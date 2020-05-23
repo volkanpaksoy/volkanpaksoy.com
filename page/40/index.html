@@ -1,0 +1,372 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/40/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/03/update-markdown-posts/" itemprop="url">Update Imported Markdown Posts</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-03T10:15:27+00:00" itemprop="datePublished">December  3, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
+
+<!-- misc -->
+
+
+
+
+    <a href="/category/misc">misc</a>
+    
+</span>
+	<span class="tags">jekyll</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>As you probably know I’ve migrated to GitHub Pages from WordPress as I blogged <a href="https://volkanpaksoy.com/archive/2014/11/26/static-blog-ftw/">here</a>.</p>
+
+<p>It was a fairly easy migration but migrating the actual content proved to be trickier. There are lots of resources on using Jekyll’s importers. I found <a href="http://hadihariri.com/2013/12/24/migrating-from-wordpress-to-jekyll/" target="_blank" rel="noopener noreferrer">this one</a> useful. Just export everything to an XML and run the converter to get the posts in markdown. The problem is the <em>YAML Front Matter</em> it generates is a bit messy:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
+layout: post
+title: Blind Password Masking
+date: 2011-06-14 03:46:18.000000000 +00:00
+categories:
+- Off the Top of My Head
+tags: []
+status: publish
+type: post
+published: true
+meta:
+  _edit_last: '1'
+author:
+  login: blogadmin
+  email: admin@myvirtualhome.net
+  display_name: Volkan
+  first_name: ''
+  last_name: ''
+---
+</code></pre></div></div>
+
+<p>I don’t want or need most of this stuff anyway!. Also I had two main issues:</p>
+
+<ul>
+  <li>Images didn’t work as it didn’t get the full path. I use S3 to host all images but the imported posts were converted to use a local assets folder. There may be a configuration setting for that but in my case I decided to convert all my posts to markdown from HTML anyway (which was a great way to practice Markdown)</li>
+  <li>Main issue was with Disqus. It’s not like people are racing to submit comments to my ramblings but still I’d like to have Disqus enabled on all my posts. Apparently to enable comments you need to specify it in the front matter like this:</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>comments: true
+</code></pre></div></div>
+
+<h3 id="manual-vs-programmatical">Manual vs. programmatical</h3>
+<p>First I resisted the temptation to write a small application to convert the layouts but manual conversion soon proved to be very time consuming even with 100+ posts. So I developed the simple console application below. It scans the folder you specify (filters *.markdown files) and reads the existing layout and converts it to the format I wanted:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
+layout: post
+title: @TITLE
+date: @DATE
+categories: [@CATEGORIES]
+comments: true
+</code></pre></div></div>
+
+<p>I wanted to keep it simple and clean. Also as all my posts are now in pure markdown I can easily loop through and update the elements (like converting H3 to H2 or adding tags to layout etc)</p>
+
+<h3 id="source-code">Source Code</h3>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/ceaa1a6dae7dea206f0069fb686f92d6.js"> </script>
+
+<h3 id="usage">Usage</h3>
+<p>It probably won’t apply to most situations but helped me out so why not publish it just in case, right? To use it you have to change the ROOT_FOLDER value in Program class at the bottom (Do NOT forget to backup your posts first!)</p>
+
+<p>As I wanted to revisit all my posts I wanted to mark them instead of replacing automatically with the original one. So when you run the program it deletes the original post and creates the updated one with “.output” appended. So you can easily find which files are modified by checking the extension. If you want it to replace the original post you can uncomment this line at the end of the ConvertFile method</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="c1">// File.Move(outputFilePath, inputFilePath);</span>
+</code></pre></div></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://hadihariri.com/2013/12/24/migrating-from-wordpress-to-jekyll/" target="_blank" rel="noopener noreferrer">Migrating from WordPress to Jekyll</a></li>
+  <li><a href="http://jekyllbootstrap.com/lessons/jekyll-introduction.html" target="_blank" rel="noopener noreferrer">Jekyll introduction</a></li>
+  <li><a href="https://github.com/Haacked/subtext-jekyll-exporter" target="_blank" rel="noopener noreferrer">Phil Haack’s Subtext exporter</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2014/11/28/preparing-for-windows-10/" itemprop="url">Preparing for Windows 10 event</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-11-28T00:30:27+00:00" itemprop="datePublished">November 28, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
+
+<!-- misc -->
+
+
+
+
+    <a href="/category/misc">misc</a>
+    
+</span>
+	<span class="tags">events</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>On Wednesday I attended <a href="http://www.meetup.com/wpuguk/events/210456342/" target="_blank" rel="noopener noreferrer">this</a> meetup. It was fairly informative. There is a bit uncertainty about the new features of Windows 10, Visual Studio 2015 and C# 6.0 but it was still good to cover most of them in a few hours.</p>
+
+<p>It was divided into two main sections: Windows 10 and VS 2015/C# 6.0. I’m planning to review these myself and blog about them separately but here are the highlights of the events:</p>
+
+<h3 id="windows-10">Windows 10</h3>
+
+<p>When they first announced the name I immediately thought about <a href="http://en.wikipedia.org/wiki/Winamp#History" target="_blank" rel="noopener noreferrer">Winamp skipping version 4</a>. We all know how that story ended so I hope Windows 10 fares better than that!</p>
+
+<p>A few items discussed in the event about Windows 10:</p>
+
+<ul>
+  <li>First demonstration was sending a feedback which was painfully slow and it took forever to send a simple feedback message.</li>
+  <li>Some enterprise features are coming like like having store and custom company portals</li>
+  <li>There was a rather long discussion about what the 4 device from the left was in the image below:
+<img src="/images/vpblogimg/2014/11/Windows_Product_Family_9-30-Event-741x416.png" alt="One Windows">
+</li>
+</ul>
+
+<p>I don’t think it makes any difference though but the idea is having one code base and one store to deploy apps to various devices with different form factors. Sounds cool but I’m a bit cautious about it for the time being. If it sounds to good to be true, it generally isn’t!</p>
+
+<ul>
+  <li>Looks like they are going to use hamburger icons everywhere which they initially opposed to.</li>
+  <li>There seems to be back buttons in a few screens which is a bit unusual so they may have to deal with some lash back from people like they did for their brilliant(!) charms invention.</li>
+</ul>
+
+<h3 id="visual-studio-2015">Visual Studio 2015</h3>
+
+<p><img src="/images/vpblogimg/2014/11/Preparing-for-Windows-10-Event.jpg" alt="Preparing for Windows 10 Event"></p>
+
+<ul>
+  <li>There will be a free version of VS 2015 and there is already a free version for VS 2013 called “Community Edition”. It’s said to be Professional equivalent so it sounds cool to have it for free.</li>
+  <li>Like all Microsoft products versioning is a bit off and confusing here as well. There was a discussion about the version number vs. release year. So VS 2013 actually is version 12 but VS 2015 is version 14 even though there is no other VS in the middle!</li>
+  <li>A research project called Pex used to generate unit tests made its way to VS 2015 under Smart Unit Tests. It should help to create a lot boilerplate test code.</li>
+</ul>
+
+<h3 id="c-60">C# 6.0</h3>
+<ul>
+  <li>Not a C# feature but one of the most impressive developments nowadays is that .NET Framework has become open source.</li>
+  <li>New version is coming with a much faster 64-bit compiler called <a href="http://blogs.msdn.com/b/dotnet/archive/2013/09/30/ryujit-the-next-generation-jit-compiler.aspx" target="_blank" rel="noopener noreferrer">.net RyuJIT</a>
+</li>
+  <li>.net Native <a href="http://msdn.microsoft.com/en-us/library/dn600165(v=vs.110).aspx" target="_blank" rel="noopener noreferrer">Project N</a> is coming which is supposedly make the applications run faster</li>
+  <li>The compiler has been completely rewritten and its name is now <a href="http://msdn.microsoft.com/en-gb/vstudio/roslyn.aspx" target="_blank" rel="noopener noreferrer">Roslyn</a>. It’s open sources and it exposes APIs that can be consumed by any application. So the compiler doesn’t have be a black box anymore.</li>
+</ul>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>A lot of exciting and revolutionary developments are going on in the .NET world these days. Taking a more open-source and multi-platform based approach will definitely help the platform in the future. It’s thrilling to be a developer and experience them first hand as these news come along. I have my virtual machine running Windows 10 and VS 2015 so I’ll play around more and blog about these specific features in detail in the near future.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="aka.ms/winappspublishhack">Windows Apps JumpStart LIVE Series: Publish Hackathon</a></li>
+  <li><a href="https://github.com/mrlacey/cs6" target="_blank" rel="noopener noreferrer">Demo code</a></li>
+  <li><a href="http://www.visualstudio.com/en-us/news/vs2013-community-vs.aspx" target="_blank" rel="noopener noreferrer">Visual Studio 2013 Community Edition</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2014/11/26/static-blog-ftw/" itemprop="url">Static blog for the win!</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-11-26T00:30:27+00:00" itemprop="datePublished">November 26, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
+
+<!-- misc -->
+
+
+
+
+    <a href="/category/misc">misc</a>
+    
+</span>
+	<span class="tags">site_news</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<h3 id="on-the-road-again">On the road again…</h3>
+<p>Using WordPress for my blog had been bugging me for quite some time. So I’ve started using the popular static site generator Jekyll and host my blog on GitHub pages. Main reasons for this were:</p>
+
+<ul>
+  <li>Security: Over time you install a lot of plugins and any number of them can come with vulnerabilities. Granted they are optional and they are installed because they provide nice functionality but it would be much better to delegate the security of the system to GitHub.</li>
+  <li>Maintenance: I used to host my blog on AWS which is relatively easy to maintain but still I was responsible for keeping that machine up and running at all times.</li>
+  <li>Database: Using a database is overkill when all I’m doing is generating some static content. Database comes with performance impact, maintenance and backup requirements.</li>
+  <li>Scalability: No need to worry about scaling as GitHub takes care of it all for free!</li>
+  <li>Versioning: Just like any project on GitHub you have full control over the content and you can rollback to a previous version anytime.</li>
+  <li>Performance: All content is served in static pages. So compared to retrieving it from the database and generating the page on the fly it’s obviously much faster and scalable.</li>
+</ul>
+
+<h3 id="beautifying-the-content">Beautifying the content</h3>
+<p>Compared to HTML, markdown is so elegant and concise. No more pesky attributes and ugly tags mingled with text. Granted WordPress has plugins for writing posts in Markdown but in GitHub it’s a first-class citizen and supported from the get-go.</p>
+
+<h3 id="drawbacks">Drawbacks</h3>
+<ul>
+  <li>WordPress has its own merits like having a gazillion of plugins and themes. GitHub Pages supports a limited number of plugins due to security reasons.</li>
+  <li>SEO must be taken care of manually whereas WordPress already has lots of plugins for that purpose too</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.slant.co/topics/330/compare/~jekyll_vs_octopress_vs_docpad" target="_blank" rel="noopener noreferrer">Static website generator comparison</a></li>
+  <li><a href="http://haacked.com/archive/2013/12/02/dr-jekyll-and-mr-haack/" target="_blank" rel="noopener noreferrer">Phil Haack Blog Migration</a></li>
+  <li><a href="http://jekyll-windows.juthilo.com/2-jekyll-gem/" target="_blank" rel="noopener noreferrer">Installing Jekyll on local Windows machine</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/39" class="prev">Prev</a>
+    
+    
+        <a href="/page/41" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

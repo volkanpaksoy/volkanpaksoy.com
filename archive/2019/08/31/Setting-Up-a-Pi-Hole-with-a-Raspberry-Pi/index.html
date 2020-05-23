@@ -1,0 +1,243 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Setting Up a Pi Hole with a Raspberry Pi - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2019/08/31/Setting-Up-a-Pi-Hole-with-a-Raspberry-Pi/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Setting Up a Pi Hole with a Raspberry Pi</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-08-31T07:00:00+01:00" itemprop="datePublished">August 31, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- security -->
+
+
+
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">pi_hole, raspberry_pi</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p><img src="/images/vpblogimg/2019/08/pi-hole-logo.png" alt=""></p>
+
+<p>For some time I’d been wanting to set up my own Pi Hole in my network.</p>
+
+<p>In <a href="https://volkanpaksoy.com/archive/2019/08/10/Implementing-a-Self-Hosted-Docker-Registry-on-Raspberry-Pi/">this</a> previous post I implemented a Docker registry on Raspberry Pi. I was planning to install it using Docker on that Pi but then I decided to set up a new Pi from scratch due to performance concerns. After I get the hang of it I might migrate it to Docker.</p>
+
+<h2 id="preparations-download-raspbian-image-and-prepare-micro-sd-card">Preparations: Download Raspbian image and prepare Micro SD card</h2>
+<p>As of this writing, the latest Raspbian release is Buster but in the <a href="https://docs.pi-hole.net/main/prerequesites/#supported-operating-systems" target="_blank" rel="noopener noreferrer">official supported OS list</a> the latest supported Raspbian is Stretch. So I went to <a href="https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-04-09/" target="_blank" rel="noopener noreferrer">this</a> page to download Raspbian Stretch Lite.</p>
+
+<p>I downloaded Raspbian Buster Lite as I don’t need desktop and other extra software for this project.I followed the official guide from raspberrypi.org to burn the image. It’s basically just a few commands:</p>
+
+<p>I inserted the card and run the following to identify the card:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil list
+</code></pre></div></div>
+
+<p>Then</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo dd bs=1m if=path_of_your_image.img of=/dev/rdiskn conv=sync
+</code></pre></div></div>
+
+<p>where n is the number of disk which I found from the first step.</p>
+
+<p>If you get “resource is busy” error, then run the following</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil unmountDisk /dev/diskn
+</code></pre></div></div>
+
+<h2 id="carry-out-necessary-configuration-updates">Carry Out Necessary Configuration Updates</h2>
+<p>It’s a good practice to change the default passwords so I ran</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>passwd
+</code></pre></div></div>
+
+<p>and updated the password.</p>
+
+<p>Also for remote installations I enabled SSH:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable ssh
+sudo systemctl start ssh
+</code></pre></div></div>
+
+<p>And I like to give a specific name to all my devices so that I can keep an eye on the machines connected to my network more easily.</p>
+
+<p>To achieve that I ran:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo hostname NEW_HOSTNAME
+</code></pre></div></div>
+
+<p>No need to set a static IP address at this point as Pi Hole setup takes care of that:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pihole-static-ip-needed.png" alt=""></p>
+
+<h2 id="install-pi-hole">Install Pi-Hole</h2>
+<p>There is an easy one-step installation:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -sSL https://install.pi-hole.net | bash
+</code></pre></div></div>
+
+<p>I changed my IP to a different static IP and rebooted the Pi.</p>
+
+<p>After that I could go to the admin page via http://{Pi Hole Static IP}/admin/ and see the dashboard:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pihole-admin-page.png" alt=""></p>
+
+<h2 id="test">Test</h2>
+<p>Now it’s time to see if it’s working at all. I have 2 MacBooks connected to the same network. I changed one of the laptop’s DNS server to point to Pi Hole and left the other one intact.</p>
+
+<p>In the laptop that’s still using the old DNS settings, I opened a Chrome window in incognito mode and visited a site and at top it shows an ad:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pihole-page-with-ads.png" alt=""></p>
+
+<p>And on the other laptop I repeated the process and I got the same page without ads this time:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pihole-page-without-ads.png" alt=""></p>
+
+<p>When I go to the admin page I can see what calls are blocked:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pi-hole-admin-page-with-results.png" alt=""></p>
+
+<p>Also a nice thing about it you can choose to Whitelist certain providers. For instance in the image below it looks like Google Analytics is blocked and I can whitelist it easily:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pi-hole-admin-page-query-logs.png" alt=""></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://pi-hole.net/" target="_blank" rel="noopener noreferrer">Official Pi-Hole Website</a></li>
+  <li><a href="https://www.hanselman.com/blog/BlockingAdsBeforeTheyEnterYourHouseAtTheDNSLevelWithPiholeAndACheapRaspberryPi.aspx" target="_blank" rel="noopener noreferrer">Scott Hanselman: Blocking ads before they enter your house at the DNS level with pi-hole and a cheap Raspberry Pi</a></li>
+  <li><a href="https://blog.codinghorror.com/an-exercise-program-for-the-fat-web/" target="_blank" rel="noopener noreferrer">Jeff Atwood: An Exercise Program for the Fat Web</a></li>
+  <li><a href="https://twit.tv/shows/know-how/episodes/355" target="_blank" rel="noopener noreferrer">TWiT Know How Episode 355: Raspberry Pi-Hole!</a></li>
+  <li><a href="https://hub.docker.com/r/pihole/pihole/" target="_blank" rel="noopener noreferrer">Docker Pi-hole DockerHub repository</a></li>
+  <li><a href="https://discourse.pi-hole.net/" target="_blank" rel="noopener noreferrer">Pi-Hole Forum</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2019/08/21/Exploring-AWS-DeepLens/" title="Previous Post: 
+Exploring AWS DeepLens">« Exploring AWS DeepLens</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2019/09/04/alarm-pi/" title="next Post: 
+Alarm Pi">Alarm Pi » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

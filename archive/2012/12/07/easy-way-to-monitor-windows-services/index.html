@@ -1,0 +1,206 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Easy way to monitor Windows Services - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2012/12/07/easy-way-to-monitor-windows-services/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Easy way to monitor Windows Services</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2012-12-07T14:11:13+00:00" itemprop="datePublished">December  7, 2012</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- sysops -->
+
+
+
+
+    <a href="/category/sysops">sysops</a>
+    
+</span>
+	<span class="tags">windows_service</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>When you have Windows Services you must also implement a monitoring solution to make sure that they are running at all times. Some time ago I needed a quick and dirty solution to notify myself when one of the services stopped. The solution I depict here is by no means an ideal one. The only advantage of it is it’s very fast to implement if you don’t already have a monitoring system. Disclaimer aside let’s get to work!</p>
+
+<p>The tools we need come with Windows so no need to install anything. The idea is simple: Create a task scheduler that is triggered on an event. The triggering even will be the stopping of the monitored service and action that will be taken will be sending the notification email.</p>
+
+<p><strong>STEP 01: Create a new filter</strong>
+a. Launch Task Scheduler.
+b. Right click Task Scheduler Library and select Create Task
+c. Select the Triggers tab.
+d. Click New…
+e. In the Begin the task list select “On an event”
+f. In the Settings section select Custom and click New Event Filter
+g. In the New Event Filter dialog, select XML tab and check “Edit query manually”
+h. As the query text type in the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;QueryList&gt;
+ &lt;Query Id="0"&gt;
+ &lt;Select Path="Application"&gt;
+ *[System[Provider[@Name='Service1']]]
+ *[EventData[Data and (Data='Service stopped successfully.')]]
+ &lt;/Select&gt;
+ &lt;/Query&gt;
+&lt;/QueryList&gt;
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2012/12/TaskScheduler_NewEventFilter.png" alt="TaskScheduler_NewEventFilter"></p>
+
+<p>Change the name of the service name and the message it displays when it stops. Note that service name is not what you see in the services list. You have to right –click and view properties. For example, as shown in the picture below, service name for DNS client is “Dnscache” where as display name is “DNS Client”.</p>
+
+<p><img src="/images/vpblogimg/2012/12/ServiceName.png" alt="Service Name"></p>
+
+<p><strong>STEP 02: Create action to send mail</strong>
+a. Select the Actions tab and click on New
+b. From the Action list select “Send an e-mail”
+c. Fill in the details for the notification email.
+At this point we are good to go. An email will be fired when the service stops and logs the text we are looking for. Keep in my mind that it’s quite fragile because it will stop working if the text the service logs changes.
+Having a built-in send mail capability is great but if you need more features, like adding Cc/Bcc recipients or setting the priority of the mail this option would not be enough for you. In that case, playing around with PowerShell would do the trick.</p>
+
+<p><strong>STEP 03: [Optional] Create a script to send mails</strong>
+PowerShell is built on top of .NET framework so with a few lines of code we can send mails just like we can in C#:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$email = New-Object System.Net.Mail.MailMessage
+$email.From = "user1@someDomain.com"
+$email.To.Add("user2@anotherDomain.com")
+$email.CC.Add("user3@yetAnotherOne.com")
+$email.Priority = [System.Net.Mail.MailPriority]::High
+$email.Subject = "Your notification subject"
+$email.Body = "A bleak and gloomy text to drive the recipient into panic"
+$smtpClient = New-Object Net.Mail.SmtpClient("SMTP hostname or IP address", 587)
+$smtpClient.EnableSsl = $true
+$smtpClient.Credentials = New-Object System.Net.NetworkCredential("username", "password");
+$smtpClient.Send($email)
+</code></pre></div></div>
+
+<p>This example uses port 587 and SSL, your configuration may vary. That’s all there is to it to send a mail with PowerShell and you have full control over it.</p>
+
+<p>To run this script in the actions list select “Start a program” from the actions list. In the Program/script textbox enter “powershell” and enter the full path of the script in the arguments textbox. Don’t forget to save it with a ps1 extension.</p>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2012/11/29/share-your-machines-with-vmware-workstation/" title="Previous Post: 
+Share your machines with VMWare Workstation">« Share your machines with VMWare Workstation</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2012/12/11/wiretap-your-other-machine/" title="next Post: 
+Wiretap your network">Wiretap your network » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

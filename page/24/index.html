@@ -1,0 +1,740 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/24/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/08/19/continuous-integration-with-tfs-2015-express/" itemprop="url">Continuous Integration with TFS Express 2015 from scratch</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-08-19T17:30:00+01:00" itemprop="datePublished">August 19, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">tfs, team_foundation_server, ci, continuous_integration, alm, application_lifecycle_management</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Setting up continuous integration environment with TFS is quite easy and free. In this post I’ll go over the details of setting up a CI environment. The tools I will use are:</p>
+
+<ul>
+  <li>Visual Studio 2015 Community Edition</li>
+  <li>TFS 2015 Express</li>
+  <li>AWS EC2 instance (To install TFS)</li>
+  <li>AWS SES (To send notification mails)</li>
+</ul>
+
+<h4 id="step-01-download-and-install-tfs-express-2015">Step 01: Download and install TFS Express 2015</h4>
+<p>I always prefer the offline installer so download the whole ISO just in case (it’s 891MB so it might be a good time for a coffee break!)</p>
+
+<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-download-iso.png" alt=""></p>
+
+<p>Installation is standard next-next-finish so nothing particular about it. Accepting all defaults yields a working TFS instance.</p>
+
+<h4 id="step-02-connect-to-tfs">Step 02: Connect to TFS</h4>
+<p>From the Team menu select Manage Connections. This will open Team Explorer on which we can choose the TFS instance.</p>
+
+<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-connect-to-team-project.png" alt=""></p>
+
+<p>It can connect to TFS Online or Github. For this example I will use the hosted TFS we have just installed. We first need to add it to TFS server list.</p>
+
+<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-add-tfs.png" alt=""></p>
+
+<p>If you are using EC2 like I did don’t forget to allow inbound traffic on port 8080 beforehand.</p>
+
+<p>Note that we don’t have a Team Project yet, what we have connected is the Project Collection. A collection is an additional abstraction layer used to group related projects. Using Default Collection generally works out just fine for me.</p>
+
+<h4 id="step-03-configure-workspace">Step 03: Configure workspace</h4>
+<p>Since a local copy needs to be stored locally we have to map it to the project</p>
+
+<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-configure-workspace-1.png" alt=""></p>
+
+<p>Just pick a local empty folder. Leaving “$/” means the entire collection will be mapped to this folder.</p>
+
+<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-configure-workspace-2.png" alt=""></p>
+
+<p>Click Map &amp; Get and you will have a blank workspace.</p>
+
+<h4 id="step-04-create-team-project">Step 04: Create team project</h4>
+<p>Now we can create a team project on TFS. click on Home -&gt; Projects and My Teams then New Team Project.</p>
+
+<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-new-team-project-1.png" alt=""></p>
+
+<p>Just following the wizard selects Scrum methodology and Team Foundation Version Control as the source control system. Starting with TFS 2013, Git is also supported now.</p>
+
+<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-new-team-project-2.png" alt=""></p>
+
+<p>After several minutes later, our team project is ready.</p>
+
+<h4 id="step-05-clone-and-start-developing">Step 05: Clone and start developing</h4>
+<p>I chose Git as the version control system. If you use TFSVC the terminology you’ll see is a bit different but since the main focus of this post is establishing continuous integration it doesn’t matter much as long you as you can check-in the source code.</p>
+
+<p>So now that we have a blank canvas let’s start painting! I added a class library with a single class like the one below:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">ComplexMathClass</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="nf">Add</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="p">+</span> <span class="n">y</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">double</span> <span class="nf">Divide</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="p">/</span> <span class="n">y</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>and 3 unit test projects (NUnit, XUnit and MSTest).</p>
+
+<p>NUnit tests:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">ComplexMathClassTests</span>
+<span class="p">{</span>
+    <span class="p">[</span><span class="nf">TestCase</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="n">ExpectedResult</span> <span class="p">=</span> <span class="m">3</span><span class="p">)]</span>
+    <span class="p">[</span><span class="nf">TestCase</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="n">ExpectedResult</span> <span class="p">=</span> <span class="m">5</span><span class="p">)]</span>
+    <span class="p">[</span><span class="nf">TestCase</span><span class="p">(-</span><span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="n">ExpectedResult</span> <span class="p">=</span> <span class="m">0</span><span class="p">)]</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="nf">Add_TwoIntegers_ShouldCalculateCorrectly</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">cmc</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ComplexMathClass</span><span class="p">();</span>
+        <span class="k">return</span> <span class="n">cmc</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="p">[</span><span class="n">Test</span><span class="p">]</span>
+    <span class="c1">// [ExpectedException(typeof(DivideByZeroException))]</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Divide_DenominatorZero_ShouldThrowDivideByZeroException</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">cmc</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ComplexMathClass</span><span class="p">();</span>
+        <span class="kt">double</span> <span class="n">result</span> <span class="p">=</span> <span class="n">cmc</span><span class="p">.</span><span class="nf">Divide</span><span class="p">(</span><span class="m">5</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>XUnit tests:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">ComplexMathClassTests</span>
+<span class="p">{</span>
+    <span class="p">[</span><span class="n">Theory</span><span class="p">]</span>
+    <span class="p">[</span><span class="nf">InlineData</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">)]</span>
+    <span class="p">[</span><span class="nf">InlineData</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">5</span><span class="p">)]</span>
+    <span class="p">[</span><span class="nf">InlineData</span><span class="p">(-</span><span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">)]</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Add_TwoIntegers_ShouldCalculateCorrectly</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="kt">int</span> <span class="n">expectedResult</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">cmc</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ComplexMathClass</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">actualResult</span> <span class="p">=</span> <span class="n">cmc</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+        <span class="n">Assert</span><span class="p">.</span><span class="n">Equal</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;(</span><span class="n">expectedResult</span><span class="p">,</span> <span class="n">actualResult</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="p">[</span><span class="n">Fact</span><span class="p">]</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Divide_DenominatorZero_ShouldThrowDivideByZeroException</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">cmc</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ComplexMathClass</span><span class="p">();</span>
+        <span class="n">cmc</span><span class="p">.</span><span class="nf">Divide</span><span class="p">(</span><span class="m">5</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
+    <span class="c1">//  Assert.Throws&lt;DivideByZeroException&gt;(() =&gt; cmc.Divide(5, 0));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>MSTest tests:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[TestClass]
+public class ComplexMathClassTests
+{
+    [TestMethod]
+    // [ExpectedException(typeof(DivideByZeroException))]
+    public void Divide_DenominatorZero_ShouldThrowDivideByZeroException()
+    {
+        var cmc = new ComplexMathClass();
+        cmc.Divide(5, 0);
+    }
+}
+</code></pre></div></div>
+
+<p>Unfortunately MSTest still doesn’t support parametrized tests which is a shame IMHO. That’s why I was never a big fan of it but added to this project for the sake of completeness.</p>
+
+<p>I commented out the lines that expect exception in all tests to fail the tests. So now the setup is complete: We have a working project with a failing test. Our goal is to get alert notifications about the failing test whenever we check in our code. Let’s proceed to the next steps to accomplish this.</p>
+
+<h4 id="step-06-building-on-the-server">Step 06: Building on the server</h4>
+<p>As of TFS 2015 they renamed the Build Configuration to XAML Build Configuration for some reason and moved it under <em>Additional Tools and Components</em> node but everything else seems to be the same.</p>
+
+<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-management-console.png" alt=""></p>
+
+<p>Default configuration installs one build controller and one agent for the Default Collection so for this project we don’t have to do add or change anything.</p>
+
+<p>Each build controller is dedicated to a team project collection. Controller performs lightweight tasks such as determining the name and reporting the status of the build. Agents are the heavy-lifters and carry out processor-intensive work of the build process. Each agent is controlled by a single controller.</p>
+
+<p>In order to build our project on the build server we need a <strong>build definition</strong> first. We can create one by selecting Build -&gt; New build Definition</p>
+
+<ul>
+  <li>One important setting is the trigger: By default the build is not triggered automatically which means soon enough it will wither and die all forgotten! To automate the process we have to select Continuous Integration option.</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-new-build-definition-trigger.png" alt=""></p>
+
+<ul>
+  <li>In order to automatically trigger the build, the branch that is to be built must be added to monitored branches list in the Source Settings tab.</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-build-definition-source.png" alt=""></p>
+
+<ul>
+  <li>Last required setting is failing the build when a test fails. It’s a bit buried so you have to go 3.1.1 Test Source and set “Fail build on test failure” to true.</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-new-build-definition-process.png" alt=""></p>
+
+<h4 id="step-07-notifications">Step 07: Notifications</h4>
+<p>At this point, our build definition is triggered automatically but we don’t get any notifications if the build fails (due to a compilation error for example). TFS comes with an application called Build Notifications. It pops up an alert but it requires to be installed on the developer machine so I don’t like this solution.</p>
+
+<p>A better approach is enabling E-Mail notifications. In order to do that first we need to set up Email Alert Settings for TFS. In the Team Foundation Server Express Administration Console select Application Tier and scroll down to the “Email Alert Settings” section. enter the SMTP credentials and server info here.</p>
+
+<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-smtp-settings.png" alt=""></p>
+
+<p>You can also send a test email to verify your settings.</p>
+
+<p>Second and final stage is to enable the project-based alerts. In Visual Studio Team Explorer window select Home -&gt; Settings -&gt; Project Alerts. This will pop up a browser and redirect to alert management page. Here select “Advanced Alert Management Page”. In the advanced settings page there are a few pre-set notification conditions and the build failure is at the top of the list!</p>
+
+<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-build-fail-notification.png" alt=""></p>
+
+<p>I intentionally broke the build and checked in my code and in a minute, as expected I received the following email:</p>
+
+<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-alert-email.png" alt=""></p>
+
+<p>With that we have automated the notifications. We already set the build to fail upon test failure in the previous step. Final step is to run the tests on the build server to complete the circuit.</p>
+
+<h4 id="step-08-run-tests-on-build-server">Step 08: Run tests on build server</h4>
+
+<p>Running tests on the server is very simple. For NUnit all we have to do is install the NUnitTestAdapter package:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package NUnitTestAdapter
+</code></pre></div></div>
+
+<p>After I committed and pushed my code with the failing test I got the notification in a minute:</p>
+
+<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-nunit-test-alert.png" alt=""></p>
+
+<p>Uncommented the ExpectedException line and the build succeeded.</p>
+
+<p>For xUnit the solution is similar, just install the xUnit runner NuGet package and checkin the code</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package xunit.runner.visualstudio
+</code></pre></div></div>
+
+<p>For MSTest it works out of the box so you don’t have to install anything.</p>
+
+<p>In the previous version of TFS I had to install Visual Studio on the build server as advised in this <a href="https://msdn.microsoft.com/en-us/library/bb399135.aspx#software" target="_blank" rel="noopener noreferrer">MSDN article</a>. Seems like in TFS 2015 you don’t have to do that. The only benefit of using MSTest (as far as I can see at least) is that it’s baked in so you don’t have to install extra packages. You create a Unit Test project and all your tests are immediately visible in the test explorer and automatically run on the server.</p>
+
+<h3 id="wrapping-up">Wrapping up</h3>
+<p>Continuous Integration is a crucial part of the development process. Team Foundation Server is a powerful tool with lots of features. In this post I tried to cover basics from installation to setting up a basic CI environment. I’ll try to cover more features in the future but my first priority will be new AWS services CodeDeploy, CodeCommit and CodePipeline. As I’m trying to migrate everything to AWS having all projects hosted and managed on AWS would make more sense in my case.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.visualstudio.com/downloads/download-visual-studio-vs" target="_blank" rel="noopener noreferrer">TFS Download</a></li>
+  <li><a href="http://blogs.msdn.com/b/mvpawardprogram/archive/2013/11/13/git-for-tfs-2013.aspx" target="_blank" rel="noopener noreferrer">Git for TFS Announcement</a></li>
+  <li><a href="https://www.visualstudio.com/en-us/news/tfs2015-vs.aspx" target="_blank" rel="noopener noreferrer">Team Foundation Server 2015 RTM Release Notes</a></li>
+  <li><a href="http://blogs.msdn.com/b/tfssetup/archive/2015/08/12/team-foundation-server-2015-rtm-installation-steps.aspx" target="_blank" rel="noopener noreferrer">Team Foundation Server 2015 RTM–Installation Steps</a></li>
+  <li><a href="https://msdn.microsoft.com/en-us/library/ms181725.aspx" target="_blank" rel="noopener noreferrer">Receive build notifications</a></li>
+  <li><a href="https://msdn.microsoft.com/en-us/library/bb399135.aspx#software" target="_blank" rel="noopener noreferrer">MSDN: Deploy and configure build agents</a></li>
+  <li><a href="https://github.com/volkanpaksoy/ci-with-tfs-workout" target="_blank" rel="noopener noreferrer">Sample project source code</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/08/12/dynamic-dns-with-aws-route53/" itemprop="url">Dynamic DNS with AWS Route 53</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-08-12T01:30:00+01:00" itemprop="datePublished">August 12, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awsdev">aws</a></span> -->
+
+<!-- aws, dev -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">route53, csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>If you don’t have a static IP and you need to access your home network for some reason you may find Dynamic DNS services useful. I was using No-IP until its limitations became offputting. Since I love DIY stuff and AWS I thought I could build the exact same service on my own using Route 53.</p>
+
+<h2 id="enter-dyndns53">Enter DynDns53</h2>
+
+<p>It’s a simple application. What it does is basically:</p>
+
+<ul>
+  <li>Get current external IP</li>
+  <li>For each subdomain in the configuration, call AWS API and get domain info</li>
+  <li>Check if the recorded IP is different than the current one</li>
+  <li>If so, call AWS API to update it with the new one, if not do nothing.</li>
+</ul>
+
+<p>In a different post on <a href="https://volkanpaksoy.com/archive/2015/03/07/portable-online-library-with-calibre-and-raspberry-pi/">setting up Calibre on a Raspberry Pi</a> I developed a script that did the same thing:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">boto.route53</span>
+<span class="kn">import</span> <span class="nn">urllib2</span>
+<span class="n">currentIP</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://checkip.amazonaws.com/"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">boto</span><span class="o">.</span><span class="n">connect_route53</span><span class="p">()</span>
+<span class="n">zone</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_zone</span><span class="p">(</span><span class="s">"volki.info."</span><span class="p">)</span>
+<span class="n">change_set</span> <span class="o">=</span> <span class="n">boto</span><span class="o">.</span><span class="n">route53</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">ResourceRecordSets</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s">'{HOSTED_ZONE_ID}'</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">rrset</span> <span class="ow">in</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_all_rrsets</span><span class="p">(</span><span class="n">zone</span><span class="o">.</span><span class="nb">id</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">rrset</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">'calibre.volki.info.'</span><span class="p">:</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">change_set</span><span class="o">.</span><span class="n">add_change</span><span class="p">(</span><span class="s">"UPSERT"</span><span class="p">,</span> <span class="n">rrset</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">rrset</span><span class="o">.</span><span class="nb">type</span><span class="p">,</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+        <span class="n">rrset</span><span class="o">.</span><span class="n">resource_records</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">currentIP</span>
+        <span class="n">u</span><span class="o">.</span><span class="n">add_value</span><span class="p">(</span><span class="n">rrset</span><span class="o">.</span><span class="n">resource_records</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">change_set</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>The difference of DynDns53 is that it can run as a background service and it has a cute logo! The C# equivalent of above code is like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">Update</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">config</span> <span class="p">=</span> <span class="n">_configHandler</span><span class="p">.</span><span class="nf">GetConfig</span><span class="p">();</span>
+    <span class="kt">string</span> <span class="n">currentExternalIp</span> <span class="p">=</span> <span class="n">_ipChecker</span><span class="p">.</span><span class="nf">GetExternalIp</span><span class="p">();</span>
+
+    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">domain</span> <span class="k">in</span> <span class="n">config</span><span class="p">.</span><span class="n">DomainList</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">string</span> <span class="n">subdomain</span> <span class="p">=</span> <span class="n">domain</span><span class="p">.</span><span class="n">DomainName</span><span class="p">;</span>
+        <span class="kt">string</span> <span class="n">zoneId</span> <span class="p">=</span> <span class="n">domain</span><span class="p">.</span><span class="n">ZoneId</span><span class="p">;</span>
+
+        <span class="kt">var</span> <span class="n">listResourceRecordSetsResponse</span> <span class="p">=</span> <span class="n">_amazonClient</span><span class="p">.</span><span class="nf">ListResourceRecordSets</span><span class="p">(</span><span class="k">new</span> <span class="nf">ListResourceRecordSetsRequest</span><span class="p">()</span> <span class="p">{</span> <span class="n">HostedZoneId</span> <span class="p">=</span> <span class="n">zoneId</span> <span class="p">});</span>
+        <span class="kt">var</span> <span class="n">resourceRecordSet</span> <span class="p">=</span> <span class="n">listResourceRecordSetsResponse</span><span class="p">.</span><span class="n">ResourceRecordSets</span><span class="p">.</span><span class="nf">First</span><span class="p">(</span><span class="n">recordset</span> <span class="p">=&gt;</span> <span class="n">recordset</span><span class="p">.</span><span class="n">Name</span> <span class="p">==</span> <span class="n">subdomain</span><span class="p">);</span>
+        <span class="kt">var</span> <span class="n">resourceRecord</span> <span class="p">=</span> <span class="n">resourceRecordSet</span><span class="p">.</span><span class="n">ResourceRecords</span><span class="p">.</span><span class="nf">First</span><span class="p">();</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">resourceRecord</span><span class="p">.</span><span class="n">Value</span> <span class="p">!=</span> <span class="n">currentExternalIp</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">resourceRecord</span><span class="p">.</span><span class="n">Value</span> <span class="p">=</span> <span class="n">currentExternalIp</span><span class="p">;</span>
+
+            <span class="n">_amazonClient</span><span class="p">.</span><span class="nf">ChangeResourceRecordSets</span><span class="p">(</span><span class="k">new</span> <span class="nf">ChangeResourceRecordSetsRequest</span><span class="p">()</span>
+            <span class="p">{</span>
+                <span class="n">HostedZoneId</span> <span class="p">=</span> <span class="n">zoneId</span><span class="p">,</span>
+                <span class="n">ChangeBatch</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ChangeBatch</span><span class="p">()</span>
+                <span class="p">{</span>
+                    <span class="n">Changes</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Change</span><span class="p">&gt;()</span> 
+                    <span class="p">{</span> 
+                        <span class="k">new</span> <span class="nf">Change</span><span class="p">(</span><span class="n">ChangeAction</span><span class="p">.</span><span class="n">UPSERT</span><span class="p">,</span> <span class="n">resourceRecordSet</span><span class="p">)</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>That’s it. The rest is just user interface, a Windows service and some basic uni tests.</p>
+
+<h2 id="usage">Usage</h2>
+
+<p>The project has a WPF user interface and a Windows service. Both are using the same library (DynDns53.Core) so the functionality is the same. Using the user interface is pretty straightforward.</p>
+
+<p><img src="/images/vpblogimg/2015/08/dyndns53-mainwindow.png" alt=""></p>
+
+<p>Just add your AWS keys that have access privileges to your domains. You can set it to run at system start so you don’t have to start it manually.</p>
+
+<p><img src="/images/vpblogimg/2015/08/dyndns53-settings-window.png" alt=""></p>
+
+<p>I built the Windows service using Topshelf. To install it, build the application and on an elevated command prompt just run</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DynDns53.Service.exe install
+</code></pre></div></div>
+
+<p>Similarly to uninstall:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DynDns53.Service.exe uninstall
+</code></pre></div></div>
+
+<h1 id="whats-missing">What’s missing</h1>
+
+<ul>
+  <li>Landing page: I’ll update the project details on the site generated by GitHub Pages.</li>
+  <li>Mac/Linux support: As the worlds are colliding I’d like to discover what I can do with the new .NET Core runtime. Since this is a simple project I think it’s a good place to start</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/dyndns53" target="_blank" rel="noopener noreferrer">DynDns53 Source Code</a></li>
+  <li><a href="http://dyndns53.com" target="_blank" rel="noopener noreferrer">Project website</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/08/08/checking-domain-availability-with-aws-route53-part-3/" itemprop="url">Checking domain availability with AWS Route 53 - Part 3</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-08-08T23:00:00+01:00" itemprop="datePublished">August  8, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">csharp, route53</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<h1 id="part-3-consuming-the-apis">Part 3: Consuming the APIs</h1>
+
+<p>So far in the series:</p>
+
+<ul>
+  <li><a href="https://volkanpaksoy.com/archive/2015/08/04/checking-domain-availability-with-aws-route53-part-1/">Part 1: Getting TLD List</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2015/08/06/checking-domain-availability-with-aws-route53-part-2/">Part 2: Implementing API for TLD service</a></li>
+</ul>
+
+<p>In this installment it’s time to implement the actual application that consumes the TLD API as well as AWS Route 53 API. I decided to turn this into a little project with a name, logo and everything. I’ll keep updating the project. Currently it just has the core library and a console application. I know it’s not enough but you have to start somewhere!</p>
+
+<h3 id="core-functionality">Core functionality</h3>
+
+<p>Basically what it does is:</p>
+
+<ol>
+  <li>
+    <p>Get the supported TLD list</p>
+  </li>
+  <li>
+    <p>For each TLD send a CheckDomainAvailability request to AWS</p>
+  </li>
+  <li>
+    <p>Return the resultset</p>
+  </li>
+</ol>
+
+<p>When I first started out I was meaning to make these requests run in parallel. But they got throttled and I ended up using all my allowance. So I changed the code to make a call per second:</p>
+
+<p>The TldProvider I developed can be used in two different ways:</p>
+
+<ol>
+  <li>As a NuGet Package</li>
+</ol>
+
+<p>I uploaded my package to NuGet.org so you can install it by running</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package TldProvider.Core.dll
+</code></pre></div></div>
+
+<p>and the usage would be:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Tld</span><span class="p">&gt;</span> <span class="nf">GetTldListFromLibrary</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">url</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"Aws.Route53.DocPageUrl"</span><span class="p">];</span>
+    <span class="kt">var</span> <span class="n">tldListProvider</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TldListProvider</span><span class="p">();</span>
+    <span class="kt">var</span> <span class="n">supportedTLDlist</span> <span class="p">=</span> <span class="n">tldListProvider</span><span class="p">.</span><span class="nf">GetSupportedTldList</span><span class="p">(</span><span class="n">url</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">supportedTLDlist</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ol>
+  <li>As an API the usage is a bit more complex because of the JSON to list conversion:</li>
+</ol>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Tld</span><span class="p">&gt;</span> <span class="nf">GetTldListFromApi</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">apiUrl</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"TldProvider.Api.EndPoint"</span><span class="p">];</span>
+    <span class="kt">var</span> <span class="n">httpClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpClient</span><span class="p">();</span>
+    <span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpRequestMessage</span><span class="p">()</span> <span class="p">{</span> <span class="n">Method</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpMethod</span><span class="p">(</span><span class="s">"GET"</span><span class="p">),</span> <span class="n">RequestUri</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="n">apiUrl</span><span class="p">)</span> <span class="p">};</span>
+    <span class="kt">var</span> <span class="n">httpResponse</span> <span class="p">=</span> <span class="n">httpClient</span><span class="p">.</span><span class="nf">SendAsync</span><span class="p">(</span><span class="n">request</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">apiResponse</span> <span class="p">=</span> <span class="n">httpResponse</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="nf">ReadAsStringAsync</span><span class="p">().</span><span class="n">Result</span><span class="p">;</span>
+    <span class="kt">dynamic</span> <span class="n">resp</span> <span class="p">=</span> <span class="n">Newtonsoft</span><span class="p">.</span><span class="n">Json</span><span class="p">.</span><span class="n">JsonConvert</span><span class="p">.</span><span class="nf">DeserializeObject</span><span class="p">(</span><span class="n">apiResponse</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">resultAsStringList</span> <span class="p">=</span> <span class="n">JToken</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="n">apiResponse</span><span class="p">)[</span><span class="s">"tldList"</span><span class="p">].</span><span class="n">ToObject</span><span class="p">&lt;</span><span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;&gt;();</span> <span class="p">;</span>
+    <span class="kt">var</span> <span class="n">resultAsTldList</span> <span class="p">=</span> <span class="n">resultAsStringList</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">t</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="nf">Tld</span><span class="p">()</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="n">t</span> <span class="p">}).</span><span class="nf">ToList</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">resultAsTldList</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Actually this method should not return List<tld> as it would require a reference to the library. The idea of using the API is to get rid of that dependency in the first place but I just wanted to add both and use them interchangably.</tld></p>
+
+<p>So finally tha main course: The check method that loops through the TLD list and gets the availability from AWS Route 53 API</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">DomainCheckResult</span><span class="p">&gt;</span> <span class="nf">Check</span><span class="p">(</span><span class="kt">string</span> <span class="n">domainName</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">ACCESS_KEY</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"Aws.Route53.AccessKey"</span><span class="p">];</span>
+    <span class="kt">string</span> <span class="n">SECRET_KEY</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"Aws.Route53.SecretKey"</span><span class="p">];</span>
+
+    <span class="kt">var</span> <span class="n">results</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">DomainCheckResult</span><span class="p">&gt;();</span>
+
+    <span class="kt">var</span> <span class="n">credentials</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">BasicAWSCredentials</span><span class="p">(</span><span class="n">ACCESS_KEY</span><span class="p">,</span> <span class="n">SECRET_KEY</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">config</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AmazonRoute53DomainsConfig</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">RegionEndpoint</span> <span class="p">=</span> <span class="n">RegionEndpoint</span><span class="p">.</span><span class="n">USEast1</span>
+    <span class="p">};</span>
+
+    <span class="kt">var</span> <span class="n">amazonRoute53DomainsClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AmazonRoute53DomainsClient</span><span class="p">(</span><span class="n">credentials</span><span class="p">,</span> <span class="n">config</span><span class="p">);</span>
+
+    <span class="c1">// var supportedTLDlist = GetTldListFromLibrary();</span>
+    <span class="kt">var</span> <span class="n">supportedTLDlist</span> <span class="p">=</span> <span class="nf">GetTldListFromApi</span><span class="p">();</span>
+
+    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">tld</span> <span class="k">in</span> <span class="n">supportedTLDlist</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CheckDomainAvailabilityRequest</span><span class="p">()</span> <span class="p">{</span> <span class="n">DomainName</span> <span class="p">=</span>  <span class="s">$"</span><span class="p">{</span><span class="n">domainName</span><span class="p">}</span><span class="s">.</span><span class="p">{</span><span class="n">tld</span><span class="p">.</span><span class="n">Name</span><span class="p">}</span><span class="s">"</span> <span class="p">};</span>
+
+        <span class="kt">var</span> <span class="n">response</span> <span class="p">=</span> <span class="n">amazonRoute53DomainsClient</span><span class="p">.</span><span class="nf">CheckDomainAvailabilityAsync</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+        <span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="n">response</span><span class="p">.</span><span class="n">Result</span><span class="p">;</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"</span><span class="p">{</span><span class="n">request</span><span class="p">.</span><span class="n">DomainName</span><span class="p">}</span><span class="s"> --&gt; </span><span class="p">{</span><span class="n">result</span><span class="p">.</span><span class="n">Availability</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+        <span class="n">results</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="nf">DomainCheckResult</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">Domain</span> <span class="p">=</span> <span class="n">domainName</span><span class="p">,</span>
+            <span class="n">Tld</span> <span class="p">=</span> <span class="n">tld</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span>
+            <span class="n">Availability</span> <span class="p">=</span> <span class="n">result</span><span class="p">.</span><span class="n">Availability</span><span class="p">,</span>
+            <span class="n">CheckDate</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span>
+        <span class="p">});</span>
+
+        <span class="n">System</span><span class="p">.</span><span class="n">Threading</span><span class="p">.</span><span class="n">Thread</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="m">1000</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">results</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="troubleshooting">TroubleShooting</h3>
+<p>I had a few problems while implementing. Learned a few things while fixing them. So here they are:</p>
+
+<ul>
+  <li>
+    <p>I created an IAM account that has access to Route53. But that wasn’t enough. There is a separate action called <strong>route53domains</strong>. I had to grant access to this as well to use domains API.</p>
+  </li>
+  <li>
+    <p>I use EUWest1 region since it’s the closest one. Normally Route53 doesn’t require any region setting but weirdly I had to set region to US East1 in order to access Route53Domains API.</p>
+  </li>
+</ul>
+
+<p>The problems above makes me think domains didn’t fit very well with the current Route53. It feels like it has not integrated seamlessly yet.</p>
+
+<h3 id="first-client-console-application">First client: Console application</h3>
+<p>This used to be the test application but since I don’t have any user interface currently this will be my first client. It just accepts the domain name from the user, checks the availability and saves the results in JSON format. This is all the code of the console application:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">Length</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Usage: DomChk53.UI.Console {domain name}"</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">string</span> <span class="n">domain</span> <span class="p">=</span> <span class="n">args</span><span class="p">[</span><span class="m">0</span><span class="p">];</span>
+    <span class="kt">var</span> <span class="n">checker</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">DomainChecker</span><span class="p">();</span>
+    <span class="kt">var</span> <span class="n">results</span> <span class="p">=</span> <span class="n">checker</span><span class="p">.</span><span class="nf">Check</span><span class="p">(</span><span class="n">domain</span><span class="p">);</span>
+
+    <span class="kt">string</span> <span class="n">outputFilename</span> <span class="p">=</span> <span class="s">$"results-</span><span class="p">{</span><span class="n">domain</span><span class="p">}</span><span class="s">-</span><span class="p">{</span><span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(</span><span class="s">"yyyyMMdd-HHmmss"</span><span class="p">)}</span><span class="s">.json"</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="n">json</span> <span class="p">=</span> <span class="n">Newtonsoft</span><span class="p">.</span><span class="n">Json</span><span class="p">.</span><span class="n">JsonConvert</span><span class="p">.</span><span class="nf">SerializeObject</span><span class="p">(</span><span class="n">results</span><span class="p">);</span>
+    <span class="n">File</span><span class="p">.</span><span class="nf">WriteAllText</span><span class="p">(</span><span class="n">outputFilename</span><span class="p">,</span> <span class="n">json</span><span class="p">);</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Saved the results to </span><span class="p">{</span><span class="n">outputFilename</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>It also displays the results of each domain on the console you can have keep track of what it’s doing</p>
+
+<p><img src="/images/vpblogimg/2015/08/domchk53-console-output.png" alt=""></p>
+
+<p>It saves the results with a timestamp so a history can be maintained:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  {
+    "Domain": "volkan",
+    "Tld": "cool",
+    "Availability": "AVAILABLE",
+    "CheckDate": "2015-08-05T12:31:58.40081Z"
+  },
+</code></pre></div></div>
+
+<h3 id="whats-missing">What’s missing</h3>
+<p>It’s not much but at least it delivers what it promises: You give it a domain name and it checks the availability of all supported TLDs by AWS Route 53 and returns the results. But there’s a lot to do to improve this project. Some items in my list:</p>
+
+<ul>
+  <li>A web-based user interface that allows viewing these results online.</li>
+  <li>Get the price list for each tLD as well and display it along with the name</li>
+  <li>Registering selected domains: It would be nice if you could buy the available domains using the same interface</li>
+  <li>A landing page at domchk53.com so that it can have links to the source code, online checker etc.</li>
+</ul>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>The reason I started this project was to overcome the limitations of AWS Route 53 domains UI and be able to search all supported TLDs all at once. To consider the project complete I will prepare a single-page website about the project and develop a nice user-interface. But in terms of basic functionality I can get what I set out for so I can think of it as a small success I guess.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/domchk53" target="_blank" rel="noopener noreferrer">Project source code</a></li>
+  <li><a href="http://domchk53.com" target="_blank" rel="noopener noreferrer">Project website</a></li>
+  <li><a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html" target="_blank" rel="noopener noreferrer">List of Supported TLDs</a></li>
+  <li><a href="http://docs.aws.amazon.com/general/latest/gr/rande.html" target="_blank" rel="noopener noreferrer">AWS Documentation for Route 53 Domains region</a></li>
+  <li><a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html" target="_blank" rel="noopener noreferrer">AWS Documentation for Route 53 limitations</a></li>
+  <li><a href="https://d32ze2gidvkk54.cloudfront.net/Amazon_Route_53_Domain_Registration_Pricing_20140731.pdf" target="_blank" rel="noopener noreferrer">AWS Domain price list</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/23" class="prev">Prev</a>
+    
+    
+        <a href="/page/25" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

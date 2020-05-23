@@ -1,0 +1,253 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Beware the Pineapple: An overview of WiFi Pineapple Mark V - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2015/02/25/beware-the-pineapple-an-overview-of-wifi-pineapple-mark-v/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Beware the Pineapple: An overview of WiFi Pineapple Mark V</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-02-25T14:30:00+00:00" itemprop="datePublished">February 25, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- security -->
+
+
+
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">gadget, wifi_pineapple</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>Wifi Pineapple has been around for quite some time now. Almost two years ago I posted a short review <a href="https://volkanpaksoy.com/archive/2013/04/22/wifi-pineapple/">here</a> but with the latest version (Mark V) it’s got badder than ever and they keep adding more features so it’s a nice time to catch up.</p>
+
+<h3 id="what-is-it">What is it?</h3>
+<p>Basically Wifi Pineapple is a WiFi honeypot that allows users to carry out man-in-the-middle attacks. Connected clients’ traffic go through the attacker which makes the attacker capable of pulling a number of tricks.</p>
+
+<p>Mark IV was based on <a href="http://www.amazon.co.uk/ALFA-Network-AP121U-Wireless-Repeater/dp/B00RKPD6MM" target="_blank" rel="noopener noreferrer">Alfa AP121U</a>. Instead of buying a pineapple you could just buy an AP121U and create your own DIY pineapple by installing the firmware. Mark V, on the other hand, is a whole new animal.</p>
+
+<p><img src="/images/vpblogimg/2015/02/wifi-pineapple-features.png" alt="Wifi Pineapple Mark V"></p>
+
+<p>Equipped with 2 radios it can work in client mode meaning it can piggyback on a nearby WiFi network and bridge the victim’s connections (In Mark IV the only way to provide internet access was 3G which is also still supported).</p>
+
+<h3 id="how-does-it-work">How does it work?</h3>
+
+<p>At the heart of the pineapple lies an attack method called Karma. It works by exploiting trusting devices to probe requests and responses. Our wireless devices, by default, constantly try to connect to the last networks they were on. To accomplish this they actively scan their neighbourhood by sending out probe requests. (A probe request is a special frame sent by a client station requesting information from either a specific access point, specified by SSID, or all access points in the area, specified with the broadcast SSID.)</p>
+
+<p>Normally, access points (AP) that don’t broadcast the requested SSID just ignore the probe request. The <em>correct</em> AP responds with a probe response and the client initiates association with the AP again. That’s how we connect to our home or work network as soon as we arrive. That is convenient and user-friendly but the malicious devices running Karma attack can break this “honor-code” based system. The pineapple responds to whatever AP the device is asking for therefore deceiving it into believing they are home.</p>
+
+<h3 id="whats-the-risk">What’s the risk</h3>
+
+<p>Obviously these honeypots are set up for a reason: To get your traffic. Once you start sending your data through the attacker’s system you are opening yourself to all sorts of attacks. One of the most important ones is called sslstrip. (These “attacks” are called <em>infusions</em> in Pineapple parlance and they can be downloaded and installed in seconds to enhance its capabilities which makes the pineapple an even more powerful weapon)</p>
+
+<p>sslstrip redirects your HTTPS traffic to HTTP equivalent (i.e. You land on http://www.google.com even though you requested https://www.google.com). So when you login to your favorite social network you essentially hand over your credentials to the attacker in plain text.</p>
+
+<p>You can find a full list of available infusions <a href="https://www.wifipineapple.com/?infusions" target="_blank" rel="noopener noreferrer">here</a> which can give you an idea what types of attacks are possible.</p>
+
+<h3 id="whats-new">What’s New</h3>
+
+<p>As of Version 2 of the Pineapple firmware a new feature is introduced: <em>PineAP</em>. They define it as “the next-gen rogue AP”.</p>
+
+<p>As Karma attack became more popular vendors started to increase security a little bit. Instead of sending out all the SSIDs that the device has connected in the past, the device simply sends a probe request that says “Broadcast” and the APs respond with a beacon with their information and what SSID(s) they are broadcasting. Then the client can decide which one to connect to. This method mitigates the regular Karma attack. To mitigate this mitigation (!) Pineapple team came up with PineAP.</p>
+
+<p>PineAP has several modules:</p>
+
+<ul>
+  <li>
+    <p><strong>Beacon Response</strong>      <br>
+Similar to probe responses this module sends beacons. For example if the client is looking for “Home Sweet Home” network, Karma sends a probe response with this SSID and at Beacon Response module sends a beacon with the same SSID making the pineapple look more legitimate.</p>
+  </li>
+  <li>
+    <p><strong>Dogma</strong>
+This module sends out beacon frames of SSIDs selected by the attacker (defined in the PineAP SSID Pool). It also allows targeted attacks so you can set the target MAC address.</p>
+  </li>
+  <li>
+    <p><strong>Auto Harvester</strong>
+Since SSID names are more likely to be kept as a secret it helps to collect this information. Harvester collects leaking SSIDs from the potential clients. They are added to the SSID pool to be used by Dogma.</p>
+  </li>
+</ul>
+
+<h3 id="further-improvements-and-new-features">Further Improvements and new features</h3>
+
+<ul>
+  <li><strong>Setup screen</strong></li>
+</ul>
+
+<p>A neat feature is, as an extra security step, when you first setup and connect to your pineapple you have to enter a random LED pattern.</p>
+
+<p><img src="/images/vpblogimg/2015/02/wifi-pineapple-led-pattern.png" alt="LED Pattern"></p>
+
+<p>As a fan of multi-factor authentication of all sorts I loved the idea of using the physical hardware to improve security.</p>
+
+<ul>
+  <li><strong>Management network</strong></li>
+</ul>
+
+<p>New Pineapple can setup a secure Wifi AP just for the owner so that you don’t have to connect via Ethernet. You can use your phone to check who is connected to the network and manage the pineapple completely by using the responsive UI.</p>
+
+<ul>
+  <li><strong>Recon mode</strong></li>
+</ul>
+
+<p>This is another neat feature that allows to scan all AP and clients around. You can even carry out a deauth attack by just clicking on a client.</p>
+
+<h3 id="mitigations">Mitigations</h3>
+
+<ul>
+  <li>
+    <p><strong>Never connect to open networks, NEVER!</strong>: If you are in the habit of using open wifi networks one day you might come across one of those pineapples in your coffee shop and hand over your data unknowingly to a guy sitting in the table next to you! Even without this risk you should never use networks that you have no control over but this kind of risk makes it even more important.</p>
+  </li>
+  <li>
+    <p><strong>Verify SSL</strong>: SSL/TLS is still the most important security measure we have when connecting to websites. Always ensure that you are connected to the right website by checking the certificate. An attacker may not be able to break SSL certificate but they can simply bypass it completely by tools like sslstrip. It’s especially important in mobile devices since they tend to hide the address bar to make more room for the content so generally you never know the exact URL you are sending your requests to.</p>
+  </li>
+  <li>
+    <p><strong>VPN</strong>: If you are using VPN your traffic is encrypted and sent through a secure channel. In this case, even if an attacker is able to get your traffic they will not be able to make any sense of it.</p>
+  </li>
+  <li>
+    <p><strong>HSTS</strong>: This mechanism allows web servers to declare that web browsers (or other complying user agents) should only interact with it using secure HTTPS connections and never via the insecure HTTP protocol. It helps to mitigate the risks of tools like sslstrip. Downside is it’s not currently adopted by all browsers at the moment.</p>
+  </li>
+</ul>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>Wireless networks provide great convenience to us but comes with risks and vulnerabilities (as all conveniences in IT). The hardware is getting smaller and more powerful everyday so the tools like Wifi Pineapple are getting more threatening. It’s important to keep an eye on what kind of risks are out there and learn how to avoid those risks.</p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="https://www.wifipineapple.com/" target="_blank" rel="noopener noreferrer">Official website</a></li>
+  <li><a href="http://hak5.org/category/episodes/pineapple-university" target="_blank" rel="noopener noreferrer">Hak5 Pineapple University</a></li>
+  <li><a href="https://www.youtube.com/watch?v=40Igim3upL0" target="_blank" rel="noopener noreferrer">YouTube Video: WiFi Pineapple 2.0.2 Firmware - PineAP</a></li>
+  <li><a href="https://scotthelme.co.uk/wifi-pineapple-karma-sslstrip/" target="_blank" rel="noopener noreferrer">Using Karma and SSLStrip to MitM Secure Connections</a></li>
+  <li><a href="http://hak5.org/episodes/haktip-23" target="_blank" rel="noopener noreferrer">Haktip 23 – WiFi 101: Probe Requests and Responses</a></li>
+  <li><a href="http://www.thoughtcrime.org/software/sslstrip/" target="_blank" rel="noopener noreferrer">BlackHat Presentation on SSL Stripping</a></li>
+  <li><a href="http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security" target="_blank" rel="noopener noreferrer">Wikipedia article on HSTS</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2015/02/19/visual-tools-for-neo4j/" title="Previous Post: 
+Visual Tools for Neo4J">« Visual Tools for Neo4J</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2015/02/27/new-aws-features-and-improvements/" title="next Post: 
+New AWS features and improvements">New AWS features and improvements » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

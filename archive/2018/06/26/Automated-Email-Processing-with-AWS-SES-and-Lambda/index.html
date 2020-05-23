@@ -1,0 +1,375 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Automated Email Processing with AWS SES and Lambda - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2018/06/26/Automated-Email-Processing-with-AWS-SES-and-Lambda/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Automated Email Processing with AWS SES and Lambda</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2018-06-26T07:00:00+01:00" itemprop="datePublished">June 26, 2018</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">ses, lambda</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>A few years ago AWS announced a new SES feature: Incoming Emails. So far I have only used it once to receive domain verification emails to an S3 bucket but haven’t built a meaningful project. In this blog post my goal is to develop a sample project to demonstrate receiving emails with SES and processing those emails automatically by triggering Lambda functions.</p>
+
+<p>As a demo project I will build a system that automatically responds to a sender with my latest CV as shown in the diagram below</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-00-architecture.png" alt=""></p>
+
+<h2 id="receiving-email-with-amazon-simple-email-service">Receiving Email with Amazon Simple Email Service</h2>
+<p>Amazon Simple Email Service (SES) is Amazon’s SMTP server. It’s core functionality has been sending emails but Amazon kept adding more features such as using templates and receiving emails.</p>
+
+<h3 id="step-1-verify-a-new-domain">Step 1: Verify a New Domain</h3>
+<p>First, we need a verified domain to receive emails. If you already have one you ca skip this step.</p>
+
+<ul>
+  <li>Step 1.1: In the SES console, click Domains –&gt; Verify a New Domain</li>
+  <li>Step 1.2: Enter the domain name to verify and click Verify This Domain</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-01-verify-domain.png" alt=""></p>
+
+<ul>
+  <li>Step 1.3: In the new dialog click Use Route 53</li>
+</ul>
+
+<p>(This is assuming your domain is in Route53. If not you have to verify it by other means)</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-02-verify-domain-confirmation.png" alt=""></p>
+
+<ul>
+  <li>Step 1.4: Make sure you check Email Receiving Record checkbox and proceed</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-03-verify-domain-create-record-sets.png" alt=""></p>
+
+<ul>
+  <li>Step 1.5 Confirm verification status</li>
+</ul>
+
+<p>Go back to Domains page in SES console and make sure the verification has been completed successfully</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-04-verify-domain-confirm-results.png" alt=""></p>
+
+<p>In my example, it only took about 2 minutes.</p>
+
+<h3 id="step-2-create-a-lambda-function-to-send-the-cv">Step 2: Create a Lambda function to send the CV</h3>
+
+<p>In the next step we will continue to configure SES to specify what to do with the received email. But first we need the actual Lambda function to do the work. Then we will connect this to SES so that it runs everytime when we receive an email to a specific email.</p>
+
+<ul>
+  <li>Step 2.1: Create a Lambda function from scratch</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-06-create-lambda.png" alt=""></p>
+
+<ul>
+  <li>Step 2.2: Create an SNS topic</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-08-create-sns-topic.png" alt=""></p>
+
+<p>SES will publish emails to this topic. We will do the plumbing and give necessary permissions later.</p>
+
+<ul>
+  <li>Step 2.3: Create subscription for the Lambda function to SNS topic</li>
+</ul>
+
+<p>Now we tie the topic to our Lambda by creating a subscription</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-10-create-sns-subscription.png" alt=""></p>
+
+<ul>
+  <li>Step 2.4: Attach necessary permissions to the new role</li>
+</ul>
+
+<p>In my example, I store my CV in an S3 bucket. So the policy would need to receive SNS notifications, read access to S3 bucket and permissions to send emails.</p>
+
+<p>By default a new Lambda role comes with AWSLambdaBasicExecutionRole attached to it</p>
+
+<p>First add this to have read-only access to a single bucket:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VisualEditor0"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"s3:GetObjectAcl"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"s3:GetObject"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"s3:ListBucket"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"arn:aws:s3:::{BUCKET NAME}"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"arn:aws:s3:::*/*"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Then this to be able to send emails</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VisualEditor0"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"ses:SendEmail"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"ses:SendTemplatedEmail"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"ses:SendRawEmail"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>I like to keep these small, modular policies so that I can reuse then in other projects.</p>
+
+<p>After adding the policies you should be able to see these in your Lambda function’s access list when you refresh the function’s page:</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-07-updated-permissions.png" alt=""></p>
+
+<h3 id="step-3-develop-the-lambda-function">Step 3: Develop the Lambda function</h3>
+
+<p>In this exmample I’m going to use a .NET Core and C# 2.0 to create the Lambda function.</p>
+
+<ul>
+  <li>Step 3.1: Install Lambda templates</li>
+</ul>
+
+<p>In Windows, AWS Lambda function templates come with AWS Visual Studio extension but in Mac we have to install them via command line.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet new -i Amazon.Lambda.Templates::*
+</code></pre></div></div>
+
+<ul>
+  <li>Step 3.2: Create Lambda function</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet new lambda.EmptyFunction --name SendEmailWithAttachmentFromS3 --profile default --region eu-west-1
+</code></pre></div></div>
+
+<ul>
+  <li>Step 3.3:</li>
+</ul>
+
+<p>Now it’s time for the actual implementation. I’m not going to paste the whole code here. Best place to get it is its <a href="https://github.com/volkanpaksoy/lab/tree/master/blog/SendEmailWithAttachmentFromS3/src/SendEmailWithAttachmentFromS3" target="_blank" rel="noopener noreferrer">GitHub repository</a></p>
+
+<ul>
+  <li>Step 3.4 Deploy the function</li>
+</ul>
+
+<p>Create an IAM user with access to Lambda deployment and create a profile locally named deploy-lambda-profile.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet restore
+dotnet lambda deploy-function send_cv
+</code></pre></div></div>
+
+<h3 id="step-4-create-a-receipt-rule">Step 4: Create a Receipt Rule</h3>
+<p>Now that we have a verified domain, we need a rule to receive emails.</p>
+
+<p>In my example project, I’m going to use an email address that will send my latest CV to a provided email adress.</p>
+
+<ul>
+  <li>
+    <p>Step 4.1: In the Email Receiving section click on Rule Sets –&gt; Create a Receipt Rule</p>
+  </li>
+  <li>
+    <p>Step 4.2: Add a recipient</p>
+  </li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-05-add-recipient.png" alt=""></p>
+
+<ul>
+  <li>Step 4.3: Add an Action</li>
+</ul>
+
+<p>Now we choose what to do when an email is received. In this example I want it to be published to an SNS topic that I created earlier. I could invoke the Lambda function directly but leveraging publish/subscribe gives me more flexibility as in I can change the subscriber in the future or add more stuff to do without affecting the rule configuration.</p>
+
+<p>Since it supports multiple actions I could choose to invoke Lambda directly and add more actions here later on if need be but I’d like to use a standard approach which is all events are published to SNS and the interested parties subscribe to the topics.</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-09-add-action.png" alt=""></p>
+
+<p>I chose UTF-8 because I’m not expecting any data in the message body so it doesn’t matter too much in this example.</p>
+
+<ul>
+  <li>Step 4.4 Give it a name and create the rule.</li>
+</ul>
+
+<h2 id="step-4-test-end-to-end">Step 4: Test end-to-end</h2>
+
+<p>Now that it’s all set up, it is time to test.</p>
+
+<ul>
+  <li>Step 4.1: Send a blank email to cv@vlkn.me (Or any other address if you’re setting up your own)</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-11-test-send-email.png" alt=""></p>
+
+<ul>
+  <li>Step 4.2:</li>
+</ul>
+
+<p>Then after a few seconds later, receive an email with the attachment:</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-12-test-confirm-email.png" alt=""></p>
+
+<p>The second email is optional. Basically, I creted an email subscriber too. So that whenever a blank email is received I get notified by SNS directly. This helps me to keep an eye on traffic if there is any.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/SendEmailWithAttachmentFromS3/src/SendEmailWithAttachmentFromS3" target="_blank" rel="noopener noreferrer">Demo Source Code</a></li>
+  <li><a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html" target="_blank" rel="noopener noreferrer">Receiving Email with Amazon SES</a></li>
+  <li><a href="https://aws.amazon.com/blogs/aws/new-receive-and-process-incoming-email-with-amazon-ses/" target="_blank" rel="noopener noreferrer">AWS Blog: Receive and Process Incoming Email with Amazon SES</a></li>
+  <li><a href="https://aws.amazon.com/blogs/messaging-and-targeting/introducing-email-templates-and-bulk-sending/" target="_blank" rel="noopener noreferrer">Introducing Email Templates and Bulk Sending</a></li>
+  <li><a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-dotnet-coreclr-deployment-package.html" target="_blank" rel="noopener noreferrer">.NET Core CLI</a></li>
+  <li><a href="https://github.com/aws/aws-lambda-dotnet/tree/master/Libraries/src/Amazon.Lambda.SNSEvents" target="_blank" rel="noopener noreferrer">Amazon.Lambda.SNSEvents</a></li>
+  <li><a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html" target="_blank" rel="noopener noreferrer">Sending Personalized Email Using the Amazon SES API</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2018/06/15/AWS-certification/" title="Previous Post: 
+AWS Certification">« AWS Certification</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2018/07/08/AWS-certification-notes-cloud-practitioner/" title="next Post: 
+AWS Certification Notes: AWS Certified Cloud Practitioner">AWS Certification Notes: AWS Certified Cloud Practitioner » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

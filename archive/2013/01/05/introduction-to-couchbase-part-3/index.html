@@ -1,0 +1,214 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Introduction to Couchbase – Part 3 - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2013/01/05/introduction-to-couchbase-part-3/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Introduction to Couchbase – Part 3</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-01-05T12:16:39+00:00" itemprop="datePublished">January  5, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">nosql</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>In this post we are diving into coding and developing a small application using the beer sample database that ships with Couchbase 2.0.</p>
+
+<h2 id="environment-setup">Environment Setup</h2>
+<p>To develop a .NET application with a Couchbase backend, we need the Couchbase .NET SDK. The current version as of this writing can be downloaded from <a href="http://packages.couchbase.com/clients/net/1.2/Couchbase-Net-Client-1.2.1.zip" target="_blank" rel="noopener noreferrer">here</a>. But the best way to get it using Nuget. Using the SDK is fairly simple. It comes with a main class called *CouchbaseClient. *All operations are performed using this class.</p>
+
+<h2 id="connecting-to-server">Connecting to server</h2>
+<p>The first step is connecting to the server and the easiest way to do is using the configuration file.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">&lt;</span><span class="n">configuration</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="n">configsections</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="n">section</span> <span class="n">name</span><span class="p">=</span><span class="s">"couchbase"</span> <span class="n">type</span><span class="p">=</span><span class="s">"Couchbase.Configuration.CouchbaseClientSection, Couchbase"</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="n">configsections</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="n">couchbase</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="n">servers</span> <span class="n">bucket</span><span class="p">=</span><span class="s">"beer-sample"</span> <span class="n">bucketpassword</span><span class="p">=</span><span class="s">""</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="k">add</span> <span class="n">uri</span><span class="p">=</span><span class="s">"http://192.168.1.111:8091/pools/"</span> <span class="p">/&gt;</span>
+
+            <span class="p">&lt;</span><span class="k">add</span> <span class="n">uri</span><span class="p">=</span><span class="s">"http://192.168.1.112:8091/pools/"</span> <span class="p">/&gt;</span>
+
+        <span class="p">&lt;/</span><span class="n">servers</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="n">couchbase</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="n">configuration</span><span class="p">&gt;</span>
+</code></pre></div></div>
+
+<p>As you can see from the configuration section, if you have multiple nodes in the cluster just add their URIs to the servers list. Once IPs and the bucket and the password are specified we are done. We don’t need to explicitly connect to the database, we can just create a new client instance and start calling methods</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="p">(</span><span class="n">CouchbaseClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CouchbaseClient</span><span class="p">())</span>
+<span class="p">{</span>
+    <span class="c1">// DB operations go here</span>
+
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="basic-operations">Basic Operations</h2>
+<p>OK so far so good. We are connected to the server without a hassle. As there is already data in the server let’s get some sample data from the database.
+As the database is a key/value store we can add any type of data we want to. We can create our JSON objects in a string and insert/update data with it. But most likely we want to use our domain objects instead of manipulating raw JSON. There are 2 things to consider here. Once we tackle those issues the rest is quite easy:</p>
+
+<ol>
+  <li>Mark your objects as <em>Serializable</em>: This is required to persist any object. Once you make the class serializable you can run CRUD operations on it.</li>
+  <li>The default serializer is binary serializer. That means when you store an object using by calling Store method you will get something like this when you try to view the object:</li>
+</ol>
+
+<p><img src="/images/vpblogimg/2013/01/Beer_Binary.png" alt="Beer Binary"></p>
+
+<p>This is not too helpful. We cannot read and index. So we’d rather store it in JSON format. Luckily StoreJson method comes to rescue. The following code produces the result below which is exactly what we wanted. To map the key’s in JSON object to the properties in our class we use JsonProperty attribute in the Newtonsoft.Json library which is used the SDK itself.</p>
+
+<p><img src="/images/vpblogimg/2013/01/Beer_JSON_Code.png" alt="Beer JSON Code"></p>
+
+<p><img src="/images/vpblogimg/2013/01/Beer_JSON_Output.png" alt="Beer JSON Output"></p>
+
+<p>Store and StoreJson methods accept an argument of type StoreMode. The values of StoreMode are Add, Set and Replace. <em>Add</em> is used to create a new record (INSERT), Replace is used to update an existing record (UPDATE). Set adds the record if it doesn’t exist and updates it if it exists (MERGE – but simpler).
+To delete an object we call the Remove method with the objects key as argument.
+So basically we perform CRUD operations with Get/GetJson, Store/StoreJson and Remove methods.</p>
+
+<h2 id="querying-database-with-views">Querying database with views</h2>
+<p>Views in Couchbase 2.0 are functions written in JavaScript that use a technique called Map/Reduce. Map/Reduce is a complex topic that I have not fully covered yet but basically it’s a method for processing large data sets in a distributed environment. It is developed by Google. It involves 2 functions called map and reduce. The map function filters entries for certain information and can extract information. The result of a map function is an ordered list of key/value pairs called an <em>index</em>. The results of map functions are stored in disk by the Couchbase server. Reduce function is optional and can be used to perform sum, aggregate or similar calculations on the output of map function.
+Views can be grouped in <em>design document</em>s which can be associated with a bucket. I consider them as namespaces. Couchbase Server offers two kinds of views: Development and Production. As creating a view means creating an index. it may incur some overhead on the performance of the system. So development views are handy to fully test before publishing to production environment. Also production views cannot be edited via admin console which forces the developer to develop and test the view in development environment first.
+So to demonstrate what they look like let’s examine the view that returns all the breweries.</p>
+
+<p><img src="/images/vpblogimg/2013/01/Beer_View_MapFunc.png" alt="Beer_View_MapFunc"></p>
+
+<p>We have 2 types of objects in the database (beer and brewery). This function only emits the objects that are of type brewery.</p>
+
+<h2 id="demo">Demo</h2>
+<p>So all this theory means nothing if we don’t put it into good use. You can get source code of the sample application (I call it Beer Explorer) from my Github account. Also if you want to see what it looks like before diving into the code I host a live version here: <a href="http://beerexplorer.me" target="_blank" rel="noopener noreferrer">http://beerexplorer.me</a>. Feel free to play with it.</p>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2012/12/27/introduction-to-couchbasepart-2/" title="Previous Post: 
+Introduction to Couchbase - Part 2">« Introduction to Couchbase - Part 2</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2013/01/06/diy-network-cables/" title="next Post: 
+DIY - Network cables">DIY - Network cables » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

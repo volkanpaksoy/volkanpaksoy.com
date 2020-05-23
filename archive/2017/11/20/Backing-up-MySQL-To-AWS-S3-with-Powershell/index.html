@@ -1,0 +1,253 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Backing Up MySQL to AWS S3 with PowerShell - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2017/11/20/Backing-up-MySQL-To-AWS-S3-with-Powershell/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Backing Up MySQL to AWS S3 with PowerShell</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2017-11-20T06:00:00+00:00" itemprop="datePublished">November 20, 2017</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- aws, devops -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags">s3, mysql, powershell</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>I have an application that uses MySQL database. Because of cost concerns it’s running on an EC2 instance instead of RDS. As it’s not a managed environment, the burden of backing up my data falls on me. This is a small step by step guide that details how I’m backing up my MySQL database to AWS S3 with PowerShell</p>
+
+<h2 id="part-01---aws-setup">PART 01 - AWS SETUP</h2>
+
+<ol>
+  <li>Create a bucket named (e.g. “application-backups”) on AWS S3 using AWS Management Console.</li>
+  <li>Create a new IAM user (e.g “upload-backup-to-s3”)</li>
+  <li>Create a new policy using management console. The policy will only give enough permissions to put objects into a single S3 bucket:</li>
+</ol>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"s3:ListBucket"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"arn:aws:s3:::xxxxxxx"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s3:PutObject"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"arn:aws:s3:::xxxxxxx/*"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>In S3 bucket properties copy ARN and replace the x’s above with that.</p>
+
+<ol>
+  <li>
+    <p>Customize S3 bucket LifeCycle settings to determine how long you want the old logs retain in your bucket. In my case I set it to expire at 21 days which I think it’s large enough window for relevant database backups. I probably wouldn’t restore anything older than 21 days anyway.</p>
+  </li>
+  <li>
+    <p>[Optional - For email notifications] Create an SES user by clicking SES -&gt; SMTP Settings -&gt; Create My SMTP Credentials</p>
+  </li>
+</ol>
+
+<p>Make sure you don’t make the mistake I made which was creating an IAM user with a policy that can send emails. In the SMTP settings page there’s a note right below the button:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Your SMTP user name and password are not the same as your AWS access key ID and secret access key. Do not attempt to use your AWS credentials to authenticate yourself against the SMTP endpoint.
+</code></pre></div></div>
+
+<p>When you click the button it creates an IAM user basically for the secret key is 44 bytes whereas the IAM user I created had a secret key of 40 characters. Anyway, bottom line is in order to be able to send emails via SES create the user as described above and all should be fine.</p>
+
+<h2 id="part-02---powershell-script">PART 02 - POWERSHELL SCRIPT</h2>
+
+<ol>
+  <li>
+    <p>Download and install AWS Tools for Windows PowerShell (https://aws.amazon.com/powershell/)</p>
+  </li>
+  <li>
+    <p>Create a script as shown below. In a nutshell what the script does is:</p>
+  </li>
+</ol>
+
+<p>a. Execute mysqldump command (Comes with MySQL Server)</p>
+
+<p>b. Zip the backup file (which reduces the size significantly)</p>
+
+<p>c. Upload the zip file to S3 bucket</p>
+
+<p>d. Send a notification email using SES</p>
+
+<p>e. Delete the local files</p>
+
+<p>This is the full script:</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/e75f2d861de8604868bec0897768896e.js"> </script>
+
+<ul>
+  <li>
+    <p>For SQL Server databases, there’s a PowerShell cmdlet called <a href="https://docs.microsoft.com/en-us/powershell/module/sqlserver/backup-sqldatabase?view=sqlserver-ps" target="_blank" rel="noopener noreferrer">Backup-SQLDatabase</a> but for MySQL I think the most straightforward way is using mysqldump that comes with MySQL server.</p>
+  </li>
+  <li>
+    <p>For password-protected zip files, you can take a look at <a href="https://cyber-defense.sans.org/blog/2016/06/06/powershell-7-zip-compress-archive-encryption#" target="_blank" rel="noopener noreferrer">this article</a> (I haven’t tried it myself)</p>
+  </li>
+</ul>
+
+<p>Final step: Schedule the script by using Windows Task Scheduler</p>
+
+<p>This is quite straightforward. Just create a task, schedule it to how often you want to backup your database.</p>
+
+<p>In the actions section, enter “powershell” as “program/script” and the path of your PowerShell script as “argument” and that’s it.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://docs.microsoft.com/en-us/powershell/module/sqlserver/backup-sqldatabase?view=sqlserver-ps" target="_blank" rel="noopener noreferrer">Backup-SQLDatabase cmdlet reference</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.archive/compress-archive?view=powershell-5.1" target="_blank" rel="noopener noreferrer">Compress-Archive cmdlet reference</a></li>
+  <li><a href="https://aws.amazon.com/powershell/" target="_blank" rel="noopener noreferrer">AWS Tools Download</a></li>
+  <li><a href="https://www.vexasoft.com/blogs/powershell/7255220-powershell-tutorial-try-catch-finally-and-error-handling-in-powershell" target="_blank" rel="noopener noreferrer">PowerShell Tutorial – Try Catch Finally and error handling in PowerShell</a></li>
+  <li><a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/smtp-credentials.html" target="_blank" rel="noopener noreferrer">AWS Documentation: Obtaining Your Amazon SES SMTP Credentials</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2017/09/05/DIY-Streaming-Service-with-Synology/" title="Previous Post: 
+DIY Streaming Service with Synology">« DIY Streaming Service with Synology</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2017/11/30/Backing-up-GitHub-Account-with-PowerShell/" title="next Post: 
+Backing up GitHub Account with PowerShell">Backing up GitHub Account with PowerShell » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

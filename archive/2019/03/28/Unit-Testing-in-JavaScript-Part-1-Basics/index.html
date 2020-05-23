@@ -1,0 +1,235 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Unit Testing in Javascript - Part 1: Basics - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2019/03/28/Unit-Testing-in-JavaScript-Part-1-Basics/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Unit Testing in Javascript - Part 1: Basics</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-03-28T06:00:00+00:00" itemprop="datePublished">March 28, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">javascript, tdd, unit_testing</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>There are so many names of tools and frameworks are flying around in JavaScript if you’re a beginner it’s easy to get lost.</p>
+
+<h2 id="first-things-first-identify-whats-what">First things first: Identify what’s what</h2>
+<p>Basically we need the following key components to write and run unit tests:</p>
+
+<ul>
+  <li>
+<strong>Assertions</strong>: We run a method in subject under test and compare the result with some known expected value</li>
+  <li>
+<strong>Mocking</strong>: We need to mock the external dependencies (network services, database, file system etc) so that we can reliably test subject under test and the tests can run everywhere and without requiring any credentials or permissions.</li>
+  <li>
+<strong>Test runner</strong>: Our test is some block of code. Something needs to make sense of the unit tests we wrote, execute them and show the results (fail/pass)</li>
+</ul>
+
+<h2 id="choosing-the-weapons-mocha-and-chai">Choosing the weapons: Mocha and Chai</h2>
+<p>In this example I’m going to use Mocha as my test runner and Chai as my assertion library.</p>
+
+<p>They can simply be installed via NPM:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install --save-dev chai
+</code></pre></div></div>
+
+<p>To be able use Mocha in the Integrated Terminal inside Visual Studio we have to install Mocha as a global package:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install -g mocha
+</code></pre></div></div>
+
+<p>To put these to test I created this simple Maths service that calculates the factorial of an integer.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module.exports = class MathsService {
+    factorial(num) {
+        if (num &lt; 0) 
+            return -1;
+        else if (num == 0) 
+            return 1;
+        else {
+            return (num * this.factorial(num - 1));
+        }
+    }
+};
+</code></pre></div></div>
+
+<p>And my unit test to test this method looks like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const MathsService = require('../maths-service.js');
+const chai = require('chai');
+const expect = chai.expect; 
+
+describe('Factorial', function() {
+    it('factorial should return correct value', function() {
+        const mathsService = new MathsService();
+    
+        expect(mathsService.factorial(-1)).to.equal(-1);
+        expect(mathsService.factorial(0)).to.equal(1);
+        expect(mathsService.factorial(1)).to.equal(1);
+        expect(mathsService.factorial(3)).to.equal(6);
+        expect(mathsService.factorial(5)).to.equal(120);
+    });
+});
+</code></pre></div></div>
+
+<p>Chai supports 3 styles:</p>
+
+<ul>
+  <li>Should</li>
+  <li>Expect</li>
+  <li>Assert</li>
+</ul>
+
+<p>They all server the same purpose so it’s just a matter of taste at the end of the day. For this demo I used <em>expect</em> style.</p>
+
+<p>By default Mocha searches test folder. So you can run mocha without parameters if you put your tests under test folder or you can specify the folder. For example, in the screenshot below I moved the test to the root folder and entered “mocha .” and that worked fine as well.</p>
+
+<p><img src="/images/vpblogimg/2019/03/unit-testing-in-javascript-mocha-output.png" alt=""></p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>In this post I want to show the very basics of unit testing in JavaScript just enough to see a passing test. In future posts I’ll build on this and explore other frameworks and other aspects of TDD.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/UnitTestingInJavaScriptPart1" target="_blank" rel="noopener noreferrer">Source code</a></li>
+  <li><a href="https://medium.com/welldone-software/an-overview-of-javascript-testing-in-2019-264e19514d0a" target="_blank" rel="noopener noreferrer">An Overview of JavaScript Testing in 2019</a></li>
+  <li><a href="https://mochajs.org" target="_blank" rel="noopener noreferrer">Mocha JS</a></li>
+  <li><a href="https://www.chaijs.com" target="_blank" rel="noopener noreferrer">Chai JS</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2019/03/23/Repurposing-A-10-Year-Old-MacBook/" title="Previous Post: 
+Repurposing a 10-Year-Old MacBook">« Repurposing a 10-Year-Old MacBook</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2019/03/29/A-Docker-Image-to-Sync-Git-Repositories/" title="next Post: 
+A Docker Image to Sync Git Repositories">A Docker Image to Sync Git Repositories » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

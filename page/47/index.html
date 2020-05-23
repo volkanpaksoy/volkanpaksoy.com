@@ -1,0 +1,309 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/47/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2014/04/16/genetic-algorithm-implementation/" itemprop="url">Genetic Algorithm Implementation</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-04-16T11:04:46+01:00" itemprop="datePublished">April 16, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">java, machine_learning</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Genetic algorithm sounds fascinating to me as in a way it mimics evolution. It’s quite easy to implement and understand.</p>
+
+<h3 id="genetic-algorithm">Genetic Algorithm</h3>
+<p>The algorithm has 3 stages:</p>
+
+<ul>
+  <li>Selection: Every generation is subjected to a selection process which eliminates the unfit ones.</li>
+  <li>Cross-over: This happens randomly among the selected generation and some genomes swap genes.</li>
+  <li>Mutation: Some genes are mutated randomly based on a given threshold value for mutation.</li>
+</ul>
+
+<h3 id="implementation">Implementation</h3>
+<p>The implementation starts with generating random bit sequences to represent genomes. The length of the genome and the number of genomes in a generation are specified in the configuration.</p>
+
+<p><img src="/images/vpblogimg/2014/04/Genetic-Algorithm-01.png" alt="Genetic Algorithm 1"></p>
+
+<p>First generation is calculated randomly and their fitness is calculated based on the fitness function the system uses. After the groundwork has been done we have a genome pool each with their own fitness values and selection ranges. The width of the selection range is determined by the fitness of the genome. So that the larger the range the more likely they are selected for the next generation.</p>
+
+<p><img src="/images/vpblogimg/2014/04/Genetic-Algorithm-02.png" alt="Genetic Algorithm 2"></p>
+
+<p>In selection process, a random value is generated and the genome whose selection range includes that value is selected. Same genome can be selected more than once.</p>
+
+<p><img src="/images/vpblogimg/2014/04/Genetic-Algorithm-03.png" alt="Genetic Algorithm 3"></p>
+
+<p>After the next generation is selected and their new fitness values are calculated cross-over starts. In cross-over 2 random genomes are picked and they swap genes. The point in the genome string is specified in the configuration (3 in this example)</p>
+
+<p><img src="/images/vpblogimg/2014/04/Genetic-Algorithm-04.png" alt="Genetic Algorithm 4"></p>
+
+<p>The final phase of the algorithm is mutation. In this step a number of genomes are picked and some bits is flipped randomly.</p>
+
+<p><img src="/images/vpblogimg/2014/04/Genetic-Algorithm-05.png" alt="Genetic Algorithm 5"></p>
+
+<p>The most important thing about this algorithm is having a good fitness function that can accurately compute the fitness values for a given feature.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://en.wikipedia.org/wiki/Genetic_algorithm" target="_blank" rel="noopener noreferrer">Wikipedia article</a></li>
+  <li><a href="https://github.com/volkanpaksoy/VP.MachineLearning.GeneticAlgorithm" target="_blank" rel="noopener noreferrer">Source code for the implementation</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2014/03/22/agnes-implementation/" itemprop="url">AGNES Implementation</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-03-22T16:49:44+00:00" itemprop="datePublished">March 22, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">java, machine_learning</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Another data mining algorithm: AGNES (Agglomerative Nesting)</p>
+
+<h3 id="agnes-algorithm">AGNES Algorithm</h3>
+<p>AGNES takes a different approach than k-means which was the subject of my previous <a href="https://volkanpaksoy.com/2014/03/k-means-implementation/">post</a>. Initially it considers all data points as a separate cluster.</p>
+
+<p><img src="/images/vpblogimg/2014/03/AGNES-01.png" alt="AGNES 1"></p>
+
+<p>Then finds the minimum distance between clusters and merges the closest clusters:</p>
+
+<p><img src="/images/vpblogimg/2014/03/AGNES-02.png" alt="AGNES 2"></p>
+
+<p>The resulting cluster is added to the all cluster list the merged clusters are removed as they are no longer valid.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/VP.DataMining.AGNES" target="_blank" rel="noopener noreferrer">Source code</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2014/03/22/k-means-implementation/" itemprop="url">k-means Implementation</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-03-22T13:46:33+00:00" itemprop="datePublished">March 22, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp, machine_learning</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I’m keeping on reviving my old projects. This is the second data mining algorithm implementation. It is another clustering algorithm called <em>k-means</em>.</p>
+
+<h3 id="k-means-algorithm">k-means Algorithm</h3>
+<p>Algorithm groups and creates k clusters from n data points. First the cluster centres are picked randomly from the data points. Then the entire dataset is iterated and all points are assigned to their closest cluster. Closest cluster is determined by measuring the distance of the data point to the centroid of the clusters. This process is repeated until there is no change in the dataset and all points are assigned to the closest ones.</p>
+
+<p><img src="/images/vpblogimg/2014/03/Kmeans_results.png" alt="K-means Results"></p>
+
+<h3 id="implementation">Implementation</h3>
+<p>The project contains 6 libraries:</p>
+
+<ul>
+  <li>
+<em>VP.KMeans.Core:</em> Core library including the algorithm implementation</li>
+  <li>
+<em>VP.KMeansClient.GUI:</em> User interface for entering the parameters and plotting the clusters</li>
+  <li>
+<em>VP.KMeansClient.Console:</em> Console user interface. No fancy plots, just an output file is generated</li>
+  <li>
+<em>VP.KMeans.DataGenerator.Core:</em> Library to generate test data</li>
+  <li>
+<em>VP.KMeans.DataGenerator.Console:</em> Console application to feed the core library to generate test data</li>
+  <li>
+<em>CPI.Plot3D:</em> External library to plot the results</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://en.wikipedia.org/wiki/K-means_clustering" target="_blank" rel="noopener noreferrer">Wikipedia article</a></li>
+  <li><a href="https://github.com/volkanpaksoy/VP.DataMining.KMeans" target="_blank" rel="noopener noreferrer">Source code</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/46" class="prev">Prev</a>
+    
+    
+        <a href="/page/48" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

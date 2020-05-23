@@ -1,0 +1,433 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/29/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/02/16/neo4j-browser-tips-and-tricks/" itemprop="url">Neo4J Browser Tips &amp; Tricks</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-02-16T18:00:00+00:00" itemprop="datePublished">February 16, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">neo4j, graph_databases</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I’m currently in search of a good tool to manage my graph database data. As they say a picture is worth a thousand words so visualization is very important to understand the nature of the data and make some sense of it. If nothing, it’s simply more fun!</p>
+
+<p>Covering a user interface may seem unnecessary since they are generally pretty straightforward and Neo4J browser is no exception but after using it for some time I discovered some neat features that are not immediately obvious in this post so I’ll go over them. I will be using the beta version (v2.2 M04) so if you are using an older version you can compare the upcoming features with your current version.</p>
+
+<p>You gotta know your tools to get the maximum benefit out of them so let’s dig in!</p>
+
+<h3 id="accessing-the-data">Accessing the Data</h3>
+<p>A major change in this version is that the authentication is being turned on by default.</p>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-browser-authentication.png" alt="Neo4J Authentication"></p>
+
+<p>So if you install it on somewhere that’s accessible from the Internet you can have a layer of protection.</p>
+
+<p>If you close that login window by accident you can run the following command to bring it back:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:server connect
+</code></pre></div></div>
+
+<p>Similarly, if you want to terminate the connection you can run</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:server disconnect
+</code></pre></div></div>
+
+<p>Until v2.2 M03 you got an authorization token back after the connection is established but since v2.2 M04 you don’t get a token. This is because authorization header is calculated by base64-encoding username:password pair.</p>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-authorization-03.png" alt="Welcome message"></p>
+
+<p>If you need to connect using other tools you need to send authorization header with every request. This is Base64-encoded value of username/password pair separated with colon.</p>
+
+<p>So in my case I changed the password to <em>pass</em> (I know it’s a horrible password, this is a just test installation :-))</p>
+
+<p>So my authorization header value becomes:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Username:Password --&gt; neo4j:pass
+Base64-encoded value --&gt; bmVvNGo6cGFzcw==
+</code></pre></div></div>
+
+<p>And with the correct authorization header I can get an HTTP 200 for the GET request for all the labels:</p>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-authorization-04.png" alt="Results for all labels"></p>
+
+<h3 id="helpful-commands-and-shortcuts">Helpful commands and shortcuts</h3>
+
+<ul>
+  <li><strong>First things first: Help!</strong></li>
+</ul>
+
+<p>To discover all the commands and links to references you can simply run the help command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:help
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-browser-help-command-output.png" alt="Help output"></p>
+
+<ul>
+  <li><strong>Clean your mess with Clear</strong></li>
+</ul>
+
+<p>Browser runs each query in a separate window and after using it a while you can have a long history of old queries. You can get rid of them easily once and for all by this command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:clear
+</code></pre></div></div>
+
+<ul>
+  <li><strong>Use Escape to switch to full-screen query view</strong></li>
+</ul>
+
+<p>You can use Escape key to toggle to a full-screen query window. Just press Esc key and you’ll hide the previous query windows.</p>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-browser-full-screen-query-window.png" alt="Toggle full screen"></p>
+
+<p>This is especially handy if you are dealing with long Cypher queries and can use some space. You can toggle back to old view (query and output windows below) by pressing <em>Esc</em> key again. Alternatively it will toggle back if you just run the query.</p>
+
+<ul>
+  <li><strong>Use Shift+Enter for multi-line mode</strong></li>
+</ul>
+
+<p>Normally <em>Enter</em> key runs the queries but most of the time you’d need to work with queries spanning multi-lines. To accomplish that you can simply use Shift+Enter to start a new line and switch to multi-line mode. Once you switch to multi-line mode, the line numbers will appear and <em>Enter</em> will no longer run your query but will start a new line. To run queries in multi-line mode you can use <strong><em>Ctrl+Enter</em></strong> key combination.</p>
+
+<ul>
+  <li><strong>Name your saved queries in favorites</strong></li>
+</ul>
+
+<p>There are some queries you run quite often. For example in my development environment I tend to delete everything and start from scratch. So I saved my query to the favorites by clicking the star button in the query window. Nice thing about it is if you add a comment at the beginning of your query the browser is smart enough to use it as the name of your query so you don’t have to guess which one is which when you have a lot of saved queries.</p>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-browser-favorites.png" alt="Named favorite"></p>
+
+<ul>
+  <li><strong>Play around with the look &amp; feel</strong></li>
+</ul>
+
+<p>With the latest version you can mess around with the stylesheet that is used to visualize the results. In the favorites tab there is a section called “Styling / Graph Style Sheet”. You can see the styles used by clicking the Graph Style Sheet button. It’s not editable on the editor but you can export it to a .grass file by clicking on the Export to File icon.</p>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-browser-style-00.png" alt="Graph Style Sheet"></p>
+
+<p>After you make your changes you can import it back by dropping it to the narrow band at the bottom of the dialog window.</p>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-browser-stylesheet.png" alt="Import style sheet"></p>
+
+<p>You can still get the original styles back by clicking on the icon next to export (that looks like a fire extinguisher!) so feel free to mess with it.</p>
+
+<ul>
+  <li><strong>Use Ctrl+Up/Down arrow to navigate through old queries</strong></li>
+</ul>
+
+<p>You can browse through your query history using Ctrl+Up/Down arrow. I find this shortcut especially helpful when you quickly need to go back to the previous query.</p>
+
+<ul>
+  <li><strong>Click on a query to get it back</strong></li>
+</ul>
+
+<p>Once you run a query, the query itself and its output is encapsulated in a separate window so you can browse through old queries. If you need to run a query again you can simply click on the query. As you can see in the image below, a dashed line appears under the query when you hover over it to indicate it’s a link. When you click the query it populates the query window so you don’t need to copy/paste it.</p>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-browser-link-to-query.png" alt="Link to query"></p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>Currently the browser doesn’t allow editing data visually but for running Cypher queries it’s a great tool. If you have any tips and tricks to suggest or corrections to make, please leave a comment below.</p>
+
+<p><strong>UPDATE:</strong> I published this post using v2.2 M03 but as <a href="https://twitter.com/mesirii" target="_blank" rel="noopener noreferrer">Michael Hunger</a> kindly pointed out there were some changes in v2.2 M04 that made my post outdated from the get-go so I updated it accordingly. If you find any inconsistencies please let me know using the comments below.</p>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/02/14/graph-databases/" itemprop="url">Graph Databases</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-02-14T20:00:00+00:00" itemprop="datePublished">February 14, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">neo4j, graph_databases</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Graph databases are getting more popular every day. I played around with it in the past but never covered it extensively. My goal is now to first cover the basics of graph databases (Neo4J in particular), cover Cypher (a SQL-Like Query Language for Neo4J) and build a full-blown project using these. So this will the first post in a multi-part series.</p>
+
+<p>Neo4J is providing nice training materials. Also I’m currently enjoying active Safari Books Online and Pluralsight subscriptions so I thought it might be a good time to conduct a comprehensive research and go through all of these resources. So without further ado, here’s what I’ve gathered on Graph Databases:</p>
+
+<h3 id="why-graph-databases">Why Graph Databases</h3>
+<p>Main focus of graph databases is the relationships between objects. In a graph database, every object is represented with a <strong>node</strong> (aka a <em>vertex</em> in graph theory) and nodes are connected to each other with <strong>relationships</strong> (aka an <em>edge</em>).</p>
+
+<p>Graph databases are especially powerful tools for heavily connected data such as social networks. When you try to model a complex real-world system you end up having a lot of entities and connections among them. At this point a traditional relational model starts to be sluggish and hard to maintain and this is where graph databases come to rescue..</p>
+
+<h3 id="players">Players</h3>
+<p>Turns out there are many implementations and it’s a broader concept as they have different attributes. You can check <a href="http://en.wikipedia.org/wiki/Graph_database#Graph_database_projects" target="_blank" rel="noopener noreferrer">this Wikipedia article</a> to see what I mean. As of this writing there were 41 different systems mentioned in the article. A few of the players in the field are:</p>
+
+<ul>
+  <li>Neo4J: Most popular and one of the oldest in the field. My main focus will be on Neo4J throughout my research</li>
+  <li>FlockDB: An open-source distributed graph database developed by Twitter. It’s much simpler than Neo4J as it focuses on specific problems only.</li>
+  <li>Trinity: A research project from Microsoft. I wish it was released because probably it would come with native .NET clients and integration but looks like it’s dead already as there is activity since late 2012 on its <a href="http://research.microsoft.com/en-us/projects/trinity/" target="_blank" rel="noopener noreferrer">page</a>.</li>
+</ul>
+
+<h3 id="popular-graph-models">Popular Graph Models</h3>
+<p>There are three dominant graph models in the industry:</p>
+
+<ul>
+  <li>The property graph</li>
+  <li>Resource Description Framework (RDF) triples</li>
+  <li>Hypergraphs</li>
+</ul>
+
+<h3 id="the-property-graph-model">The Property Graph Model</h3>
+<ul>
+  <li>It contains nodes and relationships</li>
+  <li>Nodes contain properties (key-value pairs)</li>
+  <li>Relationships are named and directed, and always have a start and end node</li>
+  <li>Relationships can also contain properties</li>
+  <li>No prior modelling is needed but it helps to understand the domain. The advice is start with no schema requirements and enforce a schema as you get closer to production.</li>
+</ul>
+
+<h3 id="basic-concepts">Basic concepts</h3>
+<p>As I will be using Neo4J, I decided to focus on the basic concepts of Neo4J databases (the current version I’m using is 2.1 and 2.2M03 which is still in beta)</p>
+
+<ol>
+  <li>Nodes - Graph data records</li>
+  <li>Relationships - Connect nodes. They must have a name and a direction. Sometimes direction has semantic value  and sometimes the connection if bothways like a MARRIED_TO relationship. It doesn’t matter which way you define it both nodes are “married to” each other. But for example a “LOVES” relationship doesn’t have to be bothways so the direction matters.</li>
+  <li>Properties - Named data values</li>
+  <li>Labels - Introduced in v2.0 They are used to tag items like Book, Person etc. A node can have multiple labels.</li>
+</ol>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>Graph databases are on the rise as can be seen clearly from the chart (taken froom db-engines.com):</p>
+
+<p><img src="/images/vpblogimg/2015/02/graph-dbms-popularity-feb-2015.png" alt="db-egines popularity chart"></p>
+
+<p>It feels very natural to model a database as a graph as they can handle relationships very well and in real-life there are many complex relationships in semi-structured data. So especially at the beginning starting without a schema and have your model and data mature over time makes perfect sense. So it is understandable why graph databases are gaining traction everyday.</p>
+
+<p>In the next post I will delve into Cypher - the query language of Neo4J. What good is a database if you can’t run queries on it anyway, right? :-)</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://neo4j.com/graphacademy/online-course/" target="_blank" rel="noopener noreferrer">Neo4J Official Training</a></li>
+  <li><a href="http://www.amazon.co.uk/Neo4j-Action-Aleksa-Vukotic/dp/1617290769/" target="_blank" rel="noopener noreferrer">Book: Neo4J in Action</a></li>
+  <li><a href="http://www.amazon.co.uk/Graph-Databases-Ian-Robinson/dp/1449356265/" target="_blank" rel="noopener noreferrer">Book: Graph Databases</a></li>
+  <li><a href="http://www.amazon.co.uk/Practical-Neo4j-Gregory-Jordan/dp/1484200233" target="_blank" rel="noopener noreferrer">Book: Practical Neo4J</a></li>
+  <li><a href="http://www.amazon.co.uk/Learning-Neo4j-Graph-Databases-Bruggen/dp/1849517169/" target="_blank" rel="noopener noreferrer">Book: Learning Neo4J</a></li>
+  <li><a href="http://www.pluralsight.com/courses/graph-databases-neo4j-introduction" target="_blank" rel="noopener noreferrer">Pluralsight Course: Introduction to Graph Databases and Neo4j</a></li>
+  <li><a href="http://www.lynda.com/Neo4j-tutorials/Up-Running-Neo4j/155604-2.html" target="_blank" rel="noopener noreferrer">Lynda Course: Up and Running with Neo4J</a></li>
+  <li><a href="http://en.wikipedia.org/wiki/Graph_database#Graph_database_projects" target="_blank" rel="noopener noreferrer">Wikipedia article: Graph Databases</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/02/12/raspberry-pi2-first-impressions/" itemprop="url">Raspberry Pi 2: First Impressions</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-02-12T15:00:00+00:00" itemprop="datePublished">February 12, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
+
+<!-- misc -->
+
+
+
+
+    <a href="/category/misc">misc</a>
+    
+</span>
+	<span class="tags">review, gadget, raspberry_pi</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I already had 3 Raspberry Pis so you might think it’s ridiculous to get excited for a 4th one but you would be wrong! Because this time they revised the hardware and made major upgrades.</p>
+
+<p><img src="/images/vpblogimg/2015/02/raspberry-pi-2.jpg" alt="Raspberry Pi 2"></p>
+
+<p>The new Pi is rocking a quad-core Cortex A7 processor and it comes with 1GB memory. Rest of the specs remained the same (including the price!) but the processor and memory made a huge impact.</p>
+
+<p>For more detailed comparison check the <a href="http://www.raspberrypi.org/blog/#benchmarking-raspberry-pi-2" target="_blank" rel="noopener noreferrer">benchmark results on the official website</a></p>
+
+<p>I tried using a web browser in the old versions and it was painfully slow. So I decided to use the previous versions for background tasks like a security camera or network scanning. The B+ is powerful enough to run XBMC and play videos but even that is slow when it transitions between different screens. So seeing the new Pi can be a full desktop replacement is really exciting.</p>
+
+<h3 id="what-else-is-new">What else is new</h3>
+<p>Pi 2 comes with a few applications installed like Mathematica and Wolfram, utilities like a PDF reader and text editor and even Minecraft!</p>
+
+<p><img src="/images/vpblogimg/2015/02/pi2-minecraft.png" alt="Minecraft on Raspberry Pi 2"></p>
+
+<h3 id="whats-next">What’s next</h3>
+<p>I don’t have a project in mind at the moment for this one yet. Since the architecture has breaking changes a lot of existing OS versions don’t work on it yet like Raspbmc and Kali Linux. Maybe I can wait and install Kali Linux on it and practice some security features. Or hopefully Microsoft releases Windows 10 for IoT soon enough so I can play with it. I’ll keep posting as I find more about my new toy! In the meantime I’m open to all project ideas so please leave a comment if you anything in mind!</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.amazon.co.uk/gp/product/B00MQLB1N6" target="_blank" rel="noopener noreferrer">Case on Amazon</a></li>
+  <li><a href="http://www.raspberrypi.org/blog/#benchmarking-raspberry-pi-2" target="_blank" rel="noopener noreferrer">Benchmarking Raspberry Pi 2</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/28" class="prev">Prev</a>
+    
+    
+        <a href="/page/30" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

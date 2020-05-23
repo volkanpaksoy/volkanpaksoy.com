@@ -1,0 +1,370 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playing with Google Speech API - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2017/12/12/Playing-with-Google-Speech-API/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Playing with Google Speech API</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2017-12-12T06:00:00+00:00" itemprop="datePublished">December 12, 2017</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev, machine_learning -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/machine_learning">machine_learning</a>
+    
+</span>
+	<span class="tags">google_cloud_platform, speech_to_text</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>Just out of curiosity I wanted to play around with Google Cloud Platform. They give $300 free credit for a 12 month trial period so I thought this would be a good chance to try it out.</p>
+
+<p>The APIs I wanted to sample were speech recognition and translation.</p>
+
+<h2 id="setting-up-sdk">Setting Up SDK</h2>
+
+<p>I followed the quick start guide which is a step-by-step process so it was quite helpful to get acquainted with the basics.</p>
+
+<p>To be able to follow the instructions I downloaded and installed the GCloud SDK. On Mac it’s quite easy:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl https://sdk.cloud.google.com | bash
+exec -l $SHELL
+gcloud init
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2017/12/google-cloud-sdk-installation-progress.png" alt=""></p>
+
+<p>And once it’s complete it requires you to log in to your account and grant access to SDK:</p>
+
+<p><img src="/images/vpblogimg/2017/12/google-cloud-sdk-installation-result.png" alt=""></p>
+
+<h2 id="testing-the-api">Testing the API</h2>
+
+<p>After the initial setup I tried the sample request and it worked just fine:</p>
+
+<p><img src="/images/vpblogimg/2017/12/google-cloud-sample-call.png" alt=""></p>
+
+<p>The example worked but also raised a few questions in my mind:</p>
+
+<ol>
+  <li>Sample uses gs protocol. First off, what does it mean?</li>
+  <li>Can I use good ol’ http instead of it and point to any audio file publicly accessible?</li>
+  <li>Can I use MP3 as encoding or does it need to be FLAC?</li>
+</ol>
+
+<p>As learned from <a href="https://stackoverflow.com/questions/38806490/what-does-gs-protocol-mean" target="_blank" rel="noopener noreferrer">this</a> SO thread, gs is used for Google Cloud Storage and “https://storage.googleapis.com” translates to “gs://”.</p>
+
+<p>So the http version of the test file is “https://storage.googleapis.com/cloud-samples-tests/speech/brooklyn.flac”. I was able to verify the file actually exists but when I replaced it with the original value I got this error:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"error"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Request contains an invalid argument."</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"INVALID_ARGUMENT"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This also answered my second question. According to the documentation it only supports Google Cloud Storage currently:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>uri contains a URI pointing to the audio content. 
+Currently, this field must contain a Google Cloud Storage URI 
+(of format gs://bucket-name path_to_audio_file). 
+</code></pre></div></div>
+
+<p>The answer to my 3rd question wasn’t very promising either. Apparently only the types listed below are supported:</p>
+
+<p><img src="/images/vpblogimg/2017/12/google-cloud-speech-supported-audio-types.png" alt=""></p>
+
+<p>If the authorization token expires, you can generate a new one by using the following commands:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export GOOGLE_APPLICATION_CREDENTIALS="/Path/To/Credentials/Json/File"
+
+gcloud auth application-default print-access-token
+</code></pre></div></div>
+
+<p>So no way of uploading a random MP3 and get text out of it. But I’ll of course try anyway :-)</p>
+
+<h2 id="test-case-get-lyrics-for-a-rammstein-song-and-translate">Test Case: Get lyrics for a Rammstein song and translate</h2>
+
+<p>OK, now that I have a free trial at my disposal and have everything setup, let’s create some storage, upload some files and put it to a real test.</p>
+
+<h3 id="step-01-get-some-media">Step 01: Get some media</h3>
+<p>My goal is to extract lyrics of a Rammstein song and translate them to English. For that I chose the song Du Hast. Since I couldn’t find a way to download FLAC version of the song I decided to download the official vide from Rammstein’s YouTube channel.</p>
+
+<p>This is just for experimental purposes and I deleted the video after I’m done testing it so should be fine I guess. To download videos from youtube you can refer to <a href="https://www.techadvisor.co.uk/how-to/photo-video/download-youtube-video-3492830/" target="_blank" rel="noopener noreferrer">this TechAdvisor article</a>.</p>
+
+<p>I simply used VLC to open the YouTube video. In Window -&gt; Media Information dialog it shows the full path of the raw video file and I copied that path into a browser and downloaded the video.</p>
+
+<p><img src="/images/vpblogimg/2017/12/google-cloud-vlc-download-youtube-video.png" alt=""></p>
+
+<h3 id="step-02-prepare-the-media-to-process">Step 02: Prepare the media to process</h3>
+<p>Since all I need is audio I extracted it from video file using VLC. Probably can be done in a number of ways but VLC is quite straightforward to do it:</p>
+
+<p>Click File –&gt; Convert &amp; Stream, drag and drop the video</p>
+
+<p><img src="/images/vpblogimg/2017/12/google-cloud-vlc-convert-video-to-flac.png" alt=""></p>
+
+<p>In the Choose Profile section, select Audio - FLAC.</p>
+
+<p>The important bit here is is that by default VLC converts to stereo audio with 2 channels but Google doesn’t support it which is explained in <a href="https://cloud.google.com/speech/reference/rest/v1beta1/RecognitionConfig#audioencoding" target="_blank" rel="noopener noreferrer">this</a> documentation:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>All encodings support only 1 channel (mono) audio
+</code></pre></div></div>
+
+<p>So make sure to customize it and enter 1 as channel count:</p>
+
+<p><img src="/images/vpblogimg/2017/12/google-cloud-flac-single-channel.png" alt=""></p>
+
+<h3 id="step-03-call-the-api">Step 03: Call the API</h3>
+<p>Now I was ready to call the API with my shiny single-channel FLAC file. I uploaded it to the Google Storage bucket I created, gave public access to it and tried the API.</p>
+
+<p>Apparently, speech:recognize endpoint only supports audio up to a minute. This is the error I got after posting a 03:55 audio.</p>
+
+<p><img src="/images/vpblogimg/2017/12/google-cloud-audio-too-long-error.png" alt=""></p>
+
+<p>“Sync input too long. For audio longer than 1 min use LongRunningRecognize with a ‘uri’ parameter.”</p>
+
+<p>The solution is using <strong>speech:longrunningrecognize</strong> endpoint which only returns a JSON with 1 value: <strong>name</strong>. This is a unique identifier assigned by Google to the job they created for us.</p>
+
+<p><img src="/images/vpblogimg/2017/12/google-cloud-longrunningprocess-result.png" alt=""></p>
+
+<p>Once we have this id we can query the result of the process by calling GET operations endpoint.</p>
+
+<p><img src="/images/vpblogimg/2017/12/google-cloud-get-operations-result.png" alt=""></p>
+
+<p>Fantastic! Some results. It’s utterly disappointing of course as we only got a few words out of it, but still something (I guess!).</p>
+
+<h3 id="step-04-compare-the-results">Step 04: Compare the results:</h3>
+<p>Now the following is the actual lyrics of the song:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Du
+du hast
+du hast mich
+du hast mich gefragt
+du hast mich gefragt, und ich hab nichts gesagt
+
+Willst du bis der Tod euch scheidet
+treu ihr sein für alle Tage
+
+Nein
+
+Willst du bis zum Tod, der scheide
+sie lieben auch in schlechten Tagen
+
+Nein
+</code></pre></div></div>
+
+<p>and this is what I got back from Google:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>du hast 
+du hast recht 
+du hast 
+du hast mich 
+du hast mich 
+du du hast 
+du hast mich
+
+du hast mich belogen
+
+du hast 
+du hast mich blockiert
+</code></pre></div></div>
+
+<p>It missed most of the lyrics. Maybe it was headbanging too hard that it couldn’t catch those parts!</p>
+
+<h2 id="test-case-slow-german-podcast">Test Case: Slow German Podcast</h2>
+<p>Since my idea of translating German industrial metal lyrics on the fly failed miserably I decided to try with cleaner audio where there is no music. Found a nice looking podcast called Slow German. Nice thing about it is that it provides transcripts as well so I can compare the Speech API results with it.</p>
+
+<p>Obtained a random episode from their site and followed the steps above.</p>
+
+<p>First 4 paragraphs of the actual transcript of the podcast is as follows (The full transcript can be found <a href="https://slowgerman.com/folgen/sg153kurz.pdf" target="_blank" rel="noopener noreferrer">here</a>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Denk ich an Deutschland in der Nacht, dann bin ich um den Schlaf gebracht.“ Habt Ihr diesen Satz schon einmal gehört? Er wird immer dann zitiert, wenn es Probleme in Deutschland gibt. Der Satz stammt von Heinrich Heine. Er war einer der wichtigsten deutschen Dichter. Aber keine Angst: Auch wenn er am 13. Dezember 1797 geboren wurde, sind seine Texte sehr aktuell und relativ leicht zu lesen. Ihr werdet ihn mögen!
+
+Harry Heine wuchs in einem jüdischen Haushalt auf. Er war 13 Jahre alt, als Napoleon in Düsseldorf einzog. Schon als Schüler begann er, Gedichte zu schreiben. Beruflich sollte er eigentlich im Bankgeschäft arbeiten, aber dafür hatte er kein Talent. Also versuchte er es erst mit einem eigenen Geschäft für Stoffe, das aber bald pleite war. Dann begann er zu studieren. Er probierte es mit Jura und mit Geschichte, besuchte verschiedene Vorlesungen.
+
+Mit 25 Jahren veröffentlichte er erste Gedichte. Es war eine aufregende Zeit für ihn. Er wechselte die Städte und die Universitäten, er beendete sein Jura- Studium und wurde promoviert. Um seine Chancen als Anwalt zu verbessern, ließ er sich protestantisch taufen, er kehrte also dem Judentum den Rücken und wurde Christ. Daher auch der neue Name: Christian Johann Heinrich Heine. Später hat er die Taufe oft bereut.
+
+Wenn Ihr Heines Werke lest werdet Ihr merken, dass sie etwas Besonderes sind. Sie sind oft kritisch, sehr oft aber auch ironisch und humorvoll. Er spielt mit der Sprache. Er kann aber auch sehr böse sein und herablassend über Menschen schreiben. Seine Kritik auch an politischen Ereignissen und die Zensur, mit der er in Deutschland leben musste, führten Heinrich Heine nach Paris. Er wanderte nach Frankreich aus.
+</code></pre></div></div>
+
+<p>And this is the result I got from Google (Trimmed to match the above):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>denk ich an Deutschland in der Nacht dann bin ich um den Schlaf gebracht habt ihr diesen Satz schon einmal gehört er wird immer dann zitiert wenn es Probleme in Deutschland gibt der Satz stammt von Heinrich Heine er war einer der wichtigsten deutschen Dichter aber keine Angst auch wenn er am 13. Dezember 1797 geboren wurde sind seine Texte sehr aktuell und relativ leicht zu lesen ihr werdet ihn mögen Harry Heine wuchs in einem jüdischen Haushalt auf er war 13 Jahre alt als Nappo
+
+hier in Düsseldorf einen Zoo schon als Schüler begann er Gedichte zu schreiben beruflich sollte er eigentlich im Bankgeschäft arbeiten aber dafür hatte er kein Talent also versuchte er es erst mit einem eigenen Geschäft für Stoffe das aber bald pleite war dann begann er zu studieren er probierte es mit Jura und mit Geschichte besuchte verschiedene Vorlesungen mit 25 Jahren veröffentlichte er erste Gedichte es war eine aufregende Zeit für ihn er wechselte die Städte und die Universitäten er beendete sein Jurastudium und wurde Promo
+
+auch an politischen Ereignissen und die Zensur mit der er in Deutschland leben musste führten Heinrich Heine nach Paris er wanderte nach Frankreich aus 
+</code></pre></div></div>
+
+<h3 id="comparing-the-translations">Comparing the translations</h3>
+<p>Since I don’t speak German I cannot judge how well it did. Clearly it didn’t capture all the words but I wanted to see if what it returned makes any sense anyway. So I put both in Google Translate and this is how they compare:</p>
+
+<h4 id="translation-of-the-original-transcript">Translation of the original transcript:</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>When I think of Germany at night, I'm about to go to sleep. "Have you ever heard that phrase before? He is always quoted when there are problems in Germany. The sentence is by Heinrich Heine. He was one of the most important German poets. But do not worry: even if he was born on December 13, 1797, his lyrics are very up to date and relatively easy to read. You will like him!
+
+Harry Heine grew up in a Jewish household. He was 13 years old when Napoleon moved in Dusseldorf. Even as a student, he began writing poetry. Professionally, he was supposed to work in banking, but he had no talent for that. So he first tried his own business for fabrics, which was soon broke. Then he began to study. He tried law and history, attended various lectures.
+
+At the age of 25 he published his first poems. It was an exciting time for him. He changed cities and universities, he completed his law studies and received his doctorate. To improve his chances as a lawyer, he was baptized Protestant, so he turned his back on Judaism and became a Christian. Hence the new name: Christian Johann Heinrich Heine. Later he often regretted baptism.
+
+When you read Heine's works, you will find that they are special. They are often critical, but often also ironic and humorous. He plays with the language. But he can also be very angry and condescending to write about people. His criticism also of political events and the censorship with which he had to live in Germany led Heinrich Heine to Paris. He emigrated to France.	
+</code></pre></div></div>
+
+<h4 id="translation-of-googles-results">Translation of Google’s results:</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>I think of Germany in the night then I'm about to sleep Did you ever hear this sentence He is always quoted when there are problems in Germany The sentence comes from Heinrich Heine He was one of the most important German poets but do not be afraid he was born on December 13, 1797 his lyrics are very up to date and relatively easy to read you will like him Harry Heine grew up in a Jewish household he was 13 years old as Nappo
+
+Here in Dusseldorf a zoo as a student he began to write poetry professionally he should actually work in the banking business but for that he had no talent so he first tried his own business for fabrics but soon broke and then began to study he tried it with Jura and with history attended various lectures at age 25 he published his first poems it was an exciting time for him he changed the cities and the universities he finished his law studies and became promo
+
+also in political events and the censorship with which he had to live in Germany led Heinrich Heine to Paris he emigrated to France
+</code></pre></div></div>
+
+<p>The translations of the podcast are very close, especially the first part. It missed some sentences and when you read the API output at least you can get a general understanding of what the text is about. It’s not a good read maybe and it’s not good if you’re interested in details but it’s probably good enough</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>Speech to text can be very useful backed with automated real-time translations. Google Speech API supports real time speech recognition as well so it may be interesting to put Translation API in use as well and develop a tool to get real time translations but that’s for another blog post.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://cloud.google.com/speech/" target="_blank" rel="noopener noreferrer">Official Google API Page</a></li>
+  <li><a href="https://cloud.google.com/speech/docs/getting-started" target="_blank" rel="noopener noreferrer">Speech API Quick Start</a></li>
+  <li><a href="https://cloud.google.com/sdk/downloads" target="_blank" rel="noopener noreferrer">GClud SDK</a></li>
+  <li><a href="https://stackoverflow.com/questions/38806490/what-does-gs-protocol-mean" target="_blank" rel="noopener noreferrer">StackOverflow: What does GS Protocol Mean</a></li>
+  <li><a href="https://slowgerman.com/" target="_blank" rel="noopener noreferrer">Slow German podcast</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2017/11/30/Backing-up-GitHub-Account-with-PowerShell/" title="Previous Post: 
+Backing up GitHub Account with PowerShell">« Backing up GitHub Account with PowerShell</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2018/03/14/Updated-DynDns53-with-DotNet-Core-Docker-and-Angular5/" title="next Post: 
+Updated DynDns53 with .NET Core, Docker and Angular 5">Updated DynDns53 with .NET Core, Docker and Angular 5 » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

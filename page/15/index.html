@@ -1,0 +1,657 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/15/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2017/12/12/Playing-with-Google-Speech-API/" itemprop="url">Playing with Google Speech API</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2017-12-12T06:00:00+00:00" itemprop="datePublished">December 12, 2017</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devmachine_learning">dev</a></span> -->
+
+<!-- dev, machine_learning -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/machine_learning">machine_learning</a>
+    
+</span>
+	<span class="tags">google_cloud_platform, speech_to_text</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Just out of curiosity I wanted to play around with Google Cloud Platform. They give $300 free credit for a 12 month trial period so I thought this would be a good chance to try it out.</p>
+
+<p>The APIs I wanted to sample were speech recognition and translation.</p>
+
+<h2 id="setting-up-sdk">Setting Up SDK</h2>
+
+<p>I followed the quick start guide which is a step-by-step process so it was quite helpful to get acquainted with the basics.</p>
+
+<p>To be able to follow the instructions I downloaded and installed the GCloud SDK. On Mac it’s quite easy:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl https://sdk.cloud.google.com | bash
+exec -l $SHELL
+gcloud init
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2017/12/google-cloud-sdk-installation-progress.png" alt=""></p>
+
+<p>And once it’s complete it requires you to log in to your account and grant access to SDK:</p>
+
+<p><img src="/images/vpblogimg/2017/12/google-cloud-sdk-installation-result.png" alt=""></p>
+
+<h2 id="testing-the-api">Testing the API</h2>
+
+<p>After the initial setup I tried the sample request and it worked just fine:</p>
+
+<p><img src="/images/vpblogimg/2017/12/google-cloud-sample-call.png" alt=""></p>
+
+<p>The example worked but also raised a few questions in my mind:</p>
+
+<ol>
+  <li>Sample uses gs protocol. First off, what does it mean?</li>
+  <li>Can I use good ol’ http instead of it and point to any audio file publicly accessible?</li>
+  <li>Can I use MP3 as encoding or does it need to be FLAC?</li>
+</ol>
+
+<p>As learned from <a href="https://stackoverflow.com/questions/38806490/what-does-gs-protocol-mean" target="_blank" rel="noopener noreferrer">this</a> SO thread, gs is used for Google Cloud Storage and “https://storage.googleapis.com” translates to “gs://”.</p>
+
+<p>So the http version of the test file is “https://storage.googleapis.com/cloud-samples-tests/speech/brooklyn.flac”. I was able to verify the file actually exists but when I replaced it with the original value I got this error:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"error"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Request contains an invalid argument."</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"INVALID_ARGUMENT"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This also answered my second question. According to the documentation it only supports Google Cloud Storage currently:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>uri contains a URI pointing to the audio content. 
+Currently, this field must contain a Google Cloud Storage URI 
+(of format gs://bucket-name path_to_audio_file). 
+</code></pre></div></div>
+
+<p>The answer to my 3rd question wasn’t very promising either. Apparently only the types listed below are supported:</p>
+
+<p><img src="/images/vpblogimg/2017/12/google-cloud-speech-supported-audio-types.png" alt=""></p>
+
+<p>If the authorization token expires, you can generate a new one by using the following commands:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export GOOGLE_APPLICATION_CREDENTIALS="/Path/To/Credentials/Json/File"
+
+gcloud auth application-default print-access-token
+</code></pre></div></div>
+
+<p>So no way of uploading a random MP3 and get text out of it. But I’ll of course try anyway :-)</p>
+
+<h2 id="test-case-get-lyrics-for-a-rammstein-song-and-translate">Test Case: Get lyrics for a Rammstein song and translate</h2>
+
+<p>OK, now that I have a free trial at my disposal and have everything setup, let’s create some storage, upload some files and put it to a real test.</p>
+
+<h3 id="step-01-get-some-media">Step 01: Get some media</h3>
+<p>My goal is to extract lyrics of a Rammstein song and translate them to English. For that I chose the song Du Hast. Since I couldn’t find a way to download FLAC version of the song I decided to download the official vide from Rammstein’s YouTube channel.</p>
+
+<p>This is just for experimental purposes and I deleted the video after I’m done testing it so should be fine I guess. To download videos from youtube you can refer to <a href="https://www.techadvisor.co.uk/how-to/photo-video/download-youtube-video-3492830/" target="_blank" rel="noopener noreferrer">this TechAdvisor article</a>.</p>
+
+<p>I simply used VLC to open the YouTube video. In Window -&gt; Media Information dialog it shows the full path of the raw video file and I copied that path into a browser and downloaded the video.</p>
+
+<p><img src="/images/vpblogimg/2017/12/google-cloud-vlc-download-youtube-video.png" alt=""></p>
+
+<h3 id="step-02-prepare-the-media-to-process">Step 02: Prepare the media to process</h3>
+<p>Since all I need is audio I extracted it from video file using VLC. Probably can be done in a number of ways but VLC is quite straightforward to do it:</p>
+
+<p>Click File –&gt; Convert &amp; Stream, drag and drop the video</p>
+
+<p><img src="/images/vpblogimg/2017/12/google-cloud-vlc-convert-video-to-flac.png" alt=""></p>
+
+<p>In the Choose Profile section, select Audio - FLAC.</p>
+
+<p>The important bit here is is that by default VLC converts to stereo audio with 2 channels but Google doesn’t support it which is explained in <a href="https://cloud.google.com/speech/reference/rest/v1beta1/RecognitionConfig#audioencoding" target="_blank" rel="noopener noreferrer">this</a> documentation:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>All encodings support only 1 channel (mono) audio
+</code></pre></div></div>
+
+<p>So make sure to customize it and enter 1 as channel count:</p>
+
+<p><img src="/images/vpblogimg/2017/12/google-cloud-flac-single-channel.png" alt=""></p>
+
+<h3 id="step-03-call-the-api">Step 03: Call the API</h3>
+<p>Now I was ready to call the API with my shiny single-channel FLAC file. I uploaded it to the Google Storage bucket I created, gave public access to it and tried the API.</p>
+
+<p>Apparently, speech:recognize endpoint only supports audio up to a minute. This is the error I got after posting a 03:55 audio.</p>
+
+<p><img src="/images/vpblogimg/2017/12/google-cloud-audio-too-long-error.png" alt=""></p>
+
+<p>“Sync input too long. For audio longer than 1 min use LongRunningRecognize with a ‘uri’ parameter.”</p>
+
+<p>The solution is using <strong>speech:longrunningrecognize</strong> endpoint which only returns a JSON with 1 value: <strong>name</strong>. This is a unique identifier assigned by Google to the job they created for us.</p>
+
+<p><img src="/images/vpblogimg/2017/12/google-cloud-longrunningprocess-result.png" alt=""></p>
+
+<p>Once we have this id we can query the result of the process by calling GET operations endpoint.</p>
+
+<p><img src="/images/vpblogimg/2017/12/google-cloud-get-operations-result.png" alt=""></p>
+
+<p>Fantastic! Some results. It’s utterly disappointing of course as we only got a few words out of it, but still something (I guess!).</p>
+
+<h3 id="step-04-compare-the-results">Step 04: Compare the results:</h3>
+<p>Now the following is the actual lyrics of the song:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Du
+du hast
+du hast mich
+du hast mich gefragt
+du hast mich gefragt, und ich hab nichts gesagt
+
+Willst du bis der Tod euch scheidet
+treu ihr sein für alle Tage
+
+Nein
+
+Willst du bis zum Tod, der scheide
+sie lieben auch in schlechten Tagen
+
+Nein
+</code></pre></div></div>
+
+<p>and this is what I got back from Google:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>du hast 
+du hast recht 
+du hast 
+du hast mich 
+du hast mich 
+du du hast 
+du hast mich
+
+du hast mich belogen
+
+du hast 
+du hast mich blockiert
+</code></pre></div></div>
+
+<p>It missed most of the lyrics. Maybe it was headbanging too hard that it couldn’t catch those parts!</p>
+
+<h2 id="test-case-slow-german-podcast">Test Case: Slow German Podcast</h2>
+<p>Since my idea of translating German industrial metal lyrics on the fly failed miserably I decided to try with cleaner audio where there is no music. Found a nice looking podcast called Slow German. Nice thing about it is that it provides transcripts as well so I can compare the Speech API results with it.</p>
+
+<p>Obtained a random episode from their site and followed the steps above.</p>
+
+<p>First 4 paragraphs of the actual transcript of the podcast is as follows (The full transcript can be found <a href="https://slowgerman.com/folgen/sg153kurz.pdf" target="_blank" rel="noopener noreferrer">here</a>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Denk ich an Deutschland in der Nacht, dann bin ich um den Schlaf gebracht.“ Habt Ihr diesen Satz schon einmal gehört? Er wird immer dann zitiert, wenn es Probleme in Deutschland gibt. Der Satz stammt von Heinrich Heine. Er war einer der wichtigsten deutschen Dichter. Aber keine Angst: Auch wenn er am 13. Dezember 1797 geboren wurde, sind seine Texte sehr aktuell und relativ leicht zu lesen. Ihr werdet ihn mögen!
+
+Harry Heine wuchs in einem jüdischen Haushalt auf. Er war 13 Jahre alt, als Napoleon in Düsseldorf einzog. Schon als Schüler begann er, Gedichte zu schreiben. Beruflich sollte er eigentlich im Bankgeschäft arbeiten, aber dafür hatte er kein Talent. Also versuchte er es erst mit einem eigenen Geschäft für Stoffe, das aber bald pleite war. Dann begann er zu studieren. Er probierte es mit Jura und mit Geschichte, besuchte verschiedene Vorlesungen.
+
+Mit 25 Jahren veröffentlichte er erste Gedichte. Es war eine aufregende Zeit für ihn. Er wechselte die Städte und die Universitäten, er beendete sein Jura- Studium und wurde promoviert. Um seine Chancen als Anwalt zu verbessern, ließ er sich protestantisch taufen, er kehrte also dem Judentum den Rücken und wurde Christ. Daher auch der neue Name: Christian Johann Heinrich Heine. Später hat er die Taufe oft bereut.
+
+Wenn Ihr Heines Werke lest werdet Ihr merken, dass sie etwas Besonderes sind. Sie sind oft kritisch, sehr oft aber auch ironisch und humorvoll. Er spielt mit der Sprache. Er kann aber auch sehr böse sein und herablassend über Menschen schreiben. Seine Kritik auch an politischen Ereignissen und die Zensur, mit der er in Deutschland leben musste, führten Heinrich Heine nach Paris. Er wanderte nach Frankreich aus.
+</code></pre></div></div>
+
+<p>And this is the result I got from Google (Trimmed to match the above):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>denk ich an Deutschland in der Nacht dann bin ich um den Schlaf gebracht habt ihr diesen Satz schon einmal gehört er wird immer dann zitiert wenn es Probleme in Deutschland gibt der Satz stammt von Heinrich Heine er war einer der wichtigsten deutschen Dichter aber keine Angst auch wenn er am 13. Dezember 1797 geboren wurde sind seine Texte sehr aktuell und relativ leicht zu lesen ihr werdet ihn mögen Harry Heine wuchs in einem jüdischen Haushalt auf er war 13 Jahre alt als Nappo
+
+hier in Düsseldorf einen Zoo schon als Schüler begann er Gedichte zu schreiben beruflich sollte er eigentlich im Bankgeschäft arbeiten aber dafür hatte er kein Talent also versuchte er es erst mit einem eigenen Geschäft für Stoffe das aber bald pleite war dann begann er zu studieren er probierte es mit Jura und mit Geschichte besuchte verschiedene Vorlesungen mit 25 Jahren veröffentlichte er erste Gedichte es war eine aufregende Zeit für ihn er wechselte die Städte und die Universitäten er beendete sein Jurastudium und wurde Promo
+
+auch an politischen Ereignissen und die Zensur mit der er in Deutschland leben musste führten Heinrich Heine nach Paris er wanderte nach Frankreich aus 
+</code></pre></div></div>
+
+<h3 id="comparing-the-translations">Comparing the translations</h3>
+<p>Since I don’t speak German I cannot judge how well it did. Clearly it didn’t capture all the words but I wanted to see if what it returned makes any sense anyway. So I put both in Google Translate and this is how they compare:</p>
+
+<h4 id="translation-of-the-original-transcript">Translation of the original transcript:</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>When I think of Germany at night, I'm about to go to sleep. "Have you ever heard that phrase before? He is always quoted when there are problems in Germany. The sentence is by Heinrich Heine. He was one of the most important German poets. But do not worry: even if he was born on December 13, 1797, his lyrics are very up to date and relatively easy to read. You will like him!
+
+Harry Heine grew up in a Jewish household. He was 13 years old when Napoleon moved in Dusseldorf. Even as a student, he began writing poetry. Professionally, he was supposed to work in banking, but he had no talent for that. So he first tried his own business for fabrics, which was soon broke. Then he began to study. He tried law and history, attended various lectures.
+
+At the age of 25 he published his first poems. It was an exciting time for him. He changed cities and universities, he completed his law studies and received his doctorate. To improve his chances as a lawyer, he was baptized Protestant, so he turned his back on Judaism and became a Christian. Hence the new name: Christian Johann Heinrich Heine. Later he often regretted baptism.
+
+When you read Heine's works, you will find that they are special. They are often critical, but often also ironic and humorous. He plays with the language. But he can also be very angry and condescending to write about people. His criticism also of political events and the censorship with which he had to live in Germany led Heinrich Heine to Paris. He emigrated to France.	
+</code></pre></div></div>
+
+<h4 id="translation-of-googles-results">Translation of Google’s results:</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>I think of Germany in the night then I'm about to sleep Did you ever hear this sentence He is always quoted when there are problems in Germany The sentence comes from Heinrich Heine He was one of the most important German poets but do not be afraid he was born on December 13, 1797 his lyrics are very up to date and relatively easy to read you will like him Harry Heine grew up in a Jewish household he was 13 years old as Nappo
+
+Here in Dusseldorf a zoo as a student he began to write poetry professionally he should actually work in the banking business but for that he had no talent so he first tried his own business for fabrics but soon broke and then began to study he tried it with Jura and with history attended various lectures at age 25 he published his first poems it was an exciting time for him he changed the cities and the universities he finished his law studies and became promo
+
+also in political events and the censorship with which he had to live in Germany led Heinrich Heine to Paris he emigrated to France
+</code></pre></div></div>
+
+<p>The translations of the podcast are very close, especially the first part. It missed some sentences and when you read the API output at least you can get a general understanding of what the text is about. It’s not a good read maybe and it’s not good if you’re interested in details but it’s probably good enough</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>Speech to text can be very useful backed with automated real-time translations. Google Speech API supports real time speech recognition as well so it may be interesting to put Translation API in use as well and develop a tool to get real time translations but that’s for another blog post.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://cloud.google.com/speech/" target="_blank" rel="noopener noreferrer">Official Google API Page</a></li>
+  <li><a href="https://cloud.google.com/speech/docs/getting-started" target="_blank" rel="noopener noreferrer">Speech API Quick Start</a></li>
+  <li><a href="https://cloud.google.com/sdk/downloads" target="_blank" rel="noopener noreferrer">GClud SDK</a></li>
+  <li><a href="https://stackoverflow.com/questions/38806490/what-does-gs-protocol-mean" target="_blank" rel="noopener noreferrer">StackOverflow: What does GS Protocol Mean</a></li>
+  <li><a href="https://slowgerman.com/" target="_blank" rel="noopener noreferrer">Slow German podcast</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2017/11/30/Backing-up-GitHub-Account-with-PowerShell/" itemprop="url">Backing up GitHub Account with PowerShell</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2017-11-30T06:00:00+00:00" itemprop="datePublished">November 30, 2017</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devops">devops</a></span> -->
+
+<!-- devops -->
+
+
+
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags">git, powershell</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Having lots of projects and assets stored on GitHub I thought it might be a good idea to create periodical backups of my entire GitHub account (all repositories, both public and private). The beauty of it is since Git is open source, this way I can migrate my account to anywhere and even host it on my own server on AWS.</p>
+
+<h2 id="challenges">Challenges</h2>
+<p>With the above goal in mind, I started to outline what’s necessary to achieve this task:</p>
+
+<ol>
+  <li>Automate calling GitHub API to get all repos including private ones. (Of course one should be aware of <a href="https://developer.github.com/v3/#rate-limiting" target="_blank" rel="noopener noreferrer">GitHub API rate limits</a> which is currently 5000 requests per hour. If you use up all your allowance with your scripts you may not be able to use it yourself. Good thing is they are returning how many calls are left before you exceed your quota in <em>x-ratelimit-remaining</em> HTTP header in their responses.)</li>
+  <li>Pull all the latest versions for all branches. Overwrite local versions in cases of conflict.</li>
+  <li>Find a way to easily transfer a git repository (A compressed single file version rather than individual files) if transferring to another medium is required (such as an S3 bucket)</li>
+</ol>
+
+<p>With these challenges ahead, I first started looking into getting the repos from GitHub:</p>
+
+<h2 id="consuming-github-api-via-powershell">Consuming GitHub API via PowerShell</h2>
+<p>First, I shopped around for existing libraries for this task (such as <a href="https://github.com/PowerShell/PowerShellForGitHub" target="_blank" rel="noopener noreferrer">PowerShellForGitHub</a> by Microsoft but it didn’t work for me. Basically I couldn’t even manage the samples on their Wiki. It kept giving cmdlet not found error so I gave up.)</p>
+
+<p>Found a nice <a href="https://channel9.msdn.com/Blogs/trevor-powershell/Automating-the-GitHub-REST-API-Using-PowerShell" target="_blank" rel="noopener noreferrer">video on Channel 9</a> about consuming REST APIs via PowerShell which uses GitHub API as a case study. It was perfect for me as my goal was to use GitHub API anyway. And since this is a generic approach to consume APIs it can come handy in the future as well. It’s quite easy using basic authentication.</p>
+
+<h3 id="authorization">Authorization</h3>
+<p>First step, is to create a <a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer">Personal Access Token</a> with repo scope. (Make sure to copy the value before you close the page, there is no way to retrieve it afterwards.)</p>
+
+<p>After the access token has been obtained, I had to generate authorization header as shown in the Channel 9 video:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$token = '&lt;YOUR GITHUB ACCOUNT NAME&gt;:&lt;PERSONAL ACCESS TOKEN&gt;'
+$base64Token = [System.Convert]::ToBase64String([char[]]$token)
+$headers = @{
+    Authorization = 'Basic {0}' -f $base64Token
+};
+
+$response = Invoke-RestMethod -Headers $headers -Uri https://api.github.com/user/repos
+</code></pre></div></div>
+
+<p>This way I was able to get the repositories including the private ones but by default it returns 30 records on a page so I had to traverse over the pages .</p>
+
+<h3 id="handling-pagination">Handling pagination</h3>
+<p>GitHub sends the next and the last page URLs in link header:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;https://api.github.com/user/repos?page=2&gt;; rel="next", &lt;https://api.github.com/user/repos?page=3&gt;; rel="last"
+</code></pre></div></div>
+
+<p>The challenge here is that 	looks like Invoke-RestMethod response doesn’t allow to access headers which is a huge bummer as there are useful info in the headers as shown in the screenshot:</p>
+
+<p><img src="/images/vpblogimg/2017/11/github-api-response-headers.png" alt="GitHub response headers in Postman"></p>
+
+<p>At this point, I wanted to use <a href="https://github.com/pcgeek86/PSGitHub" target="_blank" rel="noopener noreferrer">PSGitHub</a> mentioned in the video but as of this writing it doesn’t support getting all repositories. In fact in a note it says “<em>We need to figure out how to handle data pagination</em>” which made me think we are on the same page here (no pun intended!)</p>
+
+<p>GitHub supports a page size parameter (e.g. per_page=50) but the documentation says the maximum value is 100. Although it is tempting to use that one as that would bring all my repos and leave some room for the future ones as well I wanted to go with a more permanent solution. So I decided to request more pages as longs as there are objects returning like this</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$page = 1
+
+Do
+{
+    $response = Invoke-RestMethod -Headers $headers -Uri "https://api.github.com/user/repos?page=$page"
+    
+    foreach ($obj in $response)
+    {
+        Write-Host ($obj.id)
+    }
+    
+    $page = $page + 1
+}
+While ($response.Count -gt 0)
+</code></pre></div></div>
+
+<p>Now in the foreach loop of course  I have to do something with the repo information instead of just printing the id.</p>
+
+<h3 id="cloning--pulling-repositories">Cloning / pulling repositories</h3>
+<p>At this point I was able to get all my repositories. GitHub API only handles account information so now I needed to able to run actual git commands to get my code.</p>
+
+<p>First I had installed PowerShell on Mac which is quite simple as specified in the documentation:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew tap caskroom/cask
+brew cask install powershell
+</code></pre></div></div>
+
+<p>With Git already installed on my machine, all is left was using Git commands to clone or update repo on PowerShell terminal such as:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git fetch --all
+git reset --hard origin/master
+</code></pre></div></div>
+
+<p>Since this is just going to be a backup copy I don’t want to deal with merge conflicts and just overwriting everything local.</p>
+
+<p>Another approach could be deleting the old repo and cloning it from scratch but I think this would be a bit wasteful to do it everytime for each and every repository.</p>
+
+<h2 id="putting-it-all-together">Putting it all together</h2>
+<p>Now that I have all the bits and pieces I have glue them together in a meaningful script than can be scheduled and here it is:</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/0309dd02703c6b5d9a73859ac2abf2d8.js"> </script>
+
+<h2 id="conclusion-and-future-improvements">Conclusion and Future Improvements</h2>
+<p>This version accomplishes the basic task of backing up an entire GitHub account but it can be improved in a few ways. Maybe I can post a follow up article including those improvements. A few ideas come to mind are:</p>
+
+<ul>
+  <li>Get Gists (private and public) as well.</li>
+  <li>Add option to exclude repos by name or by type (i.e. get only private ones or get all except repo123)</li>
+  <li>Add an option to export them to a “non-git” medium such as an S3 bucket using git bundle (which turns out to be a great tool to pack everything in a repository in a single file)</li>
+  <li>Create a Docker image that contains all the necessary software (Git, PowerShell, backup script etc) so that it can be distributed without any setup requirements.</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://channel9.msdn.com/Blogs/trevor-powershell/Automating-the-GitHub-REST-API-Using-PowerShell" target="_blank" rel="noopener noreferrer">Channel9 video on using GitHub API with PowerShell</a></li>
+  <li><a href="https://developer.github.com/v3/" target="_blank" rel="noopener noreferrer">GitHub API Documentation</a></li>
+  <li><a href="https://developer.github.com/v3/guides/traversing-with-pagination/" target="_blank" rel="noopener noreferrer">Traversing with Pagination</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/invoke-restmethod?view=powershell-5.1" target="_blank" rel="noopener noreferrer">PowerShell Invoke-RestMethod documentation</a></li>
+  <li><a href="https://github.com/pcgeek86/PSGitHub" target="_blank" rel="noopener noreferrer">PSGitHub Repository</a></li>
+  <li>​<a href="https://github.com/PowerShell/PowerShell/blob/master/docs/installation/linux.md#macos-1012" target="_blank" rel="noopener noreferrer">Installing PowerShell on Mac</a>
+</li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2017/11/20/Backing-up-MySQL-To-AWS-S3-with-Powershell/" itemprop="url">Backing Up MySQL to AWS S3 with PowerShell</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2017-11-20T06:00:00+00:00" itemprop="datePublished">November 20, 2017</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awsdevops">aws</a></span> -->
+
+<!-- aws, devops -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags">s3, mysql, powershell</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I have an application that uses MySQL database. Because of cost concerns it’s running on an EC2 instance instead of RDS. As it’s not a managed environment, the burden of backing up my data falls on me. This is a small step by step guide that details how I’m backing up my MySQL database to AWS S3 with PowerShell</p>
+
+<h2 id="part-01---aws-setup">PART 01 - AWS SETUP</h2>
+
+<ol>
+  <li>Create a bucket named (e.g. “application-backups”) on AWS S3 using AWS Management Console.</li>
+  <li>Create a new IAM user (e.g “upload-backup-to-s3”)</li>
+  <li>Create a new policy using management console. The policy will only give enough permissions to put objects into a single S3 bucket:</li>
+</ol>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"s3:ListBucket"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"arn:aws:s3:::xxxxxxx"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s3:PutObject"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"arn:aws:s3:::xxxxxxx/*"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>In S3 bucket properties copy ARN and replace the x’s above with that.</p>
+
+<ol>
+  <li>
+    <p>Customize S3 bucket LifeCycle settings to determine how long you want the old logs retain in your bucket. In my case I set it to expire at 21 days which I think it’s large enough window for relevant database backups. I probably wouldn’t restore anything older than 21 days anyway.</p>
+  </li>
+  <li>
+    <p>[Optional - For email notifications] Create an SES user by clicking SES -&gt; SMTP Settings -&gt; Create My SMTP Credentials</p>
+  </li>
+</ol>
+
+<p>Make sure you don’t make the mistake I made which was creating an IAM user with a policy that can send emails. In the SMTP settings page there’s a note right below the button:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Your SMTP user name and password are not the same as your AWS access key ID and secret access key. Do not attempt to use your AWS credentials to authenticate yourself against the SMTP endpoint.
+</code></pre></div></div>
+
+<p>When you click the button it creates an IAM user basically for the secret key is 44 bytes whereas the IAM user I created had a secret key of 40 characters. Anyway, bottom line is in order to be able to send emails via SES create the user as described above and all should be fine.</p>
+
+<h2 id="part-02---powershell-script">PART 02 - POWERSHELL SCRIPT</h2>
+
+<ol>
+  <li>
+    <p>Download and install AWS Tools for Windows PowerShell (https://aws.amazon.com/powershell/)</p>
+  </li>
+  <li>
+    <p>Create a script as shown below. In a nutshell what the script does is:</p>
+  </li>
+</ol>
+
+<p>a. Execute mysqldump command (Comes with MySQL Server)</p>
+
+<p>b. Zip the backup file (which reduces the size significantly)</p>
+
+<p>c. Upload the zip file to S3 bucket</p>
+
+<p>d. Send a notification email using SES</p>
+
+<p>e. Delete the local files</p>
+
+<p>This is the full script:</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/e75f2d861de8604868bec0897768896e.js"> </script>
+
+<ul>
+  <li>
+    <p>For SQL Server databases, there’s a PowerShell cmdlet called <a href="https://docs.microsoft.com/en-us/powershell/module/sqlserver/backup-sqldatabase?view=sqlserver-ps" target="_blank" rel="noopener noreferrer">Backup-SQLDatabase</a> but for MySQL I think the most straightforward way is using mysqldump that comes with MySQL server.</p>
+  </li>
+  <li>
+    <p>For password-protected zip files, you can take a look at <a href="https://cyber-defense.sans.org/blog/2016/06/06/powershell-7-zip-compress-archive-encryption#" target="_blank" rel="noopener noreferrer">this article</a> (I haven’t tried it myself)</p>
+  </li>
+</ul>
+
+<p>Final step: Schedule the script by using Windows Task Scheduler</p>
+
+<p>This is quite straightforward. Just create a task, schedule it to how often you want to backup your database.</p>
+
+<p>In the actions section, enter “powershell” as “program/script” and the path of your PowerShell script as “argument” and that’s it.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://docs.microsoft.com/en-us/powershell/module/sqlserver/backup-sqldatabase?view=sqlserver-ps" target="_blank" rel="noopener noreferrer">Backup-SQLDatabase cmdlet reference</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.archive/compress-archive?view=powershell-5.1" target="_blank" rel="noopener noreferrer">Compress-Archive cmdlet reference</a></li>
+  <li><a href="https://aws.amazon.com/powershell/" target="_blank" rel="noopener noreferrer">AWS Tools Download</a></li>
+  <li><a href="https://www.vexasoft.com/blogs/powershell/7255220-powershell-tutorial-try-catch-finally-and-error-handling-in-powershell" target="_blank" rel="noopener noreferrer">PowerShell Tutorial – Try Catch Finally and error handling in PowerShell</a></li>
+  <li><a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/smtp-credentials.html" target="_blank" rel="noopener noreferrer">AWS Documentation: Obtaining Your Amazon SES SMTP Credentials</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/14" class="prev">Prev</a>
+    
+    
+        <a href="/page/16" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

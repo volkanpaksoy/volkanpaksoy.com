@@ -1,0 +1,424 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/49/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/12/19/moving-s3-bucket-to-another-account/" itemprop="url">Moving S3 bucket to another account</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-12-19T01:29:35+00:00" itemprop="datePublished">December 19, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
+
+<!-- aws -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">s3, cloudberry</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p><img src="/images/vpblogimg/common/aws/AmazonS3.png" alt="Amazon S3"></p>
+
+<p>I have two AWS accounts and I made a mistake by using mixing the usage of services. More specifically, I hosted an application on one account but used S3 on the other. So I perpetually had to switch back and forth between accounts to access all services I used. First I thought fixing it would be a non-issue but it proved to be a rather daunting task.</p>
+
+<h3 id="bucket-naming-in-s3">Bucket naming in S3</h3>
+<p>In S3, all buckets must have unique names. You cannot use a name if it’s already taken (much like domain names). Since I was using the bucket already, creating the same bucket in the other account and copying its contents was not an option. The second idea was to create the target bucket with a temporary name, copy the contents, delete the first one and rename the target bucket. Well, guess what? You cannot rename a bucket either! Another problem is when you delete a bucket you can create a new one with the same name right away. I’m guessing this is because of the redundancy S3 provides. It takes time to propagate the operation to all the nodes. My tests showed that I could re-create the bucket in the other account only after 45 – 50 minutes.</p>
+
+<h3 id="to-develop-or-not-to-develop">To develop or not to develop</h3>
+<p>My initial instinct was to develop a tool to handle this operation but I decided to check out the what’s already available. I was occasionally using Cloudberry but wanted to check its competitors hoping one of the tools would support the functionality I need.</p>
+
+<h4 id="cloudberry-explorer-for-amazon-s3">Cloudberry Explorer for Amazon S3</h4>
+<p>I find this tool quite handy. It has lots of functions and a nice intuitive. It comes in flavours: Free and Pro version. I used free version so far and unless you are a big enterprise it seems sufficient. It allows you to manage multiple AWS account. It allows copying objects among accounts but not moving a bucket (actually after my findings above I wasn’t very hopeful anyway)</p>
+
+<p><img src="/images/vpblogimg/2013/12/AmazonS3_CloudBerry_Main.png" alt="AmazonS3 CloudBerry Main"></p>
+
+<p>As you can see in the menu bar, it supports lots of features.</p>
+
+<h4 id="s3-browser">S3 Browser</h4>
+<p>This one comes with a free version too as well as a paid version. The free version is limited to 2 accounts and you can only see one account at a time.</p>
+
+<p><img src="/images/vpblogimg/2013/12/S3Browser.png" alt="S3 Browser"></p>
+
+<p>I tried to copy a file and paste to another but it got an Access Denied error. I could do the same thing with Cloudberry in seconds by simply dragging and dropping to the target folder.</p>
+
+<h4 id="bucket-explorer">Bucket Explorer</h4>
+<p>Third candidate only has a 30-day trial version as opposed to a free one. The second I installed it I knew it was a loser for me because it doesn’t support multiple accounts. Also as you can see below the UI is hideous so this is not a tool for me.</p>
+
+<p><img src="/images/vpblogimg/2013/12/BucketExplorer.png" alt="Bucket explorer"></p>
+
+<h3 id="and-the-winner-is">..and the winner is</h3>
+<p>Cloudberry won by a landslide! It looks much more superior than both of the other tools combined.</p>
+
+<h3 id="operation-bucket-migration">Operation Bucket Migration</h3>
+<p>So I backed up everything locally and deleted the source bucket so that I could create the same one in the new account. After periodically checking for 45 minutes I finally created the bucket and uploaded the files. Set the permissions and the operation was completed without any casualties.. Well, at least I thought that was the case..</p>
+
+<h3 id="nobody-is-perfect">Nobody is perfect!</h3>
+<p>After I uploaded the images I reloaded my blog. The first image re-appeared and I was ready for the celebrations which were abruptly interrupted by the missing images in the second post. The images were nowhere to be found locally in none of the two backups I took. I think Cloudberry has a bug when handling filenames with hyphens. I’m still not certain that is the case but that’s the only characteristic that differs from the other files. Anyway, the moral of the story is triple-check everything before you’re initiating a destructive process and don’t trust external tools blindly.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://aws.amazon.com/articles/1109#05" target="_blank" rel="noopener noreferrer">Amazon S3 Technical FAQs</a></li>
+  <li><a href="http://www.cloudberrylab.com" target="_blank" rel="noopener noreferrer">Cloudberry</a></li>
+  <li><a href="http://s3browser.com" target="_blank" rel="noopener noreferrer">S3 Browser</a></li>
+  <li><a href="http://www.bucketexplorer.com" target="_blank" rel="noopener noreferrer">Bucket Explorer</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/12/11/auto-scaling-using-aws-management-console/" itemprop="url">Auto-Scaling using AWS Management Console</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-12-11T20:37:06+00:00" itemprop="datePublished">December 11, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awsdevops">aws</a></span> -->
+
+<!-- aws, devops -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags">auto_scaling</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p><img src="/images/vpblogimg/2013/12/AWS_AutoScaling.png" alt="Amazon Web Services (AWS) Auto-Scaling"></p>
+
+<p>Auto-scaling has always been a feature of Amazon Web Services (AWS). Until today, it could be done in 2 ways:</p>
+
+<ul>
+  <li>Using command line tool (See resources section for the link)</li>
+  <li>Using Elastic BeanStalk to deploy your application</li>
+</ul>
+
+<p>Yesterday (10/12/2013) they announced they added Auto-Scaling support to AWS console. I was planning to create auto-scaling my blog anyway so I cannot think of a better time to apply this.</p>
+
+<h2 id="auto-scaling-using-aws-management-console">Auto-scaling using AWS Management Console</h2>
+
+<h3 id="step-01-launch-configuration">Step 01: Launch Configuration</h3>
+<p>First we tell AWS what we want to launch. This step is a lot like creating a new EC2 instance. First you select an AMI. So before I started I created an AMI of my current blog and selected that one for the launch configuration. Then we select the instance properties. In this wizard we have the option for using spot instances. They are not suitable for Internet-facing applications so I’ll skip that part.</p>
+
+<h3 id="step-02-auto-scaling-group">Step 02: Auto Scaling Group</h3>
+<p>At the end of Launch Configuration wizard we can select create auto-scaling group with that launch configuration and jump right into Step 2.
+First we specify the name and the initial instance count for the group. Also we need to choose at least 1 availability zone. I always select all of them, I’m not sure if there is any trade-off with narrowing down your selection.</p>
+
+<p>An important point to pay attention here is to expand Advanced Details section because it contains the load balancer selection. For web applications auto-scaling makes sense when the instances are behind a load-balancer. Otherwise new instances could not be reached anyway. Once you create the auto-scaling group you cannot associate it with an ELB so make sure you select your load balancer at this step.</p>
+
+<p><img src="/images/vpblogimg/2013/12/AutoScalingGroup01.png" alt="Create Auto Scaling Group"></p>
+
+<p>After comes another important step: Specifying scaling policies. Basically, telling AWS the action to take when it needs to scale up or down and when to do it. “When” is defined by CloudWatch alarms. For scaling up, I added an alarm for average CPU utilization over 80% for 5 minutes and for scaling up CPU utilization under 20% for 5 minutes. When high CPU alarm goes off it will take the action we select, which in my case is adding 1 more instance. And scaling down is just the opposite: remove 1 instance from the existing machine farm.</p>
+
+<p><img src="/images/vpblogimg/2013/12/AutoScalingGroup02.png" alt="Create Auto Scaling Group"></p>
+
+<p>On next step we define the notifications we want to receive when an AS event is triggered. I would definitely would like to know everything that happens to my machines so I requested an email for all events.</p>
+
+<p><img src="/images/vpblogimg/2013/12/AutoScalingGroup03.png" alt="Create Auto Scaling Group"></p>
+
+<p>That’s all it takes to create an AS group using the wizard.</p>
+
+<h3 id="testing-the-scaling">Testing the scaling</h3>
+<p>The easiest way to test auto-scaling group is to terminate the instance it just launched. As you can see below once I killed the instance it immediately launched another one to match the minimum number requirement of AS group. So auto-scaling group is working but how can I be sure that it will launch a new instance when I need it most. Time to make it sweat a little! But first we have to setup an environment to create load on the system:</p>
+
+<h3 id="installing-siege">Installing Siege</h3>
+<p>The easiest and simplest load testing tool I know is a Linux-based one called Siege. To prepare my simple load testing environment I quickly downloaded siege:</p>
+
+<blockquote>
+  <p>wget http://www.joedog.org/pub/siege/siege-latest.tar.gz</p>
+</blockquote>
+
+<blockquote>
+  <p>tar -xzvf siege-latest.tar.gz</p>
+</blockquote>
+
+<p>It requires a C compiler which doesn’t come out-of-the-box with an Amazon Linux AMI. So first we need to install that:</p>
+
+<blockquote>
+  <p>yum install gcc*</p>
+</blockquote>
+
+<p>And configure it by</p>
+
+<blockquote>
+  <p>./configure</p>
+</blockquote>
+
+<p>At the end of the configuration it instructs us to run the following commands:</p>
+
+<p><img src="/images/vpblogimg/2013/12/Siege+configuration.png" alt="Siege configuration"></p>
+
+<p>So after running make Siege is ready to go. We can check the configuration by</p>
+
+<blockquote>
+  <p>/usr/local/bin/siege -C</p>
+</blockquote>
+
+<p>It should display the current version and other details about the tool.</p>
+
+<p><img src="/images/vpblogimg/2013/12/Siege+configuration+02.png" alt="Siege Configuration"></p>
+
+<h3 id="ready-to-go">Ready to go</h3>
+<p>Now, we have a micro instance running Siege and a small instance launched by auto-scaling.</p>
+
+<p><img src="/images/vpblogimg/2013/12/AWS_Instances_01.png" alt="AWS Instances"></p>
+
+<p>The auto-scaling is supposed to launch another instance and add it to load balancer if the CPU usage is too high on the existing one. Let’s see if it’s really working.</p>
+
+<h3 id="under-siege">Under Siege!</h3>
+<p>I first created a URL file from my sitemap so that the load can be more realistic. I fired up 20 threads and it started to bombard my site:</p>
+
+<p><img src="/images/vpblogimg/2013/12/Siege+in+action.png" alt="Siege in Action"></p>
+
+<p>When I try to load my site it was incredibly slow. The CPU usage kept rising on the single instance until the CloudWatch alarm went off. It triggered auto-scale to launch a new instance.</p>
+
+<p><img src="/images/vpblogimg/2013/12/AWS_Instances_02.png" alt="AWS Instances"></p>
+
+<p>Now, I had 2 instances to share the load but that could only happen if the new instance was added to the Elastic Load Balancer (ELB) automatically. After a few minutes it passed the health checks and went in service.</p>
+
+<p><img src="/images/vpblogimg/2013/12/ELB_with_AS_Instances.png" alt="Auto-scaling using AWS Management Console - Elastic Load Balancer Overview"></p>
+
+<p>At this point I had 2 instances and when I tried to load posts from my blog I noticed it was quite fast again. The CPU usage graph below tells how it all went down:</p>
+
+<p><img src="/images/vpblogimg/2013/12/CPU_Usage.png" alt="Auto-scaling using AWS Management Console - CPU utilization"></p>
+
+<p>My first instance (orange) was running silently and peacefully until it was attacked by Siege. After a few minutes of hard times the cavalry came to rescue (blue instance) and started getting its fair share of the load. Then ELB distributed load as evenly as possible making the system running smoothly again.
+OK, so the system can withstand a spike and scale itself but it costs money. What’s going to happen after the storm. So I stopped Siege and sure enough, as we’d expect, after a few minutes Low CPU alarm kicked off and set the instance count back to 1 by terminating one of the instances.</p>
+
+<p><img src="/images/vpblogimg/2013/12/AWS_Instances_03.png" alt="AWS Instances"></p>
+
+<p>Also, I was notified in every step of this process. So that I could be able to keep track of my instances at all times.</p>
+
+<p><img src="/images/vpblogimg/2013/12/Notification.png" alt="Auto-scaling using AWS Management Console - Notifications"></p>
+
+<h3 id="architecture-of-the-system">Architecture of the system</h3>
+<p>So at this point the architecture of the system looks like this:</p>
+
+<p><img src="/images/vpblogimg/2013/12/AWS+Architecture.png" alt="Auto-scaling using AWS Management Console - System Architecture"></p>
+
+<p>I’m planning to cover some basics (EC2, RDS, S3) in more detail in a later post. Also I’ll try to add more AWS services and enhance this architecture as I go along.</p>
+
+<h3 id="final-words">Final Words</h3>
+<ul>
+  <li>If you are planning to use auto-scaling in production environment make sure to backup all your stuff externally. Also create snapshots for all the volumes.</li>
+  <li>Even though network traffic is cheap it still costs. So for extended tests I suggest you keep an eye on your billing statement</li>
+  <li>In Amazon Linux AMI Apache and MySQL don’t start automatically so you may need to update your configuration like I did. I used the script I found <a href="http://codingsteps.com/install-apache-php-apc-mysql-on-amazon-ec2-with-amazon-linux-ami/" target="_blank" rel="noopener noreferrer">here</a>.</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://aws.amazon.com/autoscaling" target="_blank" rel="noopener noreferrer">AWS Auto-scaling</a></li>
+  <li><a href="http://aws.typepad.com/aws/2013/12/aws-management-console-auto-scaling-support.html" target="_blank" rel="noopener noreferrer">AWS Blog post announcing AWS in management console</a></li>
+  <li><a href="http://aws.amazon.com/developertools/2535" target="_blank" rel="noopener noreferrer">Autoscaling command line tool</a></li>
+  <li><a href="http://www.joedog.org/siege-home" target="_blank" rel="noopener noreferrer">Siege website</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/12/10/devops/" itemprop="url">DevOps</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-12-10T22:01:42+00:00" itemprop="datePublished">December 10, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devops">devops</a></span> -->
+
+<!-- devops -->
+
+
+
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags"></span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>DevOps (Development + Operations) is one of most popular terms in the IT world recently. From what I’ve read and listened to so far, my understanding is it is all about continuous deployment (or delivery). Basically, you have to automate everything from development to deployment to practice DevOps.</p>
+
+<h3 id="current-problem">Current problem</h3>
+<p>Traditionally, successful deployment is a huge challenge. It is mostly a manual and cumbersome process. Because of its sensitive nature the system admins are not huge fans of deployments. Also, another challenge is the miscommunication (or no communication in some cases) between system admin and development teams. They are generally run by different high-level executives and their priorities conflict most of the time.</p>
+
+<h3 id="solution">Solution</h3>
+<p>On the philosophical side, DevOps is bringing these teams together and work in harmony. Having social events with both teams’ attendance is a key to build confidence among team members. As Richard Campbell (from <a href="http://runasradio.com/" target="_blank" rel="noopener noreferrer">RunAsRadio</a> and <a href="http://dotnetrocks.com" target="_blank" rel="noopener noreferrer">.NET Rocks</a> podcasts) says “Pizza and beer is a global lubricant”.</p>
+
+<h4 id="dev">Dev…</h4>
+<p>On the development side, the key requirement is continuous integration. You have to able to run unit tests and acceptance tests automatically on build servers. This means development has to be done in short sprints in an agile way with frequent check-ins. One step further of this stage is continuous deployment.</p>
+
+<h4 id="ops">…Ops</h4>
+<p>This is where the IT team comes into play. When the whole system is automated, deploying to production frequently and without much headache becomes possible. Cloud computing is one of the core technologies that makes DevOps possible. Ability to manage virtual machines programmatically (i.e. AWS, OpenStack) leads to a whole bunch of possibilities.</p>
+
+<p>This is a fairly complex topic encompassing many disciplines and technologies. Also it’s quite dynamic and open to innovation. Definitely worth keeping an eye on.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://en.wikipedia.org/wiki/DevOps" target="_blank" rel="noopener noreferrer">Wikipedia article</a></li>
+  <li><a href="http://www.runasradio.com" target="_blank" rel="noopener noreferrer">RunAsRadio podcast - Building the Culture of DevOps with Steven Murawski</a></li>
+  <li><a href="http://www.cert.org/podcast/mp3/2/20130730kim-full.mp3" target="_blank" rel="noopener noreferrer">Cert.org podcast - DevOps - Transform Development and Operations for Fast, Secure Deployments</a></li>
+  <li><a href="http://vimeo.com/67110005" target="_blank" rel="noopener noreferrer">Richard Campbell DevOps talk on Vimeo</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/48" class="prev">Prev</a>
+    
+    
+        <a href="/page/50" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

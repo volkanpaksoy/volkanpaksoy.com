@@ -1,0 +1,219 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playing with Lego Mindstorms NXT and EV3 - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2019/10/24/Playing-with-Lego-Mindstorms/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Playing with Lego Mindstorms NXT and EV3</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-10-24T07:00:00+01:00" itemprop="datePublished">October 24, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- hobby -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">lego, mindstorms, ev3, nxt-g, nxt</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p><img src="/images/vpblogimg/2019/10/lego-1/lego-mindstorms-ev3.jpg" alt="Lego Mindstorms EV3"></p>
+
+<p>Whenever I see my Lego Mindstorms kit on the shelf gathering dust I sigh then I tell myself one day I’ll find enough time to build soemthing with it again. That day was last weekend! This post is a collection of notes that I started taking when I started playing.</p>
+
+<h2 id="terminology">Terminology</h2>
+<p>I have 2 older bricks and one of the newer ones. At first glance the naming was a bit confusing. So to clarify there are 3 versions of the brick out there as outlines <a href="http://robotsquare.com/2013/07/16/ev3-nxt-compatibility/" target="_blank" rel="noopener noreferrer">here</a>.</p>
+
+<ul>
+  <li>The programmable bricks are all called <strong>Lego Mindstorms</strong>
+</li>
+  <li>The names of the versions are:
+    <ul>
+      <li>1998: LEGO MINDSTORMS <strong>RCX</strong>
+</li>
+      <li>2006: LEGO MINDSTORMS <strong>NXT</strong>
+</li>
+      <li>2013: LEGO MINDSTORMS <strong>EV3</strong>
+</li>
+    </ul>
+  </li>
+  <li>Also NXT has several sets:
+    <ul>
+      <li>LEGO MINDSTORMS NXT (8527)</li>
+      <li>LEGO MINDSTORMS NXT 2.0 (8547)</li>
+      <li>LEGO MINDSTORMS NXT Education Base Set (9797)</li>
+    </ul>
+  </li>
+</ul>
+
+<p>I have one of the education sets and one regular so I was getting confused about identifying which one was which as all the contents are mixed up at this point. The good news is shown in the same <a href="http://robotsquare.com/2012/02/18/understanding-nxt-versions/" target="_blank" rel="noopener noreferrer">article</a> that lists NXT sets:</p>
+
+<ul>
+  <li>The NXT Intelligent Brick is the same in all versions of the Mindstorms NXT sets.</li>
+  <li>The NXT motors are the same in all versions of the Mindstorms NXT sets. Each version has three of such motors</li>
+</ul>
+
+<p>Since the brick is the heart and soul of the whole thing, it’s much easier to say that I have 2 NXT and 1 EV3 bricks.</p>
+
+<h2 id="programming-the-brick">Programming the brick</h2>
+<p>First, I downloaded the software and installed it:</p>
+
+<p><img src="/images/vpblogimg/2019/10/lego-1/lego-mindstorms-software-installation.png" alt=""></p>
+
+<p>Then plugged in the EV3 brick via USB cable:</p>
+
+<p><img src="/images/vpblogimg/2019/10/lego-1/lego-mindstorms-connect-brick.png" alt=""></p>
+
+<p>Unfortunately, macoOS Catalina doesn’t seem to support programming yet. Even though it installs fine and sees the EV3 brick connected I couldn’t make it work. So I reverted to my Surface Pro 3 and tried Windows to do the job.</p>
+
+<p>I guess this time it really worked as it asked me to upgrade firmware on the brick which I did.</p>
+
+<p><img src="/images/vpblogimg/2019/10/lego-1/lego-mindstorms-firmware-update.png" alt=""></p>
+
+<p>After that I was able to start using NXT-G to develop my first program: An infinite loop of 2 motors moving forward</p>
+
+<p><img src="/images/vpblogimg/2019/10/lego-1/lego-mindstorms-first-program.png" alt=""></p>
+
+<p>And the result is simple but good enough for the time being:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3RE---CIvbI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.lego.com/en-gb/mindstorms/downloads/download-software" target="_blank" rel="noopener noreferrer">Lego Software Download</a></li>
+  <li><a href="http://robotsquare.com/2013/07/16/ev3-nxt-compatibility/" target="_blank" rel="noopener noreferrer">EV3 and NXT: Difference and Compatibility</a></li>
+  <li><a href="http://robotsquare.com/2012/02/18/understanding-nxt-versions/" target="_blank" rel="noopener noreferrer">Tutorial: Understanding the difference between NXT set versions</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2014/05/24/programming-lego-mindstorms-ev3-net-api">Old blog post: Programming EV3 with .NET</a></li>
+  <li><a href="https://www.ev3dev.org/" target="_blank" rel="noopener noreferrer">ev3dev</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2019/10/23/AWS-Developer-Tools-Services-Part-4-AWS-CodePipeline/" title="Previous Post: 
+AWS Developer Tools Services Part 4: AWS CodePipeline">« AWS Developer Tools Services Part 4: AWS CodePipeline</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2019/10/26/Building-Robots-with-Lego-Mindstorms-EV3/" title="next Post: 
+Building Robots with Lego Mindstorms EV3">Building Robots with Lego Mindstorms EV3 » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

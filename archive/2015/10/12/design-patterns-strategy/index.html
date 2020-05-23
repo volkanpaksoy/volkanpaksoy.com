@@ -1,0 +1,286 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Design Patterns: Strategy - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2015/10/12/design-patterns-strategy/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Design Patterns: Strategy</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-10-12T15:00:00+01:00" itemprop="datePublished">October 12, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- design, dev -->
+
+
+
+
+    <a href="/category/design">design</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">design_patterns, csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>Often times we need to change some algorithm with another without changing the client code that’s consuming it. In this post I want to show a use case I came across and utilised Strategy pattern.</p>
+
+<h3 id="what-is-it">What is it?</h3>
+<p>Here’s the official definition of the pattern from GoF book:</p>
+
+<blockquote>
+  <p>Define a family of algorithms, encapsulate each one, and make them interchangeable. Strategy lets the algorithm vary independently from clients that use it.</p>
+</blockquote>
+
+<h3 id="use-case-get-external-ip-address">Use case: Get external IP address</h3>
+<p>In an application I was working on I needed to get the external IP address of the computer the application is running on. There are various ways to achieve that. This looked like a good opprtunity to use the Strategy pattern as I wanted to be able switch between the different methods easily.</p>
+
+<h3 id="implementation">Implementation</h3>
+<p>The interface is quite simple:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">interface</span> <span class="nc">IIpCheckStrategy</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="nf">GetExternalIp</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Some services return their data in JSON format, some have extra text in it. But encapsulating the algorithms in their own classes this way, the clint code doesn’t have to worry about parsing these various return values. It’s handled in each class. If one service changes it’s output and breaks the implementation I can recover just by changing the code instantiates the class.</p>
+
+<p>The concrete implementations of the interface are below. They implement the IIpCheckStrategy and are responsible for getting the data and return parsed IP address as string.</p>
+
+<p>AWS IP Checker:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">AwsIPCheckStrategy</span> <span class="p">:</span> <span class="n">IIpCheckStrategy</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="nf">GetExternalIp</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpClient</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">client</span><span class="p">.</span><span class="n">BaseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="s">"http://checkip.amazonaws.com/"</span><span class="p">);</span>
+            <span class="kt">string</span> <span class="n">result</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">GetStringAsync</span><span class="p">(</span><span class="s">""</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">result</span><span class="p">.</span><span class="nf">TrimEnd</span><span class="p">(</span><span class="sc">'\n'</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>DynDns IP Checker:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">DynDnsIPCheckStrategy</span> <span class="p">:</span> <span class="n">IIpCheckStrategy</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="nf">GetExternalIp</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpClient</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">client</span><span class="p">.</span><span class="n">BaseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="s">"http://checkip.dyndns.org/"</span><span class="p">);</span>
+            <span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">GetAsync</span><span class="p">(</span><span class="s">""</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">HelperMethods</span><span class="p">.</span><span class="nf">ExtractIPAddress</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="nf">ReadAsStringAsync</span><span class="p">().</span><span class="n">Result</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Custom IP Checker:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">CustomIpCheckStrategy</span> <span class="p">:</span> <span class="n">IIpCheckStrategy</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="nf">GetExternalIp</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpClient</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">client</span><span class="p">.</span><span class="n">BaseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="s">"http://check-ip.herokuapp.com/"</span><span class="p">);</span>
+            <span class="n">client</span><span class="p">.</span><span class="n">DefaultRequestHeaders</span><span class="p">.</span><span class="n">Accept</span><span class="p">.</span><span class="nf">Clear</span><span class="p">();</span>
+            <span class="n">client</span><span class="p">.</span><span class="n">DefaultRequestHeaders</span><span class="p">.</span><span class="n">Accept</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="nf">MediaTypeWithQualityHeaderValue</span><span class="p">(</span><span class="s">"application/json"</span><span class="p">));</span>
+
+            <span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">GetAsync</span><span class="p">(</span><span class="s">""</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+            <span class="kt">string</span> <span class="n">json</span> <span class="p">=</span> <span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="nf">ReadAsStringAsync</span><span class="p">().</span><span class="n">Result</span><span class="p">;</span>
+            <span class="kt">dynamic</span> <span class="n">ip</span> <span class="p">=</span> <span class="n">Newtonsoft</span><span class="p">.</span><span class="n">Json</span><span class="p">.</span><span class="n">JsonConvert</span><span class="p">.</span><span class="nf">DeserializeObject</span><span class="p">(</span><span class="n">json</span><span class="p">);</span>
+            <span class="kt">string</span> <span class="n">result</span> <span class="p">=</span> <span class="n">ip</span><span class="p">.</span><span class="n">ipAddress</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="choosing-the-algorithm">Choosing the algorithm</h3>
+<p>The consumer of the algorithm can pick any class that implements IIpCheckStrategy and switch between them. For example:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">StrategyClient1</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Execute</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">IIpCheckStrategy</span> <span class="n">ipChecker</span><span class="p">;</span>
+
+        <span class="n">ipChecker</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">DynDnsIPCheckStrategy</span><span class="p">();</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">ipChecker</span><span class="p">.</span><span class="nf">GetExternalIp</span><span class="p">());</span>
+
+        <span class="n">ipChecker</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AwsIPCheckStrategy</span><span class="p">();</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">ipChecker</span><span class="p">.</span><span class="nf">GetExternalIp</span><span class="p">());</span>
+
+        <span class="n">ipChecker</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CustomIpCheckStrategy</span><span class="p">();</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">ipChecker</span><span class="p">.</span><span class="nf">GetExternalIp</span><span class="p">());</span>
+
+        <span class="n">Console</span><span class="p">.</span><span class="nf">ReadKey</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Also the class name to be used can be stored in the configuration in some cases so that it can be changed at runtime without recompiling the application. For instance:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">StrategyClient2</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Execute</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">string</span> <span class="n">ipcheckerTypeName</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"IPChecker"</span><span class="p">];</span>
+
+        <span class="n">IIpCheckStrategy</span> <span class="n">ipchecker</span> <span class="p">=</span> <span class="n">Assembly</span><span class="p">.</span><span class="nf">GetExecutingAssembly</span><span class="p">().</span><span class="nf">CreateInstance</span><span class="p">(</span><span class="n">ipcheckerTypeName</span><span class="p">)</span> <span class="k">as</span> <span class="n">IIpCheckStrategy</span><span class="p">;</span>
+
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">ipchecker</span><span class="p">.</span><span class="nf">GetExternalIp</span><span class="p">());</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>and the appSettings in the configuration would look like this:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;appSettings&gt;</span>
+	<span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"IPChecker"</span> <span class="na">value=</span><span class="s">"Strategy.AwsIPCheckStrategy"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/appSettings&gt;</span>
+</code></pre></div></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/design-pattern-workout" target="_blank" rel="noopener noreferrer">Sample source code</a></li>
+  <li><a href="http://www.amazon.co.uk/Head-First-Design-Patterns-Freeman/dp/0596007124" target="_blank" rel="noopener noreferrer">Head First Design Patterns</a></li>
+  <li><a href="http://www.amazon.co.uk/Design-patterns-elements-reusable-object-oriented/dp/0201633612" target="_blank" rel="noopener noreferrer">GoF Book: Design Patterns : Elements of Reusable Object-Oriented Software</a></li>
+  <li><a href="http://www.pluralsight.com/courses/csharp-design-strategies" target="_blank" rel="noopener noreferrer">Pluralsight course: C# Design Strategies</a></li>
+  <li><a href="http://www.dofactory.com/net/strategy-design-pattern" target="_blank" rel="noopener noreferrer">DoFactory Strategy Design Pattern</a></li>
+</ul>
+
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2015/10/09/aws-lambda-official-scheduling-support/" title="Previous Post: 
+AWS Lambda Official Scheduling Support">« AWS Lambda Official Scheduling Support</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2015/10/16/design-patterns-factory-method/" title="next Post: 
+Design Patterns: Factory Method">Design Patterns: Factory Method » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

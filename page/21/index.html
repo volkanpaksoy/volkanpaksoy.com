@@ -1,0 +1,860 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/21/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/10/22/ip-checker-with-mef/" itemprop="url">Building Plugin-Based Applications with Managed Extensibility Framework (MEF)</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-10-22T12:30:00+01:00" itemprop="datePublished">October 22, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devdesign">dev</a></span> -->
+
+<!-- dev, design -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/design">design</a>
+    
+</span>
+	<span class="tags">csharp, mef, managed_extensibility_framework, plugin</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>In this post I will try to cover some of the basic concepts and features of MEF over a working example. In the future I’ll post more articles demonstraint MEF usage with more complex applications.</p>
+
+<h3 id="background">Background</h3>
+<p>Many successful and popular applications, such as Visual Studio, Eclipse, Sublime Text, support a plug-in model. Adopting a plugin-based model, whenever possible, has quite a few advantages:</p>
+
+<ul>
+  <li>Helps to keep the core lightweight instead of cramming all features into the same code-base.</li>
+  <li>Helps to make the application more robust: New functionality can be added without changing any existing code.</li>
+  <li>Helps to make development easier as different modules can be developed by different people simultaneously</li>
+  <li>Allows plugin development without distributing the main the source code</li>
+</ul>
+
+<p>Extensibility is based on composition and it is very helpful to build SOLID compliant applications as it adopts <em>Open/closed</em> and <em>Dependency Inversion</em> principles.</p>
+
+<p>MEF is part of .NET framework as of version 4.0 and it lives inside <em>System.ComponentModel.Composition</em> namespace. This is also the standard extension model that has been used in Visual Studio. It is not meant to replace Invesion of Control (IoC) frameworks. It is rather meant to simplify building extensible applications using dependency injection based on component composition.</p>
+
+<h3 id="some-terminology">Some terminology</h3>
+<p>Before diving into the sample, let’s look at some MEF terminology and core terms:</p>
+
+<ul>
+  <li>
+    <p><strong>Part:</strong> Basic elements in MEF are called <strong>parts</strong>. Parts can provide services to other parts (<em>exporting</em>) and can consume other parts’ services (<em>importing</em>).</p>
+  </li>
+  <li>
+    <p><strong>Container:</strong> This is the part that performs the composition. Most common one is <em>CompositionContainer</em> class.</p>
+  </li>
+  <li>
+    <p><strong>Catalog:</strong> In order to discover the parts, containers use <em>catalogs</em>. There are various catelogs suplied by MEF such as</p>
+
+    <ul>
+      <li>AssemblyCatalog: Discovers attributed parts in a managed code assembly.</li>
+      <li>DirectoryCatalog: Discovers attributed parts in the assemblies in a specified directory.</li>
+      <li>AggregateCatalog: A catalog that combines the elements of ComposablePartCatalog objects.</li>
+      <li>ApplicationCatalog: Discovers attributed parts in the dynamic link library (DLL) and EXE files in an application’s directory and path</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Export / import:</strong> The way the plugins make themselves discoverable is by exporting their implementation of a <em>contract</em>. A contract is simply a common interface that the application and the plugins understand so they can speak the same language so to speak.</p>
+  </li>
+</ul>
+
+<h3 id="sample-project">Sample Project</h3>
+<p>As I learn best by playing around, I decided to start with a simple project. I’ve recently published a sample project for Strategy design pattern which I blogged <a href="https://volkanpaksoy.com/archive/2015/10/12/design-patterns-strategy">here</a>. In this post I will use the same project and convert it into a plugin-based version.</p>
+
+<h3 id="ip-checker-with-mef-v1-bare-essentials">IP Checker with MEF v1: Bare Essentials</h3>
+<p>At this point we have everything we need for the first version of the plugin-based IP checker. Firstly, I divided my project into 5 parts:</p>
+
+<p><img src="/images/vpblogimg/2015/10/ip-checker-with-mef-v1-project-structure.png" alt=""></p>
+
+<ul>
+  <li>IPCheckerWithMEF.Lab: The consumer application</li>
+  <li>IPCheckerWithMEF.Contract: Project containing the common interface</li>
+  <li>Plugins: Extensions for the main application
+    <ul>
+      <li>IPCheckerWithMEF.Plugins.AwsIPChecker</li>
+      <li>IPCheckerWithMEF.Plugins.CustomIPChecker</li>
+      <li>IPCheckerWithMEF.Plugins.DynDnsIPChecker</li>
+    </ul>
+  </li>
+</ul>
+
+<p>I set the output folder of the plugins to a directory called Plugins at the project level.</p>
+
+<h3 id="lets-see-some-code">Let’s see some code!</h3>
+<p>For this basic version we need 3 things:</p>
+
+<ul>
+  <li>A container to handle the composition.</li>
+  <li>A catalog that the container can use to discover the plugins.</li>
+  <li>A way to tell which classes should be discovered and imported</li>
+</ul>
+
+<p>In this sample I used a DirectoryCatalog that points to the output folder of the plugin projects. So after adding the required parts above the main application shaped up to be something like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">MainApplication</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="n">CompositionContainer</span> <span class="n">_container</span><span class="p">;</span>
+
+    <span class="p">[</span><span class="nf">ImportMany</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">IIpChecker</span><span class="p">))]</span>
+    <span class="k">public</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">IIpChecker</span><span class="p">&gt;</span> <span class="n">IpCheckerList</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="nf">MainApplication</span><span class="p">(</span><span class="kt">string</span> <span class="n">pluginFolder</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">catalog</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">DirectoryCatalog</span><span class="p">(</span><span class="n">pluginFolder</span><span class="p">);</span>
+        <span class="n">_container</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CompositionContainer</span><span class="p">(</span><span class="n">catalog</span><span class="p">);</span>
+
+        <span class="nf">LoadPlugins</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">LoadPlugins</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">try</span>
+        <span class="p">{</span>
+            <span class="n">_container</span><span class="p">.</span><span class="nf">ComposeParts</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">catch</span> <span class="p">(</span><span class="n">CompositionException</span> <span class="n">compositionException</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">compositionException</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In the constructor, it instantiates a DirectoryCatalog with the given path and passes it to the container. The container imports IIpChecker type objects found in the assemblies inside that folder. Note that we didn’t do anything about IpCheckerList. By decorating it with ImportMany attribute we declared that it’s to be filled by the composition engine. In this example we could only use <em>ImportMany</em> as opposed to <em>Import</em> which would look for a single part to compose. If we used Import we would get the following exception:</p>
+
+<p><img src="/images/vpblogimg/2015/10/ip-checker-with-mef-v1-single-import-exception.png" alt=""></p>
+
+<p>Now to complete the circle we need to export our plugins with <em>Export</em> attribute such as:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[Export(typeof(IIpChecker))]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">AwsIPChecker</span> <span class="p">:</span> <span class="n">IIpChecker</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="nf">GetExternalIp</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Alternatively we can use InheritedExport attribute on the interface to export any class that implements the IIpChecker interface.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[InheritedExport(typeof(IIpChecker))]</span>
+<span class="k">public</span> <span class="k">interface</span> <span class="nc">IIpChecker</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="nf">GetExternalIp</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This way the plugins would still be discovered even if they weren’t decorated with Export attribute because of this inheritance model.</p>
+
+<h3 id="putting-it-together">Putting it together</h3>
+<p>Now that we’ve seen the plugins that export the implementation and part that discovers and imports them let’s see them all in action:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Program</span>
+<span class="p">{</span>
+    <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Starting the main application"</span><span class="p">);</span>
+
+        <span class="kt">string</span> <span class="n">pluginFolder</span> <span class="p">=</span> <span class="s">@"..\..\..\Plugins\"</span><span class="p">;</span>
+        <span class="kt">var</span> <span class="n">app</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MainApplication</span><span class="p">(</span><span class="n">pluginFolder</span><span class="p">);</span>
+
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"</span><span class="p">{</span><span class="n">app</span><span class="p">.</span><span class="n">IpCheckerList</span><span class="p">.</span><span class="n">Count</span><span class="p">}</span><span class="s"> plugin(s) loaded.."</span><span class="p">);</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Executing all plugins..."</span><span class="p">);</span>
+
+        <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">ipChecker</span> <span class="k">in</span> <span class="n">app</span><span class="p">.</span><span class="n">IpCheckerList</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="nf">ObfuscateIP</span><span class="p">(</span><span class="n">ipChecker</span><span class="p">.</span><span class="nf">GetExternalIp</span><span class="p">()));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="k">static</span> <span class="kt">string</span> <span class="nf">ObfuscateIP</span><span class="p">(</span><span class="kt">string</span> <span class="n">actualIp</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">Regex</span><span class="p">.</span><span class="nf">Replace</span><span class="p">(</span><span class="n">actualIp</span><span class="p">,</span> <span class="s">"[0-9]"</span><span class="p">,</span> <span class="s">"*"</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>We create the consumer application that loads all the plugins in the directory we specify. Then we can loop over and execute all of them:</p>
+
+<p><img src="/images/vpblogimg/2015/10/ip-checker-with-mef-v1-output.png" alt=""></p>
+
+<p>So far so good. Now, let’s try to export some metadata about our plugins so that we can display the loaded plugins to the user.</p>
+
+<h3 id="ip-checker-with-mef-v2-metadata-comes-into-play">IP Checker with MEF v2: Metadata comes into play</h3>
+<p>In almost all applications plugins come with some sort of information so that the user can identify which ones have been installed and what they do. To export the extra data let’s add a new interface:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">interface</span> <span class="nc">IPluginInfo</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">DisplayName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kt">string</span> <span class="n">Description</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kt">string</span> <span class="n">Version</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>And on the plugins we fill that data and export it using the <em>ExportMetadata</em> attribute:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[Export(typeof(IIpChecker))]</span>
+<span class="na">[ExportMetadata("DisplayName", "Custom IP Checker")]</span>
+<span class="na">[ExportMetadata("Description", "Uses homebrew service developed with Node.js and hosted on Heroku")]</span>
+<span class="na">[ExportMetadata("Version", "2.1")]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">CustomIpChecker</span> <span class="p">:</span> <span class="n">IIpChecker</span>
+<span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In v1, we only imported a list of objects implementing IIpChecker. So how do we accommodate this new piece of information? In order to do that we have to change the way we import the plugins and use the <em>Lazy</em> construct:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[ImportMany]</span>
+<span class="k">public</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Lazy</span><span class="p">&lt;</span><span class="n">IIpChecker</span><span class="p">,</span> <span class="n">IPluginInfo</span><span class="p">&gt;&gt;</span> <span class="n">Plugins</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<p>According to <a href="https://msdn.microsoft.com/en-us/library/vstudio/ee155691%28v=vs.100%29.aspx" target="_blank" rel="noopener noreferrer">MSDN</a> this is mandatory to get metadata out of plugins:</p>
+
+<blockquote>
+  <p>The importing part can use this data to decide which exports to use, or to gather information about an export without having to construct it. For this reason, an import must be lazy to use metadata</p>
+</blockquote>
+
+<p>So let’s load and display this new plugin information:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">PrintPluginInfo</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"</span><span class="p">{</span><span class="n">_app</span><span class="p">.</span><span class="n">Plugins</span><span class="p">.</span><span class="n">Count</span><span class="p">}</span><span class="s"> plugin(s) loaded.."</span><span class="p">);</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Displaying plugin info..."</span><span class="p">);</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">();</span>
+
+    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">ipChecker</span> <span class="k">in</span> <span class="n">_app</span><span class="p">.</span><span class="n">Plugins</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"----------------------------------------"</span><span class="p">);</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Name: </span><span class="p">{</span><span class="n">ipChecker</span><span class="p">.</span><span class="n">Metadata</span><span class="p">.</span><span class="n">DisplayName</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Description: </span><span class="p">{</span><span class="n">ipChecker</span><span class="p">.</span><span class="n">Metadata</span><span class="p">.</span><span class="n">Description</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Version: </span><span class="p">{</span><span class="n">ipChecker</span><span class="p">.</span><span class="n">Metadata</span><span class="p">.</span><span class="n">Version</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Notice that we access the metadata through <em>[PluginName].Metadata.[PropertyName]</em> properties. To access the actual plugin and call the exported methods we have to use <em>[PluginName].Value</em> such as:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">ipChecker</span> <span class="k">in</span> <span class="n">_app</span><span class="p">.</span><span class="n">Plugins</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">ipChecker</span><span class="p">.</span><span class="n">Value</span><span class="p">.</span><span class="nf">GetExternalIp</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2015/10/ip-checker-with-mef-v2-output-with-metadata.png" alt=""></p>
+
+<h3 id="managing-the-plugins">Managing the plugins</h3>
+<p>What if we want to add or remove plugins at runtime? We can do it without restarting the application but refreshing the catalog and calling the container’s ComposeParts method again.</p>
+
+<p>In this sample application I added a FileSystemWatcher that listens to the Created and Deleted events on the Plugins folder and calls the LoadPlugins method of the application when an event fires. LoadPlugins first refreshes the catalog and composes the parts:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">LoadPlugins</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">try</span>
+    <span class="p">{</span>
+        <span class="n">_catalog</span><span class="p">.</span><span class="nf">Refresh</span><span class="p">();</span>
+        <span class="n">_container</span><span class="p">.</span><span class="nf">ComposeParts</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="n">CompositionException</span> <span class="n">compositionException</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">compositionException</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>But making this change alone isn’t sufficient and we would end up getting a CompositionException:</p>
+
+<p><img src="/images/vpblogimg/2015/10/ip-checker-with-mef-v2-recomposition-exception.png" alt=""></p>
+
+<p>By default recomposition is disabled so we have to specify it explicitly while importing parts:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[ImportMany(AllowRecomposition = true)]</span>
+<span class="k">public</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Lazy</span><span class="p">&lt;</span><span class="n">IIpChecker</span><span class="p">,</span> <span class="n">IPluginInfo</span><span class="p">&gt;&gt;</span> <span class="n">Plugins</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<p>After these changes the final version of composing class looks like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">MainApplication</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="n">CompositionContainer</span> <span class="n">_container</span><span class="p">;</span>
+    <span class="k">private</span> <span class="n">DirectoryCatalog</span> <span class="n">_catalog</span><span class="p">;</span>
+
+    <span class="p">[</span><span class="nf">ImportMany</span><span class="p">(</span><span class="n">AllowRecomposition</span> <span class="p">=</span> <span class="k">true</span><span class="p">)]</span>
+    <span class="k">public</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Lazy</span><span class="p">&lt;</span><span class="n">IIpChecker</span><span class="p">,</span> <span class="n">IPluginInfo</span><span class="p">&gt;&gt;</span> <span class="n">Plugins</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="nf">MainApplication</span><span class="p">(</span><span class="kt">string</span> <span class="n">pluginFolder</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_catalog</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">DirectoryCatalog</span><span class="p">(</span><span class="n">pluginFolder</span><span class="p">);</span>
+        <span class="n">_container</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CompositionContainer</span><span class="p">(</span><span class="n">_catalog</span><span class="p">);</span>
+
+        <span class="nf">LoadPlugins</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">LoadPlugins</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">try</span>
+        <span class="p">{</span>
+            <span class="n">_catalog</span><span class="p">.</span><span class="nf">Refresh</span><span class="p">();</span>
+            <span class="n">_container</span><span class="p">.</span><span class="nf">ComposeParts</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">catch</span> <span class="p">(</span><span class="n">CompositionException</span> <span class="n">compositionException</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">compositionException</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>and the client app:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Program</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">static</span> <span class="k">readonly</span> <span class="kt">string</span> <span class="n">_pluginFolder</span> <span class="p">=</span> <span class="s">@"..\..\..\Plugins\"</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">static</span> <span class="n">FileSystemWatcher</span> <span class="n">_pluginWatcher</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">static</span> <span class="n">MainApplication</span> <span class="n">_app</span><span class="p">;</span>
+
+    <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Starting the main application"</span><span class="p">);</span>
+
+        <span class="n">_pluginWatcher</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FileSystemWatcher</span><span class="p">(</span><span class="n">_pluginFolder</span><span class="p">);</span>
+        <span class="n">_pluginWatcher</span><span class="p">.</span><span class="n">Created</span> <span class="p">+=</span> <span class="n">PluginWatcher_FolderUpdated</span><span class="p">;</span>
+        <span class="n">_pluginWatcher</span><span class="p">.</span><span class="n">Deleted</span> <span class="p">+=</span> <span class="n">PluginWatcher_FolderUpdated</span><span class="p">;</span>
+        <span class="n">_pluginWatcher</span><span class="p">.</span><span class="n">EnableRaisingEvents</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+
+        <span class="n">_app</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MainApplication</span><span class="p">(</span><span class="n">_pluginFolder</span><span class="p">);</span>
+
+        <span class="nf">PrintPluginInfo</span><span class="p">();</span>
+
+        <span class="n">Console</span><span class="p">.</span><span class="nf">ReadLine</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">PrintPluginInfo</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"</span><span class="p">{</span><span class="n">_app</span><span class="p">.</span><span class="n">Plugins</span><span class="p">.</span><span class="n">Count</span><span class="p">}</span><span class="s"> plugin(s) loaded.."</span><span class="p">);</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Displaying plugin info..."</span><span class="p">);</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">();</span>
+
+        <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">ipChecker</span> <span class="k">in</span> <span class="n">_app</span><span class="p">.</span><span class="n">Plugins</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"----------------------------------------"</span><span class="p">);</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Name: </span><span class="p">{</span><span class="n">ipChecker</span><span class="p">.</span><span class="n">Metadata</span><span class="p">.</span><span class="n">DisplayName</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Description: </span><span class="p">{</span><span class="n">ipChecker</span><span class="p">.</span><span class="n">Metadata</span><span class="p">.</span><span class="n">Description</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Version: </span><span class="p">{</span><span class="n">ipChecker</span><span class="p">.</span><span class="n">Metadata</span><span class="p">.</span><span class="n">Version</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">PluginWatcher_FolderUpdated</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">FileSystemEventArgs</span> <span class="n">e</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">();</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"===================================="</span><span class="p">);</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Folder changed. Reloading plugins..."</span><span class="p">);</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">();</span>
+        
+        <span class="n">_app</span><span class="p">.</span><span class="nf">LoadPlugins</span><span class="p">();</span>
+
+        <span class="nf">PrintPluginInfo</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>After these changes I started the application with 2 plugins in the target folder and added a 3rd one while it’s running and got this output:</p>
+
+<p><img src="/images/vpblogimg/2015/10/ip-checker-with-mef-v2-output-with-updated-plugins.png" alt=""></p>
+
+<p>It also works the same way for deleted plugins but not for updates because the assemblies are locked by .NET. Adding new plugins at runtime is painless but removing and updating would require more attention as the plugin might be running at the time.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/ip-checker-with-mef" target="_blank" rel="noopener noreferrer">Sample project source code</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2015/10/12/design-patterns-strategy">IP Checker with strategy design pattern blog post</a></li>
+  <li><a href="https://msdn.microsoft.com/en-us/library/dd460648%28v=vs.110%29.aspx" target="_blank" rel="noopener noreferrer">MSDN: Managed Extensibility Framework (MEF)</a></li>
+  <li><a href="https://msdn.microsoft.com/en-us/library/system.componentmodel.composition.hosting" target="_blank" rel="noopener noreferrer">MSDN: System.ComponentModel.Composition.Hosting Namespace</a></li>
+  <li><a href="https://msdn.microsoft.com/en-us/library/vstudio/ee155691%28v=vs.100%29.aspx" target="_blank" rel="noopener noreferrer">MSDN: Attributed Programming Model Overview</a></li>
+  <li><a href="https://mef.codeplex.com/" target="_blank" rel="noopener noreferrer">MEF Source Code on Codeplex</a></li>
+  <li><a href="http://msdn.microsoft.com/en-us/magazine/ee291628.aspx" target="_blank" rel="noopener noreferrer">MSDN Magazine Article: Building Composable Apps in .NET 4 with the Managed Extensibility Framework</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/10/19/design-patterns-abstract-factory/" itemprop="url">Design Patterns: Abstract Factory</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-10-19T12:30:00+01:00" itemprop="datePublished">October 19, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/designdev">design</a></span> -->
+
+<!-- design, dev -->
+
+
+
+
+    <a href="/category/design">design</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">design_patterns, csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>A few days ago I published a <a href="https://volkanpaksoy.com/archive/2015/10/16/design-patterns-factory-method">post discussing Factory Method pattern</a>. This article is about the other factory design pattern: Abstract Factory.</p>
+
+<h3 id="use-case-switching-between-configuration-sources-easily">Use case: Switching between configuration sources easily</h3>
+<p>Imagine in a C# application you accessed ConfigurationManager.AppSettings whenever you needed a value from the configuration. This would essentially be hardcoding the configuration source and it would be hard to change if you needed to switch to another configuration source (database, web service, etc). A nicer way would be to <em>“outsource”</em> the creation of configuration source to another class.</p>
+
+<h3 id="what-is-abstract-factory">What is Abstract Factory?</h3>
+<p>Here’s the official definition from GoF:</p>
+
+<blockquote>
+  <p>Provide an interface for creating families of related or dependent objects without specifying their concrete classes.</p>
+</blockquote>
+
+<h3 id="implementation">Implementation</h3>
+<p>The application first composes the main class (ArticleFeedGenerator) with the services it will use and starts the process.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">IConfigurationFactory</span> <span class="n">configFactory</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AppConfigConfigurationFactory</span><span class="p">();</span>
+
+    <span class="n">IApiSettings</span> <span class="n">apiSettings</span> <span class="p">=</span> <span class="n">configFactory</span><span class="p">.</span><span class="nf">GetApiSettings</span><span class="p">();</span>
+    <span class="n">IFeedSettings</span> <span class="n">feedSettings</span> <span class="p">=</span> <span class="n">configFactory</span><span class="p">.</span><span class="nf">GetFeedSettings</span><span class="p">();</span>
+    <span class="n">IFeedServiceSettings</span> <span class="n">feedServiceSettings</span> <span class="p">=</span> <span class="n">configFactory</span><span class="p">.</span><span class="nf">GetFeedServiceSettings</span><span class="p">();</span>
+    <span class="n">IS3PublisherSettings</span> <span class="n">s3PublishSettings</span> <span class="p">=</span> <span class="n">configFactory</span><span class="p">.</span><span class="nf">GetS3PublisherSettings</span><span class="p">();</span>
+    <span class="n">IOfflineClientSettings</span> <span class="n">offlineClientSettings</span> <span class="p">=</span> <span class="n">configFactory</span><span class="p">.</span><span class="nf">GetOfflineClientSettings</span><span class="p">();</span>
+
+    <span class="kt">var</span> <span class="n">rareburgClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">OfflineRareburgClient</span><span class="p">(</span><span class="n">offlineClientSettings</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">rareburgArticleFeedService</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RareburgArticleFeedService</span><span class="p">(</span><span class="n">feedServiceSettings</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">publishService</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">S3PublishService</span><span class="p">(</span><span class="n">s3PublishSettings</span><span class="p">,</span> <span class="n">feedSettings</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">feedGenerator</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ArticleFeedGenerator</span><span class="p">(</span><span class="n">rareburgClient</span><span class="p">,</span> <span class="n">rareburgArticleFeedService</span><span class="p">,</span> <span class="n">publishService</span><span class="p">,</span> <span class="n">feedSettings</span><span class="p">);</span>
+
+    <span class="n">feedGenerator</span><span class="p">.</span><span class="nf">Run</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This version uses AppConfigConfigurationFactory to get the values from the App.config. When I need to switch to DynamoDB which I used in this example all I have to do is replace one line of code in the application:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">configFactory</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">DynamoDBConfigurationFactory</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>With this change alone we are essentially replacing a whole family of related classes.</p>
+
+<h3 id="on-the-factory-floor">On the factory floor</h3>
+<p>The abstract factory and the concrete factories implement it are shown below:</p>
+
+<p><img src="/images/vpblogimg/2015/10/design-pattern-abstract-factory-class-diagram-1.png" alt=""></p>
+
+<p>Concrete configuration factories create the classes that deal with specific configuration values (<em>concrete products</em>). For instance AppConfigConfigurationFactory looks like this (simplified for brevity):</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">AppConfigConfigurationFactory</span> <span class="p">:</span> <span class="n">IConfigurationFactory</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="n">IApiSettings</span> <span class="nf">GetApiSettings</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">AppConfigApiSettings</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">IFeedServiceSettings</span> <span class="nf">GetFeedServiceSettings</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">AppConfigFeedServiceSettings</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Similarly, DynamoDBConfigurationFactory is responsible for creating concrete classes that access DynamoDB values:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">DynamoDBConfigurationFactory</span> <span class="p">:</span> <span class="n">IConfigurationFactory</span>
+<span class="p">{</span>
+    <span class="k">protected</span> <span class="n">Table</span> <span class="n">_configTable</span><span class="p">;</span>
+    
+    <span class="k">public</span> <span class="nf">DynamoDBConfigurationFactory</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">AmazonDynamoDBClient</span> <span class="n">dynmamoClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AmazonDynamoDBClient</span><span class="p">(</span><span class="s">"accessKey"</span><span class="p">,</span> <span class="s">"secretKey"</span><span class="p">,</span> <span class="n">RegionEndpoint</span><span class="p">.</span><span class="n">EUWest1</span><span class="p">);</span>
+        <span class="n">_configTable</span> <span class="p">=</span> <span class="n">Table</span><span class="p">.</span><span class="nf">LoadTable</span><span class="p">(</span><span class="n">dynmamoClient</span><span class="p">,</span> <span class="s">"tableName"</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="k">public</span> <span class="n">IApiSettings</span> <span class="nf">GetApiSettings</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">DynamoDBApiSettings</span><span class="p">(</span><span class="n">_configTable</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">IFeedServiceSettings</span> <span class="nf">GetFeedServiceSettings</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">DynamoDBFeedServiceSettings</span><span class="p">(</span><span class="n">_configTable</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Notice all the “concrete products” implement the same “abstract product” interface and hence they are interchangable. With the product classes in the picture the diagram now looks like this:</p>
+
+<p><img src="/images/vpblogimg/2015/10/design-pattern-abstract-factory-class-diagram-2.png" alt=""></p>
+
+<p>Finally let’s have a look at the concrete objects that carry out the actual job. For example the IApiSettings exposes 2 string properties:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">interface</span> <span class="nc">IApiSettings</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">ApiKey</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kt">string</span> <span class="n">ApiEndPoint</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>If we want to read these values from App.config it’s very straightforward:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">AppConfigApiSettings</span> <span class="p">:</span> <span class="n">IApiSettings</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">ApiKey</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"Rareburg.ApiKey"</span><span class="p">];</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">ApiEndPoint</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"Rareburg.ApiEndPoint"</span><span class="p">];</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The DynamoDB version is fairly more complex but it makes no difference from the consumer’s point of view. Here GetValue is a method in the base class that returns the value from the encapsulated <em>Amazon.DynamoDBv2.DocumentModel.Table</em> object.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">DynamoDBApiSettings</span> <span class="p">:</span> <span class="n">DynamoDBSettingsBase</span><span class="p">,</span> <span class="n">IApiSettings</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nf">DynamoDBApiSettings</span><span class="p">(</span><span class="n">Table</span> <span class="n">configTable</span><span class="p">)</span>
+        <span class="p">:</span> <span class="k">base</span> <span class="p">(</span><span class="n">configTable</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">ApiKey</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="nf">GetValue</span><span class="p">(</span><span class="s">"Rareburg.ApiKey"</span><span class="p">);</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">ApiEndPoint</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="nf">GetValue</span><span class="p">(</span><span class="s">"Rareburg.ApiEndPoint"</span><span class="p">);</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The concrete factory is responsible for creating the concrete classes it uses. So the client is completely oblivious to the classes such as DynamoDBApiSettings or AppConfigApiSettings. This means we can add a whole new set of configuration classes (i.e. a web service) and all we have to change in the client code will be one line where we instantiate the concrete factory.</p>
+
+<p>This approach also allows us to be more flexible with the concerete class implementations. For example DynamoDB config class family requires a Table object in their constructors. To avoid code repetition I derived them all from a base class and moved the table to the base but the that doesn’t change anything in the client code.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/design-pattern-workout" target="_blank" rel="noopener noreferrer">Sample project source code</a></li>
+  <li><a href="https://github.com/volkanpaksoy/rareburg-article-feed-generator" target="_blank" rel="noopener noreferrer">Rareburg article feed generator source code</a></li>
+  <li><a href="http://www.amazon.co.uk/Design-patterns-elements-reusable-object-oriented/dp/0201633612/" target="_blank" rel="noopener noreferrer">Book: GoF Book</a></li>
+  <li><a href="http://www.amazon.co.uk/Head-First-Design-Patterns-Freeman/dp/0596007124/" target="_blank" rel="noopener noreferrer">Book: Head First Design Patterns</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/10/16/design-patterns-factory-method/" itemprop="url">Design Patterns: Factory Method</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-10-16T01:30:00+01:00" itemprop="datePublished">October 16, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/designdev">design</a></span> -->
+
+<!-- design, dev -->
+
+
+
+
+    <a href="/category/design">design</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">design_patterns, csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I recently developed a toy project called <a href="https://github.com/volkanpaksoy/rareburg-article-feed-generator" target="_blank" rel="noopener noreferrer">Rareburg article feed generator</a>. It basically gets the articles from Rareburg.com (a marketplace for collectors) and creates an RSS feed. One challenge I had was picking the feed formatter class (RSS vs Atom). I utilised Factory Method design pattern to solve that and this post discusses the usage of the pattern over that use case.</p>
+
+<h3 id="use-case-creating-rss-feed-formatter">Use case: Creating RSS feed formatter</h3>
+<p>I wanted my feed generator to support both RSS and Atom feeds based on the value specified in the configuration. In order to pass the XML validations they needed to modified a bit and I wanted these details hidden from the client code.</p>
+
+<h3 id="what-is-factory-method">What is Factory Method?</h3>
+<p>Here’s the official definition from GoF:</p>
+
+<blockquote>
+  <p>Define an interface for creating an object, but let subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses</p>
+</blockquote>
+
+<p>Factory Method pattern is one of the creational patterns which make it easy to separate object creation from the actual system. The actual business logic doesn’t need to care about these object creation details.</p>
+
+<h3 id="implementation">Implementation</h3>
+<p>To see the implementation at a glance let’s have a look at the class diagram:</p>
+
+<p><img src="/images/vpblogimg/2015/10/design-pattern-factory-method-class-diagram-1.png" alt=""></p>
+
+<p>The base abstract class is called ArticleFeedGenerator (it corresponds to <em>Creator</em> in the GoF book). Here’s a shortened version:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">ArticleFeedGenerator</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="n">SyndicationFeedFormatter</span> <span class="n">_feedFormatter</span><span class="p">;</span>
+
+    <span class="c1">// Factory method</span>
+    <span class="k">public</span> <span class="k">abstract</span> <span class="n">SyndicationFeedFormatter</span> <span class="nf">CreateFeedFormatter</span><span class="p">();</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Run</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">allArticles</span> <span class="p">=</span> <span class="n">_feedDataClient</span><span class="p">.</span><span class="nf">GetAllArticles</span><span class="p">();</span>
+        <span class="n">_feed</span> <span class="p">=</span> <span class="n">_feedService</span><span class="p">.</span><span class="nf">GetFeed</span><span class="p">(</span><span class="n">allArticles</span><span class="p">);</span>
+
+        <span class="n">_feedFormatter</span> <span class="p">=</span> <span class="nf">CreateFeedFormatter</span><span class="p">();</span>
+
+        <span class="n">_publishService</span><span class="p">.</span><span class="nf">Publish</span><span class="p">(</span><span class="n">_feedFormatter</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>ArticleFeedGenerator does all the work except creating a conccrete implementation of SyndicationFeedFormatter. It delegates it to the derived class who provide the implementation for CreateFeedFormatter abstract method.</p>
+
+<p>And here comes the concrete implementations (which correspond to <em>ConcreteCreator</em>)</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">AtomFeedGenerator</span> <span class="p">:</span> <span class="n">ArticleFeedGenerator</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nf">AtomFeedGenerator</span><span class="p">(</span>
+        <span class="n">IFeedDataClient</span> <span class="n">feedDataClient</span><span class="p">,</span>
+        <span class="n">IFeedService</span> <span class="n">feedService</span><span class="p">,</span>
+        <span class="n">IPublishService</span> <span class="n">publishService</span><span class="p">,</span>
+        <span class="n">IFeedSettings</span> <span class="n">feedSettings</span><span class="p">)</span>
+        <span class="p">:</span> <span class="k">base</span> <span class="p">(</span><span class="n">feedDataClient</span><span class="p">,</span> <span class="n">feedService</span><span class="p">,</span> <span class="n">publishService</span><span class="p">,</span> <span class="n">feedSettings</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">override</span> <span class="n">SyndicationFeedFormatter</span> <span class="nf">CreateFeedFormatter</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">Atom10FeedFormatter</span><span class="p">(</span><span class="n">_feed</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In order to pass RSS validations RSS formatter needed more “love” than the Atom version above:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">RssFeedGenerator</span> <span class="p">:</span> <span class="n">ArticleFeedGenerator</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nf">RssFeedGenerator</span><span class="p">(</span>
+        <span class="n">IFeedDataClient</span> <span class="n">feedDataClient</span><span class="p">,</span>
+        <span class="n">IFeedService</span> <span class="n">feedService</span><span class="p">,</span>
+        <span class="n">IPublishService</span> <span class="n">publishService</span><span class="p">,</span>
+        <span class="n">IFeedSettings</span> <span class="n">feedSettings</span><span class="p">)</span>
+        <span class="p">:</span> <span class="k">base</span> <span class="p">(</span><span class="n">feedDataClient</span><span class="p">,</span> <span class="n">feedService</span><span class="p">,</span> <span class="n">publishService</span><span class="p">,</span> <span class="n">feedSettings</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+    
+    <span class="k">public</span> <span class="k">override</span> <span class="n">SyndicationFeedFormatter</span> <span class="nf">CreateFeedFormatter</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">formatter</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Rss20FeedFormatter</span><span class="p">(</span><span class="n">_feed</span><span class="p">);</span>
+        <span class="n">formatter</span><span class="p">.</span><span class="n">SerializeExtensionsAsAtom</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+        <span class="n">XNamespace</span> <span class="n">atom</span> <span class="p">=</span> <span class="s">"http://www.w3.org/2005/Atom"</span><span class="p">;</span>
+        <span class="n">_feed</span><span class="p">.</span><span class="n">AttributeExtensions</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="nf">XmlQualifiedName</span><span class="p">(</span><span class="s">"atom"</span><span class="p">,</span> <span class="n">XNamespace</span><span class="p">.</span><span class="n">Xmlns</span><span class="p">.</span><span class="n">NamespaceName</span><span class="p">),</span> <span class="n">atom</span><span class="p">.</span><span class="n">NamespaceName</span><span class="p">);</span>
+        <span class="n">_feed</span><span class="p">.</span><span class="n">ElementExtensions</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="nf">XElement</span><span class="p">(</span><span class="n">atom</span> <span class="p">+</span> <span class="s">"link"</span><span class="p">,</span> <span class="k">new</span> <span class="nf">XAttribute</span><span class="p">(</span><span class="s">"href"</span><span class="p">,</span> <span class="n">_feedSettings</span><span class="p">.</span><span class="n">FeedUrl</span><span class="p">),</span> <span class="k">new</span> <span class="nf">XAttribute</span><span class="p">(</span><span class="s">"rel"</span><span class="p">,</span> <span class="s">"self"</span><span class="p">),</span> <span class="k">new</span> <span class="nf">XAttribute</span><span class="p">(</span><span class="s">"type"</span><span class="p">,</span> <span class="s">"application/rss+xml"</span><span class="p">)));</span>
+        <span class="k">return</span> <span class="n">formatter</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Concerete creators create concrete products but the factory method returns the abstract product which ArticleFeedGenerator (abstract creator) works with.</p>
+
+<p>To avoid hard-coding the class name, a helper method called CreateFeedGenerator is added. The client code calls this method to get either a AtomFeedGenerator or a RssFeedGenerator based on configuration value.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Program</span>
+<span class="p">{</span>
+    <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">feedSettings</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AppConfigFeedSettings</span><span class="p">();</span>
+        <span class="n">ArticleFeedGenerator</span> <span class="n">feedGenerator</span> <span class="p">=</span> <span class="nf">CreateFeedGenerator</span><span class="p">(</span><span class="n">feedSettings</span><span class="p">);</span>
+        <span class="n">feedGenerator</span><span class="p">.</span><span class="nf">Run</span><span class="p">();</span>
+    <span class="p">}</span>
+    
+    <span class="k">private</span> <span class="k">static</span> <span class="n">ArticleFeedGenerator</span> <span class="nf">CreateFeedGenerator</span><span class="p">(</span><span class="n">IFeedSettings</span> <span class="n">feedSettings</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">string</span> <span class="n">feedFormat</span> <span class="p">=</span> <span class="n">feedSettings</span><span class="p">.</span><span class="n">FeedFormat</span><span class="p">;</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">feedFormat</span><span class="p">.</span><span class="nf">ToLower</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="k">case</span> <span class="s">"atom"</span><span class="p">:</span> <span class="k">return</span> <span class="k">new</span> <span class="nf">AtomFeedGenerator</span><span class="p">(</span><span class="k">new</span> <span class="nf">RareburgClient</span><span class="p">(),</span> <span class="k">new</span> <span class="nf">RareburgArticleFeedService</span><span class="p">(),</span> <span class="k">new</span> <span class="nf">S3PublishService</span><span class="p">(),</span> <span class="n">feedSettings</span><span class="p">);</span>
+            <span class="k">case</span> <span class="s">"rss"</span><span class="p">:</span> <span class="k">return</span> <span class="k">new</span> <span class="nf">RssFeedGenerator</span><span class="p">(</span><span class="k">new</span> <span class="nf">RareburgClient</span><span class="p">(),</span> <span class="k">new</span> <span class="nf">RareburgArticleFeedService</span><span class="p">(),</span> <span class="k">new</span> <span class="nf">S3PublishService</span><span class="p">(),</span> <span class="n">feedSettings</span><span class="p">);</span>
+            <span class="k">default</span><span class="p">:</span> <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentException</span><span class="p">(</span><span class="s">"Unknown feed format"</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/design-pattern-workout" target="_blank" rel="noopener noreferrer">Sample project source code</a></li>
+  <li><a href="https://github.com/volkanpaksoy/rareburg-article-feed-generator" target="_blank" rel="noopener noreferrer">Rareburg article feed generator source code</a></li>
+  <li><a href="http://www.amazon.co.uk/Design-patterns-elements-reusable-object-oriented/dp/0201633612/" target="_blank" rel="noopener noreferrer">Book: GoF Book</a></li>
+  <li><a href="http://www.amazon.co.uk/Head-First-Design-Patterns-Freeman/dp/0596007124/" target="_blank" rel="noopener noreferrer">Book: Head First Design Patterns</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/20" class="prev">Prev</a>
+    
+    
+        <a href="/page/22" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,496 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/31/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/01/21/dotnet-gadgeteer-part-1/" itemprop="url">.NET Gadgeteer (Part 1 of n)</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-01-21T02:00:00+00:00" itemprop="datePublished">January 21, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/hobbydev">hobby</a></span> -->
+
+<!-- hobby, dev -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">gadget, dotnet_gadgeteer</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>My problem is I have a ton of gadgets and keep getting more before building meaningful projects with the previous ones. So I decided to be a good boy and create at least one full project with the existing ones before I move on to new shiny toys. First target is my .NET Gadgeteer hardware kit set that’s been lying around for a quite some time. For the sake of completeness here are the previous posts about Gadgeteer so far:</p>
+
+<ul>
+  <li><a href="https://volkanpaksoy.com/archive/2013/07/26/cleaning-up-net-gadgeteer-work-environment/">Cleaning up .NET Gadgeteer work environment</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2013/06/27/playing-with-net-gadgeteer/">Playing with .NET Gadgeteer</a></li>
+</ul>
+
+<p>My main goal now is to discover the capabilities of the kit I have and try to come up with a fun project. So as I have no clue at the moment I will play around with each component I have and create sample projects for each them. By the end I hope I’ll get a nice idea.</p>
+
+<h3 id="what-is-it-anyway">What is it anyway?</h3>
+<p>The official definiton is: “Microsoft .NET Gadgeteer is an open-source toolkit for building small electronic devices using the .NET Micro Framework” I think it’s a great kit for children because it makes development a lot easier than say Arduino.</p>
+
+<p>All sockets are labelled and all you have to do is connect the mathcing sockets in the module and mainboard:</p>
+
+<p><img src="/images/vpblogimg/common/Gadgeteer/Gadgeteer_Cerberus_Mainboard.jpg" alt="Cerberus Mainboard"></p>
+
+<p><img src="/images/vpblogimg/common/Gadgeteer/Gadgeteer_Socket_Letter.jpg" alt="Gadgeteer Socket Letters"></p>
+
+<p>Also if you are a .NET developer there is absolutely no learning curve. You just build your application just like you’ve been building all along.</p>
+
+<h3 id="setting-up-the-development-environment">Setting up the development environment!</h3>
+<p>Well, there is no learning curve but still you need to make some preparations. First thing you need to do is install the .NET Micro Framework. Then the next step I took is install the Gadgeteer project templates for Visual Studio 2013. All of these can be found at the downloads section at <a href="https://www.ghielectronics.com/support/netmf" target="_blank" rel="noopener noreferrer">GHI Electronics website</a>.</p>
+
+<p>Once you install the Gadgeteer package you should be able to create new Gadgeteer projects when you select <em>File</em> -&gt; <em>New Project</em> in Visual Studio:</p>
+
+<p><img src="/images/vpblogimg/common/Gadgeteer/gadgeteer-add-new-project.png" alt="Visual Studio Add Gadgeteer Project"></p>
+
+<p>Next step is to select the mainboard you’re going to use in the project:</p>
+
+<p><img src="/images/vpblogimg/common/Gadgeteer/gadgeteer-board-selection.png" alt="Gadgeteer Mainboard Selection"></p>
+
+<h3 id="first-rule-of-gadget-development-fork-over-the-money">First rule of gadget development: Fork over the money!</h3>
+<p>Once you install the required software you will of course need the actually hardware to run your applications on. The bulk of modules I currently have came from the starter kit I initially bought:</p>
+
+<p><img src="/images/vpblogimg/common/Gadgeteer/Gadgeteer_FEZ_Spider_Starter_Kit.jpg" alt="FEZ Spider Starter Kit"></p>
+
+<p>Then I added a few more components but there are so many more that can be purchased. Since it’s an open hardware platform any vendor can build their own modules. But looks like, even though it’s open-source, a company called <a href="https://www.ghielectronics.com/" target="_blank" rel="noopener noreferrer">GHI Electronics</a> are taking the lead in this market.</p>
+
+<h3 id="lets-get-down-to-business">Let’s get down to business!</h3>
+<p>I will explain each module in depth in the upcoming posts but for the purposes of testing the development environment I’ll just build a sample project consisting of Spider mainboard and 3 LEDs.</p>
+
+<p>First component I’m going to play around is multi color LED. I happen to have 3 of them and added all of them to my design. Once you drag and drop the modules you want to use in your project you can simply right-click on an empty point on the canvas and select <em>Connect All Modules</em>. It automatically connects using the appropriate slots for each module. So you can instantly get something like this:</p>
+
+<p><img src="/images/vpblogimg/common/Gadgeteer/gadgeteer-sample-design.png" alt="Sample design"></p>
+
+<p>And the source code I’m going to use to test it is as follows:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">partial</span> <span class="k">class</span> <span class="nc">Program</span>
+<span class="p">{</span>
+	<span class="k">void</span> <span class="nf">ProgramStarted</span><span class="p">()</span>
+	<span class="p">{</span>
+		<span class="n">multicolorLED</span><span class="p">.</span><span class="nf">TurnOff</span><span class="p">();</span>
+		<span class="n">multicolorLED2</span><span class="p">.</span><span class="nf">TurnOff</span><span class="p">();</span>
+		<span class="n">multicolorLED3</span><span class="p">.</span><span class="nf">TurnOff</span><span class="p">();</span>
+
+		<span class="n">multicolorLED</span><span class="p">.</span><span class="nf">TurnBlue</span><span class="p">();</span>
+		<span class="n">multicolorLED2</span><span class="p">.</span><span class="nf">TurnGreen</span><span class="p">();</span>
+		<span class="n">multicolorLED3</span><span class="p">.</span><span class="nf">TurnRed</span><span class="p">();</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Once you get such a visual design it’s very easy to build the actual hardware by referring to this:</p>
+
+<p><img src="/images/vpblogimg/common/Gadgeteer/Gadgeteer-Sample-Hardware.jpg" alt="Sample hardware"></p>
+
+<p>By the way, I’m using <a href="http://www.amazon.co.uk/Tamiya-70172-Universal-Plate-210x160mm/dp/B005PQJ5O6" target="_blank" rel="noopener noreferrer">Tamiya universal plate</a> to keep modules nice and tidy otherwise they hang around uncontrollably. So it is quite handy.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>I’ll leave it here. I’m hoping this post should have enough information for anyone who wants to start developing projects with .NET Gadgeteer hardware kit. In the next post I’ll go over each component and discover their capabilities. If you already have a Gadgeteer kit your mileage may vary as I can only cover the devices I own. I’d appreciate if you submit any project ideas. I can acquire the modules needed and add to my projects.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.netmf.com/gadgeteer/" target="_blank" rel="noopener noreferrer">Official Gadgeteer site</a></li>
+  <li><a href="https://www.ghielectronics.com/support/netmf" target="_blank" rel="noopener noreferrer">GHI Downloads</a></li>
+  <li><a href="http://www.amazon.co.uk/Tamiya-70172-Universal-Plate-210x160mm/dp/B005PQJ5O6" target="_blank" rel="noopener noreferrer">Tamiya universal plate</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/01/13/adventures-in-fsharp-rock-paper-scissors-lizard-spock/" itemprop="url">Adventures in F# - Rock Paper Scissors Lizard Spock</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-01-13T19:00:00+00:00" itemprop="datePublished">January 13, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">fsharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I can learn by doing so after I’ve started learning F# I had to develop some application to practice. The one I came up with is a simple game: Rock Paper Scissors Lizard Spock. First version only gets a bunch of moves from the player, generates random moves for the computer and displays the outcome as shown below:</p>
+
+<p><img src="/images/vpblogimg/2015/01/RPSLS-output.png" alt="Rock Paper Scissors Lizard Spock sample output"></p>
+
+<h3 id="implementation">Implementation</h3>
+<p>First, it gets a list of moves from the user. It should be a space-separated list of moves: R (Rock), P (Paper), S (Scissors), L (Lizard) and M (M for Mr. Spock as S was taken!)</p>
+
+<p>Then it converts the characters to corresponding moves and generates equal number of moves for the computer.</p>
+
+<p>Next it compares both lists of moves. It uses overloaded “-“ operator of the discriminated union. If the difference is 1 it means first player won, if it’s 2 then the second move won. 0 means draw.</p>
+
+<p>Finally it displays the output of each round the score after that.</p>
+
+<h3 id="source-code">Source code</h3>
+<p>Program has two files only and basic game implementation is as follows:</p>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">module</span> <span class="nc">Game</span>
+
+<span class="k">type</span> <span class="nc">Move</span> <span class="p">=</span> 
+    <span class="p">|</span> <span class="nc">Rock</span>
+    <span class="p">|</span> <span class="nc">Paper</span>
+    <span class="p">|</span> <span class="nc">Scissors</span>
+    <span class="p">|</span> <span class="nc">Lizard</span>
+    <span class="p">|</span> <span class="nc">Spock</span>
+
+    <span class="k">static</span> <span class="k">member</span> <span class="o">(-)</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="p">=</span>
+        <span class="k">match</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="k">with</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span> <span class="p">-&gt;</span> <span class="mi">1</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span> <span class="p">-&gt;</span> <span class="mi">1</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span> <span class="p">-&gt;</span> <span class="mi">2</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span> <span class="p">-&gt;</span> <span class="mi">2</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span> <span class="p">-&gt;</span> <span class="mi">1</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span> <span class="p">-&gt;</span> <span class="mi">2</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span> <span class="p">-&gt;</span> <span class="mi">2</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span> <span class="p">-&gt;</span> <span class="mi">1</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span> <span class="p">-&gt;</span> <span class="mi">1</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span> <span class="p">-&gt;</span> <span class="mi">2</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span> <span class="p">-&gt;</span> <span class="mi">2</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span> <span class="p">-&gt;</span> <span class="mi">1</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span> <span class="p">-&gt;</span> <span class="mi">2</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span> <span class="p">-&gt;</span> <span class="mi">1</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span> <span class="p">-&gt;</span> <span class="mi">1</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span> <span class="p">-&gt;</span> <span class="mi">2</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span> <span class="p">-&gt;</span> <span class="mi">2</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span> <span class="p">-&gt;</span> <span class="mi">2</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span> <span class="p">-&gt;</span> <span class="mi">1</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span> <span class="p">-&gt;</span> <span class="mi">1</span>
+        <span class="p">|</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">when</span> <span class="p">(</span><span class="n">x</span> <span class="p">=</span> <span class="n">y</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="mi">0</span>
+
+<span class="k">let</span> <span class="nc">GetRandomMove</span> <span class="n">n</span> <span class="p">=</span> 
+    <span class="k">let</span> <span class="n">rnd</span> <span class="p">=</span> <span class="nn">System</span><span class="p">.</span><span class="nc">Random</span><span class="bp">()</span><span class="p">;</span>
+    <span class="k">let</span> <span class="n">output</span> <span class="p">=</span> <span class="p">[</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span> <span class="p">..</span> <span class="n">n</span> <span class="p">-&gt;</span> 
+        <span class="k">let</span> <span class="n">index</span> <span class="p">=</span> <span class="n">rnd</span><span class="p">.</span><span class="nc">Next</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="k">match</span> <span class="n">index</span> <span class="k">with</span>
+        <span class="p">|</span> <span class="mi">0</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span>
+        <span class="p">|</span> <span class="mi">1</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span>
+        <span class="p">|</span> <span class="mi">2</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span>
+        <span class="p">|</span> <span class="mi">3</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span>
+        <span class="p">|</span> <span class="mi">4</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span>
+    <span class="p">]</span>
+    <span class="n">output</span>
+
+<span class="k">let</span> <span class="nc">GetRoundOutputText</span> <span class="n">moves</span> <span class="p">=</span>
+    <span class="k">match</span> <span class="n">moves</span> <span class="k">with</span>
+    <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">)</span> <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Scissors cuts Paper"</span>
+    <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">)</span> <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Paper covers Rock"</span>
+    <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">)</span> <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Rock crushes Lizard"</span>
+    <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">)</span> <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Lizard poisons Spock"</span>
+    <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">)</span> <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Spock smashes Scissors"</span>
+    <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">)</span> <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Scissors decapitates Lizard"</span>
+    <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">)</span> <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Lizard eats Paper"</span>
+    <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">)</span> <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Paper disproves Spock"</span>
+    <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">)</span> <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Spock vaporizes Rock"</span>
+    <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">)</span> <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Rock crushes scissors"</span>
+    <span class="p">|</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">when</span> <span class="p">(</span><span class="n">x</span> <span class="p">=</span> <span class="n">y</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Draw"</span>
+    <span class="p">|</span> <span class="o">(_,</span> <span class="o">_)</span> <span class="p">-&gt;</span> <span class="s2">"Unknown move pair"</span>
+    
+<span class="k">let</span> <span class="nc">GetMovesFromInput</span> <span class="p">(</span><span class="n">input</span> <span class="p">:</span> <span class="kt">string</span><span class="p">)</span> <span class="p">=</span>
+    <span class="k">let</span> <span class="n">inputList</span> <span class="p">=</span> <span class="nn">Array</span><span class="p">.</span><span class="n">toList</span> <span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="nc">Trim</span><span class="bp">()</span><span class="p">.</span><span class="nc">Split</span> <span class="p">[|</span><span class="k">'</span> <span class="k">'</span><span class="o">|])</span>
+    <span class="k">let</span> <span class="n">moves</span> <span class="p">=</span> <span class="nn">List</span><span class="p">.</span><span class="n">map</span> <span class="p">(</span><span class="k">fun</span> <span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="kt">string</span><span class="p">)</span> <span class="p">-&gt;</span> 
+        <span class="k">match</span> <span class="n">x</span><span class="p">.</span><span class="nc">ToUpper</span><span class="bp">()</span> <span class="k">with</span>
+        <span class="p">|</span> <span class="s2">"R"</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span>
+        <span class="p">|</span> <span class="s2">"P"</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span>
+        <span class="p">|</span> <span class="s2">"S"</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span>
+        <span class="p">|</span> <span class="s2">"L"</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span>
+        <span class="p">|</span> <span class="s2">"M"</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span> <span class="p">)</span> <span class="n">inputList</span>
+    <span class="n">moves</span>
+</code></pre></div></div>
+
+<p>And the entry point of the program that gets user input and displays the results is :</p>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">open</span> <span class="nc">Game</span>
+<span class="k">open</span> <span class="nc">System</span>
+
+<span class="p">[&lt;</span><span class="nc">EntryPoint</span><span class="p">&gt;]</span>
+<span class="k">let</span> <span class="n">main</span> <span class="n">argv</span> <span class="p">=</span> 
+
+    <span class="k">let</span> <span class="k">mutable</span> <span class="n">playerScore</span> <span class="p">=</span> <span class="mi">0</span>
+    <span class="k">let</span> <span class="k">mutable</span> <span class="n">computerScore</span> <span class="p">=</span> <span class="mi">0</span>
+
+    <span class="k">let</span> <span class="n">playerMoves</span> <span class="p">=</span> <span class="nc">GetMovesFromInput</span> <span class="p">(</span><span class="nn">Console</span><span class="p">.</span><span class="nc">ReadLine</span><span class="bp">()</span><span class="p">)</span>
+    <span class="k">let</span> <span class="n">n</span> <span class="p">=</span> <span class="n">playerMoves</span><span class="p">.</span><span class="nc">Length</span>
+    <span class="n">printfn</span> <span class="s2">"You played: "</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span> <span class="p">..</span> <span class="n">n</span> <span class="p">-</span> <span class="mi">1</span> <span class="k">do</span>
+        <span class="n">printfn</span> <span class="s2">"%A"</span> <span class="p">(</span><span class="n">playerMoves</span><span class="p">.</span><span class="nc">Item</span><span class="p">(</span><span class="n">i</span><span class="o">))</span>
+
+    <span class="n">printfn</span> <span class="s2">""</span>
+    <span class="n">printfn</span> <span class="s2">"Generating computer moves"</span>
+    <span class="k">let</span> <span class="n">computerMoves</span> <span class="p">=</span> <span class="nc">GetRandomMove</span> <span class="n">n</span>
+    <span class="n">printfn</span> <span class="s2">"Computer played: "</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span> <span class="p">..</span> <span class="n">n</span> <span class="p">-</span> <span class="mi">1</span> <span class="k">do</span>
+        <span class="n">printfn</span> <span class="s2">"%A"</span> <span class="p">(</span><span class="n">computerMoves</span><span class="p">.</span><span class="nc">Item</span><span class="p">(</span><span class="n">i</span><span class="o">))</span>
+
+    <span class="n">printfn</span> <span class="s2">""</span>
+    <span class="n">printfn</span> <span class="s2">"Results:"</span>    
+
+    <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span> <span class="p">..</span> <span class="n">n</span> <span class="p">-</span> <span class="mi">1</span> <span class="k">do</span>
+        <span class="n">printfn</span>  <span class="s2">"%s"</span> <span class="p">(</span><span class="nc">GetRoundOutputText</span> <span class="p">(</span><span class="n">playerMoves</span><span class="p">.</span><span class="nc">Item</span><span class="p">(</span><span class="n">i</span><span class="o">),</span> <span class="n">computerMoves</span><span class="p">.</span><span class="nc">Item</span><span class="p">(</span><span class="n">i</span><span class="o">)))</span>
+        <span class="k">let</span> <span class="n">diff</span> <span class="p">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">)(</span><span class="n">playerMoves</span><span class="p">.</span><span class="nc">Item</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="p">-</span> <span class="n">computerMoves</span><span class="p">.</span><span class="nc">Item</span><span class="p">(</span><span class="n">i</span><span class="o">))</span>
+        <span class="k">if</span> <span class="n">diff</span> <span class="p">=</span> <span class="mi">1</span> <span class="k">then</span> <span class="n">playerScore</span> <span class="p">&lt;-</span> <span class="n">playerScore</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">diff</span> <span class="p">=</span> <span class="mi">2</span> <span class="k">then</span> <span class="n">computerScore</span> <span class="p">&lt;-</span> <span class="n">computerScore</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">printfn</span> <span class="s2">"Player: %d </span><span class="se">\t</span><span class="s2"> Computer: %d"</span> <span class="n">playerScore</span> <span class="n">computerScore</span>
+
+    <span class="k">let</span> <span class="n">s</span> <span class="p">=</span> <span class="nn">Console</span><span class="p">.</span><span class="nc">ReadLine</span><span class="bp">()</span>
+    <span class="n">printfn</span> <span class="s2">"%s"</span> <span class="n">s</span>
+    
+    <span class="mi">0</span> 
+</code></pre></div></div>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>This is just the initial version (v0.1). I will keep improving it but for the time being I’m satisfied that I have a fully-working program developed in F# that uses the basics like discriminated unions, operator overloading and pattern matching. More to come soon…</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.samkass.com/theories/RPSSL.html" target="_blank" rel="noopener noreferrer">Rock Paper Scissors Lizard Spock game rules</a></li>
+  <li><a href="https://github.com/volkanpaksoy/rock-paper-scissors-lizard-spock" target="_blank" rel="noopener noreferrer">Source code - GitHub repository</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/01/08/adventures-in-fsharp-monogame/" itemprop="url">Adventures in F# - MonoGame, F# and Santa!</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-01-08T23:30:00+00:00" itemprop="datePublished">January  8, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">fsharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>In today’s F# session I’ll examine a sample program. It helps to be inspired and learn more about real-life usage and capabilities of the language.</p>
+
+<p>It’s definitely a fun game if nothing else and offers a lot to learn for F# noobs like myself!</p>
+
+<p><img src="/images/vpblogimg/2015/01/make-santa-jump-game.gif" alt="Make Santa Jump"></p>
+
+<p>One thing to pay attention is when you first clone and build it gives compile errors.</p>
+
+<p><img src="/images/vpblogimg/2015/01/fsharp-santa-build-errors.png" alt="Build error"></p>
+
+<p>To fix this you have reload the solution and restart Visual Studio.</p>
+
+<h3 id="notes">Notes</h3>
+<ul>
+  <li>
+<strong>use</strong> keyword has the same functionality as a let binding but adds a call to Dispose method. It’s like the using statement</li>
+  <li>
+<strong>open</strong> keyword is similar to using in C# but it can be used for other modules as well as namespaces</li>
+  <li>I added a source file called Game.fs and started getting the following error:</li>
+</ul>
+
+<blockquote>
+  <p>Files in libraries or multiple-file applications must begin with a namespace 
+or module declaration, e.g. ‘namespace SomeNamespace.SubNamespace’ or ‘module 
+SomeNamespace.SomeModule’. Only the last source file of an application may
+omit such a declaration.</p>
+</blockquote>
+
+<p>Even though G came before P, Visual Studio didn’t automatically reorder files alphabetically like it would normally do with C#. Apparently even the order of files are important in F# (who knew?). There are even Move Up/Down options in the context menu. So I right-clicked Program.fs and moved it down so it would be the last source file in the project and it fixed the build error!</p>
+
+<ul>
+  <li>Properties can be defined with get and set members as below:</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">module</span> <span class="nc">Game</span>
+
+<span class="k">type</span> <span class="nc">Suit</span> <span class="p">=</span> 
+    <span class="p">|</span> <span class="nc">Hearts</span> 
+    <span class="p">|</span> <span class="nc">Clubs</span> 
+    <span class="p">|</span> <span class="nc">Diamonds</span> 
+    <span class="p">|</span> <span class="nc">Spades</span>
+
+<span class="k">type</span> <span class="nc">Card</span><span class="p">(</span><span class="n">suit</span> <span class="p">:</span> <span class="nc">Suit</span><span class="p">,</span> <span class="n">value</span> <span class="p">:</span> <span class="kt">int</span><span class="p">)</span> <span class="p">=</span> 
+    <span class="k">let</span> <span class="k">mutable</span> <span class="n">faceValue</span> <span class="p">=</span> <span class="n">value</span>
+
+    <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">Value</span>
+        <span class="k">with</span> <span class="n">get</span><span class="bp">()</span> <span class="p">=</span> <span class="n">faceValue</span>
+        <span class="k">and</span> <span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="p">=</span> <span class="n">faceValue</span> <span class="p">&lt;-</span> <span class="n">value</span>
+</code></pre></div></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://channel9.msdn.com/coding4fun/blog/MonoGame-F-and-Santa" target="_blank" rel="noopener noreferrer">Channel 9 post: MonoGame, F# and Santa!</a></li>
+  <li><a href="http://timjones.tw/blog/archive/2014/12/28/make-santa-jump-game-in-fsharp-using-monogame" target="_blank" rel="noopener noreferrer">Original blogpost by Tim Jones</a></li>
+  <li><a href="https://github.com/tgjones/make-santa-jump" target="_blank" rel="noopener noreferrer">GitHub repository</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/30" class="prev">Prev</a>
+    
+    
+        <a href="/page/32" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,860 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/6/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2019/08/10/Implementing-a-Self-Hosted-Docker-Registry-on-Raspberry-Pi/" itemprop="url">Implementing a Self-Hosted Docker Registry on Raspberry Pi</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-08-10T05:00:00+01:00" itemprop="datePublished">August 10, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/docker">docker</a></span> -->
+
+<!-- docker -->
+
+
+
+
+    <a href="/category/docker">docker</a>
+    
+</span>
+	<span class="tags">registry, self_hosted</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Working with Docker is great but when you want to deploy your applications to another server you need a registry to push your images so that you can pull them from the other end. To have that capability in my dev environment I decided to setup my own self-hosted Docker registry.</p>
+
+<p>For the sake of brevity, I will omit creating Raspberry Pi SD Card and installing Docker on it. There are lots of gret videos and articles out there already.</p>
+
+<h2 id="self-hosted-vs-hosted">Self-hosted vs Hosted</h2>
+<p>When it comes to hosted Docker registries, there are lots of free and paid options.</p>
+
+<p><strong>Benefits of self-hosted registry:</strong></p>
+
+<ul>
+  <li>See the storage size and number of repos required for your system early on without having to pay anything</li>
+  <li>Push/pull images on the go without Internet connection during development phase</li>
+  <li>No privacy concerns: If you upload your image with your application in it you may have some sensitive data inside the image which may pose a risk if the 3rd party registry has full access to them</li>
+  <li>Free!</li>
+</ul>
+
+<p><strong>Benefits of hosted registry:</strong></p>
+
+<ul>
+  <li>Hassle-free: No backups or server management</li>
+</ul>
+
+<p>There are great Docker registries such as Docker Hub and Amazon ECR. I wouldn’t recommend usign a self-hosted registry for production. But if the price or privacy is a concern it can certainly be an option.</p>
+
+<h2 id="creating-self-hosted-registry">Creating Self-Hosted Registry</h2>
+<p>It sounds like it requires installing a server application but the nice thing about Docker is, even it is a Docker registry it can run in a container itself. So first off we pull the registry repo for Docker Hub:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull registry
+</code></pre></div></div>
+
+<p>Now let’s create a container that will act as our registry:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d -p 5000:5000 --restart always --name registry registry
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-repo-list-before.png" alt=""></p>
+
+<p>In my case the hostname of the Raspbeery Pi is</p>
+
+<p>Now to test how we can push and pull images let’s download Docker’s hello-world image from Docker Hub:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull hello-world
+</code></pre></div></div>
+
+<p>Now to push this inot our own registry running in Raspbeery Pi all we have to do is tag it with the server URL such as:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker tag hello-world HOBBITON.local:5000/hello-world
+</code></pre></div></div>
+
+<p>At this point if we take look at the images on our local machine we can see the hello-world image is duplicated.</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-registry-tagged-image.png" alt=""></p>
+
+<p>Now let’s push it to Pi:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker push HOBBITON.local:5000/hello-world
+</code></pre></div></div>
+
+<p>This doesn’t work because of the following reason:</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-push-failed.png" alt=""></p>
+
+<p>This is because the reigstry is considered to be insecure and by default it’s rejected by the client. We can confirm it’s deemed to be insecure if we check the server by running the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker info
+</code></pre></div></div>
+
+<p>At the bottom of the bottom we can see the localhost registry is insecure:</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-info-insecure-registry.png" alt=""></p>
+
+<p>To address this we can add this registry to the list of insecure registries. For example in a Mac client we add go to Preferences –&gt; Daemon and add the Raspberry Pi registry as shown below:</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-add-insecure-registry.png" alt=""></p>
+
+<p>After this, if we try once again to push to Pi we can see it succeded:</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-push-to-pi-successful.png" alt=""></p>
+
+<p>If you’re pulling from a client without a user interface, another Raspberry Pi for example, try the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo nano  /etc/docker/daemon.json
+</code></pre></div></div>
+
+<p>and add the following (with the correct registry name):</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w"> </span><span class="s2">"insecure-registries"</span><span class="p">:[</span><span class="s2">"myregistry.example.com:5000"</span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>and restart Docker:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo service docker restart
+</code></pre></div></div>
+
+<p>Now if we check the repository list on the registry again we can see the hello-world image hosted on our Pi:</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-repo-list-after.png" alt=""></p>
+
+<p>Let’s now see if we can pull this image from another client.</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-pull.png" alt=""></p>
+
+<p>And after pulling the image we can see it in the image list:</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-list-on-puller.png" alt=""></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.pluralsight.com/courses/implementing-self-hosted-docker-registry" target="_blank" rel="noopener noreferrer">Pluralsight course: Implementing a Self-hosted Docker Registry</a></li>
+  <li><a href="https://hub.docker.com/_/registry" target="_blank" rel="noopener noreferrer">Docker registry repo</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2019/07/05/ElasticSearch-Workout/" itemprop="url">Elasticsearch Workout</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-07-05T05:00:00+01:00" itemprop="datePublished">July  5, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp, elasticsearch, docker, nest</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p><img src="/images/vpblogimg/2019/07/logo-elastic-elasticsearch-lt.svg" alt=""></p>
+
+<p>I’ve been playing around with Elasticsearch on several occasions. This post is to organize those thoughts and experiences and show an easy way to setup ElasticSearch and start playing around with it.</p>
+
+<h2 id="setup">Setup</h2>
+<p>Easiest way to setup Elasticsearch locally is using Docker. As of this writing the latest version of Elasticsearch is 7.2.0 and I’ll be using that in this example:</p>
+
+<p>If you don’t already have the image, simply pull from Docker hub:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+</code></pre></div></div>
+
+<p>For development environment suggested command to run a container is</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+</code></pre></div></div>
+
+<p>which keeps it very simple and straightforward but in my workout I’d like to insert a whole bunch of data and run some queries on it and I don’t want to re-generate my data over and over again. So I decided to persist my data on host.</p>
+
+<h3 id="persisting-elasticsearch-data">Persisting Elasticsearch Data</h3>
+<p>Instead of running containers one by one in the command line a better approach is to create a docker-compose.yml file file and use Docker compose to start services. I used the sample YAML file provided in official Elastic <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html" target="_blank" rel="noopener noreferrer">documentation</a></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '2.2'
+services:
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    container_name: es01
+    environment:
+      - node.name=es01
+      - discovery.seed_hosts=es02
+      - cluster.initial_master_nodes=es01,es02
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - esnet
+  es02:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    container_name: es02
+    environment:
+      - node.name=es02
+      - discovery.seed_hosts=es01
+      - cluster.initial_master_nodes=es01,es02
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata02:/usr/share/elasticsearch/data
+    networks:
+      - esnet
+
+volumes:
+  esdata01:
+    driver: local
+  esdata02:
+    driver: local
+
+networks:
+  esnet:
+</code></pre></div></div>
+
+<p>This example creates an Elasticsearch cluster with 2 nodes and uses named volumes to persist data so next time when we bring this cluster up again we should be able to continue where we left off data-wise.</p>
+
+<h2 id="sample-application">Sample Application</h2>
+<p>In <a href="https://volkanpaksoy.com/archive/2019/06/27/Generating-Test-Data-with-Bogus/">my previous blog post</a> I developed a simple test data generator to generate fake bank statement data with a library called Bogus. In this project, I will use that generator to generate lots and lots of test data, insert them into Elasticsearch and have fun with it!</p>
+
+<p>When you start a C# project and start looking for a library to interact with Elasticsearch, it’s a bit confusing to find out there are actually two of them: Elasticsearch.net and NEST. The gist of it is NEST is a high-level library that uses Elasticsearch.net under the hood. It also exposes low-level client so that it actually enhances Elasticsearch.net and allows using strongly typed DSL queries. In the sample application I used NEST.</p>
+
+<h3 id="creating-elasticsearch-client">Creating Elasticsearch client</h3>
+<p>Creating a client with some basic settings is straightforward:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">connectionSettings</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ConnectionSettings</span><span class="p">(</span><span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="s">"http://localhost:9200"</span><span class="p">)))</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">settings</span> <span class="p">=</span> <span class="n">connectionSettings</span>
+        <span class="p">.</span><span class="nf">DefaultIndex</span><span class="p">(</span><span class="s">"bankstatementindex"</span><span class="p">)</span>
+        <span class="p">.</span><span class="nf">ThrowExceptions</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+	<span class="n">IElasticClient</span> <span class="n">elasticClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ElasticClient</span><span class="p">(</span><span class="n">settings</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="indexing-data">Indexing data</h3>
+<p>To index a single document **IndexDocument<t>** method can be called. However, using this method to loop through a large number of documents is not recommended.</t></p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">elasticClient</span><span class="p">.</span><span class="n">IndexDocument</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;(</span><span class="n">testData</span><span class="p">.</span><span class="nf">First</span><span class="p">());</span>
+</code></pre></div></div>
+
+<p>For multiple documents, <strong>IndexMany</strong> method should be called. If the data size too large then using <strong>BulkAll</strong> method and <strong>BulkAllObservable</strong> helper is recommended.</p>
+
+<p>To see the difference I created a test to index 5,000 documents with a looping over the array and using BulkAll after that. Looping over the collection took around 26 seconds whereas bulk index took only 1.2 seconds as shown in the screenshot.</p>
+
+<p><img src="/images/vpblogimg/2019/07/indexdocument-vs-bulkall.png" alt=""></p>
+
+<p>Also it displays “Done” 5 times because I set the size to 1,000 and I requested 5,000 documents to be indexed so it automatically divided the load into 5 and made 5 calls:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">bulkAll</span> <span class="p">=</span> <span class="n">elasticClient</span><span class="p">.</span><span class="nf">BulkAll</span><span class="p">(</span><span class="n">testData</span><span class="p">,</span> <span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span>
+                <span class="p">.</span><span class="nf">BackOffRetries</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+                <span class="p">.</span><span class="nf">BackOffTime</span><span class="p">(</span><span class="s">"30s"</span><span class="p">)</span>
+                <span class="p">.</span><span class="nf">RefreshOnCompleted</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
+                <span class="p">.</span><span class="nf">MaxDegreeOfParallelism</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
+                <span class="p">.</span><span class="nf">Size</span><span class="p">(</span><span class="m">1000</span><span class="p">));</span>
+
+<span class="n">bulkAll</span><span class="p">.</span><span class="nf">Wait</span><span class="p">(</span><span class="n">TimeSpan</span><span class="p">.</span><span class="nf">FromSeconds</span><span class="p">(</span><span class="m">60</span><span class="p">),</span>
+    <span class="n">onNext</span><span class="p">:</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="n">Console</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="s">"Done"</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<p>Same result can also be achieved by subscribing to BulkAll observer:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">waitHandle</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CountdownEvent</span><span class="p">(</span><span class="m">1</span><span class="p">);</span>
+
+<span class="n">bulkAll</span><span class="p">.</span><span class="nf">Subscribe</span><span class="p">(</span><span class="k">new</span> <span class="nf">BulkAllObserver</span><span class="p">(</span>
+    <span class="n">onNext</span><span class="p">:</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="n">Console</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="s">"."</span><span class="p">);</span> <span class="p">},</span>
+    <span class="n">onError</span><span class="p">:</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="k">throw</span> <span class="n">e</span><span class="p">;</span> <span class="p">},</span>
+    <span class="n">onCompleted</span><span class="p">:</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="n">waitHandle</span><span class="p">.</span><span class="nf">Signal</span><span class="p">()</span>
+<span class="p">));</span>
+
+<span class="n">waitHandle</span><span class="p">.</span><span class="nf">Wait</span><span class="p">();</span>
+</code></pre></div></div>
+
+<h3 id="showing-progress">Showing progress</h3>
+<p>In the sample code below I showed displaying progress using onNext action delegate:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var testData = dataGen.Generate(statementConfig.StartDate, statementConfig.EndDate, statementConfig.OpeningBalance, statementConfig.DebitTransactionRatio, statementConfig.TransactionDateInterval, statementConfig.NumberOfStatementLines);
+var cancellationToken = new CancellationToken();
+var batchSize = 250;
+var bulkAll = elasticClient.BulkAll(testData, x =&gt; x
+    .BackOffRetries(2)
+    .BackOffTime("30s")
+    .RefreshOnCompleted(true)
+    .MaxDegreeOfParallelism(4)
+    .Size(batchSize), cancellationToken);
+var totalIndexed = 0;
+var stopWatch = new Stopwatch();
+stopWatch.Start();
+bulkAll.Wait(TimeSpan.FromSeconds(60),
+    onNext: (b) =&gt;
+    {
+        totalIndexed += batchSize;
+        Console.WriteLine($"Total indexed documents: {totalIndexed}");
+    }
+);
+</code></pre></div></div>
+
+<p>and the output looked like this:</p>
+
+<p><img src="/images/vpblogimg/2019/07/bulkall-parallel-threads.png" alt=""></p>
+
+<p>Even though the numbers seem a bit wonky I think it’s a good example to illustrate the multi-threaded nature of BulkAll. Because I set the maximum degree of paralleism to 4 and first 1,000 were inserted in a mixed order suggesting that they were running in parallel.</p>
+
+<h3 id="cancellation-with-bulk-operations">Cancellation with bulk operations</h3>
+<p>BulkAll observer can also be cancelled for longer processes if necessary. The code excerpt below shows the relevant pieces to cancellation</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">cancellationTokenSource</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CancellationTokenSource</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">cancellationToken</span> <span class="p">=</span> <span class="n">cancellationTokenSource</span><span class="p">.</span><span class="n">Token</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">batchSize</span> <span class="p">=</span> <span class="m">250</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">bulkAll</span> <span class="p">=</span> <span class="n">elasticClient</span><span class="p">.</span><span class="nf">BulkAll</span><span class="p">(</span><span class="n">testData</span><span class="p">,</span> <span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span>
+    <span class="p">.</span><span class="nf">BackOffRetries</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">BackOffTime</span><span class="p">(</span><span class="s">"30s"</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">RefreshOnCompleted</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">MaxDegreeOfParallelism</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">Size</span><span class="p">(</span><span class="n">batchSize</span><span class="p">),</span> <span class="n">cancellationToken</span><span class="p">);</span>
+<span class="kt">var</span> <span class="n">totalIndexed</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">stopWatch</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Stopwatch</span><span class="p">();</span>
+<span class="n">stopWatch</span><span class="p">.</span><span class="nf">Start</span><span class="p">();</span>
+<span class="n">Task</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="nf">StartNew</span><span class="p">(()</span> <span class="p">=&gt;</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Started monitor thread"</span><span class="p">);</span>
+        <span class="kt">var</span> <span class="n">cancelled</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(!</span><span class="n">cancelled</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">stopWatch</span><span class="p">.</span><span class="n">Elapsed</span> <span class="p">&gt;=</span> <span class="n">TimeSpan</span><span class="p">.</span><span class="nf">FromSeconds</span><span class="p">(</span><span class="m">60</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">cancellationToken</span><span class="p">.</span><span class="n">CanBeCanceled</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Cancelling. Elapsed time: </span><span class="p">{</span><span class="n">stopWatch</span><span class="p">.</span><span class="n">Elapsed</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(</span><span class="s">"mm\\:ss\\.ff"</span><span class="p">)}</span><span class="s">"</span><span class="p">);</span>
+                    <span class="n">cancellationTokenSource</span><span class="p">.</span><span class="nf">Cancel</span><span class="p">();</span>
+                    <span class="n">cancelled</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="n">Thread</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="m">100</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">);</span>
+
+<span class="k">try</span>
+<span class="p">{</span>
+    <span class="n">bulkAll</span><span class="p">.</span><span class="nf">Wait</span><span class="p">(</span><span class="n">TimeSpan</span><span class="p">.</span><span class="nf">FromSeconds</span><span class="p">(</span><span class="m">60</span><span class="p">),</span>
+        <span class="n">onNext</span><span class="p">:</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">=&gt;</span>
+        <span class="p">{</span>
+            <span class="n">totalIndexed</span> <span class="p">+=</span> <span class="n">batchSize</span><span class="p">;</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Total indexed documents: </span><span class="p">{</span><span class="n">totalIndexed</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">);</span>
+<span class="p">}</span>
+<span class="k">catch</span> <span class="p">(</span><span class="n">OperationCanceledException</span> <span class="n">e</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Taking longer than allowed. Cancelled."</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="querying-data">Querying Data</h3>
+<p>Querying data can be done by calling Search method of ElasticsearchClient. Here’s a few examples below. There are more in the sample accompanying source code:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Get the first 100 documents</span>
+<span class="kt">var</span> <span class="n">searchResponse</span> <span class="p">=</span> <span class="n">elasticClient</span><span class="p">.</span><span class="n">Search</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;(</span><span class="n">s</span> <span class="p">=&gt;</span> <span class="n">s</span>
+    <span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="n">q</span> <span class="p">=&gt;</span> <span class="n">q</span>
+        <span class="p">.</span><span class="nf">MatchAll</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="p">.</span><span class="nf">Size</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Get transactions with date between 01/01/2018 and 10/01/2018</span>
+<span class="kt">var</span> <span class="n">searchResponse</span> <span class="p">=</span> <span class="n">elasticClient</span><span class="p">.</span><span class="n">Search</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;(</span><span class="n">s</span> <span class="p">=&gt;</span> <span class="n">s</span>
+    <span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="n">q</span> <span class="p">=&gt;</span> <span class="n">q</span>
+        <span class="p">.</span><span class="nf">DateRange</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span>
+            <span class="p">.</span><span class="nf">Field</span><span class="p">(</span><span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">TransactionDate</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">GreaterThanOrEquals</span><span class="p">(</span><span class="k">new</span> <span class="nf">DateTime</span><span class="p">(</span><span class="m">2018</span><span class="p">,</span> <span class="m">01</span><span class="p">,</span> <span class="m">01</span><span class="p">))</span>
+            <span class="p">.</span><span class="nf">LessThanOrEquals</span><span class="p">(</span><span class="k">new</span> <span class="nf">DateTime</span><span class="p">(</span><span class="m">2018</span><span class="p">,</span> <span class="m">01</span><span class="p">,</span> <span class="m">10</span><span class="p">))</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="p">.</span><span class="nf">Size</span><span class="p">(</span><span class="m">10000</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<h3 id="deleting-data">Deleting data</h3>
+<p>For my tests I had to delete all frequently and it can be achieved by running the query below:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">elasticClient</span><span class="p">.</span><span class="n">DeleteByQuery</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;(</span><span class="n">del</span> <span class="p">=&gt;</span> <span class="n">del</span>
+    <span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="n">q</span> <span class="p">=&gt;</span> <span class="n">q</span><span class="p">.</span><span class="nf">QueryString</span><span class="p">(</span><span class="n">qs</span> <span class="p">=&gt;</span> <span class="n">qs</span><span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="s">"*"</span><span class="p">)))</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="source-code">Source Code</h2>
+<p></p>
+<div class="github-widget" data-repo="volkanpaksoy/lab"></div>
+
+<p>Sample application can be found under blog/ElasticsearchWorkout folder in the repository.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/ElasticsearchWorkout" target="_blank" rel="noopener noreferrer">Sample source code</a></li>
+  <li><a href="https://www.elastic.co/guide/en/elasticsearch/client/net-api/current/nest-getting-started.html" target="_blank" rel="noopener noreferrer">NEST Getting Started</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/06/27/Generating-Test-Data-with-Bogus/">Blog post: Generating Test Data with Bogus</a></li>
+  <li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.2/index.html" target="_blank" rel="noopener noreferrer">Elasticsearch Reference</a></li>
+  <li><a href="https://www.elastic.co/guide/en/elasticsearch/client/net-api/7.x/index.html" target="_blank" rel="noopener noreferrer">Elasticsearch.Net and NEST: the .NET clients 7.x</a></li>
+  <li><a href="https://www.elastic.co/blog/a-practical-introduction-to-elasticsearch" target="_blank" rel="noopener noreferrer">A Practical Introduction to Elasticsearch</a></li>
+  <li><a href="https://rimdev.io/bulk-import-documents-into-elasticsearch-using-nest/" target="_blank" rel="noopener noreferrer">Bulk Import Documents Into Elasticsearch Using NEST</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2019/06/27/Generating-Test-Data-with-Bogus/" itemprop="url">Generating Test Data with Bogus</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-06-27T07:00:00+01:00" itemprop="datePublished">June 27, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp, fake, test, data</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Generating high-quality test data can have an impact on the accuracy of the tests overall. In this post I’ll show using a helpful C# library called <a href="https://github.com/bchavez/Bogus" target="_blank" rel="noopener noreferrer">Bogus</a></p>
+
+<h2 id="showcase-project-bank-statement-generator">Showcase project: Bank Statement Generator</h2>
+<p>In this example I’ll generate fake bank statements. Normally they come in CSV files and have the following model:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">BankStatementLine</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="n">DateTime</span> <span class="n">TransactionDate</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">TransactionType</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">SortCode</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">AccountNumber</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">TransactionDescription</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">decimal</span><span class="p">?</span> <span class="n">DebitAmount</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">decimal</span><span class="p">?</span> <span class="n">CreditAmount</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">decimal</span> <span class="n">Balance</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>I’ll use Bogus to generate realistic fake statement lines and finally save it as a CSV and see if it looks real.</p>
+
+<h2 id="rules-and-restrictions">Rules and restrictions</h2>
+<p>I want the fields in the model above conform to certain set of rules to be realistic:</p>
+
+<ul>
+  <li>Transaction Date must be within a certain range I provide as bank statements are generated for a date range.</li>
+  <li>Dates should be incremental and not random</li>
+  <li>Sort Code must be in the following format: NN-NN-NN and must be the same for the entire statement.</li>
+  <li>Account number must be an 8-digit number and same for the entire statement.</li>
+  <li>Transaction Description must be free text</li>
+  <li>Debit Amount and Credit Amount must be decimal numbers but only one of them can be present at any given line</li>
+  <li>Transaction Type must be one of the pre-defined values and also some types can be for credit and some for debit only.</li>
+  <li>Balance should be sum of all debit and credit amounts plus the first balance in the statement. So this value is dependent on the values that come before it.</li>
+  <li>The number of lines in a statement should be random.</li>
+</ul>
+
+<h2 id="rule-implementations">Rule implementations</h2>
+<p>Some rules stated above are very straightforward and easy to implement. These are some samples of what Bogus is capable of. For the full documentation check out the GitHub repository.</p>
+
+<h3 id="date-range-support">Date range support</h3>
+<p>Generating a date between a range is simple:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">TransactionDate</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Date</span><span class="p">.</span><span class="nf">Between</span><span class="p">(</span><span class="n">startDate</span><span class="p">,</span> <span class="n">endDate</span><span class="p">))</span>
+</code></pre></div></div>
+
+<h3 id="enum-and-array-support">Enum and array support</h3>
+<p>For Transaction Type I want to select a random value from a list of set values. This can be done in 2 ways: By using an enum or an IEnumerable.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">transactionTypes</span> <span class="p">=</span> <span class="k">new</span><span class="p">[]</span> <span class="p">{</span> <span class="s">"FPO"</span><span class="p">,</span> <span class="s">"DEB"</span><span class="p">,</span> <span class="s">"DB"</span><span class="p">,</span> <span class="s">"FPI"</span> <span class="p">};</span>
+</code></pre></div></div>
+
+<p>and in the rule description it can be used as</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">TransactionType</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="nf">PickRandom</span><span class="p">(</span><span class="n">transactionTypes</span><span class="p">)</span> <span class="p">)</span>
+</code></pre></div></div>
+
+<p>Another way is using enums such as:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">enum</span> <span class="n">TransactionType</span>
+<span class="p">{</span>
+    <span class="n">FPO</span><span class="p">,</span>
+    <span class="n">DEB</span><span class="p">,</span>
+    <span class="n">DB</span><span class="p">,</span>
+    <span class="n">FPI</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>and the rule becomes:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">TransactionType</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">PickRandom</span><span class="p">&lt;</span><span class="n">TransactionType</span><span class="p">&gt;().</span><span class="nf">ToString</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>In my final implementation I used selecting from a list of objects. You can check out the <a href="https://github.com/volkanpaksoy/lab/tree/master/blog/GeneratingTestDataWithBogus" target="_blank" rel="noopener noreferrer">sample code</a> to see that version.</p>
+
+<h3 id="number-range">Number range</h3>
+<p>For the account number I need an 8-digit number which can be achieved with something like this rule:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">AccountNumber</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Long</span><span class="p">(</span><span class="m">100000000</span><span class="p">,</span> <span class="m">99999999</span><span class="p">).</span><span class="nf">ToString</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>Bogus API also has builtin support for account number so the following is a more elegant and expressive way of achieving the same:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">AccountNumber</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Finance</span><span class="p">.</span><span class="nf">Account</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h3 id="formatting-string">Formatting string</h3>
+<p>Formatting Sort Code can be achieved by Field.Random.Replace method</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">SortCode</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Replace</span><span class="p">(</span><span class="s">"##-##-##"</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>Similar to account number, it also has built-in support for sort code:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">SortCode</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Finance</span><span class="p">.</span><span class="nf">SortCode</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h3 id="null-values">Null values</h3>
+<p>In my case in some fields I’d like to have null values too. This can be achieved by <em>OrNull</em> extension method. For example, in the code below it generates %20 of DebitAmount values null.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">DebitAmount</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Decimal</span><span class="p">(</span><span class="m">0.00</span><span class="n">m</span><span class="p">,</span> <span class="m">9999.00</span><span class="n">m</span><span class="p">).</span><span class="nf">OrNull</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="m">0.2f</span><span class="p">))</span>
+</code></pre></div></div>
+
+<h3 id="common-fields">Common fields</h3>
+<p>In my case some values in each statement line repeat throughout the entire statement such as account number and sort code. To achieve that I created a “base” statement line and every fake statement line used these shared fields instead of generating new ones.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">commonFields</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Faker</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;()</span>
+    <span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">AccountNumber</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Finance</span><span class="p">.</span><span class="nf">Account</span><span class="p">())</span>
+    <span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">SortCode</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Finance</span><span class="p">.</span><span class="nf">SortCode</span><span class="p">())</span>
+    <span class="p">.</span><span class="nf">Generate</span><span class="p">();</span>
+
+
+<span class="kt">var</span> <span class="n">fakeTransactions</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Faker</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;()</span>
+    <span class="p">.</span><span class="nf">StrictMode</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">AccountNumber</span><span class="p">,</span> <span class="n">commonFields</span><span class="p">.</span><span class="n">AccountNumber</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">SortCode</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">commonFields</span><span class="p">.</span><span class="n">SortCode</span><span class="p">)</span>
+	<span class="p">...</span>
+	<span class="p">...</span>
+</code></pre></div></div>
+
+<h3 id="random-number-of-objects">Random number of objects</h3>
+<p>It’s more realistic to have varying number of lines in statements. With Generate method you can specify the exact number of items you want to generate which is good for unit tests. For my purposes I just wanted to create random of rows in each statement as I only needed the data to be imported. This can be achieved by GenerateBetween:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">statementLines</span> <span class="p">=</span> <span class="n">fakeTransactions</span><span class="p">.</span><span class="nf">GenerateBetween</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">20</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h3 id="dependent-values">Dependent values</h3>
+<p>The tricky part in this scenario was the dependent values. Normally when you use RuleFor extension method it generates the value for that field alone in isolation. In my case, one restriction was Debit Amount and Credit Amount could not both have values in the same line. Also Balance depends on these values and needs to be calculated in each line.</p>
+
+<p>As far as I can tell there’s no built-in support to define these dependencies. Based on my tests I was able to achieve this in 2 ways</p>
+
+<ol>
+  <li>Update the values accordingly in <strong>FinishWith</strong> extension method</li>
+  <li>Use <strong>Rules</strong> extension method to define multiple rules at once and implement the restrictions inside it.</li>
+</ol>
+
+<p>I think the latter is a better solution as FinishWith sounds more like clean up, logging or similar extra activity where Rules sound more like actual business logic implementation.</p>
+
+<p>So with that in mind my rules for Debit Amount, Credit Amount and Balance fields looked like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">Rules</span><span class="p">((</span><span class="n">f</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">debitAmount</span> <span class="p">=</span> <span class="p">(</span><span class="kt">decimal</span><span class="p">?)</span><span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Decimal</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">100</span><span class="p">).</span><span class="nf">OrNull</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="m">1.0f</span> <span class="p">-</span> <span class="n">statementconfig</span><span class="p">.</span><span class="n">DebitTransactionRatio</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">debitAmount</span><span class="p">.</span><span class="n">HasValue</span><span class="p">)</span> <span class="c1">// Is it a debit transaction?</span>
+    <span class="p">{</span>
+        <span class="n">x</span><span class="p">.</span><span class="n">CreditAmount</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+        <span class="n">x</span><span class="p">.</span><span class="n">DebitAmount</span> <span class="p">=</span> <span class="n">debitAmount</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span>
+        <span class="n">balance</span> <span class="p">-=</span> <span class="n">x</span><span class="p">.</span><span class="n">DebitAmount</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span>
+
+        <span class="n">x</span><span class="p">.</span><span class="n">TransactionType</span> <span class="p">=</span> <span class="n">f</span><span class="p">.</span><span class="nf">PickRandom</span><span class="p">(</span><span class="n">TransactionType</span><span class="p">.</span><span class="n">AllTransactionTypes</span>
+            <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">tt</span> <span class="p">=&gt;</span> <span class="n">tt</span><span class="p">.</span><span class="n">Direction</span> <span class="p">==</span> <span class="n">TransactionDirection</span><span class="p">.</span><span class="n">Debit</span> <span class="p">||</span> <span class="n">tt</span><span class="p">.</span><span class="n">Direction</span> <span class="p">==</span> <span class="n">TransactionDirection</span><span class="p">.</span><span class="n">DebitOrCredit</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">tt</span> <span class="p">=&gt;</span> <span class="n">tt</span><span class="p">.</span><span class="n">Code</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">creditAmount</span> <span class="p">=</span> <span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Decimal</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">100</span><span class="p">);</span>
+        <span class="n">x</span><span class="p">.</span><span class="n">DebitAmount</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+        <span class="n">x</span><span class="p">.</span><span class="n">CreditAmount</span> <span class="p">=</span> <span class="n">creditAmount</span><span class="p">;</span>
+
+        <span class="n">balance</span> <span class="p">+=</span> <span class="n">x</span><span class="p">.</span><span class="n">CreditAmount</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span>
+
+        <span class="n">x</span><span class="p">.</span><span class="n">TransactionType</span> <span class="p">=</span> <span class="n">f</span><span class="p">.</span><span class="nf">PickRandom</span><span class="p">(</span><span class="n">TransactionType</span><span class="p">.</span><span class="n">AllTransactionTypes</span>
+            <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">tt</span> <span class="p">=&gt;</span> <span class="n">tt</span><span class="p">.</span><span class="n">Direction</span> <span class="p">==</span> <span class="n">TransactionDirection</span><span class="p">.</span><span class="n">Credit</span> <span class="p">||</span> <span class="n">tt</span><span class="p">.</span><span class="n">Direction</span> <span class="p">==</span> <span class="n">TransactionDirection</span><span class="p">.</span><span class="n">DebitOrCredit</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">tt</span> <span class="p">=&gt;</span> <span class="n">tt</span><span class="p">.</span><span class="n">Code</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="n">x</span><span class="p">.</span><span class="n">Balance</span> <span class="p">=</span> <span class="n">balance</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>A caveat with this approach is that I cannot use <strong>StrictMode</strong> anymore as it complains about those 3 fields having null values. It specifically mentions that in the exception. If you use Rules you’re on your own to ensure that all fields are populated properly.</p>
+
+<p>Another drawback of setting multiple rules at once is that it can easily make the code harder to read. Fortunately for me, the author of the library <a href="https://bchavez.bitarmory.com/" target="_blank" rel="noopener noreferrer">Brian Chavez</a> kindly reviewed the code and suggested some refactorings one of which proved it was still possible to use <strong>RuleFor</strong> method and strict mode. I’ve updated the final source code with these refactorings. So with individual rules the implementation looks like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">DebitAmount</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="kt">decimal</span><span class="p">?)</span><span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Decimal</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">100</span><span class="p">).</span><span class="nf">OrNull</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="m">1.0f</span> <span class="p">-</span> <span class="n">statementconfig</span><span class="p">.</span><span class="n">DebitTransactionRatio</span><span class="p">);</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">CreditAmount</span><span class="p">,</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">.</span><span class="nf">IsCredit</span><span class="p">()</span> <span class="p">?</span> <span class="p">(</span><span class="kt">decimal</span><span class="p">?)</span><span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Decimal</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">100</span><span class="p">)</span> <span class="p">:</span> <span class="k">null</span><span class="p">;</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">TransactionType</span><span class="p">,</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="nf">IsCredit</span><span class="p">())</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">RandomTxCode</span><span class="p">(</span><span class="n">TransactionDirection</span><span class="p">.</span><span class="n">Credit</span><span class="p">);</span> <span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">RandomTxCode</span><span class="p">(</span><span class="n">TransactionDirection</span><span class="p">.</span><span class="n">Debit</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">string</span> <span class="nf">RandomTxCode</span><span class="p">(</span><span class="n">TransactionDirection</span> <span class="n">direction</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">.</span><span class="nf">PickRandom</span><span class="p">(</span><span class="n">TransactionType</span><span class="p">.</span><span class="n">AllTransactionTypes</span>
+            <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">tt</span> <span class="p">=&gt;</span> <span class="n">tt</span><span class="p">.</span><span class="n">Direction</span> <span class="p">==</span> <span class="n">direction</span> <span class="p">||</span> <span class="n">tt</span><span class="p">.</span><span class="n">Direction</span> <span class="p">==</span> <span class="n">TransactionDirection</span><span class="p">.</span><span class="n">DebitOrCredit</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">tt</span> <span class="p">=&gt;</span> <span class="n">tt</span><span class="p">.</span><span class="n">Code</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Balance</span><span class="p">,</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="nf">IsCredit</span><span class="p">())</span>
+        <span class="n">balance</span> <span class="p">+=</span> <span class="n">x</span><span class="p">.</span><span class="n">CreditAmount</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="n">balance</span> <span class="p">-=</span> <span class="n">x</span><span class="p">.</span><span class="n">DebitAmount</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">balance</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>IsDebit and IsCredit methods referred to above are extension methods defined like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">static</span> <span class="k">class</span> <span class="nc">Extensions</span>
+<span class="p">{</span>
+   <span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="nf">IsCredit</span><span class="p">(</span><span class="k">this</span> <span class="n">BankStatementLine</span> <span class="n">bsl</span><span class="p">)</span>
+   <span class="p">{</span>
+      <span class="k">return</span> <span class="n">bsl</span><span class="p">.</span><span class="n">DebitAmount</span> <span class="k">is</span> <span class="k">null</span><span class="p">;</span>
+   <span class="p">}</span>
+   <span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="nf">IsDebit</span><span class="p">(</span><span class="k">this</span> <span class="n">BankStatementLine</span> <span class="n">bsl</span><span class="p">)</span>
+   <span class="p">{</span>
+      <span class="k">return</span> <span class="p">!</span><span class="nf">IsCredit</span><span class="p">(</span><span class="n">bsl</span><span class="p">);</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="random-text">Random text</h3>
+<p>For the transaction description for now I’ll go with random Lorem Ipsum texts. Bogus has support for this too</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">TransactionDescription</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Lorem</span><span class="p">.</span><span class="nf">Sentence</span><span class="p">(</span><span class="m">3</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>I probably will need to use a fixed list of descriptions soon but for the time being it’s fine. Also as shown below it’s very easy to switch to that too.</p>
+
+<h3 id="incremental-values">Incremental values</h3>
+<p>Similar to balance being dependent on the previous values, transaction date is also dependent as it needs to go in an incremental fashion. I couldn’t find built-in support for this so implemented it using my own shared variable like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">TransactionDate</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="n">lastDate</span> <span class="p">=</span> <span class="n">lastDate</span><span class="p">.</span><span class="nf">AddDays</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Double</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">statementconfig</span><span class="p">.</span><span class="n">TransactionDateInterval</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">lastDate</span><span class="p">.</span><span class="n">Date</span> <span class="p">&gt;</span> <span class="n">statementconfig</span><span class="p">.</span><span class="n">EndDate</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">lastDate</span> <span class="p">=</span> <span class="n">statementconfig</span><span class="p">.</span><span class="n">EndDate</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">lastDate</span><span class="p">;</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<h2 id="putting-it-all-together">Putting It All Together</h2>
+<p>So let’s see the output with the help of another nice library called <a href="https://github.com/khalidabuhakmeh/ConsoleTables" target="_blank" rel="noopener noreferrer">Console Tables</a></p>
+
+<p><img src="/images/vpblogimg/2019/06/generating-test-data-with-bogus-output.png" alt=""></p>
+
+<h2 id="source-code">Source Code</h2>
+<p></p>
+<div class="github-widget" data-repo="volkanpaksoy/lab"></div>
+
+<p>Sample application can be found under blog/GeneratingTestDataWithBogus folder in the repository.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/bchavez/Bogus" target="_blank" rel="noopener noreferrer">Bogus GitHub repository</a></li>
+  <li><a href="https://github.com/khalidabuhakmeh/ConsoleTables" target="_blank" rel="noopener noreferrer">Console Tables repository</a></li>
+  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/GeneratingTestDataWithBogus" target="_blank" rel="noopener noreferrer">Sample source code</a></li>
+  <li><a href="https://bchavez.bitarmory.com/" target="_blank" rel="noopener noreferrer">Author Brian Chavez’s website</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/5" class="prev">Prev</a>
+    
+    
+        <a href="/page/7" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

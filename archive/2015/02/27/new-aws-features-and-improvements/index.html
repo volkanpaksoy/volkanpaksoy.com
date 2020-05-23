@@ -1,0 +1,193 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>New AWS features and improvements - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2015/02/27/new-aws-features-and-improvements/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">New AWS features and improvements</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-02-27T15:00:00+00:00" itemprop="datePublished">February 27, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- aws -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">news</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>AWS team is certainly keeping themselves very busy. If you turn your head away for a while you end up falling behind the new features. In this post I’ll cover some of the fairly new features and improvements I’ve recently discovered and found useful and interesting.</p>
+
+<h3 id="reserved-instance-pricing-model-improvements">Reserved Instance pricing model improvements</h3>
+<p>In the new simplified model they introduced 3 options: <em>No upfront</em>, <em>partial upfront</em> and <em>full upfront</em>. No upfront is a great feature as you don’t need to pay big amounts and just start paying less. Reserved instances are generally great for servers that run 24/7. For example currently if you launch a t2.micro Linux instance in EU-Ireland region you pay $0.014/hour. If you switch to No Upfront option the hourly rate falls to $0.010. (This is assuming the server will run continuously. You pay $7.30/month regardless of the instance’s state.)</p>
+
+<p><img src="/images/vpblogimg/2015/02/aws-reserved-instance-pricing.png" alt="AWS Reserved Instance Pricing"></p>
+
+<h3 id="auto-recovery">Auto recovery</h3>
+<p>This is a very cool feature that helps a great deal with system. maintenance. It’s not available in all regions yet (just N. Virginia as of this writing) but I’m guessing it will be rolled out to other regions soon. Now with this feature we can create an alarm for <em>StatusCheckFailed_System</em> metric and select <em>“Recover this instance”</em> as an action</p>
+
+<p><img src="/images/vpblogimg/2015/02/aws-instance-recovery.png" alt="AWS Instance Recovery"></p>
+
+<p>So when a machine is unresponsive it can be restarted automatically. Considering how many issues a simple restart can solve I think it’s a great feature :-)</p>
+
+<h3 id="resource-groups">Resource Groups</h3>
+<p>I’ve always found AWS Management Console a very dangerous place as all machines (dev, test prod) are all pooled and listed in the same place. In a careless moment you can easily terminate a production machine instead of a temporary test machine (that’s why I always turn on termination protection).</p>
+
+<p>Resource groups, as the name implies, are meant to group related items. Although it’s primary goal is not to solve the problem I mentioned above (maybe it’s just me who sees it as a problem) but that’s I initially will use it for.</p>
+
+<p><img src="/images/vpblogimg/2015/02/aws-resource-groups-overview.png" alt="AWS Resource Groups Overview"></p>
+
+<p>Using resource groups is dead simple: Just add a tag to your resources (I added one called “type”) and create a resource group and use that tag as a filter. So now instead of listing the entire EC2 instancess I can just click on Dev group and play around with my development servers without even seeing the production machines.</p>
+
+<p><img src="/images/vpblogimg/2015/02/aws-resource-groups-group-details.png" alt="AWS Resource Group Details"></p>
+
+<h3 id="lambda">Lambda</h3>
+<p>AWS Lambda is a compute service that allows you to execute your code without launching an EC2 instance. It’s in preview mode at the moment. It’s not meant to run full-blown applications and you have no control over the actual machines running the code. It’s great for simple even-handlers such as triggering a function when an image is uploaded etc. Currently I’m working on an application that’s going to use this service so more on that later.</p>
+
+<h3 id="aurora">Aurora</h3>
+<p>I haven’t tried this one myself yet and currently it’s in preview stage. The premise is it’s fully-compatible with MySQL and costs 1/10th of a regular MySQL instance. It’s not quite clear whether it’s a fork of MySQL like MariaDB or just an independent RDBMS but either way being able to use it directly as a MySQL replacement sounds good. As an AWS fan I’m sure performance-wise it would be everything they said it would so no doubts there. I signed up for the preview and waiting for approval. When I get to try it out I will post my impressions as a separate blog post.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>There is a big competition going on between the cloud computing platforms these days. Prices are constantly going down and new features are being added so it’s quite a lot of fun to follow the news in this market. I’ll try to keep an eye on new AWS features more closely from now on.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://aws.amazon.com/blogs/aws/simplified-reserved-instances/" target="_blank" rel="noopener noreferrer">Announcement for the new reserved instance pricing model</a></li>
+  <li><a href="http://aws.amazon.com/ec2/purchasing-options/reserved-instances/" target="_blank" rel="noopener noreferrer">Reserved instance pricing</a></li>
+  <li><a href="http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/resource-groups.html" target="_blank" rel="noopener noreferrer">Documentation: Working with Resource Groups</a></li>
+  <li><a href="http://aws.amazon.com/lambda/" target="_blank" rel="noopener noreferrer">AWS Lambda</a></li>
+  <li><a href="http://aws.amazon.com/rds/aurora/" target="_blank" rel="noopener noreferrer">AWS Aurora</a></li>
+</ul>
+
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2015/02/25/beware-the-pineapple-an-overview-of-wifi-pineapple-mark-v/" title="Previous Post: 
+Beware the Pineapple: An overview of WiFi Pineapple Mark V">« Beware the Pineapple: An overview of WiFi Pineapple Mark V</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2015/03/03/inside-the-graph-cypher/" title="next Post: 
+Inside the Graph: Cypher">Inside the Graph: Cypher » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

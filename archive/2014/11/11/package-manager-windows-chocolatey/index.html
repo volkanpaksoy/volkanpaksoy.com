@@ -1,0 +1,175 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Package Manager for Windows: Chocolatey - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2014/11/11/package-manager-windows-chocolatey/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Package Manager for Windows: Chocolatey</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-11-11T16:02:56+00:00" itemprop="datePublished">November 11, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- devops -->
+
+
+
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags">chocolatey</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>When moving to a new machine, re-installing all the applications is sounds a very daunting task. Linux distros have been enjoying the ease of package repositories for quite a long time and users can install almost everything they need by package manager applications like apt-get and yum. Chocolatey aims to bring the same convenience to Windows.</p>
+
+<h3 id="easy-install-indeed">Easy Install Indeed!</h3>
+<p>Installation is a breeze as shown in their website. By using some Powershell and NuGet magic you download a script which then downloads Chocolatey package from the <a href="https://chocolatey.org/api/v2/package/chocolatey/" target="_blank" rel="noopener noreferrer">repository</a>. You may have noticed the URL is very similar to nuget.org’s package path. That’s simply because it uses NuGet under the hood. Even the user interface is just a skinned version of <a href="https://github.com/NuGet/NuGetGallery" target="_blank" rel="noopener noreferrer">NuGet Gallery</a> (which is open source and can be downloaded from GitHub).</p>
+
+<p><img src="/images/vpblogimg/2014/10/Chocolatey-Install.png" alt="Chocolatey-Install"></p>
+
+<h3 id="automate-all-installations">Automate all installations</h3>
+<p>After Chocolatey is installed all you have to do is browse the packages and select the ones you want to install with an easy command such as:</p>
+<blockquote>
+  <p>choco install atom</p>
+</blockquote>
+
+<p>And after a bunch of colourful messages you’re good to go.</p>
+
+<p><img src="/images/vpblogimg/2014/10/Chocolatey01.png" alt="Chocolatey-Install"></p>
+
+<h3 id="are-we-done">Are we done?</h3>
+<p>Most core tools for development and everyday use (SysInternals, Fiddler, Chrome, FireFox, NodeJS, Python, VLC, Paint.NET etc.) can be installed automatically using Chocolatey. The major applications such as Visual Studio and SQL Server still need some love and your caring hands but I think automating installation of tens of applications in such an easy way is priceless.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://chocolatey.org" target="_blank" rel="noopener noreferrer">Official Chocolatey site</a></li>
+  <li><a href="https://github.com/NuGet/NuGetGallery" target="_blank" rel="noopener noreferrer">NuGet Gallery Source Code</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2014/08/25/verify-file-integrity-hashes/" title="Previous Post: 
+Verify file integrity with HashTab">« Verify file integrity with HashTab</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2014/11/15/tip-day-generating-insert-statements-sql-server-management-studio/" title="next Post: 
+Tip of the Day: Generating insert statements with SQL Server Management Studio">Tip of the Day: Generating insert statements with SQL Server Management Studio » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

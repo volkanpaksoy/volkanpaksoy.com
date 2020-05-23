@@ -1,0 +1,186 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>MSP430 LaunchPad - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2013/07/13/msp430-launchpad/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">MSP430 LaunchPad</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-07-13T23:44:05+01:00" itemprop="datePublished">July 13, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- hobby -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">electronics, msp430</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>I have a number of electronics kits and boards like Netduino, Arduino and Gadgeteer. Among all the cheapest one I’ve ever seen is Texas Instrument’s MSP430 LaunchPad. Last year I bough one of these just because it was so cheap but couldn’t spend much time on it. I recently found out it has dropped to £8 and I decided to buy the latest version. Now that I have 2 of these babies I definitely need to spend some time to play with them.</p>
+
+<p><img src="/images/vpblogimg/2013/07/MSP430_02.jpg" alt="MSP 430"></p>
+
+<p>Looks like there are a few differences between the two. The one on the left in the picture above is the old version. The new version comes with better controllers and male pins on the side.</p>
+
+<h3 id="installation">Installation</h3>
+<p>First thing to do is go to its official site and download Code Composer Studio to develop programs to run on it. It is an Eclipse-based IDE so I’m hoping it won’t take to long to get acquainted with it.</p>
+
+<h4 id="first-program">First Program</h4>
+<p>Good thing there are plenty of tutorials about it. I decided to follow one of the simplest ones which just blinks one of the on-board LEDs. To be honest, the code looks hideous:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>unsigned int i = 0; 
+void main(void)
+{
+  WDTCTL = WDTPW + WDTHOLD;     
+  P1DIR |= 0x01;
+
+  for (;;)
+  {
+    P1OUT ^= 0x01;
+    for(i=0; i&amp;lt; 20000; i++);
+  }
+}
+</code></pre></div></div>
+
+<p>I deleted the comments to keep it short. But even with detailed comments it looks hard to develop complex applications with this. Anyway, I’ll see how far I can get with it. So far, for this amound of work, the results are not so bad:</p>
+
+<iframe src="//www.youtube.com/embed/ZhPRVO6UKbk" frameborder="0" width="560" height="315"></iframe>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://ti.com/launchpad" target="_blank" rel="noopener noreferrer">MSP430 LaunchPad home site</a></li>
+  <li><a href="http://processors.wiki.ti.com/index.php/Blink_your_first_LED" target="_blank" rel="noopener noreferrer">Blinking LED tutorial</a></li>
+  <li><a href="http://www.youtube.com/watch?v=JfXz3x1tQFA" target="_blank" rel="noopener noreferrer">Blinking LED video tutorial</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2013/07/12/new-toy-beaglebone-black/" title="Previous Post: 
+New toy: BeagleBone Black">« New toy: BeagleBone Black</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2013/07/15/kinect/" title="next Post: 
+Kinect">Kinect » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

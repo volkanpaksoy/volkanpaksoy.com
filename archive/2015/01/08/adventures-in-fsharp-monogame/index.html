@@ -1,0 +1,206 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Adventures in F# - MonoGame, F# and Santa! - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2015/01/08/adventures-in-fsharp-monogame/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Adventures in F# - MonoGame, F# and Santa!</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-01-08T23:30:00+00:00" itemprop="datePublished">January  8, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">fsharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>In today’s F# session I’ll examine a sample program. It helps to be inspired and learn more about real-life usage and capabilities of the language.</p>
+
+<p>It’s definitely a fun game if nothing else and offers a lot to learn for F# noobs like myself!</p>
+
+<p><img src="/images/vpblogimg/2015/01/make-santa-jump-game.gif" alt="Make Santa Jump"></p>
+
+<p>One thing to pay attention is when you first clone and build it gives compile errors.</p>
+
+<p><img src="/images/vpblogimg/2015/01/fsharp-santa-build-errors.png" alt="Build error"></p>
+
+<p>To fix this you have reload the solution and restart Visual Studio.</p>
+
+<h3 id="notes">Notes</h3>
+<ul>
+  <li>
+<strong>use</strong> keyword has the same functionality as a let binding but adds a call to Dispose method. It’s like the using statement</li>
+  <li>
+<strong>open</strong> keyword is similar to using in C# but it can be used for other modules as well as namespaces</li>
+  <li>I added a source file called Game.fs and started getting the following error:</li>
+</ul>
+
+<blockquote>
+  <p>Files in libraries or multiple-file applications must begin with a namespace 
+or module declaration, e.g. ‘namespace SomeNamespace.SubNamespace’ or ‘module 
+SomeNamespace.SomeModule’. Only the last source file of an application may
+omit such a declaration.</p>
+</blockquote>
+
+<p>Even though G came before P, Visual Studio didn’t automatically reorder files alphabetically like it would normally do with C#. Apparently even the order of files are important in F# (who knew?). There are even Move Up/Down options in the context menu. So I right-clicked Program.fs and moved it down so it would be the last source file in the project and it fixed the build error!</p>
+
+<ul>
+  <li>Properties can be defined with get and set members as below:</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">module</span> <span class="nc">Game</span>
+
+<span class="k">type</span> <span class="nc">Suit</span> <span class="p">=</span> 
+    <span class="p">|</span> <span class="nc">Hearts</span> 
+    <span class="p">|</span> <span class="nc">Clubs</span> 
+    <span class="p">|</span> <span class="nc">Diamonds</span> 
+    <span class="p">|</span> <span class="nc">Spades</span>
+
+<span class="k">type</span> <span class="nc">Card</span><span class="p">(</span><span class="n">suit</span> <span class="p">:</span> <span class="nc">Suit</span><span class="p">,</span> <span class="n">value</span> <span class="p">:</span> <span class="kt">int</span><span class="p">)</span> <span class="p">=</span> 
+    <span class="k">let</span> <span class="k">mutable</span> <span class="n">faceValue</span> <span class="p">=</span> <span class="n">value</span>
+
+    <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">Value</span>
+        <span class="k">with</span> <span class="n">get</span><span class="bp">()</span> <span class="p">=</span> <span class="n">faceValue</span>
+        <span class="k">and</span> <span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="p">=</span> <span class="n">faceValue</span> <span class="p">&lt;-</span> <span class="n">value</span>
+</code></pre></div></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://channel9.msdn.com/coding4fun/blog/MonoGame-F-and-Santa" target="_blank" rel="noopener noreferrer">Channel 9 post: MonoGame, F# and Santa!</a></li>
+  <li><a href="http://timjones.tw/blog/archive/2014/12/28/make-santa-jump-game-in-fsharp-using-monogame" target="_blank" rel="noopener noreferrer">Original blogpost by Tim Jones</a></li>
+  <li><a href="https://github.com/tgjones/make-santa-jump" target="_blank" rel="noopener noreferrer">GitHub repository</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2015/01/07/adventures-in-fsharp-part-5/" title="Previous Post: 
+Adventures in F# - Part 5">« Adventures in F# - Part 5</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2015/01/13/adventures-in-fsharp-rock-paper-scissors-lizard-spock/" title="next Post: 
+Adventures in F# - Rock Paper Scissors Lizard Spock">Adventures in F# - Rock Paper Scissors Lizard Spock » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

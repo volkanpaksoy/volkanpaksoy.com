@@ -1,0 +1,286 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Enter F# - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2015/01/02/enter-fsharp/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Enter F#</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-01-02T22:30:00+00:00" itemprop="datePublished">January  2, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">fsharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>I’m not a big fan of New Year’s resolutions. I was meaning to start learning F# and since it’s the new year’s 2nd day it might a good time to finally give it a shot!</p>
+
+<h3 id="where-to-start">Where to start</h3>
+<p>It’s always hard to find the best resource when you are starting. Some time ago I heard about a Microsoft Research project called TryFSharp.org. It’s a tutorial website geared towards the absolute beginners. It comes with a REPL editor so no extra tools are needed to start.</p>
+
+<p>From now on I’m planning to spend 2 pomodoros (around 1 hour) every day to learn F#. After my first 2 pomodoros I completed the first 3 sections and below are my notes for today’s training.</p>
+
+<h3 id="lecture-notes">Lecture Notes</h3>
+
+<ul>
+  <li>
+<strong>let</strong> keyword to bind names to values. These bindings are <em>immutable</em>. If you try to assign a value to a same name twice you get the following error:</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">duplicated</span> <span class="p">=</span> <span class="s2">"original value"</span>
+<span class="k">let</span> <span class="n">duplicated</span> <span class="p">=</span> <span class="s2">"new value"</span>
+</code></pre></div></div>
+
+<p>causes the following error:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>stdin(8,5): error FS0037: Duplicate definition of value 'duplicated'
+</code></pre></div></div>
+
+<ul>
+  <li>Mutable variables can be created by explicitly specifiying <strong>mutable</strong> keyword but it should be used cautiously.</li>
+  <li>F# is a statically typed language like C#</li>
+  <li>
+<strong>printfn</strong> can be used to display messages. Strings can be formatted by using special characters such %d for int, %s for string such as</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">printfn</span> <span class="s2">"The answer is %d"</span> <span class="mi">42</span>
+</code></pre></div></div>
+
+<ul>
+  <li>let can also be used bind a name to a function. The following code</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">square</span> <span class="n">x</span> <span class="p">=</span>
+    <span class="n">x</span> <span class="p">*</span> <span class="n">x</span>
+
+<span class="n">square</span> <span class="mi">4</span>
+</code></pre></div></div>
+
+<p>produces this result in the output window:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; let square x =
+      x * x
+  
+  square 4
+
+val square : x:int -&gt; int
+val it : int = 16
+
+&gt; 
+</code></pre></div></div>
+
+<ul>
+  <li>F# is whitespace-sensitive. In the function above the body of the function was denoted by indenting it 4 spaces and return values is the last line of the function.</li>
+  <li>In times when F# cannot determine the type on itw own, it can specified explicitly bu using type annotations. For example:</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">toLeetSpeak</span> <span class="p">(</span><span class="n">phrase</span><span class="p">:</span><span class="kt">string</span><span class="p">)</span> <span class="p">=</span>
+    <span class="n">phrase</span><span class="p">.</span><span class="nc">Replace</span><span class="p">(</span><span class="k">'</span><span class="n">t'</span><span class="p">,</span> <span class="k">'</span><span class="mi">7</span><span class="k">'</span><span class="o">).</span><span class="nc">Replace</span><span class="p">(</span><span class="k">'</span><span class="n">o'</span><span class="p">,</span> <span class="k">'</span><span class="mi">0</span><span class="k">'</span><span class="p">)</span>
+
+<span class="n">toLeetSpeak</span> <span class="s2">"root"</span>
+</code></pre></div></div>
+
+<p>In the example above it needs to be specified that phrase if of type string before String.Replace method can be called.</p>
+
+<ul>
+  <li>Functions can be defined inside other functions:</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">quadruple</span> <span class="n">x</span> <span class="p">=</span>    
+    <span class="k">let</span> <span class="n">double</span> <span class="n">x</span> <span class="p">=</span>
+        <span class="n">x</span> <span class="p">*</span> <span class="mi">2</span>
+
+    <span class="n">double</span><span class="p">(</span><span class="n">double</span><span class="p">(</span><span class="n">x</span><span class="o">))</span>
+</code></pre></div></div>
+
+<ul>
+  <li>A function can be used as an argument to another function to create what’s called a <strong>higher order function</strong>.</li>
+  <li>Inline functions can be created such as</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">square</span> <span class="p">=</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="p">*</span> <span class="n">x</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Theres are called <strong>lambda functions</strong> or <strong>lambdas</strong>.</p>
+
+<ul>
+  <li>Lists can be created by semi-colon separated single values or a range values with .. in between such as</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">evens</span> <span class="p">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">;</span> <span class="mi">4</span><span class="p">;</span> <span class="mi">6</span><span class="p">;</span> <span class="mi">8</span><span class="p">]</span>
+<span class="k">let</span> <span class="n">firstHundred</span> <span class="p">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="mi">100</span><span class="p">]</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Higher-order functions can be combined with other functions such as</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">firstHundred</span> <span class="p">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="mi">100</span><span class="p">]</span>
+<span class="nn">List</span><span class="p">.</span><span class="n">map</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="p">*</span> <span class="mi">2</span><span class="p">)</span> 
+    <span class="p">(</span><span class="nn">List</span><span class="p">.</span><span class="n">filter</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="p">=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">firstHundred</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>which produces the following output</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>val it : int list =
+  [0; 4; 8; 12; 16; 20; 24; 28; 32; 36; 40; 44; 48; 52; 56; 60; 64; 68; 72; 76;
+   80; 84; 88; 92; 96; 100; 104; 108; 112; 116; 120; 124; 128; 132; 136; 140;
+   144; 148; 152; 156; 160; 164; 168; 172; 176; 180; 184; 188; 192; 196; 200]
+</code></pre></div></div>
+
+<p>It first filters the odd numbers out of <em>firstHundred</em> list and send the result to map function to double all the values.</p>
+
+<ul>
+  <li>Forward-pipe operator can be used to make the code easier to read when functions are chained:</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="mi">100</span><span class="p">]</span>
+<span class="p">|&gt;</span> <span class="nn">List</span><span class="p">.</span><span class="n">filter</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="p">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">|&gt;</span> <span class="nn">List</span><span class="p">.</span><span class="n">map</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="p">*</span> <span class="mi">2</span><span class="p">)</span>
+<span class="p">|&gt;</span> <span class="nn">List</span><span class="p">.</span><span class="n">sum</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Array indexing is zero-based.</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://TryFSharp.org" target="_blank" rel="noopener noreferrer">TryFSharp.org website</a></li>
+  <li><a href="http://fsharpshow.com/" target="_blank" rel="noopener noreferrer">The F# Show Podcast</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2014/12/15/simple-ids-with-nmap/" title="Previous Post: 
+Simple IDS with Nmap">« Simple IDS with Nmap</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2015/01/03/adventures-in-fsharp-part-2/" title="next Post: 
+Adventures in F# - Part 2">Adventures in F# - Part 2 » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

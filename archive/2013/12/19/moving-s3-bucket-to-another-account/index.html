@@ -1,0 +1,195 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Moving S3 bucket to another account - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2013/12/19/moving-s3-bucket-to-another-account/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Moving S3 bucket to another account</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-12-19T01:29:35+00:00" itemprop="datePublished">December 19, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- aws -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">s3, cloudberry</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p><img src="/images/vpblogimg/common/aws/AmazonS3.png" alt="Amazon S3"></p>
+
+<p>I have two AWS accounts and I made a mistake by using mixing the usage of services. More specifically, I hosted an application on one account but used S3 on the other. So I perpetually had to switch back and forth between accounts to access all services I used. First I thought fixing it would be a non-issue but it proved to be a rather daunting task.</p>
+
+<h3 id="bucket-naming-in-s3">Bucket naming in S3</h3>
+<p>In S3, all buckets must have unique names. You cannot use a name if it’s already taken (much like domain names). Since I was using the bucket already, creating the same bucket in the other account and copying its contents was not an option. The second idea was to create the target bucket with a temporary name, copy the contents, delete the first one and rename the target bucket. Well, guess what? You cannot rename a bucket either! Another problem is when you delete a bucket you can create a new one with the same name right away. I’m guessing this is because of the redundancy S3 provides. It takes time to propagate the operation to all the nodes. My tests showed that I could re-create the bucket in the other account only after 45 – 50 minutes.</p>
+
+<h3 id="to-develop-or-not-to-develop">To develop or not to develop</h3>
+<p>My initial instinct was to develop a tool to handle this operation but I decided to check out the what’s already available. I was occasionally using Cloudberry but wanted to check its competitors hoping one of the tools would support the functionality I need.</p>
+
+<h4 id="cloudberry-explorer-for-amazon-s3">Cloudberry Explorer for Amazon S3</h4>
+<p>I find this tool quite handy. It has lots of functions and a nice intuitive. It comes in flavours: Free and Pro version. I used free version so far and unless you are a big enterprise it seems sufficient. It allows you to manage multiple AWS account. It allows copying objects among accounts but not moving a bucket (actually after my findings above I wasn’t very hopeful anyway)</p>
+
+<p><img src="/images/vpblogimg/2013/12/AmazonS3_CloudBerry_Main.png" alt="AmazonS3 CloudBerry Main"></p>
+
+<p>As you can see in the menu bar, it supports lots of features.</p>
+
+<h4 id="s3-browser">S3 Browser</h4>
+<p>This one comes with a free version too as well as a paid version. The free version is limited to 2 accounts and you can only see one account at a time.</p>
+
+<p><img src="/images/vpblogimg/2013/12/S3Browser.png" alt="S3 Browser"></p>
+
+<p>I tried to copy a file and paste to another but it got an Access Denied error. I could do the same thing with Cloudberry in seconds by simply dragging and dropping to the target folder.</p>
+
+<h4 id="bucket-explorer">Bucket Explorer</h4>
+<p>Third candidate only has a 30-day trial version as opposed to a free one. The second I installed it I knew it was a loser for me because it doesn’t support multiple accounts. Also as you can see below the UI is hideous so this is not a tool for me.</p>
+
+<p><img src="/images/vpblogimg/2013/12/BucketExplorer.png" alt="Bucket explorer"></p>
+
+<h3 id="and-the-winner-is">..and the winner is</h3>
+<p>Cloudberry won by a landslide! It looks much more superior than both of the other tools combined.</p>
+
+<h3 id="operation-bucket-migration">Operation Bucket Migration</h3>
+<p>So I backed up everything locally and deleted the source bucket so that I could create the same one in the new account. After periodically checking for 45 minutes I finally created the bucket and uploaded the files. Set the permissions and the operation was completed without any casualties.. Well, at least I thought that was the case..</p>
+
+<h3 id="nobody-is-perfect">Nobody is perfect!</h3>
+<p>After I uploaded the images I reloaded my blog. The first image re-appeared and I was ready for the celebrations which were abruptly interrupted by the missing images in the second post. The images were nowhere to be found locally in none of the two backups I took. I think Cloudberry has a bug when handling filenames with hyphens. I’m still not certain that is the case but that’s the only characteristic that differs from the other files. Anyway, the moral of the story is triple-check everything before you’re initiating a destructive process and don’t trust external tools blindly.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://aws.amazon.com/articles/1109#05" target="_blank" rel="noopener noreferrer">Amazon S3 Technical FAQs</a></li>
+  <li><a href="http://www.cloudberrylab.com" target="_blank" rel="noopener noreferrer">Cloudberry</a></li>
+  <li><a href="http://s3browser.com" target="_blank" rel="noopener noreferrer">S3 Browser</a></li>
+  <li><a href="http://www.bucketexplorer.com" target="_blank" rel="noopener noreferrer">Bucket Explorer</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2013/12/11/auto-scaling-using-aws-management-console/" title="Previous Post: 
+Auto-Scaling using AWS Management Console">« Auto-Scaling using AWS Management Console</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2014/01/04/framework-design-guidelines/" title="next Post: 
+Book Review: Framework Design Guidelines">Book Review: Framework Design Guidelines » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

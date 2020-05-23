@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Object expiration on AWS S3 - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2013/10/26/object-expiration-on-aws-s3/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Object expiration on AWS S3</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-10-26T23:23:34+01:00" itemprop="datePublished">October 26, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- aws -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">s3</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>We all know backups are good but most of the time you won’t need a backup from a year ago. Just keep enough copies to recover from a possible failure and get rid of the rest.
+The other day I was working on cleaning up old security camera images which become meaningless very quickly. The images are uploaded to Amazon S3. My first approach was to delete the older ones by a scheduled script but then I discovered an easier and more effective way.</p>
+
+<h3 id="let-aws-do-the-work">Let AWS do the work!</h3>
+<p>It’s possible to loop through thousands of objects and delete them but the alternative is to set an expiration date for each object. To activate this select the folder and make sure the properties panel is visible. Expand the Lifecycle section and click Add rule. Add a number of days for the expiration. Make sure “Apply to Entire Bucket” is checked so that any newly uploaded files comply with this rule. It’s easy as that!</p>
+
+<p><img src="/images/vpblogimg/2013/10/S3_Lifecycle.png" alt="S3 Lifecycle"></p>
+
+<p>One thing to note is that this process runs once a day. So don’t expect to get your bucket cleaned up immediately. But also don’t forget to check the next to ensure everything is working as expected!</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectExpiration.html" target="_blank" rel="noopener noreferrer">Amazon documentation on object expiration</a></li>
+  <li><a href="http://docs.aws.amazon.com/AmazonS3/latest/UG/LifecycleConfiguration.html" target="_blank" rel="noopener noreferrer">Amazon documentation on lifecycle configuration</a></li>
+  <li><a href="http://aws.typepad.com/aws/2011/12/amazon-s3-object-expiration.html" target="_blank" rel="noopener noreferrer">Amazon Blog</a></li>
+</ul>
+
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2013/09/28/free-static-web-site-hosting/" title="Previous Post: 
+Free static web site hosting">« Free static web site hosting</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2013/11/01/commodore-64-on-raspberry-pi/" title="next Post: 
+Commodore 64 on Raspberry Pi">Commodore 64 on Raspberry Pi » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

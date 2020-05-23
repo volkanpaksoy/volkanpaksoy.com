@@ -1,0 +1,200 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Adventures in F# - Miscellaneous Notes - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2015/02/05/adventures-in-fsharp/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Adventures in F# - Miscellaneous Notes</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-02-05T18:00:00+00:00" itemprop="datePublished">February  5, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">fsharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>I finished the Pluralsight course finally. I’m still studying F# 2 pomodoros a day but lately lost he motivation to publish the notes. In this post I’ll tidy up the notes. In order to maintain my cadence I think I had better develop more stuff instead of covering theoretical subjects.</p>
+
+<h3 id="more-notes">More Notes</h3>
+
+<ul>
+  <li>Upcasting / Downcasting
+To upcast <strong>:&gt;</strong> operator is used. Alternatively the keyword <strong>upcast</strong> can be used to achieve the same results. It performs a static cast and the cast is determined at runtime.</li>
+</ul>
+
+<p>Downcasting is performed by the <strong>:?&gt;</strong> operator or <strong>downcast</strong> keyword.</p>
+
+<ul>
+  <li>Abstract classes
+Abstract classes are decorated with **[<abstractclass>]**. To mark members **abstract** keyword is used:</abstractclass>
+</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">abstract</span> <span class="nc">Area</span> <span class="p">:</span> <span class="kt">float</span> <span class="k">with</span> <span class="n">get</span>
+<span class="k">abstract</span> <span class="nc">Perimeter</span> <span class="p">:</span> <span class="kt">float</span>  <span class="k">with</span> <span class="n">get</span>
+<span class="k">abstract</span> <span class="nc">Name</span> <span class="p">:</span> <span class="kt">string</span> <span class="k">with</span> <span class="n">get</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+<strong>obj</strong> is shortcut for <strong>System.Object</strong>
+</li>
+  <li>
+<strong>do bindings</strong> perform actions when the object is constructed. do bindings are usually put after let bindings so that code in the do binding can execute with a fully initialized object.</li>
+  <li>
+<strong>unit</strong> is equivalent of void</li>
+  <li>tabs are not allowed as they can indicate an unknown number of space characters and as spaces and indents matter</li>
+  <li>
+<strong>‘a</strong> means generic. By default a function <strong>f</strong> is infered as <strong>‘a -&gt; bool</strong> meaning it takes a general parameter and returns boolean</li>
+  <li>Providing an incomplete list of functions result in a new function (currying)</li>
+  <li>Getting values from tuples: <strong>fst</strong> gets the first value, <strong>snd</strong> gets the second value</li>
+  <li>You can attach elements to a list by using the <strong>:: (cons)</strong> operator</li>
+  <li>
+<strong>@</strong> operator Concatenates two lists.</li>
+  <li>Exceptions can be thrown using <strong>raise</strong> function. <strong>Reraise</strong> function rethrows an exception</li>
+  <li>BigInt (C# and VB) don’t have support for arbitrarily long integers</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.amazon.co.uk/Programming-F-3-0-Chris-Smith/dp/1449320295/" target="_blank" rel="noopener noreferrer">Book: Programming F# 3.0</a></li>
+  <li><a href="http://www.pluralsight.com/courses/fsintro" target="_blank" rel="noopener noreferrer">Pluralsight course: Introduction to F#</a></li>
+  <li><a href="https://msdn.microsoft.com/en-us/library/dd233220.aspx" target="_blank" rel="noopener noreferrer">MSDN Article: Casting and Conversions</a></li>
+  <li><a href="https://msdn.microsoft.com/en-us/library/dd483471.aspx" target="_blank" rel="noopener noreferrer">MSDN Article: Abstract Classes</a></li>
+  <li><a href="https://msdn.microsoft.com/en-us/library/dd483473.aspx" target="_blank" rel="noopener noreferrer">MSDN Article: do Bindings in Classes</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2015/01/24/adventures-in-fsharp-enums-and-constructors/" title="Previous Post: 
+Adventures in F# - Enums and constructors">« Adventures in F# - Enums and constructors</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2015/02/12/raspberry-pi2-first-impressions/" title="next Post: 
+Raspberry Pi 2: First Impressions">Raspberry Pi 2: First Impressions » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

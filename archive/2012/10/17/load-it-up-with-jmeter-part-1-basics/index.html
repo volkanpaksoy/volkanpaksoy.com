@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Load it up with JMeter (Part 1 – Basics) - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2012/10/17/load-it-up-with-jmeter-part-1-basics/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Load it up with JMeter (Part 1 – Basics)</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2012-10-17T14:15:43+01:00" itemprop="datePublished">October 17, 2012</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">jmeter</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>One of the key goals when developing a web application is to make it scalable. Meaning that it should handle lots of traffic without hindering the performance. But most of the time we only care about performance when it becomes a problem and generally it’s then too late to make radical design changes. Therefore, an upfront automated load testing is very helpful to gauge your application’s performance and being aware of its limits. One popular tool used for load testing is JMeter.</p>
+
+<h2 id="jmeter-basics">JMeter Basics</h2>
+<ul>
+  <li>Thread Group: Each thread acts like a single user. All elements must be under a thread group.</li>
+  <li>Listener: Allows access to the information gathered by JMeter. Some listener examples are Aggregate Report, Graph Report and Summary Report</li>
+  <li>Logical Controller: They allow you to add construct to control the flow of your tests such as If, While, ForEach</li>
+  <li>Sampler: They tell jMeter to send requests to server and wait for a response.</li>
+</ul>
+
+<p>When you launch JMeter there are 2 items on the left menu: Test Plan and Workbench. Test Plan is the real deal. That is the actual sequence of events that are fired. Workbench is where you can store test elements.</p>
+
+<p>Creating a load test plan can be accomplished in 2 simple steps:</p>
+
+<ol>
+  <li>
+    <p>Create a thread group: Everything runs under a thread group. Think of each thread as a user.</p>
+
+    <p><img src="/images/vpblogimg/2012/10/jMeter0101.png" alt="JMeter"></p>
+  </li>
+  <li>
+    <p>Insert an HTTP request: Set the host name and page you want to call.</p>
+
+    <p><img src="/images/vpblogimg/2012/10/jMeter0102.png" alt="JMeter"></p>
+  </li>
+</ol>
+
+<p>That’s it! If all you need is to create some heavy load you can create a few different HTTP requests and start bombarding your server right away.</p>
+
+<p>A trivia about the JMeter is that it is mentioned in the book titled “We Are Anonymous”. Apparently it can also be used as a DDoS tool!</p>
+
+<p><a href="http://www.amazon.com/We-Are-Anonymous-LulzSec-Insurgency/dp/0316213543/" target="_blank" rel="noopener noreferrer"><img src="/images/vpblogimg/2012/10/AnonymousBookCover.jpg" alt="Anonymous"></a></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://jmeter.apache.org/usermanual" target="_blank" rel="noopener noreferrer">Official user manual</a></li>
+  <li><a href="http://www.amazon.com/Apache-JMeter-practical-performance-measurement/dp/1847192955" target="_blank" rel="noopener noreferrer">Apache JMeter</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2012/10/11/online-networking-course-from-stanford/" title="Previous Post: 
+Online networking course from Stanford">« Online networking course from Stanford</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2012/10/19/otp-everywhere/" title="next Post: 
+OTP Everywhere">OTP Everywhere » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

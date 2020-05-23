@@ -1,0 +1,180 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Debugging a BindingFailure Exception in Visual Studio - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2015/05/11/debugging-bindingfailure-exception/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Debugging a BindingFailure Exception in Visual Studio</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-05-11T11:30:00+01:00" itemprop="datePublished">May 11, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">debug</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>Even though APIs are RESTful these days sometimes you might need to interact with a SOAP-based web service.</p>
+
+<p>I had to consume an SOAP XML web service the other day and encountered a strange problem while debugging my test application. The application was working fine but when I tried to debug it was closing silently. So as a first step I opened Debug –&gt; Exceptions and checked all to let the application break upon any type of exception it gets.</p>
+
+<p><img src="/images/vpblogimg/2015/05/debugging-bindingfailure-exception-01.png" alt="Break when any exception is thrown"></p>
+
+<p>After running the application with this setting at least I was able to see what the fuss was all about:</p>
+
+<p><img src="/images/vpblogimg/2015/05/debugging-bindingfailure-exception-02.png" alt="SOAP BindingFailure exception"></p>
+
+<p>There are various approaches to resolve this issue and finally I found the correct one on a Stackoverflow answer: Go to Project Properties and in the Build tab turn on Generate Serialization Assembly setting.</p>
+
+<p><img src="/images/vpblogimg/2015/05/debugging-bindingfailure-exception-03.png" alt="Turn on Generate Serialization Assembly setting"></p>
+
+<p>When this setting it turned on, it generates an assembly named {Your Application Name}.XmlSerializers.dll.</p>
+
+<p>Out of curiosity I peeked into the assembly with ILSpy and it looks like this:</p>
+
+<p><img src="/images/vpblogimg/2015/05/debugging-bindingfailure-exception-04.png" alt="XmlSerializers.dll in ILSpy"></p>
+
+<p>Basically it just generates an abstract class deriving from XmlSerializer (named XmlSerializer1) and generates a bunch of sealed child classes deriving from that class.</p>
+
+<p>I’ve never been a fan of auto-generated code anyway and looks like I’m not going to need it in my code but it’s used in the background by the framework. I added links to a few Stackoverflow answers related to that assembly though. I gather the advantage of turning it on is reduced startup time and being able to debug in this case. The disadvantage is increased deployment size which I think is negligible in this day and age so I’ll just keep it on and debug happily ever after!</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://stackoverflow.com/questions/234515/how-do-i-fix-a-binding-failure-in-soap" target="_blank" rel="noopener noreferrer">Stackoverflow answer</a></li>
+  <li><a href="http://stackoverflow.com/questions/934411/what-is-myassembly-xmlserializers-dll-generated-for" target="_blank" rel="noopener noreferrer">Stackoverflow: What is MyAssembly XmlSerializers.dll Generated For</a></li>
+  <li><a href="http://stackoverflow.com/questions/9187248/when-to-change-the-generate-serialization-assembly-value" target="_blank" rel="noopener noreferrer">Stackoverflow: When to Change the Generate Serialization Assembly Value</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2015/03/07/portable-online-library-with-calibre-and-raspberry-pi/" title="Previous Post: 
+Portable Online Library with Calibre and Raspberry Pi">« Portable Online Library with Calibre and Raspberry Pi</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2015/06/10/csharp-xml-serialization-tips/" title="next Post: 
+C# XML Serialization Tips">C# XML Serialization Tips » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Design Patterns: Abstract Factory - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2015/10/19/design-patterns-abstract-factory/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Design Patterns: Abstract Factory</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-10-19T12:30:00+01:00" itemprop="datePublished">October 19, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- design, dev -->
+
+
+
+
+    <a href="/category/design">design</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">design_patterns, csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>A few days ago I published a <a href="https://volkanpaksoy.com/archive/2015/10/16/design-patterns-factory-method">post discussing Factory Method pattern</a>. This article is about the other factory design pattern: Abstract Factory.</p>
+
+<h3 id="use-case-switching-between-configuration-sources-easily">Use case: Switching between configuration sources easily</h3>
+<p>Imagine in a C# application you accessed ConfigurationManager.AppSettings whenever you needed a value from the configuration. This would essentially be hardcoding the configuration source and it would be hard to change if you needed to switch to another configuration source (database, web service, etc). A nicer way would be to <em>“outsource”</em> the creation of configuration source to another class.</p>
+
+<h3 id="what-is-abstract-factory">What is Abstract Factory?</h3>
+<p>Here’s the official definition from GoF:</p>
+
+<blockquote>
+  <p>Provide an interface for creating families of related or dependent objects without specifying their concrete classes.</p>
+</blockquote>
+
+<h3 id="implementation">Implementation</h3>
+<p>The application first composes the main class (ArticleFeedGenerator) with the services it will use and starts the process.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">IConfigurationFactory</span> <span class="n">configFactory</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AppConfigConfigurationFactory</span><span class="p">();</span>
+
+    <span class="n">IApiSettings</span> <span class="n">apiSettings</span> <span class="p">=</span> <span class="n">configFactory</span><span class="p">.</span><span class="nf">GetApiSettings</span><span class="p">();</span>
+    <span class="n">IFeedSettings</span> <span class="n">feedSettings</span> <span class="p">=</span> <span class="n">configFactory</span><span class="p">.</span><span class="nf">GetFeedSettings</span><span class="p">();</span>
+    <span class="n">IFeedServiceSettings</span> <span class="n">feedServiceSettings</span> <span class="p">=</span> <span class="n">configFactory</span><span class="p">.</span><span class="nf">GetFeedServiceSettings</span><span class="p">();</span>
+    <span class="n">IS3PublisherSettings</span> <span class="n">s3PublishSettings</span> <span class="p">=</span> <span class="n">configFactory</span><span class="p">.</span><span class="nf">GetS3PublisherSettings</span><span class="p">();</span>
+    <span class="n">IOfflineClientSettings</span> <span class="n">offlineClientSettings</span> <span class="p">=</span> <span class="n">configFactory</span><span class="p">.</span><span class="nf">GetOfflineClientSettings</span><span class="p">();</span>
+
+    <span class="kt">var</span> <span class="n">rareburgClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">OfflineRareburgClient</span><span class="p">(</span><span class="n">offlineClientSettings</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">rareburgArticleFeedService</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RareburgArticleFeedService</span><span class="p">(</span><span class="n">feedServiceSettings</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">publishService</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">S3PublishService</span><span class="p">(</span><span class="n">s3PublishSettings</span><span class="p">,</span> <span class="n">feedSettings</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">feedGenerator</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ArticleFeedGenerator</span><span class="p">(</span><span class="n">rareburgClient</span><span class="p">,</span> <span class="n">rareburgArticleFeedService</span><span class="p">,</span> <span class="n">publishService</span><span class="p">,</span> <span class="n">feedSettings</span><span class="p">);</span>
+
+    <span class="n">feedGenerator</span><span class="p">.</span><span class="nf">Run</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This version uses AppConfigConfigurationFactory to get the values from the App.config. When I need to switch to DynamoDB which I used in this example all I have to do is replace one line of code in the application:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">configFactory</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">DynamoDBConfigurationFactory</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>With this change alone we are essentially replacing a whole family of related classes.</p>
+
+<h3 id="on-the-factory-floor">On the factory floor</h3>
+<p>The abstract factory and the concrete factories implement it are shown below:</p>
+
+<p><img src="/images/vpblogimg/2015/10/design-pattern-abstract-factory-class-diagram-1.png" alt=""></p>
+
+<p>Concrete configuration factories create the classes that deal with specific configuration values (<em>concrete products</em>). For instance AppConfigConfigurationFactory looks like this (simplified for brevity):</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">AppConfigConfigurationFactory</span> <span class="p">:</span> <span class="n">IConfigurationFactory</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="n">IApiSettings</span> <span class="nf">GetApiSettings</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">AppConfigApiSettings</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">IFeedServiceSettings</span> <span class="nf">GetFeedServiceSettings</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">AppConfigFeedServiceSettings</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Similarly, DynamoDBConfigurationFactory is responsible for creating concrete classes that access DynamoDB values:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">DynamoDBConfigurationFactory</span> <span class="p">:</span> <span class="n">IConfigurationFactory</span>
+<span class="p">{</span>
+    <span class="k">protected</span> <span class="n">Table</span> <span class="n">_configTable</span><span class="p">;</span>
+    
+    <span class="k">public</span> <span class="nf">DynamoDBConfigurationFactory</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">AmazonDynamoDBClient</span> <span class="n">dynmamoClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AmazonDynamoDBClient</span><span class="p">(</span><span class="s">"accessKey"</span><span class="p">,</span> <span class="s">"secretKey"</span><span class="p">,</span> <span class="n">RegionEndpoint</span><span class="p">.</span><span class="n">EUWest1</span><span class="p">);</span>
+        <span class="n">_configTable</span> <span class="p">=</span> <span class="n">Table</span><span class="p">.</span><span class="nf">LoadTable</span><span class="p">(</span><span class="n">dynmamoClient</span><span class="p">,</span> <span class="s">"tableName"</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="k">public</span> <span class="n">IApiSettings</span> <span class="nf">GetApiSettings</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">DynamoDBApiSettings</span><span class="p">(</span><span class="n">_configTable</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">IFeedServiceSettings</span> <span class="nf">GetFeedServiceSettings</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">DynamoDBFeedServiceSettings</span><span class="p">(</span><span class="n">_configTable</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Notice all the “concrete products” implement the same “abstract product” interface and hence they are interchangable. With the product classes in the picture the diagram now looks like this:</p>
+
+<p><img src="/images/vpblogimg/2015/10/design-pattern-abstract-factory-class-diagram-2.png" alt=""></p>
+
+<p>Finally let’s have a look at the concrete objects that carry out the actual job. For example the IApiSettings exposes 2 string properties:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">interface</span> <span class="nc">IApiSettings</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">ApiKey</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kt">string</span> <span class="n">ApiEndPoint</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>If we want to read these values from App.config it’s very straightforward:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">AppConfigApiSettings</span> <span class="p">:</span> <span class="n">IApiSettings</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">ApiKey</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"Rareburg.ApiKey"</span><span class="p">];</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">ApiEndPoint</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"Rareburg.ApiEndPoint"</span><span class="p">];</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The DynamoDB version is fairly more complex but it makes no difference from the consumer’s point of view. Here GetValue is a method in the base class that returns the value from the encapsulated <em>Amazon.DynamoDBv2.DocumentModel.Table</em> object.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">DynamoDBApiSettings</span> <span class="p">:</span> <span class="n">DynamoDBSettingsBase</span><span class="p">,</span> <span class="n">IApiSettings</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nf">DynamoDBApiSettings</span><span class="p">(</span><span class="n">Table</span> <span class="n">configTable</span><span class="p">)</span>
+        <span class="p">:</span> <span class="k">base</span> <span class="p">(</span><span class="n">configTable</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">ApiKey</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="nf">GetValue</span><span class="p">(</span><span class="s">"Rareburg.ApiKey"</span><span class="p">);</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">ApiEndPoint</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="nf">GetValue</span><span class="p">(</span><span class="s">"Rareburg.ApiEndPoint"</span><span class="p">);</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The concrete factory is responsible for creating the concrete classes it uses. So the client is completely oblivious to the classes such as DynamoDBApiSettings or AppConfigApiSettings. This means we can add a whole new set of configuration classes (i.e. a web service) and all we have to change in the client code will be one line where we instantiate the concrete factory.</p>
+
+<p>This approach also allows us to be more flexible with the concerete class implementations. For example DynamoDB config class family requires a Table object in their constructors. To avoid code repetition I derived them all from a base class and moved the table to the base but the that doesn’t change anything in the client code.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/design-pattern-workout" target="_blank" rel="noopener noreferrer">Sample project source code</a></li>
+  <li><a href="https://github.com/volkanpaksoy/rareburg-article-feed-generator" target="_blank" rel="noopener noreferrer">Rareburg article feed generator source code</a></li>
+  <li><a href="http://www.amazon.co.uk/Design-patterns-elements-reusable-object-oriented/dp/0201633612/" target="_blank" rel="noopener noreferrer">Book: GoF Book</a></li>
+  <li><a href="http://www.amazon.co.uk/Head-First-Design-Patterns-Freeman/dp/0596007124/" target="_blank" rel="noopener noreferrer">Book: Head First Design Patterns</a></li>
+</ul>
+
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2015/10/16/design-patterns-factory-method/" title="Previous Post: 
+Design Patterns: Factory Method">« Design Patterns: Factory Method</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2015/10/22/ip-checker-with-mef/" title="next Post: 
+Building Plugin-Based Applications with Managed Extensibility Framework (MEF)">Building Plugin-Based Applications with Managed Extensibility Framework (MEF) » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

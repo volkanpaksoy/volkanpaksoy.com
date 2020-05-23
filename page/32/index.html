@@ -1,0 +1,608 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/32/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/01/07/adventures-in-fsharp-part-5/" itemprop="url">Adventures in F# - Part 5</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-01-07T15:00:00+00:00" itemprop="datePublished">January  7, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">fsharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>It’s about time for me to develop some application to put the basics in use. I will develop it in Visual Studio so first is to get accustomed to using F# in VS 2013. There are 5 project types for F#:</p>
+
+<ul>
+  <li>Console Application</li>
+  <li>Library</li>
+  <li>Tutorial</li>
+  <li>Portable Library</li>
+  <li>Portable Library (Legacy)</li>
+</ul>
+
+<p>Portable Library should be helpful when developing universal Windows Store apps. For my purposes Console Application and Library should be enough. Before going any further I decided to check out the Tutorial project. So below are today’s notes on using F# in VS 2013 and from the tutorial project</p>
+
+<h3 id="notes">Notes</h3>
+<ul>
+  <li>Tutorial project comes with a single Tutorial.fsx file with all the sample code. Console Application, on the other hand, comes with Program.fs. Apparently an fsx is the extension for F# script files: <em>“An F# script file is a normal F# source code file, except that .fsx files have a few extra capabilities.”</em>.</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2015/01/fsharp-fsx-windows-explorer-integration.png" alt="fsx Windows Explorer integration"></p>
+
+<ul>
+  <li>Ctrl + Alt + F combination opens the F# Interactive Window</li>
+  <li>You can select a code block and run it in the interactive window by right-clikcing and selecting “Execute in Interactive” or using Alt + Enter shortcut.</li>
+  <li>A <strong>module</strong> is a logical grouping of related code segments. The code in a module must be indented. When types and functions are inside modules they can be accessed by their fully-qualified names from outside the module:</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">module</span> <span class="nc">MyModule1</span> <span class="p">=</span>
+    <span class="k">let</span> <span class="n">module1Value</span> <span class="p">=</span> <span class="mi">100</span>
+    <span class="k">let</span> <span class="n">module1Function</span> <span class="n">x</span> <span class="p">=</span>
+        <span class="n">x</span> <span class="o">+</span> <span class="mi">10</span>
+
+<span class="k">module</span> <span class="nc">MyModule2</span> <span class="p">=</span>
+    <span class="k">let</span> <span class="n">module2Value</span> <span class="p">=</span> <span class="mi">121</span>
+    <span class="k">let</span> <span class="n">module2Function</span> <span class="n">x</span> <span class="p">=</span>
+        <span class="n">x</span> <span class="p">*</span> <span class="p">(</span><span class="nn">MyModule1</span><span class="p">.</span><span class="n">module1Function</span> <span class="n">module2Value</span><span class="p">)</span>
+
+<span class="nn">MyModule2</span><span class="p">.</span><span class="n">module2Function</span> <span class="mi">5</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Modules can have <em>public, private or internal</em> access modifiers. The default is <em>public</em>.</li>
+  <li>A foreach loop can be defined as for i in {values} -&gt; … For example</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">sampleTableOfSquares</span> <span class="p">=</span> <span class="p">[</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span> <span class="p">..</span> <span class="mi">99</span> <span class="p">-&gt;</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">*</span><span class="n">i</span><span class="p">)</span> <span class="p">]</span>
+</code></pre></div></div>
+
+<ul>
+  <li>When defining functions parenthesis can be used optionally. I think this makes the function look more “mathy” and a littler easier to read.</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">func1a</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">=</span> <span class="n">x</span><span class="p">*</span><span class="n">x</span> <span class="o">+</span> <span class="mi">3</span>             
+</code></pre></div></div>
+
+<ul>
+  <li>To improve the readability further it sounds like a good idea to annotate the type always (even when it can be inferred automatically)</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">func2</span> <span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="kt">int</span><span class="p">)</span> <span class="p">=</span> <span class="mi">2</span><span class="p">*</span><span class="n">x</span><span class="p">*</span><span class="n">x</span> <span class="p">-</span> <span class="n">x</span><span class="o">/</span><span class="mi">5</span> <span class="o">+</span> <span class="mi">3</span>   
+</code></pre></div></div>
+
+<ul>
+  <li>Boolean operations are straightforward</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">boolean1</span> <span class="p">=</span> <span class="bp">true</span>
+<span class="k">let</span> <span class="n">boolean2</span> <span class="p">=</span> <span class="bp">false</span>
+<span class="k">let</span> <span class="n">boolean3</span> <span class="p">=</span> <span class="k">not</span> <span class="n">boolean1</span> <span class="p">&amp;&amp;</span> <span class="p">(</span><span class="n">boolean2</span> <span class="o">||</span> <span class="bp">false</span><span class="p">)</span>
+<span class="n">printfn</span> <span class="s2">"The expression 'not boolean1 &amp;&amp; (boolean2 || false)' is %A"</span> <span class="n">boolean3</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Double-quotes can be used inside strings be enclosing them with triple quotes</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">string4</span> <span class="p">=</span> <span class="s2">"""He said "</span><span class="n">hello</span> <span class="n">world</span><span class="s2">" after you did"""</span>
+</code></pre></div></div>
+
+<ul>
+  <li>A fragment of a string can be accessed by this notation:</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">string1</span> <span class="p">=</span> <span class="s2">"Hello"</span>
+<span class="k">let</span> <span class="n">string2</span>  <span class="p">=</span> <span class="s2">"world"</span>
+<span class="k">let</span> <span class="n">helloWorld</span> <span class="p">=</span> <span class="n">string1</span> <span class="o">+</span> <span class="s2">" "</span> <span class="o">+</span> <span class="n">string2</span>
+<span class="k">let</span> <span class="n">substring</span> <span class="p">=</span> <span class="n">helloWorld</span><span class="o">.[</span><span class="mi">0</span><span class="p">..</span><span class="mi">6</span><span class="p">]</span>
+</code></pre></div></div>
+
+<ul>
+  <li>A tuples is a set of ordered values</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">tuple1</span> <span class="p">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"fred"</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">1415</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Lists can be defined in various syntax</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">list1</span> <span class="p">=</span> <span class="p">[</span> <span class="p">]</span>
+<span class="k">let</span> <span class="n">list2</span> <span class="p">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">;</span> <span class="mi">2</span><span class="p">;</span> <span class="mi">3</span> <span class="p">]</span>
+<span class="k">let</span> <span class="n">list3</span> <span class="p">=</span> <span class="mi">42</span> <span class="p">::</span> <span class="n">list2</span>
+<span class="k">let</span> <span class="n">numberList</span> <span class="p">=</span> <span class="p">[</span> <span class="mi">1</span> <span class="p">..</span> <span class="mi">1000</span> <span class="p">]</span>
+<span class="k">let</span> <span class="n">squares</span> <span class="p">=</span> 
+    <span class="n">numberList</span> 
+    <span class="p">|&gt;</span> <span class="nn">List</span><span class="p">.</span><span class="n">map</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span><span class="p">*</span><span class="n">x</span><span class="p">)</span> 
+</code></pre></div></div>
+
+<ul>
+  <li>Classes can be defined by type keyword</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="nc">Vector2D</span><span class="p">(</span><span class="n">dx</span> <span class="p">:</span> <span class="kt">float</span><span class="p">,</span> <span class="n">dy</span> <span class="p">:</span> <span class="kt">float</span><span class="p">)</span> <span class="p">=</span> 
+    <span class="k">let</span> <span class="n">length</span> <span class="p">=</span> <span class="n">sqrt</span> <span class="p">(</span><span class="n">dx</span><span class="p">*</span><span class="n">dx</span> <span class="o">+</span> <span class="n">dy</span><span class="p">*</span><span class="n">dy</span><span class="p">)</span>
+    <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">DX</span> <span class="p">=</span> <span class="n">dx</span>  
+    <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">DY</span> <span class="p">=</span> <span class="n">dy</span>
+    <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">Length</span> <span class="p">=</span> <span class="n">length</span>
+    <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">Scale</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="p">=</span> <span class="nc">Vector2D</span><span class="p">(</span><span class="n">k</span> <span class="p">*</span> <span class="n">this</span><span class="p">.</span><span class="nc">DX</span><span class="p">,</span> <span class="n">k</span> <span class="p">*</span> <span class="n">this</span><span class="p">.</span><span class="nc">DY</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Generics classes are supported</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="nc">StateTracker</span><span class="p">&lt;</span><span class="k">'</span><span class="nc">T</span><span class="o">&gt;(</span><span class="n">initialElement</span><span class="p">:</span> <span class="k">'</span><span class="nc">T</span><span class="p">)</span> <span class="p">=</span> 
+    <span class="k">let</span> <span class="k">mutable</span> <span class="n">states</span> <span class="p">=</span> <span class="p">[</span> <span class="n">initialElement</span> <span class="p">]</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Classes can implement interfaces</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="nc">ReadFile</span><span class="bp">()</span> <span class="p">=</span>
+    <span class="k">let</span> <span class="n">file</span> <span class="p">=</span> <span class="k">new</span> <span class="nn">System</span><span class="p">.</span><span class="nn">IO</span><span class="p">.</span><span class="nc">StreamReader</span><span class="p">(</span><span class="s2">"readme.txt"</span><span class="p">)</span>
+    <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">ReadLine</span><span class="bp">()</span> <span class="p">=</span> <span class="n">file</span><span class="p">.</span><span class="nc">ReadLine</span><span class="bp">()</span>
+    <span class="k">interface</span> <span class="nn">System</span><span class="p">.</span><span class="nc">IDisposable</span> <span class="k">with</span>    
+        <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">Dispose</span><span class="bp">()</span> <span class="p">=</span> <span class="n">file</span><span class="p">.</span><span class="nc">Close</span><span class="bp">()</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>Arrays use a similar syntax to lists except [</td>
+          <td>…</td>
+          <td>] operators are used</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">array1</span> <span class="p">=</span> <span class="p">[|</span> <span class="mi">1</span> <span class="p">..</span> <span class="mi">1000</span> <span class="p">|]</span>
+<span class="k">let</span> <span class="n">evenNumbers</span> <span class="p">=</span> <span class="nn">Array</span><span class="p">.</span><span class="n">init</span> <span class="mi">1001</span> <span class="p">(</span><span class="k">fun</span> <span class="n">n</span> <span class="p">-&gt;</span> <span class="n">n</span> <span class="p">*</span> <span class="mi">2</span><span class="p">)</span> 
+</code></pre></div></div>
+
+<ul>
+  <li>Sequences are evaluated on-demand and are re-evaluated each time they are iterated. They are defined by curly braces</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">numbersSeq</span> <span class="p">=</span> <span class="n">seq</span> <span class="p">{</span> <span class="mi">1</span> <span class="p">..</span> <span class="mi">1000</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Recursive functions are defined by <strong>let rec</strong> keyword</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="k">rec</span> <span class="n">factorial</span> <span class="n">n</span> <span class="p">=</span> 
+    <span class="k">if</span> <span class="n">n</span> <span class="p">=</span> <span class="mi">0</span> <span class="k">then</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">n</span> <span class="p">*</span> <span class="n">factorial</span> <span class="p">(</span><span class="n">n</span><span class="p">-</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Record types can be created by type keyword and curly braces</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="nc">ContactCard</span> <span class="p">=</span> 
+    <span class="p">{</span> <span class="nc">Name</span>     <span class="p">:</span> <span class="kt">string</span><span class="p">;</span>
+      <span class="nc">Phone</span>    <span class="p">:</span> <span class="kt">string</span><span class="p">;</span>
+      <span class="nc">Verified</span> <span class="p">:</span> <span class="kt">bool</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Union types can be created by type keyword and pipe-separated values</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="nc">Suit</span> <span class="p">=</span> 
+    <span class="p">|</span> <span class="nc">Hearts</span> 
+    <span class="p">|</span> <span class="nc">Clubs</span> 
+    <span class="p">|</span> <span class="nc">Diamonds</span> 
+    <span class="p">|</span> <span class="nc">Spades</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Option values are any kind of value tagged with either ‘Some’ or ‘None’.</li>
+  <li>Code can be annotated with units of measure when using F# arithmetic over numeric types</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">open</span> <span class="nn">Microsoft</span><span class="p">.</span><span class="nn">FSharp</span><span class="p">.</span><span class="nn">Data</span><span class="p">.</span><span class="nn">UnitSystems</span><span class="p">.</span><span class="nn">SI</span><span class="p">.</span><span class="nc">UnitNames</span>
+
+    <span class="p">[&lt;</span><span class="nc">Measure</span><span class="p">&gt;]</span>
+    <span class="k">type</span> <span class="n">mile</span> <span class="p">=</span>
+        <span class="c1">/// Conversion factor mile to meter: meter is defined in SI.UnitNames</span>
+        <span class="k">static</span> <span class="k">member</span> <span class="n">asMeter</span> <span class="p">=</span> <span class="mi">1600</span><span class="o">.&lt;</span><span class="n">meter</span><span class="o">/</span><span class="n">mile</span><span class="p">&gt;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Large arrays can be processed in parallel</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">let</span> <span class="n">oneBigArray</span> <span class="p">=</span> <span class="p">[|</span> <span class="mi">0</span> <span class="p">..</span> <span class="mi">100000</span> <span class="p">|]</span>
+    
+    <span class="c1">// do some CPU intensive computation </span>
+    <span class="k">let</span> <span class="k">rec</span> <span class="n">computeSomeFunction</span> <span class="n">x</span> <span class="p">=</span> 
+        <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">2</span> <span class="k">then</span> <span class="mi">1</span> 
+        <span class="k">else</span> <span class="n">computeSomeFunction</span> <span class="p">(</span><span class="n">x</span> <span class="p">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">computeSomeFunction</span> <span class="p">(</span><span class="n">x</span> <span class="p">-</span> <span class="mi">2</span><span class="p">)</span>
+       
+    <span class="c1">// Do a parallel map over a large input array</span>
+    <span class="k">let</span> <span class="n">computeResults</span><span class="bp">()</span> <span class="p">=</span> <span class="n">oneBigArray</span> <span class="p">|&gt;</span> <span class="nn">Array</span><span class="p">.</span><span class="nn">Parallel</span><span class="p">.</span><span class="n">map</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">computeSomeFunction</span> <span class="p">(</span><span class="n">x</span> <span class="o">%</span> <span class="mi">20</span><span class="o">))</span>
+
+    <span class="n">printfn</span> <span class="s2">"Parallel computation results: %A"</span> <span class="p">(</span><span class="n">computeResults</span><span class="bp">()</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Events are also supported</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">open</span> <span class="nc">System</span>
+
+    <span class="c1">// create instance of Event object that consists of subscription point (event.Publish) and event trigger (event.Trigger)</span>
+    <span class="k">let</span> <span class="n">simpleEvent</span> <span class="p">=</span> <span class="k">new</span> <span class="nc">Event</span><span class="p">&lt;</span><span class="kt">int</span><span class="o">&gt;()</span> 
+
+    <span class="c1">// add handler</span>
+    <span class="n">simpleEvent</span><span class="p">.</span><span class="nn">Publish</span><span class="p">.</span><span class="nc">Add</span><span class="p">(</span>
+        <span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">printfn</span> <span class="s2">"this is handler was added with Publish.Add: %d"</span> <span class="n">x</span><span class="p">)</span>
+
+    <span class="c1">// trigger event</span>
+    <span class="n">simpleEvent</span><span class="p">.</span><span class="nc">Trigger</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>I like the tutorial script that came with VS. It shows all basic aspects in one place. I think I’ve spent enough time covering the basics. I need to dive deeper and develop something on my own or at least check out complete applications which I’m going to do next.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://msdn.microsoft.com/en-us/library/dd233160.aspx" target="_blank" rel="noopener noreferrer">Walkthrough: Your First F# Program</a></li>
+  <li><a href="http://blogs.msdn.com/b/chrsmith/archive/2008/09/12/scripting-in-f.aspx" target="_blank" rel="noopener noreferrer">Scripting in F#</a></li>
+  <li><a href="http://msdn.microsoft.com/en-gb/library/dd233221.aspx" target="_blank" rel="noopener noreferrer">Modules in F#</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/01/06/surface-pro-3-review/" itemprop="url">Surface Pro 3 Review</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-01-06T20:30:00+00:00" itemprop="datePublished">January  6, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
+
+<!-- misc -->
+
+
+
+
+    <a href="/category/misc">misc</a>
+    
+</span>
+	<span class="tags">gadget, review, surface_pro_3</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>To be brutally honest I didn’t need this device when I bought it. I had started considering of buying one and, as usually I do, just ended up buying it just because it’s a shiny little toy that got my attention!</p>
+
+<p>Since I forked over £1350 quids I had to justify it to myself to be able to sleep at nights. And my justification is that now that I have a fully mobile device I can work outside home quite often. In coffee shops, pubs and even in parks come spring. I think changing venues every now and then is a good idea to increase productivity and motivation. The main benefit of this device is that it’s running the exact OS my desktop is running meaning that I can use the exact same development environment on the go. I already had a 17” laptop which, in theory, allowed me to do that but it was a 5kg unwieldy beast with only 3-hour battery life so in practice it’s doomed to stay at home or office.</p>
+
+<p><img src="/images/vpblogimg/2015/01/laptop-vs-tablet.jpg" alt="Laptop vs. tablet"></p>
+
+<h3 id="first-impressions">First impressions</h3>
+<p>Another driving factor behind my decision was since it’s also a tablet I could use it as a comic book reader and it’s indeed a great reader. Compared to my good ol’ iPad 2 it provides a much better experience.</p>
+
+<p>Performance-wise it’s working great so far. The model I got has an Intel Core i7 CPU with 8GB RAM and 256GB SSD which is close to my desktop. The desktop has 32GB RAM but it runs a lot of virtual machines so 8GB with no-VMs sucking a ton of memory is good enough for a decent development machine.</p>
+
+<h3 id="tips-pros-and-cons">Tips, Pros and cons</h3>
+<ul>
+  <li>Tip: Toggle function keys: Fn button + Caps Lock. Fn keys are used much more frequently than searching or changing screen brightness.</li>
+  <li>Pro: Lovely and crisp 12” screen with 2160 x 1440 resolution. Great for reading comic books.</li>
+  <li>Pro: Good performance for development</li>
+  <li>Pro: Type-cover feels sturdy with strong magnets</li>
+  <li>Con: Appears connected to network while it’s not after waking up from sleep (I guess it’s a Windows flaw rather than Surface)</li>
+  <li>Con: Only 1 USB port is generally not good enough especially when it’s generally occupied by the mouse</li>
+  <li>Con: The type-cover keyboard feels a bit flimsy at times. But still it’s good enough to write code and blogposts.</li>
+  <li>Con: Gets hot sometimes</li>
+</ul>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>All in all, I’m glad I bought this device. Once I manage to forget the price tag I’m sure I’ll enjoy it even more! The 12” screen is great for comic books and it becomes a full-blown development machine with the type-cover attached. People criticize the battery life but I think it’s adequate for a work laptop (at least compared to my Asus my laptop it lasts forever.</p>
+
+<p>I’m writing this post in a coffee shop and I guess I’ll be around town more often and still be able to write code while travelling around :-)</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.microsoft.com/surface/en-gb/products/surface-pro-3" target="_blank" rel="noopener noreferrer">Surface Pro 3 specs</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/01/05/visual-studio-project-template-for-webapi/" itemprop="url">Visual Studio Project Template for ASP.NET Web API</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-01-05T15:00:00+00:00" itemprop="datePublished">January  5, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">visual_studio, web_api</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>In Visual Studio 2013 they decided to create one web project called <em>ASP.NET Web Application</em> to make it simpler as opposed to VS 2012 which had 7 different templates. I like this project wizard but I think there is a gap in the templates it provides when you want to start a Web API project. If you select Web API it comes with a full blown ASP.NET MVC website. If you select Empty you don’t get anything. I feel like there should be something in between: A functional Web API project with no overhead of the website.</p>
+
+<h3 id="minimal-web-api">Minimal Web API</h3>
+<p>The steps to achieve this are simple. I found this <a href="http://www.daniellewis.me.uk/2014/02/21/asp-net-web-api-from-scratch-part-1/" target="_blank" rel="noopener noreferrer">blog post</a> that helped me to get what I wanted quickly.</p>
+
+<p>For the sake of completeness the steps to create the minimal Web API project is as follows (I changed some of the steps to suit my needs):</p>
+
+<ol>
+  <li>Create an Emptry ASP.NET Web Project</li>
+  <li>
+    <p>Install Web API package via Nuget</p>
+
+    <div class="highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> Install-Package Microsoft.AspNet.WebApi
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Add a <em>Global Configuration Class</em> and add the following line defining a default route to  <em>Application_Start</em> method</p>
+
+    <div class="language-csharp highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> <span class="k">protected</span> <span class="k">void</span> <span class="nf">Application_Start</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
+ <span class="p">{</span>
+     <span class="n">GlobalConfiguration</span><span class="p">.</span><span class="n">Configuration</span><span class="p">.</span><span class="n">Routes</span><span class="p">.</span><span class="nf">MapHttpRoute</span><span class="p">(</span><span class="s">"Default"</span><span class="p">,</span> <span class="s">"{controller}/{id}"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">id</span> <span class="p">=</span> <span class="n">RouteParameter</span><span class="p">.</span><span class="n">Optional</span> <span class="p">});</span>
+ <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Add a controller from Web API Controller Class (v2.1) template and rename it to DefaultController. By default it comes with method implementations for GET/POST/PUT/DELETE HTTP verbs:</p>
+
+    <div class="language-csharp highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> <span class="k">public</span> <span class="k">class</span> <span class="nc">DefaultController</span> <span class="p">:</span> <span class="n">ApiController</span>
+ <span class="p">{</span>
+     <span class="c1">// GET: api/Entry</span>
+     <span class="k">public</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="nf">Get</span><span class="p">()</span>
+     <span class="p">{</span>
+         <span class="k">return</span> <span class="k">new</span> <span class="kt">string</span><span class="p">[]</span> <span class="p">{</span> <span class="s">"value1"</span><span class="p">,</span> <span class="s">"value2"</span> <span class="p">};</span>
+     <span class="p">}</span>
+
+     <span class="c1">// GET: api/Entry/5</span>
+     <span class="k">public</span> <span class="kt">string</span> <span class="nf">Get</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">)</span>
+     <span class="p">{</span>
+         <span class="k">return</span> <span class="s">"value"</span><span class="p">;</span>
+     <span class="p">}</span>
+
+     <span class="c1">// POST: api/Entry</span>
+     <span class="k">public</span> <span class="k">void</span> <span class="nf">Post</span><span class="p">([</span><span class="n">FromBody</span><span class="p">]</span><span class="kt">string</span> <span class="k">value</span><span class="p">)</span>
+     <span class="p">{</span>
+     <span class="p">}</span>
+
+     <span class="c1">// PUT: api/Entry/5</span>
+     <span class="k">public</span> <span class="k">void</span> <span class="nf">Put</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">,</span> <span class="p">[</span><span class="n">FromBody</span><span class="p">]</span><span class="kt">string</span> <span class="k">value</span><span class="p">)</span>
+     <span class="p">{</span>
+     <span class="p">}</span>
+
+     <span class="c1">// DELETE: api/Entry/5</span>
+     <span class="k">public</span> <span class="k">void</span> <span class="nf">Delete</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">)</span>
+     <span class="p">{</span>
+     <span class="p">}</span>
+ <span class="p">}</span>	
+</code></pre></div>    </div>
+  </li>
+  <li>In order to run properly the following references need to be deployed:
+    <ul>
+      <li>System.Net.Http.Formatting</li>
+      <li>System.Web.Http</li>
+      <li>System.Web.Http.WebHost</li>
+    </ul>
+  </li>
+</ol>
+
+<p>So change <em>Copy Local</em> to true in the properties window.</p>
+
+<p>That’s all it takes to create a working Web API.</p>
+
+<h3 id="templates-in-action">Templates in action</h3>
+<p>Now I have what I want but when I need a new Web API project I don’t want to start from scratch every time. Instead I’d rather use the nice and easy templating feature of Visual Studio. To create the template:</p>
+
+<ol>
+  <li>
+    <p>Select File -&gt; Export Template</p>
+
+    <p><img src="/images/vpblogimg/2015/01/vs-project-template-wizard.png" alt="Visual Studio Project Template Wizard"></p>
+  </li>
+  <li>
+    <p>Leave “Project template” selected and click next. Give the template a name and description. It will automatically import the template to Visual Studio so leave the defaults.</p>
+
+    <p><img src="/images/vpblogimg/2015/01/vs-project-template-wizard-options.png" alt="Visual Studio Project Template Wizard Otions"></p>
+  </li>
+</ol>
+
+<p>When you need to create a simple Web API you can use this template from now on by simply searching webapi in the templates:</p>
+
+<p><img src="/images/vpblogimg/2015/01/vs-project-template-select-template.png" alt="Visual Studio Project Template Search"></p>
+
+<p>And when you create a new project based on this template (not surprisingly) you get something like this:</p>
+
+<p><img src="/images/vpblogimg/2015/01/vs-project-template-default-project.png" alt="Visual Studio Project Template-Based Project Output"></p>
+
+<p>Creating the project from scratch was easy enough but using templates is even easier so why not use it!</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.daniellewis.me.uk/2014/02/21/asp-net-web-api-from-scratch-part-1/" target="_blank" rel="noopener noreferrer">ASP.NET Web API from scratch</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/31" class="prev">Prev</a>
+    
+    
+        <a href="/page/33" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

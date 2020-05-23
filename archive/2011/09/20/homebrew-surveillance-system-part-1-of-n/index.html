@@ -1,0 +1,172 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Homebrew Surveillance System Part 1 of n - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2011/09/20/homebrew-surveillance-system-part-1-of-n/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Homebrew Surveillance System Part 1 of n</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2011-09-20T10:52:06+01:00" itemprop="datePublished">September 20, 2011</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- hobby, security -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    , 
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">ispyconnect</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>Recently i decided to buy an surveillance camera to setup in my room. For two reasons mainly:</p>
+
+<ol>
+  <li>Security: Shocking but true!</li>
+  <li>Research: I always wondered how these devices operate, how they are installed what protocols they use etc.</li>
+</ol>
+
+<p>I ordered one but the shipment never arrived. After waiting for two months, and a battle for refund i ended up where i started. (By the way, in this instance I was too cheap to shop at a company called TMart.com. I’m glad i finally could get a refund but I’m never ever going to shop there again. I strongly recommend everyone to stay away.)</p>
+
+<p>In the meantime, it occurred to me that i had 2 laptops with webcams and a external USB webcam that i plug into my desktop PC. With 3 cameras i should be able to setup a small security system. So i started searching for some software to turn my cameras into a security system. Surprisingly i found an open-source one. It’s called iSpyConnect (<a href="http://www.ispyconnect.com" target="_blank" rel="noopener noreferrer">http://www.ispyconnect.com</a>). Better yet it’s written in C#. It supports cool features like uploading to YouTube. But most features that require server support requires a subscription. In the free version you are allowed to upload pictures via FTP to one server. But since I have the source code I’m planning to make my own changes.</p>
+
+<p>So for now i have webcams and required software. I can’t use MacBook and it’s webcam since it’s not supported but I tested it with two webcams (One facing the door and the other facing the window) When it detected motion it started recording the video. Also uploaded pictures to my FTP server on the Internet. So even if the burglar notices the system and somehow manages to delete the local copy of the video feed, there’s still good evidence safe and sound out in the cloud.</p>
+
+<p>I am planning to improve the system and I will be posting more details about it as I go along.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.ispyconnect.com" target="_blank" rel="noopener noreferrer">iSpyConnect</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2011/09/11/my-rss-feeds-came-back-from-the-dead/" title="Previous Post: 
+My RSS feeds came back from the dead">« My RSS feeds came back from the dead</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2011/10/19/lightning-fast-development-with-lightswitch/" title="next Post: 
+Lightning-fast development with Lightswitch">Lightning-fast development with Lightswitch » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

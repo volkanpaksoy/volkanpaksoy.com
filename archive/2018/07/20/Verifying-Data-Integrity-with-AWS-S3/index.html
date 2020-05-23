@@ -1,0 +1,215 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Verifying Data Integrity with AWS S3 - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2018/07/20/Verifying-Data-Integrity-with-AWS-S3/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Verifying Data Integrity with AWS S3</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2018-07-20T06:00:00+01:00" itemprop="datePublished">July 20, 2018</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">s3, csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>When it comes to transferring files over network, there’s always a risk of ending up with corrupted files. To prevent this on transfers to and from S3, AWS provides us with some tools we can leverage to guarantee correctness of the files.</p>
+
+<h2 id="verifying-files-while-uploading">Verifying files while uploading</h2>
+
+<p>In order to verify the file is uploaded successfully, we need to provide AWS the MD5 hash value of our file. Once upload has been completed, AWS calculates the MD5 hash on their end and compares the both values. If they match, it means it went through successfully. So our request looks like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="n">PutObjectRequest</span>
+<span class="p">{</span>
+    <span class="n">MD5Digest</span> <span class="p">=</span> <span class="n">md5</span><span class="p">,</span>
+    <span class="n">BucketName</span> <span class="p">=</span> <span class="n">bucketName</span><span class="p">,</span>
+    <span class="n">Key</span> <span class="p">=</span>  <span class="n">key</span><span class="p">,</span>
+    <span class="n">FilePath</span> <span class="p">=</span> <span class="n">inputPath</span><span class="p">,</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>where we calculate MD5 hash value like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">stream</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FileStream</span><span class="p">(</span><span class="n">fullPath</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">Open</span><span class="p">,</span> <span class="n">FileAccess</span><span class="p">.</span><span class="n">Read</span><span class="p">,</span> <span class="n">FileShare</span><span class="p">.</span><span class="n">Read</span><span class="p">))</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">md5</span> <span class="p">=</span> <span class="n">MD5</span><span class="p">.</span><span class="nf">Create</span><span class="p">())</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">hash</span> <span class="p">=</span> <span class="n">md5</span><span class="p">.</span><span class="nf">ComputeHash</span><span class="p">(</span><span class="n">stream</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToBase64String</span><span class="p">(</span><span class="n">hash</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In my tests, it looks like if you don’t provide a valid MD5 hash, you get a <em>WinHttpException</em> with the inner exception message “The connection with the server was terminated abnormally”</p>
+
+<p>If you provide a valid but incorrect MD5, the exception thrown is of type <em>AmazonS3Exception</em> with the message “The Content-MD5 you specified did not match what we received”.</p>
+
+<p>Amazon SDK comes with 2 utility methods named <em>GenerateChecksumForContent</em> and <em>GenerateChecksumForStream</em>. At the time of this writing, GenerateChecksumForStream wasn’t available in the AWS SDK for .NET Core. So the only method worked for me to calculate the hash was the way as shown above.</p>
+
+<h2 id="verifying-files-while-downloading">Verifying files while downloading</h2>
+
+<p>When downloading we use EtagToMatch property of GetObjectRequest to have the verification:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="n">GetObjectRequest</span>
+<span class="p">{</span>
+	<span class="n">BucketName</span> <span class="p">=</span> <span class="n">bucketName</span><span class="p">,</span>
+    <span class="n">Key</span> <span class="p">=</span>  <span class="n">key</span><span class="p">,</span>
+    <span class="n">EtagToMatch</span> <span class="p">=</span> <span class="s">"\"278D8FD9F7516B4CA5D7D291DB04FB20\""</span><span class="p">.</span><span class="nf">ToLower</span><span class="p">()</span> <span class="c1">// Case-sensitive</span>
+<span class="p">};</span>
+
+<span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">_s3Client</span><span class="p">.</span><span class="nf">GetObjectAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+<span class="p">{</span>
+    <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="nf">WriteResponseStreamToFileAsync</span><span class="p">(</span><span class="n">outputPath</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">CancellationToken</span><span class="p">.</span><span class="n">None</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>When we request the object this way and if the the MD5 hash we send doesn’t match the one on the server we get an exception with the following message: <em>“At least one of the pre-conditions you specified did not hold”</em></p>
+
+<p>Once important point to keep in mind is that AWS keeps the hashes in lowerc-ase and the comparison is case-sensitive so make sure to convert everything to lower-case before you send it out.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/VerifyingDataIntegrityWithAWSS3" target="_blank" rel="noopener noreferrer">Sample source code</a></li>
+  <li><a href="https://aws.amazon.com/premiumsupport/knowledge-center/data-integrity-s3/" target="_blank" rel="noopener noreferrer">How do I ensure data integrity of objects uploaded to or downloaded from Amazon S3?</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash?view=powershell-6" target="_blank" rel="noopener noreferrer">Powershell Get-FileHash cmdlet reference</a></li>
+  <li><a href="https://docs.aws.amazon.com/cli/latest/topic/s3-faq.html" target="_blank" rel="noopener noreferrer">AWS CLI S3 FAQ</a></li>
+</ul>
+
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2018/07/08/AWS-certification-notes-cloud-practitioner/" title="Previous Post: 
+AWS Certification Notes: AWS Certified Cloud Practitioner">« AWS Certification Notes: AWS Certified Cloud Practitioner</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2018/07/21/Row-Against-the-Machine-Getting-Rowing-Data-Out-of-Concept2-Model-D/" title="next Post: 
+Row Against the Machine: Getting Rowing Data Out of Concept2 Model D">Row Against the Machine: Getting Rowing Data Out of Concept2 Model D » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

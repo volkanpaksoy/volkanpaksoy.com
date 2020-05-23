@@ -1,0 +1,291 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Setting up RAID1 in Ubuntu 18.04 and Monitoring Disk Health - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2018/07/28/Setting-up-RAID1-in-Ubuntu-18.04-and-Monitoring-Disk-Health/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Setting up RAID1 in Ubuntu 18.04 and Monitoring Disk Health</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2018-07-28T07:00:00+01:00" itemprop="datePublished">July 28, 2018</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- linux, sysops -->
+
+
+
+
+    <a href="/category/linux">linux</a>
+    , 
+
+    <a href="/category/sysops">sysops</a>
+    
+</span>
+	<span class="tags">raid</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p><img src="/images/vpblogimg/2018/07/linux-raid1-01-tux.svg" alt=""></p>
+
+<p>AWS and cloud computing are awesome but I still enjoy having a server at home. I’ve decided to reinstate my old desktop. Replaced the disks with shiny new ones (A 500GB SSD and 2 4TB drives for data) and installed Ubuntu 18.04.</p>
+
+<p>My primary goals were:</p>
+
+<ul>
+  <li>Partition SSD drive and use it for data that needs performance</li>
+  <li>Set up RAID1 on 2 4TB disks so that 1 disk failure wouldn’t result in data loss</li>
+  <li>Set up some sort of notifications to monitor SSD disk health</li>
+  <li>Set up some sort of notifications to monitor RAID disk health</li>
+</ul>
+
+<p>Having all these in place was important for me to have a solid, reliable system before I started building stuff on top of it.</p>
+
+<h2 id="partitioning">Partitioning</h2>
+
+<p>By default Ubuntu only adds a 512MB /boot/efi partition and leaves the rest for root (/). But since I recently had some free space issues in the boot drive recently I decided to create a boot partition as well. Also added a 32GB Swap partition. Swap is is virtual memory and it should have the same size as the computer’s memory.</p>
+
+<p>So I ended up allocating 32GB for home as well and left the rest for the root. Going forward now I have more than 300GB to use for application data, Docker images etc.</p>
+
+<p><img src="/images/vpblogimg/2018/07/linux-raid1-02-partitions.png" alt=""></p>
+
+<h2 id="raid1">RAID1</h2>
+<p>Now it’s time to set up a RAID array to have some redundancy. They are shiny new disks but you can never fully rely on them and they will eventually fail. Probably it’s not the best idea to install 2 identical disks at the same time as their lifecycle will likely end at similar times. So I’ll need to keep an eye on them and set up some monitoring and notifications (more on that later).</p>
+
+<p>As my guide I started using this article called <a href="https://www.tecmint.com/create-raid1-in-linux/" target="_blank" rel="noopener noreferrer">Setting up RAID 1 (Mirroring) using ‘Two Disks’ in Linux – Part 3</a> to set up my RAID.</p>
+
+<p>This is a very nice article and explains everything step by step already so I’m not going to duplicate it here. But I bumped into an issue while following the guide: 4TB drives. My disks were MBR which only supported up to 2TB and I had to convert them into GPT disks.</p>
+
+<p>The answer was <strong>parted</strong>. I followed the steps in this <a href="https://askubuntu.com/a/586721" target="_blank" rel="noopener noreferrer">answer</a> and managed to partition the drives to 4TB (3.7 to be exact!)</p>
+
+<h2 id="testing-raid1">Testing RAID1</h2>
+
+<p>Now that I had a RAID it was time to go out and test it. First thing I wanted to see was it mounted automatically after a reboot. It did mount the drives but there was a problem with RAID. At boot the device was showing as md127 instead of md0 and it was failing to sync.</p>
+
+<p>My mdadm.conf file looked like this when this was happening:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ARRAY /dev/md0 level=raid1 num-devices=2 metadata=1.2 name=asgard:0 UUID={device id}
+   devices=/dev/sda1,/dev/sdb1
+</code></pre></div></div>
+
+<p>After some Googling I found the answere <a href="https://ubuntuforums.org/showthread.php?t=1764861" target="_blank" rel="noopener noreferrer">here</a></p>
+
+<p>The solution was simply removing the name parameter from the file!. After that, when I rebooted and entered the following commands I was able to see a healthy RAID:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat /proc/mdstat
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2018/07/linux-raid1-03-mdadm-stat.png" alt=""></p>
+
+<p>and</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mdadm -D /dev/md0
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2018/07/linux-raid1-04-mdadm-status.png" alt=""></p>
+
+<h2 id="monitoring-system-disk-with-smartmontols">Monitoring System Disk with smartmontols</h2>
+<p>Now that everything looked in place, I needed to ensure it stays that way!</p>
+
+<p>To achieve that goal, I edited this file /etc/smartd.conf and added this line:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DEVICESCAN -o on -H -l error -l selftest -t -m my.email@address.com -M test
+</code></pre></div></div>
+
+<h3 id="set-up-sending-emails-from-server">Set up sending emails from server</h3>
+<p>When I first installed smartmontools, it asked Postfix configuration which looks like this:</p>
+
+<p><img src="/images/vpblogimg/2018/07/linux-raid1-05-postfix-configuration.png" alt=""></p>
+
+<p>Since I was interested in getting results fast, I selected No Configuration and moved on. Now it’s time to configure it.</p>
+
+<p>To bring up this screen again I entered the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dpkg-reconfigure postfix
+</code></pre></div></div>
+
+<p>I followed the wizard, entered my email domain. Then followed this documentation from AWS: <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/postfix.html" target="_blank" rel="noopener noreferrer">Integrating Amazon SES with Postfix</a></p>
+
+<p>As always, I ended up having some issues :-).</p>
+
+<p>First problem was it didn’t work! It wasn’t finding the SES SMTP server as relay server and was always trying to send emails from localhost. The solution was <a href="https://devanswers.co/postfix-statusbounced-unknown-user-user/" target="_blank" rel="noopener noreferrer">here</a></p>
+
+<p>As the instructions say, I updated /etc/postfix/main.cf with the values below:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>myhostname = localhost
+mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+</code></pre></div></div>
+
+<p>and I was able to send emails to the SMTP server. But the SES didn’t like my IP address and the email bounced. The solution to that was to create an IP filter in SES and allow the traffic from that address.</p>
+
+<p><img src="/images/vpblogimg/2018/07/linux-raid1-06-aws-ses-create-filter.png" alt=""></p>
+
+<p>Then I restarted the service to test</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>service smartmontools restart
+</code></pre></div></div>
+
+<p>and received the notification. Actually received 3 emails for some reason.</p>
+
+<p><img src="/images/vpblogimg/2018/07/linux-raid1-07-aws-ses-notifications.png" alt=""></p>
+
+<p>The service runs at startup so this way I can be notified whenever it reboots too.</p>
+
+<h2 id="monitoring-raid-with-mdadm">Monitoring RAID with mdadm</h2>
+
+<p>Took some time to complete synchronizing 4TB disks but finally I was ready to rock:</p>
+
+<p><img src="/images/vpblogimg/2018/07/linux-raid1-08-mdadm-status-complete.png" alt=""></p>
+
+<p>Apart from smartmontools, mdadm application is also capable of sending emails when a disk fails.</p>
+
+<p>The documentation tells to add MAILADDR followed by an email address to specify target email address but in my tests adding the line didn’t change anything.</p>
+
+<p>In fact, turns out by default it’s sending the notifications. As my server was set up to send emails now, by just entering the following command to send out a test email I was able to receive it</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mdadm --monitor --scan --test -1
+</code></pre></div></div>
+
+<p>The problem is it’s now using root@mydomain.com all the time now. I wasn’t able to change it. But as long as that mailbox exists at least I can receive notifications.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>All hardware eventually fails. Disk failure is especially annoying because it may cause some precious data loss. Apart from good backup practices, it’s also helpful to have a good monitoring system and redundancy on the disks we use.</p>
+
+<p>It took me some time to set up my system but now at least I have 1 disk redundancy for large amounts of data and the ability to be notified whenever something goes wrong with the disks which gives me some peace of mind (not too much though :-)).</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.tecmint.com/create-raid1-in-linux/" target="_blank" rel="noopener noreferrer">Setting up RAID 1 (Mirroring) using ‘Two Disks’ in Linux – Part 3</a></li>
+  <li><a href="https://askubuntu.com/a/586721" target="_blank" rel="noopener noreferrer">Create GUID partition table (GPT) during Ubuntu Server install</a></li>
+  <li><a href="https://ubuntuforums.org/showthread.php?t=1764861" target="_blank" rel="noopener noreferrer">RAID starting at md127 instead of md0</a></li>
+  <li><a href="https://dustymabe.com/2012/03/10/hard-drive-monitoring-and-e-mail-alerts-using-smartd/" target="_blank" rel="noopener noreferrer">Hard Drive Monitoring and E-mail Alerts Using smartd</a></li>
+  <li><a href="https://help.ubuntu.com/community/Smartmontools" target="_blank" rel="noopener noreferrer">Smartmontools documentation</a></li>
+  <li><a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/postfix.html" target="_blank" rel="noopener noreferrer">Integrating Amazon SES with Postfix</a></li>
+  <li><a href="https://devanswers.co/postfix-statusbounced-unknown-user-user/" target="_blank" rel="noopener noreferrer">Can’t send mail to own domain. Postfix: status=bounced (unknown user: “user”)</a></li>
+  <li><a href="https://www.systutorials.com/docs/linux/man/5-mdadm.conf/" target="_blank" rel="noopener noreferrer">mdadm.conf (5) - Linux Man Pages</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2018/07/21/Row-Against-the-Machine-Getting-Rowing-Data-Out-of-Concept2-Model-D/" title="Previous Post: 
+Row Against the Machine: Getting Rowing Data Out of Concept2 Model D">« Row Against the Machine: Getting Rowing Data Out of Concept2 Model D</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2018/09/04/AWS-Organisations/" title="next Post: 
+Managing Accounts with AWS Organizations">Managing Accounts with AWS Organizations » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

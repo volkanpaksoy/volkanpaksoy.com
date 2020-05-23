@@ -1,0 +1,326 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/56/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/07/25/improved-web-security-with-hsts/" itemprop="url">Improved Web Security with HSTS</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-07-25T20:25:13+01:00" itemprop="datePublished">July 25, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/security">security</a></span> -->
+
+<!-- security -->
+
+
+
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">hsts, network</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>HSTS (HTTP Strict Transport Security) is a security policy where a web server instructs the client that the website they are calling can be used with HTTPS only. By using tools like Wi-Fi PineApple and sslstrip a man-in-the-middle attack can be carried out easily. The attacker can redirect the victim to HTTP version of the site they are connecting to and after the login info is submitted in clear-text and captured the victim is redirected back to HTTPS. By using HSTS the client browser always makes the calls over HTTPS hence reducing the risk of MitM attack. It’s not bullet-proof but still an improvement over not using it.</p>
+
+<h3 id="implementation">Implementation</h3>
+<p>HSTS is basically a response header. In an ASP.NET application it can be added in the web.config file as below:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="p">&lt;</span><span class="n">system</span><span class="p">.</span><span class="n">webserver</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="n">httpprotocol</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="n">customheaders</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="k">add</span> <span class="n">name</span><span class="p">=</span><span class="s">"Strict-Transport-Security"</span> <span class="k">value</span><span class="p">=</span><span class="s">"max-age=31536000"</span> <span class="p">/&gt;</span>
+      <span class="p">&lt;/</span><span class="n">customheaders</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="n">httpprotocol</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="n">system</span><span class="p">.</span><span class="n">webserver</span><span class="p">&gt;</span>
+</code></pre></div></div>
+
+<p>And when you visit this site over HTTPS response looks like:</p>
+
+<p><img src="/images/vpblogimg/2013/07/HSTS_02.png" alt="HSTS"></p>
+
+<p>This header tells the browser to use only HTTPS from now on for 1 year. Also, the response header can be added in the BeginRequest event handler:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">protected</span> <span class="k">void</span> <span class="nf">Application_BeginRequest</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">protected</span> <span class="k">void</span> <span class="nf">Application_BeginRequest</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="k">switch</span> <span class="p">(</span><span class="n">Request</span><span class="p">.</span><span class="n">Url</span><span class="p">.</span><span class="n">Scheme</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="k">case</span> <span class="s">"https"</span><span class="p">:</span>
+				<span class="n">Response</span><span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"Strict-Transport-Security"</span><span class="p">,</span> <span class="s">"max-age=31536000"</span><span class="p">);</span>
+				<span class="k">break</span><span class="p">;</span>
+			<span class="k">case</span> <span class="s">"http"</span><span class="p">:</span>
+				<span class="kt">var</span> <span class="n">path</span> <span class="p">=</span> <span class="s">"https://"</span> <span class="p">+</span> <span class="n">Request</span><span class="p">.</span><span class="n">Url</span><span class="p">.</span><span class="n">Host</span> <span class="p">+</span> <span class="n">Request</span><span class="p">.</span><span class="n">Url</span><span class="p">.</span><span class="n">PathAndQuery</span><span class="p">;</span>
+				<span class="n">Response</span><span class="p">.</span><span class="n">Status</span> <span class="p">=</span> <span class="s">"301 Moved Permanently"</span><span class="p">;</span>
+				<span class="n">Response</span><span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"Location"</span><span class="p">,</span> <span class="n">path</span><span class="p">);</span>
+				<span class="k">break</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>HSTS header only works with HTTPS. So you can not observe it HTTP responses. That’s why redirecting to HTTPS is required. Because if the client uses HTTP all the time and if there is nothing forcing the user to use HTTPS, even if you have HSTS turned on, the client will never receive those responses. So at this point even if an attacker is redirecting the user to HTTP, the browser will always make the requests over HTTPS.</p>
+
+<h3 id="shortcomings">Shortcomings</h3>
+<ul>
+  <li>Not all browsers support it. It works with Chrome and Firefox but not with IE and Safari</li>
+  <li>Cannot protect for the first call: If the user is making a call to a site for the first time and there is an attacker in between it wouldn’t work. At least it would start working after the attacker is finished with the attack and redirected the user back to HTTPS.</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://tools.ietf.org/html/rfc6797" target="_blank" rel="noopener noreferrer">http://tools.ietf.org/html/rfc6797</a></li>
+  <li><a href="http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security" target="_blank" rel="noopener noreferrer">http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/07/24/electronics-tool-update/" itemprop="url">Electronics Tool Update</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-07-24T19:47:01+01:00" itemprop="datePublished">July 24, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
+
+<!-- hobby -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">electronics</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>If you’re going to do something you need the right tools. The last time I was dabbling with I didn’t quite enjoy it but that was mostly because I didn’t have the right tools. The most daunting part for me was cabling. With the jumper cable set I had it was just too painful.</p>
+
+<h3 id="get-your-cables-right">Get your cables right</h3>
+<p>This time I’m prepared for all occasions: I have Male – Male, Male – Female and Female – Females cables which cover all combinations.</p>
+
+<p><img src="/images/vpblogimg/2013/07/Cables.jpg" alt="Cables"></p>
+
+<h3 id="essentials">Essentials</h3>
+<p><strong>Multimeter:</strong> I realized a multimeter is an essential tool if you want to build your own circuits. I added a reference for an excellent tutorial which teaches you how to use one in a few minutes. By using it, I was able to measure voltage and resistor values in no time.</p>
+
+<p><strong>LCD Display:</strong> Also, I think it’s almost impossible to build a cool project without a display. It can be used for debugging and informing the user so very helpful to have it in the mix. They are so cheap that I ordered 5 of them for about £7 on eBay. So I guess there is no excuse for not buying one!</p>
+
+<p><strong>Resistors:</strong> Real resistors! I hated my old blue resistors with 5 bands. I couldn’t read the values. Colors were not clear. But now finally I got a bunch of standard 3-band yellow ones which make it easier to read. (Actually I have a multimeter now, so I can just use it to measure the resistance anyway.)</p>
+
+<p><strong>Breadboards:</strong> I had a big nice one but I think in order to run things in parallel I’ll need a few more of the smaller ones. Also I’m trying to learn how to solder so I now have a couple of solder boards to practice.
+<span style="text-decoration: underline;">Push buttons:</span> I think to control the flow they are definitely needed.</p>
+
+<p><img src="/images/vpblogimg/2013/07/NewComponents.jpg" alt="New Components"></p>
+
+<h3 id="lets-get-crackin">Let’s get crackin’</h3>
+<p>I just built a simple circuit to light a LED when the push button is pressed. I know it’s not impressive by any means but I enjoyed building something from scratch. Familiarized myself with my tool shed and looking forward to build more complicated things.</p>
+
+<iframe src="//www.youtube.com/embed/wse9I_5Dx5c" frameborder="0" width="560" height="315"></iframe>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.youtube.com/watch?v=bF3OyQ3HwfU" target="_blank" rel="noopener noreferrer">Excellent multimeter tutorial</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/07/23/leapmotion-initialization/" itemprop="url">Introducing Leap Motion</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-07-23T21:04:55+01:00" itemprop="datePublished">July 23, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
+
+<!-- hobby -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">leap_motion, gadget, review</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Yes!!! Finally it arrived. It looks very tiny and elegant. This is what the package and contents look like:</p>
+
+<p><img src="/images/vpblogimg/2013/07/LeapMotion.jpg" alt="Leap Motion"></p>
+
+<h4 id="installation">Installation</h4>
+<p>Good thing it comes with 2 USB cables of different lengths. One is bout half a meter, probably for laptop users and the other is about 2 meters, better suited for desktop users like myself.
+It doesn’t come with any instructions or user guide but a card that tells you to go to <a href="http://leapmotion.com/setup" target="_blank" rel="noopener noreferrer">leapmotion.com/setup</a>. And that’s where I went.</p>
+
+<p>The setup file is about 56MB. As this is a new file, Norton 360 didn’t like it and issued a warning.
+Another interesting note is right after I plugged it in Skype icon started blinking. I checked the window and it was saying “Your video works fine”.  as I don’t normally keep my webcam plugged in, the video doesn’t work. But it became happy to detect a camera! I’m not sure if it would work with Skype though. Probably not.</p>
+
+<h4 id="app-store">App Store</h4>
+<p>After the installation you have to login to Airspace which is the app store for Leap Motion. I logged in with my LeapMotion account. It comes with a few free apps. Cut the Rope didn’t run unfortunately. Didn’t bother to give an error message either. So I tried the others. Lotus looks like a weird psychedelic app. As far as I could understand you make music with your fingers. Here’s a little demo of how it looks:</p>
+
+<iframe src="http://www.youtube.com/embed/2Wi8vPsPaPE" frameborder="0" width="560" height="315"></iframe>
+
+<h4 id="development">Development</h4>
+<p>What’s more interesting than downloading and using apps is developing one on my own! In order to do this you have to sign up for a developer account at: <a href="http://developer.leapmotion.com" target="_blank" rel="noopener noreferrer">http://developer.leapmotion.com</a>
+After the sign up you download their SDK. So far I managed to install the drivers, tried a few apps and downloaded the SDK and I’ll post the development experience in another post.</p>
+
+<h4 id="final-words">Final words</h4>
+<p>I’m not so sure if this gizmo will take off but as long as it’s an interface for the OS, not some custom apps, I don’t see much use for it. Keeping hands in the air for long tasks is tiring. I think it only might make some games more fun but that’s a very small market.</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/55" class="prev">Prev</a>
+    
+    
+        <a href="/page/57" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

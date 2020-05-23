@@ -1,0 +1,327 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>RSS Feed Generation with C# - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2015/07/11/rss-feed-generation-with-csharp/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">RSS Feed Generation with C#</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-07-11T15:30:00+01:00" itemprop="datePublished">July 11, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">csharp, s3, rss</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>Recently I got burned by another Windows update and my favorite podcatcher on the desktop, Miro, stopped functioning. I was already planning to develop something on my own so that I wouldn’t have to manually backup OPMLs (I’m sure there must be neat solutions already but again couldn’t resist the temptation of DIY!). So started exploring RSS feeds and the ways to produce and consume them. My first toy project is a feed generator.</p>
+
+<h2 id="implementation">Implementation</h2>
+<p>I developed a console application in C# that can be scheduled to generate the feed and upload it to AWS S3. Source code is <a href="https://github.com/volkanpaksoy/rss-feed-generator" target="_blank" rel="noopener noreferrer">here</a></p>
+
+<p>Apparently .NET Framework has a System.ServiceModel.Syndication namespace since version 3.5 that contains all the tools need to consume and create an RSS feed with a few lines of code. The core part of the application is the part that generates the actual feed:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="n">SyndicationFeed</span> <span class="nf">GetFeed</span><span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Article</span><span class="p">&gt;</span> <span class="n">articles</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">SyndicationFeed</span> <span class="n">feed</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">SyndicationFeed</span><span class="p">(</span><span class="n">_feedServiceSettings</span><span class="p">.</span><span class="n">Title</span><span class="p">,</span> <span class="n">_feedServiceSettings</span><span class="p">.</span><span class="n">Description</span><span class="p">,</span> <span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="n">_feedServiceSettings</span><span class="p">.</span><span class="n">BaseUri</span><span class="p">));</span>
+    <span class="n">feed</span><span class="p">.</span><span class="n">Title</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TextSyndicationContent</span><span class="p">(</span><span class="n">_feedServiceSettings</span><span class="p">.</span><span class="n">Title</span><span class="p">);</span>
+    <span class="n">feed</span><span class="p">.</span><span class="n">Description</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TextSyndicationContent</span><span class="p">(</span><span class="n">_feedServiceSettings</span><span class="p">.</span><span class="n">Description</span><span class="p">);</span>
+    <span class="n">feed</span><span class="p">.</span><span class="n">BaseUri</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="n">_feedServiceSettings</span><span class="p">.</span><span class="n">BaseUri</span><span class="p">);</span>
+    <span class="n">feed</span><span class="p">.</span><span class="n">Categories</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="nf">SyndicationCategory</span><span class="p">(</span><span class="n">_feedServiceSettings</span><span class="p">.</span><span class="n">Category</span><span class="p">));</span>
+
+    <span class="kt">var</span> <span class="n">items</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">SyndicationItem</span><span class="p">&gt;();</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">article</span> <span class="k">in</span> <span class="n">articles</span>
+        <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">a</span> <span class="p">=&gt;</span> <span class="n">a</span><span class="p">.</span><span class="n">ispublished</span><span class="p">)</span>
+        <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">a</span> <span class="p">=&gt;</span> <span class="n">a</span><span class="p">.</span><span class="n">ispubliclyvisible</span><span class="p">)</span>
+        <span class="p">.</span><span class="nf">OrderByDescending</span><span class="p">(</span><span class="n">a</span> <span class="p">=&gt;</span> <span class="n">a</span><span class="p">.</span><span class="n">publisheddate</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">item</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">SyndicationItem</span><span class="p">(</span><span class="n">article</span><span class="p">.</span><span class="n">title</span><span class="p">,</span> 
+            <span class="n">article</span><span class="p">.</span><span class="n">bodysnippet</span><span class="p">,</span>
+            <span class="k">new</span> <span class="nf">Uri</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="n">_feedServiceSettings</span><span class="p">.</span><span class="n">ArticleUrl</span><span class="p">,</span> <span class="n">article</span><span class="p">.</span><span class="n">slug</span><span class="p">)),</span>
+            <span class="n">article</span><span class="p">.</span><span class="n">articleid</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(),</span>
+            <span class="n">article</span><span class="p">.</span><span class="n">publisheddate</span><span class="p">);</span>
+        
+        <span class="n">item</span><span class="p">.</span><span class="n">Authors</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="nf">SyndicationPerson</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="n">article</span><span class="p">.</span><span class="n">authorname</span><span class="p">,</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="n">_feedServiceSettings</span><span class="p">.</span><span class="n">UserUrl</span><span class="p">,</span> <span class="n">article</span><span class="p">.</span><span class="n">user</span><span class="p">.</span><span class="n">username</span><span class="p">)));</span>
+        <span class="n">items</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="n">feed</span><span class="p">.</span><span class="n">Items</span> <span class="p">=</span> <span class="n">items</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">feed</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The feed itself is independent from the format (RSS or Atom). The classes that do the actual formatting are derived from the abstract SyndicationFeedFormatter class: Rss20FeedFormatter and Atom10FeedFormatter. The format is read from the config file so the application supports both formats.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="n">SyndicationFeedFormatter</span> <span class="nf">CreateFeedFormatter</span><span class="p">(</span><span class="n">SyndicationFeed</span> <span class="n">feed</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">feedFormat</span> <span class="p">=</span> <span class="n">_feedSettings</span><span class="p">.</span><span class="n">FeedFormat</span><span class="p">;</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="n">feedFormat</span><span class="p">.</span><span class="nf">ToLower</span><span class="p">())</span>
+    <span class="p">{</span>
+        <span class="k">case</span> <span class="s">"atom"</span><span class="p">:</span> <span class="k">return</span> <span class="k">new</span> <span class="nf">Atom10FeedFormatter</span><span class="p">(</span><span class="n">feed</span><span class="p">);</span>
+        <span class="k">case</span> <span class="s">"rss"</span><span class="p">:</span> <span class="k">return</span> <span class="k">new</span> <span class="nf">Rss20FeedFormatter</span><span class="p">(</span><span class="n">feed</span><span class="p">);</span>
+        <span class="k">default</span><span class="p">:</span> <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentException</span><span class="p">(</span><span class="s">"Unknown feed format"</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>and in the publisher service it gets the output feed:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">memStream</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MemoryStream</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">settings</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">XmlWriterSettings</span><span class="p">(){</span> <span class="n">Encoding</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span> <span class="p">};</span>
+<span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">writer</span> <span class="p">=</span> <span class="n">XmlWriter</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="n">memStream</span><span class="p">,</span> <span class="n">settings</span><span class="p">))</span>
+<span class="p">{</span>
+    <span class="n">feedFormatter</span><span class="p">.</span><span class="nf">WriteTo</span><span class="p">(</span><span class="n">writer</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>I added the output of the API call as a JSON file under samples. Also implemented a fake API client called OfflineFedClient. It reads the response from a file instead of actually making an API call. It comes in handy if you don’t have an Internet connection or a valid API key. To use it in offline mode you have to change the the line that creates the client from this</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FeedClient</span><span class="p">(</span><span class="n">configFactory</span><span class="p">.</span><span class="nf">GetApiSettings</span><span class="p">());</span>
+</code></pre></div></div>
+
+<p>to this</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">OfflineFeedClient</span><span class="p">(</span><span class="n">configFactory</span><span class="p">.</span><span class="nf">GetOfflineClientSettings</span><span class="p">());</span>
+</code></pre></div></div>
+
+<h2 id="lessons-learned--implementation-notes">Lessons learned / Implementation Notes</h2>
+<p>So since the motivation behind the project is to learn more about manipulating RSS by myself here’s a few things that I’ve learned and used:</p>
+
+<ul>
+  <li>I created an IAM account that has write-only access to the bucket the feed will be stored in. It works with default permissions which is private access. But since RSS reader service will need access to the feed I had to upload the file with public access, Apparently changing ACL requires different permissions, namely <strong>s3:PutObjectAcl</strong>. Weird thing is just replacing s3:PutObject with s3:PutObjectAcl didn’t work either. They had to be both allowed. So after a few retries the final policy shaped up to be like this:</li>
+</ul>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Stmt1418647210000"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"s3:PutObject"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"s3:PutObjectAcl"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"arn:aws:s3:::{BUCKET_NAME}/*"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<ul>
+  <li>In this implementation I used Visual Studio’s neat feature <strong>Paste JSON As Classes</strong>.</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2015/07/rss-paste-as-json.png" alt="Edit -&gt; Paste Special -&gt; Paste JSON As Classes"></p>
+
+<p>First I captured the API response with Fiddler. Then created a blank .cs file and using this option created the class to deserialize the response. Using strongly typed objects can easily be a daunting task if you are wrapping a whole API so I’d prefer to use dynamic objects like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="n">Execute</span><span class="p">&lt;</span><span class="kt">dynamic</span><span class="p">&gt;(</span><span class="n">request</span><span class="p">);</span>
+<span class="kt">var</span> <span class="n">latestArticles</span> <span class="p">=</span> <span class="p">((</span><span class="n">IEnumerable</span><span class="p">)</span> <span class="n">response</span><span class="p">.</span><span class="n">Data</span><span class="p">.</span><span class="n">payload</span><span class="p">.</span><span class="n">articles</span><span class="p">).</span><span class="n">Cast</span><span class="p">&lt;</span><span class="kt">dynamic</span><span class="p">&gt;()</span>
+                        <span class="p">.</span><span class="nf">OrderByDescending</span><span class="p">(</span><span class="n">a</span> <span class="p">=&gt;</span> <span class="n">a</span><span class="p">.</span><span class="n">publisheddate</span><span class="p">)</span>
+                        <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">a</span> <span class="p">=&gt;</span> <span class="k">new</span> 
+                        <span class="p">{</span> 
+                            <span class="n">slug</span> <span class="p">=</span> <span class="n">a</span><span class="p">.</span><span class="n">slug</span><span class="p">,</span>
+                            <span class="n">id</span> <span class="p">=</span> <span class="n">a</span><span class="p">.</span><span class="n">articleid</span><span class="p">,</span>
+                            <span class="n">title</span> <span class="p">=</span> <span class="n">a</span><span class="p">.</span><span class="n">title</span><span class="p">,</span>
+                            <span class="n">publishedDate</span> <span class="p">=</span> <span class="n">a</span><span class="p">.</span><span class="n">publisheddate</span><span class="p">,</span>
+                            <span class="n">ispublished</span> <span class="p">=</span> <span class="n">a</span><span class="p">.</span><span class="n">ispublished</span><span class="p">,</span>
+                            <span class="n">isvisible</span> <span class="p">=</span> <span class="n">a</span><span class="p">.</span><span class="n">ispubliclyvisile</span>
+                        <span class="p">});</span>
+</code></pre></div></div>
+
+<p>This works fine but the problem in this case was the hyphens in some of the JSON property names which are not supported in C#. I can get around it if I use the strongly typed objects and specify the property name explicitly, such as:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[JsonProperty("is-published?")]</span>
+<span class="k">public</span> <span class="kt">bool</span> <span class="n">ispublished</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<p>But I cannot do it in the dynamic version. I’ll put a pin into it and move on for now but have a feeling it will come back and haunt me in the future!</p>
+
+<ul>
+  <li>
+    <p>Default output of the RSS feed passes the validation but get 3 warnings. I’m sure they can be safely ignored but just of curiosity researched a little bit to see if I could pass with flying colors. Two of the three warnings were</p>
+
+    <p>line 1, column 39: Avoid Namespace Prefix: a10 [help]
+      ﻿<?xml version="1.0" encoding="utf-8"?>&lt;rss xmlns:a10=”http://www.w3.org/200 …</p>
+
+    <p>line 12, column 5302: Missing atom:link with rel=”self” [help]
+      … encompassing the Ch&lt;/description&gt;&lt;/item&gt;&lt;/channel&gt;&lt;/rss&gt;</p>
+  </li>
+</ul>
+
+<p>I found the solution on <a href="http://stackoverflow.com/questions/15678635/syndicationfeed-change-namespace-prefix-from-a10-to-atom" target="_blank" rel="noopener noreferrer">StackOverflow</a> (not surprisingly!)</p>
+
+<p>I made a few changes in the formatter factory</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">case</span> <span class="s">"rss"</span><span class="p">:</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">formatter</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Rss20FeedFormatter</span><span class="p">(</span><span class="n">feed</span><span class="p">);</span>
+    <span class="n">formatter</span><span class="p">.</span><span class="n">SerializeExtensionsAsAtom</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+    <span class="n">XNamespace</span> <span class="n">atom</span> <span class="p">=</span> <span class="s">"http://www.w3.org/2005/Atom"</span><span class="p">;</span>
+    <span class="n">feed</span><span class="p">.</span><span class="n">AttributeExtensions</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="nf">XmlQualifiedName</span><span class="p">(</span><span class="s">"atom"</span><span class="p">,</span> <span class="n">XNamespace</span><span class="p">.</span><span class="n">Xmlns</span><span class="p">.</span><span class="n">NamespaceName</span><span class="p">),</span> <span class="n">atom</span><span class="p">.</span><span class="n">NamespaceName</span><span class="p">);</span>
+    <span class="n">feed</span><span class="p">.</span><span class="n">ElementExtensions</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="nf">XElement</span><span class="p">(</span><span class="n">atom</span> <span class="p">+</span> <span class="s">"link"</span><span class="p">,</span> <span class="k">new</span> <span class="nf">XAttribute</span><span class="p">(</span><span class="s">"href"</span><span class="p">,</span> <span class="n">_feedSettings</span><span class="p">.</span><span class="n">FeedUrl</span><span class="p">),</span> <span class="k">new</span> <span class="nf">XAttribute</span><span class="p">(</span><span class="s">"rel"</span><span class="p">,</span> <span class="s">"self"</span><span class="p">),</span> <span class="k">new</span> <span class="nf">XAttribute</span><span class="p">(</span><span class="s">"type"</span><span class="p">,</span> <span class="s">"application/rss+xml"</span><span class="p">)));</span>
+    <span class="k">return</span> <span class="n">formatter</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>I liked the fact I only had to make changes in one place so the factory could return a customized formatter instead of the default one and the rest of the application didn’t care at all. But unfortunately the fix required the publish URL or the feed. I got around it by adding to FeedSettings in the config but now the S3 settings and Feed settings need to be changed at the same time.</p>
+
+<p>My idea was to make it like a pipeline so that the feed generator didn’t have to care how and where it’s published but this fix contradicted with that approach a little bit. Unfortunately it doesn’t look possible to use variables in the config files so that I could generate Feed.Url using the other settings.</p>
+
+<ul>
+  <li>The 3rd warning was encoding-related. If don’t explicitly specify the API uses ISO-8859-1 charset. I tried playing around a with a few headers to get the response  in UTF-8 but the solution came from a friend: Accept-Charset header. So adding the header fixed that issue as well:</li>
+</ul>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">request</span><span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"Accept-Charset"</span><span class="p">,</span> <span class="s">"UTF-8"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>The genereated Atom feed doesn’t pass the validation but I will handle it later on. Since Atom is a newer format I think I’ll go with that in the future but so far it’s good to know that it’s fairly easy to play with RSS/Atom feeds with C# so it was a fun experiment after all…</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/rss-feed-generator" target="_blank" rel="noopener noreferrer">Source code</a></li>
+  <li><a href="https://validator.w3.org/feed/" target="_blank" rel="noopener noreferrer">W3 Feed validator</a></li>
+  <li><a href="https://msdn.microsoft.com/en-us/library/system.servicemodel.syndication.syndicationfeed(v=vs.110).aspx" target="_blank" rel="noopener noreferrer">MSDN Reference: SyndicationFeed</a></li>
+  <li><a href="http://stackoverflow.com/questions/15678635/syndicationfeed-change-namespace-prefix-from-a10-to-atom" target="_blank" rel="noopener noreferrer">StackOverflow solution to fix RSS warnings</a></li>
+  <li><a href="http://nullprogram.com/blog/2013/09/23/" target="_blank" rel="noopener noreferrer">Blogpost: Atom vs. RSS</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2015/06/10/csharp-xml-serialization-tips/" title="Previous Post: 
+C# XML Serialization Tips">« C# XML Serialization Tips</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2015/07/22/disassembling-and-decompiling-dotnet-assemblies/" title="next Post: 
+Disassembling And Decompiling .NET Assemblies">Disassembling And Decompiling .NET Assemblies » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

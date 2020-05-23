@@ -1,0 +1,246 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Kinect - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2013/07/15/kinect/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Kinect</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-07-15T21:27:21+01:00" itemprop="datePublished">July 15, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- hobby, dev -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">kinect</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>I know they are about to release XBox One and they have already released Kinect for Windows but I still only have a Kinect for XBox for 360. I’m hoping to create a quick and sample application to test my Kinect and discover what’s in Kinect SDK so that I can remove it for a while from my gadgets-pending-to-be-tested-and-played-with list.</p>
+
+<p>Until I buy a better and more recent hardware I just decided to utilise my existing sensor. I followed Channel9’s video tutorials and here is the code to display a video output of the sensor on the screen:</p>
+
+<p><img src="/images/vpblogimg/2013/07/Xbox-360-Kinect-Standalone.png" alt="Xbox-360-Kinect-Standalone"></p>
+
+<p>Source code:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Windows</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Windows.Media</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Windows.Media.Imaging</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Microsoft.Kinect</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">KinectDemo</span>
+<span class="p">{</span>
+	<span class="k">public</span> <span class="k">partial</span> <span class="k">class</span> <span class="nc">MainWindow</span> <span class="p">:</span> <span class="n">Window</span>
+	<span class="p">{</span>
+		<span class="n">KinectSensor</span> <span class="n">_sensor</span><span class="p">;</span>
+
+		<span class="k">public</span> <span class="nf">MainWindow</span><span class="p">()</span>
+		<span class="p">{</span>
+			<span class="nf">InitializeComponent</span><span class="p">();</span>
+		<span class="p">}</span>
+
+		<span class="k">private</span> <span class="k">void</span> <span class="nf">Button_Click</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">RoutedEventArgs</span> <span class="n">e</span><span class="p">)</span>
+		<span class="p">{</span>
+			
+		<span class="p">}</span>
+
+		<span class="k">private</span> <span class="k">void</span> <span class="nf">Window_Loaded</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">RoutedEventArgs</span> <span class="n">e</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">KinectSensor</span><span class="p">.</span><span class="n">KinectSensors</span><span class="p">.</span><span class="n">Count</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="n">_sensor</span> <span class="p">=</span> <span class="n">KinectSensor</span><span class="p">.</span><span class="n">KinectSensors</span><span class="p">[</span><span class="m">0</span><span class="p">];</span>
+
+				<span class="k">if</span> <span class="p">(</span><span class="n">_sensor</span><span class="p">.</span><span class="n">Status</span> <span class="p">==</span> <span class="n">KinectStatus</span><span class="p">.</span><span class="n">Connected</span><span class="p">)</span>
+				<span class="p">{</span>
+					<span class="n">_sensor</span><span class="p">.</span><span class="n">ColorStream</span><span class="p">.</span><span class="nf">Enable</span><span class="p">();</span>
+					<span class="n">_sensor</span><span class="p">.</span><span class="n">DepthStream</span><span class="p">.</span><span class="nf">Enable</span><span class="p">();</span>
+					<span class="n">_sensor</span><span class="p">.</span><span class="n">SkeletonStream</span><span class="p">.</span><span class="nf">Enable</span><span class="p">();</span>
+					<span class="n">_sensor</span><span class="p">.</span><span class="n">AllFramesReady</span> <span class="p">+=</span> <span class="n">_sensor_AllFramesReady</span><span class="p">;</span>
+					<span class="n">_sensor</span><span class="p">.</span><span class="nf">Start</span><span class="p">();</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+
+		<span class="k">void</span> <span class="nf">_sensor_AllFramesReady</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">AllFramesReadyEventArgs</span> <span class="n">e</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="k">using</span> <span class="p">(</span><span class="n">ColorImageFrame</span> <span class="n">colorFrame</span> <span class="p">=</span> <span class="n">e</span><span class="p">.</span><span class="nf">OpenColorImageFrame</span><span class="p">())</span>
+			<span class="p">{</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">colorFrame</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+				<span class="p">{</span>
+					<span class="k">return</span><span class="p">;</span>
+				<span class="p">}</span>
+
+				<span class="kt">byte</span><span class="p">[]</span> <span class="n">pixels</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="p">[</span><span class="n">colorFrame</span><span class="p">.</span><span class="n">PixelDataLength</span><span class="p">];</span>
+				<span class="n">colorFrame</span><span class="p">.</span><span class="nf">CopyPixelDataTo</span><span class="p">(</span><span class="n">pixels</span><span class="p">);</span>
+
+				<span class="kt">int</span> <span class="n">stride</span> <span class="p">=</span> <span class="n">colorFrame</span><span class="p">.</span><span class="n">Width</span> <span class="p">*</span> <span class="m">4</span><span class="p">;</span>
+				<span class="n">image1</span><span class="p">.</span><span class="n">Source</span> <span class="p">=</span> <span class="n">BitmapSource</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="n">colorFrame</span><span class="p">.</span><span class="n">Width</span><span class="p">,</span> <span class="n">colorFrame</span><span class="p">.</span><span class="n">Height</span><span class="p">,</span> <span class="m">96</span><span class="p">,</span> <span class="m">96</span><span class="p">,</span> <span class="n">PixelFormats</span><span class="p">.</span><span class="n">Bgr32</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="n">pixels</span><span class="p">,</span> <span class="n">stride</span><span class="p">);</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+
+		<span class="k">void</span> <span class="nf">StopKinect</span><span class="p">(</span><span class="n">KinectSensor</span> <span class="n">sensor</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">sensor</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="n">sensor</span><span class="p">.</span><span class="nf">Stop</span><span class="p">();</span>
+				<span class="n">sensor</span><span class="p">.</span><span class="n">AudioSource</span><span class="p">.</span><span class="nf">Stop</span><span class="p">();</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+
+		<span class="k">private</span> <span class="k">void</span> <span class="nf">Window_Closing</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">System</span><span class="p">.</span><span class="n">ComponentModel</span><span class="p">.</span><span class="n">CancelEventArgs</span> <span class="n">e</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="nf">StopKinect</span><span class="p">(</span><span class="n">_sensor</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>I think for this amount of code and the simplicity it is a pretty good result:</p>
+
+<p>Video:</p>
+<iframe src="//www.youtube.com/embed/xYAwSrCaJkQ" frameborder="0" width="560" height="315"></iframe>
+
+<p>Probably I will continue my conquest of Kinect after I get the latest one, but for now I’ll just call it.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://channel9.msdn.com/Series/KinectQuickstart" target="_blank" rel="noopener noreferrer">Channel 9 Kinect QuickStart series</a></li>
+  <li><a href="http://www.microsoft.com/en-us/kinectforwindows" target="_blank" rel="noopener noreferrer">Official site</a></li>
+  <li><a href="https://kinectmouse.codeplex.com" target="_blank" rel="noopener noreferrer">Kinect Mouse Application</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2013/07/13/msp430-launchpad/" title="Previous Post: 
+MSP430 LaunchPad">« MSP430 LaunchPad</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2013/07/22/customizing-phone-with-nfc-task-launcher/" title="next Post: 
+Customizing phone with NFC Task Launcher">Customizing phone with NFC Task Launcher » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

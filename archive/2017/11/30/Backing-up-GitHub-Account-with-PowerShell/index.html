@@ -1,0 +1,261 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Backing up GitHub Account with PowerShell - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2017/11/30/Backing-up-GitHub-Account-with-PowerShell/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Backing up GitHub Account with PowerShell</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2017-11-30T06:00:00+00:00" itemprop="datePublished">November 30, 2017</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- devops -->
+
+
+
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags">git, powershell</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>Having lots of projects and assets stored on GitHub I thought it might be a good idea to create periodical backups of my entire GitHub account (all repositories, both public and private). The beauty of it is since Git is open source, this way I can migrate my account to anywhere and even host it on my own server on AWS.</p>
+
+<h2 id="challenges">Challenges</h2>
+<p>With the above goal in mind, I started to outline what’s necessary to achieve this task:</p>
+
+<ol>
+  <li>Automate calling GitHub API to get all repos including private ones. (Of course one should be aware of <a href="https://developer.github.com/v3/#rate-limiting" target="_blank" rel="noopener noreferrer">GitHub API rate limits</a> which is currently 5000 requests per hour. If you use up all your allowance with your scripts you may not be able to use it yourself. Good thing is they are returning how many calls are left before you exceed your quota in <em>x-ratelimit-remaining</em> HTTP header in their responses.)</li>
+  <li>Pull all the latest versions for all branches. Overwrite local versions in cases of conflict.</li>
+  <li>Find a way to easily transfer a git repository (A compressed single file version rather than individual files) if transferring to another medium is required (such as an S3 bucket)</li>
+</ol>
+
+<p>With these challenges ahead, I first started looking into getting the repos from GitHub:</p>
+
+<h2 id="consuming-github-api-via-powershell">Consuming GitHub API via PowerShell</h2>
+<p>First, I shopped around for existing libraries for this task (such as <a href="https://github.com/PowerShell/PowerShellForGitHub" target="_blank" rel="noopener noreferrer">PowerShellForGitHub</a> by Microsoft but it didn’t work for me. Basically I couldn’t even manage the samples on their Wiki. It kept giving cmdlet not found error so I gave up.)</p>
+
+<p>Found a nice <a href="https://channel9.msdn.com/Blogs/trevor-powershell/Automating-the-GitHub-REST-API-Using-PowerShell" target="_blank" rel="noopener noreferrer">video on Channel 9</a> about consuming REST APIs via PowerShell which uses GitHub API as a case study. It was perfect for me as my goal was to use GitHub API anyway. And since this is a generic approach to consume APIs it can come handy in the future as well. It’s quite easy using basic authentication.</p>
+
+<h3 id="authorization">Authorization</h3>
+<p>First step, is to create a <a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer">Personal Access Token</a> with repo scope. (Make sure to copy the value before you close the page, there is no way to retrieve it afterwards.)</p>
+
+<p>After the access token has been obtained, I had to generate authorization header as shown in the Channel 9 video:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$token = '&lt;YOUR GITHUB ACCOUNT NAME&gt;:&lt;PERSONAL ACCESS TOKEN&gt;'
+$base64Token = [System.Convert]::ToBase64String([char[]]$token)
+$headers = @{
+    Authorization = 'Basic {0}' -f $base64Token
+};
+
+$response = Invoke-RestMethod -Headers $headers -Uri https://api.github.com/user/repos
+</code></pre></div></div>
+
+<p>This way I was able to get the repositories including the private ones but by default it returns 30 records on a page so I had to traverse over the pages .</p>
+
+<h3 id="handling-pagination">Handling pagination</h3>
+<p>GitHub sends the next and the last page URLs in link header:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;https://api.github.com/user/repos?page=2&gt;; rel="next", &lt;https://api.github.com/user/repos?page=3&gt;; rel="last"
+</code></pre></div></div>
+
+<p>The challenge here is that 	looks like Invoke-RestMethod response doesn’t allow to access headers which is a huge bummer as there are useful info in the headers as shown in the screenshot:</p>
+
+<p><img src="/images/vpblogimg/2017/11/github-api-response-headers.png" alt="GitHub response headers in Postman"></p>
+
+<p>At this point, I wanted to use <a href="https://github.com/pcgeek86/PSGitHub" target="_blank" rel="noopener noreferrer">PSGitHub</a> mentioned in the video but as of this writing it doesn’t support getting all repositories. In fact in a note it says “<em>We need to figure out how to handle data pagination</em>” which made me think we are on the same page here (no pun intended!)</p>
+
+<p>GitHub supports a page size parameter (e.g. per_page=50) but the documentation says the maximum value is 100. Although it is tempting to use that one as that would bring all my repos and leave some room for the future ones as well I wanted to go with a more permanent solution. So I decided to request more pages as longs as there are objects returning like this</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$page = 1
+
+Do
+{
+    $response = Invoke-RestMethod -Headers $headers -Uri "https://api.github.com/user/repos?page=$page"
+    
+    foreach ($obj in $response)
+    {
+        Write-Host ($obj.id)
+    }
+    
+    $page = $page + 1
+}
+While ($response.Count -gt 0)
+</code></pre></div></div>
+
+<p>Now in the foreach loop of course  I have to do something with the repo information instead of just printing the id.</p>
+
+<h3 id="cloning--pulling-repositories">Cloning / pulling repositories</h3>
+<p>At this point I was able to get all my repositories. GitHub API only handles account information so now I needed to able to run actual git commands to get my code.</p>
+
+<p>First I had installed PowerShell on Mac which is quite simple as specified in the documentation:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew tap caskroom/cask
+brew cask install powershell
+</code></pre></div></div>
+
+<p>With Git already installed on my machine, all is left was using Git commands to clone or update repo on PowerShell terminal such as:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git fetch --all
+git reset --hard origin/master
+</code></pre></div></div>
+
+<p>Since this is just going to be a backup copy I don’t want to deal with merge conflicts and just overwriting everything local.</p>
+
+<p>Another approach could be deleting the old repo and cloning it from scratch but I think this would be a bit wasteful to do it everytime for each and every repository.</p>
+
+<h2 id="putting-it-all-together">Putting it all together</h2>
+<p>Now that I have all the bits and pieces I have glue them together in a meaningful script than can be scheduled and here it is:</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/0309dd02703c6b5d9a73859ac2abf2d8.js"> </script>
+
+<h2 id="conclusion-and-future-improvements">Conclusion and Future Improvements</h2>
+<p>This version accomplishes the basic task of backing up an entire GitHub account but it can be improved in a few ways. Maybe I can post a follow up article including those improvements. A few ideas come to mind are:</p>
+
+<ul>
+  <li>Get Gists (private and public) as well.</li>
+  <li>Add option to exclude repos by name or by type (i.e. get only private ones or get all except repo123)</li>
+  <li>Add an option to export them to a “non-git” medium such as an S3 bucket using git bundle (which turns out to be a great tool to pack everything in a repository in a single file)</li>
+  <li>Create a Docker image that contains all the necessary software (Git, PowerShell, backup script etc) so that it can be distributed without any setup requirements.</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://channel9.msdn.com/Blogs/trevor-powershell/Automating-the-GitHub-REST-API-Using-PowerShell" target="_blank" rel="noopener noreferrer">Channel9 video on using GitHub API with PowerShell</a></li>
+  <li><a href="https://developer.github.com/v3/" target="_blank" rel="noopener noreferrer">GitHub API Documentation</a></li>
+  <li><a href="https://developer.github.com/v3/guides/traversing-with-pagination/" target="_blank" rel="noopener noreferrer">Traversing with Pagination</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/invoke-restmethod?view=powershell-5.1" target="_blank" rel="noopener noreferrer">PowerShell Invoke-RestMethod documentation</a></li>
+  <li><a href="https://github.com/pcgeek86/PSGitHub" target="_blank" rel="noopener noreferrer">PSGitHub Repository</a></li>
+  <li>​<a href="https://github.com/PowerShell/PowerShell/blob/master/docs/installation/linux.md#macos-1012" target="_blank" rel="noopener noreferrer">Installing PowerShell on Mac</a>
+</li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2017/11/20/Backing-up-MySQL-To-AWS-S3-with-Powershell/" title="Previous Post: 
+Backing Up MySQL to AWS S3 with PowerShell">« Backing Up MySQL to AWS S3 with PowerShell</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2017/12/12/Playing-with-Google-Speech-API/" title="next Post: 
+Playing with Google Speech API">Playing with Google Speech API » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

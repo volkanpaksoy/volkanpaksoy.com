@@ -1,0 +1,260 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Inner-workings of TempData in ASP.NET MVC 5 - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2015/09/14/innerworkings-of-tempdata-in-aspnet-mvc5/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Inner-workings of TempData in ASP.NET MVC 5</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-09-14T12:30:00+01:00" itemprop="datePublished">September 14, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp, asp_net, mvc</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>In ASP.NET, TempData is one of the mechanisms used to pass data from controller to the view. In this post I’ll dive into its source code to investigate its behaviour.</p>
+
+<h3 id="what-is-tempdata">What is TempData</h3>
+<p>TempData is an instance of <em>TempDataDictionary</em> that is used to pass data from the controller to the view.</p>
+
+<h3 id="lifespan">Lifespan</h3>
+<p>The lifespan of TempData is rather unusual: It lives for one request only. In order to achieve this it maintains two HashSets to manage keys as well as the data dictionary:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span> <span class="n">_data</span><span class="p">;</span>
+<span class="k">private</span> <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">_initialKeys</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="n">StringComparer</span><span class="p">.</span><span class="n">OrdinalIgnoreCase</span><span class="p">);</span>
+<span class="k">private</span> <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">_retainedKeys</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="n">StringComparer</span><span class="p">.</span><span class="n">OrdinalIgnoreCase</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>When we read some data using an indexer or TryGetValue method it removes that key from _initalKeys collection.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="kt">bool</span> <span class="nf">TryGetValue</span><span class="p">(</span><span class="kt">string</span> <span class="n">key</span><span class="p">,</span> <span class="k">out</span> <span class="kt">object</span> <span class="k">value</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">_initialKeys</span><span class="p">.</span><span class="nf">Remove</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">_data</span><span class="p">.</span><span class="nf">TryGetValue</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="k">out</span> <span class="k">value</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The actual dictionary that holds the data is intact at this point. That’s why we can read same data consecutively without any issues. It only removes the key from <em>_initialKeys</em> collection, basically marking it to be deleted when the data is persisted.</p>
+
+<h3 id="peek-and-keep">Peek and keep</h3>
+<p>If we want the values in TempData last longer we can use Peek and Keep methods. What <em>Peek</em> does is return the value without removing it from the _initialKeys:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="kt">object</span> <span class="nf">Peek</span><span class="p">(</span><span class="kt">string</span> <span class="n">key</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">object</span> <span class="k">value</span><span class="p">;</span>
+    <span class="n">_data</span><span class="p">.</span><span class="nf">TryGetValue</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="k">out</span> <span class="k">value</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">value</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Alternatively, we can call <em>Keep</em> method. Similarly it doesn’t manipulate the data directly but just marks the key to be persisted by adding it to the <em>_retainedKeys</em> collection.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">Keep</span><span class="p">(</span><span class="kt">string</span> <span class="n">key</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">_retainedKeys</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Parameterless overload of Keep method add all keys in the _data dictionary to _retainedKeys.</p>
+
+<h3 id="which-keys-to-persist">Which keys to persist</h3>
+<p>So as seen above when we get values and call Peek/Keep methods, operations are carried out on <em>_initialKeys</em> and <em>_retainedKeys</em> collections and nothing happens to the actual data. These operations take effect when the _data is actually saved:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">Save</span><span class="p">(</span><span class="n">ControllerContext</span> <span class="n">controllerContext</span><span class="p">,</span> <span class="n">ITempDataProvider</span> <span class="n">tempDataProvider</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">_data</span><span class="p">.</span><span class="nf">RemoveFromDictionary</span><span class="p">((</span><span class="n">KeyValuePair</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span> <span class="n">entry</span><span class="p">,</span> <span class="n">TempDataDictionary</span> <span class="n">tempData</span><span class="p">)</span> <span class="p">=&gt;</span>
+        <span class="p">{</span>
+            <span class="kt">string</span> <span class="n">key</span> <span class="p">=</span> <span class="n">entry</span><span class="p">.</span><span class="n">Key</span><span class="p">;</span>
+            <span class="k">return</span> <span class="p">!</span><span class="n">tempData</span><span class="p">.</span><span class="n">_initialKeys</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> 
+                <span class="p">&amp;&amp;</span> <span class="p">!</span><span class="n">tempData</span><span class="p">.</span><span class="n">_retainedKeys</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+        <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
+
+    <span class="n">tempDataProvider</span><span class="p">.</span><span class="nf">SaveTempData</span><span class="p">(</span><span class="n">controllerContext</span><span class="p">,</span> <span class="n">_data</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Before the data is passed on to the provider it’s pruned. The keys that don’t exist in the _retainedKeys (the keys we explicitly told to keep) and _initialKeys (the keys that have not been touched so far or accessed through Peek method) collections are removed.</p>
+
+<h3 id="providers">Providers</h3>
+<p>By default, TempData uses session variables to persist data from one request to the next. Serializing and deserializing data is carried out via an object implementing <em>ITempDataProvider</em>. By default SessionStateTempDataProvider class is used to provide this functionality. It occurs in the CreateTempDataProvider method in Controller.cs class:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">protected</span> <span class="k">virtual</span> <span class="n">ITempDataProvider</span> <span class="nf">CreateTempDataProvider</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">Resolver</span><span class="p">.</span><span class="n">GetService</span><span class="p">&lt;</span><span class="n">ITempDataProvider</span><span class="p">&gt;()</span> <span class="p">??</span> <span class="k">new</span> <span class="nf">SessionStateTempDataProvider</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This also means we can replace the provider with our own custom class. For demonstration purposes I wrote my own provider which uses a simple text file to persist TempData:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">TextFileTempDataProvider</span> <span class="p">:</span> <span class="n">ITempDataProvider</span>
+<span class="p">{</span>
+    <span class="k">internal</span> <span class="k">readonly</span> <span class="kt">string</span> <span class="n">FileName</span> <span class="p">=</span> <span class="n">Path</span><span class="p">.</span><span class="nf">Combine</span><span class="p">(</span><span class="n">HttpContext</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Server</span><span class="p">.</span><span class="nf">MapPath</span><span class="p">(</span><span class="s">@"~/App_Data"</span><span class="p">),</span> <span class="s">@"TempData.txt"</span><span class="p">);</span>
+
+    <span class="k">public</span> <span class="n">IDictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span> <span class="nf">LoadTempData</span><span class="p">(</span><span class="n">ControllerContext</span> <span class="n">controllerContext</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">File</span><span class="p">.</span><span class="nf">Exists</span><span class="p">(</span><span class="n">FileName</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="kt">string</span> <span class="n">json</span> <span class="p">=</span> <span class="n">File</span><span class="p">.</span><span class="nf">ReadAllText</span><span class="p">(</span><span class="n">FileName</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">Newtonsoft</span><span class="p">.</span><span class="n">Json</span><span class="p">.</span><span class="n">JsonConvert</span><span class="p">.</span><span class="n">DeserializeObject</span><span class="p">&lt;</span><span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;&gt;(</span><span class="n">json</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;(</span><span class="n">StringComparer</span><span class="p">.</span><span class="n">OrdinalIgnoreCase</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">SaveTempData</span><span class="p">(</span><span class="n">ControllerContext</span> <span class="n">controllerContext</span><span class="p">,</span> <span class="n">IDictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span> <span class="n">values</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">string</span> <span class="n">json</span> <span class="p">=</span> <span class="n">Newtonsoft</span><span class="p">.</span><span class="n">Json</span><span class="p">.</span><span class="n">JsonConvert</span><span class="p">.</span><span class="nf">SerializeObject</span><span class="p">(</span><span class="n">values</span><span class="p">);</span>
+        <span class="n">File</span><span class="p">.</span><span class="nf">WriteAllText</span><span class="p">(</span><span class="n">FileName</span><span class="p">,</span> <span class="n">json</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In order to use this class it needs to be assigned to TempDataProvider in the controller’s constructor</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="nf">FirstController</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">TempDataProvider</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TextFileTempDataProvider</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Of course it’s not a bright idea to use disk for such operations, this is just for demonstration purposes and makes it easier to observe the behaviour.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>Often times I’ve found knowledge about the internals of a construct useful. Applications and frameworks are getting more complex each day, adding more layers and hiding the complexity from the consumers. It’s great because we can focus on the actual business logic and application we are building but when we get stuck it takes quite a while to figure out what’s going on. Having in-depth knowledge on the internals can save a lot if time.</p>
+
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2015/08/19/continuous-integration-with-tfs-2015-express/" title="Previous Post: 
+Continuous Integration with TFS Express 2015 from scratch">« Continuous Integration with TFS Express 2015 from scratch</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2015/09/18/from-json-to-neo4j/" title="next Post: 
+From JSON to Neo4J">From JSON to Neo4J » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

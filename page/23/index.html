@@ -1,0 +1,502 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/23/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/10/01/creating-pdfs-from-images-with-csharp-and-wpf/" itemprop="url">Creating PDFs from Images with C# and WPF</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-10-01T00:00:00+01:00" itemprop="datePublished">October  1, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp, wpf</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I like scanning all my documents and keep a digital version as well as the dead-tree version just in case. But storing the documents as individual image files is too messy. There are various solutions to merge image files into a single PDF but I don’t want to upload my sensitive documents to unknown parties so I rolled my own: <a href="https://github.com/volkanpaksoy/image2pdf" target="_blank" rel="noopener noreferrer">Image2PDF</a></p>
+
+<h2 id="implementation">Implementation</h2>
+<p>I decided to go with a WPF application rathen than a web-based solution because it would be unnecessary to upload a bunch of image files to cloud and download the PDF back. It’s a lot of network traffic for something that can be handled locally much faster.</p>
+
+<p>Image2PDF a simple WPF application developed in C#. I’ve used <a href="http://sourceforge.net/projects/itextsharp" target="_blank" rel="noopener noreferrer">iTextSharp</a> library to create the PDFs. It’s a great open-source library with lots of capabilities.</p>
+
+<p>I’ve also started using <a href="https://www.syncfusion.com/products/wpf" target="_blank" rel="noopener noreferrer">SyncFusion WPF control library</a> recently. The entire control suite is free of charge (which is always a great price!). It has a Wizard control which I decided to go with. I think using a wizard and is cleaner UI instead of dumping every control on one window.</p>
+
+<h2 id="usage">Usage</h2>
+<p>As you might expect you provide the list of input images, re-order them if needed, choose the path for the output folder and go!</p>
+
+<p>Step 1: Select input</p>
+
+<p><img src="/images/vpblogimg/2015/09/image2pdf-page1.png" alt="Page 1: Specify input image files"></p>
+
+<p>Step 2: Select output</p>
+
+<p><img src="/images/vpblogimg/2015/09/image2pdf-page2.png" alt="Page 2: Specify output PDF path"></p>
+
+<p>Step 3: Go!</p>
+
+<p><img src="/images/vpblogimg/2015/09/image2pdf-page3.png" alt="Page 3: Run!"></p>
+
+<p>Simples!</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>In the future I’m planning to add various PDF operarions and enhance the functionality but since shipping is a feature I’ll limit the scope for now. After all, this was the main feature I needed anyway.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/image2pdf" target="_blank" rel="noopener noreferrer">Source code</a></li>
+  <li><a href="http://sourceforge.net/projects/itextsharp/" target="_blank" rel="noopener noreferrer">iTextSharp project page</a></li>
+  <li><a href="https://www.syncfusion.com/products/wpf" target="_blank" rel="noopener noreferrer">SyncFusion Essential Studio for WPF</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/09/18/from-json-to-neo4j/" itemprop="url">From JSON to Neo4J</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-09-18T16:30:00+01:00" itemprop="datePublished">September 18, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp, neo4j, cypher, json</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I have a simple JSON file that contained a bunch of users with their followers which looked like this:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"user-id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user_2"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"URL"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"following"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"user_10"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"user_6"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"user_1"</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"followers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"user_10"</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>It felt like a good exercise would be to import that data into a graph database as it wasn’t something I had done before.</p>
+
+<p>As my go-to language is C# and I had some experience with Cypher before, my initial instinct was to develop a tool to generate Cypher statements from the JSON.</p>
+
+<p>First I create the nodes:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="k">void</span> <span class="nf">GenerateNodesCypher</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">filename</span> <span class="p">=</span> <span class="s">@"..\..\output\nodes.cql"</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">output</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringBuilder</span><span class="p">();</span>
+
+    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">user</span> <span class="k">in</span> <span class="n">_userList</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">string</span> <span class="n">s</span> <span class="p">=</span> <span class="s">$"CREATE (</span><span class="p">{</span><span class="n">user</span><span class="p">.</span><span class="n">username</span><span class="p">}</span><span class="s">:User </span><span class="p">{{</span> <span class="n">userid</span><span class="p">:</span> <span class="p">{</span><span class="n">user</span><span class="p">.</span><span class="n">userid</span><span class="p">}</span> <span class="p">,</span> <span class="n">username</span><span class="p">:</span> <span class="err">'</span><span class="p">{</span><span class="n">user</span><span class="p">.</span><span class="n">username</span><span class="p">}</span><span class="err">'</span><span class="p">,</span> <span class="n">avatar</span><span class="p">:</span> <span class="err">'</span><span class="p">{</span><span class="n">user</span><span class="p">.</span><span class="n">avatar</span><span class="p">}</span><span class="err">'</span>  <span class="p">}}</span><span class="s"> ); "</span><span class="p">;</span>
+        <span class="n">output</span><span class="p">.</span><span class="nf">AppendLine</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">File</span><span class="p">.</span><span class="nf">WriteAllText</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">output</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>and then the relationships:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="k">void</span> <span class="nf">GenerateRelationshipsCypher</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">filename</span> <span class="p">=</span> <span class="s">@"..\..\output\relationships.cql"</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">output</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringBuilder</span><span class="p">();</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">user</span> <span class="k">in</span> <span class="n">_userList</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">following</span> <span class="k">in</span> <span class="n">user</span><span class="p">.</span><span class="n">following</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">string</span> <span class="n">s</span> <span class="p">=</span> <span class="s">$"MATCH (a), (b) WHERE a.username = '</span><span class="p">{</span><span class="n">user</span><span class="p">.</span><span class="n">username</span><span class="p">}</span><span class="s">' AND b.username = '</span><span class="p">{</span><span class="n">following</span><span class="p">}</span><span class="s">' CREATE (a)-[:FOLLOWING]-&gt;(b); "</span><span class="p">;</span>
+            <span class="n">output</span><span class="p">.</span><span class="nf">AppendLine</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+            <span class="n">n</span><span class="p">++;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">File</span><span class="p">.</span><span class="nf">WriteAllText</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">output</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>So I ended up with two cql files that looked like this</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE (user_1:User { userid: 1 , username: 'user_1', avatar: 'URL' }); 
+CREATE (user_2:User { userid: 2 , username: 'user_2', avatar: 'URL' }); 
+CREATE (user_3:User { userid: 3 , username: 'user_3', avatar: 'URL' }); 
+</code></pre></div></div>
+
+<p>and</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (a), (b) WHERE a.username = 'user_1' AND b.username = 'user_26' CREATE (a)-[:FOLLOWING]-&gt;(b); 
+MATCH (a), (b) WHERE a.username = 'user_1' AND b.username = 'user_53' CREATE (a)-[:FOLLOWING]-&gt;(b); 
+MATCH (a), (b) WHERE a.username = 'user_2' AND b.username = 'user_6' CREATE (a)-[:FOLLOWING]-&gt;(b); 
+</code></pre></div></div>
+
+<p>and I used neo4j-shell to execute the files and import the data. But it was no bed of roses. I’ll list the problems I faced along the way and how I got around them so that this experience might be helpful for other people as well:</p>
+
+<h2 id="issues-along-the-way-and-lessons-learned">Issues along the way and lessons learned</h2>
+
+<h3 id="running-multiple-statements-on-neo4j-browser">Running multiple statements on Neo4J browser</h3>
+<p>First I tried to run the create statements using the Neo4J browser which turned out to be problematic because it cannot run multiple statements that end with semi-colons. So I removed the semi-colons but then it started giving me this error</p>
+
+<blockquote>
+  <p>WITH is required between CREATE and MATCH</p>
+</blockquote>
+
+<p>I found a workaround for that on <a href="http://stackoverflow.com/questions/21778435/multiple-unrelated-queries-in-neo4j-cypher" target="_blank" rel="noopener noreferrer">SO</a>. So the following works:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (a), (b) WHERE a.username = 'user_1' AND b.username = 'user_14' CREATE (a)-[:FOLLOWING]-&gt;(b); 
+WITH 1 as dummy
+MATCH (a), (b) WHERE a.username = 'user_1' AND b.username = 'user_22' CREATE (a)-[:FOLLOWING]-&gt;(b); 
+</code></pre></div></div>
+
+<p>Now the problem was, if the data was a bit dirty, for instance if user_14 didn’t exist, it stopped executing the rest and no other relationships were created). I had a few nodes like that so this method didn’t work for me after all.</p>
+
+<h3 id="starting-the-shell-was-not-as-easy-as-id-imagined">Starting the shell was not as easy as I’d imagined</h3>
+<p>I installed Neo4J using the default settings and to start the shell just navigated to that directory and ran the batch file. Got an error instead of my shell:</p>
+
+<blockquote>
+  <p>C:\Program Files\Neo4j Community\bin&gt;Neo4jShell.bat</p>
+</blockquote>
+
+<blockquote>
+  <p>The system cannot find the path specified.</p>
+</blockquote>
+
+<blockquote>
+  <p>Error: Could not find or load main class org.neo4j.shell.StartClient</p>
+</blockquote>
+
+<p>Apparently the way to run the shell is using the Neo4J server application and clicking <em>Options</em> -&gt; <em>Command Prompt</em></p>
+
+<p><img src="/images/vpblogimg/2015/09/from-json-to-neo4j-command-prompt.png" alt="Neo4J command prompt"></p>
+
+<p>This launches the Neo4J Command Prompt then the rest is easy:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>neo4jshell -file nodes.cql
+
+neo4jshell -file relationships.cql
+</code></pre></div></div>
+
+<h3 id="exiting-with-unterminated-multi-line-input">“Exiting with unterminated multi-line input”</h3>
+<p>Final issue was the statements in a sql file must be terminated with a semi-colon in order for the shell to execute them. Otherwise it gives the above warning and quits</p>
+
+<p>So after all this hassle my data is in the Neo4J database ready to be queried to death!:</p>
+
+<p><img src="/images/vpblogimg/2015/09/from-json-to-neo4j-final-database.png" alt=""></p>
+
+<p>Next I’ll investigate converting the data into CSV and achieve the same results by using LOAD CSV command and look into visualization of this data.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://stackoverflow.com/questions/21778435/multiple-unrelated-queries-in-neo4j-cypher" target="_blank" rel="noopener noreferrer">Workaround for running multiple statements on Neo4J browser</a></li>
+  <li><a href="http://neo4j.com/docs/stable/query-load-csv.html" target="_blank" rel="noopener noreferrer">Neo4J documentation for LOAD CSV</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/09/14/innerworkings-of-tempdata-in-aspnet-mvc5/" itemprop="url">Inner-workings of TempData in ASP.NET MVC 5</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-09-14T12:30:00+01:00" itemprop="datePublished">September 14, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp, asp_net, mvc</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>In ASP.NET, TempData is one of the mechanisms used to pass data from controller to the view. In this post I’ll dive into its source code to investigate its behaviour.</p>
+
+<h3 id="what-is-tempdata">What is TempData</h3>
+<p>TempData is an instance of <em>TempDataDictionary</em> that is used to pass data from the controller to the view.</p>
+
+<h3 id="lifespan">Lifespan</h3>
+<p>The lifespan of TempData is rather unusual: It lives for one request only. In order to achieve this it maintains two HashSets to manage keys as well as the data dictionary:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span> <span class="n">_data</span><span class="p">;</span>
+<span class="k">private</span> <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">_initialKeys</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="n">StringComparer</span><span class="p">.</span><span class="n">OrdinalIgnoreCase</span><span class="p">);</span>
+<span class="k">private</span> <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">_retainedKeys</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="n">StringComparer</span><span class="p">.</span><span class="n">OrdinalIgnoreCase</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>When we read some data using an indexer or TryGetValue method it removes that key from _initalKeys collection.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="kt">bool</span> <span class="nf">TryGetValue</span><span class="p">(</span><span class="kt">string</span> <span class="n">key</span><span class="p">,</span> <span class="k">out</span> <span class="kt">object</span> <span class="k">value</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">_initialKeys</span><span class="p">.</span><span class="nf">Remove</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">_data</span><span class="p">.</span><span class="nf">TryGetValue</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="k">out</span> <span class="k">value</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The actual dictionary that holds the data is intact at this point. That’s why we can read same data consecutively without any issues. It only removes the key from <em>_initialKeys</em> collection, basically marking it to be deleted when the data is persisted.</p>
+
+<h3 id="peek-and-keep">Peek and keep</h3>
+<p>If we want the values in TempData last longer we can use Peek and Keep methods. What <em>Peek</em> does is return the value without removing it from the _initialKeys:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="kt">object</span> <span class="nf">Peek</span><span class="p">(</span><span class="kt">string</span> <span class="n">key</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">object</span> <span class="k">value</span><span class="p">;</span>
+    <span class="n">_data</span><span class="p">.</span><span class="nf">TryGetValue</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="k">out</span> <span class="k">value</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">value</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Alternatively, we can call <em>Keep</em> method. Similarly it doesn’t manipulate the data directly but just marks the key to be persisted by adding it to the <em>_retainedKeys</em> collection.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">Keep</span><span class="p">(</span><span class="kt">string</span> <span class="n">key</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">_retainedKeys</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Parameterless overload of Keep method add all keys in the _data dictionary to _retainedKeys.</p>
+
+<h3 id="which-keys-to-persist">Which keys to persist</h3>
+<p>So as seen above when we get values and call Peek/Keep methods, operations are carried out on <em>_initialKeys</em> and <em>_retainedKeys</em> collections and nothing happens to the actual data. These operations take effect when the _data is actually saved:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">Save</span><span class="p">(</span><span class="n">ControllerContext</span> <span class="n">controllerContext</span><span class="p">,</span> <span class="n">ITempDataProvider</span> <span class="n">tempDataProvider</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">_data</span><span class="p">.</span><span class="nf">RemoveFromDictionary</span><span class="p">((</span><span class="n">KeyValuePair</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span> <span class="n">entry</span><span class="p">,</span> <span class="n">TempDataDictionary</span> <span class="n">tempData</span><span class="p">)</span> <span class="p">=&gt;</span>
+        <span class="p">{</span>
+            <span class="kt">string</span> <span class="n">key</span> <span class="p">=</span> <span class="n">entry</span><span class="p">.</span><span class="n">Key</span><span class="p">;</span>
+            <span class="k">return</span> <span class="p">!</span><span class="n">tempData</span><span class="p">.</span><span class="n">_initialKeys</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> 
+                <span class="p">&amp;&amp;</span> <span class="p">!</span><span class="n">tempData</span><span class="p">.</span><span class="n">_retainedKeys</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+        <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
+
+    <span class="n">tempDataProvider</span><span class="p">.</span><span class="nf">SaveTempData</span><span class="p">(</span><span class="n">controllerContext</span><span class="p">,</span> <span class="n">_data</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Before the data is passed on to the provider it’s pruned. The keys that don’t exist in the _retainedKeys (the keys we explicitly told to keep) and _initialKeys (the keys that have not been touched so far or accessed through Peek method) collections are removed.</p>
+
+<h3 id="providers">Providers</h3>
+<p>By default, TempData uses session variables to persist data from one request to the next. Serializing and deserializing data is carried out via an object implementing <em>ITempDataProvider</em>. By default SessionStateTempDataProvider class is used to provide this functionality. It occurs in the CreateTempDataProvider method in Controller.cs class:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">protected</span> <span class="k">virtual</span> <span class="n">ITempDataProvider</span> <span class="nf">CreateTempDataProvider</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">Resolver</span><span class="p">.</span><span class="n">GetService</span><span class="p">&lt;</span><span class="n">ITempDataProvider</span><span class="p">&gt;()</span> <span class="p">??</span> <span class="k">new</span> <span class="nf">SessionStateTempDataProvider</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This also means we can replace the provider with our own custom class. For demonstration purposes I wrote my own provider which uses a simple text file to persist TempData:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">TextFileTempDataProvider</span> <span class="p">:</span> <span class="n">ITempDataProvider</span>
+<span class="p">{</span>
+    <span class="k">internal</span> <span class="k">readonly</span> <span class="kt">string</span> <span class="n">FileName</span> <span class="p">=</span> <span class="n">Path</span><span class="p">.</span><span class="nf">Combine</span><span class="p">(</span><span class="n">HttpContext</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Server</span><span class="p">.</span><span class="nf">MapPath</span><span class="p">(</span><span class="s">@"~/App_Data"</span><span class="p">),</span> <span class="s">@"TempData.txt"</span><span class="p">);</span>
+
+    <span class="k">public</span> <span class="n">IDictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span> <span class="nf">LoadTempData</span><span class="p">(</span><span class="n">ControllerContext</span> <span class="n">controllerContext</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">File</span><span class="p">.</span><span class="nf">Exists</span><span class="p">(</span><span class="n">FileName</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="kt">string</span> <span class="n">json</span> <span class="p">=</span> <span class="n">File</span><span class="p">.</span><span class="nf">ReadAllText</span><span class="p">(</span><span class="n">FileName</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">Newtonsoft</span><span class="p">.</span><span class="n">Json</span><span class="p">.</span><span class="n">JsonConvert</span><span class="p">.</span><span class="n">DeserializeObject</span><span class="p">&lt;</span><span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;&gt;(</span><span class="n">json</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;(</span><span class="n">StringComparer</span><span class="p">.</span><span class="n">OrdinalIgnoreCase</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">SaveTempData</span><span class="p">(</span><span class="n">ControllerContext</span> <span class="n">controllerContext</span><span class="p">,</span> <span class="n">IDictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span> <span class="n">values</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">string</span> <span class="n">json</span> <span class="p">=</span> <span class="n">Newtonsoft</span><span class="p">.</span><span class="n">Json</span><span class="p">.</span><span class="n">JsonConvert</span><span class="p">.</span><span class="nf">SerializeObject</span><span class="p">(</span><span class="n">values</span><span class="p">);</span>
+        <span class="n">File</span><span class="p">.</span><span class="nf">WriteAllText</span><span class="p">(</span><span class="n">FileName</span><span class="p">,</span> <span class="n">json</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In order to use this class it needs to be assigned to TempDataProvider in the controller’s constructor</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="nf">FirstController</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">TempDataProvider</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TextFileTempDataProvider</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Of course it’s not a bright idea to use disk for such operations, this is just for demonstration purposes and makes it easier to observe the behaviour.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>Often times I’ve found knowledge about the internals of a construct useful. Applications and frameworks are getting more complex each day, adding more layers and hiding the complexity from the consumers. It’s great because we can focus on the actual business logic and application we are building but when we get stuck it takes quite a while to figure out what’s going on. Having in-depth knowledge on the internals can save a lot if time.</p>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/22" class="prev">Prev</a>
+    
+    
+        <a href="/page/24" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

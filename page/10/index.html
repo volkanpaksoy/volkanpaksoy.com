@@ -1,0 +1,380 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/10/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2019/01/22/Auditing-AWS-events-with-CloudTrail/" itemprop="url">Auditing AWS events with CloudTrail</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-01-22T06:00:00+00:00" itemprop="datePublished">January 22, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awssecurity">aws</a></span> -->
+
+<!-- aws, security -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">cloudtrail, audit</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Another important service under Management &amp; Governance category is CloudTrail.</p>
+
+<p><img src="/images/vpblogimg/common/aws/aws-cloudtrail.png" alt=""></p>
+
+<p>A nice thing about this service is that it’s already enabled by default with a limited capacity. You can view all AWS API calls made in your account within the last 90 days. This is completely free and enabled out of the box.</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-cloudtrail-01-free.png" alt=""></p>
+
+<p>To get more out of CloudTrail we need to create <em>trails</em></p>
+
+<h2 id="inside-trails">Inside Trails</h2>
+
+<p>A couple of options about trails:</p>
+
+<ul>
+  <li>It can apply to all regions</li>
+  <li>It can apply to all accounts in an organization</li>
+  <li>It can record all management events</li>
+  <li>It can record data events from S3 and Lambda functions</li>
+</ul>
+
+<p>Just be mindful about the possible extra charges when you log every event for all organization accounts:</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-cloudtrail-02-org-charges.png" alt=""></p>
+
+<h2 id="testing-the-logs">Testing the logs</h2>
+<p>I created a trail that logs all events for all organization accounts. I created an IAM user in another account in the organization. In the event history of the local account events look like this:</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-cloudtrail-03-local-events.png" alt=""></p>
+
+<p>These events now can be tracked from master account as well. In the S3 bucket these events are organized by account id and date and they are stored in JSON format:</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-cloudtrail-04-viewing-logs.png" alt=""></p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>Having a central storage of all events in across all regions and accounts is a great tool to have. Having the raw data is a good start but making sense of that data is even more important. I’ll keep on exploring CloudTrail and getting more out of it to harden my accounts.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://aws.amazon.com/cloudtrail/" target="_blank" rel="noopener noreferrer">AWS Official CloudTrail page</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2019/01/21/Exploring-AWS-Config/" itemprop="url">Exploring AWS Config</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-01-21T06:00:00+00:00" itemprop="datePublished">January 21, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awssecurity">aws</a></span> -->
+
+<!-- aws, security -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">aws_config, audit</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>In my previos <a href="https://volkanpaksoy.com/archive/2019/01/18/AWS-Security-Best-Practices-Use-IAM-instead-of-root/">blog post</a> I talked about creating an IAM admin user and using that instead of root user all the time. Applying such best practices is a good idea which also begs the question: How can I enforce these rules?</p>
+
+<h2 id="aws-config">AWS Config</h2>
+
+<p><img src="/images/vpblogimg/common/aws/aws-config.png" alt=""></p>
+
+<p>The official description of the service is: <em>“AWS Config is a service that enables you to assess, audit, and evaluate the configurations of your AWS resources”</em></p>
+
+<p>What this means is you select some pre-defined rules or implement your custom rules and AWS config constantly runs checks against your resources and notify you if you have non-compliant resources.</p>
+
+<p>Since currently I’m interested in hardening IAM users in the next example I’m going to use an IAM check</p>
+
+<h2 id="use-case-enforcing-mfa">Use case: Enforcing MFA</h2>
+
+<p>As of this writing there are 80 managed config rules. To enforce MFA, I simply searched MFA in the “Add rule” anf got 5 matches of which I selected only 3:</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-config-00-mfa-rules.png" alt=""></p>
+
+<p>After I accepted the default settings it was able to identify my IAM user without MFA:</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-config-01-rules.png" alt=""></p>
+
+<p>And it comes with a nice little dashboard that shows all your non-compliant resources:</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-config-02-dashboard.png" alt=""></p>
+
+<p>It also supports notifications via SNS. It creates a topic and all you have to do is subscribe to that via an email address and after confirming your address you can start receiving emails.</p>
+
+<p>I was only expecting to get emails about non-compliant resources but it’s bit noisy as it sends emails with subjects “Configuration History Delivery Completed” or “Configuration Snapshot Delivery Started” which didn’t mean much to me.</p>
+
+<h2 id="pricing">Pricing</h2>
+<p>I think the price is exteremely high. The details can be found on their <a href="https://aws.amazon.com/config/pricing/" target="_blank" rel="noopener noreferrer">pricing page</a> but in a nutshell a single rule costs $2/month. So for the above example I paid $6 which is a lot of money in terms of resources used.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>I like the idea of having an auditing system with notifications but for this price I don’t think I will use it.</p>
+
+<p>I will keep on exploring though as I’m keen on implementing my custom rules with AWS config and also implementing them without AWS config and see if this service adds any benefit over having scheduled Lambda functions.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://aws.amazon.com/config/" target="_blank" rel="noopener noreferrer">AWS Config</a></li>
+  <li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#enable-mfa-for-privileged-users" target="_blank" rel="noopener noreferrer">AWS IAM Best Practices: Enable MFA for Privileged Users</a></li>
+  <li><a href="https://aws.amazon.com/config/pricing/" target="_blank" rel="noopener noreferrer">AWS Config Pricing</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2019/01/18/AWS-Security-Best-Practices-Use-IAM-instead-of-root/" itemprop="url">AWS Security Best Practices: Use IAM user instead of root account</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-01-18T06:00:00+00:00" itemprop="datePublished">January 18, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awssecurity">aws</a></span> -->
+
+<!-- aws, security -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">iam, best_practices</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>When you create a new AWS account you are the root user who has unlimited access to everything. Using such a powerful user as root on a day-to-day basis is not such a good idea because if it gets compromised you may not have a way to override and/or undo the changes done by the hacker.</p>
+
+<p><img src="/images/vpblogimg/common/aws/aws-iam.png" alt=""></p>
+
+<h2 id="using-iam-user-instead-of-root-account">Using IAM user instead of root account</h2>
+<p>Instead, suggested best practice is to create an admin-level IAM account and use it for normal operations. At first I was hesitant to adopt this practice. I didn’t see the point and thought attaching AdministratorAccess policy awould make the use as powerful as root. But there’s a whole list of things that even the most powerful IAM user cannot do. Here’s the list: <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html" target="_blank" rel="noopener noreferrer">AWS Tasks That Require AWS Account Root User Credentials</a></p>
+
+<p>So as you can see root user has important privileges such as closing the account and changing billing information. Even if your account gets compromised and some mailicous person gains access using an IAM account, you can still log in as root and take necessary action.</p>
+
+<p>In a nutshell, based on AWS documentation the following practices are recommended:</p>
+
+<ul>
+  <li><strong>Use the root user only to create your first IAM user</strong></li>
+  <li><strong>Create an IAM user for yourself as well, give that user administrative permissions, and use that IAM user for all your work.</strong></li>
+</ul>
+
+<p>In addition to Eric Hammond suggests in his <a href="https://alestic.com/2014/09/aws-root-password/" target="_blank" rel="noopener noreferrer">blog</a> to delete the root account password as well and use Forgot Password option to create a new one when needed. I keep my passwords in a password manager so if that application is compromised, the hacker can reset my password as well so I don’t follow this practice but it might come in handy if you have to write your password down somewhere.</p>
+
+<h2 id="templated-iam-user-creation">Templated IAM user creation</h2>
+<p>It’s a good practice to create an IAM user right after you create your AWS account. It’s even a better practice to automate this process. To achieve this I created a CloudFormation template. The YAML template below does the following:</p>
+
+<ul>
+  <li>Creates an IAM group named <em>administrators</em>
+</li>
+  <li>Creates a user named <em>admin</em>
+</li>
+  <li>Attaches AdministratorAccess policy to the group</li>
+  <li>Forces the user to change their password first time they log in (by attaching IAMUserChangePassword policy to the user)</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Resources:
+  AdministratorsGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: "administrators"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+      Path: /
+
+  AdminUser:
+    Type: AWS::IAM::User
+    Properties: 
+      Groups:
+        - !Ref AdministratorsGroup
+      LoginProfile:
+        Password: "CHANGE_THIS"
+        PasswordResetRequired: true
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/IAMUserChangePassword
+      Path: /
+      UserName: "admin"
+</code></pre></div></div>
+
+<p><a href="https://console.aws.amazon.com/cloudformation/home?region=eu-west-2#/stacks/new?stackName=AdminGroupAndUser&amp;templateURL=https://s3.eu-west-2.amazonaws.com/blog-cloudformation-templates/2019-01-18-AWS-Security-Best-Practices-Use-IAM-instead-of-root-IAM-sysadmin-template.yaml" target="_blank" rel="noopener noreferrer"><img src="/images/vpblogimg/common/aws/aws-cloudformation-launch-stack.svg" alt=""></a></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#create-iam-users" target="_blank" rel="noopener noreferrer">IAM Best Practices: Create Individual IAM Users</a></li>
+  <li><a href="https://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html" target="_blank" rel="noopener noreferrer">AWS Tasks That Require AWS Account Root User Credentials</a></li>
+  <li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html" target="_blank" rel="noopener noreferrer">The AWS Account Root User</a></li>
+  <li><a href="https://alestic.com/2014/09/aws-root-password/" target="_blank" rel="noopener noreferrer">Throw Away The Password To Your AWS Account</a></li>
+  <li><a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html" target="_blank" rel="noopener noreferrer">CloudFormation Template Reference for IAM User</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/9" class="prev">Prev</a>
+    
+    
+        <a href="/page/11" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

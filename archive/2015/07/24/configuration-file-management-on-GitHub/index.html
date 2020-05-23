@@ -1,0 +1,268 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Configuration File Management on GitHub - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2015/07/24/configuration-file-management-on-GitHub/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Configuration File Management on GitHub</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-07-24T22:30:00+01:00" itemprop="datePublished">July 24, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">dotnet, configuration, github</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>I hate configuration files! They contain highly sensitive information and there is always a risk of them leaking out. Especially when I read horror stories like <a href="http://wptavern.com/ryan-hellyers-aws-nightmare-leaked-access-keys-result-in-a-6000-bill-overnight" target="_blank" rel="noopener noreferrer">this</a> I remind myself to be more careful about it. It is particularly important when starting off with a private repository and converting it to open-source.</p>
+
+<p>There are a few approaches and I will try to make pros and cons list for each of them which hopefully would make it easier for me to make a decision.</p>
+
+<h3 id="method-1-ignore-config-files-completely">Method 1: Ignore config files completely</h3>
+<p>Simply add to gitignore before checking in the config files. This is not really a viable option but to cover all basis I wanted to add this one as well.</p>
+
+<h4 id="pros">Pros</h4>
+<ul>
+  <li>Very easy to implement</li>
+  <li>Easy to be consistent (use the same gitignore everywhere)</li>
+</ul>
+
+<h4 id="cons">Cons</h4>
+<ul>
+  <li>When someone checks out the project initially it wouldn’t compile because of the missing config file.</li>
+  <li>For a new user there is no way to figure out what the actual config should look like</li>
+  <li>For internal applications, you have to maintain local copies and handle distribution among developers manually.</li>
+</ul>
+
+<h3 id="method-2-check-in-configuration-with-placeholders">Method 2: Check in configuration with placeholders</h3>
+<p>Check in the initial file then run the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git update-index --assume-unchanged &lt;file&gt;
+</code></pre></div></div>
+
+<p>After this you can add the actual values and use the config as usual. But those values will be ignored. This way when someone checks out they can at least compile the project.</p>
+
+<h4 id="pros-1">Pros</h4>
+<ul>
+  <li>Less disruptive as the project can be compiled</li>
+</ul>
+
+<h4 id="cons-1">Cons</h4>
+<ul>
+  <li>When you make a change to the config file (e.g. add/rename keys) you can’t check in those changes as well</li>
+</ul>
+
+<h3 id="method-3-ignore-config-file-check-in-a-sample-file-instead">Method 3: Ignore config file, check in a sample file instead</h3>
+<p>This is essentially a merger of Method 1 and 2. Maintain two files (e.g. App.config and App.config.sample). Ignore the app.config from the getgo and only check in .sample file. Structurally it will be exactly the same as app.config without the confidential values.</p>
+
+<h4 id="pros-2">Pros</h4>
+<ul>
+  <li>Won’t compile by default, extra step for the people who check out (small one but still)</li>
+</ul>
+
+<h4 id="cons-2">Cons</h4>
+<ul>
+  <li>Both files need to be kept in sync manually</li>
+  <li>Still no online copy of the actual config file available</li>
+</ul>
+
+<h3 id="method-4-reference-to-another-configuration-file">Method 4: Reference to another configuration file</h3>
+<p>A slight variation of the previous method. .NET allows cascading and linking with configuration files. For example say this is my app.config file:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;configuration&gt;</span>
+	<span class="nt">&lt;appSettings</span> <span class="na">file=</span><span class="s">"Actual.config"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Twilio.AccountSID"</span> <span class="na">value=</span><span class="s">"SAMPLE SID"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Twilio.AuthToken"</span> <span class="na">value=</span><span class="s">"SAMPLE TOKEN"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Non-sensitive-info"</span> <span class="na">value=</span><span class="s">"some value"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;/appSettings&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div></div>
+
+<p>I can link the appSettings section to another file named actual.config which would look like this:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;appSettings&gt;</span>
+  <span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Twilio.AccountSID"</span> <span class="na">value=</span><span class="s">"REAL 123456"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Twilio.AuthToken"</span> <span class="na">value=</span><span class="s">"REAL Token"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Non-sensitive-info"</span> <span class="na">value=</span><span class="s">"some value"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/appSettings&gt;</span>
+</code></pre></div></div>
+
+<p>Actual.config never goes into source control. When the application cannot find the actual.config it just uses the values in the app.config. When the actual.config is present, those values override the sample values.</p>
+
+<h4 id="pros-3">Pros</h4>
+<ul>
+  <li>Only keys with sensitive values can be hidden</li>
+</ul>
+
+<h4 id="cons-3">Cons</h4>
+<ul>
+  <li>Doesn’t work with custom config sections</li>
+  <li>Still no online copy of the actual config file available</li>
+</ul>
+
+<h3 id="method-5-use-submodules-to-link-to-config-files">Method 5: Use submodules to link to config files</h3>
+<p>The idea is to maintain a private repository that contains the config files and add it as a submodule:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git submodule add git@github.com:volkanpaksoy/private-config.git
+</code></pre></div></div>
+
+<p>And link to that configuration file in the app.config as in Method 4.</p>
+
+<h4 id="pros-4">Pros</h4>
+<ul>
+  <li>Actual values are online and accessible</li>
+</ul>
+
+<h4 id="cons-4">Cons</h4>
+<ul>
+  <li>Requires a paid account for private repositories</li>
+  <li>More complicated</li>
+</ul>
+
+<h3 id="verdict">Verdict</h3>
+<p>As I already have a paid GitHub account the con for Method 5 is not quite valid for me so I think I will go with that one. Otherwise the actual values will be stored locally on the disk only and will eventually get lost. Looks like there is no convenient and easy way of doing it after all. If you have any suggestions I’m all ears.</p>
+
+<p>As I said, I hate configuration files!</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://gitready.com/intermediate/2009/02/18/temporarily-ignoring-files.html" target="_blank" rel="noopener noreferrer">Temporarily ignoring files</a></li>
+  <li><a href="http://stackoverflow.com/questions/4743770/git-collaboration-how-to-manage-configuration-files" target="_blank" rel="noopener noreferrer">SO Thread: Git sample and default files</a></li>
+  <li><a href="http://msdevshow.com/2014/07/github-with-phil-haack/" target="_blank" rel="noopener noreferrer">Phil Haack on MSDevShow</a></li>
+  <li><a href="http://stackoverflow.com/questions/5252450/using-someone-elses-repo-as-a-git-submodule-on-github" target="_blank" rel="noopener noreferrer">SO Thread: Using other repositories as submodules</a></li>
+</ul>
+
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2015/07/22/disassembling-and-decompiling-dotnet-assemblies/" title="Previous Post: 
+Disassembling And Decompiling .NET Assemblies">« Disassembling And Decompiling .NET Assemblies</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2015/08/05/checking-domain-availability-with-aws-route53-part-1/" title="next Post: 
+Checking domain availability with AWS Route 53 - Part 1">Checking domain availability with AWS Route 53 - Part 1 » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

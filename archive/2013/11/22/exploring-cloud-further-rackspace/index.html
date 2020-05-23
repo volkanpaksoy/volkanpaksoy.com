@@ -1,0 +1,187 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Exploring cloud further: Rackspace - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2013/11/22/exploring-cloud-further-rackspace/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Exploring cloud further: Rackspace</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-11-22T21:06:29+00:00" itemprop="datePublished">November 22, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- devops -->
+
+
+
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags">rackspace</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>**It’s been a while since I’ve started using Amazon Web Services (AWS) to host my sites. I think it’s a great platform as you only pay for what you use and there are lots of options. And the best part is anything you can do via their user interface (and more) can be done programmatically via their API. I’m extremely happy using AWS but still I wanted to see what its competitors are doing.</p>
+
+<h3 id="enter-rackspace">Enter RackSpace</h3>
+<p><img src="/images/vpblogimg/2013/11/RackSpaceLogo.jpg" alt="RackSpace"></p>
+
+<p>So I decided to test RackSpace first. One reason for selecting it is that it has a data centre in London (the closest AWS data centre to UK is in Dublin). Also it is based on <a href="http://www.openstack.org/" target="_blank" rel="noopener noreferrer">OpenStack</a> platform which I wanted to play with for some time. I created my free account but it needs to be activated after you receive a call from a staff member. He just asked basic questions like my username and the reason I created the account. After the call the account was activated and I was ready to explore this new land.</p>
+
+<p><img src="/images/vpblogimg/2013/11/RackSpace_01.png" alt="Servers"></p>
+
+<h3 id="first-impressions">First Impressions</h3>
+<p>This is still a work in progress actually, I cannot say I have fully covered everything about it. Here are just my first impressions and comparisons with AWS:</p>
+
+<h4 id="pricing--billing">Pricing &amp; Billing</h4>
+<p>Maybe I’m cheap but my first order of business was compare the prices! The cheapest Linux configuration starts from £0.030/hr. You can find the entire list <a href="http://www.rackspace.co.uk/cloud/servers/pricing" target="_blank" rel="noopener noreferrer">here</a>. As the site I’m planning to migrate didn’t need much resources I decided to go with the cheapest one: 1GB RAM, 1vCPU, 20GB SSD. After the migration I’m quite happy with its performance.</p>
+
+<p>One interesting thing I noticed is, unlike AWS, you pay for the machine even if you stop it. Excerpt from a documentation says “<em>Shutting down a server will <strong>NOT</strong> stop billing, since the virtual hard drives are persistent, server resources are always in use whether the servers is powered on or not.”</em>
+Now that’s not cool! Actually if you are running web-based systems you never stop the machines anyway. But there are many times I preferred to keep the old machine stopped for a period until the new machine proves to functioning fully for example. It’s nice to have the chance to rollback easily if need be. Of course you can do it here too, but you just have to pay twice as much during that period.</p>
+
+<h4 id="features">Features</h4>
+<p>When trying to configure the machine I noticed there isn’t a feature like Security Groups of AWS. I had to update the <em>iptables</em> configuration on the machine. Which would make it hard to manage firewall rules in a multi-machine environment. In AWS you just add the new machine to an existing security group and forget about it because all the existing rules are applied to the new one automatically.</p>
+
+<h4 id="programmability-and-api">Programmability and API</h4>
+<p><img src="/images/vpblogimg/2013/11/OpenStackLogo.jpg" alt="OpenStack"></p>
+
+<p>Even though I haven’t developed anything for it yet, I just wanted to see what are our capabilities and how would I develop something when I needed. All I needed to do was get the NuGet package and I was ready to get the list of my machines in a a few minutes. Basically you can manage machines, images, volumes pretty much like AWS. I’ll put a pin to it for now and develop some tools for myself later.</p>
+
+<p><img src="/images/vpblogimg/2013/11/RackSpace_02.png" alt="Program"></p>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>I think the best thing about RackSpace is that it is built on top of OpenStack. This means if you your system to another vendor your applications using the API can remain intact. Also as it is open source software you can build your own data centre if you wanted to. Of course it sounds good to geek ears but I guess in real world it doesn’t have much value as such migration of systems are quite often. Other than that I didn’t see any advantages over AWS but I’ll keep the machine running for a while and see how it goes.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.openstack.org/" target="_blank" rel="noopener noreferrer">OpenStack website</a></li>
+  <li><a href="https://github.com/rackspace/openstack.net" target="_blank" rel="noopener noreferrer">OpenStack .NET SDK Source</a></li>
+</ul>
+
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2013/11/22/rss-feed-update/" title="Previous Post: 
+RSS feed update">« RSS feed update</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2013/11/23/beer-explorer/" title="next Post: 
+Beer Explorer">Beer Explorer » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

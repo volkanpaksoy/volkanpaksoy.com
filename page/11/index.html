@@ -1,0 +1,436 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/11/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2019/01/15/Infrastructure-as-code-with-AWS-CloudFormation/" itemprop="url">Infrastructure as Code with AWS CloudFormation</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-01-15T06:00:00+00:00" itemprop="datePublished">January 15, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awsdevops">aws</a></span> -->
+
+<!-- aws, devops -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags">cloudformation</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>If you have a habit creating your AWS resources manually, things can get very messy very quickly. At some point you realize that you have no idea if a resource is still in use and just to be safe you leave it alone.</p>
+
+<p>I found myself in this situation and decided to take advantage Infrastructure as Code paradigm using AWS CloudFormation. To start simple I decided to migrate my <a href="https://volkanpaksoy.com/archive/2018/06/26/Automated-Email-Processing-with-AWS-SES-and-Lambda/">automated CV response application</a> to a CloudFormation stack. Going forward this is a much efficient way to write blog posts too. Instead of writing step by step instructions I can simply post the CloudFormation stack in JSON or YAML.</p>
+
+<h2 id="infrastructure-of-code-in-a-nutshell">Infrastructure of Code in a nutshell</h2>
+
+<p><img src="/images/vpblogimg/2019/01/aws-cloudformation-logo.png" alt=""></p>
+
+<p>Basically this approach allows you to define, manage and provision all the resources that define your system.</p>
+
+<p><strong>Advantages:</strong></p>
+
+<ul>
+  <li>Changes can be source-controlled</li>
+  <li>Entire provisioning process can be automated</li>
+  <li>entire infrastructure can be easily recreated in a different account.</li>
+  <li>Resources can easily be identified. Tags can be used to identify which stack the resources belong to.</li>
+  <li>Resources can easily be clean up. Deleting a stack will delete all the resource it created.</li>
+</ul>
+
+<h2 id="basic-terminology">Basic Terminology</h2>
+<ul>
+  <li>
+<strong>Stack:</strong> All the resources used to create an infrastructure.</li>
+  <li>
+<strong>StackSet:</strong> A StackSet is a container for AWS CloudFormation stacks that lets you provision stacks across AWS accounts and regions by using a single AWS CloudFormation template.</li>
+  <li>
+<strong>Design template:</strong> This is the file YAML or JSON format that defines all the resources that will be created AWS</li>
+</ul>
+
+<h2 id="where-to-start">Where to start…</h2>
+<p>Even though you get familiar with the concepts finding where tostart can be intimidating sometimes. When it comes to CloudFormation, there are a lot of sample templates that you can start and build upon.</p>
+
+<p>So here’s an easy way to get started:</p>
+
+<p><strong>Step 1:</strong> Save the following snippet to a local file such as <em>cloudformation.sample.yaml</em>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Resources:
+  Ec2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: ami-0aff88ed576e63e90
+</code></pre></div></div>
+
+<p>In the example above I’m using a stock AWS Linux AMI in London region.</p>
+
+<p><strong>Step 2:</strong> Go to Stack and click <em>Create Stack</em> (Make sure you’re in EU London region otherwise AWS won’t be able to find the AMI specified in our template)</p>
+
+<p><strong>Step 3:</strong> In specify template section, select <em>Upload a template file</em></p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-cloudformation-part-1-create-stack-1.png" alt=""></p>
+
+<p><strong>Step 4:</strong> Clock <em>Choose file</em> to locate your file and upload your template.</p>
+
+<p><strong>Step 5:</strong> Click next and specify a stack name something like FirstStackForEC2 and click Next</p>
+
+<p><strong>Step 6:</strong> Click Next on Configure Stack Options view and in the final review step of the wizard click <em>Create Stack</em>.</p>
+
+<p>At this point you can observe the progress of your stack being created.</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-cloudformation-part-1-create-stack-2.png" alt=""></p>
+
+<p>Now if you go to EC2 service in the same region you should be able to see the new instance:</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-cloudformation-part-1-create-stack-3.png" alt=""></p>
+
+<p>If you delete the stack, it will in turn delete everything it created which is the EC2 instance in this example.</p>
+
+<h2 id="launch-stack-urls">Launch Stack URLs</h2>
+<p>I always like the launch stack buttons that I see every now and then. I think there’s something magical about clicking a button and watching an entire infrastructure being created right before your eyes!</p>
+
+<p>Basically clicking the Launch Stack URL opens the wizard we just used with the fields populated with the values in the template.</p>
+
+<p><strong>Step 1:</strong> Upload the template to S3 and make it publicly accessible.</p>
+
+<p><strong>Step 2:</strong> Use the following naming convention and replace the values:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://console.aws.amazon.com/cloudformation/home?region=region#/stacks/new?stackName=stack_name&amp;templateURL=template_location
+</code></pre></div></div>
+
+<p><a href="https://console.aws.amazon.com/cloudformation/home?region=eu-west-2#/stacks/new?stackName=FirstStackForEC2&amp;templateURL=https://s3.eu-west-2.amazonaws.com/blog-cloudformation-templates/2019-01-15-Infrastructure-as-code-with-AWS-CloudFormation-cloudformation.sample.yaml" target="_blank" rel="noopener noreferrer"><img src="/images/vpblogimg/2019/01/aws-cloudformation-launch-stack.svg" alt=""></a></p>
+
+<p>In this example I uploaded the Launch Stack button image to my GitHub repository so that I can link to it.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://aws.amazon.com/cloudformation/" target="_blank" rel="noopener noreferrer">AWS Official Product Page</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2018/06/26/Automated-Email-Processing-with-AWS-SES-and-Lambda/">Related blog post: Automated Email Processing with AWS SES and Lambda</a></li>
+  <li><a href="https://aws.amazon.com/cloudformation/aws-cloudformation-templates/" target="_blank" rel="noopener noreferrer">AWS CloudFormation Templates</a></li>
+  <li><a href="https://aws.amazon.com/blogs/devops/construct-your-own-launch-stack-url/" target="_blank" rel="noopener noreferrer">Construct Your Own Launch Stack URL</a></li>
+  <li><a href="https://aws.amazon.com/cloudformation/resources/" target="_blank" rel="noopener noreferrer">AWS CloudFormation Resources</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2018/12/19/Aurora-Serverless/" itemprop="url">AWS Aurora Serverless</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2018-12-19T09:00:00+00:00" itemprop="datePublished">December 19, 2018</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
+
+<!-- aws -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">aurora, rds, serverless, database</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>A few months ago AWS <a href="https://aws.amazon.com/blogs/aws/aurora-serverless-ga/" target="_blank" rel="noopener noreferrer">announced</a> a serverless model for their Aurora databases. Compared to traditional DB approach this is brand new.</p>
+
+<p>I’ve been trying it out for a pilot application and it works well in general. You pay for what you use just like any other serverless resource.</p>
+
+<p>The only problem I’ve been having is DB startup time after pause. Meaning after 5 minutes the resources are released and the first request that comes after that suffers a performance penalty. My application was getting an error when this happened and it was showing an error screen. Obviously from a user standpoint it’s not a great experience.</p>
+
+<p>So to remedy this issue I’ve updated the DB connection timeout</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Connection Timeout=120
+</code></pre></div></div>
+
+<p>By default it’s 15 seconds which is not enough for the new server to respond. But after increasing the timeout at least I could prevent the application from failing. Of course this doesn’t speed up the response time of the DB server.</p>
+
+<p>They recently <a href="https://aws.amazon.com/about-aws/whats-new/2018/11/amazon-aurora-serverless-now-available-in-additional-regions/" target="_blank" rel="noopener noreferrer">announced</a> additional regions that support serverless Aurora.</p>
+
+<p>For cost-cutting reasons this can be a great option. Especially if your system is idle for extended periods of time you don’t need to pay anything. Also it scales up so you don’t have to worry about the database bottlenecks under heavy traffic.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.how-it-works.html" target="_blank" rel="noopener noreferrer">How Aurora Serverless Works</a></li>
+  <li><a href="https://medium.com/searce/amazon-aurora-serverless-features-limitations-glitches-d07f0374a2ab" target="_blank" rel="noopener noreferrer">Amazon Aurora Serverless — Features, Limitations, Glitches</a></li>
+  <li><a href="https://forums.aws.amazon.com/thread.jspa?threadID=288043" target="_blank" rel="noopener noreferrer">aurora serverless startup time after pause</a></li>
+  <li><a href="https://aws.amazon.com/blogs/aws/aurora-serverless-ga/" target="_blank" rel="noopener noreferrer">Aurora Serverless MySQL Generally Available</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2018/12/19/Monitoring-EC2-Instance-Disk-Space-with-AWS-CloudWatch/" itemprop="url">Monitoring EC2 Instance Disk Space with AWS CloudWatch</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2018-12-19T04:00:00+00:00" itemprop="datePublished">December 19, 2018</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awsdevops">aws</a></span> -->
+
+<!-- aws, devops -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags">cloudwatch, custom_metric</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I had an issue recently with an EC2 instance running out of disk space. Unfortunately free disk space is not a metric that comes out of the box with AWS CloudWatch. This post is about implementing a custom metric and getting notifications via AWs CloudWatch based on that metric.</p>
+
+<h2 id="steps-to-monitor-disk-space-with-cloudwatch">Steps to monitor disk space with CloudWatch</h2>
+
+<p><strong>Step 1: Download sample config file</strong></p>
+
+<p>AWS provides a sample JSON file at this location: <a href="https://s3.amazonaws.com/ec2-downloads-windows/CloudWatchConfig/AWS.EC2.Windows.CloudWatch.json" target="_blank" rel="noopener noreferrer">https://s3.amazonaws.com/ec2-downloads-windows/CloudWatchConfig/AWS.EC2.Windows.CloudWatch.json</a></p>
+
+<p>Download a copy of this file.</p>
+
+<p><strong>Step 2: Set IsEnabled to true</strong></p>
+
+<p>By default it comes disabled so set the value as shown below:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"IsEnabled": true
+</code></pre></div></div>
+
+<p><strong>Step 3: Add the custom metric for disk usage</strong></p>
+
+<p>Add the custom metric to monitor disk space:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+    "Id": "PerformanceCounterDisk",
+    "FullName": "AWS.EC2.Windows.CloudWatch.PerformanceCounterComponent.PerformanceCounterInputComponent,AWS.EC2.Windows.CloudWatch",
+    "Parameters": {
+        "CategoryName": "LogicalDisk",
+        "CounterName": "% Free Space",
+        "InstanceName": "C:",
+        "MetricName": "FreeDiskPercentage",
+        "Unit": "Percent",
+        "DimensionName": "InstanceId",
+        "DimensionValue": "{instance_id}"
+    }
+}
+</code></pre></div></div>
+
+<p><strong>Step 4: Add the new metric to flows</strong></p>
+
+<p>After defining the metric we need to add it to the flows so that it can be sent to CloudWatch. To achieve this update the flows section as shown below:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"Flows": {
+    "Flows": 
+    [
+        "(ApplicationEventLog,SystemEventLog),CloudWatchLogs",
+        "(PerformanceCounter,PerformanceCounterDisk),CloudWatch"
+    ]
+}
+</code></pre></div></div>
+
+<p><strong>Step 5: Add IAM role to server</strong></p>
+
+<p>It’s a good practice to manage permissions of EC2 instances via IAM roles assigned to the machine. To enable sending logs to CloudWatch add AmazonEC2RoleForSSM policy to the machine’s role</p>
+
+<p><img src="/images/vpblogimg/2018/12/aws-cloudwatch-custom-metrics-01.png" alt=""></p>
+
+<p>Without this role SSM agent service gets an access denied error.</p>
+
+<p><strong>Step 6: Restart Amazon SSM Agent service</strong></p>
+
+<p>Either by using Windows Services Manager or running the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Restart-Service AmazonSSMAgent
+</code></pre></div></div>
+
+<p>Once this is all done wait a few minutes and check CloudWatch metrics. Under All -&gt; Windows/Default you should be able to see new metric under InstanceId group (as that’s what we are using to group the logs). And when you click the metric you should be able to see a nice time-based graph of free disk space on the server:</p>
+
+<p><img src="/images/vpblogimg/2018/12/aws-cloudwatch-custom-metrics-02.png" alt=""></p>
+
+<h2 id="notes">Notes</h2>
+
+<ul>
+  <li>
+    <p>It’s useful to know where SSM Agent’s logs are stored. They can be found in this path:</p>
+
+    <p>%PROGRAMDATA%\Amazon\SSM\Logs\</p>
+  </li>
+  <li>
+    <p>The service reports every 5 minutes. The PollInterval in the JSON file is in seconds and is different than service report interval.</p>
+  </li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html" target="_blank" rel="noopener noreferrer">AWS Documentation: Publish Custom Metrics</a></li>
+  <li><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/cwl-ug.pdf" target="_blank" rel="noopener noreferrer">Amazon CloudWatch Logs User Guide (PDF)</a></li>
+  <li><a href="https://s3.amazonaws.com/ec2-downloads-windows/CloudWatchConfig/AWS.EC2.Windows.CloudWatch.json" target="_blank" rel="noopener noreferrer">CoudWatch Sample Config File</a></li>
+  <li><a href="https://stackoverflow.com/questions/37441225/how-to-monitor-free-disk-space-at-aws-ec2-with-cloud-watch-in-windows" target="_blank" rel="noopener noreferrer">StackOverflow question: How to monitor free disk space at AWS EC2 with Cloud Watch in windows
+</a></li>
+  <li><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartWindows2016.html" target="_blank" rel="noopener noreferrer">Quick Start: Enable Your Amazon EC2 Instances Running Windows Server 2016 to Send Logs to CloudWatch Logs Using the CloudWatch Logs Agent</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/10" class="prev">Prev</a>
+    
+    
+        <a href="/page/12" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

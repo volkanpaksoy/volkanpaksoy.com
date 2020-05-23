@@ -1,0 +1,717 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/25/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/08/06/checking-domain-availability-with-aws-route53-part-2/" itemprop="url">Checking domain availability with AWS Route 53 - Part 2</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-08-06T12:30:00+01:00" itemprop="datePublished">August  6, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">csharp, javascript, route53, lambda, amazon_api_gateway, nodejs</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<h1 id="part-2-converting-tld-provider-into-an-api">Part 2: Converting TLD Provider into an API</h1>
+
+<p>In all fairness, this part is not entirely necessary for the project. I already found a way to get the list of TLDs from Amazon documentation so I could easily integrate it with my client applications. But I recently heard about Amazon API Gateway which has been introduced a few weeks back so I thought it would be cool to access my JavaScript method via a web API hosted on AWS. After all, the point of many projects I develop is to learn new stuff! In light of that I’ll try something new with the C# version as well and use a self-hosted service so that I can use a Windows Service instead of IIS.</p>
+
+<h3 id="api-1-amazon-api-gateway">API #1: Amazon API Gateway</h3>
+<p>There are a couple of new technologies here that I haven’t used before so this was a good chance for me to play with them.</p>
+
+<p>Amazon API Gateway looks like a great service to create hosted APIs. Also it’s integrated with AWS Lambda. You can bind an endpoint directly to lambda function. There are other binding options but in this project I will use Lambda as it was also in my to-learn list.</p>
+
+<h4 id="setup-amazon-api-gateway">Setup Amazon API Gateway</h4>
+<p>API Gateway interface is very intuitive. Within minutes I was able to create a GET method calling my Lambda function. First you create the API by clicking the “Create API” button!</p>
+
+<p>Then you add your resource by clicking “Create Resource”. By default it comes with the root resource (“/”) so you can just use that one as well to add methods.</p>
+
+<p>I created a resource called tldlist. All I needed was a GET method so I created it by “Create Method”.</p>
+
+<p><img src="/images/vpblogimg/2015/08/domchk53-api-gateway-create-method.png" alt=""></p>
+
+<p>You select the region and enter the full ARN of your Lambda function. In the UI it just says “function name” but it requires full ARN (i.e.: arn:aws:lambda:eu-west-1:1234567890:function:getTldList)</p>
+
+<h4 id="and-lambda">…and Lambda</h4>
+<p>The function is a bit different from the previous version. In Node.js I wasn’t able to use <em>XMLHttpRequest</em> object and turns out your use the http module to make web requests so I modified the code a bit. Here’s the final version of my Lambda function:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Loading function'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">docHost</span> <span class="o">=</span> <span class="s1">'docs.aws.amazon.com'</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">docPath</span> <span class="o">=</span> <span class="s1">'/Route53/latest/DeveloperGuide/registrar-tld-list.html'</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">supportedTldPage</span> <span class="o">=</span> <span class="nx">docHost</span> <span class="o">+</span> <span class="nx">docPath</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'http'</span><span class="p">);</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">host</span><span class="p">:</span> <span class="nx">docHost</span><span class="p">,</span>
+      <span class="na">path</span><span class="p">:</span> <span class="nx">docPath</span><span class="p">,</span>
+      <span class="na">port</span><span class="p">:</span> <span class="mi">80</span>
+    <span class="p">};</span>
+    
+    <span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">body</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">body</span> <span class="o">+=</span> <span class="nx">chunk</span><span class="p">;</span>
+        <span class="p">});</span>
+        
+        <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'end'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">parseHtml</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span>
+            <span class="nx">context</span><span class="p">.</span><span class="nx">succeed</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">}).</span><span class="nx">on</span><span class="p">(</span><span class="s1">'error'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Got error: "</span> <span class="o">+</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+    <span class="p">});</span>     
+
+<span class="p">};</span>
+
+<span class="kd">function</span> <span class="nx">parseHtml</span><span class="p">(</span><span class="nx">pageHtml</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">pattern</span> <span class="o">=</span> <span class="sr">/&lt;a class="xref" href="registrar-tld-list.html#.+</span><span class="se">?</span><span class="sr">"&gt;</span><span class="se">[</span><span class="sr">.</span><span class="se">](</span><span class="sr">.+</span><span class="se">?)</span><span class="sr">&lt;</span><span class="se">\/</span><span class="sr">a&gt;/g</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">regEx</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="nx">pattern</span><span class="p">);</span>
+
+    <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">url</span> <span class="o">=</span> <span class="s1">'http://'</span> <span class="o">+</span> <span class="nx">supportedTldPage</span><span class="p">;</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">date</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">toUTCString</span><span class="p">();</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">tldList</span> <span class="o">=</span> <span class="p">[];</span>
+
+    <span class="k">while</span> <span class="p">((</span><span class="nx">match</span> <span class="o">=</span> <span class="nx">regEx</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">pageHtml</span><span class="p">))</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">result</span><span class="p">.</span><span class="nx">tldList</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">match</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In order to return a value from Lambda function you have to call succeed, fail or done:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>context.succeed (Object result);
+context.fail (Error error);
+context.done (Error error, Object result);
+</code></pre></div></div>
+
+<p>Succeed and fail are self-explanatory. done is like a combination of both. If error is non-null it treats it as failure. Even if you call fail or done with an error the HTTP response code is always 200. what changes is the message body. For example, I played around with a few possibilities to test various results:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Method call: context.succeed(result);  
+Output: Full JSON results
+
+Method call: context.done(null, result);  
+Output: Full JSON results
+
+Method call: context.fail("FAIL!!!");  
+Output: {"errorMessage":"FAIL!!!"}
+
+Method call: context.done("FAIL!!!", results);  
+Output: {"errorMessage":"FAIL!!!"}
+</code></pre></div></div>
+
+<p>As you can see, if error parameter is not null it ignores the actual results. Also I removed the JSON.stringify call from the parseHtml method because API gateway automatically converts it to JSON.</p>
+
+<h4 id="tying-things-together">Tying things together</h4>
+<p>Deployment is also a breeze, just like creating the API, resource and the methods all it takes is a few button clicks. You click Deploy API and create an environment such as staging or prod. And that’s it! You’re good to go!</p>
+
+<p>Since this will be a public-facing API with no authentication I also added a CloudWatch alarm:</p>
+
+<p><img src="/images/vpblogimg/2015/08/domchk53-api-gateway-create-alarm.png" alt=""></p>
+
+<p>This way if some mental decides to abuse I will be aware of it. The good thing is it’s very cheap. It costs $3.5 per million API calls which is about £2.25. I don’t think it will break the bank but for serious applications authorization is a must so I will need to investigate that feature in the future anyway.</p>
+
+<p>At this point, I have a Lambda function called from the API hosted by AWS. I don’t have to worry about anything regarding the maintenance and scaling which feels great!</p>
+
+<h3 id="api-2-c--self-hosting-on-a-windows-service">API #2: C# &amp; Self-hosting on a Windows Service</h3>
+<p>Speaking of maintenance, here comes the Windows version! I don’t intend to deploy it on production but I was meaning to learn self-hosting APIs with Web API to avoid IIS and here’s chance to do so.</p>
+
+<p>Found this nice concise <a href="http://www.asp.net/web-api/overview/hosting-aspnet-web-api/use-owin-to-self-host-web-api" target="_blank" rel="noopener noreferrer">article</a> showing how to run a Web API inside a console application. I tweaked the code a little bit to suit my needs. Basically it takes 4 simple steps:</p>
+
+<h4 id="step-01-install-owin-self-host-nuget-package">Step 01. Install OWIN Self-Host NuGet package:</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package Microsoft.AspNet.WebApi.OwinSelfHost
+</code></pre></div></div>
+
+<h4 id="step-02-setup-routing">Step 02. Setup routing</h4>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Startup</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Configuration</span><span class="p">(</span><span class="n">IAppBuilder</span> <span class="n">appBuilder</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">HttpConfiguration</span> <span class="n">config</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpConfiguration</span><span class="p">();</span>
+        <span class="n">config</span><span class="p">.</span><span class="n">Routes</span><span class="p">.</span><span class="nf">MapHttpRoute</span><span class="p">(</span>
+            <span class="n">name</span><span class="p">:</span> <span class="s">"DefaultApi"</span><span class="p">,</span>
+            <span class="n">routeTemplate</span><span class="p">:</span> <span class="s">"api/{controller}/{id}"</span><span class="p">,</span>
+            <span class="n">defaults</span><span class="p">:</span> <span class="k">new</span> <span class="p">{</span> <span class="n">id</span> <span class="p">=</span> <span class="n">RouteParameter</span><span class="p">.</span><span class="n">Optional</span> <span class="p">}</span>
+        <span class="p">);</span>
+
+        <span class="n">appBuilder</span><span class="p">.</span><span class="nf">UseWebApi</span><span class="p">(</span><span class="n">config</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="step-03-add-the-controller">Step 03. Add the controller</h4>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">TldController</span> <span class="p">:</span> <span class="n">ApiController</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="n">HttpResponseMessage</span> <span class="nf">Get</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">string</span> <span class="n">supportedTLDPage</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"AWS-URL"</span><span class="p">];</span>
+        <span class="kt">var</span> <span class="n">tldProvider</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TldListProvider</span><span class="p">();</span>
+        <span class="kt">var</span> <span class="n">tldList</span> <span class="p">=</span> <span class="n">tldProvider</span><span class="p">.</span><span class="nf">GetSupportedTldList</span><span class="p">(</span><span class="n">supportedTLDPage</span><span class="p">);</span>
+        <span class="kt">var</span> <span class="n">output</span> <span class="p">=</span> <span class="k">new</span> <span class="p">{</span>
+            <span class="n">url</span> <span class="p">=</span> <span class="n">supportedTLDPage</span><span class="p">,</span> 
+            <span class="n">date</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(),</span>
+            <span class="n">tldList</span> <span class="p">=</span> <span class="n">tldList</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">tld</span> <span class="p">=&gt;</span> <span class="n">tld</span><span class="p">.</span><span class="n">Name</span><span class="p">)</span>
+        <span class="p">};</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="nf">CreateResponse</span><span class="p">(</span><span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">OK</span><span class="p">,</span> <span class="n">output</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="step-04-start-owin-webapp">Step 04. Start OWIN WebApp</h4>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">baseAddress</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"BaseAddress"</span><span class="p">];</span>
+    <span class="n">WebApp</span><span class="p">.</span><span class="n">Start</span><span class="p">&lt;</span><span class="n">Startup</span><span class="p">&gt;(</span><span class="n">url</span><span class="p">:</span> <span class="n">baseAddress</span><span class="p">);</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Service started"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Final step is installation. As I used TopShelf all I had to do was running a command prompt with administrator privileges run this command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>TldProvider.Service.exe install
+
+</code></pre></div></div>
+
+<p>Now that my service is running in the background and accepting HTTP requests let’s take it out for a spin:</p>
+
+<p><img src="/images/vpblogimg/2015/08/domchk53-self-hosted-service-output.png" alt=""></p>
+
+<p>Brilliant!</p>
+
+<h3 id="whats-next">What’s next?</h3>
+<p>So now I have an API that returns me the supported TLD list. In the next post I’ll work on a basic client that consumes that API and AWS Route53 to get the availability results finally.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/aws-tld-provider" target="_blank" rel="noopener noreferrer">Project source code on GitHub</a></li>
+  <li><a href="https://aws.amazon.com/blogs/aws/amazon-api-gateway-build-and-run-scalable-application-backends/" target="_blank" rel="noopener noreferrer">Amazon API Gateway Announcement</a></li>
+  <li><a href="http://aws.amazon.com/api-gateway/" target="_blank" rel="noopener noreferrer">Amazon API Gateway official site</a></li>
+  <li><a href="http://docs.aws.amazon.com/lambda/latest/dg/programming-model.html" target="_blank" rel="noopener noreferrer">AWS Documentation: Lambda programming model</a></li>
+  <li><a href="http://owin.org/" target="_blank" rel="noopener noreferrer">OWIN official website</a></li>
+  <li><a href="http://www.asp.net/web-api/overview/hosting-aspnet-web-api/use-owin-to-self-host-web-api" target="_blank" rel="noopener noreferrer">Use OWIN to Self-Host ASP.NET Web API 2</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/08/05/checking-domain-availability-with-aws-route53-part-1/" itemprop="url">Checking domain availability with AWS Route 53 - Part 1</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-08-05T00:00:00+01:00" itemprop="datePublished">August  5, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">csharp, javascript, route53</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<h1 id="part-1-getting-supported-tld-list">Part 1: Getting supported TLD List</h1>
+
+<p>Around this time last year Amazon <a href="https://aws.amazon.com/blogs/aws/route-53-domain-reg-geo-route-price-drop/" target="_blank" rel="noopener noreferrer">announced</a> the Route 53 update which allowed domain registrations.</p>
+
+<p><img src="/images/vpblogimg/2015/08/domchk53-route53-search-user-interface.png" alt="Domain search in Route 53"></p>
+
+<p>Unfortunately, the AWS Management Console UI doesn’t allow searching all TLDs at once for a given domain. So I set out to write a console application in C# that retrieved the TLDs from AWS API in order to “enhance” AWS a bit. As all of my projects, the scope got out of hand very quickly so I decided to break this adventure into smaller parts. In this post I’ll talk about how to get the supported TLD list.</p>
+
+<h3 id="aws-everything-is-api-based-right-not-quite">AWS: Everything is API-based, right? Not quite!</h3>
+<p>The first step to a domain checker application is to acquire a list of TLDs to check. So I started exploring AWS API to get the supported TLD list. To my surprise there wasn’t any! I asked the question in AWS support forums and the response is it’s not supported. There is a webpage that has the list but that’s it! So until they make it available I decided to do a little scraping to generate the list myself. Obviously this is not the proper way of doing it and it’s prone to breaking very easily but they gave me no choice!</p>
+
+<h3 id="first-method-c-library">First method: C# Library</h3>
+<p>It’s just one method and it was easy to implement (apart from fiddling with regular expressions!)</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Tld</span><span class="p">&gt;</span> <span class="nf">GetSupportedTldList</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Uri</span> <span class="n">supportedTldPage</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="s">"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html"</span><span class="p">);</span>
+    <span class="kt">string</span> <span class="n">pageHtml</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
+    <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">webclient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">WebClient</span><span class="p">())</span>
+    <span class="p">{</span>
+        <span class="n">pageHtml</span> <span class="p">=</span> <span class="n">webclient</span><span class="p">.</span><span class="nf">DownloadString</span><span class="p">(</span><span class="n">supportedTldPage</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">string</span> <span class="n">pattern</span> <span class="p">=</span> <span class="s">"&lt;a class=\"xref\" href=\"registrar-tld-list.html#.+?\"&gt;[.](.+?)&lt;/a&gt;"</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">matches</span> <span class="p">=</span> <span class="n">Regex</span><span class="p">.</span><span class="nf">Matches</span><span class="p">(</span><span class="n">pageHtml</span><span class="p">,</span> <span class="n">pattern</span><span class="p">);</span>
+
+    <span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Tld</span><span class="p">&gt;();</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="n">Match</span> <span class="n">m</span> <span class="k">in</span> <span class="n">matches</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">result</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="nf">Tld</span><span class="p">()</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="n">m</span><span class="p">.</span><span class="n">Groups</span><span class="p">[</span><span class="m">1</span><span class="p">].</span><span class="n">Value</span> <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>It first downloads the raw HTML from the AWS documentation page. The TLDs on the page have a link in this format:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">"xref"</span> <span class="na">href=</span><span class="s">"registrar-tld-list.html#cab"</span><span class="nt">&gt;</span>.cab<span class="nt">&lt;/a&gt;</span> 
+</code></pre></div></div>
+
+<p>The regular expression pattern retrieves all anchors in this format. Only the ones that contain a dot in the value are retrieved to eliminate irrelevant links. To extract the actual TLD from this matching string I used parenthesis to create a group. By default the whole matched string is the first group. Additional groups can be created by parenthesis so that we can only get the values we are interested in. For example the group values for a match look like this</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>m.Groups[0].Value: "&lt;a class=\"xref\" href=\"registrar-tld-list.html#academy\"&gt;.academy&lt;/a&gt;"
+m.Groups[1].Value: "academy"
+</code></pre></div></div>
+
+<p>Adds these extracted values to a list (for now Tld class only contains Name property, more info like type of TLD or description can be added in the future)</p>
+
+<h3 id="second-method-javascript">Second method: JavaScript</h3>
+<p>It’s not very complicated with C# to accomplish this task so I thought it would be even easier with JavaScript as I already tackled the regular expression bit. I couldn’t be wronger!</p>
+
+<p>I created a simple AJAX call with jQuery and got the following error:</p>
+
+<p><img src="/images/vpblogimg/2015/08/domchk53-cors-error.png" alt=""></p>
+
+<p>Apparently you cannot get external resources willy nilly using jQuery! It took some time but I found a neat workaround <a href="http://james.padolsey.com/javascript/cross-domain-requests-with-jquery/" target="_blank" rel="noopener noreferrer">here</a> It’s essentially a jQuery plugin sending the request to query.yahooapis.com instead of the URL we request. Apparently Yahoo API returns the results to a callback method we provide. I hadn’t heard about <a href="https://developer.yahoo.com/yql/" target="_blank" rel="noopener noreferrer">YQL</a> before. The pitch on their site is:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"The YQL (Yahoo! Query Language) platform enables you to query, filter, and combine data across the web through a single interface." 
+</code></pre></div></div>
+
+<p>so a bit explains why they allow Cross-domain queries.</p>
+
+<p>In the test page I added the plugin script</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;script-- src="jquery.xdomainajax.js"&gt;&lt;/script&gt;
+</code></pre></div></div>
+
+<p>Then the main function using jQuery worked just fine:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">supportedTldPage</span> <span class="o">=</span> <span class="s2">"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html"</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">getTldList</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+        <span class="na">url</span><span class="p">:</span> <span class="nx">supportedTldPage</span><span class="p">,</span>
+        <span class="na">type</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">,</span>
+        <span class="na">success</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">pageHtml</span> <span class="o">=</span> <span class="nx">res</span><span class="p">.</span><span class="nx">responseText</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">jsonResult</span> <span class="o">=</span> <span class="nx">parseHtml</span><span class="p">(</span><span class="nx">pageHtml</span><span class="p">);</span>
+            <span class="nx">callback</span><span class="p">(</span><span class="nx">jsonResult</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Another thing I tried was using pure JavaScript:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">getTldList</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+    <span class="nx">request</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="nx">supportedTldPage</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+    <span class="nx">request</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">!=</span> <span class="mi">4</span> <span class="o">||</span> <span class="nx">request</span><span class="p">.</span><span class="nx">status</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+
+        <span class="kd">var</span> <span class="nx">pageHtml</span> <span class="o">=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">responseText</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">jsonResult</span> <span class="o">=</span> <span class="nx">parseHtml</span><span class="p">(</span><span class="nx">pageHtml</span><span class="p">);</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="nx">jsonResult</span><span class="p">);</span>
+    <span class="p">};</span>
+    <span class="nx">request</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This version doesn’t work by default because of the same CORS restrictions. But apparently there’s an <a href="https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en" target="_blank" rel="noopener noreferrer">extension</a> for that. I installed it and it worked like a charm. Wondering what was happening behind the scenes I captured the request with Fiddler and it looked like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host: docs.aws.amazon.com
+Connection: keep-alive
+Cache-Control: max-age=0
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36
+Origin: http://evil.com/
+Accept: */*
+Accept-Encoding: gzip, deflate, sdch
+Accept-Language: en-US,en;q=0.8,tr;q=0.6
+If-None-Match: "19ce8-51b1a64cfe880-gzip"
+If-Modified-Since: Fri, 17 Jul 2015 23:17:38 GMT
+</code></pre></div></div>
+
+<p>Origin was “http://evil.com”! Works great as long as it’s not null! In the sample code I’ll leave both versions. Of course all this hassle is to bypass browser restrictions. Depending on your use case, you can always fire the HTTP request above in Fiddler and get the results. I guess it’s a nice mechanism if you need to implement a closed system and want to ensure that resources are not consumed from the outside. Of course for public web pages like this which are meant to be accessed from anywhere in the world there are no restrictions on the server side.</p>
+
+<p>So that now we can get the raw HTML from AWS documentation, the rest is smooth sailing. The part that handles finding the TLDs in the HTML is very similar:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">parseHtml</span><span class="p">(</span><span class="nx">pageHtml</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">pattern</span> <span class="o">=</span> <span class="sr">/&lt;a class="xref" href="registrar-tld-list.html#.+</span><span class="se">?</span><span class="sr">"&gt;</span><span class="se">[</span><span class="sr">.</span><span class="se">](</span><span class="sr">.+</span><span class="se">?)</span><span class="sr">&lt;</span><span class="se">\/</span><span class="sr">a&gt;/g</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">regEx</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="nx">pattern</span><span class="p">);</span>
+
+    <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">url</span> <span class="o">=</span> <span class="nx">supportedTldPage</span><span class="p">;</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">date</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">toUTCString</span><span class="p">();</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">tldList</span> <span class="o">=</span> <span class="p">[];</span>
+
+    <span class="k">while</span> <span class="p">((</span><span class="nx">match</span> <span class="o">=</span> <span class="nx">regEx</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">pageHtml</span><span class="p">))</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">result</span><span class="p">.</span><span class="nx">tldList</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">match</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">myString</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">myString</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The regular expression pattern is the same. The only difference is .exec method doesn’t return mutliple matches so you have to loop through unless there are no matches.</p>
+
+<p>So finally the result in JSON format is:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tue, 29 Jul 2015 20:26:02 GMT"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"tldList"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"academy"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"agency"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"bargains"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"bike"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"biz"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"blue"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"boutique"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"-- removed for brevity --"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"eu"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"fi"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"fr"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"it"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"me"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"me.uk"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"nl"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"org.uk"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"ruhr"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"se"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"wien"</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="whats-next">What’s next?</h3>
+<p>Now I have the supported TLD list. I can easily use it in my application but where’s the fun that? I’d rather convert this code into an API so that we can get the new TLDs whenever they are added to that page. I just they don’t change their HTML markup anytime soon! :-)</p>
+
+<p>So in the next post I’ll work on the API…</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/aws-tld-provider" target="_blank" rel="noopener noreferrer">Project source code on GitHub</a></li>
+  <li><a href="https://aws.amazon.com/blogs/aws/route-53-domain-reg-geo-route-price-drop/" target="_blank" rel="noopener noreferrer">AWS Route 53 Domain Registration announcement</a></li>
+  <li><a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html" target="_blank" rel="noopener noreferrer">Route 53 Supported TLD documentation</a></li>
+  <li><a href="http://james.padolsey.com/javascript/cross-domain-requests-with-jquery/" target="_blank" rel="noopener noreferrer">Cross Domain Requests with jQuery</a></li>
+  <li><a href="https://github.com/padolsey-archive/jquery.fn/tree/master/cross-domain-ajax" target="_blank" rel="noopener noreferrer">Cross-domain-AJAX Plugin</a></li>
+  <li><a href="https://developer.yahoo.com/yql/" target="_blank" rel="noopener noreferrer">YQL website</a></li>
+  <li><a href="https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en" target="_blank" rel="noopener noreferrer">Chrome Extension to allow CORS</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/07/24/configuration-file-management-on-GitHub/" itemprop="url">Configuration File Management on GitHub</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-07-24T22:30:00+01:00" itemprop="datePublished">July 24, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">dotnet, configuration, github</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I hate configuration files! They contain highly sensitive information and there is always a risk of them leaking out. Especially when I read horror stories like <a href="http://wptavern.com/ryan-hellyers-aws-nightmare-leaked-access-keys-result-in-a-6000-bill-overnight" target="_blank" rel="noopener noreferrer">this</a> I remind myself to be more careful about it. It is particularly important when starting off with a private repository and converting it to open-source.</p>
+
+<p>There are a few approaches and I will try to make pros and cons list for each of them which hopefully would make it easier for me to make a decision.</p>
+
+<h3 id="method-1-ignore-config-files-completely">Method 1: Ignore config files completely</h3>
+<p>Simply add to gitignore before checking in the config files. This is not really a viable option but to cover all basis I wanted to add this one as well.</p>
+
+<h4 id="pros">Pros</h4>
+<ul>
+  <li>Very easy to implement</li>
+  <li>Easy to be consistent (use the same gitignore everywhere)</li>
+</ul>
+
+<h4 id="cons">Cons</h4>
+<ul>
+  <li>When someone checks out the project initially it wouldn’t compile because of the missing config file.</li>
+  <li>For a new user there is no way to figure out what the actual config should look like</li>
+  <li>For internal applications, you have to maintain local copies and handle distribution among developers manually.</li>
+</ul>
+
+<h3 id="method-2-check-in-configuration-with-placeholders">Method 2: Check in configuration with placeholders</h3>
+<p>Check in the initial file then run the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git update-index --assume-unchanged &lt;file&gt;
+</code></pre></div></div>
+
+<p>After this you can add the actual values and use the config as usual. But those values will be ignored. This way when someone checks out they can at least compile the project.</p>
+
+<h4 id="pros-1">Pros</h4>
+<ul>
+  <li>Less disruptive as the project can be compiled</li>
+</ul>
+
+<h4 id="cons-1">Cons</h4>
+<ul>
+  <li>When you make a change to the config file (e.g. add/rename keys) you can’t check in those changes as well</li>
+</ul>
+
+<h3 id="method-3-ignore-config-file-check-in-a-sample-file-instead">Method 3: Ignore config file, check in a sample file instead</h3>
+<p>This is essentially a merger of Method 1 and 2. Maintain two files (e.g. App.config and App.config.sample). Ignore the app.config from the getgo and only check in .sample file. Structurally it will be exactly the same as app.config without the confidential values.</p>
+
+<h4 id="pros-2">Pros</h4>
+<ul>
+  <li>Won’t compile by default, extra step for the people who check out (small one but still)</li>
+</ul>
+
+<h4 id="cons-2">Cons</h4>
+<ul>
+  <li>Both files need to be kept in sync manually</li>
+  <li>Still no online copy of the actual config file available</li>
+</ul>
+
+<h3 id="method-4-reference-to-another-configuration-file">Method 4: Reference to another configuration file</h3>
+<p>A slight variation of the previous method. .NET allows cascading and linking with configuration files. For example say this is my app.config file:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;configuration&gt;</span>
+	<span class="nt">&lt;appSettings</span> <span class="na">file=</span><span class="s">"Actual.config"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Twilio.AccountSID"</span> <span class="na">value=</span><span class="s">"SAMPLE SID"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Twilio.AuthToken"</span> <span class="na">value=</span><span class="s">"SAMPLE TOKEN"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Non-sensitive-info"</span> <span class="na">value=</span><span class="s">"some value"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;/appSettings&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div></div>
+
+<p>I can link the appSettings section to another file named actual.config which would look like this:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;appSettings&gt;</span>
+  <span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Twilio.AccountSID"</span> <span class="na">value=</span><span class="s">"REAL 123456"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Twilio.AuthToken"</span> <span class="na">value=</span><span class="s">"REAL Token"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Non-sensitive-info"</span> <span class="na">value=</span><span class="s">"some value"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/appSettings&gt;</span>
+</code></pre></div></div>
+
+<p>Actual.config never goes into source control. When the application cannot find the actual.config it just uses the values in the app.config. When the actual.config is present, those values override the sample values.</p>
+
+<h4 id="pros-3">Pros</h4>
+<ul>
+  <li>Only keys with sensitive values can be hidden</li>
+</ul>
+
+<h4 id="cons-3">Cons</h4>
+<ul>
+  <li>Doesn’t work with custom config sections</li>
+  <li>Still no online copy of the actual config file available</li>
+</ul>
+
+<h3 id="method-5-use-submodules-to-link-to-config-files">Method 5: Use submodules to link to config files</h3>
+<p>The idea is to maintain a private repository that contains the config files and add it as a submodule:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git submodule add git@github.com:volkanpaksoy/private-config.git
+</code></pre></div></div>
+
+<p>And link to that configuration file in the app.config as in Method 4.</p>
+
+<h4 id="pros-4">Pros</h4>
+<ul>
+  <li>Actual values are online and accessible</li>
+</ul>
+
+<h4 id="cons-4">Cons</h4>
+<ul>
+  <li>Requires a paid account for private repositories</li>
+  <li>More complicated</li>
+</ul>
+
+<h3 id="verdict">Verdict</h3>
+<p>As I already have a paid GitHub account the con for Method 5 is not quite valid for me so I think I will go with that one. Otherwise the actual values will be stored locally on the disk only and will eventually get lost. Looks like there is no convenient and easy way of doing it after all. If you have any suggestions I’m all ears.</p>
+
+<p>As I said, I hate configuration files!</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://gitready.com/intermediate/2009/02/18/temporarily-ignoring-files.html" target="_blank" rel="noopener noreferrer">Temporarily ignoring files</a></li>
+  <li><a href="http://stackoverflow.com/questions/4743770/git-collaboration-how-to-manage-configuration-files" target="_blank" rel="noopener noreferrer">SO Thread: Git sample and default files</a></li>
+  <li><a href="http://msdevshow.com/2014/07/github-with-phil-haack/" target="_blank" rel="noopener noreferrer">Phil Haack on MSDevShow</a></li>
+  <li><a href="http://stackoverflow.com/questions/5252450/using-someone-elses-repo-as-a-git-submodule-on-github" target="_blank" rel="noopener noreferrer">SO Thread: Using other repositories as submodules</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/24" class="prev">Prev</a>
+    
+    
+        <a href="/page/26" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

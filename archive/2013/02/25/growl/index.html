@@ -1,0 +1,272 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Growl - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2013/02/25/growl/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Growl</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-02-25T16:42:49+00:00" itemprop="datePublished">February 25, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">growl, raspberry_pi</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>I was going to write myself a desktop notification user control. I was planning it to be a simple window popping up when an event occurred. Before investing time and effort into this, I decided to look around to find a similar project and build on it. Unfortunately I couldn’t find something to my liking but discovered <a href="http://www.growlforwindows.com/" target="_blank" rel="noopener noreferrer">Growl</a>. It has all feature you might expect from desktop notification tool. One additional feature that pleasingly surprised me is that you can send notifications to another machine over the network. This sounds good to me as I’m working on running my applications on Raspberry Pi using Mono lately. So the idea is to run the program on my Pi and receive the notifications on my desktop where I spend most of my time. Another benefit of Growl is that it is open-source which can be found here: <a href="https://code.google.com/p/growl-for-windows/" target="_blank" rel="noopener noreferrer">https://code.google.com/p/growl-for-windows/</a></p>
+
+<p>I don’t like my programs to be dependent on some external software that needs to be installed on the client machine but I thought this could be optional because desktop notifications can be one channel for communications and others can be added if necessary. So it is not a dependency but rather it enhancement in functionality. Also a pitfall in software development is the anti-pattern described as <a href="http://en.wikipedia.org/wiki/Not_Invented_Here#In_computing" target="_blank" rel="noopener noreferrer">Not Invented Here</a>. One simply cannot develop every piece of software needed to build complex systems. It’s not feasible. Of course when I write code on my own, my main goal is to learn something new but still I like to get results and produce working software. So best practices for commercial software still apply. Having convinced myself to use Growl for messaging I started looking for ways integrate it with my application. It comes with .NET SDK which is quite easy to use.</p>
+
+<p>There are two assemblies need to be referred to:</p>
+
+<ul>
+  <li>Growl.CoreLibrary.dll</li>
+  <li>Growl.Connector.dll</li>
+</ul>
+
+<p>The interesting bits are in Growl.Connector library. First you need to create an instance of <em>GrowlConnector</em>class. You can specify the remote hostname and password to send the notifications over the network which is what I wanted to do.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">this</span><span class="p">.</span><span class="n">growl</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GrowlConnector</span><span class="p">(</span><span class="s">"password"</span><span class="p">,</span> <span class="s">"192.168.1.64"</span><span class="p">,</span> <span class="n">GrowlConnector</span><span class="p">.</span><span class="n">TCP_PORT</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Next, you have to register the application. If it is not registered, Growl will discard notifications coming from this source</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">this</span><span class="p">.</span><span class="n">application</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Growl</span><span class="p">.</span><span class="n">Connector</span><span class="p">.</span><span class="nf">Application</span><span class="p">(</span><span class="s">"Test notifier from ROHAN"</span><span class="p">);</span>
+<span class="k">this</span><span class="p">.</span><span class="n">notificationType</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">NotificationType</span><span class="p">(</span><span class="n">sampleNotificationType</span><span class="p">,</span> <span class="s">"Sample Notification"</span><span class="p">);</span>
+<span class="k">this</span><span class="p">.</span><span class="n">growl</span><span class="p">.</span><span class="nf">Register</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">application</span><span class="p">,</span> <span class="k">new</span> <span class="n">NotificationType</span><span class="p">[]</span> <span class="p">{</span> <span class="n">notificationType</span> <span class="p">});</span>
+</code></pre></div></div>
+
+<p>Final step is to enable notifications over the network. By default it only accepts messages from the local machine.</p>
+
+<p><img src="/images/vpblogimg/2013/02/Growl_Security_Settings.png" alt="Growl Security Settings"></p>
+
+<p>After the setup is completed we can send a test notification by this piece of simple code:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">string</span> <span class="n">text</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"DateTime: {0}"</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(</span><span class="s">"dd/MM/yyyy HH:mm"</span><span class="p">));</span>
+<span class="n">Notification</span> <span class="n">notification</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Notification</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">application</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="n">notificationType</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">.</span><span class="n">Ticks</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(),</span> <span class="s">"Mmessage from ROHAN"</span><span class="p">,</span> <span class="n">text</span><span class="p">);</span>
+<span class="k">this</span><span class="p">.</span><span class="n">growl</span><span class="p">.</span><span class="nf">Notify</span><span class="p">(</span><span class="n">notification</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>And the result is:</p>
+
+<p><img src="/images/vpblogimg/2013/02/GrowlMessage.png" alt="Growl Message"></p>
+
+<p>So far so good. With only a few lines of code we managed to send a desktop notification over the network. We could specify a callback method to handle responses from the Growl host. We could also specify the encryption algorithm to enhance security.
+Now the last thing to test for me is to see it running on Raspberry Pi. To do that I created a sample console application that looks like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Growl.Connector</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">MonoWorkout</span>
+<span class="p">{</span>
+	<span class="k">class</span> <span class="nc">MainClass</span>
+	<span class="p">{</span>
+		<span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">GrowlConnector</span> <span class="n">growl</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GrowlConnector</span><span class="p">(</span><span class="s">"password"</span><span class="p">,</span> <span class="s">"192.168.1.64"</span><span class="p">,</span> <span class="n">GrowlConnector</span><span class="p">.</span><span class="n">TCP_PORT</span><span class="p">);</span>
+			<span class="n">growl</span><span class="p">.</span><span class="n">EncryptionAlgorithm</span> <span class="p">=</span> <span class="n">Cryptography</span><span class="p">.</span><span class="n">SymmetricAlgorithmType</span><span class="p">.</span><span class="n">PlainText</span><span class="p">;</span>
+			<span class="n">Growl</span><span class="p">.</span><span class="n">Connector</span><span class="p">.</span><span class="n">Application</span> <span class="n">application</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Application</span><span class="p">(</span><span class="s">"Test notifier from Raspberry Pi"</span><span class="p">);</span>
+			<span class="n">NotificationType</span> <span class="n">notificationType</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">NotificationType</span><span class="p">(</span><span class="s">"SAMPLE_NOTIFICATION"</span><span class="p">,</span> <span class="s">"Sample Notification"</span><span class="p">);</span>
+			<span class="n">growl</span><span class="p">.</span><span class="nf">Register</span><span class="p">(</span><span class="n">application</span><span class="p">,</span> <span class="k">new</span> <span class="n">NotificationType</span><span class="p">[]</span> <span class="p">{</span> <span class="n">notificationType</span> <span class="p">});</span>
+
+			<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Type message to generate notification"</span><span class="p">);</span>
+
+			<span class="kt">string</span> <span class="n">message</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
+			<span class="k">while</span> <span class="p">((</span><span class="n">message</span> <span class="p">=</span> <span class="n">Console</span><span class="p">.</span><span class="nf">ReadLine</span><span class="p">())</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">message</span> <span class="p">==</span> <span class="s">"q"</span><span class="p">)</span>
+				<span class="p">{</span>
+					<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Quitting program"</span><span class="p">);</span>
+					<span class="k">break</span><span class="p">;</span>
+				<span class="p">}</span>
+
+				<span class="kt">string</span> <span class="n">text</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"DateTime: {0} \t Message: {1}"</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(</span><span class="s">"dd/MM/yyyy HH:mm"</span><span class="p">),</span> <span class="n">message</span><span class="p">);</span>
+				<span class="n">Notification</span> <span class="n">notification</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Notification</span><span class="p">(</span><span class="n">application</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">notificationType</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">.</span><span class="n">Ticks</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(),</span> <span class="s">"Message from Raspberry Pi"</span><span class="p">,</span> <span class="n">text</span><span class="p">);</span>
+				<span class="n">growl</span><span class="p">.</span><span class="nf">Notify</span><span class="p">(</span><span class="n">notification</span><span class="p">);</span>
+				<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Notification sent"</span><span class="p">);</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>I ran the application but did not receive the results. I immediately ran WireShark and could see the packages coming to my desktop machine so it is not a network or firewall issue. After Googling a little bit I’ve found that there is Mono branch in the source code. I downloaded it and replaced the binaries with their Mono counterparts. Tested it again but to no avail.</p>
+
+<p><img src="/images/vpblogimg/2013/02/Growl_Message_Capture.png" alt="Growl_Message_Capture"></p>
+
+<p>When I sent the message I can clearly see it in wireshark but I don’t know why Growl is rejecting them. I ran the same application in both a Windows 7 instance and Raspberry Pi and captured the message packets. Outcome is interesting:</p>
+
+<p>Here’s the message sent from Windows:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GNTP/1.0 NOTIFY NONE MD5:C5FB01D47A56832A17B3F941BC6F327F.3ECBA79D164DA5F8
+Application-Name: Test notifier from Raspberry Pi
+Notification-Name: SAMPLE_NOTIFICATION
+Notification-ID: 634982701932496447
+Notification-Title: Message from Raspberry Pi
+Notification-Text: DateTime: 07/03/2013 16:23 	 Message: TEST_ROHAN
+Notification-Sticky: No
+Notification-Priority: 0
+Notification-Coalescing-ID: 
+Origin-Machine-Name: ROHAN
+Origin-Software-Name: GrowlConnector
+Origin-Software-Version: 2.0.0.0
+Origin-Platform-Name: Microsoft Windows NT 6.1.7601 Service Pack 1
+Origin-Platform-Version: 6.1.7601.65536
+&lt;/pre&gt;
+And this is the one coming from Raspberry Pi:
+&lt;pre name="code" class="c-sharp:nocontrols"&gt;
+0'_`E{@P@ZTg&lt;
+	DGNTP/1.0 NOTIFY NONE MD5:45DF50ED8E166AE3AF39F0FEFFC36F5D.6EC74DE6BCD67A71
+Application-Name: Test notifier from Raspberry Pi
+Notification-Name: SAMPLE_NOTIFICATION
+Notification-ID: 634982703645630380
+Notification-Title: Message from Raspberry Pi
+Notification-Text: DateTime: 07/03/2013 16:26 	 Message: TEST_RASPBERRYPI
+Notification-Sticky: No
+Notification-Priority: 0
+Notification-Coalescing-ID: 
+Origin-Machine-Name: raspberrypi
+Origin-Software-Name: GrowlConnector
+Origin-Software-Version: 2.0.0.0
+Origin-Platform-Name: Unix 3.1.9.0
+Origin-Platform-Version: 3.1.9.0
+</code></pre></div></div>
+
+<p>There is a 16 byte block at the beginning and I believe because of that Growl cannot parse the message therefore end up discarding it.</p>
+
+<p>At this point, I’ll shelf this problem and look for alternative solutions. I hate leaving a problem unsolved like this but it is not a crucial feature so I’d rather not invest too much time into it. So for now my official opinion is, despite the Mono branch in the SVN, I don’t think Growl supports Mono.</p>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2013/01/31/running-mono-on-raspberry-pi/" title="Previous Post: 
+Running Mono on Raspberry Pi">« Running Mono on Raspberry Pi</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2013/03/01/discover-your-brain/" title="next Post: 
+Discover your brain">Discover your brain » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

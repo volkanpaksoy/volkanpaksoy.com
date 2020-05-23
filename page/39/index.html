@@ -1,0 +1,357 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/39/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/07/auto-properties-with-initializers/" itemprop="url">C# 6.0 New Features - Auto-Properties with Initializers</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-07T00:20:00+00:00" itemprop="datePublished">December  7, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Currently, in Visual Studio 2013, if you have a line like this</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="kt">int</span> <span class="n">MyProperty</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span>  <span class="p">}</span>
+</code></pre></div></div>
+
+<p>you’d get a compilation error like this:</p>
+
+<p><img src="/images/vpblogimg/2014/12/getter-only-property-error-vs-2013.png" alt="Getter-only auto-property error"></p>
+
+<p>But the same code in VS 2015 compiles happily. The reason to add this feature is to not get in the way of immutable data types.</p>
+
+<p>Another new feature about auto-properties is initializers. For example the following code would compile and run with new C#:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">AutoInit</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">FirstName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="s">"Unknown"</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">LastName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="s">"Unknown"</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">AutoInit</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"{0} {1}"</span><span class="p">,</span> <span class="n">FirstName</span><span class="p">,</span> <span class="n">LastName</span><span class="p">));</span>
+        <span class="n">FirstName</span> <span class="p">=</span> <span class="s">"Volkan"</span><span class="p">;</span>
+        <span class="n">LastName</span> <span class="p">=</span> <span class="s">"Paksoy"</span><span class="p">;</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"{0} {1}"</span><span class="p">,</span> <span class="n">FirstName</span><span class="p">,</span> <span class="n">LastName</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>		
+</code></pre></div></div>
+<p>and the output is unsurprisingly looks like this:</p>
+
+<p><img src="/images/vpblogimg/2014/12/init-auto-property-ouput.png" alt="Auto-property initializer output"></p>
+
+<p>When I first ran this code successfully I was surprised how I managed to set values without a setter. Looks like under the covers it’s generating a read-only backing field for the property and just assignning the value to the field instead of calling the setter method. It can easily be seen using a decompiler:</p>
+
+<p><img src="/images/vpblogimg/2014/12/auto-property-justdecompile.png" alt="Just Decompile output"></p>
+
+<p>As it’s a read-only value it can only be set inside the constructor. So if you add the following method it wouldn’t compile:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">SetValue</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">FirstName</span> <span class="p">=</span> <span class="s">"another name"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2014/12/auto-property-set-error.png" alt="Auto-property set error"></p>
+
+<p>It’s a small improvement providing an alternative way to write the same code in less lines.</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/06/csharp-6-new-features/" itemprop="url">C# 6.0 New Features</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-06T11:00:00+00:00" itemprop="datePublished">December  6, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<h3 id="a-new-microsoft">A new Microsoft</h3>
+<p>These are exciting times to work with Microsoft technologies as the company seems to be changing their approach drastically. They are open-sourcing a ton of projects including the .NET Framework itself. Maybe the best of it all is the next version of ASP.NET will be cross-platform. There are already some proof of concept projects that run a  ASP.NET vNext application on a Raspberry Pi. I like the direction they are taking so I think it’s a good time to catch up with these new instalments of my favorite IDE and programming language.</p>
+
+<p><img src="/images/vpblogimg/2014/12/DotNET_Logo.jpg" alt=""></p>
+
+<h3 id="new-features-in-a-nutshell">New features in a nutshell</h3>
+<p>Looking at the new features it feels like they are all about improving productivity and reducing the clutter with shorthands and less code overall. (It’s also confirmed by Mads Torgersen in his video on Channel 9)</p>
+
+<p>If you check out the resources at the end of the this post you’ll notice that there is quite a flux in the features mentioned in various sources. I’ll use Channel 9 video as my primary source. It features a PM in the language team and it’s the most recent source so sounds like the most credible among all.</p>
+
+<p>Here’s the list of new features:</p>
+
+<ol>
+  <li>Auto-Properties with Initializers</li>
+  <li>Using statements for static classes</li>
+  <li>String interpolation</li>
+  <li>Expression-bodied methods</li>
+  <li>Index initializers</li>
+  <li>Null-conditional operators</li>
+  <li>nameof operator</li>
+  <li>Exception-handling improvements</li>
+</ol>
+
+<p>I was planning to go over all of these features in this post but with sample code and outputs it quickly became quite lengthy so I decided to create a separate post for each of them. Watch this space for the posts about each feature.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.wintellectnow.com/course/detail/what-s-new-in-c-6-visual-basic-dotnet-14-and-visual-studio-14" target="_blank" rel="noopener noreferrer">Wintellect course</a></li>
+  <li><a href="http://dotnetrocks.com/default.aspx?showNum=1029" target="_blank" rel="noopener noreferrer">.NET Rocks Podcast</a></li>
+  <li><a href="http://msdn.microsoft.com/en-us/magazine/dn802602.aspx" target="_blank" rel="noopener noreferrer">MSDN Magazine Article: The New and Improved C# 6.0</a></li>
+  <li><a href="http://msdn.microsoft.com/en-us/magazine/dn683793.aspx" target="_blank" rel="noopener noreferrer">MSDN Magazine article: A C# 6.0 Language Preview</a></li>
+  <li><a href="http://channel9.msdn.com/Events/Visual-Studio/Connect-event-2014/116" target="_blank" rel="noopener noreferrer">Channel 9 Video</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/04/uploading-files-to-s3-using-windows-powershell/" itemprop="url">Uploading files to AWS S3 using Windows PowerShell</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-04T22:30:00+00:00" itemprop="datePublished">December  4, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
+
+<!-- aws -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">s3, powershell</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Cloud computing is a relatively new concept, especially when compared to FTP which dates back to 70s (<a href="http://en.wikipedia.org/wiki/File_Transfer_Protocol#History_of_FTP_server" target="_blank" rel="noopener noreferrer">History of FTP server</a>). So not every device supports S3 uploads. If you cannot force a device to upload directly to S3 and have control over the FTP server machine (and assuming it’s running Windows) you can create a simple PowerShell script to upload files to S3.</p>
+
+<h3 id="ftp-to-s3">FTP to S3</h3>
+<p>First you need to install <a href="http://aws.amazon.com/powershell/" target="_blank" rel="noopener noreferrer">AWS Tools for Windows</a>. I tested on a couple of machines and the results were dramatically different. My main development machine is running Windows 8.1 and has PowerShell v4 on it. I had no issues with using AWS commandlets in this environment. The VM I tested has PS v2 on it and I had to make some changes first.</p>
+
+<h3 id="v2-vs-v4">v2 vs. v4</h3>
+<p>The problem is AWS module is not loaded and you have to do it yourself with this command</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import-module "C:\Program Files (x86)\AWS Tools\PowerShell\AWSPowerShell\AWSPowerShell.psd1"
+</code></pre></div></div>
+
+<p>After this command you can use AWS commandlets but when you close and open another shell it will be completely oblivious and will deny knowing what you’re talking about! To automate this process you need to add it to your profile. AWS documentation tells you to edit your profile straight away but the profile did not exist in my case. So first check if the profile exists:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Test-Path $profile
+</code></pre></div></div>
+<p>If you get “False” like I did then you need to create a new profile first.</p>
+
+<p><img src="/images/vpblogimg/2014/12/PowerShell-Profile-Check.png" alt=""></p>
+
+<p>To create the profile run the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>New-Item -path $profile -type file –force
+</code></pre></div></div>
+
+<p>then you can edit the profile by simply running</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>notepad $profile
+</code></pre></div></div>
+
+<p>Add the import-module command above and save the file. From now on every time you run PowerShell it will be ready to run AWS commandlets.</p>
+
+<h3 id="time-to-upload">Time to upload</h3>
+<p>Now that we got over with troubleshooting we can finally upload our files. The commandlet we need is called Write-S3Object. The parameters it requires are the target bucket name, source file, target path, and the credentials.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Write-S3Object -BucketName my-bucket -File file.txt -Key subfolder/remote-file.txt -CannedACLName Private -AccessKey accesskey -SecretKey secretKey
+</code></pre></div></div>
+
+<p>Most likely you would like to upload a bunch of files under a folder. In order to accomplish that you can create a simple PowerShell script like this one:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$results = Get-ChildItem .\path\to\files -Recurse -Include "*.pdf" 
+foreach ($path in $results) {
+	Write-Host $path
+	$filename = [System.IO.Path]::GetFileName($path)
+	Write-S3Object -BucketName my-bucket -File $path -Key subfolder/$filename -CannedACLName Private -AccessKey accessKey -SecretKey secretKey
+}
+</code></pre></div></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://aws.amazon.com/powershell/" target="_blank" rel="noopener noreferrer">AWS Tools Download</a></li>
+  <li><a href="http://docs.aws.amazon.com/powershell/latest/userguide/pstools-getting-set-up.html" target="_blank" rel="noopener noreferrer">Setting up AWS Tools</a></li>
+  <li><a href="http://www.howtogeek.com/50236/customizing-your-powershell-profile/" target="_blank" rel="noopener noreferrer">Customizing Your Powershell Profile</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/38" class="prev">Prev</a>
+    
+    
+        <a href="/page/40" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/60/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/06/28/playing-with-net-gadgeteer/" itemprop="url">Playing with .NET Gadgeteer</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-06-28T00:09:40+01:00" itemprop="datePublished">June 28, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/hobbydev">hobby</a></span> -->
+
+<!-- hobby, dev -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">dotnet_gadgeteer</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I like gadgets and electronics. Programming against hardware and interact with the real world makes it much more fun I think. I bought a .NET Gadgeteer kit set some time ago but hadn’t much time to spend on it. Now it’s time to break that cycle and actually do something with it.</p>
+
+<h3 id="setting-up-dev-environment">Setting up dev environment</h3>
+<p>As this will be more experimenting than actual development I decided to use my spare laptop for this task. I installed the latest version of .NET Micro Framework which can be found in the official site. My kit is GHI Electronics’ FEZ Spider Starter Kit which can be ordered from here: <a href="https://www.ghielectronics.com/catalog/product/297" target="_blank" rel="noopener noreferrer">https://www.ghielectronics.com/catalog/product/297</a>. I also needed to install device drivers and Spider mainboard SDK which all could be found on GHI’s website.</p>
+
+<h3 id="updating-the-firmware">Updating the Firmware</h3>
+<p>Since I bought the device .NET Micro Framework release v4.2 and I wanted to work with the latest version. Turns out it’s a quite complicated process! I tried a bunch of tools but finally managed to upgrade my framework by using FEZSpiderMainboardUpdater.exe application which can be found under the legacy apps from GHI.</p>
+
+<p><img src="/images/vpblogimg/2013/06/SpiderUpdater.png" alt="Spider updater"></p>
+
+<h3 id="down-to-coding">Down to coding</h3>
+<p>After installing every bit it was time to develop my first program to explore its capabilities. For this I used the excellent “Getting started with the FEZ Spider Kit”. You can find the link below in Resources section.
+What you do is basically designing your gadget using the designer that’s installed in the Visual Studio and comes with the Gadgeteer project. Then you connect the actual hardware components in the same way. After this you run it just like a regular project. It first compiles and deploys the project to the device then runs it. You can even debug your source code even though it’s running on the mainboard.</p>
+
+<p><img src="/images/vpblogimg/2013/06/Mainboard_diagram.png" alt="Mainboard Diagram"></p>
+
+<p>After I completed the gadget described in the guide, I got a rather strange and annoying error called “MMP error”. After Googling it a little bit I found the link for the workaround: <a href="http://netmf.codeplex.com/workitem/221" target="_blank" rel="noopener noreferrer">http://netmf.codeplex.com/workitem/221</a>. After copying the config file the problem was resolved. The source code for the sample project is just a few lines which can be seen below:</p>
+
+<p><img src="/images/vpblogimg/2013/06/SourceCode.png" alt="Gadgeteer source code"></p>
+
+<p>The application is quite simple: You press the button and the camera takes a picture and displays on the screen. You can see a sample screenshot below:</p>
+
+<p><img src="/images/vpblogimg/2013/06/Gadgeteer_Sample_Output.jpg" alt="Gadgeteer sample Output"></p>
+
+<p>So far so good. I now have the environment ready and I have to check all the components and find out what they are capable of and hopefully come up with a cool project idea to make all this worthwhile.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://gadgeteer.codeplex.com" target="_blank" rel="noopener noreferrer">Gadgeter Downloads</a></li>
+  <li><a href="http://research.microsoft.com/en-us/projects/gadgeteer/" target="_blank" rel="noopener noreferrer">MS Research home page</a></li>
+  <li><a href="http://www.netmf.com/gadgeteer" target="_blank" rel="noopener noreferrer">Gadgetter site in .NET Micro Framework website</a></li>
+  <li><a href="https://www.ghielectronics.com/technologies/.net-gadgeteer" target="_blank" rel="noopener noreferrer">GHI Electronics Gadgeteer site</a></li>
+  <li><a href="http://www.ghielectronics.com/downloads/Gadgeteer/Mainboard/Spider/FEZSpider%20Starter%20Kit%20Guide.pdf" target="_blank" rel="noopener noreferrer">Getting started with the FEZ Spider Kit</a></li>
+  <li><a href="http://www.netmf.com" target="_blank" rel="noopener noreferrer">Official .NET Micro Framework</a></li>
+  <li><a href="http://www.youtube.com/watch?v=pYXYjBUyBC0" target="_blank" rel="noopener noreferrer">O’Reilly Getting Started with .NET Gadgeteer webcast</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/04/22/wifi-pineapple/" itemprop="url">Wifi Pineapple</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-04-22T15:13:06+01:00" itemprop="datePublished">April 22, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/security">security</a></span> -->
+
+<!-- security -->
+
+
+
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">wifi_pineapple, network</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>One of the online shows I enjoy is Hak5.org’s podcast (<a href="http://hak5.org" target="_blank" rel="noopener noreferrer">http://hak5.org</a>). Hak5 also manufactures tools for penetration testers. WiFi Pineapple (<a href="https://wifipineapple.com/" target="_blank" rel="noopener noreferrer">https://wifipineapple.com/</a>) is one of the devices they manufacture. It is a “hotspot honeypot” and its most powerful feature is something called a Karma attack.</p>
+
+<h3 id="what-is-karma-attack">What is Karma Attack?</h3>
+<p>Simply put when our wireless devices keep sending out <em>probe requests</em> searching for the networks they “know” to re-associate. Normally all APs that don not have the SSID that’s probed for simply ignore these packets. But not WiFi Pineapple! It runs a modified firmware and replies to all probe requests claiming that it is the network our device is looking for. The modified firmware is called Jasager (yes-man in German) which explains a lot I think.</p>
+
+<h3 id="build-or-buy-one">Build or Buy One</h3>
+<p>Base WiFi Pineapple costs $99. You can buy one from here: <a href="http://hakshop.myshopify.com/collections/gadgets/products/wifi-pineapple" target="_blank" rel="noopener noreferrer">http://hakshop.myshopify.com/collections/gadgets/products/wifi-pineapple</a></p>
+
+<p><img src="/images/vpblogimg/2013/04/WifiPineapple.jpg" alt="Wi-Fi Pineapple"></p>
+
+<p>If you like getting your hands dirty to dig deeper you can build one on your own. The firmware is a free download. The router inside WiFi Pineapple is an Alfa AP121U which costs around £40 or you can go with the bare board which costs around £20 (<a href="http://www.amazon.co.uk/Alfa-Network-Hornet-UB-Atheros-Embedded/dp/B00A8UKSE0/ref=sr_1_2?ie=UTF8&amp;qid=1367416232&amp;sr=8-2&amp;keywords=alfa+ap121u" target="_blank" rel="noopener noreferrer">here on Amazon</a>) Also you need to flash it via serial port and you need a USB TTL cable (<a href="http://www.amazon.co.uk/UART-CP2102-Module-Serial-Converter/dp/B00CDIIQPI/ref=sr_1_cc_3?s=aps&amp;ie=UTF8&amp;qid=1367416398&amp;sr=1-3-catcorr&amp;keywords=USB+TTL+UART" target="_blank" rel="noopener noreferrer">here on Amazon</a>)
+They have a great step-by-step tutorial (see References down below). After following the instructions you can have your own homemade WiFi Pineapple within 20 minutes.</p>
+
+<h3 id="so-what-is-the-risk">So what is the risk?</h3>
+<p>If you have a habit of using unsecured wireless networks than you are under risk. As by default most devices try to connect to previous networks automatically, there is a chance to connect to attacker’s AP as it is faking to be your old friendly network that you used to be connected. Good news is that <strong>pineapple doesn’t support Karma attack for protected networks</strong>. So if you manage to stay away from open networks then you are off the hook. But still it doesn’t hurt to be careful and watch out closely to where you are connecting.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://forums.hak5.org/index.php?/forum/65-mark-iv/" target="_blank" rel="noopener noreferrer">Hak5 Forums</a></li>
+  <li><a href="http://www.troyhunt.com/2013/04/the-beginners-guide-to-breaking-website.html" target="_blank" rel="noopener noreferrer">Troy Hunt’s blogpost</a></li>
+  <li><a href="https://wifipineapple.com/?flashing" target="_blank" rel="noopener noreferrer">Flashing the device</a></li>
+  <li><a href="http://news.cnet.com/8301-31921_3-57394889-281/five-ways-to-protect-yourself-from-wi-fi-honeypots/" target="_blank" rel="noopener noreferrer">Protecting from WiFi Honeypots</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/03/20/roll-your-own-cloud-with-owncloud/" itemprop="url">Roll your own cloud with ownCloud</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-03-20T00:52:29+00:00" itemprop="datePublished">March 20, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/sysops">sysops</a></span> -->
+
+<!-- sysops -->
+
+
+
+
+    <a href="/category/sysops">sysops</a>
+    
+</span>
+	<span class="tags">cloud_computing, system_administration, owncloud</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Evernote has been recently hacked. Dropbox has been hacked many times. Who knows what’s going in the other services we are using. So I decided to phase out my cloud service providers and create my own cloud.
+There are bunch of ways of running this tool. For instance, you can just download a VM image with everything installed. I decided to start from scratch and perform a manual installation on a new Ubuntu server. It’s very easy. First we need to install dependencies:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt-get install apache2 php5 php5-gd php-xml-parser php5-intl
+apt-get install php5-sqlite php5-mysql smbclient curl libcurl3 php5-curl
+</code></pre></div></div>
+
+<p>Then extract the downladed compressed file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tar -xjf path/to/downloaded/owncloud-x.x.x.tar.bz2
+cp -r owncloud /path/to/your/webserver
+</code></pre></div></div>
+
+<p>Set the directory permissions:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chown -R www-data:www-data /path/to/your/owncloud/
+</code></pre></div></div>
+
+<p>Enable .htaccess by settings AllowOverride to “All” in /var/www directory in Apache config which is in /etc/apache2/sites-enabled/000-default on Ubuntu
+Finally run mod_rewrite:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>a2enmod rewrite
+a2enmod headers
+</code></pre></div></div>
+
+<p>I got these instructions from Admin Manual which can be found here: <a href="http://doc.owncloud.com/server/2012.4.5/ownCloudAdminManual.pdf" target="_blank" rel="noopener noreferrer">ownCloud Admin Manual</a> It’s quite straighforward. Then all we have to do is navigate to login page, create an admin account and start uploading files:</p>
+
+<p><img src="/images/vpblogimg/2013/03/ownCloud.png" alt="Own Cloud"></p>
+
+<p>My favourite features are:</p>
+
+<ul>
+  <li>Ability to share password protected links with specific users</li>
+  <li>Ability to set expiry date to shared files</li>
+  <li>Ability to sync mulitple local folders (it doesn’t have to mimic the directory structure of server, you can select and map separate folders)</li>
+  <li>Supports plugins. A simple note taking plugin is quite helpful to take and sync notes. Also I installed YubiAuth plugin which supposedly enables using my Yubikey with it. But couldn’t make it work yet.
+My only negative observation about it is SMTP settings didn’t work. When I tried to send someone a link of shared file I got a bizarre error. On their forums I saw other people having similar problems. To me it’s not a crucial issue (as a single user, who am I going to mail anyway) but for an organization it may quickly become an annoying issue.</li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/59" class="prev">Prev</a>
+    
+    
+        <a href="/page/61" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/59/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/07/06/study-notes-for-70-461-querying-microsoft-sql-server-2012/" itemprop="url">Study Notes for 70-461: Querying Microsoft SQL Server 2012 – Part 1</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-07-06T11:22:13+01:00" itemprop="datePublished">July  6, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">certification, sql_server</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>As I mentioned before I like certification because it gives me a chance to cover all topics related to a subject no matter how trivial. During my preparations for this exam I learned some useful stuff. I believe they can be very useful in real-life scenarios. A compiled a list of items that I learned while studying for this exam:</p>
+
+<h3 id="01-common-table-expressions">01. Common Table Expressions</h3>
+<p>Not a new feature in SQL 2012 actually. I have used it a few times but I didn’t know its name back then. A Common Table Expression (CTE) is basically a temporary result set that you can use in the scope statement. For example</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>WITH DepartmentCTE (Name, GroupName)
+AS
+(
+    SELECT Name, GroupName
+    FROM HumanResources.Department
+    WHERE GroupName = 'Executive General and Administration'
+)
+
+SELECT NationalIDNumber
+FROM DepartmentCTE cte
+INNER JOIN HumanResources.Employee e ON cte.Name = e.JobTitle
+</code></pre></div></div>
+
+<p>This is not a very good example because a simple join could be used instead. But for the demonstration purposes it should be enough to layout the syntax and usage.</p>
+
+<p>Source: <a href="http://msdn.microsoft.com/en-us/library/ms190766(v=sql.105).aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/ms190766(v=sql.105).aspx</a></p>
+
+<h3 id="02-pivot--unpivot">02. Pivot / Unpivot</h3>
+<p>I had one question about Pivot and that was just the definition of it so it was easy. Basically, pivot converts row values to columns. For example, take this query:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT o.TerritoryID, YEAR(OrderDate) AS SaleYear, SUM(SubTotal) AS Total
+FROM Sales.SalesOrderHeader o
+WHERE o.TerritoryID = 1
+GROUP BY o.TerritoryID, YEAR(OrderDate)
+ORDER BY SaleYear ASC, o.TerritoryID ASC
+</code></pre></div></div>
+
+<p>which yields this output:</p>
+
+<p><img src="/images/vpblogimg/2013/07/QueryOutput01.png" alt="Query Output"></p>
+
+<p>Say we want to get all years as columns and the totals as the values in the row. Using pivots we can rewrite the query as follows:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT 'Total Sales' AS TotalSales, [2005], [2006], [2007], [2008]
+FROM
+(
+    SELECT o.TerritoryID, YEAR(OrderDate) AS SaleYear, SubTotal
+    FROM Sales.SalesOrderHeader o
+    WHERE o.TerritoryID = 1
+) AS SourceTable
+PIVOT
+(
+    SUM(SubTotal)
+    FOR SaleYear IN ([2005], [2006], [2007], [2008])
+) AS PivotTable;
+</code></pre></div></div>
+
+<p>and we get this resultset:</p>
+
+<p><img src="/images/vpblogimg/2013/07/QueryOutput02.png" alt="Query Output"></p>
+
+<p>Source: <a href="http://msdn.microsoft.com/en-us/library/ms177410(v=sql.105).aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/ms177410(v=sql.105).aspx</a></p>
+
+<h3 id="03-for-xml">03. FOR XML</h3>
+<p>I think XML lost a lot of ground after the rise of JSON over the last few years but still it is used very commonly. I never used FOR XML in a real-life project but I was aware the Microsoft cares about it and not surprisingly I got 4 questions. It’s is very simple and intuitive actually. The keywords you need to know are: RAW, AUTO, EXPLICIT, PATH and ELEMENTS</p>
+
+<p><em>Raw:</em> Returns a single <row> element for row.</row></p>
+
+<p>Query:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT TOP 1 *
+FROM HumanResources.Department
+FOR XML RAW
+</code></pre></div></div>
+
+<p>Output:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;row DepartmentID="1" Name="Engineering" GroupName="Research and Development" ModifiedDate="2002-06-01T00:00:00"/&gt;
+</code></pre></div></div>
+<p><em>Auto:</em> Generates the name of the elements from the query</p>
+
+<p>Query:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT TOP 1 *
+FROM HumanResources.Department
+FOR XML AUTO
+</code></pre></div></div>
+
+<p>Output:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;HumanResources.Department DepartmentID="1" Name="Engineering" GroupName="Research and Development" ModifiedDate="2002-06-01T00:00:00"&gt;
+</code></pre></div></div>
+<p><em>Elements:</em> Returns the values in elements rather than attributes.</p>
+
+<p>Query:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT TOP 1 *
+FROM HumanResources.Department
+FOR XML AUTO, ELEMENTS
+</code></pre></div></div>
+
+<p>Output:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;HumanResources.Department&gt;
+&lt;DepartmentID&gt;1&lt;/DepartmentID&gt;
+&lt;Name&gt;Engineering&lt;/Name&gt;
+&lt;GroupName&gt;Research and Development&lt;/GroupName&gt;
+&lt;ModifiedDate&gt;2002-06-01T00:00:00&lt;/ModifiedDate&gt;
+&lt;/HumanResources.Department&gt;
+</code></pre></div></div>
+
+<p><em>Path:</em> Gives more control over the path of the nodes</p>
+
+<p>Query:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT TOP 1 *
+FROM HumanResources.Department
+FOR XML PATH('Department'), ROOT('HumanResources')
+</code></pre></div></div>
+
+<p>Output:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;HumanResources&gt;
+&lt;Department&gt;
+&lt;DepartmentID&gt;1&lt;/DepartmentID&gt;
+&lt;Name&gt;Engineering&lt;/Name&gt;
+&lt;GroupName&gt;Research and Development&lt;/GroupName&gt;
+&lt;ModifiedDate&gt;2002-06-01T00:00:00&lt;/ModifiedDate&gt;
+&lt;/Department&gt;
+&lt;/HumanResources&gt;
+</code></pre></div></div>
+
+<p>Source: <a href="http://msdn.microsoft.com/en-us/library/ms178107.aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/ms178107.aspx</a></p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/07/05/on-microsoft-exam-70-461-querying-microsoft-sql-server-2012/" itemprop="url">On Microsoft Exam 70-461: Querying Microsoft SQL Server 2012</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-07-05T17:07:39+01:00" itemprop="datePublished">July  5, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">certification, sql_server</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I believe I had a considerable amount of experience with SQL Server throughout my career. Recently I decided to get SQL Server MSCA title which requires taking 3 exams (70-461, 70-462 and 70-463 namely). I think it’s a good way of polishing existing knowledge and learning new stuff. Hands on experience is great but generally you only learn enough to get things done, which is the desired result of course but when studying for certification you have to cover all details. Some of them may be quite trivial and don’t have much practical usage but I think they all may come in handy sometime so it doesn’t hurt to learn more.</p>
+
+<h3 id="on-to-70-461">On to 70-461</h3>
+<p>The number of questions vary between 40 – 60 and test duration is between 2 – 3 hours. In my exam, I had <strong>44 questions</strong> and the time given was <strong>2 hours</strong>.</p>
+
+<p>Total score is 1000 and the passing score is 700. I’ve got a whopping <strong>906</strong>. Actually at the end of the day doesn’t really matter if you get a full 1000 but it feels better to pass with a high mark.</p>
+
+<h3 id="study-notes">Study Notes</h3>
+<p>I decided to release my notes on a separate blog post as it became very lengthy very quickly.</p>
+
+<h3 id="study-materials">Study Materials</h3>
+
+<p><img src="/images/vpblogimg/2013/07/70-461_Training_Kit.jpg" alt="70-461 Training Kit"></p>
+
+<p>I used several different sources preparing for the exam. One of the most important ones is the official Training Kit. Also, I found the CBT Nuggets video series quite useful. You can move at a much faster pace to cover the topics with a video. So I recommend those videos (despite the steep price of CBT Nuggets subscription)</p>
+
+<p>There is another series in TrainSignal but I haven’t tried it.Finally I’ve found a short introductory video (around 1h 15m) to the exam. You can find the find link in the resorces section. It’s a very fast-paced introduction mainly underlining the exam topics that are not commonly used in real life.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.90daystomcsa.com" target="_blank" rel="noopener noreferrer">MCSA videos</a></li>
+  <li><a href="http://www.youtube.com/watch?v=K7zaBb4mxWI" target="_blank" rel="noopener noreferrer">70-461 video</a></li>
+  <li><a href="http://www.amazon.co.uk/Querying-Microsoft-Server-Training-Package/dp/0735666059/04" target="_blank" rel="noopener noreferrer">Training Kit</a></li>
+  <li><a href="https://secure.cbtnuggets.com/it-training-videos/series/mcrsft_sql_70-461" target="_blank" rel="noopener noreferrer">CBT Nuggets</a></li>
+  <li><a href="http://www.trainsignal.com/course/180/sql-server-2012-querying-70-461" target="_blank" rel="noopener noreferrer">TrainSignal</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/06/28/electronics-101/" itemprop="url">Electronics 101</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-06-28T16:51:13+01:00" itemprop="datePublished">June 28, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
+
+<!-- hobby -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">electronics</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Playing with Gadgeteer fuelled my enthusiasm so I dusted off my solderless breadboard and basic electronics components that came with the basic kit I bought a while ago.</p>
+
+<p><img src="/images/vpblogimg/2013/06/Electronics101_02.jpg" alt="Electronics"></p>
+
+<p>I don’t know what most of those things are but I decided to start with a simple circuit that lights an LED. After burning a few LEDs I learned that it would be a good idea to use a resistor in the circuit in order not to fry the LED. Reading resistors turned out to be a pain though! They are colour-coded and you have to know the value of each colour. I found here a nice calculator to free myself from that unnecessary waste of time: <a href="http://www.csgnetwork.com/resistcolcalc.html" target="_blank" rel="noopener noreferrer">http://www.csgnetwork.com/resistcolcalc.html</a></p>
+
+<p>Yet there was another problem. All the sources I had found were talking about 3 bands. But my resistors had 5 colour bands! After spending some more time I learned that there is also a 5-colour version of resistors. Here is the calculator for the 5-band version: <a href="http://www.diyalarmforum.com/5-band-resistor-calc" target="_blank" rel="noopener noreferrer">http://www.diyalarmforum.com/5-band-resistor-calc</a></p>
+
+<p>The problem is they are so tiny that it’s not always easy to distinguish the colours. Anyway, I decided to pick one and hope for the best.</p>
+
+<p>The next challenge is using the breadboard. Even though it’s meant to make life easier for circuit builders there’s a still a few things to learn about it which are not very intuitive. I found a nice video on Youtube to learn the basics: <a href="http://www.youtube.com/watch?v=k9jcHB9tWko" target="_blank" rel="noopener noreferrer">http://www.youtube.com/watch?v=k9jcHB9tWko</a></p>
+
+<p>After playing around a little bit a finally managed to light a LED which was nice but didn’t feel like much of an accomplishment. It required too much time to achieve something so trivial.</p>
+
+<p><img src="/images/vpblogimg/2013/06/Electronics101_01.jpg" alt="Electronics"></p>
+
+<p>I think I’ll need various components to build something significant. The kit I have looks very limited. But before I invest more money into this I think I’ll keep playing with more high-level products like Gadgeteer, Netduino and Arduino. If I can incorporate breadboard and lower-level components into systems using those that would a bonus but without such powerful controllers I don’t think I’ll get satisfying results with circuits built on a solderless breadboard.</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/58" class="prev">Prev</a>
+    
+    
+        <a href="/page/60" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

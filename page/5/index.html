@@ -1,0 +1,531 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/5/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2019/09/04/alarm-pi/" itemprop="url">Alarm Pi</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-09-04T07:00:00+01:00" itemprop="datePublished">September  4, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
+
+<!-- hobby -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">raspberry_pi, productivity</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<h2 id="the-problem">The Problem</h2>
+<p>Snoozing is the worst possible thing you can do to yourself! You start the day with a feeling of guilt and being late for everything from the start. To avoid this I’ve been working on improving my toolkit and techniques. I posted <a href="https://volkanpaksoy.com/archive/2019/03/09/No-More-Snoozing-Tips-Tools-and-Techniques/">this</a> as a list of my current methods and tools.</p>
+
+<p>Whilst these methods worked for me a while I’ve started having an issue with Alexa playing my playlist from Spotify: It always starts with the same song. My idea was to have a different song every morning so this bug in Spotify impeded me from achieving my goal.</p>
+
+<h2 id="the-idea">The Idea</h2>
+<p>As the saying goes: If all you have is a hammer, everything looks like a nail!</p>
+
+<p>Even though I have other means of developing tools and software, I wanted to use another Raspberry Pi to replace Alexa morning routine (it still turns on the light though).</p>
+
+<h2 id="the-execution">The Execution</h2>
+<p>So I decided to dust off my OG Raspberry Pi 1 Model B and implement my own custom solution for playing a random song every morning to help wake me up.</p>
+
+<p><img src="/images/vpblogimg/2019/09/alarm-pi-angmar.jpg" alt=""></p>
+
+<p>Here’s how I implemented it from start to finish:</p>
+
+<h3 id="step-01-download-raspbian-image-and-prepare-sdmicrosd-card">Step 01: Download Raspbian image and prepare SD/MicroSD card</h3>
+<p>I downloaded Raspbian Buster Lite as I don’t need desktop and other extra software for this project.</p>
+
+<p>I followed the official guide from raspberrypi.org to burn the image. It’s basically just a few commands:</p>
+
+<p>Insert the card and run the following to identify the card:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil list
+</code></pre></div></div>
+
+<p>Then</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo dd bs=1m if=path_of_your_image.img of=/dev/rdiskn conv=sync
+</code></pre></div></div>
+
+<p>where n is the number of disk which I found from the first step.</p>
+
+<p>If you get “resource is busy” error, then run the following</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil unmountDisk /dev/diskn
+</code></pre></div></div>
+
+<h3 id="step-02-carry-out-necessary-configuration-updates">Step 02: Carry Out Necessary Configuration Updates</h3>
+<p>It’s a good practice to change the default passwords so I ran</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>passwd
+</code></pre></div></div>
+
+<p>and updated the password.</p>
+
+<p>Also for remote installations I enabled SSH:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable ssh
+sudo systemctl start ssh
+</code></pre></div></div>
+
+<p>And I like to give a specific name to all my devices so that I can keep an eye on the machines connected to my network more easily.</p>
+
+<p>To achieve that I ran:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo hostname NEW_HOSTNAME
+</code></pre></div></div>
+
+<p>I used raspi-config to connect to WiFi network</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo raspi-config
+</code></pre></div></div>
+
+<p>and enter the details and rebooted to connect to the network.</p>
+
+<p>In this MVP implementation I don’t even need Internet connectivity (after the initial installations below) as all my MP3 files are on the device already. But in my tests I noticed that when the Pi is disconnected the system time wasn’t updating so scheduled job wasn’t being triggered. This is probably because I’m using a Pi 1. I’m guessing the newer version can work offline as well.</p>
+
+<h3 id="step-03-install-mp3-player-software">Step 03: Install MP3 Player Software</h3>
+<p>In this simple project I’m going to install mpg123 and run it via a Python script</p>
+
+<p>Installation is as simple as this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install mpg123 -y
+</code></pre></div></div>
+
+<h3 id="step-04-develop-the-script">Step 04: Develop the script</h3>
+<p>The following script points to a folder which supposedly have all the local MP3 files, picks one randomly and starts playing.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="n">path</span> <span class="o">=</span><span class="s">'/path/to/mp3/folder'</span> 
+<span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="n">index</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">))</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">f</span><span class="s">'/usr/bin/mpg123 {files[index]}'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="step-05-copy-music-and-script-to-raspberry-pi">Step 05: Copy music and script to Raspberry Pi</h3>
+<p>Save the script above in a USB drive along with the MP3 files. To copy the files from USB drive to Pi microSD card, I inserted my USB and ran the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo fdisk -l
+sudo mkdir /media/usb
+sudo mount /dev/sda1 /media/usb
+</code></pre></div></div>
+
+<p>Then</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir /home/pi/music
+cp /media/usb/*.mp3 /home/pi/music
+</code></pre></div></div>
+
+<p>and copy the script to home folder</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cp /media/usb/alarm-pi.py /home/pi
+</code></pre></div></div>
+
+<h3 id="step-06-schedule-the-script">Step 06: Schedule the script</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>crontab -e
+</code></pre></div></div>
+
+<p>Then add to run at a certain time. The example below runs at 7:30am everyday:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>30 7 * * * /usr/bin/python3 /home/pi/alarm-pi.py
+</code></pre></div></div>
+
+<p>If you want to run the script multiple times you can another one (like another one after 10 minutes as a snooze-prevention mechanism!)</p>
+
+<h3 id="step-07-test-the-schedule">Step 07: Test the schedule</h3>
+<p>Update your schedule temporarily and set it to a few minutes later and start playing the waiting game! Once you hear a random song playing make sure to set it back to your actual alarm time.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>I meant to run this in a Docker container and develop the application with dotnet core but turns out playing MP3 with dotnet core in Linux is not easy. Also playing sound from inside a container has its own issues. So for those reasons I chose the easiest possible path to achieve the goal. If I find time I’ll improve this and make it more flexible but for the time being it does the job so I’ll assume MVP is done now.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://volkanpaksoy.com/archive/2019/03/09/No-More-Snoozing-Tips-Tools-and-Techniques">No more snoozing: Tips, tools and techniques</a></li>
+  <li><a href="https://www.raspberrypi.org/documentation/installation/installing-images/mac.md" target="_blank" rel="noopener noreferrer">Installing operating system images on Mac OS</a></li>
+  <li><a href="https://blog.docker.com/2019/03/happy-pi-day-docker-raspberry-pi/" target="_blank" rel="noopener noreferrer">Docker Blog: Happy Pi Day with Docker and Raspberry Pi</a></li>
+  <li><a href="https://downloads.raspberrypi.org/raspbian/images/" target="_blank" rel="noopener noreferrer">Raspbian Downloads Page</a></li>
+  <li><a href="https://downloads.raspberrypi.org/raspbian_lite/images/" target="_blank" rel="noopener noreferrer">Raspbian Lite Downloads Page</a></li>
+  <li><a href="https://electrondust.com/2017/11/25/setting-raspberry-pi-wifi-static-ip-raspbian-stretch-lite/" target="_blank" rel="noopener noreferrer">Setting up Raspberry Pi WiFi with Static IP on Raspbian Stretch Lite</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2019/08/31/Setting-Up-a-Pi-Hole-with-a-Raspberry-Pi/" itemprop="url">Setting Up a Pi Hole with a Raspberry Pi</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-08-31T07:00:00+01:00" itemprop="datePublished">August 31, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/security">security</a></span> -->
+
+<!-- security -->
+
+
+
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">pi_hole, raspberry_pi</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p><img src="/images/vpblogimg/2019/08/pi-hole-logo.png" alt=""></p>
+
+<p>For some time I’d been wanting to set up my own Pi Hole in my network.</p>
+
+<p>In <a href="https://volkanpaksoy.com/archive/2019/08/10/Implementing-a-Self-Hosted-Docker-Registry-on-Raspberry-Pi/">this</a> previous post I implemented a Docker registry on Raspberry Pi. I was planning to install it using Docker on that Pi but then I decided to set up a new Pi from scratch due to performance concerns. After I get the hang of it I might migrate it to Docker.</p>
+
+<h2 id="preparations-download-raspbian-image-and-prepare-micro-sd-card">Preparations: Download Raspbian image and prepare Micro SD card</h2>
+<p>As of this writing, the latest Raspbian release is Buster but in the <a href="https://docs.pi-hole.net/main/prerequesites/#supported-operating-systems" target="_blank" rel="noopener noreferrer">official supported OS list</a> the latest supported Raspbian is Stretch. So I went to <a href="https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-04-09/" target="_blank" rel="noopener noreferrer">this</a> page to download Raspbian Stretch Lite.</p>
+
+<p>I downloaded Raspbian Buster Lite as I don’t need desktop and other extra software for this project.I followed the official guide from raspberrypi.org to burn the image. It’s basically just a few commands:</p>
+
+<p>I inserted the card and run the following to identify the card:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil list
+</code></pre></div></div>
+
+<p>Then</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo dd bs=1m if=path_of_your_image.img of=/dev/rdiskn conv=sync
+</code></pre></div></div>
+
+<p>where n is the number of disk which I found from the first step.</p>
+
+<p>If you get “resource is busy” error, then run the following</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil unmountDisk /dev/diskn
+</code></pre></div></div>
+
+<h2 id="carry-out-necessary-configuration-updates">Carry Out Necessary Configuration Updates</h2>
+<p>It’s a good practice to change the default passwords so I ran</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>passwd
+</code></pre></div></div>
+
+<p>and updated the password.</p>
+
+<p>Also for remote installations I enabled SSH:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable ssh
+sudo systemctl start ssh
+</code></pre></div></div>
+
+<p>And I like to give a specific name to all my devices so that I can keep an eye on the machines connected to my network more easily.</p>
+
+<p>To achieve that I ran:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo hostname NEW_HOSTNAME
+</code></pre></div></div>
+
+<p>No need to set a static IP address at this point as Pi Hole setup takes care of that:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pihole-static-ip-needed.png" alt=""></p>
+
+<h2 id="install-pi-hole">Install Pi-Hole</h2>
+<p>There is an easy one-step installation:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -sSL https://install.pi-hole.net | bash
+</code></pre></div></div>
+
+<p>I changed my IP to a different static IP and rebooted the Pi.</p>
+
+<p>After that I could go to the admin page via http://{Pi Hole Static IP}/admin/ and see the dashboard:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pihole-admin-page.png" alt=""></p>
+
+<h2 id="test">Test</h2>
+<p>Now it’s time to see if it’s working at all. I have 2 MacBooks connected to the same network. I changed one of the laptop’s DNS server to point to Pi Hole and left the other one intact.</p>
+
+<p>In the laptop that’s still using the old DNS settings, I opened a Chrome window in incognito mode and visited a site and at top it shows an ad:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pihole-page-with-ads.png" alt=""></p>
+
+<p>And on the other laptop I repeated the process and I got the same page without ads this time:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pihole-page-without-ads.png" alt=""></p>
+
+<p>When I go to the admin page I can see what calls are blocked:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pi-hole-admin-page-with-results.png" alt=""></p>
+
+<p>Also a nice thing about it you can choose to Whitelist certain providers. For instance in the image below it looks like Google Analytics is blocked and I can whitelist it easily:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pi-hole-admin-page-query-logs.png" alt=""></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://pi-hole.net/" target="_blank" rel="noopener noreferrer">Official Pi-Hole Website</a></li>
+  <li><a href="https://www.hanselman.com/blog/BlockingAdsBeforeTheyEnterYourHouseAtTheDNSLevelWithPiholeAndACheapRaspberryPi.aspx" target="_blank" rel="noopener noreferrer">Scott Hanselman: Blocking ads before they enter your house at the DNS level with pi-hole and a cheap Raspberry Pi</a></li>
+  <li><a href="https://blog.codinghorror.com/an-exercise-program-for-the-fat-web/" target="_blank" rel="noopener noreferrer">Jeff Atwood: An Exercise Program for the Fat Web</a></li>
+  <li><a href="https://twit.tv/shows/know-how/episodes/355" target="_blank" rel="noopener noreferrer">TWiT Know How Episode 355: Raspberry Pi-Hole!</a></li>
+  <li><a href="https://hub.docker.com/r/pihole/pihole/" target="_blank" rel="noopener noreferrer">Docker Pi-hole DockerHub repository</a></li>
+  <li><a href="https://discourse.pi-hole.net/" target="_blank" rel="noopener noreferrer">Pi-Hole Forum</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2019/08/21/Exploring-AWS-DeepLens/" itemprop="url">Exploring AWS DeepLens</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-08-21T06:00:00+01:00" itemprop="datePublished">August 21, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/machine_learningaws">machine_learning</a></span> -->
+
+<!-- machine_learning, aws -->
+
+
+
+
+    <a href="/category/machine_learning">machine_learning</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">deeplens</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I recently bought this device in anticipation of getting accustomed with AWS Machine Learning services. I thought it would be a nice and fun introduction to build a DIY project using ML. This weekend I had a chance to play around with it.</p>
+
+<h2 id="unboxing">Unboxing</h2>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-unboxing-1.jpeg" alt=""></p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-unboxing-2.jpeg" alt=""></p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-unboxing-3.jpeg" alt=""></p>
+
+<h2 id="registering">Registering</h2>
+
+<p>First thing you need to do is register your DeepLens which can be done <a href="https://docs.aws.amazon.com/deeplens/latest/dg/deeplens-getting-started-register.html" target="_blank" rel="noopener noreferrer">here</a></p>
+
+<p>Alternatively, you can log in to AWS Console, go to AWS DeepLens service and click Register Device. As of this writing this service is only available in Tokyo, N.Virginia and Frankfurt. As closest to me is Frankfurt I chose that one.</p>
+
+<h2 id="creating-a-project">Creating a Project</h2>
+
+<p>Now that the devices is ready, I went to Projects section and created a new project based on a template. For this initial exploration mission I chose Bird Classification template.</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-project-templates.png" alt=""></p>
+
+<p>When you choose your template it shows a description of the template and how it works</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-project-overview.png" alt=""></p>
+
+<p>Once you create the project it creates the necessary resources. For example in my template it created 2 Lambda functions:</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-lambda.png" alt=""></p>
+
+<p>Now we are ready to deploy the project to the device so we can simply click on Deploy to Device button on top right-hand corner in the project page:</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-deploy-to-device.png" alt=""></p>
+
+<p>After that you choose your DeepLens from the avialble device list (in my case I had one device) and click Review then Deploy</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-deploy-review.png" alt=""></p>
+
+<h2 id="testing-the-project">Testing the project</h2>
+
+<p>First I followed the steps to install custom certificate so that I can start viewing the video feed in my browser:</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-video-feed-1.png" alt=""></p>
+
+<p>Because DeepLens doesn’t know if there’s a bird or not in the picture it constantly makes a guess. Even an empty carton box looks like a Long Tailed Jaeger with 2.1% confidence apparently!</p>
+
+<p>When I presented an image I found from the Internet the results significantly improved though (thankfully, otherwise this would all be for nothing!)</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-video-feed-2.png" alt=""></p>
+
+<p>According to Google the bird in the picture is indeed a Kingfisher.</p>
+
+<p>Next test is the bird I saw on the roof and identified as a Mallard. Let’s see what DeepLens thinks about it:</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-video-feed-3.png" alt=""></p>
+
+<p>So with 17.5% confidens DeepLenms agrees that it is a Mallard. One thing to note is that the angle of the image significantly changes the prediction. Even a slight change in the angle makes the prediction shift from 3% to 45%. But it’s just a test project template anyway so I’m not looking for too much accuracy at this point.</p>
+
+<p>Final test: I downloaded the dataset used to train the algorithm. It’s a 1.1GB download full of images. To compare with the last Mallard test I got one picture from the Mallard folder and showed it to DeepLens:</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-video-feed-4.png" alt=""></p>
+
+<p>As shown above the confidence increased to 55%. So probably if I use the pictures I took to train the algorithm I would be able to get much better results.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>This was just a first step to set up and explore the device. Hopefully in the comin days I’ll be doing more meaningful projects with it and post those too.</p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="https://aws.amazon.com/deeplens/" target="_blank" rel="noopener noreferrer">AWS DeepLens Site</a></li>
+  <li><a href="https://aws.amazon.com/blogs/aws/aws-deeplens-now-orderable-in-seven-additional-countries" target="_blank" rel="noopener noreferrer">AWS DeepLens – Now Orderable in Seven Additional Countries</a></li>
+  <li><a href="http://www.vision.caltech.edu/visipedia/CUB-200-2011.html" target="_blank" rel="noopener noreferrer">Caltech-UCSD Birds-200-2011</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/4" class="prev">Prev</a>
+    
+    
+        <a href="/page/6" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Download Once, Install Forever! - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2011/10/23/download-once-install-forever/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Download Once, Install Forever!</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2011-10-23T16:55:29+01:00" itemprop="datePublished">October 23, 2011</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- misc -->
+
+
+
+
+    <a href="/category/misc">misc</a>
+    
+</span>
+	<span class="tags">wsus</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>I’ve been using my own domain in my home network for a few years now but I hadn’t tried Windows Server Update Services (WSUS) until recently. After re-organizing my network, I ended up having almost 20 virtual machines. Since most of them are running various flavours of Windows, keeping them up-to-date became an issue. That’s when I recalled the existence of WSUS. What it does is basically allowing you to download Windows updates on one of your own servers and then distributing them to other machines over LAN. So no more downloading 300M of service packs over and over again.</p>
+
+<p>Installing WSUS is quite easy. You just have to open server manager and add the Windows Server Update Services role.</p>
+
+<p><img src="/images/vpblogimg/2011/10/ss3.png" alt="SQL Server Roles"></p>
+
+<p>Then you can select for which products you want to download updates. And also what types of updates you want to download.</p>
+
+<p><img src="/images/vpblogimg/2011/10/ss4.png" alt="SQL Server">
+<img src="/images/vpblogimg/2011/10/ss5.png" alt="SQL Server"></p>
+
+<p>The most tricky part is enforcing the client machines in the domain to download the updates from your server. That goal is achieved by Group Policy Management. TechNet has a nice article describing the necessary actions: <a href="http://technet.microsoft.com/en-us/library/cc708574(WS.10).aspx" target="_blank" rel="noopener noreferrer">http://technet.microsoft.com/en-us/library/cc708574(WS.10).aspx</a></p>
+
+<p>Normally, its target is not home users obviously. But after I’ve seen the benefits of it, I strongly recommend it to anyone running his own domain.</p>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2011/10/19/lightning-fast-development-with-lightswitch/" title="Previous Post: 
+Lightning-fast development with Lightswitch">« Lightning-fast development with Lightswitch</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2012/08/24/online-education-boom/" title="next Post: 
+Online Education Boom">Online Education Boom » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

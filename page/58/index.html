@@ -1,0 +1,430 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/58/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/07/12/new-toy-beaglebone-black/" itemprop="url">New toy: BeagleBone Black</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-07-12T23:46:03+01:00" itemprop="datePublished">July 12, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
+
+<!-- hobby -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">beaglebone_black, electronics</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>After Raspberry Pi opened the way for low-cost small computers, a number of them started to show up in the market. One of the most recent ones gaining ground is BeagleBoard.</p>
+
+<p><img src="/images/vpblogimg/2013/07/beagle_logo_hdr.gif" alt="Beagle Logo"></p>
+
+<p>I just bought the cheap version which is called BeagleBone black which looks something like this:</p>
+
+<p><img src="/images/vpblogimg/2013/07/BeagleBone_Black_Board.jpg" alt="BeagleBone_Black_Board"></p>
+
+<p>Nice looking little fellow, right?</p>
+
+<h3 id="getting-started">Getting Started</h3>
+<p>I followed the getting started guide which you can find on the home page. Also the link in the resources section. When I plugged it in to USB it is recognized as a removable device. Then downloaded and tried to install the drivers as suggested but no luck. Apparently the drivers are unsigned and Windows 8 didn’t allow me to install them. Googling a little bit I found a step-by-step guide to change the machine settings so that unsigned drivers can be installed. I followed the steps and it worked like a charm. The original URL is in the resources section also the steps are below.</p>
+
+<h3 id="troubleshooting">Troubleshooting</h3>
+<p>To be able to install drivers on Windows 8 follow the steps below:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Press win+c on the keyboard to bring up the charms side bar (or move mouse to right top corner of the screen)
+2. Click the Settings button.
+3. Click the Change PC Settings at the bottom of the sidebar.
+4. On screen that shows up, select the General option from the sidebar then scroll down the page that appears.
+5. Click the Restart now button under the Advanced startup section.
+6. You will momentarily see the restarting screen, then it will switch to a blue screen titled "Choose an option"
+7. Click the Troubleshoot button.
+8. Click Advanced options.
+9. Click Startup Settings
+10. Click Restart
+11. You should then see a Startup Settings screen after your computer reboots.
+12. Press 7 or F7 on your keyboard to Disable driver signature enforcement
+13. Now Windows 8 will continue starting up.
+14. Log-in as normal, and then run BONE_D64.exe again
+15. Now you should see 4 warning dialogs about "unsigned driver installation", click OK for all of them.
+</code></pre></div></div>
+
+<h3 id="results">Results</h3>
+<p>So far so good:</p>
+
+<p><img src="/images/vpblogimg/2013/07/BeagleBone_Black.jpg" alt="BeagleBone Black"></p>
+
+<p>I can connect to the web server running by default. I’ll try to explore what I can do with it further. Let’s see what it is capable of.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://beagleboard.org/Getting%20Started" target="_blank" rel="noopener noreferrer">Getting started guide</a></li>
+  <li><a href="https://groups.google.com/forum/#!topic/beagleboard/_y-fIgg-J7I" target="_blank" rel="noopener noreferrer">Troubleshoting Windows 8 driver installation</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/07/10/hardening-windows-with-emet/" itemprop="url">Hardening Windows with EMET</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-07-10T18:06:56+01:00" itemprop="datePublished">July 10, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/security">security</a></span> -->
+
+<!-- security -->
+
+
+
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">emet</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p><img src="/images/vpblogimg/2013/07/EMET.png" alt="EMET"></p>
+
+<p>EMET (Enhanced Mitigation Experience Toolkit) is a free utility that helps prevent memory corruption vulnerabilities and is designed to prevent hackers from gaining access to a system.
+I haven’t used it before but according to the documentation the new features are:</p>
+
+<ul>
+  <li>
+<strong>Certificate Trust:</strong> Allows to detect Man in the Middle attacks that leverage fraudulent SSL certificates</li>
+  <li>
+<strong>ROP mitigations:</strong> Block exploit that leverage the Return Oriented Programming exploitation technique.</li>
+  <li>
+<strong>Early Warning Program:</strong> Allows enterprise customers and Microsoft to analyze the details of an attack and respond effectively.</li>
+  <li>
+<strong>Audit Mode:</strong> Provides monitoring functionalities for testing purposes.</li>
+  <li>
+<strong>Redesigned User Interface:</strong> Streamlines the configuration operations and provides accessibility.</li>
+</ul>
+
+<p>Under the hood this tool performs very low-level operations and honestly I don’t know what they all mean. For me the biggest benefit was learning about advanced attacks and exploits and how to avoid them. I strongly recommend reading the user’s guide. Apparently there are many interesting attack techniques when it comes to exploiting the memory. EMET provides mitigation methods against these attacks. For instance:</p>
+
+<ul>
+  <li>
+<strong>Structured Exception Handler Overwrite Protection (SEHOP):</strong> This mitigation was shipped with Windows Vista SP1 but with EMET it can be used in previous versions as well.</li>
+  <li>
+<strong>Data Execution Prevention (DEP):</strong> This mitigation exists since Windows XP but applications need to be compiled with a special flag to opt-in to DEP. With EMET allows applications without that flag to opt as well.</li>
+  <li>
+<strong>Heapspray allocation:</strong> “When an exploit runs, it often cannot be sure of the address where its shellcode resides and must guess when taking control of the instruction pointer. To increase the odds of success, most exploits now use heapspray techniques to place copies of their shellcode at as many memory locations as possible.”</li>
+  <li>
+<strong>Mandatory Address Space Layout Randomization (ASLR):</strong> ASLR randomizes the address space of the loaded modules so that attackers cannot predict their locations. Like in DEP, EMET allows applications without the special flag to use this feature.</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2013/07/EMT_Scr.png" alt="EMET"></p>
+
+<h3 id="certificate-trust">Certificate Trust</h3>
+<p>I was wondering about this feature as it’s more “visible” than the others. Basically what you do is define protected websites and pinning rules. Pinning Rule is essentially importing an SSL certificate’s thumbprint. Once you import it you create a protected website which is simply entering the domain name of the site and you associate the certificate with the site.</p>
+
+<p><img src="/images/vpblogimg/2013/07/EMET_CertTrustConfig.png" alt="EMET"></p>
+
+<p>From now on if the certificate changes EMET displays a message like below:</p>
+
+<p><img src="/images/vpblogimg/2013/07/EMET_SSL.png" alt="EMET"></p>
+
+<p>Actually, I didn’t want to spend a great deal to test it first so the easiest way to test is running Fiddler (allow it to install it’s own certificate) and visit login.live.com. EMET comes with that site already configured so as soon as it notices the certificate doesn’t match its rule it fires the alarm.
+Looks like a nice feature but it only works with IE which I almost never use other than testing my code. Also I was expecting more fuss about it actually. It just displays the window for a few seconds and you can keep visiting the site. If for instance you were looking at something else in that brief period while the site is loading you may completely miss the fact you are being “Man-in-the-Middle”d.
+Overall, it’s better to have it than not having it at all I think.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://download.microsoft.com/download/7/A/A/7AA570E7-92DF-4C28-BE12-E72831797666/EMET%20User's%20Guide.pdf" target="_blank" rel="noopener noreferrer">Download EMET 4.0 and User’s Guide</a></li>
+  <li><a href="http://technet.microsoft.com/en-us/security/dn283932.aspx" target="_blank" rel="noopener noreferrer">Technet article</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/07/07/study-notes-for-70-461-querying-microsoft-sql-server-2012-part-2/" itemprop="url">Study Notes for 70-461: Querying Microsoft SQL Server 2012 – Part 2</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-07-07T18:46:51+01:00" itemprop="datePublished">July  7, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">certification, sql_server</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>This the Part 2 of my Study notes for 70-461 exam. You can find the Part 1 <a href="https://volkanpaksoy.com/archive/2013/07/06/study-notes-for-70-461-querying-microsoft-sql-server-2012/">here</a></p>
+
+<h3 id="04-aggregate-functions">04. Aggregate Functions</h3>
+
+<ol>
+  <li>
+    <p>GROUPING SETS
+ Using GROUPING SETS operator returns the same result set generated by using a GROUP BY, ROLLUP and CUBE operator. For example, this query generates the following result set:</p>
+
+    <div class="highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> SELECT o.TerritoryID, YEAR(OrderDate) AS SaleYear, SUM(SubTotal) AS Total
+ FROM Sales.SalesOrderHeader o
+ GROUP BY GROUPING SETS ((), o.TerritoryID, YEAR(OrderDate))
+ ORDER BY SaleYear ASC, o.TerritoryID ASC, Total ASC
+</code></pre></div>    </div>
+
+    <p>Output:
+ <img src="/images/vpblogimg/2013/07/QueryOutput03.png" alt="Query Output"></p>
+
+    <p>Source: <a href="http://technet.microsoft.com/en-us/library/bb522495(v=sql.105).aspx" target="_blank" rel="noopener noreferrer">http://technet.microsoft.com/en-us/library/bb522495(v=sql.105).aspx</a></p>
+  </li>
+  <li>
+    <p>RANK / DENSE_RANK / NTILE / ROW_NUMBER
+ These functions may be quite helpful for reporting queries.</p>
+
+    <p>RANK – DENSE_RANK: These functions help to order rows by assigning an incrementing number based on the criteria used in ORDER BY clause. The difference between them is rank skips the next value when there are two of the same one and dense_rank doesn’t.</p>
+
+    <p><em>Example:</em></p>
+    <div class="highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> SELECT o.TerritoryID, YEAR(OrderDate) AS SaleYear, SUM(SubTotal) AS Total,
+ RANK() OVER(ORDER BY SUM(SubTotal) DESC) AS Rank
+ FROM Sales.SalesOrderHeader o
+ GROUP BY o.TerritoryID, YEAR(OrderDate)
+ ORDER BY Rank, SaleYear ASC, o.TerritoryID ASC, Total ASC
+</code></pre></div>    </div>
+
+    <p><em>Output:</em></p>
+
+    <p><img src="/images/vpblogimg/2013/07/QueryOutput04.png" alt="Query Output"></p>
+  </li>
+  <li>
+    <p>NTILE
+ Works like rank but it takes an integer parameter (n) and partitions the results to n-pieces. For example, the query below with NTILE returns 40 rows. As n is 4 in this example, the first 10 rows got rank 1 and 11 – 20 got rank 2 and so forth.
+ Example:</p>
+    <div class="highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> SELECT o.TerritoryID, YEAR(OrderDate) AS SaleYear, SUM(SubTotal) AS Total,
+ NTILE(4) OVER(ORDER BY SUM(SubTotal) DESC) AS Rank
+ FROM Sales.SalesOrderHeader o
+ GROUP BY o.TerritoryID, YEAR(OrderDate)
+ ORDER BY Rank, SaleYear ASC, o.TerritoryID ASC, Total ASC
+</code></pre></div>    </div>
+
+    <p><em>Output:</em></p>
+
+    <p><img src="/images/vpblogimg/2013/07/QueryOutput05.png" alt="Query Output"></p>
+
+    <p><em>ROW_NUMBER:</em> Just increments the rank no matter what.
+ <em>Example:</em></p>
+
+    <div class="highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> SELECT o.TerritoryID, YEAR(OrderDate) AS SaleYear, SUM(SubTotal) AS Total,
+ ROW_NUMBER() OVER(ORDER BY SUM(SubTotal) DESC) AS Rank
+ FROM Sales.SalesOrderHeader o
+ GROUP BY o.TerritoryID, YEAR(OrderDate)
+ ORDER BY Rank, SaleYear ASC, o.TerritoryID ASC, Total ASC
+</code></pre></div>    </div>
+
+    <p><em>Output:</em></p>
+
+    <p><img src="/images/vpblogimg/2013/07/QueryOutput06.png" alt="Query Output"></p>
+  </li>
+</ol>
+
+<p>Source: <a href="http://msdn.microsoft.com/en-us/library/ms189798.aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/ms189798.aspx</a></p>
+
+<h3 id="05-analytic-functions">05. Analytic Functions</h3>
+<p>LAG / LEAD: When I first saw these I instantly loved them! They prevent an unnecessary costly self-join to access previous and next rows in a result set.</p>
+
+<p>So for example check out the following query and its output:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT o.TerritoryID, YEAR(OrderDate) AS SaleYear, SUM(SubTotal) AS Total,
+LAG(SUM(SubTotal)) OVER(ORDER BY YEAR(OrderDate)) AS PrevYear,
+LEAD(SUM(SubTotal)) OVER(ORDER BY YEAR(OrderDate))  AS NextYear
+FROM Sales.SalesOrderHeader o
+WHERE o.TerritoryID = 1
+GROUP BY o.TerritoryID, YEAR(OrderDate)
+ORDER BY SaleYear ASC, o.TerritoryID ASC, Total ASC
+</code></pre></div></div>
+
+<p><em>Output:</em></p>
+
+<p><img src="/images/vpblogimg/2013/07/QueryOutput07.png" alt="Query Output"></p>
+
+<p>Notice that every row has the previous row’s current value in its PrevYear column. Except the first one obviously as it doesn’t have a previous year. And the same logic applies to the NextYear value with the difference that LEAD function is used to obtain those values.</p>
+
+<p>Source: <a href="http://msdn.microsoft.com/en-us/library/hh213234.aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/hh213234.aspx</a></p>
+
+<h3 id="06-transaction-tips">06. TRANSACTION TIPS</h3>
+<p>One important topic to grasp is transaction isolation levels. I had a few questions related to this topic. Also it is crucial to create high-performance queries.
+The isolation levels you need to pay attention are:</p>
+
+<p>READ UNCOMMITTED: This one is most loose one as it allows dirty reads. But much faster than the others as it doesn’t lock the rows.</p>
+
+<p>READ COMMITTED: It doesn’t allow reading uncommitted data. This is the default level.</p>
+
+<p>REPEATABLE READ: Prevents dirty reads. Concurrent operations cannot modify or delete data.</p>
+
+<p>SERIALIZABLE: This level takes it one step further: In  addition to REPEATABLE READ it prevents concurrent operations from inserting data too.</p>
+
+<p>SNAPSHOT: Specifies that data read by any statement in a transaction will be the transactionally consistent version of the data that existed at the start of the transaction.</p>
+
+<p>Source: <a href="http://msdn.microsoft.com/en-us/library/ms173763.aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/ms173763.aspx</a></p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/57" class="prev">Prev</a>
+    
+    
+        <a href="/page/59" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

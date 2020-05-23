@@ -1,0 +1,225 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>DIY Streaming Service with Synology - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2017/09/05/DIY-Streaming-Service-with-Synology/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">DIY Streaming Service with Synology</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2017-09-05T07:00:00+01:00" itemprop="datePublished">September  5, 2017</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- hobby -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">synology, music, streaming</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>I’ve been a Spotify customer for quite long time but recently realized that I wasn’t using it enough to justify 10 quid per month. Amazon made a great offer for 4 months subscription for only £0.99 and I’m trying that out now but the quality of the service didn’t impress so far. Then it dawned on me: I already have lots of MP3s from my old archives, I have a fast internet connection and I have a Synology. Why not just build my own streaming?</p>
+
+<h2 id="one-device-to-rule-them-all-synology">One device to rule them all: Synology</h2>
+<p>Everyday I’m growing more fond of my Synology and regretting for all that time I haven’t utilized it fully.</p>
+
+<p>For streaming audio, we need the server and client software. The server side comes with Synology: Audio Station</p>
+
+<h3 id="the-server">The Server</h3>
+<p>Using Synology Audio Station is a breeze. You simply connect to Synology over the network and copy your albums into the music folder. Try to have a cover art named as “cover.jpg” so that your albums shows nicely on the user interface.</p>
+
+<p><img src="/images/vpblogimg/2017/09/synology-audio-folder-view.png" alt=""></p>
+
+<h3 id="the-client">The Client</h3>
+<p>Synology has a suite of iOS applications which are available in the Apple App Store. The one I’m using for audio streaming is called <strong>DS Audio</strong>.</p>
+
+<p><img src="/images/vpblogimg/2017/09/synology-audio-on-appstore.PNG" alt=""></p>
+
+<p>By using Synology’s Control Panel you can use a specific user for listening to music only. This way even if your account is compromised the attacker will only have read-only access to your music library.</p>
+
+<p><img src="/images/vpblogimg/2017/09/synology-audio-user-permissions.png" alt=""></p>
+
+<h2 id="connecting-to-the-server">Connecting to the server</h2>
+<p>There are two ways of connecting to your server:</p>
+
+<ol>
+  <li>Dynamic DNS</li>
+  <li>Quick Connect (QC)</li>
+</ol>
+
+<p>Dynamic DNS is a builtin functionality but you’d need a Synology account. Basically your Synology pings their server so that it can detec the IP changes.</p>
+
+<p>QC is the way I chose to go with. It’s a proprietary technology by Synology. The nice thing about QC is when you are connected to your local network it uses the internal IP so it doesn’t use mobile data. When you’re outside it uses the external IP and connects over the Internet.</p>
+
+<h2 id="features">Features</h2>
+<ul>
+  <li>You can download all the music you want from your own library without any limitations. There’s no limit set for manual downloads. For automatic downloads you can choose from no caching to caching everything or choose a fixed size from 250MB to 20GB.</li>
+  <li>When you’re offline you don’t need to login. On login form there’s a link to Downloaded Songs so you can skip logging in and go straight to your local cache.</li>
+  <li>You can pin your favourite albums to home screen.</li>
+  <li>Creating a playlist or adding songs to playlists is cumbersome (on iPhone at least):
+    <ul>
+      <li>Select a song and tap on … next to the song</li>
+      <li>Tap Add. This will add your song to the play queue.</li>
+      <li>Tap on Play button on top right corner.</li>
+      <li>Tap playlist icon on top right corner.</li>
+      <li>Tap the same icon again which is now on top left corner to go into edit mode</li>
+      <li>Now tap on the radio buttons on the left of the songs to select.</li>
+      <li>When done, tap on the icon on the bottom left corner. This will open the Add to Playlist screen (finally!)</li>
+      <li>Here you can choose an existing playlist or create a new one by clicking + icon.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Considering how easy this can be done on Spotify client this really needs to be improved.</p>
+
+<ul>
+  <li>In the library or Downloaded Songs sections, you can organise your music by Album, Artist, Composer, Genre and Folder. Of course in order for Artist/Composer/Genre classification to work you have to have your music properly tagged.</li>
+  <li>The client has Radio featue which has builtin support for SHOUTCast</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2017/09/synology-shoutcast.PNG" alt="SHOUTCast"></p>
+
+<ul>
+  <li>You can rate songs. There’s a built-in Top Rated playlist. By rating them you can play your favourite songs without needing them to be added to playlists which is a neat feature.</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2017/09/synology-rate-playlist.PNG" alt=""></p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>I think having full control over my own music is great and even though DS Audio client has some drawbacks it’s worth it as it’s completely free. Also you can just set it up as a secondary streaming service in addition to your favourite paid one just in case so that you have a backup solution.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://blog.synology.com/?p=2283" target="_blank" rel="noopener noreferrer">Synology Blog: QuickConnect, Quickly Explained</a></li>
+</ul>
+
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2017/05/20/synology-dns-server-for-dev-testing/" title="Previous Post: 
+Using Synology DNS Server for testing">« Using Synology DNS Server for testing</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2017/11/20/Backing-up-MySQL-To-AWS-S3-with-Powershell/" title="next Post: 
+Backing Up MySQL to AWS S3 with PowerShell">Backing Up MySQL to AWS S3 with PowerShell » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,516 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/28/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/02/27/new-aws-features-and-improvements/" itemprop="url">New AWS features and improvements</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-02-27T15:00:00+00:00" itemprop="datePublished">February 27, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
+
+<!-- aws -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">news</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>AWS team is certainly keeping themselves very busy. If you turn your head away for a while you end up falling behind the new features. In this post I’ll cover some of the fairly new features and improvements I’ve recently discovered and found useful and interesting.</p>
+
+<h3 id="reserved-instance-pricing-model-improvements">Reserved Instance pricing model improvements</h3>
+<p>In the new simplified model they introduced 3 options: <em>No upfront</em>, <em>partial upfront</em> and <em>full upfront</em>. No upfront is a great feature as you don’t need to pay big amounts and just start paying less. Reserved instances are generally great for servers that run 24/7. For example currently if you launch a t2.micro Linux instance in EU-Ireland region you pay $0.014/hour. If you switch to No Upfront option the hourly rate falls to $0.010. (This is assuming the server will run continuously. You pay $7.30/month regardless of the instance’s state.)</p>
+
+<p><img src="/images/vpblogimg/2015/02/aws-reserved-instance-pricing.png" alt="AWS Reserved Instance Pricing"></p>
+
+<h3 id="auto-recovery">Auto recovery</h3>
+<p>This is a very cool feature that helps a great deal with system. maintenance. It’s not available in all regions yet (just N. Virginia as of this writing) but I’m guessing it will be rolled out to other regions soon. Now with this feature we can create an alarm for <em>StatusCheckFailed_System</em> metric and select <em>“Recover this instance”</em> as an action</p>
+
+<p><img src="/images/vpblogimg/2015/02/aws-instance-recovery.png" alt="AWS Instance Recovery"></p>
+
+<p>So when a machine is unresponsive it can be restarted automatically. Considering how many issues a simple restart can solve I think it’s a great feature :-)</p>
+
+<h3 id="resource-groups">Resource Groups</h3>
+<p>I’ve always found AWS Management Console a very dangerous place as all machines (dev, test prod) are all pooled and listed in the same place. In a careless moment you can easily terminate a production machine instead of a temporary test machine (that’s why I always turn on termination protection).</p>
+
+<p>Resource groups, as the name implies, are meant to group related items. Although it’s primary goal is not to solve the problem I mentioned above (maybe it’s just me who sees it as a problem) but that’s I initially will use it for.</p>
+
+<p><img src="/images/vpblogimg/2015/02/aws-resource-groups-overview.png" alt="AWS Resource Groups Overview"></p>
+
+<p>Using resource groups is dead simple: Just add a tag to your resources (I added one called “type”) and create a resource group and use that tag as a filter. So now instead of listing the entire EC2 instancess I can just click on Dev group and play around with my development servers without even seeing the production machines.</p>
+
+<p><img src="/images/vpblogimg/2015/02/aws-resource-groups-group-details.png" alt="AWS Resource Group Details"></p>
+
+<h3 id="lambda">Lambda</h3>
+<p>AWS Lambda is a compute service that allows you to execute your code without launching an EC2 instance. It’s in preview mode at the moment. It’s not meant to run full-blown applications and you have no control over the actual machines running the code. It’s great for simple even-handlers such as triggering a function when an image is uploaded etc. Currently I’m working on an application that’s going to use this service so more on that later.</p>
+
+<h3 id="aurora">Aurora</h3>
+<p>I haven’t tried this one myself yet and currently it’s in preview stage. The premise is it’s fully-compatible with MySQL and costs 1/10th of a regular MySQL instance. It’s not quite clear whether it’s a fork of MySQL like MariaDB or just an independent RDBMS but either way being able to use it directly as a MySQL replacement sounds good. As an AWS fan I’m sure performance-wise it would be everything they said it would so no doubts there. I signed up for the preview and waiting for approval. When I get to try it out I will post my impressions as a separate blog post.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>There is a big competition going on between the cloud computing platforms these days. Prices are constantly going down and new features are being added so it’s quite a lot of fun to follow the news in this market. I’ll try to keep an eye on new AWS features more closely from now on.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://aws.amazon.com/blogs/aws/simplified-reserved-instances/" target="_blank" rel="noopener noreferrer">Announcement for the new reserved instance pricing model</a></li>
+  <li><a href="http://aws.amazon.com/ec2/purchasing-options/reserved-instances/" target="_blank" rel="noopener noreferrer">Reserved instance pricing</a></li>
+  <li><a href="http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/resource-groups.html" target="_blank" rel="noopener noreferrer">Documentation: Working with Resource Groups</a></li>
+  <li><a href="http://aws.amazon.com/lambda/" target="_blank" rel="noopener noreferrer">AWS Lambda</a></li>
+  <li><a href="http://aws.amazon.com/rds/aurora/" target="_blank" rel="noopener noreferrer">AWS Aurora</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/02/25/beware-the-pineapple-an-overview-of-wifi-pineapple-mark-v/" itemprop="url">Beware the Pineapple: An overview of WiFi Pineapple Mark V</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-02-25T14:30:00+00:00" itemprop="datePublished">February 25, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/security">security</a></span> -->
+
+<!-- security -->
+
+
+
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">gadget, wifi_pineapple</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Wifi Pineapple has been around for quite some time now. Almost two years ago I posted a short review <a href="https://volkanpaksoy.com/archive/2013/04/22/wifi-pineapple/">here</a> but with the latest version (Mark V) it’s got badder than ever and they keep adding more features so it’s a nice time to catch up.</p>
+
+<h3 id="what-is-it">What is it?</h3>
+<p>Basically Wifi Pineapple is a WiFi honeypot that allows users to carry out man-in-the-middle attacks. Connected clients’ traffic go through the attacker which makes the attacker capable of pulling a number of tricks.</p>
+
+<p>Mark IV was based on <a href="http://www.amazon.co.uk/ALFA-Network-AP121U-Wireless-Repeater/dp/B00RKPD6MM" target="_blank" rel="noopener noreferrer">Alfa AP121U</a>. Instead of buying a pineapple you could just buy an AP121U and create your own DIY pineapple by installing the firmware. Mark V, on the other hand, is a whole new animal.</p>
+
+<p><img src="/images/vpblogimg/2015/02/wifi-pineapple-features.png" alt="Wifi Pineapple Mark V"></p>
+
+<p>Equipped with 2 radios it can work in client mode meaning it can piggyback on a nearby WiFi network and bridge the victim’s connections (In Mark IV the only way to provide internet access was 3G which is also still supported).</p>
+
+<h3 id="how-does-it-work">How does it work?</h3>
+
+<p>At the heart of the pineapple lies an attack method called Karma. It works by exploiting trusting devices to probe requests and responses. Our wireless devices, by default, constantly try to connect to the last networks they were on. To accomplish this they actively scan their neighbourhood by sending out probe requests. (A probe request is a special frame sent by a client station requesting information from either a specific access point, specified by SSID, or all access points in the area, specified with the broadcast SSID.)</p>
+
+<p>Normally, access points (AP) that don’t broadcast the requested SSID just ignore the probe request. The <em>correct</em> AP responds with a probe response and the client initiates association with the AP again. That’s how we connect to our home or work network as soon as we arrive. That is convenient and user-friendly but the malicious devices running Karma attack can break this “honor-code” based system. The pineapple responds to whatever AP the device is asking for therefore deceiving it into believing they are home.</p>
+
+<h3 id="whats-the-risk">What’s the risk</h3>
+
+<p>Obviously these honeypots are set up for a reason: To get your traffic. Once you start sending your data through the attacker’s system you are opening yourself to all sorts of attacks. One of the most important ones is called sslstrip. (These “attacks” are called <em>infusions</em> in Pineapple parlance and they can be downloaded and installed in seconds to enhance its capabilities which makes the pineapple an even more powerful weapon)</p>
+
+<p>sslstrip redirects your HTTPS traffic to HTTP equivalent (i.e. You land on http://www.google.com even though you requested https://www.google.com). So when you login to your favorite social network you essentially hand over your credentials to the attacker in plain text.</p>
+
+<p>You can find a full list of available infusions <a href="https://www.wifipineapple.com/?infusions" target="_blank" rel="noopener noreferrer">here</a> which can give you an idea what types of attacks are possible.</p>
+
+<h3 id="whats-new">What’s New</h3>
+
+<p>As of Version 2 of the Pineapple firmware a new feature is introduced: <em>PineAP</em>. They define it as “the next-gen rogue AP”.</p>
+
+<p>As Karma attack became more popular vendors started to increase security a little bit. Instead of sending out all the SSIDs that the device has connected in the past, the device simply sends a probe request that says “Broadcast” and the APs respond with a beacon with their information and what SSID(s) they are broadcasting. Then the client can decide which one to connect to. This method mitigates the regular Karma attack. To mitigate this mitigation (!) Pineapple team came up with PineAP.</p>
+
+<p>PineAP has several modules:</p>
+
+<ul>
+  <li>
+    <p><strong>Beacon Response</strong>      <br>
+Similar to probe responses this module sends beacons. For example if the client is looking for “Home Sweet Home” network, Karma sends a probe response with this SSID and at Beacon Response module sends a beacon with the same SSID making the pineapple look more legitimate.</p>
+  </li>
+  <li>
+    <p><strong>Dogma</strong>
+This module sends out beacon frames of SSIDs selected by the attacker (defined in the PineAP SSID Pool). It also allows targeted attacks so you can set the target MAC address.</p>
+  </li>
+  <li>
+    <p><strong>Auto Harvester</strong>
+Since SSID names are more likely to be kept as a secret it helps to collect this information. Harvester collects leaking SSIDs from the potential clients. They are added to the SSID pool to be used by Dogma.</p>
+  </li>
+</ul>
+
+<h3 id="further-improvements-and-new-features">Further Improvements and new features</h3>
+
+<ul>
+  <li><strong>Setup screen</strong></li>
+</ul>
+
+<p>A neat feature is, as an extra security step, when you first setup and connect to your pineapple you have to enter a random LED pattern.</p>
+
+<p><img src="/images/vpblogimg/2015/02/wifi-pineapple-led-pattern.png" alt="LED Pattern"></p>
+
+<p>As a fan of multi-factor authentication of all sorts I loved the idea of using the physical hardware to improve security.</p>
+
+<ul>
+  <li><strong>Management network</strong></li>
+</ul>
+
+<p>New Pineapple can setup a secure Wifi AP just for the owner so that you don’t have to connect via Ethernet. You can use your phone to check who is connected to the network and manage the pineapple completely by using the responsive UI.</p>
+
+<ul>
+  <li><strong>Recon mode</strong></li>
+</ul>
+
+<p>This is another neat feature that allows to scan all AP and clients around. You can even carry out a deauth attack by just clicking on a client.</p>
+
+<h3 id="mitigations">Mitigations</h3>
+
+<ul>
+  <li>
+    <p><strong>Never connect to open networks, NEVER!</strong>: If you are in the habit of using open wifi networks one day you might come across one of those pineapples in your coffee shop and hand over your data unknowingly to a guy sitting in the table next to you! Even without this risk you should never use networks that you have no control over but this kind of risk makes it even more important.</p>
+  </li>
+  <li>
+    <p><strong>Verify SSL</strong>: SSL/TLS is still the most important security measure we have when connecting to websites. Always ensure that you are connected to the right website by checking the certificate. An attacker may not be able to break SSL certificate but they can simply bypass it completely by tools like sslstrip. It’s especially important in mobile devices since they tend to hide the address bar to make more room for the content so generally you never know the exact URL you are sending your requests to.</p>
+  </li>
+  <li>
+    <p><strong>VPN</strong>: If you are using VPN your traffic is encrypted and sent through a secure channel. In this case, even if an attacker is able to get your traffic they will not be able to make any sense of it.</p>
+  </li>
+  <li>
+    <p><strong>HSTS</strong>: This mechanism allows web servers to declare that web browsers (or other complying user agents) should only interact with it using secure HTTPS connections and never via the insecure HTTP protocol. It helps to mitigate the risks of tools like sslstrip. Downside is it’s not currently adopted by all browsers at the moment.</p>
+  </li>
+</ul>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>Wireless networks provide great convenience to us but comes with risks and vulnerabilities (as all conveniences in IT). The hardware is getting smaller and more powerful everyday so the tools like Wifi Pineapple are getting more threatening. It’s important to keep an eye on what kind of risks are out there and learn how to avoid those risks.</p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="https://www.wifipineapple.com/" target="_blank" rel="noopener noreferrer">Official website</a></li>
+  <li><a href="http://hak5.org/category/episodes/pineapple-university" target="_blank" rel="noopener noreferrer">Hak5 Pineapple University</a></li>
+  <li><a href="https://www.youtube.com/watch?v=40Igim3upL0" target="_blank" rel="noopener noreferrer">YouTube Video: WiFi Pineapple 2.0.2 Firmware - PineAP</a></li>
+  <li><a href="https://scotthelme.co.uk/wifi-pineapple-karma-sslstrip/" target="_blank" rel="noopener noreferrer">Using Karma and SSLStrip to MitM Secure Connections</a></li>
+  <li><a href="http://hak5.org/episodes/haktip-23" target="_blank" rel="noopener noreferrer">Haktip 23 – WiFi 101: Probe Requests and Responses</a></li>
+  <li><a href="http://www.thoughtcrime.org/software/sslstrip/" target="_blank" rel="noopener noreferrer">BlackHat Presentation on SSL Stripping</a></li>
+  <li><a href="http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security" target="_blank" rel="noopener noreferrer">Wikipedia article on HSTS</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/02/19/visual-tools-for-neo4j/" itemprop="url">Visual Tools for Neo4J</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-02-19T14:30:00+00:00" itemprop="datePublished">February 19, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">graph_databases, neo4j</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>It always helps to know the ecosystem to get the maximum performance out of any development platform. In this post I will cover some of the tools that can be used to manage a Neo4J database.</p>
+
+<h3 id="neo4j-browser">Neo4J Browser</h3>
+<p>This tool comes out of the box and very handy to run Cypher queries and get visual results. I covered some of the stuff you can do with this tool in <a href="https://volkanpaksoy.com/archive/2015/02/16/neo4j-browser-tips-and-tricks/">an earlier post</a> but it’s capable of much more so very nice tool to have in your toolbelt. I think the only shortcoming is you cannot edit data visually. I think it would be very helpful to have the ability to manually add nodes or create new relationships in a drag &amp; drop fashion. It would save time to write the queries from scratch every time but maybe it can have that feature in the future releases.</p>
+
+<h3 id="linkurious">Linkurious</h3>
+<p>This is a paid online service. Unfortunately they don’t have a trial option. You can sign up for an online demo though.</p>
+
+<p><img src="/images/vpblogimg/2015/02/linkurious-tutorial.png" alt="Linkurious tutorial"></p>
+
+<p>It has a nice intuitive user interface that allows you to search and edit data via the UI.</p>
+
+<p><img src="/images/vpblogimg/2015/02/linkurious-tutorial-2.png" alt="Linkurious tutorial"></p>
+
+<p>When I tried to edit data or try the “Save as a Neo4J Database” feature I got errors.</p>
+
+<p><img src="/images/vpblogimg/2015/02/linkurious-server-error.png" alt="Linkurious server error"></p>
+
+<p>I don’t know if it’s a limitation of the demo version or their system was having a bad day but I’m not convinced to fork over €249 for this tool yet.</p>
+
+<p><em>UPDATE: After I published this post I’ve been informed that adding/editing feature is disabled in the demo. So the error messages were intentional and not because of a system failure.</em></p>
+
+<h3 id="neoclipse">Neoclipse</h3>
+<p>This is a free an open-source desktop application written in Java. It has some flaws (e.g. sometimes you have to reconnect to server to see the affects or your changes) but in general it’s a nice tool for visual editing. You can also run Cyper queries.</p>
+
+<p>Another neat feature to further embellish the visualization is assigning icons to nodes.</p>
+
+<p><img src="/images/vpblogimg/2015/02/neoclipse-preferences.png" alt="Neoclipse preferences"></p>
+
+<p>You can specify a folder that contains your images. The image name must match the property specified in the “Node icon filename properties” textbox.</p>
+
+<p>For example when I ran my sample <a href="https://gist.github.com/volkanpaksoy/8cd4fcda784b27b47e6e183edc36682b" target="_blank" rel="noopener noreferrer">Simpsons Cypher script</a> I get the following graph:</p>
+
+<p><img src="/images/vpblogimg/2015/02/neoclipse-simpsons.png" alt="Neoclipse visualisation with icons"></p>
+
+<p>Note that the values that should match the filename is case-sensitive and you may need to reconnect to server to see the changes (refresh doesn’t cut it). I learned it the hard-way :-)</p>
+
+<p>Managing the properties of a node is very easy. You can edit the current values in-place on the grid and add new values by right-clicking on the Properties grid and select New and type of the property.</p>
+
+<p><img src="/images/vpblogimg/2015/02/neoclipse-add-property.png" alt="Neoclipse - Adding new property"></p>
+
+<p>It’s a nice tool for quickly editing data but it can easily be a memory-hog too! Once I noticed it was using 1.5GB RAM and the graph only around 100 nodes and relationships so I have some performance concerns about it with large datasets.</p>
+
+<h3 id="gephi">Gephi</h3>
+<p>Gephi is a general visualisation tool and thanks to its plugin support it could be extended to support Neo4J databases. (You need at least JDK 7 to install the plugin.)</p>
+
+<p><img src="/images/vpblogimg/2015/02/gephi-plugins.png" alt="Gephi plugins"></p>
+
+<p>You can download and install the <a href="https://marketplace.gephi.org/plugin/neo4j-graph-database-support/" target="_blank" rel="noopener noreferrer">Neo4J plugin</a> manually or better yet you can just select Tools -&gt; Plugins -&gt; Available Plugins and search Neo4J.</p>
+
+<p>Once installed you can then import a Neo4J database by selecting <em>File -&gt; Neo4J Database -&gt; Full Import</em></p>
+
+<p>Make sure to shutdown the Neo4J server before the import or you will get this very informative error message from Gephi:</p>
+
+<p><img src="/images/vpblogimg/2015/02/gephi-db-use-error.png" alt="Gephi database in use error"></p>
+
+<p>Apparently it locks the database as well so if you try to run Neo4J again while Gephi is still running you get this error:</p>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-lock-errror.png" alt="Neo4J lock error"></p>
+
+<p>Clearly they don’t play well together so it’s best to run them separately.</p>
+
+<p>After the import you can view the graph visually like this</p>
+
+<p><img src="/images/vpblogimg/2015/02/gephi-imported-database.png" alt="Gephi imported Neo4J database"></p>
+
+<p>Doesn’t look as impressive as Neoclipse IMHO!</p>
+
+<p>To view the data you can switch to Data Laboratory tab:</p>
+
+<p><img src="/images/vpblogimg/2015/02/gephi-nodes.png" alt="Gephi Nodes"></p>
+
+<p><img src="/images/vpblogimg/2015/02/gephi-edges.png" alt="Gephi Edges"></p>
+
+<p>In theory you can add nodes and export the database but that wasn’t a very successful endeavour for me. When you add a new node you can set the label but you cannot edit any properties.</p>
+
+<p><img src="/images/vpblogimg/2015/02/gephi-new-node.png" alt="Gephi new node"></p>
+
+<p>So that wasn’t quite helpful. I don’t know what you can do with a graph without any properties.</p>
+
+<p>Gephi is still in beta phase. Also as plugins are developed by third-parties there might be some inconsistencies sometimes. I’ll leave this tool for the moment but it looks promising so I’ll put a pin to it for the time being.</p>
+
+<h3 id="tom-sawyer-perspectives">Tom Sawyer Perspectives</h3>
+<p>This is also a generic visualisation tools that can work with multiple data sources. It can integrate with Neo4J as well as <a href="www.objectivity.com/infinitegraph">InfiniteGraph</a>, a distributed graph database.</p>
+
+<p>Downloading the trial software is a bit tricky. First you apply for an account. Your application is processed manually. After you are accepted, you first apply for a code to evaluate the product. Luckily it’s handled automatically and you receive the code right away. You then enter the code to have the privilege(!) to submit another form that details what type of project you’re planning to develop, what programming language you are using etc. That application is also processed manually. Currently I’m still waiting to be granted a trial license so I will not review the software for the time being. If I get to try it someday I will update this post.</p>
+
+<h3 id="comparison">Comparison</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tool</th>
+      <th>Price</th>
+      <th>Requirements</th>
+      <th>Pros</th>
+      <th>Cons</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Neo4J Browser</td>
+      <td>Free</td>
+      <td>Web browser</td>
+      <td>&lt;ul&gt;&lt;li&gt;Comes with the server&lt;/li&gt;&lt;li&gt;Rich feature set&lt;/li&gt;&lt;/ul&gt;</td>
+      <td>&lt;ul&gt;&lt;li&gt;No editing visually&lt;/li&gt;&lt;/ul&gt;</td>
+    </tr>
+    <tr>
+      <td>Linkurious</td>
+      <td>€249</td>
+      <td>Web browser</td>
+      <td>&lt;ul&gt;&lt;li&gt;Visual editing&lt;/li&gt;&lt;/ul&gt;</td>
+      <td>&lt;ul&gt;&lt;li&gt; Expensive &lt;/li&gt;&lt;/ul&gt;</td>
+    </tr>
+    <tr>
+      <td>Neoclipse</td>
+      <td>Free	/ Open Source</td>
+      <td>Java 1.6</td>
+      <td>&lt;ul&gt;&lt;li&gt;Easy to use and edit data&lt;/li&gt;&lt;li&gt;Nice decoration options&lt;/li&gt;&lt;/ul&gt;</td>
+      <td>&lt;ul&gt;&lt;li&gt;High memory usage&lt;/li&gt;&lt;li&gt;Glitches may cause disruption&lt;/li&gt;&lt;/ul&gt;</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="prototyping-tools">Prototyping tools</h3>
+<p>My main goal in this quest was to find a tool that would allow me to edit data visually to speed up data entry. Apart from tools that can directly manipulate data there are also a bunch of modelling tools. I won’t cover them in depth in this post but might be helpful to have a short list of them at least so that to give some pointers.</p>
+
+<h4 id="omnigraffle">OmniGraffle</h4>
+<p><a href="https://www.omnigroup.com/omnigraffle" target="_blank" rel="noopener noreferrer">OmniGraffle</a> is a general purpose diagramming tool. It’s not free nor cheap but it has an iPad version so you can keep modelling on-the-go!</p>
+
+<h4 id="arrow-tool">Arrow Tool</h4>
+<p><a href="https://github.com/apcj/arrows" target="_blank" rel="noopener noreferrer">Arrow Tool</a> is an open-source project developed by a Neo4J developer. It’s as simple as it gets and helps you to quickly create a model.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>This is by no means an exhaustive list of the tools in the market. As graph databases gain more traction the number of such tools will exponentially increase.</p>
+
+<p>Visual tools help a great deal sometimes to make sense of and see how the data is connected. But you need to have good Cypher skills to be able to run complex queries. In the next post I’ll go over Cypher and cover the basics.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://linkurio.us/" target="_blank" rel="noopener noreferrer">linkurious</a></li>
+  <li><a href="https://github.com/neo4j-contrib/neoclipse" target="_blank" rel="noopener noreferrer">Neoclipse</a></li>
+  <li><a href="http://gephi.github.io/" target="_blank" rel="noopener noreferrer">Gephi</a></li>
+  <li><a href="https://www.tomsawyer.com/products/perspectives/" target="_blank" rel="noopener noreferrer">Tom Sawyer Perspectives</a></li>
+  <li><a href="https://gist.github.com/volkanpaksoy/8cd4fcda784b27b47e6e183edc36682b" target="_blank" rel="noopener noreferrer">Cypher query for Simpsons sample</a></li>
+  <li><a href="http://www.amazon.co.uk/Learning-Neo4j-Graph-Databases-Bruggen/dp/1849517169" target="_blank" rel="noopener noreferrer">Book: Learning Neo4J</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/27" class="prev">Prev</a>
+    
+    
+        <a href="/page/29" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

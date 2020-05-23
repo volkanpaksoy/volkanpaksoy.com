@@ -1,0 +1,261 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>AWS Developer Tools Services Part 2: AWS CodeBuild - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2019/10/19/AWS-Developer-Tools-Services-Part-2-AWS-CodeBuild/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">AWS Developer Tools Services Part 2: AWS CodeBuild</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-10-19T07:00:00+01:00" itemprop="datePublished">October 19, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- aws, devops -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags">codebuild, git, aws_developer_tools_services</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<h2 id="introduction">Introduction</h2>
+<p>This post is part of my mini-series about <a href="https://aws.amazon.com/products/developer-tools/" target="_blank" rel="noopener noreferrer">AWS Developer Tools Services</a></p>
+
+<ul>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/15/AWS-Developer-Tools-Services-Part-1-AWS-CodeCommit/">Part 1: AWS CodeCommit</a></li>
+  <li>Part 2: AWS CodeBuild</li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/20/AWS-Developer-Tools-Services-Part-3-AWS-CodeDeploy/">Part 3: AWS CodeDeploy</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/23/AWS-Developer-Tools-Services-Part-4-AWS-CodePipeline/">Part 4: AWS CodePipeline</a></li>
+</ul>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-icon.png" alt=""></p>
+
+<h2 id="aws-codebuild">AWS CodeBuild</h2>
+<p>As the name implies, AWS CodeBuild is Amazon’s build service that compiles your code, runs unit tests etc. As this is quite broad and changes from project to project and technology to technology it requires some customization.</p>
+
+<h2 id="hook-up-the-source-code">Hook up the source code</h2>
+<p>First step is to select the source. It’s quite flexible in the sense that it integrates with top Git providers such as GitHub and Bitbucket. The easiest way is to use CodeCommit because of the direct integration between services. No extra authentication is required to connect to the repository.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-selecting-source.png" alt=""></p>
+
+<p>It also support Amazon S3 as source but I cannot think of a practical use for it.</p>
+
+<p>Another interesting feature is that it supports multiple input sources. If your build depends on source from multiple repositories I would consider merging them into a single repository but if that’s not possible this is a nice option to make it work.</p>
+
+<h2 id="hook-up-the-docker-image-with-build-tools">Hook up the Docker image with build tools</h2>
+<p>The build process takes place in a Docker container. By default AWS provides their own build images for different operating systems:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-environment.png" alt=""></p>
+
+<p>A couple of notes on build images:</p>
+
+<ul>
+  <li>AWS provides some build images but we can provide our own images as well.</li>
+  <li>
+    <p>How the managed images configured can be found here: <a href="https://docs.aws.amazon.com/en_pv/codebuild/latest/userguide/build-env-ref-available.html" target="_blank" rel="noopener noreferrer">Docker Images Provided by CodeBuild</a>. They have build tools installed on these images for all runtimes they support. As of this writing dotnet core 3.0 is not supported in any of the images though.</p>
+  </li>
+  <li>The image availability may differ between regions. For example N.Virginia regions has 3 supported OS images whereas London region doesn’t have Windows image.</li>
+  <li>Running this build process is not free and pricing details can be found <a href="https://aws.amazon.com/codebuild/pricing" target="_blank" rel="noopener noreferrer">here</a>. If you’re running long build processes that you run frequently these costs can quickly add up.</li>
+</ul>
+
+<h2 id="configuring-the-build">Configuring the build</h2>
+<p>If you run the build after selecting the source and the build image, you get the following error:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-buildspec-missing-error.png" alt=""></p>
+
+<p>By default CodeBuild requires a special configuration file called buildspec.yml to reside at the root of the repository:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-buildspec-settings.png" alt=""></p>
+
+<p>In my example, the folder structure is like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[Root]
+	[Src]
+   		[Sample.UI.Web]
+   		[Sample.Core]
+   		[Sample.Core.UnitTests]
+   		Sample.sln
+   		buildspec.yml
+</code></pre></div></div>
+
+<p>I’m using a dotnet core 2.2 project on Windows-based Docker image and my buildspec.yml looks like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 0.2
+
+phases:
+  build:
+    commands:
+      - cd ./src
+      - dotnet restore
+      - dotnet test
+      - dotnet publish Sample.UI.Web -c Release -o ../output
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: ./src/output
+</code></pre></div></div>
+
+<h2 id="running-the-unit-tests">Running the unit tests</h2>
+<p>As you can see in my buildspec file I’m running the unit tests using <em>dotnet test</em> command. There’s no built-in facility in CodeBuild to run unit tests as it’s a general-purpose tool. You have to provide your own mechanism to achieve this.</p>
+
+<p>To test running the unit tests I deliberately broke a test and checked in the code. After running the build again I got this result:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-running-tests.png" alt=""></p>
+
+<p>So it actually runs the tests and fails the build if there’s a failing test. Ideally you want to run the tests whenever there are code changes. Looks like currently this is possible via CodePipeline service. I’ll explore that later and will cover running the build and unit tests automatically.</p>
+
+<h2 id="artifacts">Artifacts</h2>
+<p>Now that we can build the project we need to upload the output of the build to somewhere so that we can deploy it. Currently you can only choose Amazon S3 to upload the artifacts or no artifacts at all.</p>
+
+<p>If you had created a bucket already you can simply select it from the dropdown list.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-artifacts.png" alt=""></p>
+
+<p>The options are pretty basic. You can choose to compress the output and upload as a single zip file or the artifacts you defined in the buildspec in their original format.</p>
+
+<p>You can also choose to create a folder named as the build GUID so that you can keep the unique outputs for each release. You can do this by specifying Build ID as the namespace type.</p>
+
+<p>When you’re running the build make sure to view the full logs to get the latest status quickly. I noticed that if you just watch the main page and check out the results you may experience some delays.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>In my experience CodeBuild doesn’t provide too much to help with the build process because by nature it’s a generic tool. But it provides flexibility and full integration with other AWS services such as CodeCommit and CodeDeploy so I believe it’s worht using.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://aws.amazon.com/codebuild/pricing/" target="_blank" rel="noopener noreferrer">AWS CodeBuild Pricing</a></li>
+  <li><a href="https://docs.aws.amazon.com/en_pv/codebuild/latest/userguide/build-env-ref-available.html" target="_blank" rel="noopener noreferrer">Docker Images Provided by CodeBuild</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2019/10/15/AWS-Developer-Tools-Services-Part-1-AWS-CodeCommit/" title="Previous Post: 
+AWS Developer Tools Services Part 1: AWS CodeCommit">« AWS Developer Tools Services Part 1: AWS CodeCommit</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2019/10/20/AWS-Developer-Tools-Services-Part-3-AWS-CodeDeploy/" title="next Post: 
+AWS Developer Tools Services Part 3: AWS CodeDeploy">AWS Developer Tools Services Part 3: AWS CodeDeploy » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

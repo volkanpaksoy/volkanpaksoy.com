@@ -1,0 +1,329 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Using Custom Domains with AWS API Gateway - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2018/05/16/Using-Custom-Domains-with-AWS-API-Gateway/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Using Custom Domains with AWS API Gateway</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2018-05-16T07:00:00+01:00" itemprop="datePublished">May 16, 2018</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">api_gateway</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>API Gateway is Amazon’s managed API service. Serverless architecture is growing more on me everyday. I think leveraging infinite auto-scaling and only paying for what you use makes perfect sense. But to have an API that will be customer-facing first thing that needs to be setup is a custom domain which might be a bit involved when SSL certificates come in to play. In this post I’d like to create an API from scratch and use a custom domain name assigned to it.</p>
+
+<h2 id="step-1-create-an-api">Step 1: Create an API</h2>
+<p>Creating an API is straightforward: Just assign a meaningful and description. However, to me it was a bit confusing when it came to choosing the endpoint type.</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-01-create-api.png" alt=""></p>
+
+<p>The two options provided are: <em>Regional</em> and <em>Edge optimized</em>.</p>
+
+<ul>
+  <li>
+    <p>Edge-optimized API endpoint: The API is deployed to the specified region and a CloudFront distribution is created. API requests are routed to the nearest CloudFront Point of Presence (POP).</p>
+  </li>
+  <li>
+    <p>Regional API endpoint: This type was added in November 2017. The main goal is to prevent a roundtrip for in-region requests. API requests are targeted directly to the region-specific API Gateway without going through any CloudFront distribution.</p>
+  </li>
+</ul>
+
+<p>Custom domain names are supported for both endpoint types.</p>
+
+<p>In this example, I’ll use <strong>Regional</strong> endpoint type. For further reading, here’s <a href="http://blog.ryangreen.ca/2017/11/03/api-gateway-regional-vs-edge-optimized-endpoints/" target="_blank" rel="noopener noreferrer">a nice blog post about endpoint types</a>.</p>
+
+<h2 id="step-2-create-a-resource-and-method">Step 2: Create a resource and method</h2>
+<p>For demonstration purposes I created a resource called customer and a GET method that is which calls a mock endpoint.</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-02-create-resource-and-method.png" alt=""></p>
+
+<h2 id="step-3-deploy-the-api">Step 3: Deploy the API</h2>
+<p>From the Actions menu in Resources tab, I selected Deploy API.</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-03-deploy.png" alt=""></p>
+
+<p>Deployment requires a stage. Since this is the first deployment, I had to create a new stage called test. A new stage can be created while deploying. After the deployment test stage looks like this:</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-04-stage.png" alt=""></p>
+
+<p>At this point API Gateway assigned a non-user-friendly URL already:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://81dkdt6q81.execute-api.eu-west-2.amazonaws.com/test
+</code></pre></div></div>
+
+<p>This is the root domain of the API. So I was able to call the endpoint like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://81dkdt6q81.execute-api.eu-west-2.amazonaws.com/test/albums
+</code></pre></div></div>
+
+<p>My goal was to get it working with my own domain such as:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://hmdb.myvirtualhome.net/albums
+</code></pre></div></div>
+
+<h2 id="step-4-generate-the-certificate-in-acm">Step 4: Generate the certificate in ACM</h2>
+<p>I’m using Route53 for all my domains and using ACM (AWS Certificate Manager) for generating SSL/TLS certificates. Before creating the custom domain name I needed my certificate available.</p>
+
+<p>The wizard is quite simple: I just added the subdomain for the API and selected DNS validation.</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-05-acm-add-domain-name.png" alt=""></p>
+
+<p>After the review comes the validation process. Since I’m using Route 53 and ACM plays well with it, it simply provided a nice big button that said Create record in Route 53.</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-06-acm-validation.png" alt=""></p>
+
+<p>After clicking and confirming I got this confirmation message:</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-07-acm-confirmation.png" alt=""></p>
+
+<p>After waiting for about 3 minutes, the cerficate was issued already:</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-08-acm-done.png" alt=""></p>
+
+<h2 id="step-5-create-custom-domain-name-in-api-gateway">Step 5: Create Custom Domain Name in API Gateway</h2>
+
+<p>Now that the certificate was ready I had to go back to API Gateway to create the custom domain name and associate it with the newly created cert.</p>
+
+<p>First, I clicked on Custom Domain Names on left menu and filled out the details. Make sure that your subdomain matches the one the certificate was generated for.</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-09-create-custom-domain.png" alt=""></p>
+
+<p>I assigned /test path to the test stage I had created earlier. I will use root path for the production stage when I deploy the final version.</p>
+
+<p>After creating the custom domain, take note of Target Domain Name generated by AWS.</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-10-target-domain-name.png" alt=""></p>
+
+<h2 id="step-6-create-a-record-in-route-53">Step 6: Create A Record in Route 53</h2>
+
+<p>I had to also point DNS to the domain generated by API Gateway.</p>
+
+<p>Since I was using a regional endpoint I had to map the custom domain name to the target domain name mentioned in the previous step.</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-11-add-a-record-to-route-53-error.png" alt=""></p>
+
+<p>Now the problem was when I tried to do it via AWS Management Console, it failed as explained in this <a href="https://stackoverflow.com/questions/47827670/understanding-aws-api-gateway-custom-domain-names" target="_blank" rel="noopener noreferrer">StackOverflow answer</a>.</p>
+
+<p>So I had to do it via CLI as below:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws route53 change-resource-record-sets --hosted-zone-id {ZONE_ID_OF_MY_DOMAIN} --change-batch file://changedns.json
+</code></pre></div></div>
+
+<p>whereas the contents of changedns.json were</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"Changes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CREATE"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"ResourceRecordSet"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"api.hmdb.myvirtualhome.net"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"A"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"AliasTarget"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"DNSName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"d-xyz.execute-api.eu-west-2.amazonaws.com"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"HostedZoneId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ZJ5UAJN8Y3Z2Q"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"EvaluateTargetHealth"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>In the JSON above, DNSName is the Target Domain Name created by AWS is Step 5. The HostedZoneId (ZJ5UAJN8Y3Z2Q), on the other hand, is the zone ID of API Gateway which is listed <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#apigateway_region" target="_blank" rel="noopener noreferrer">here</a>.</p>
+
+<h3 id="update">UPDATE</h3>
+<p>If you are having issues running the command above that might mean you don’t have a default profile setup which has permissions to change DNS settings. To fix that:</p>
+
+<h4 id="1-create-a-new-user-with-no-permissions">1. Create a new user with no permissions</h4>
+
+<p>Go to IAM console and create a new user. Skip all the steps and download the credentials as .csv in the last step.</p>
+
+<h4 id="2-assign-required-permissions">2. Assign required permissions</h4>
+<p>Create a new policy using the JSON template below and attach it to the new user</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VisualEditor0"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"route53:ChangeResourceRecordSets"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:route53:::hostedzone/{ZONE ID OF YOUR DOMAIN}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h4 id="3-create-a-new-profile-for-the-user">3. Create a new profile for the user</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws configure --profile temp-route53-profile
+</code></pre></div></div>
+
+<p>and set the Access/Secret keys along with the region of your hosted zone.</p>
+
+<p>Then you run the first CLI command with providing profile name:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws route53 change-resource-record-sets --hosted-zone-id {ZONE_ID_OF_MY_DOMAIN} --change-batch file://changedns.json --profile temp-route53-profile
+</code></pre></div></div>
+
+<p>An important point here is to get your hosted zone ID from Route53. In the API Gateway, it shows a hosted zone ID which is actually AWS API Gateway zone ID. We use that zone ID in our DNS configuration (which is in changedns.json file in this example) but when we provide the hosted zone ID on the command line we provide our domain ID which can be found in Route53.</p>
+
+<h2 id="step-7-test">Step 7: Test</h2>
+<p>So after creating the alias for my API I visited the URL on a browser and I was able to get the green padlock indicating that it loaded the correct SSL certificate.</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-12-success.png" alt=""></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-basic-concept.html" target="_blank" rel="noopener noreferrer">Amazon API Gateway Concepts</a></li>
+  <li><a href="https://aws.amazon.com/about-aws/whats-new/2017/11/amazon-api-gateway-supports-regional-api-endpoints/" target="_blank" rel="noopener noreferrer">Amazon API Gateway Supports Regional API Endpoints</a></li>
+  <li><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html" target="_blank" rel="noopener noreferrer">Set up Custom Domain Name for an API in API Gateway</a></li>
+  <li><a href="https://stackoverflow.com/questions/47827670/understanding-aws-api-gateway-custom-domain-names" target="_blank" rel="noopener noreferrer">StackOverflow answer: Understanding AWS API Gateway Custom Domain Names
+</a></li>
+  <li><a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#apigateway_region" target="_blank" rel="noopener noreferrer">AWS Regions and Endpoints</a></li>
+  <li><a href="http://blog.ryangreen.ca/2017/11/03/api-gateway-regional-vs-edge-optimized-endpoints/" target="_blank" rel="noopener noreferrer">API Gateway Regional vs. Edge-Optimized Endpoints</a></li>
+  <li><a href="https://docs.aws.amazon.com/powershell/latest/userguide/pstools-getting-set-up-linux-mac.html" target="_blank" rel="noopener noreferrer">Setting up the AWS Tools for PowerShell Core on Linux or macOS X</a></li>
+  <li><a href="https://docs.aws.amazon.com/powershell/latest/reference/" target="_blank" rel="noopener noreferrer">AWS Tools for PowerShell Cmdlet Reference</a></li>
+  <li><a href="https://docs.aws.amazon.com/apigateway/api-reference/" target="_blank" rel="noopener noreferrer">Amazon API Gateway REST API</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2018/03/14/Updated-DynDns53-with-DotNet-Core-Docker-and-Angular5/" title="Previous Post: 
+Updated DynDns53 with .NET Core, Docker and Angular 5">« Updated DynDns53 with .NET Core, Docker and Angular 5</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2018/06/15/AWS-certification/" title="next Post: 
+AWS Certification">AWS Certification » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

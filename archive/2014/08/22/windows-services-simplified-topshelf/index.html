@@ -1,0 +1,178 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Windows Services Simplified: TopShelf - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2014/08/22/windows-services-simplified-topshelf/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Windows Services Simplified: TopShelf</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-08-22T22:20:16+01:00" itemprop="datePublished">August 22, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">topshelf, windows_service, csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p><img src="/images/vpblogimg/2014/08/TopShelfIcon.png" alt="Topshelf"></p>
+
+<p>In almost all projects I’ve worked there was always a need for scheduled background jobs. Windows Services are well-suited for the job but when it comes to deployment and debugging they fall short. This is where TopShelf comes to rescue!</p>
+
+<h3 id="topshelf-in-action">TopShelf in action</h3>
+<p>With TopShelf all you need to do is create a Console Application as your Windows Service and initialize TopShelf in the Main method:</p>
+
+<p><img src="/images/vpblogimg/2014/08/TopShelf-Code.png" alt="Topshelf"></p>
+
+<p>Configuring it is quite easy and straightforward. It also has a nice comprehensive documentation on its <a href="http://topshelf-project.com/" target="_blank" rel="noopener noreferrer">official site</a>. You can define all the parameters like the account that will run the service, the recovery policy and start-up type.</p>
+
+<h3 id="what-about-scheduling">What about scheduling</h3>
+<p>Scheduling is also a crucial feature in background services. TopShelf doesn’t help with that but that’s easy to fix with <a href="https://github.com/jgeurts/FluentScheduler" target="_blank" rel="noopener noreferrer">FluentScheduler</a>.</p>
+
+<p><img src="/images/vpblogimg/2014/08/TopShelf-Code2.png" alt="Topshelf"></p>
+
+<p>FluentScheduler is yet another great library available at NuGet which makes scheduling a breeze. No need to fiddle with timers, it can be defined very easily.</p>
+
+<p>And here is the sample code:</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/198174e19c567a6109b6b30292ee3058.js"> </script>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://topshelf-project.com" target="_blank" rel="noopener noreferrer">Top-Shelf Official site</a></li>
+  <li><a href="https://github.com/jgeurts/FluentScheduler" target="_blank" rel="noopener noreferrer">FluentScheduler</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2014/07/20/using-multiple-git-accounts-ssh-keys/" title="Previous Post: 
+Using multiple git accounts with SSH keys">« Using multiple git accounts with SSH keys</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2014/08/25/verify-file-integrity-hashes/" title="next Post: 
+Verify file integrity with HashTab">Verify file integrity with HashTab » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

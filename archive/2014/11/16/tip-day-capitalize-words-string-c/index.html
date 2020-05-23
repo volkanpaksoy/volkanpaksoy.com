@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Tip of the Day: Capitalize all words in string with C# - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2014/11/16/tip-day-capitalize-words-string-c/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Tip of the Day: Capitalize all words in string with C#</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-11-16T11:04:26+00:00" itemprop="datePublished">November 16, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">tip_of_the_day, csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>To capitalize all words in a string you can use the function built-in the .NET framework <strong><em>ToTitleCase</em></strong> function in <strong><em>System.Globalization.TextInfo</em></strong> class</p>
+
+<p>Here is a sample (taken from MSDN link below):</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Globalization</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Example</span>
+<span class="p">{</span>
+   <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">()</span>
+   <span class="p">{</span>
+      <span class="kt">string</span><span class="p">[]</span> <span class="n">values</span> <span class="p">=</span> <span class="p">{</span> <span class="s">"a tale of two cities"</span><span class="p">,</span> <span class="s">"gROWL to the rescue"</span><span class="p">,</span>
+                          <span class="s">"inside the US government"</span><span class="p">,</span> <span class="s">"sports and MLB baseball"</span><span class="p">,</span>
+                          <span class="s">"The Return of Sherlock Holmes"</span><span class="p">,</span> <span class="s">"UNICEF and children"</span><span class="p">};</span>
+
+      <span class="n">TextInfo</span> <span class="n">ti</span> <span class="p">=</span> <span class="n">CultureInfo</span><span class="p">.</span><span class="n">CurrentCulture</span><span class="p">.</span><span class="n">TextInfo</span><span class="p">;</span>
+      <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="k">value</span> <span class="k">in</span> <span class="n">values</span><span class="p">)</span>
+         <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"{0} --&gt; {1}"</span><span class="p">,</span> <span class="k">value</span><span class="p">,</span> <span class="n">ti</span><span class="p">.</span><span class="nf">ToTitleCase</span><span class="p">(</span><span class="k">value</span><span class="p">));</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">// The example displays the following output: </span>
+<span class="c1">//    a tale of two cities --&gt; A Tale Of Two Cities </span>
+<span class="c1">//    gROWL to the rescue --&gt; Growl To The Rescue </span>
+<span class="c1">//    inside the US government --&gt; Inside The US Government </span>
+<span class="c1">//    sports and MLB baseball --&gt; Sports And MLB Baseball </span>
+<span class="c1">//    The Return of Sherlock Holmes --&gt; The Return Of Sherlock Holmes </span>
+<span class="c1">//    UNICEF and children --&gt; UNICEF And Children</span>
+</code></pre></div></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://msdn.microsoft.com/en-us/library/system.globalization.textinfo.totitlecase(v=vs.110).aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/system.globalization.textinfo.totitlecase(v=vs.110).aspx</a></li>
+</ul>
+
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2014/11/16/tip-day-activate-multi-factor-authentication-mfa-aws/" title="Previous Post: 
+Tip of the Day: Activate multi-factor authentication (MFA) on AWS">« Tip of the Day: Activate multi-factor authentication (MFA) on AWS</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2014/11/16/tip-day-wildcard-ssl-subdomain-limitation/" title="next Post: 
+Tip of the Day: Wildcard SSL subdomain limitation">Tip of the Day: Wildcard SSL subdomain limitation » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

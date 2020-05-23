@@ -1,0 +1,283 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>A simple REST API with Node.js - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2014/12/08/simple-api-with-nodejs/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">A simple REST API with Node.js</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-08T21:30:00+00:00" itemprop="datePublished">December  8, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">nodejs, javascript</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<h3 id="enter-nodejs">Enter Node.js</h3>
+<p><a href="http://nodejs.org/" target="_blank" rel="noopener noreferrer">Node.js</a> is a popular platform to develop JavaScript applications. Internally it uses Google’s <a href="https://code.google.com/p/v8/" target="_blank" rel="noopener noreferrer">V8 JavaScript Engine</a> and enables to develop fast, scalable and event-driven JavaScript applications. I’ve recently developed my first REST API using Node and in this post I’ll talk about the steps required to develop and deploy a Node application.</p>
+
+<h3 id="learn">Learn</h3>
+<p>Needless to say there are many resources to learn Node (as with any such popular environment). I found the <a href="http://www.microsoftvirtualacademy.com/training-courses/building-apps-with-node-js-jump-start" target="_blank" rel="noopener noreferrer">Microsoft Virtual Academy’s training</a> quite useful. It’s very enjoyable and free. I’ll provide more recommendations as I go deeper.</p>
+
+<h3 id="setup">Setup</h3>
+<p>I used my main dev machine for this project which is running Windows 8.1. A nice thing about Node.js is that it’s cross-platform so you can use Linux, Mac or Windows.</p>
+
+<p>On Windows, simply download and run installer on <a href="http://nodejs.org/download/" target="_blank" rel="noopener noreferrer">this</a> page. Alternativaly if you like Chocolatey you can run the following command in a command-prompt (you may need to run it as administrator)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>choco install nodejs.install
+</code></pre></div></div>
+
+<h3 id="develop">Develop</h3>
+<p>There is a module that makes life a lot easier if are planning to develop an API with Node and it’s called <a href="http://expressjs.com/" target="_blank" rel="noopener noreferrer">Express</a></p>
+
+<p>We’re going to use express in our API so first we need to install it using Node Package Manager (NPM)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install express 
+</code></pre></div></div>
+
+<p>Now that we have everything we need, we can write the actual code for the endpoint:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">remoteAddress</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">headers</span><span class="p">[</span><span class="s1">'x-forwarded-for'</span><span class="p">]</span> <span class="o">||</span> 
+    				  <span class="nx">req</span><span class="p">.</span><span class="nx">connection</span><span class="p">.</span><span class="nx">remoteAddress</span><span class="p">;</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">({</span> <span class="s2">"ipAddress"</span><span class="p">:</span> <span class="nx">remoteAddress</span> <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span> <span class="o">||</span> <span class="mi">80</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Just getting remoteAddress wouldn’t work when your applications is not accepting connections from the users directly –which is generally the case in large applications where load balancers face the clients.</p>
+
+<p><img src="/images/vpblogimg/2014/12/heroku-output.png" alt=""></p>
+
+<p>For example, in the sample output above it’s obviously getting a 10.x.x.x IP from remoteAddress. So we check for the <em>x-forwarded-for</em> HTTP header and use it if present.</p>
+
+<h3 id="deploy">Deploy</h3>
+<p>First I installed Node on Linux box on AWS by simple running</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -sL https://deb.nodesource.com/setup | sudo bash -
+sudo apt-get install -y nodejs
+</code></pre></div></div>
+
+<p>but then I recalled I could use Heroku to host node.js applications for free. Why would I keep an eye on the service when the nice guys at Heroku are volunteering to do it for me for free, right? So I created an application on Heroku by following <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs" target="_blank" rel="noopener noreferrer">this guide</a>.</p>
+
+<p>Basically you can deploy by just following these simple steps:</p>
+
+<ol>
+  <li>Download and install Heroku Toolbelt from <a href="https://toolbelt.heroku.com/" target="_blank" rel="noopener noreferrer">here</a>
+</li>
+  <li>Clone your git repository and navigate to that folder using a command prompt.</li>
+  <li>
+    <p>Create an app on heroku by running</p>
+
+    <div class="highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> heroku create --http-git
+</code></pre></div>    </div>
+
+    <p>This will add a remote to your git repository</p>
+
+    <p><img src="/images/vpblogimg/2014/12/heroku-remote.png" alt="Heroku remote"></p>
+  </li>
+  <li>
+    <p>Now as you have the remote you can push your code to that</p>
+
+    <div class="highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> git push heroku master
+</code></pre></div>    </div>
+
+    <p><img src="/images/vpblogimg/2014/12/heroku-deploy-app.png" alt="Heroku deploy app"></p>
+  </li>
+  <li>
+    <p>[Optional] Add a custom domain and change the application name</p>
+
+    <p>If you don’t want to use Heroku domain and/or the application name is assigns automatically you can change them. First go to Dashboard –&gt; Personal Apps and click on the application. Then click Settings. You can rename the application there directly but it breaks your git remote. So I suggest doing it via the command line by running</p>
+
+    <div class="highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> heroku apps:rename newname --app oldname
+</code></pre></div>    </div>
+
+    <p>On the same page you can add your custom domain. Of course you have to redirect your domain/subdomain to heroku’s URL by adding a CNAME record to your zone file.</p>
+
+    <p><img src="/images/vpblogimg/2014/12/heroku-custom-domain.png" alt="Heroku custom domain"></p>
+  </li>
+</ol>
+
+<h3 id="test">Test</h3>
+<p>So we have an up-and-running REST API and let’s see it in action. One way to test it with several IP addresses is using free proxy servers that float around the net (for some reason). I visited <a href="http://proxylist.hidemyass.com/" target="_blank" rel="noopener noreferrer">HideMyAss</a> to quickly get a few. It may take a few tries to find a working proxy but here is what we’re looking for:</p>
+
+<p><img src="/images/vpblogimg/2014/12/check-ip-output.png" alt=""></p>
+
+<p>My external IP is the same as the proxy address I just set. While testing with a few different proxy servers I came across this rather unexpected result:</p>
+
+<p><img src="/images/vpblogimg/2014/12/heroku-output-with-forwarded-header.png" alt=""></p>
+
+<p>I deployed a version with more detailed output to understand what was going on. Looks like the <em>X-Forwarded-For</em> header was set to <em>“127.0.0.1, 177.99.93.214”</em> My service currently doesn’t support extracting the actual external IP from such comma-separated lists. First I need to look into it and see whether it’s a common and acceptable practice conforming with the standards or just a weird behaviour from a random server. But the solution is obviously simple to implement: Just split the string from commas and get the last entry.</p>
+
+<h3 id="enjoy">Enjoy!</h3>
+<p>So now instead of <a href="http://whatismyip.com" target="_blank" rel="noopener noreferrer">whatismyip.com</a> I can use the service I built with my own two hands: <a href="http://check-ip.herokuapp.com/" target="_blank" rel="noopener noreferrer">http://check-ip.herokuapp.com/</a>. It’s open-source so feel free to fiddle at will!</p>
+
+<p>It’s a simple API anyway but it feels nice to see it running so quickly. Also no maintenance is required thanks to Heroku. For me it was a nice introduction to Node.js world. I hope this post comes in handy to other people as well.</p>
+
+<h3 id="update">UPDATE</h3>
+<p>As I pointed out in one example above during my tests I got comma separated IP addresses in <em>x-forwarded-for</em> field. Turns out it’s not a weird behaviour and perfectly legitimate as described in the RFC for the header:</p>
+
+<blockquote>
+  <p>The “for” parameter is used to disclose information about the client that initiated the request 
+and subsequent proxies in a chain of proxies.  When proxies choose to use the “for” parameter, 
+its default configuration SHOULD contain an obfuscated identifier as described in Section 6.3.</p>
+</blockquote>
+
+<p>So I updated the application to split the proxy chain from comma and return the last entry in the list.</p>
+
+<p><img src="/images/vpblogimg/2014/12/check-ip-output2.png" alt=""></p>
+
+<p>As shown above there are two entries in the forwarded for header but the result IP address is the one I set in Firefox.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.microsoftvirtualacademy.com/training-courses/building-apps-with-node-js-jump-start" target="_blank" rel="noopener noreferrer">Microsoft Virtual Academy course</a></li>
+  <li><a href="https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager#debian-and-ubuntu-based-linux-distributions" target="_blank" rel="noopener noreferrer">Node.js Linux installation</a></li>
+  <li><a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs" target="_blank" rel="noopener noreferrer">Deploying Node.js application to Heroku</a></li>
+  <li><a href="https://github.com/volkanpaksoy/check-external-ip" target="_blank" rel="noopener noreferrer">Source code</a></li>
+  <li><a href="http://check-ip.herokuapp.com/" target="_blank" rel="noopener noreferrer">Application on Heroku</a></li>
+  <li><a href="http://tools.ietf.org/html/rfc7239#section-5.2" target="_blank" rel="noopener noreferrer">RFC for Forwarded For header</a></li>
+  <li><a href="http://en.wikipedia.org/wiki/X-Forwarded-For" target="_blank" rel="noopener noreferrer">WikiPedia Article for X-Forwarded-For</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2014/12/08/csharp-6-new-features-conclusion/" title="Previous Post: 
+C# 6.0 New Features - Conclusion">« C# 6.0 New Features - Conclusion</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2014/12/12/update-aws-security-groups-with-powershell/" title="next Post: 
+Update AWS Security Groups with PowerShell">Update AWS Security Groups with PowerShell » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

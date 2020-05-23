@@ -1,0 +1,914 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/13/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2018/07/20/Verifying-Data-Integrity-with-AWS-S3/" itemprop="url">Verifying Data Integrity with AWS S3</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2018-07-20T06:00:00+01:00" itemprop="datePublished">July 20, 2018</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">s3, csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>When it comes to transferring files over network, there’s always a risk of ending up with corrupted files. To prevent this on transfers to and from S3, AWS provides us with some tools we can leverage to guarantee correctness of the files.</p>
+
+<h2 id="verifying-files-while-uploading">Verifying files while uploading</h2>
+
+<p>In order to verify the file is uploaded successfully, we need to provide AWS the MD5 hash value of our file. Once upload has been completed, AWS calculates the MD5 hash on their end and compares the both values. If they match, it means it went through successfully. So our request looks like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="n">PutObjectRequest</span>
+<span class="p">{</span>
+    <span class="n">MD5Digest</span> <span class="p">=</span> <span class="n">md5</span><span class="p">,</span>
+    <span class="n">BucketName</span> <span class="p">=</span> <span class="n">bucketName</span><span class="p">,</span>
+    <span class="n">Key</span> <span class="p">=</span>  <span class="n">key</span><span class="p">,</span>
+    <span class="n">FilePath</span> <span class="p">=</span> <span class="n">inputPath</span><span class="p">,</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>where we calculate MD5 hash value like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">stream</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FileStream</span><span class="p">(</span><span class="n">fullPath</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">Open</span><span class="p">,</span> <span class="n">FileAccess</span><span class="p">.</span><span class="n">Read</span><span class="p">,</span> <span class="n">FileShare</span><span class="p">.</span><span class="n">Read</span><span class="p">))</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">md5</span> <span class="p">=</span> <span class="n">MD5</span><span class="p">.</span><span class="nf">Create</span><span class="p">())</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">hash</span> <span class="p">=</span> <span class="n">md5</span><span class="p">.</span><span class="nf">ComputeHash</span><span class="p">(</span><span class="n">stream</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToBase64String</span><span class="p">(</span><span class="n">hash</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In my tests, it looks like if you don’t provide a valid MD5 hash, you get a <em>WinHttpException</em> with the inner exception message “The connection with the server was terminated abnormally”</p>
+
+<p>If you provide a valid but incorrect MD5, the exception thrown is of type <em>AmazonS3Exception</em> with the message “The Content-MD5 you specified did not match what we received”.</p>
+
+<p>Amazon SDK comes with 2 utility methods named <em>GenerateChecksumForContent</em> and <em>GenerateChecksumForStream</em>. At the time of this writing, GenerateChecksumForStream wasn’t available in the AWS SDK for .NET Core. So the only method worked for me to calculate the hash was the way as shown above.</p>
+
+<h2 id="verifying-files-while-downloading">Verifying files while downloading</h2>
+
+<p>When downloading we use EtagToMatch property of GetObjectRequest to have the verification:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="n">GetObjectRequest</span>
+<span class="p">{</span>
+	<span class="n">BucketName</span> <span class="p">=</span> <span class="n">bucketName</span><span class="p">,</span>
+    <span class="n">Key</span> <span class="p">=</span>  <span class="n">key</span><span class="p">,</span>
+    <span class="n">EtagToMatch</span> <span class="p">=</span> <span class="s">"\"278D8FD9F7516B4CA5D7D291DB04FB20\""</span><span class="p">.</span><span class="nf">ToLower</span><span class="p">()</span> <span class="c1">// Case-sensitive</span>
+<span class="p">};</span>
+
+<span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">_s3Client</span><span class="p">.</span><span class="nf">GetObjectAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+<span class="p">{</span>
+    <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="nf">WriteResponseStreamToFileAsync</span><span class="p">(</span><span class="n">outputPath</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">CancellationToken</span><span class="p">.</span><span class="n">None</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>When we request the object this way and if the the MD5 hash we send doesn’t match the one on the server we get an exception with the following message: <em>“At least one of the pre-conditions you specified did not hold”</em></p>
+
+<p>Once important point to keep in mind is that AWS keeps the hashes in lowerc-ase and the comparison is case-sensitive so make sure to convert everything to lower-case before you send it out.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/VerifyingDataIntegrityWithAWSS3" target="_blank" rel="noopener noreferrer">Sample source code</a></li>
+  <li><a href="https://aws.amazon.com/premiumsupport/knowledge-center/data-integrity-s3/" target="_blank" rel="noopener noreferrer">How do I ensure data integrity of objects uploaded to or downloaded from Amazon S3?</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash?view=powershell-6" target="_blank" rel="noopener noreferrer">Powershell Get-FileHash cmdlet reference</a></li>
+  <li><a href="https://docs.aws.amazon.com/cli/latest/topic/s3-faq.html" target="_blank" rel="noopener noreferrer">AWS CLI S3 FAQ</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2018/07/08/AWS-certification-notes-cloud-practitioner/" itemprop="url">AWS Certification Notes: AWS Certified Cloud Practitioner</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2018-07-08T06:00:00+01:00" itemprop="datePublished">July  8, 2018</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">certification, certified_cloud_practitioner</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p><img src="/images/vpblogimg/2018/07/aws-cloud-practitioner-00-Intro.png" alt=""></p>
+
+<p>As I decided to get full AWS certification I started preparing for the exams. I wanted to start with the Cloud Practitioner just to get my self accustomed with the exam procedure in general. Here’s my notes:</p>
+
+<h2 id="exam-objectives">Exam Objectives</h2>
+
+<p>According to Amazon’s official exam description page, this exam validates the following aspects:</p>
+
+<ul>
+  <li>Define what the AWS Cloud is and the basic global infrastructure</li>
+  <li>Describe basic AWS Cloud architectural principles</li>
+  <li>Describe the AWS Cloud value proposition</li>
+  <li>Describe key services on the AWS platform and their common use cases (for example, compute and analytics)</li>
+  <li>Describe basic security and compliance aspects of the AWS platform and the shared security model</li>
+  <li>Define the billing, account management, and pricing models</li>
+  <li>Identify sources of documentation or technical assistance (for example, whitepapers or support tickets)</li>
+  <li>Describe basic/core characteristics of deploying and operating in the AWS Cloud</li>
+</ul>
+
+<h2 id="main-subject-areas">Main Subject Areas</h2>
+
+<ol>
+  <li>Billing and pricing (12%)</li>
+  <li>Cloud concepts (28%)</li>
+  <li>Technology (36%)</li>
+  <li>Security (24%)</li>
+</ol>
+
+<h2 id="preparation-notes">Preparation Notes</h2>
+
+<h3 id="awstraining-online-training-notes">aws.training Online Training Notes</h3>
+
+<h4 id="cloud-computing">Cloud Computing</h4>
+
+<ul>
+  <li>On-demand delivery of IT resources. Can scale up and down based on needs.</li>
+  <li>Fosters agility (number one reason why customers switch to cloud computing): Speed (global reach), experimentation (operations as code, templated environments with CloudFormation) and culture of innovation (experiment quickly with low cost)</li>
+  <li>Region vs Availability Zone (AZ): Region is a physical location in the world which contains multiple AZs. AZs contain one or more discrete data centers with independent resources and housed in different facilities.</li>
+  <li>Using Auto Scaling and ELB, scale up and down and only pay for what you use.</li>
+  <li>Ability to deploy systems in multiple regions (lower latency)</li>
+  <li>Ability to choose the region where data is stored</li>
+  <li>AWS is responsible for data center security</li>
+  <li>Security policy can be formalized (as code)</li>
+  <li>Ability to recover from failures</li>
+</ul>
+
+<h4 id="core-services">Core Services</h4>
+<ul>
+  <li>Global Infrastructure:
+    <ul>
+      <li>Regions: Have multiple AZs</li>
+      <li>Availability Zones: Have one or more data centres. They all have different power supplier companies.</li>
+      <li>Edge Locations: Used by CloudFront.</li>
+    </ul>
+  </li>
+  <li>Amazon Virtual Private Cloud (VPC)
+    <ul>
+      <li>Uses same concepts as on-premise networking</li>
+      <li>VPC can span across multiple AZs</li>
+      <li>Supports multiple subnets (each of which can be deployed in a different AZ)</li>
+      <li>Can create public-facing subnets and private-facing subnets within the same VPC</li>
+      <li>Each account can create multiple VPCs</li>
+      <li>Using fewer VPCs is recommended to avoid complexity</li>
+      <li>
+        <p>Can assign Internet Gateways to specific subnets to allow public access</p>
+
+        <p><img src="/images/vpblogimg/2018/07/aws-cloud-practitioner-01-VPC.png" alt=""></p>
+      </li>
+    </ul>
+  </li>
+  <li>Security Groups
+    <ul>
+      <li>Act like a built-in firewall</li>
+      <li>Best practice: Allow what’s required only and block everything else</li>
+    </ul>
+  </li>
+  <li>Compute Services
+    <ul>
+      <li>Amazon Lightsail: Managed Virtual Private Servers service
+        <ul>
+          <li>Fixed price.</li>
+          <li>Includes a static IP, DNS management and storage</li>
+          <li>Fixed configuration</li>
+          <li>Uses t2 class EC2 instances under the hood</li>
+        </ul>
+      </li>
+      <li>AWS Elastic Compute Cloud (EC2)
+        <ul>
+          <li>Difference betwwen EC2-Classic and EC2-VPC
+            <ul>
+              <li>EC2-Classic: Your instances run in a single, flat network that you share with other customers.</li>
+              <li>EC2-VPC: Your instances run in a virtual private cloud (VPC) that’s logically isolated to your AWS account.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>AWS Lambda
+        <ul>
+          <li>No servers to manage</li>
+          <li>Pay as you go: Only pay for the time your code runs</li>
+          <li>Continuous scaling</li>
+          <li>Supports subsecond metering. Charged for every 100 milliseconds of execution time</li>
+          <li>Some limitations apply: <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html" target="_blank" rel="noopener noreferrer">AWS Lambda Limits</a>
+</li>
+        </ul>
+      </li>
+      <li>AWS Elastic Beanstalk
+        <ul>
+          <li>Platform as a service</li>
+          <li>Allows quick deployments of applications</li>
+          <li>Allows HTTPS on load balancers</li>
+          <li>Supports various platforms (node.js, python etc)</li>
+          <li>Provisions the resources required (EC2, ELB etc) automatically</li>
+        </ul>
+      </li>
+      <li>Application Load Balancer
+        <ul>
+          <li>2nd type of load balancer offered by ELB</li>
+        </ul>
+
+        <p><img src="/images/vpblogimg/2018/07/aws-cloud-practitioner-02-Application-Load-Balancer.png" alt=""></p>
+
+        <ul>
+          <li>Comes with new features</li>
+        </ul>
+
+        <p><img src="/images/vpblogimg/2018/07/aws-cloud-practitioner-03-ALB-New-features.png" alt=""></p>
+
+        <ul>
+          <li>Supports routing to containers</li>
+          <li>Key terms:
+            <ul>
+              <li>Listeners: A process that checks for connection requests using the configuration (protocol, port)</li>
+              <li>Target: Destination for traffic</li>
+              <li>Target Group: Each target group routes requests to one or more registered targets</li>
+            </ul>
+          </li>
+          <li>Target checks can be performed per target group basis</li>
+          <li>Integrates with ECS and supports dynamic ports utilized by scheduled containers</li>
+          <li>Need to create at least 2 AZs when creating an Application Load Balancer</li>
+          <li>Ability to route to different target groups based on port or path</li>
+        </ul>
+      </li>
+      <li>Elastic Load Balancer
+        <ul>
+          <li>Supports sticky sessions</li>
+          <li>Supports multiple AZs and cross-zone balancing</li>
+          <li>For HTTP/HTTPS it uses “Least Outstanding” method to route the request. For TCP, it uses “Round robin”. The least outstanding routing algorithm is defined as “A ‘least outstanding requests routing algorithm’ is an algorithm that choses which instance receives the next request by selecting the instance that, at that moment, has the lowest number of outstanding (pending, unfinished) requests.”</li>
+        </ul>
+      </li>
+      <li>Auto Scaling
+        <ul>
+          <li>Adding more instances: Scaling out, terminating instanes: Scaling in</li>
+          <li>Launch configuration answers “What” (AMI, Instance type, Security Groups, Roles). Creating an LC is similar to creating a new EC2 instance.</li>
+          <li>Auto Scaling Group answers “Where” (VPC and subnet(s), load balancer, minimum and maximum instances, desired capacity)</li>
+          <li>Auto Scaling Policy answeres “When” (Scheduled/on-demand/scale out or in policy)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Amazon EBS
+    <ul>
+      <li>Allows point-in-time snapshots and creation of a new volume from a snapshot</li>
+      <li>Supports encrypted volumes free of charge</li>
+      <li>EBS volume must be created in the same AZ as the EC2 instance that will use it</li>
+    </ul>
+  </li>
+  <li>Amazon S3
+    <ul>
+      <li>Objects are stored redundantly across multiple facilities withing the same region</li>
+      <li>The bucket names must be globally unique.</li>
+      <li>Can configure cross-region replication for backup and disaster recovery</li>
+      <li>Amazon S3 Transfer Acceleration enables fast, easy, and secure transfers of files over long distances between your client and an S3 bucket</li>
+    </ul>
+  </li>
+  <li>Amazon Glacier
+    <ul>
+      <li>Vaults have access and lock policies attached to them</li>
+      <li>Each AWS account can create up to 1000 vaults</li>
+      <li>Can create an S3 lifecycle policy to move to Glacier then delete after a period of time
+        <ul>
+          <li>Supports up to 40TB max item size (S3 supports 5TB)</li>
+          <li>It costs more per retrieval</li>
+          <li>Vault Lock allows you to easily deploy and enforce compliance controls for individual Amazon Glacier vaults with a vault lock policy. You can specify controls such as “write once read many” (WORM) in a vault lock policy and lock the policy from future edits. Once locked, the policy can no longer be changed</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Amazon RDS
+    <ul>
+      <li>Can create a standby copy in a different AZ within the same VPC</li>
+      <li>Can create multiple read replicas (in different regions as well)</li>
+    </ul>
+  </li>
+  <li>Amazon DynamoDB
+    <ul>
+      <li>Always uses SSD for storage</li>
+      <li>Supports auto-scaling. Increases/decreases the throughput based on load</li>
+      <li>Tables are partitioned by primary key</li>
+      <li>Two query methods: Query and Scan</li>
+      <li>Query uses the primary key to find items. Scan can use any attribute.</li>
+      <li>Scan is slower than Query as it needs to look at all items</li>
+    </ul>
+  </li>
+  <li>Amazon Redshift
+    <ul>
+      <li>Managed data warehouse</li>
+      <li>Supports standard SQL</li>
+      <li>Supports ODBC/JDBC connectors</li>
+    </ul>
+  </li>
+  <li>Amazon Aurora
+    <ul>
+      <li>Managed MySQL-clone (compatible with MySQL)</li>
+      <li>After a crash it doesn’t need to redo log files. It performs it on every read operation which reduces the restart time</li>
+    </ul>
+  </li>
+  <li>AWS Trusted Advisor
+    <ul>
+      <li>Checks all the resources used and gives advice based on best practices</li>
+      <li>5 categories:
+        <ul>
+          <li>Cost optimisation</li>
+          <li>Performance</li>
+          <li>Security</li>
+          <li>Fault tolerance</li>
+          <li>Service limits</li>
+        </ul>
+      </li>
+      <li>Upgrading support plan enables all Trusted Advisor recommendations, free plan doesn’t include all</li>
+      <li>Has an API and can be used to automate optimisations</li>
+      <li>Can use it with CloudWatch alarms</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="security">Security</h4>
+<ul>
+  <li>The AWS Shared Responsibility Model
+    <ul>
+      <li>AWS handles infrastructure security</li>
+      <li>AWS provides 3rd party audit reports</li>
+      <li>AWS’s responsibilities include: OS and database patching, firewall configuration and disaster recovery</li>
+      <li>Customer is responsible for putting logical access controls in place and protect account credentials</li>
+      <li>Customers are responsible to secure everything they put in the cloud</li>
+    </ul>
+  </li>
+  <li>AWS Service Catalog
+    <ul>
+      <li>Allows to centrally manage common IT services that are approved for use on AWS</li>
+    </ul>
+  </li>
+  <li>AWS IAM
+    <ul>
+      <li>Controls access to AWS resources</li>
+      <li>Handles Authentication (who can access resources) and authorization (how they can use resources)</li>
+      <li>Users can have programmatic access and/or console access.</li>
+      <li>Best practices
+        <ul>
+          <li>Delete root account keys. Instead use IAM accounts</li>
+          <li>Use MFA</li>
+          <li>Use groups</li>
+          <li>Use roles</li>
+          <li>Rotate credentials</li>
+          <li>Remove unnecessary users</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>AWS Security Compliance Programs
+    <ul>
+      <li>Risk Management: Follow the following standards:
+        <ul>
+          <li>COBIT</li>
+          <li>AICPA</li>
+          <li>NIST</li>
+        </ul>
+      </li>
+      <li>Constantly scans service endpoints for vulnerabilities</li>
+      <li>Compliance programs are listed <a href="https://aws.amazon.com/compliance/programs/" target="_blank" rel="noopener noreferrer">here</a>
+</li>
+    </ul>
+  </li>
+  <li>AWS Security Resources
+    <ul>
+      <li>AWS Trusted Advisor: Helps to follow best practices</li>
+      <li>AWS Account Teams: First point of contact</li>
+      <li>AWS Enterprise Support: 15-minute response time, 24x7 availability</li>
+      <li>AWS Partner Network</li>
+      <li>AWS Advisories and Bulletins</li>
+      <li>AWS Auditor Learning Path</li>
+      <li>AWS Compliance Solutions Guide: <a href="https://aws.amazon.com/compliance/solutions-guide/" target="_blank" rel="noopener noreferrer">https://aws.amazon.com/compliance/solutions-guide/</a>
+</li>
+      <li>AWS Security Blog: <a href="https://aws.amazon.com/blogs/security/" target="_blank" rel="noopener noreferrer">https://aws.amazon.com/blogs/security/</a>
+</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="architecting">Architecting</h4>
+<ul>
+  <li>Well-architected framework: <a href="https://aws.amazon.com/architecture/well-architected/" target="_blank" rel="noopener noreferrer">https://aws.amazon.com/architecture/well-architected/</a>
+</li>
+  <li>Fiver pillars of the framework
+    <ul>
+      <li>Operational excellence</li>
+      <li>Security</li>
+      <li>Reliability</li>
+      <li>Performance efficency</li>
+      <li>Cost optimization</li>
+    </ul>
+  </li>
+  <li>Fault Tolerance
+    <ul>
+      <li>Remain operational even if components fail</li>
+      <li>Built-in redundancy of an application’s components</li>
+    </ul>
+  </li>
+  <li>High-Availability
+    <ul>
+      <li>A concept for the whole system</li>
+      <li>“Always” functioning and accessible</li>
+      <li>Without human intervention</li>
+      <li>HA Service Tools
+        <ul>
+          <li>Elastic Load Balancer</li>
+          <li>Elastic IP Addresses</li>
+          <li>Amazon Route 53</li>
+          <li>Auto Scaling</li>
+          <li>Amazon CloudWatch</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="pricing-and-support">Pricing and Support</h4>
+<ul>
+  <li>Core concepts in billing
+    <ul>
+      <li>Pay as you go: No up front expenses</li>
+      <li>Pay less when you reserve: Reserved instances cost less</li>
+      <li>Pay even less per unit by using more: Tiered pricing for services such as S3, EC2 etc. Data transfer in is always free of charge.</li>
+      <li>Pay even less as AWS grows</li>
+    </ul>
+  </li>
+  <li>Amazon RDS Costs
+    <ul>
+      <li>Clock hours of server time</li>
+      <li>Database characteristics</li>
+      <li>Database purchase type</li>
+      <li>Number of DB instances</li>
+      <li>Provisional storage
+        <ul>
+          <li>No charge for backup storage of up to 100% of database storage for active databases. After terminated, the backups are charged</li>
+        </ul>
+      </li>
+      <li>Additional storage</li>
+      <li>Requests</li>
+      <li>Deployment type</li>
+      <li>Data transfer</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="general-notes">General Notes</h2>
+
+<h3 id="exam-centre">Exam Centre</h3>
+<p>The exam centre was very small and there was some sort of music studio next door so there was constant noise. OVerall it was a bit disappointing to take the exam in a desolated business centre and in a small room but it’s the same exam regardless so I was able to focus on the questions after I got used to the noise.</p>
+
+<h3 id="exam-process">Exam Process</h3>
+<ul>
+  <li>My exam was scheduled at 3:00. I arrived early and the proctor allowed me to sit at 2:00 as there were empty places in the exam room. It was a nice surprise because I definitely didn’t want to wait for another hour in that heat</li>
+  <li>At one point, the screen froze. I had to call the proctor. He restarted the application. Fortunately it just resumed where it left off.</li>
+  <li>CCP is the easiest AWS exam but even so there were some challenging questions. Mostly non-technical questions were hard for me (like questions related to support plans). I don’t think I’ll everr see those questions in other exams.</li>
+</ul>
+
+<h2 id="exam-result">Exam Result</h2>
+<p>… and the result is : Pass</p>
+
+<p><img src="/images/vpblogimg/2018/07/aws-cloud-practitioner-05-badge.png" alt=""></p>
+
+<p>Amazon has an interesting scoring system apparently. Right after you submit the exam, the screen displays Pass or Fail but not the actual score. You receive that in a separate email. They don’t even announce what the passing score is as they reserve the right to change when they see fit. It’s also based on other candidates’ results too so almost like a curve. Anyway, it was quite a relief to see the pass result on the screen. I’m still curiously waiting for the actual score though.</p>
+
+<p>My next exam will be AWS Certified Solutions Associate. I’ll post my exam notes after that exam as well.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="2018-07-07-AWS-certification-notes-cloud-practitioner">AWS Certification blog post</a></li>
+  <li><a href="https://aws.amazon.com/certification/certified-cloud-practitioner/" target="_blank" rel="noopener noreferrer">AWS Certified Cloud Practitioner exam page</a></li>
+  <li><a href="https://aws.amazon.com/training/course-descriptions/cloud-practitioner-essentials/" target="_blank" rel="noopener noreferrer">AWS Cloud Practitioner Essentials: Free Online Training</a></li>
+  <li><a href="https://www.whizlabs.com/blog/aws-certified-cloud-practitioner-certification-preparation/" target="_blank" rel="noopener noreferrer">How to Prepare for AWS Certified Cloud Practitioner Certification?</a></li>
+  <li><a href="https://docs.aws.amazon.com/aws-technical-content/latest/aws-overview/global-infrastructure.html" target="_blank" rel="noopener noreferrer">AWS Docs: Global Infrastructure</a></li>
+  <li><a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Internet_Gateway.html" target="_blank" rel="noopener noreferrer">AWS Docs: Internet Gateways</a></li>
+  <li><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-vpc.html#differences-ec2-classic-vpc" target="_blank" rel="noopener noreferrer">AWS Docs: Differences Between EC2-Classic and EC2-VPC
+</a></li>
+  <li><a href="https://aws.amazon.com/architecture/well-architected/" target="_blank" rel="noopener noreferrer">AWS Well-Architected</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2018/06/26/Automated-Email-Processing-with-AWS-SES-and-Lambda/" itemprop="url">Automated Email Processing with AWS SES and Lambda</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2018-06-26T07:00:00+01:00" itemprop="datePublished">June 26, 2018</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">ses, lambda</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>A few years ago AWS announced a new SES feature: Incoming Emails. So far I have only used it once to receive domain verification emails to an S3 bucket but haven’t built a meaningful project. In this blog post my goal is to develop a sample project to demonstrate receiving emails with SES and processing those emails automatically by triggering Lambda functions.</p>
+
+<p>As a demo project I will build a system that automatically responds to a sender with my latest CV as shown in the diagram below</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-00-architecture.png" alt=""></p>
+
+<h2 id="receiving-email-with-amazon-simple-email-service">Receiving Email with Amazon Simple Email Service</h2>
+<p>Amazon Simple Email Service (SES) is Amazon’s SMTP server. It’s core functionality has been sending emails but Amazon kept adding more features such as using templates and receiving emails.</p>
+
+<h3 id="step-1-verify-a-new-domain">Step 1: Verify a New Domain</h3>
+<p>First, we need a verified domain to receive emails. If you already have one you ca skip this step.</p>
+
+<ul>
+  <li>Step 1.1: In the SES console, click Domains –&gt; Verify a New Domain</li>
+  <li>Step 1.2: Enter the domain name to verify and click Verify This Domain</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-01-verify-domain.png" alt=""></p>
+
+<ul>
+  <li>Step 1.3: In the new dialog click Use Route 53</li>
+</ul>
+
+<p>(This is assuming your domain is in Route53. If not you have to verify it by other means)</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-02-verify-domain-confirmation.png" alt=""></p>
+
+<ul>
+  <li>Step 1.4: Make sure you check Email Receiving Record checkbox and proceed</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-03-verify-domain-create-record-sets.png" alt=""></p>
+
+<ul>
+  <li>Step 1.5 Confirm verification status</li>
+</ul>
+
+<p>Go back to Domains page in SES console and make sure the verification has been completed successfully</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-04-verify-domain-confirm-results.png" alt=""></p>
+
+<p>In my example, it only took about 2 minutes.</p>
+
+<h3 id="step-2-create-a-lambda-function-to-send-the-cv">Step 2: Create a Lambda function to send the CV</h3>
+
+<p>In the next step we will continue to configure SES to specify what to do with the received email. But first we need the actual Lambda function to do the work. Then we will connect this to SES so that it runs everytime when we receive an email to a specific email.</p>
+
+<ul>
+  <li>Step 2.1: Create a Lambda function from scratch</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-06-create-lambda.png" alt=""></p>
+
+<ul>
+  <li>Step 2.2: Create an SNS topic</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-08-create-sns-topic.png" alt=""></p>
+
+<p>SES will publish emails to this topic. We will do the plumbing and give necessary permissions later.</p>
+
+<ul>
+  <li>Step 2.3: Create subscription for the Lambda function to SNS topic</li>
+</ul>
+
+<p>Now we tie the topic to our Lambda by creating a subscription</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-10-create-sns-subscription.png" alt=""></p>
+
+<ul>
+  <li>Step 2.4: Attach necessary permissions to the new role</li>
+</ul>
+
+<p>In my example, I store my CV in an S3 bucket. So the policy would need to receive SNS notifications, read access to S3 bucket and permissions to send emails.</p>
+
+<p>By default a new Lambda role comes with AWSLambdaBasicExecutionRole attached to it</p>
+
+<p>First add this to have read-only access to a single bucket:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VisualEditor0"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"s3:GetObjectAcl"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"s3:GetObject"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"s3:ListBucket"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"arn:aws:s3:::{BUCKET NAME}"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"arn:aws:s3:::*/*"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Then this to be able to send emails</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VisualEditor0"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"ses:SendEmail"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"ses:SendTemplatedEmail"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"ses:SendRawEmail"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>I like to keep these small, modular policies so that I can reuse then in other projects.</p>
+
+<p>After adding the policies you should be able to see these in your Lambda function’s access list when you refresh the function’s page:</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-07-updated-permissions.png" alt=""></p>
+
+<h3 id="step-3-develop-the-lambda-function">Step 3: Develop the Lambda function</h3>
+
+<p>In this exmample I’m going to use a .NET Core and C# 2.0 to create the Lambda function.</p>
+
+<ul>
+  <li>Step 3.1: Install Lambda templates</li>
+</ul>
+
+<p>In Windows, AWS Lambda function templates come with AWS Visual Studio extension but in Mac we have to install them via command line.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet new -i Amazon.Lambda.Templates::*
+</code></pre></div></div>
+
+<ul>
+  <li>Step 3.2: Create Lambda function</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet new lambda.EmptyFunction --name SendEmailWithAttachmentFromS3 --profile default --region eu-west-1
+</code></pre></div></div>
+
+<ul>
+  <li>Step 3.3:</li>
+</ul>
+
+<p>Now it’s time for the actual implementation. I’m not going to paste the whole code here. Best place to get it is its <a href="https://github.com/volkanpaksoy/lab/tree/master/blog/SendEmailWithAttachmentFromS3/src/SendEmailWithAttachmentFromS3" target="_blank" rel="noopener noreferrer">GitHub repository</a></p>
+
+<ul>
+  <li>Step 3.4 Deploy the function</li>
+</ul>
+
+<p>Create an IAM user with access to Lambda deployment and create a profile locally named deploy-lambda-profile.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet restore
+dotnet lambda deploy-function send_cv
+</code></pre></div></div>
+
+<h3 id="step-4-create-a-receipt-rule">Step 4: Create a Receipt Rule</h3>
+<p>Now that we have a verified domain, we need a rule to receive emails.</p>
+
+<p>In my example project, I’m going to use an email address that will send my latest CV to a provided email adress.</p>
+
+<ul>
+  <li>
+    <p>Step 4.1: In the Email Receiving section click on Rule Sets –&gt; Create a Receipt Rule</p>
+  </li>
+  <li>
+    <p>Step 4.2: Add a recipient</p>
+  </li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-05-add-recipient.png" alt=""></p>
+
+<ul>
+  <li>Step 4.3: Add an Action</li>
+</ul>
+
+<p>Now we choose what to do when an email is received. In this example I want it to be published to an SNS topic that I created earlier. I could invoke the Lambda function directly but leveraging publish/subscribe gives me more flexibility as in I can change the subscriber in the future or add more stuff to do without affecting the rule configuration.</p>
+
+<p>Since it supports multiple actions I could choose to invoke Lambda directly and add more actions here later on if need be but I’d like to use a standard approach which is all events are published to SNS and the interested parties subscribe to the topics.</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-09-add-action.png" alt=""></p>
+
+<p>I chose UTF-8 because I’m not expecting any data in the message body so it doesn’t matter too much in this example.</p>
+
+<ul>
+  <li>Step 4.4 Give it a name and create the rule.</li>
+</ul>
+
+<h2 id="step-4-test-end-to-end">Step 4: Test end-to-end</h2>
+
+<p>Now that it’s all set up, it is time to test.</p>
+
+<ul>
+  <li>Step 4.1: Send a blank email to cv@vlkn.me (Or any other address if you’re setting up your own)</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-11-test-send-email.png" alt=""></p>
+
+<ul>
+  <li>Step 4.2:</li>
+</ul>
+
+<p>Then after a few seconds later, receive an email with the attachment:</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-12-test-confirm-email.png" alt=""></p>
+
+<p>The second email is optional. Basically, I creted an email subscriber too. So that whenever a blank email is received I get notified by SNS directly. This helps me to keep an eye on traffic if there is any.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/SendEmailWithAttachmentFromS3/src/SendEmailWithAttachmentFromS3" target="_blank" rel="noopener noreferrer">Demo Source Code</a></li>
+  <li><a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html" target="_blank" rel="noopener noreferrer">Receiving Email with Amazon SES</a></li>
+  <li><a href="https://aws.amazon.com/blogs/aws/new-receive-and-process-incoming-email-with-amazon-ses/" target="_blank" rel="noopener noreferrer">AWS Blog: Receive and Process Incoming Email with Amazon SES</a></li>
+  <li><a href="https://aws.amazon.com/blogs/messaging-and-targeting/introducing-email-templates-and-bulk-sending/" target="_blank" rel="noopener noreferrer">Introducing Email Templates and Bulk Sending</a></li>
+  <li><a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-dotnet-coreclr-deployment-package.html" target="_blank" rel="noopener noreferrer">.NET Core CLI</a></li>
+  <li><a href="https://github.com/aws/aws-lambda-dotnet/tree/master/Libraries/src/Amazon.Lambda.SNSEvents" target="_blank" rel="noopener noreferrer">Amazon.Lambda.SNSEvents</a></li>
+  <li><a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html" target="_blank" rel="noopener noreferrer">Sending Personalized Email Using the Amazon SES API</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/12" class="prev">Prev</a>
+    
+    
+        <a href="/page/14" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

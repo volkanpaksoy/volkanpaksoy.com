@@ -1,0 +1,186 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Top 3 AWS Gotchas - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2016/01/11/aws-gotchas/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Top 3 AWS Gotchas</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2016-01-11T18:00:00+00:00" itemprop="datePublished">January 11, 2016</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- aws -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">s3, ec2, eip</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>I’ve been using AWS for a few years now and over the years I noticed there some questions that keep popping up. I was confused by these issues at first and as they look like they are tripping everybody up at some point I decided to compile of a small list of common gotchas. I’ll update this or post another when if I come across more of these.</p>
+
+<h2 id="1-the-s3-folder-delusion">1. The S3 folder delusion</h2>
+
+<p>When you AWS console you can create folders to group objects but this is just a delusion deliberately created by AWS to simplify the usage. In reality, S3 has a flat structure and all the objects are on the same level. Here’s the excerpt from AWS documentation that states this fact:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>In Amazon S3, buckets and objects are the primary resources, where objects are stored in buckets. Amazon S3 has a flat structure with no hierarchy like you would see in a typical file system. However, for the sake of organizational simplicity, the Amazon S3 console supports the folder concept as a means of grouping objects. Amazon S3 does this by using key name prefixes for objects.
+</code></pre></div></div>
+
+<p>So essentially AWS is just smart enough to recognize the standard folder notation we’ve been using for ages to make this things easier for us.</p>
+
+<h2 id="2-reserved-instance-confusion">2. Reserved instance confusion</h2>
+
+<p>Reserved instances cost less but require some resource planning and paying some money up-front. Although there is now an option to buy reserved instances with no upfront payment they generally shine on long-term commitments with heavy usage (always-on machines). The confusing bit you don’t reserve actual instances. Unfortunately management console doesn’t do a great job in bridging that gap and when you buy a reserved instance you don’t even know which running instance it covers.</p>
+
+<p>Basically you just buy a subscription for 1 or 3 years and you pay less for any machine that meets that criteria. For instance, say you reserved 1 Linux t1.small instance for 12 months and you are running 2 t1.small Linux instances at the moment. You will pay reserved instance prices for one of them and on-demand price for the other. From a financial point of view it doesn’t matter which one is which. If you shut down one of those instances, again regardless of the instance, you still pay for reserved instance price as it matches your reserved instance criteria.</p>
+
+<p>So that’s all there is to it really. Reserved instance is just about billing and has nothing to do with the actual running instances.</p>
+
+<h2 id="3-publicelastic-ip-uncertainty">3. Public/Elastic IP uncertainty</h2>
+
+<p>There are 3 types of IP addresses in AWS:</p>
+
+<p>Private IPs are internal IP that every instance are assigned. They remain the same throughout the lifespan of the instance and as the name implies they are not addressable from the Internet.</p>
+
+<p>Public IPs are optional. They remain the same as long as the instance is running but they are likely to change after a reboot. So they are not reliable for web-accessible applications.</p>
+
+<p>Elastic IPs are basically static IPs that never change. By default AWS gives up to 5 EIPs. If you need more you have to contact their support. They come free of charge as long as they are associated with a running instance. It costs a small amount if you just want to keep them around without using them though.</p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="http://docs.aws.amazon.com/AmazonS3/latest/UG/FolderOperations.html" target="_blank" rel="noopener noreferrer">AWS Documentation: Working with Folders</a></li>
+  <li><a href="https://aws.amazon.com/ec2/faqs/#Reserved_Instances" target="_blank" rel="noopener noreferrer">Reserved Instances FAQ</a></li>
+  <li><a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-instance-addressing.html" target="_blank" rel="noopener noreferrer">Amazon EC2 Instance IP Addressing</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2015/11/19/diy-pdf-viewer/" title="Previous Post: 
+A DIY PDF Reader">« A DIY PDF Reader</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2016/01/18/playing-with-microsoft-band/" title="next Post: 
+Playing with Microsoft Band">Playing with Microsoft Band » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

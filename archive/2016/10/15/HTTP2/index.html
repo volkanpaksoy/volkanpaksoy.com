@@ -1,0 +1,205 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>HTTP/2 - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2016/10/15/HTTP2/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">HTTP/2</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2016-10-15T07:00:00+01:00" itemprop="datePublished">October 15, 2016</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">http2</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>HTTP/2 is a major update to the HTTP 1.x protocol and I decided to spare some time to have a general idea what it is all about:</p>
+
+<p>Here are my findings:</p>
+
+<ul>
+  <li>It’s based on SPDY (a protocol developed by Google, currently deprecated)</li>
+  <li>It uses same methods, status codes etc. so it is backwards-compatible and the main focus is on performance</li>
+  <li>The problem it is addressing is HTTP requiring a TCP connection per request.</li>
+  <li>Key differences:
+    <ul>
+      <li>It is binary rather than text.</li>
+      <li>It can use one connection for multiple requests</li>
+      <li>Allows servers push responses to browser caches. This way it can automatically start sending assets before the browser parses the HTML and sends a request for each of them (images, JavaScript, CSS etc)</li>
+    </ul>
+  </li>
+  <li>The protocol doesn’t have built-in encryption but currently Firefox, Internet Explorer, Safari, and Chrome agree that HTTPS is required.</li>
+  <li>There will be a negotiation process between the client and server to select which version to use</li>
+  <li>WireShark has support for it but Fiddler doesn’t.</li>
+  <li>
+    <p>As the speed is the main focus it’s especially important for CDNs to support it. In September 2016, AWS announced that they now support HTTP/2. For existing distributions it needs to enabled explicitly by updating the settings.</p>
+
+    <p><img src="/images/vpblogimg/2016/10/2016-10-15-HTTP2-AWS-CloudFront.PNG" alt="AWS CloudFront HTTP/2 Support"></p>
+  </li>
+  <li>
+    <p>On the client side looks like it’s been widely adopted and supported. CanIUse.com also confirms that it’s only allowed over HTTPS on all browsers that support it.</p>
+
+    <p><img src="/images/vpblogimg/2016/10/2016-10-15-HTTP2-Browser-Support.PNG" alt="HTTP/2 Browser Support"></p>
+  </li>
+</ul>
+
+<h2 id="what-does-it-look-like-on-the-wire">What Does It Look Like on the Wire</h2>
+<p>As it’s binary I was curious, as a developer, to see what the actual bits looked like. Normally it’s easy to inspect HTTP requests/responses because it’s just text.</p>
+
+<p>Apparently the easiest way to do it is WireShark. First, I had to enable session logging by creating a user variable in Windows:</p>
+
+<p><img src="/images/vpblogimg/2016/10/2016-10-15-HTTP2-WireShark-NSS-Log-Setup2.PNG" alt="Windows environment variable to capture TLS session keys"></p>
+
+<p>and pointing the WireShark to use that log (Edit -&gt; Preferences -&gt; Protocols -&gt; SSL)</p>
+
+<p><img src="/images/vpblogimg/2016/10/2016-10-15-HTTP2-WireShark-NSS-Log-Setup.PNG" alt=""></p>
+
+<p>This is a very neat trick and it can be used to analyse all encrypted traffic so it serves a broader purpose. After restarting the browser and WireShark I was able to see the captured session keys and by starting a new capture with WireShark I could see the decrypted HTTP/2 traffic.</p>
+
+<p><img src="/images/vpblogimg/2016/10/2016-10-15-HTTP2-WireShark-HTTP2-Capture.PNG" alt="WireShark HTTP/2 capture"></p>
+
+<p>It’s hard to make sense of everything in the packets but I guess it’s a good start to be able to inspect the wire format of the new protocol.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://tools.ietf.org/html/rfc7540" target="_blank" rel="noopener noreferrer">Specs: RFC7540</a></li>
+  <li><a href="https://http2.github.io/" target="_blank" rel="noopener noreferrer">IETF HTTP Working Group website</a></li>
+  <li><a href="https://www.microsoft.com/en-gb/developers/articles/week01dec14/what-is-http-2-and-what-does-it-mean-to-web-developers/" target="_blank" rel="noopener noreferrer">Microsoft article: What is HTTP/2, and what does it mean to web developers?</a></li>
+  <li><a href="https://aws.amazon.com/blogs/aws/new-http2-support-for-cloudfront/" target="_blank" rel="noopener noreferrer">AWS Blog: HTTP/2 Support for Amazon CloudFront</a></li>
+  <li><a href="https://jimshaver.net/2015/02/11/decrypting-tls-browser-traffic-with-wireshark-the-easy-way/" target="_blank" rel="noopener noreferrer">Blogpost: Decrypting TLS Browser Traffic With Wireshark – The Easy Way!</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2016/04/12/swift-notes-the-basics/" title="Previous Post: 
+Swift Notes - The Basics">« Swift Notes - The Basics</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2017/04/11/Integrating-c-applications-with-slack/" title="next Post: 
+Integrating C# applications with Slack">Integrating C# applications with Slack » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

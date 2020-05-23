@@ -1,0 +1,252 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>A Docker Image to Sync Git Repositories - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2019/03/29/A-Docker-Image-to-Sync-Git-Repositories/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">A Docker Image to Sync Git Repositories</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-03-29T06:00:00+00:00" itemprop="datePublished">March 29, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev, devops -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags">git</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>When you work on the same repository on multiple computers it’s easy to forget to push code and leave some changes local. To avoid that I decided to develop a tiny project that loops through all the folders and pulls remote changes then commits and pushes all the local changes.</p>
+
+<p>The script itself it very simple. It first pulls the latest and pushes the local changes:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">Function </span>Sync-Git <span class="o">{</span>
+    git fetch --all
+    git pull
+    git add <span class="nb">.</span>
+    git commit -m <span class="s1">'git-sync'</span>
+    git push
+<span class="o">}</span>
+
+<span class="nv">$rootFolder</span> <span class="o">=</span> <span class="s1">'/rootFolder'</span>
+
+<span class="nb">Write-Host</span> <span class="s2">"Changing directory to root folder: </span><span class="nv">$rootFolder</span><span class="s2">"</span>
+<span class="nb">Set-Location</span> <span class="nv">$rootFolder</span>
+<span class="nb">Get-Location</span> | <span class="nb">Write-Host
+
+Get-ChildItem</span> -Directory | <span class="k">ForEach</span>-Object <span class="o">{</span> 
+    <span class="nb">Set-Location</span> -Path <span class="nv">$_</span> 
+    <span class="nb">Write-Host</span> <span class="nv">$_</span>
+    Sync-Git
+    <span class="nb">Set-Location</span> <span class="nv">$rootFolder</span>
+<span class="o">}</span>
+
+<span class="nb">Write-Host</span> <span class="s2">"Done"</span>
+
+</code></pre></div></div>
+
+<p>Dockerfile is based Microsoft’s Powershell image and it only needs to install Git on it:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM mcr.microsoft.com/powershell
+
+RUN apt-get update &amp;&amp; apt-get install -y git
+RUN git config --global user.email "you@example.com"
+
+RUN echo "    IdentityFile ~/.ssh/id_rsa" &gt;&gt; /etc/ssh/ssh_config
+RUN echo "    StrictHostKeyChecking no" &gt;&gt; /etc/ssh/ssh_config
+
+RUN mkdir /home/git-sync
+WORKDIR /home/git-sync
+
+COPY ./git-sync.ps1 .
+
+ENTRYPOINT ["pwsh", "git-sync.ps1"]
+</code></pre></div></div>
+
+<p>Build it at the root folder:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build . -t {image name}
+</code></pre></div></div>
+
+<p>And run it as:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run --rm -d -v /host/path/to/root/git/folder:/rootFolder -v ~/.ssh:/root/.ssh:ro {image name}
+</code></pre></div></div>
+
+<p>Or pull my image from Docker Hub:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull volkanpaksoy/git-sync
+</code></pre></div></div>
+
+<h2 id="issues">Issues</h2>
+
+<h3 id="fatal-unable-to-auto-detect-email-address">fatal: unable to auto-detect email address</h3>
+<p>GitHub didn’t allow me to push my changes without an email address so I had to add the command below to Dockerfile:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config --global user.email "you@example.com"
+</code></pre></div></div>
+
+<p>It doesn’t look good maybe but I don’t care too much about email addresses in commits anyway so I’m fine with it.</p>
+
+<h3 id="warning-unprotected-private-key-file-error">“WARNING: UNPROTECTED PRIVATE KEY FILE!” error</h3>
+<p>This might also be an issue in which case the solution is simple (assuming the name of the private key file is id_rsa):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chmod 600 ~/.ssh/id_rsa 
+</code></pre></div></div>
+
+<h3 id="bad-configuration-option">Bad configuration option</h3>
+<p>Make sure to have the following options in the config file in your .ssh directory:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host *
+  StrictHostKeyChecking no
+  AddKeysToAgent yes
+  IgnoreUnknown UseKeychain
+  UseKeychain yes
+  IdentityFile ~/.ssh/id_rsa
+</code></pre></div></div>
+
+<h2 id="source-code">Source Code</h2>
+<p></p>
+<div class="github-widget" data-repo="volkanpaksoy/git-sync"></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/git-sync" target="_blank" rel="noopener noreferrer">Source Code</a></li>
+  <li><a href="https://hub.docker.com/r/volkanpaksoy/git-sync" target="_blank" rel="noopener noreferrer">Docker repository</a></li>
+  <li><a href="https://help.github.com/en/articles/about-commit-email-addresses" target="_blank" rel="noopener noreferrer">About commit email addresses</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2019/03/28/Unit-Testing-in-JavaScript-Part-1-Basics/" title="Previous Post: 
+Unit Testing in Javascript - Part 1: Basics">« Unit Testing in Javascript - Part 1: Basics</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2019/04/03/Unit-Testing-in-JavaScript-Part-2-Mocking/" title="next Post: 
+Unit Testing in Javascript - Part 2: Mocking">Unit Testing in Javascript - Part 2: Mocking » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

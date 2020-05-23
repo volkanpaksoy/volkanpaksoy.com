@@ -1,0 +1,247 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Homebrew Security Camera with Raspberry Pi - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2014/12/12/homebrew-security-camera-with-raspberry-pi/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Homebrew Security Camera with Raspberry Pi</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-12T12:45:00+00:00" itemprop="datePublished">December 12, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- security, aws, dev -->
+
+
+
+
+    <a href="/category/security">security</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">raspberry_pi, gadget, powershell, s3</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>I know there are very cheap security cameras that you can setup in a few minutes. They may provide security but they cannot provide the satisfaction you get after a DIY project! So let’s dig in just for the fun of it.</p>
+
+<h3 id="ingredients">Ingredients</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Price</th>
+      <th>Where to buy?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Raspberry Pi Starter Kit</td>
+      <td>£36</td>
+      <td><a href="http://www.amazon.co.uk/Raspberry-Pi-Motherboard-Starter-Kit/dp/B00LU2FDG8/" target="_blank" rel="noopener noreferrer">Amazon</a></td>
+    </tr>
+    <tr>
+      <td>Camera module</td>
+      <td>£17</td>
+      <td><a href="http://www.amazon.co.uk/gp/product/B00E1GGE40" target="_blank" rel="noopener noreferrer">Amazon</a></td>
+    </tr>
+    <tr>
+      <td>Protective case for the camera module</td>
+      <td>£4</td>
+      <td><a href="http://www.amazon.co.uk/gp/product/B00IJZOT5A" target="_blank" rel="noopener noreferrer">Amazon</a></td>
+    </tr>
+    <tr>
+      <td>Wireless adaptor</td>
+      <td>£6</td>
+      <td><a href="http://www.amazon.co.uk/gp/product/B003MTTJOY" target="_blank" rel="noopener noreferrer">Amazon</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Once all put together this is what you are going to end up with:</p>
+
+<p><img src="/images/vpblogimg/2014/12/raspberry-pi-security-camera-1.png" alt="Raspberry Pi Security Camera"></p>
+
+<h3 id="bring-it-to-life">Bring it to life</h3>
+<ol>
+  <li>Download a standard distro for Raspberry Pi. I used <a href="http://www.raspberrypi.org/downloads/" target="_blank" rel="noopener noreferrer">Rasbian</a>.</li>
+  <li>Write the image to the SD card. I use <a href="http://sourceforge.net/projects/win32diskimager/" target="_blank" rel="noopener noreferrer">Win32 Disk Imager</a> on Windows.</li>
+</ol>
+
+<h3 id="main-course-motion">Main course: Motion</h3>
+<p>There is a great tutorial <a href="http://www.instructables.com/id/Raspberry-Pi-as-low-cost-HD-surveillance-camera/" target="_blank" rel="noopener noreferrer">here</a> for converting your Pi into a security camera  which I mostly followed. Basically you enable WiFi, install Motion software and tweak the configuration a bit (image size, framerate etc) and it’s (hopefully) good to go.</p>
+
+<p>The video didn’t work for me unfortunately. It was recording something but only the first frame was visible so it wasn’t any better than a still image. So I decided to ignore videos completely.</p>
+
+<p>Instead of using a network share I decided to upload footage to AWS S3 directly using <a href="http://s3tools.org/s3cmd" target="_blank" rel="noopener noreferrer">Amazon S3 Tools</a>. Also don’t forget to clear old footage. Otherwise you can run out of space very quickly. I added a few cron jobs to carry out these tasks for me:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* * * * * s3cmd sync /var/surv/*.jpg s3://{BUCKET NAME}/
+* */2 * * * sudo rm /var/surv/*.avi
+* */6 * * *  find /var/surv/* -mtime +1 -exec rm {} \;
+</code></pre></div></div>
+
+<p>It syncs the local folder with S3 bucket, deletes all local video files and files older than a day. I delete the video files more frequently as they take up a lot of space.</p>
+
+<h3 id="monitoring-and-notifications">Monitoring and Notifications</h3>
+<p>No system is complete without proper monitoring and notifications. It’s especially important for systems like this that’s supposed to run quietly in the background.</p>
+
+<p>Unfortunately in my case it stopped working a few times which made monitoring even more important. I don’t know what’s causing the issue. Maybe it’s because I’m using an older version of Raspberry Pi and it’s not capable of handling all the motion software and S3 uploads etc.</p>
+
+<p>To keep an eye on it, I decided to create a small PowerShell script to check S3 for incoming files and send me a notification if it seems to have stopped uploading.</p>
+
+<h3 id="powershell-as-the-glue">PowerShell as the glue</h3>
+<p>Built on .NET framework PowerShell is a very powerful (no pun intended) tool to write quick and dirty solutions. So first here’s the Send-Mail function:</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/672433f21d0748c1a399a1bd574e1687.js"> </script>
+
+<p>I created a separate function for it as it’s a general-purpose feature which can be used in many places. To make it even more generic you can take out the from and to email addresses and add them as parameters to the function.</p>
+
+<p>And here’s the actual notification logic:</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/c711c19e19799b1ba4193d79d364dc76.js"> </script>
+
+<p>It finds the latest image by sorting them by LastModified field and compares this date with the current date. If it’s been more than 1 day it sends an email. Depending on how often you expect images to be uploaded you can change the alert condition.</p>
+
+<p>To use these scripts you’ll AWS accounts with S3 and SES privileges. Also you have to change the path of the send-mail.ps1 in the line it’s included.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.instructables.com/id/Raspberry-Pi-as-low-cost-HD-surveillance-camera/" target="_blank" rel="noopener noreferrer">Tutorial on Instructables.com</a></li>
+  <li><a href="http://www.fl3m.com/2012/08/sending-email-through-amazon-ses-with.html" target="_blank" rel="noopener noreferrer">PowerShell script to send email</a></li>
+  <li><a href="http://www.raspberrypi.org/downloads/" target="_blank" rel="noopener noreferrer">Raspberry Pi downloads</a></li>
+  <li><a href="http://s3tools.org/s3cmd" target="_blank" rel="noopener noreferrer">Amazon S3 Tools</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2014/12/12/update-aws-security-groups-with-powershell/" title="Previous Post: 
+Update AWS Security Groups with PowerShell">« Update AWS Security Groups with PowerShell</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2014/12/13/nmap-basics/" title="next Post: 
+Nmap Basics">Nmap Basics » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

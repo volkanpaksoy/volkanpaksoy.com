@@ -1,0 +1,1105 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/20/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/11/19/diy-pdf-viewer/" itemprop="url">A DIY PDF Reader</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-11-19T12:00:00+00:00" itemprop="datePublished">November 19, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp, wpf, syncfusion, pdf</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Every few months I have to clean up my desktop computer as dust gets stuck in the CPU fan and it gets hot and slow and loud and annoying! A few days ago I snapped and decided to phase out the desktop and made my laptop as main machine. Even though I love making a fresh start on a new computer it comes with re-installing a bunch of stuff.</p>
+
+<p>One missing thing that made itself obvious at the very start was a PDF reader. So far I’ve always been disappointed with PDF viewers. They are too bloated with unnecessary features and they always try to install a browser toolbar or an anti-virus trial.</p>
+
+<h2 id="my-diy-pdf-reader">My DIY PDF Reader</h2>
+<p>I started looking into my options to build my own PDF viewer and fortunately didn’t have to look too much. SyncFusion is offering a <a href="https://www.syncfusion.com/downloads/communitylicense" target="_blank" rel="noopener noreferrer">free license</a> to their products for indie developers and small startups. I used their great wizard control in a past project (<a href="https://github.com/volkanpaksoy/image2pdf" target="_blank" rel="noopener noreferrer">Image2PDF</a>) so I first checked if they had something for me. Turns out they have exactly everything I needed wrapped in an easy to use control. Their WPF suite comes with a <a href="https://www.syncfusion.com/products/wpf/pdf-viewer" target="_blank" rel="noopener noreferrer">PdfViewerControl</a>. It supports standard navigation and zooming functions which is pretty much what I need from a PDF viewer. So all I had to do was a start a new WPF project, drag &amp; drop PdfViewerControl and run!</p>
+
+<p>The whole XAML code looks like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">&lt;</span><span class="n">Window</span>
+        <span class="n">xmlns</span><span class="p">=</span><span class="s">"http://schemas.microsoft.com/winfx/2006/xaml/presentation"</span>
+        <span class="n">xmlns</span><span class="p">:</span><span class="n">x</span><span class="p">=</span><span class="s">"http://schemas.microsoft.com/winfx/2006/xaml"</span>
+        <span class="n">xmlns</span><span class="p">:</span><span class="n">d</span><span class="p">=</span><span class="s">"http://schemas.microsoft.com/expression/blend/2008"</span>
+        <span class="n">xmlns</span><span class="p">:</span><span class="n">mc</span><span class="p">=</span><span class="s">"http://schemas.openxmlformats.org/markup-compatibility/2006"</span>
+        <span class="n">xmlns</span><span class="p">:</span><span class="n">local</span><span class="p">=</span><span class="s">"clr-namespace:PdfViewer"</span>
+        <span class="n">xmlns</span><span class="p">:</span><span class="n">PdfViewer</span><span class="p">=</span><span class="s">"clr-namespace:Syncfusion.Windows.PdfViewer;assembly=Syncfusion.PdfViewer.WPF"</span> <span class="n">x</span><span class="p">:</span><span class="n">Class</span><span class="p">=</span><span class="s">"PdfViewer.MainWindow"</span>
+        <span class="n">mc</span><span class="p">:</span><span class="n">Ignorable</span><span class="p">=</span><span class="s">"d"</span>
+        <span class="n">Title</span><span class="p">=</span><span class="s">"Easy PDF Viewer"</span> 
+        <span class="n">WindowState</span><span class="p">=</span><span class="s">"Maximized"</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="n">Grid</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="n">PdfViewer</span><span class="p">:</span><span class="n">PdfViewerControl</span>  <span class="n">HorizontalAlignment</span><span class="p">=</span><span class="s">"Stretch"</span> <span class="n">VerticalAlignment</span><span class="p">=</span><span class="s">"Stretch"</span><span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="n">Grid</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="n">Window</span><span class="p">&gt;</span>
+</code></pre></div></div>
+
+<p>And for my 5 minutes, this is the application I got:</p>
+
+<p><img src="/images/vpblogimg/2015/11/diy-pdf-viewer-output.png" alt=""></p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>If I need more features in the future I think I’ll just build on this. I always have the open source PDF library iTextSharp which I like quite a lot and now have SyncFusion PDF components and libraries in my arsenal, I have no intention to deal with adware-ridden, bloated applications with lots of security flaws.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/diy-pdf-viewer" target="_blank" rel="noopener noreferrer">DIY PDF Viewer Source Code</a></li>
+  <li><a href="https://www.syncfusion.com/products/wpf/pdf-viewer" target="_blank" rel="noopener noreferrer">SyncFusion PDF Viewer product page</a></li>
+  <li><a href="https://www.syncfusion.com/downloads/communitylicense" target="_blank" rel="noopener noreferrer">SyncFusion Community License</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/11/13/playing-with-tfl-api-with-csharp-xamarin-and-swift/" itemprop="url">Playing with TFL API with C#, Xamarin and Swift</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-11-13T11:00:00+00:00" itemprop="datePublished">November 13, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp, ios, swift, wpf, xamarin, tfl_api</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Recently I discovered that Transport for London (TFL) has some great APIs that I can play around with some familiar data. It’s very to use as an API key is not even mandatory. My main goal here is to discover what I can do with this data and build a few user interfaces consuming it. All source code is available on <a href="https://github.com/volkanpaksoy/tube-status-fetcher" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+
+<h2 id="tube-status">Tube status</h2>
+<p>The <a href="https://api.tfl.gov.uk/line/mode/tube/status?detail=true" target="_blank" rel="noopener noreferrer">API endpoint</a> I will use returns the current status of tube lines, an array of the following JSON objects:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"$type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tfl.Api.Presentation.Entities.Line, Tfl.Api.Presentation.Entities"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"central"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Central"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"modeName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tube"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-10-14T10:31:00.39"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"modified"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-10-14T10:31:00.39"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"lineStatuses"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"$type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tfl.Api.Presentation.Entities.LineStatus, Tfl.Api.Presentation.Entities"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"statusSeverity"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"statusSeverityDescription"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Good Service"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0001-01-01T00:00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"validityPeriods"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"routeSections"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+    </span><span class="s2">"serviceTypes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"$type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Regular"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"uri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/Line/Route?ids=Central&amp;serviceTypes=Regular"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="visualizing-the-data---line-colours">Visualizing the data - line colours</h2>
+<p>TFL have standard colours for tube lines which are documented <a href="http://content.tfl.gov.uk/tfl-colour-standard.pdf" target="_blank" rel="noopener noreferrer">here</a>. So I created a small lookup json using that reference:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bakerloo"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">58</span><span class="p">,</span><span class="w"> </span><span class="s2">"Y"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="s2">"K"</span><span class="p">:</span><span class="w"> </span><span class="mi">33</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">137</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">78</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">36</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"central"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">95</span><span class="p">,</span><span class="w"> </span><span class="s2">"Y"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">36</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">31</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"circle"</span><span class="p">,</span><span class="w">  </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="s2">"Y"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">206</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"district"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"C"</span><span class="p">:</span><span class="w">  </span><span class="mi">95</span><span class="p">,</span><span class="w"> </span><span class="s2">"Y"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="s2">"K"</span><span class="p">:</span><span class="w"> </span><span class="mi">27</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">114</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">41</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"hammersmith-city"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span><span class="w"> </span><span class="s2">"Y"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">215</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">153</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">175</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"jubilee"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"C"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s2">"K"</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">134</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">143</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">152</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"metropolitan"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"C"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s2">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="s2">"K"</span><span class="p">:</span><span class="w"> </span><span class="mi">40</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">117</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">86</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"northern"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"K"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"piccadilly"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"C"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="s2">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">88</span><span class="p">,</span><span class="w"> </span><span class="s2">"K"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">168</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"victoria"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"C"</span><span class="p">:</span><span class="w"> </span><span class="mi">85</span><span class="p">,</span><span class="w"> </span><span class="s2">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">19</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">160</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">226</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"waterloo-city"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"C"</span><span class="p">:</span><span class="w"> </span><span class="mi">47</span><span class="p">,</span><span class="w"> </span><span class="s2">"Y"</span><span class="p">:</span><span class="w"> </span><span class="mi">32</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">118</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">208</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">189</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
+
+<p>I was hoping to map status values to colours as well (i.e. “Severe delays” to red) but there is no official guide to that. The status codes and values can be retrieved from this endpoint: <a href="https://api.tfl.gov.uk/line/meta/severity" target="_blank" rel="noopener noreferrer">https://api.tfl.gov.uk/line/meta/severity</a> which returns a collection of objects like this:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"$type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tfl.Api.Presentation.Entities.StatusSeverity, Tfl.Api.Presentation.Entities"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"modeName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tube"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Suspended"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>I simplified it for my purposes (just the values for tube):</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Special Service"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Closed"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Suspended"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Part Suspended"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Planned Closure"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Part Closure"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Severe Delays"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Reduced Service"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bus Service"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Minor Delays"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Good Service"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Part Closed"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Exist Only"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"No Step Free Access"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Change of frequency"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Diverted"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Not Running"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Issues Reported"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"No Issues"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">19</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Information"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Service Closed"</span><span class="w"> </span><span class="p">},</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
+
+<p>I will keep it around but in this initial version I won’t use it as description is returned with the status query anyway. But it was still a useful exercise to figure out there is no “official” colour for status values. After all what’s the colour of “No Step Free Access” or “Exist Only”? There is a also reason field that explains the effects of any delays etc. which should ne displayed along with the severity especially when there are some disruptions in the service.</p>
+
+<p>‘Nuff said about the data! Let’s start building something with it!</p>
+
+<h2 id="core-library">Core library</h2>
+<p>As I will build several API call to retrieve tube status is encapsulated in the core library which basically has sends the HTTP request, parses the JSON and returns the <em>LineInfo</em> list:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Fetcher</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">string</span> <span class="n">_apiEndPoint</span> <span class="p">=</span> <span class="s">"https://api.tfl.gov.uk/line/mode/tube/status?detail=true"</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">LineInfo</span><span class="p">&gt;</span> <span class="nf">GetTubeInfo</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="n">_apiEndPoint</span><span class="p">);</span>
+        <span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestRequest</span><span class="p">(</span><span class="s">"/"</span><span class="p">,</span> <span class="n">Method</span><span class="p">.</span><span class="n">GET</span><span class="p">);</span>
+        <span class="n">request</span><span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"Content-Type"</span><span class="p">,</span> <span class="s">"application/json"</span><span class="p">);</span>
+        <span class="kt">var</span> <span class="n">response</span> <span class="p">=</span> <span class="p">(</span><span class="n">RestResponse</span><span class="p">)</span><span class="n">client</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+        <span class="kt">var</span> <span class="n">content</span> <span class="p">=</span> <span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">;</span>
+        <span class="kt">var</span> <span class="n">tflResponse</span> <span class="p">=</span> <span class="n">JsonConvert</span><span class="p">.</span><span class="n">DeserializeObject</span><span class="p">&lt;</span><span class="n">List</span><span class="p">&lt;</span><span class="n">TflLineInfo</span><span class="p">&gt;&gt;(</span><span class="n">content</span><span class="p">);</span>
+
+        <span class="kt">var</span> <span class="n">lineInfoList</span> <span class="p">=</span> <span class="n">tflResponse</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">t</span> <span class="p">=&gt;</span>
+            <span class="k">new</span> <span class="nf">LineInfo</span><span class="p">()</span>
+            <span class="p">{</span>
+                <span class="n">Id</span> <span class="p">=</span> <span class="n">t</span><span class="p">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="n">Name</span> <span class="p">=</span> <span class="n">t</span><span class="p">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="n">Reason</span> <span class="p">=</span> <span class="n">t</span><span class="p">.</span><span class="n">lineStatuses</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="n">reason</span><span class="p">,</span>
+                <span class="n">StatusSeverityDescription</span> <span class="p">=</span> <span class="n">t</span><span class="p">.</span><span class="n">lineStatuses</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="n">statusSeverityDescription</span><span class="p">,</span>
+                <span class="n">StatusSeverity</span> <span class="p">=</span> <span class="n">t</span><span class="p">.</span><span class="n">lineStatuses</span><span class="p">[</span><span class="m">0</span><span class="p">].</span><span class="n">statusSeverity</span>
+            <span class="p">}).</span><span class="nf">ToList</span><span class="p">();</span>
+
+        <span class="k">return</span> <span class="n">lineInfoList</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>LineInfo class contains the current status with the description. It also contains the colour defined by TFL for that tube line:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">LineInfo</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">StatusSeverity</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">StatusSeverityDescription</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Reason</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">RGB</span> <span class="n">LineColour</span>
+    <span class="p">{</span>
+        <span class="k">get</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">TubeColourHelper</span><span class="p">.</span><span class="nf">GetRGBColour</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">Id</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>As the line colours aren’t returned by the service I have to populate it by a helper class:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">TubeColourHelper</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">static</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="n">RGB</span><span class="p">&gt;</span> <span class="n">_tubeColorRGBDictionary</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="n">RGB</span><span class="p">&gt;();</span>
+
+    <span class="k">static</span> <span class="nf">TubeColourHelper</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">_tubeColorRGBDictionary</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="n">RGB</span><span class="p">&gt;();</span>
+
+        <span class="kt">string</span> <span class="n">json</span> <span class="p">=</span> <span class="n">File</span><span class="p">.</span><span class="nf">ReadAllText</span><span class="p">(</span><span class="s">"./data/colours.json"</span><span class="p">);</span>
+        <span class="kt">var</span> <span class="n">tubeColors</span> <span class="p">=</span> <span class="n">JArray</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="n">json</span><span class="p">);</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">tubeColor</span> <span class="k">in</span> <span class="n">tubeColors</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">_tubeColorRGBDictionary</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">tubeColor</span><span class="p">[</span><span class="s">"id"</span><span class="p">].</span><span class="n">Value</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(),</span> <span class="k">new</span> <span class="nf">RGB</span><span class="p">(</span>
+                <span class="n">tubeColor</span><span class="p">[</span><span class="s">"RGB"</span><span class="p">][</span><span class="s">"R"</span><span class="p">]?.</span><span class="n">Value</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;()</span> <span class="p">??</span> <span class="m">0</span><span class="p">,</span>
+                <span class="n">tubeColor</span><span class="p">[</span><span class="s">"RGB"</span><span class="p">][</span><span class="s">"G"</span><span class="p">]?.</span><span class="n">Value</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;()</span> <span class="p">??</span> <span class="m">0</span><span class="p">,</span>
+                <span class="n">tubeColor</span><span class="p">[</span><span class="s">"RGB"</span><span class="p">][</span><span class="s">"B"</span><span class="p">]?.</span><span class="n">Value</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;()</span> <span class="p">??</span> <span class="m">0</span><span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="k">public</span> <span class="k">static</span> <span class="n">RGB</span> <span class="nf">GetRGBColour</span><span class="p">(</span><span class="kt">string</span> <span class="n">lineId</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="n">_tubeColorRGBDictionary</span><span class="p">.</span><span class="nf">ContainsKey</span><span class="p">(</span><span class="n">lineId</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentException</span><span class="p">(</span><span class="s">$"Colour for line [</span><span class="p">{</span><span class="n">lineId</span><span class="p">}</span><span class="s">] could not be found in RGB colour map"</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">_tubeColorRGBDictionary</span><span class="p">[</span><span class="n">lineId</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The static constructor runs only the first time it is accessed, reads the <em>colours.json</em> and populates the dictionary. From then on it’s just a lookup in memory.</p>
+
+<h2 id="first-client-c-console-application-on-windows">First client: C# Console Application on Windows</h2>
+<p>Time to develop our first client and see some actual results. As it’s generally the case with console applications this one is pretty simple and hassle-free. I decided to start with that one just to see the core library is working as expected.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Program</span>
+<span class="p">{</span>
+    <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">fetcher</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Fetcher</span><span class="p">();</span>
+        <span class="kt">var</span> <span class="n">viewer</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ConsoleViewer</span><span class="p">();</span>
+
+        <span class="kt">bool</span> <span class="n">exit</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+
+        <span class="n">viewer</span><span class="p">.</span><span class="nf">DisplayTubeStatus</span><span class="p">(</span><span class="n">fetcher</span><span class="p">.</span><span class="nf">GetTubeInfo</span><span class="p">());</span>
+
+        <span class="k">do</span>
+        <span class="p">{</span>
+            <span class="n">ConsoleKeyInfo</span> <span class="n">key</span> <span class="p">=</span> <span class="n">System</span><span class="p">.</span><span class="n">Console</span><span class="p">.</span><span class="nf">ReadKey</span><span class="p">();</span>
+            <span class="k">switch</span> <span class="p">(</span><span class="n">key</span><span class="p">.</span><span class="n">Key</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">case</span> <span class="n">ConsoleKey</span><span class="p">.</span><span class="n">F5</span><span class="p">:</span>
+                    <span class="n">viewer</span><span class="p">.</span><span class="nf">DisplayTubeStatus</span><span class="p">(</span><span class="n">fetcher</span><span class="p">.</span><span class="nf">GetTubeInfo</span><span class="p">());</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="n">ConsoleKey</span><span class="p">.</span><span class="n">Q</span><span class="p">:</span>
+                    <span class="n">exit</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">default</span><span class="p">:</span>
+                    <span class="n">System</span><span class="p">.</span><span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Unknown command"</span><span class="p">);</span>
+                    <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(!</span><span class="n">exit</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Displays the results when it’s first run. You can refresh by pressing F5 or quit by pressing Q. The output looks like this:</p>
+
+<p><img src="/images/vpblogimg/2015/11/playing-with-tfl-api-console-output.png" alt=""></p>
+
+<p>The problem with console application is that I wasn’t able to use RGB values directly as the console only supports an enumeration called <em>ConsoleColor</em>.</p>
+
+<h2 id="second-client-wpf-application-on-windows">Second client: WPF Application on Windows</h2>
+<p>Now let’s look at a more <em>graphical</em> UI, a WPF client:</p>
+
+<p><img src="/images/vpblogimg/2015/11/playing-with-tfl-api-wpf-output.png" alt=""></p>
+
+<p>Same idea, display the results upon first run then call the service again on Refresh button’s click event.</p>
+
+<h2 id="third-client-ios-app-with-xamarin">Third client: iOS App with Xamarin</h2>
+<p>I’ve recently subscribed to Xamarin and one of the main reasons for starting this project was to see it in action. What I was mostly curious about was if I could use my C# libraries using NuGet packages on an iOS application developed with Xamarin. This would allow me build apps significantly faster.</p>
+
+<p>It didn’t work out of the box because I used C# 6.0 and .NET Framework 4.5.2 on the Windows side but it wasn’t available on the Mac.</p>
+
+<p><img src="/images/vpblogimg/2015/11/playing-with-tfl-api-xamarin-framework-selection.png" alt=""></p>
+
+<p>But wasn’t too hard to change the framework and make some small modifications to make it work. Good news is that it supports NuGet and most common libraries have Mono support including RestSharp and Newtonsoft.Json which I used in this project</p>
+
+<p><img src="/images/vpblogimg/2015/11/playing-with-tfl-api-xamarin-add-nuget-packages.png" alt=""></p>
+
+<p>I had to remove and add them but finally they worked fine so I didn’t have to change anything in the code.</p>
+
+<p><img src="/images/vpblogimg/2015/11/playing-with-tfl-api-xamarin-output.png" alt=""></p>
+
+<p>I won’t go into implementation details as there’s not much change. The app has one table view controller and it calls the core library to get the results and assigns them to the table’s data source. It’s a relief that I could have the same functionality as Windows with just minor changes.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">ViewDidLoad</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">base</span><span class="p">.</span><span class="nf">ViewDidLoad</span><span class="p">();</span>
+
+    <span class="kt">var</span> <span class="n">fetcher</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Fetcher</span><span class="p">();</span>
+    <span class="kt">var</span> <span class="n">lineInfoList</span> <span class="p">=</span> <span class="n">fetcher</span><span class="p">.</span><span class="nf">GetTubeInfo</span><span class="p">();</span>
+    <span class="n">TableView</span><span class="p">.</span><span class="n">Source</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TubeStatusTableViewControllerSource</span><span class="p">(</span><span class="n">lineInfoList</span><span class="p">.</span><span class="nf">ToArray</span><span class="p">());</span>
+    <span class="n">TableView</span><span class="p">.</span><span class="nf">ReloadData</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Anyway, more on Xamarin later after I cover the Swift version.</p>
+
+<h2 id="fourth-client-ios-app-with-swift">Fourth client: iOS App with Swift</h2>
+<p>Last but not least, here comes Swift client built with XCode. Naturally this one cannot use the core library that the first 3 clients shared (which is good because I was looking for a chance to practice handling HTTP requests and parsinng JSON with Swift anyway).</p>
+
+<p>I didn’t use any external libraries so the implementation is a bit long but mainly it sends the request using NSURLSession and  NSSessionDataTask.</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">func</span> <span class="nf">getTubeStatus</span><span class="p">(</span><span class="nv">completionHandler</span><span class="p">:</span> <span class="p">(</span><span class="nv">result</span><span class="p">:</span> <span class="p">[</span><span class="kt">LineInfo</span><span class="p">]?,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">NSError</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">parameters</span> <span class="o">=</span> <span class="p">[</span><span class="s">"detail"</span> <span class="p">:</span> <span class="s">"true"</span><span class="p">]</span>
+    <span class="k">let</span> <span class="nv">mutableMethod</span> <span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="kt">Methods</span><span class="o">.</span><span class="kt">TubeStatus</span>
+    
+    <span class="nf">taskForGETMethod</span><span class="p">(</span><span class="n">mutableMethod</span><span class="p">,</span> <span class="nv">parameters</span><span class="p">:</span> <span class="n">parameters</span><span class="p">)</span> <span class="p">{</span> <span class="kt">JSONResult</span><span class="p">,</span> <span class="n">error</span> <span class="k">in</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
+            <span class="nf">completionHandler</span><span class="p">(</span><span class="nv">result</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">error</span><span class="p">:</span> <span class="n">error</span><span class="p">)</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="k">let</span> <span class="nv">results</span> <span class="o">=</span> <span class="kt">JSONResult</span> <span class="k">as?</span> <span class="p">[</span><span class="kt">AnyObject</span><span class="p">]</span> <span class="p">{</span>
+                <span class="k">let</span> <span class="nv">lineStatus</span> <span class="o">=</span> <span class="kt">LineInfo</span><span class="o">.</span><span class="nf">lineStatusFromResults</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+                <span class="nf">completionHandler</span><span class="p">(</span><span class="nv">result</span><span class="p">:</span> <span class="n">lineStatus</span><span class="p">,</span> <span class="nv">error</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
+            <span class="p">}</span>
+       <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Then constructs the LineInfo objects by calling the static <em>lineStatusFromResults</em> method:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">static</span> <span class="kd">func</span> <span class="nf">lineStatusFromResults</span><span class="p">(</span><span class="nv">results</span><span class="p">:</span> <span class="p">[</span><span class="kt">AnyObject</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">LineInfo</span><span class="p">]</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">lineStatus</span> <span class="o">=</span> <span class="p">[</span><span class="kt">LineInfo</span><span class="p">]()</span>
+    <span class="k">for</span> <span class="n">result</span> <span class="k">in</span> <span class="n">results</span> <span class="p">{</span>
+        <span class="n">lineStatus</span><span class="o">.</span><span class="nf">append</span><span class="p">(</span><span class="kt">LineInfo</span><span class="p">(</span><span class="nv">status</span><span class="p">:</span> <span class="n">result</span><span class="p">))</span>
+    <span class="p">}</span>
+    
+    <span class="k">return</span> <span class="n">lineStatus</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>which creates a new LineInfo and adds to resultset:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">init</span><span class="p">(</span><span class="nv">status</span><span class="p">:</span> <span class="kt">AnyObject</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="kt">Id</span> <span class="o">=</span> <span class="n">status</span><span class="p">[</span><span class="s">"id"</span><span class="p">]</span> <span class="k">as!</span> <span class="kt">String</span>
+    <span class="kt">Name</span> <span class="o">=</span> <span class="n">status</span><span class="p">[</span><span class="s">"name"</span><span class="p">]</span> <span class="k">as!</span> <span class="kt">String</span>
+    <span class="kt">StatusSeverity</span> <span class="o">=</span> <span class="n">status</span><span class="p">[</span><span class="s">"lineStatuses"</span><span class="p">]</span><span class="o">!!</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!</span><span class="p">[</span><span class="s">"statusSeverity"</span><span class="p">]</span> <span class="k">as!</span> <span class="kt">Int</span>
+    <span class="kt">StatusSeverityDescription</span> <span class="o">=</span> <span class="n">status</span><span class="p">[</span><span class="s">"lineStatuses"</span><span class="p">]</span><span class="o">!!</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!</span><span class="p">[</span><span class="s">"statusSeverityDescription"</span><span class="p">]</span> <span class="k">as!</span> <span class="kt">String</span>
+    <span class="kt">LineColour</span> <span class="o">=</span> <span class="kt">RGB</span><span class="p">(</span><span class="kt">R</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="kt">G</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="kt">B</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>JSON parsing is a bit nasy because of unwrapping the optionals. I’ll look into SwiftyJSON later on which is a popular JSON library for Swift.</p>
+
+<p>Finally the controller displays the results:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">override</span> <span class="kd">func</span> <span class="nf">viewWillAppear</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">super</span><span class="o">.</span><span class="nf">viewWillAppear</span><span class="p">(</span><span class="n">animated</span><span class="p">)</span>
+    
+    <span class="kt">TFLClient</span><span class="o">.</span><span class="nf">sharedInstance</span><span class="p">()</span><span class="o">.</span><span class="n">getTubeStatus</span> <span class="p">{</span> <span class="n">lineStatus</span><span class="p">,</span> <span class="n">error</span> <span class="k">in</span>
+        
+        <span class="k">if</span> <span class="k">let</span> <span class="nv">lineStatus</span> <span class="o">=</span> <span class="n">lineStatus</span> <span class="p">{</span>
+            <span class="k">self</span><span class="o">.</span><span class="n">lineInfoList</span> <span class="o">=</span> <span class="n">lineStatus</span>
+            <span class="nf">dispatch_async</span><span class="p">(</span><span class="nf">dispatch_get_main_queue</span><span class="p">())</span> <span class="p">{</span>
+                <span class="k">self</span><span class="o">.</span><span class="n">tableView</span><span class="o">!.</span><span class="nf">reloadData</span><span class="p">()</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>And the custom cells are created when data is loaded and the text and colours are set:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">override</span> <span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">cellForRowAtIndexPath</span> <span class="nv">indexPath</span><span class="p">:</span> <span class="kt">NSIndexPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UITableViewCell</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">cell</span> <span class="o">=</span> <span class="n">tableView</span><span class="o">.</span><span class="nf">dequeueReusableCellWithIdentifier</span><span class="p">(</span><span class="s">"TubeInfoCell"</span><span class="p">,</span> <span class="nv">forIndexPath</span><span class="p">:</span> <span class="n">indexPath</span><span class="p">)</span> <span class="k">as!</span> <span class="kt">TubeInfoTableViewCell</span>
+    <span class="k">let</span> <span class="nv">lineStatus</span> <span class="o">=</span> <span class="n">lineInfoList</span><span class="p">[</span><span class="n">indexPath</span><span class="o">.</span><span class="n">row</span><span class="p">]</span>
+    
+    <span class="n">cell</span><span class="o">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="n">colourHelper</span><span class="o">.</span><span class="nf">getTubeColor</span><span class="p">(</span><span class="n">lineStatus</span><span class="o">.</span><span class="kt">Id</span><span class="p">)</span>
+    
+    <span class="n">cell</span><span class="o">.</span><span class="n">lineName</span><span class="p">?</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">lineStatus</span><span class="o">.</span><span class="kt">Name</span>
+    <span class="n">cell</span><span class="o">.</span><span class="n">lineName</span><span class="p">?</span><span class="o">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="kt">UIColor</span><span class="o">.</span><span class="nf">whiteColor</span><span class="p">()</span>
+    <span class="n">cell</span><span class="o">.</span><span class="n">severityDescription</span><span class="p">?</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">lineStatus</span><span class="o">.</span><span class="kt">StatusSeverityDescription</span>
+    <span class="n">cell</span><span class="o">.</span><span class="n">severityDescription</span><span class="p">?</span><span class="o">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="kt">UIColor</span><span class="o">.</span><span class="nf">whiteColor</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">cell</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>And here’s the output:</p>
+
+<p><img src="/images/vpblogimg/2015/11/playing-with-tfl-api-swift-output.png" alt=""></p>
+
+<h2 id="xamarin-vs-swift">Xamarin vs Swift</h2>
+
+<p>Here’s a quick overview and comparison of both platforms based on my (limited) experiences with this toy project:</p>
+
+<ul>
+  <li>XCode is much faster when building and deploying</li>
+  <li>XamarinStudio doesn’t seem to be very intuitive at times. For examples the code snippets use Java-notation</li>
+  <li>
+    <p>The more I use Swift the more I like it and it doesn’t slow me down terribly. Once you get used to it the difference is syntax more or less. For example the following two methods do the same thing:</p>
+
+    <p>Xamarin:</p>
+
+    <div class="language-csharp highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>  <span class="k">public</span> <span class="k">override</span> <span class="n">nint</span> <span class="nf">RowsInSection</span> <span class="p">(</span><span class="n">UITableView</span> <span class="n">tableview</span><span class="p">,</span> <span class="n">nint</span> <span class="n">section</span><span class="p">)</span>
+  <span class="p">{</span>
+      <span class="k">return</span> <span class="n">lineInfoList</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+  <span class="p">}</span>
+</code></pre></div>    </div>
+
+    <p>Swift:</p>
+
+    <div class="language-swift highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>  <span class="k">override</span> <span class="kd">func</span> <span class="nf">tableView</span><span class="p">(</span><span class="nv">tableView</span><span class="p">:</span> <span class="kt">UITableView</span><span class="p">,</span> <span class="n">numberOfRowsInSection</span> <span class="nv">section</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="n">lineInfoList</span><span class="o">.</span><span class="n">count</span>
+      <span class="p">}</span>
+</code></pre></div>    </div>
+
+    <p>I can even argue I’d be more comfortable with the Swift version here as I have no idea what a “nint” is as it’s an input parameter in the Xamarin version.</p>
+  </li>
+  <li>The idea behind Xamarin subscription was to develop iOS apps quickly as I’m a seasoned C# developer and feel comfortable with it. But turns it, I can’t move as fast as I expected. With the Indie subscription you can only use Xamarin Studio. Enabling Visual Studio is only allowed with the business version which costs $1000/year. And Xamarin Studio is a brand new IDE for me so it definitely has a learning curve. Also I’m getting used to XCode now (besides the fact that it crashes hundred times a day on average!)</li>
+</ul>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>This was just a reconnaisance mission to explore the TFL API, iOS development with Xamarin and Swift. It was a fun exercise for me, I hope anyone who reads this can benefit from it too.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/tube-status-fetcher" target="_blank" rel="noopener noreferrer">TubeStatusFetcher source code</a></li>
+  <li><a href="https://api-portal.tfl.gov.uk/docs" target="_blank" rel="noopener noreferrer">TFL API Docs</a></li>
+  <li><a href="http://content.tfl.gov.uk/tfl-colour-standard.pdf" target="_blank" rel="noopener noreferrer">TFL Colour Standards</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/11/11/building-a-simple-http-server-with-nancy/" itemprop="url">Building a simple HTTP server with Nancy</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-11-11T11:30:00+00:00" itemprop="datePublished">November 11, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp, nancy</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Recently I needed to simulate HTTP responses from a 3rd party. I decided to use Nancy to quickly build a local web server that would handle my test requests and return the responses I wanted.</p>
+
+<p>Here’s the definition of Nancy from their official website:</p>
+
+<blockquote>
+  <p>Nancy is a lightweight, low-ceremony, framework for building HTTP based services on .Net and Mono.</p>
+</blockquote>
+
+<p>It can handle DELETE, GET, HEAD, OPTIONS, POST, PUT and PATCH requests. It’s very easy to customize and extend as it’s module-based. In order to build our tiny web server we are going to need self-hosting package:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package Nancy.Hosting.Self
+</code></pre></div></div>
+
+<p>This would automatically install Nancy as it depends on that package.</p>
+
+<h2 id="self-hosting-in-action">Self-hosting in action</h2>
+
+<p>The container application can be anything as long it keeps running one way or another. A background service would be ideal for this task. Since all I need is testing I just created a console application and added Console.ReadKey() statement to keep it “alive”</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Program</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="kt">string</span> <span class="n">_url</span> <span class="p">=</span> <span class="s">"http://localhost"</span><span class="p">;</span>
+    <span class="k">private</span> <span class="kt">int</span> <span class="n">_port</span> <span class="p">=</span> <span class="m">12345</span><span class="p">;</span>
+    <span class="k">private</span> <span class="n">NancyHost</span> <span class="n">_nancy</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">Program</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">uri</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span> <span class="s">$"</span><span class="p">{</span><span class="n">_url</span><span class="p">}</span><span class="s">:</span><span class="p">{</span><span class="n">_port</span><span class="p">}</span><span class="s">/"</span><span class="p">);</span>
+        <span class="n">_nancy</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">NancyHost</span><span class="p">(</span><span class="n">uri</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">_nancy</span><span class="p">.</span><span class="nf">Start</span><span class="p">();</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Started listennig port </span><span class="p">{</span><span class="n">_port</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">ReadKey</span><span class="p">();</span>
+        <span class="n">_nancy</span><span class="p">.</span><span class="nf">Stop</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">p</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Program</span><span class="p">();</span>
+        <span class="n">p</span><span class="p">.</span><span class="nf">Start</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>If you try this code, it’s likely that you’ll have an error (AutomaticUrlReservationCreationFailureException)</p>
+
+<p><img src="/images/vpblogimg/2015/11/self-hosting-with-nancy-AutomaticUrlReservationCreationFailureException.png" alt=""></p>
+
+<p>saying:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The Nancy self host was unable to start, as no namespace reservation existed for the provided url(s).
+
+Please either enable UrlReservations.CreateAutomatically on the HostConfiguration provided to 
+the NancyHost, or create the reservations manually with the (elevated) command(s):
+
+netsh http add urlacl url="http://+:12345/" user="Everyone"
+</code></pre></div></div>
+
+<p>There are 3 ways to resolve this issue and two of which are already suggested in the error message:</p>
+
+<ol>
+  <li>
+    <p>In an elevated command prompt (fancy way of saying run as administrator!), run</p>
+
+    <div class="highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> netsh http add urlacl url="http://+:12345/" user="Everyone"
+</code></pre></div>    </div>
+
+    <p>What add urlacl does is</p>
+
+    <blockquote>
+      <p>Reserves the specified URL for non-administrator users and accounts</p>
+    </blockquote>
+
+    <p>If you want to delete it later on you can use the following command</p>
+
+    <div class="highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> netsh http delete urlacl url=http://+:12345/
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Specify a host configuration to NancyHost like this:</p>
+
+    <div class="language-csharp highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> <span class="kt">var</span> <span class="n">configuration</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HostConfiguration</span><span class="p">()</span>
+ <span class="p">{</span>
+     <span class="n">UrlReservations</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">UrlReservations</span><span class="p">()</span> <span class="p">{</span> <span class="n">CreateAutomatically</span> <span class="p">=</span> <span class="k">true</span> <span class="p">}</span>
+ <span class="p">};</span>
+	
+ <span class="n">_nancy</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">NancyHost</span><span class="p">(</span><span class="n">configuration</span><span class="p">,</span> <span class="n">uri</span><span class="p">);</span>
+</code></pre></div>    </div>
+
+    <p>This essentially does the same thing and a UAC prompt pops up so it’s not that automatical!</p>
+  </li>
+  <li>
+    <p>Run the Visual Studio (and the standalone application when deployed) as administrator</p>
+  </li>
+</ol>
+
+<p>After applying either one of the 3 solutions, let’s run the application and try the address http://localhost:12345 in a browser and we get …</p>
+
+<p><img src="/images/vpblogimg/2015/11/self-hosting-with-nancy-404.png" alt=""></p>
+
+<p>Excellent! We are actually getting a response from the server even though it’s just a 404 error.</p>
+
+<p>Now let’s add some functionality, otherwise it isn’t terribly useful.</p>
+
+<h2 id="handling-requests">Handling requests</h2>
+<p>Requests are handled by <em>modules</em>. Creating a module is as simple as creating a class deriving from <em>NancyModule</em>. Let’s create two handlers for the root, one for GET verbs and one for POST:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">SimpleModule</span> <span class="p">:</span> <span class="n">Nancy</span><span class="p">.</span><span class="n">NancyModule</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nf">SimpleModule</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Get</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span> <span class="s">"Received GET request"</span><span class="p">;</span>
+
+        <span class="n">Post</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span> <span class="s">"Received POST request"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Nancy automatically discovers all modules so we don’t have to register them. If there are conflicting handlers the last one discovered overrides the previous ones. For example the following example would work fine and the second GET handler will be executed:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">SimpleModule</span> <span class="p">:</span> <span class="n">Nancy</span><span class="p">.</span><span class="n">NancyModule</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nf">SimpleModule</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Get</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span> <span class="s">"Received GET request"</span><span class="p">;</span>
+
+        <span class="n">Post</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span> <span class="s">"Received POST request"</span><span class="p">;</span>
+
+        <span class="n">Get</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span> <span class="s">"Let me have the request!"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="working-with-input-data-request-parameters">Working with input data: Request parameters</h2>
+<p>In the simple we used underscore to represent input as didn’t care but most of the time we would. In that case we can get the request parameters as a DynamicDictionary (a type that comes with Nancy). For example let’s create a route for <em>/user</em>:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="nf">SimpleModule</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Get</span><span class="p">[</span><span class="s">"/user/{id}"</span><span class="p">]</span> <span class="p">=</span> <span class="n">parameters</span> <span class="p">=&gt;</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(((</span><span class="kt">int</span><span class="p">)</span><span class="n">parameters</span><span class="p">.</span><span class="n">id</span><span class="p">)</span> <span class="p">==</span> <span class="m">666</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="s">$"All hail user #</span><span class="p">{</span><span class="n">parameters</span><span class="p">.</span><span class="n">id</span><span class="p">}</span><span class="s">! \\m/"</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="s">"Just a regular user!"</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>And send the GET request:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET http://localhost:12345/user/666 HTTP/1.1
+User-Agent: Fiddler
+Host: localhost:12345
+Content-Length: 2
+</code></pre></div></div>
+
+<p>which would return the response:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
+Content-Type: text/html
+Server: Microsoft-HTTPAPI/2.0
+Date: Tue, 10 Nov 2015 11:40:08 GMT
+Content-Length: 23
+
+All hail user #666! \m/
+</code></pre></div></div>
+
+<h2 id="working-with-input-data-request-body">Working with input data: Request body</h2>
+<p>Now let’s try to handle the data posted in the request body. Data posted in the body can be accessed though <strong>this.Request.Body</strong> property such as for the following request</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>POST http://localhost:12345/ HTTP/1.1
+User-Agent: Fiddler
+Host: localhost:12345
+Content-Length: 55
+Content-Type: application/json
+
+{
+    "username": "volkan",
+    "isAdmin": "sure!"
+}
+</code></pre></div></div>
+
+<p>this code would first convert the request stream to a string and deserialize it to a POCO:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Post</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">id</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="n">Body</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">length</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="n">Body</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">data</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="p">[</span><span class="n">length</span><span class="p">];</span>
+    <span class="n">id</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">length</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">body</span> <span class="p">=</span> <span class="n">System</span><span class="p">.</span><span class="n">Text</span><span class="p">.</span><span class="n">Encoding</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="nf">GetString</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+
+    <span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="n">JsonConvert</span><span class="p">.</span><span class="n">DeserializeObject</span><span class="p">&lt;</span><span class="n">SimpleRequest</span><span class="p">&gt;(</span><span class="n">body</span><span class="p">);</span>
+    <span class="k">return</span> <span class="m">200</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+<p>If the was posted from a form for example and sent in the following format in the body</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>username=volkan&amp;isAdmin=sure!
+</code></pre></div></div>
+
+<p>then we could simply convert it to a dictionary with a little bit of LINQ:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Post</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">parameters</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">id</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="n">Body</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="n">length</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="n">Body</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+    <span class="kt">byte</span><span class="p">[]</span> <span class="n">data</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="p">[</span><span class="n">length</span><span class="p">];</span>
+    <span class="n">id</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">length</span><span class="p">);</span>
+    <span class="kt">string</span> <span class="n">body</span> <span class="p">=</span> <span class="n">System</span><span class="p">.</span><span class="n">Text</span><span class="p">.</span><span class="n">Encoding</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="nf">GetString</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">p</span> <span class="p">=</span> <span class="n">body</span><span class="p">.</span><span class="nf">Split</span><span class="p">(</span><span class="sc">'&amp;'</span><span class="p">)</span>
+        <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">s</span> <span class="p">=&gt;</span> <span class="n">s</span><span class="p">.</span><span class="nf">Split</span><span class="p">(</span><span class="sc">'='</span><span class="p">))</span>
+        <span class="p">.</span><span class="nf">ToDictionary</span><span class="p">(</span><span class="n">k</span> <span class="p">=&gt;</span> <span class="n">k</span><span class="p">.</span><span class="nf">ElementAt</span><span class="p">(</span><span class="m">0</span><span class="p">),</span> <span class="n">v</span> <span class="p">=&gt;</span> <span class="n">v</span><span class="p">.</span><span class="nf">ElementAt</span><span class="p">(</span><span class="m">1</span><span class="p">));</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s">"username"</span><span class="p">]</span> <span class="p">==</span> <span class="s">"volkan"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">"awesome!"</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="s">"meh!"</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>This is nice but it’s a lot of work to read the whole and manually deserialize it! Fortunately Nancy supports model binding. First we need to add the using statement as the <strong>Bind</strong> extension method lives in <em>Nancy.ModelBinding</em></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>using Nancy.ModelBinding;
+</code></pre></div></div>
+
+<p>Now we can simplify the code by the help of model binding:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Post</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">Bind</span><span class="p">&lt;</span><span class="n">SimpleRequest</span><span class="p">&gt;();</span>
+    <span class="k">return</span> <span class="n">request</span><span class="p">.</span><span class="n">username</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>The important thing to note is to send the data with the appropriate content type. For the form data example the request should be like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>POST http://localhost:12345/ HTTP/1.1
+User-Agent: Fiddler
+Host: localhost:12345
+Content-Length: 29
+Content-Type: application/x-www-form-urlencoded
+
+username=volkan&amp;isAdmin=sure!
+</code></pre></div></div>
+
+<p>It also works for binding JSON to the same POCO.</p>
+
+<h2 id="preparing-responses">Preparing responses</h2>
+<p>Nancy is very flexible in terms of responses. As shown in the above examples you can return a string</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Post</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="s">"This is a valid response"</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>which would yield this HTTP message on the wire:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
+Content-Type: text/html
+Server: Microsoft-HTTPAPI/2.0
+Date: Tue, 10 Nov 2015 15:48:12 GMT
+Content-Length: 20
+
+This is a valid response
+</code></pre></div></div>
+
+<p>Response code is set to 200 - OK automatically and the text is sent in the response body.</p>
+
+<p>We can just set the code and return a response with a simple one-liner:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Post</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span> <span class="m">405</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>which would produce:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 405 Method Not Allowed
+Content-Type: text/html
+Server: Microsoft-HTTPAPI/2.0
+Date: Tue, 10 Nov 2015 15:51:36 GMT
+Content-Length: 0
+</code></pre></div></div>
+
+<p>To prepare more complex responses with headers and everything we can construct a new Response object like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Post</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">jsonString</span> <span class="p">=</span> <span class="s">"{ username: \"admin\", password: \"just kidding\" }"</span><span class="p">;</span>
+    <span class="kt">byte</span><span class="p">[]</span> <span class="n">jsonBytes</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="nf">GetBytes</span><span class="p">(</span><span class="n">jsonString</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="k">new</span> <span class="nf">Response</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">StatusCode</span> <span class="p">=</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">OK</span><span class="p">,</span>
+        <span class="n">ContentType</span> <span class="p">=</span> <span class="s">"application/json"</span><span class="p">,</span>
+        <span class="n">ReasonPhrase</span> <span class="p">=</span> <span class="s">"Because why not!"</span><span class="p">,</span>
+        <span class="n">Headers</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;()</span>
+        <span class="p">{</span>
+            <span class="p">{</span> <span class="s">"Content-Type"</span><span class="p">,</span> <span class="s">"application/json"</span> <span class="p">},</span>
+            <span class="p">{</span> <span class="s">"X-Custom-Header"</span><span class="p">,</span> <span class="s">"Sup?"</span> <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="n">Contents</span> <span class="p">=</span> <span class="n">c</span> <span class="p">=&gt;</span> <span class="n">c</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="n">jsonBytes</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">jsonBytes</span><span class="p">.</span><span class="n">Length</span><span class="p">)</span>
+    <span class="p">};</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>and we would get this at the other end of the line:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 Because why not!
+Content-Type: application/json
+Server: Microsoft-HTTPAPI/2.0
+X-Custom-Header: Sup?
+Date: Tue, 10 Nov 2015 16:09:19 GMT
+Content-Length: 47
+
+{ username: "admin", password: "just kidding" }
+</code></pre></div></div>
+
+<p>Response also comes with a lot of useful methods like AsJson, AsXml and AsRedirect. For example we could simplify returning a JSON response like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Post</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">Response</span><span class="p">.</span><span class="n">AsJson</span><span class="p">&lt;</span><span class="n">SimpleResponse</span><span class="p">&gt;(</span>
+        <span class="k">new</span> <span class="nf">SimpleResponse</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">Status</span> <span class="p">=</span> <span class="s">"A-OK!"</span><span class="p">,</span> <span class="n">ErrorCode</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">Description</span> <span class="p">=</span> <span class="s">"All systems are go!"</span>
+        <span class="p">});</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>and the result would contain the appropriate header and status code:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Server: Microsoft-HTTPAPI/2.0
+Date: Tue, 10 Nov 2015 16:19:18 GMT
+Content-Length: 68
+
+{"status":"A-OK!","errorCode":1,"description":"All systems are go!"}
+</code></pre></div></div>
+
+<p>One extension I like is the AsRedirect method. The following example would return Google search results for a given parameter:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get</span><span class="p">[</span><span class="s">"/search"</span><span class="p">]</span> <span class="p">=</span> <span class="n">parameters</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">s</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="n">Query</span><span class="p">[</span><span class="s">"q"</span><span class="p">];</span>
+    <span class="k">return</span> <span class="n">Response</span><span class="p">.</span><span class="nf">AsRedirect</span><span class="p">(</span><span class="s">$"http://www.google.com/search?q=</span><span class="p">{</span><span class="n">s</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<h2 id="https">HTTPS</h2>
+<p>What if we needed to support HTTPS for our tests for some reason? Fear not, Nancy covers that too. By default, if we just try to use HTTPS by changing the protocol we would get this exception:</p>
+
+<blockquote>
+  <p>The connection to ‘localhost’ failed. 
+System.Security.SecurityException Failed to negotiate HTTPS connection with server.fiddler.network.https HTTPS handshake to localhost (for #2) failed. System.IO.IOException Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host.</p>
+</blockquote>
+
+<p>The solution is to add create a self-signed certificate and add it using netsh http add command. Here’s the step-by-step process:</p>
+
+<ol>
+  <li>Create a self-signed certificate: Open a Visual Studio command prompt and enter the following command:</li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>makecert nancy.cer
+</code></pre></div></div>
+
+<p>You can provide more properties so that it would look with a name that makes sense. Here’s an MSD page to</p>
+
+<ol>
+  <li>Run mmc and add Certificates snap-in. Make sure to select <strong>Computer Account</strong>.</li>
+</ol>
+
+<p><img src="/images/vpblogimg/2015/11/self-hosting-with-nancy-cert-account.png" alt=""></p>
+
+<p>I selected <em>My User Account</em> at first and it gave the following error:</p>
+
+<blockquote>
+  <p>SSL Certificate add failed, Error: 1312 A specified logon session does not exist. It may already have been terminated.</p>
+</blockquote>
+
+<p>In that case the solution is just to drag and drop the certificate to the computer account as shown below:</p>
+
+<p><img src="/images/vpblogimg/2015/11/self-hosting-with-nancy-cert-store.png" alt=""></p>
+
+<ol>
+  <li>
+    <p>Right-click on Certificates (Local Computer) -&gt; Personal -&gt; Certificates and select All tasks -&gt; Import and browse to nancy.cer file created in Step 1</p>
+  </li>
+  <li>
+    <p>Double-click on the certificate, switch to Details tab and scroll to the bottom and copy the Thumbprint value (and remove the spaces after copied it)</p>
+  </li>
+</ol>
+
+<p><img src="/images/vpblogimg/2015/11/self-hosting-with-nancy-cert-thumbnail.png" alt=""></p>
+
+<ol>
+  <li>Now enter the following commands. The first one is the same as before, just with HTTPS as protocol. The second command add the certificate we’ve just created.</li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>netsh http add urlacl url=https://+:12345/ user="Everyone"
+
+netsh http add sslcert ipport=0.0.0.0:1234 ccerthash=653a1c60d4daaae00b2a103f242eac965ca21bec appid={A0DEC7A4-CF28-42FD-9B85-AFFDDD4FDD0F} clientcertnegotiation=enable
+</code></pre></div></div>
+
+<p>Here appid can be any GUID.</p>
+
+<p>Let’s take it out for a test drive:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">parameters</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="s">"Response over HTTPS! Weeee!"</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>This request</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET https://localhost:12345 HTTP/1.1
+Host: localhost:12345
+
+
+</code></pre></div></div>
+
+<p>returns this response</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
+Content-Type: text/html
+Server: Microsoft-HTTPAPI/2.0
+Date: Wed, 11 Nov 2015 10:24:58 GMT
+Content-Length: 27
+
+Response over HTTPS! Weeee!
+</code></pre></div></div>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>There are a few alternatives when you need a small web server to test something locally. Nancy is one of them. It’s easy to configure, use and it’s lightweight. Apparently you can even <a href="https://github.com/NancyFx/Nancy/wiki/Running-Nancy-on-your-Raspberry-Pi" target="_blank" rel="noopener noreferrer">host in on a Raspberry Pi!</a></p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="http://nancyfx.org/" target="_blank" rel="noopener noreferrer">Official Nancy site</a></li>
+  <li><a href="https://github.com/NancyFx" target="_blank" rel="noopener noreferrer">GitHub repository</a></li>
+  <li><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/cc307223(v=vs.85).aspx" target="_blank" rel="noopener noreferrer">Windows Dev Centre reference for add urlacl</a></li>
+  <li><a href="https://msdn.microsoft.com/en-us/library/bfsktky3(v=vs.110).aspx" target="_blank" rel="noopener noreferrer">MSDN Reference for Makecert</a></li>
+  <li><a href="https://github.com/NancyFx/Nancy/wiki/Accessing-the-client-certificate-when-using-SSL" target="_blank" rel="noopener noreferrer">Accessing the client certificate when using SSL</a></li>
+  <li><a href="https://coderead.wordpress.com/2014/08/07/enabling-ssl-for-self-hosted-nancy/" target="_blank" rel="noopener noreferrer">Blogpost: Enabling SSL for Self-Hosted Nancy</a></li>
+  <li><a href="https://github.com/NancyFx/Nancy/wiki/Running-Nancy-on-your-Raspberry-Pi" target="_blank" rel="noopener noreferrer">Running Nancy on your Raspberry Pi</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/19" class="prev">Prev</a>
+    
+    
+        <a href="/page/21" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

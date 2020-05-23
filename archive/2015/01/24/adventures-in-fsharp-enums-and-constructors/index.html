@@ -1,0 +1,207 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Adventures in F# - Enums and constructors - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2015/01/24/adventures-in-fsharp-enums-and-constructors/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Adventures in F# - Enums and constructors</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-01-24T18:30:00+00:00" itemprop="datePublished">January 24, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">fsharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>Going over the F# Pluralsight course I learned a few more things and thought I should use them to improve my world-famous Rock-Paper-Too-Long-To-Type game.</p>
+
+<h3 id="new-tidbits-and-improvements-in-the-game">New tidbits and improvements in the game</h3>
+<ul>
+  <li>
+    <p><em>new</em> keyword is only required when the type implements IDisposable. So no need to use them on my RPSLS object. It works exactly the same.</p>
+  </li>
+  <li>
+    <p>default constructor can be defined such as</p>
+  </li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">new</span><span class="bp">()</span> <span class="p">=</span> <span class="nc">Car</span><span class="p">(</span><span class="s2">"red"</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>You can access the constructor parameters anywhere in the object so there is no need to assign it to another value.</p>
+  </li>
+  <li>
+    <p>Assigning values to enum values makes it compatible with other.NET languages. When I assigned values to moves an interesting thing happened. I stated getting this error: <em>Enumerations cannot have members</em> So you can overload operators in a discriminated union in F# and you can use it in F# only  but if you want your type be compatible with other CLR languages than you can only use it as a regular enum.</p>
+  </li>
+</ul>
+
+<p>After I assigned the values my Move discriminated union became:</p>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="nc">Move</span> <span class="p">=</span> 
+    <span class="p">|</span> <span class="nc">Rock</span> <span class="p">=</span> <span class="mi">0</span>
+    <span class="p">|</span> <span class="nc">Spock</span> <span class="p">=</span> <span class="mi">1</span>
+    <span class="p">|</span> <span class="nc">Paper</span> <span class="p">=</span> <span class="mi">2</span>
+    <span class="p">|</span> <span class="nc">Lizard</span> <span class="p">=</span> <span class="mi">3</span>
+    <span class="p">|</span> <span class="nc">Scissors</span> <span class="p">=</span> <span class="mi">4</span>
+</code></pre></div></div>
+
+<p>So no more overloaded minus operator which significantly reduced the lines of code in the type. After Googling a bit I found out that generally the above values are assigned to moves the winner is determined by extracting computer number from the player number and applying modulo operator. For example: When player plays rock (0) and computer plays paper (2)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>difference = player - computer = 0 - 2 = -2
+result = -2 % 5 = 3 --&gt; Python returns 3 after this operation
+
+if result &lt; 3 then player wins
+if result &gt;= 3 then computer wins 
+</code></pre></div></div>
+
+<p>Apparently in F#, -2 % 5 = -2! So I had to add 5 before applying modulo operator:</p>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">diff</span> <span class="p">=</span> <span class="o">((</span><span class="kt">int</span><span class="o">)(</span><span class="n">this</span><span class="p">.</span><span class="nn">PlayerMoves</span><span class="p">.</span><span class="nc">Item</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="p">-</span> <span class="nn">ComputerMoves</span><span class="p">.</span><span class="nc">Item</span><span class="p">(</span><span class="n">i</span><span class="o">))</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span> <span class="o">%</span> <span class="mi">5</span>
+</code></pre></div></div>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>I’m still working with the PluralSight course. In the next post I’ll examine type casting, abstract types and do bindings etc</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://codepad.org/8NtmZw2w" target="_blank" rel="noopener noreferrer">Python implementation of RPSLS game</a></li>
+  <li><a href="http://www.pluralsight.com/courses/fsintro" target="_blank" rel="noopener noreferrer">Pluralsight course: Introduction to F#</a></li>
+</ul>
+
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2015/01/21/adventures-in-fsharp-interfaces-exception-handling-and-unit-testing/" title="Previous Post: 
+Adventures in F# - Interfaces, Exception Handling and Unit Testing">« Adventures in F# - Interfaces, Exception Handling and Unit Testing</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2015/02/05/adventures-in-fsharp/" title="next Post: 
+Adventures in F# - Miscellaneous Notes">Adventures in F# - Miscellaneous Notes » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

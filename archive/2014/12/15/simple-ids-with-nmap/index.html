@@ -1,0 +1,300 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Simple IDS with Nmap - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2014/12/15/simple-ids-with-nmap/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Simple IDS with Nmap</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-15T22:45:00+00:00" itemprop="datePublished">December 15, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- security, aws, dev -->
+
+
+
+
+    <a href="/category/security">security</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">network, raspberry_pi, nmap</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>One of the Nmap’s many usages is for asset management as it is very good at discovering devices in a network. I’m going to use it to develop a simple IDS (Intrusion Detection System). Of course IDS software is much more complex and I hope I will look into installing a proper one, like <a href="https://www.snort.org/" target="_blank" rel="noopener noreferrer">Snort</a>, when I have the time but for now I’ll just roll out my own. My goals in this project are:</p>
+
+<ol>
+  <li>Utilise the idle old Raspberry Pi: I used one to <a href="https://volkanpaksoy.com/archive/2014/11/19/media-centre-raspberry-pi/">build a media server</a> another one as a <a href="https://volkanpaksoy.com/archive/2014/12/12/homebrew-security-camera-with-raspberry-pi/">security camera</a>. The 3rd one is one of the first releases. It has 256MB memory and failed to run various projects I tried in the past. Looks like it’s at least good enough to run Nmap so it may have a use after all.</li>
+  <li>Practice more Powershell and discover XML parsing capabilities.</li>
+  <li>Writing a Python version of the same script so that everything can run on Pi but I’ll defer that to a later date.</li>
+</ol>
+
+<h3 id="basics">Basics</h3>
+<p>So like every Raspberry Pi project, first step is to download a distro suitable for Raspberry Pi and write to an SD/miroSD card. There is a Pi version of the (in)famous security distro Kali Linux. It’s convenient as it comes with all security tools pre-installed but for my purposes I just used a plain <a href="http://www.raspberrypi.org/downloads/" target="_blank" rel="noopener noreferrer">Raspbian</a> as I only need Nmap.</p>
+
+<p>Nmap that is installed from Linux repositories was a bit outdated (v6.00) so I decided to download the latest version (v6.47) and build it from source. Even though all I need is a simple command I like to keep my tools current!</p>
+
+<h3 id="how-does-it-work">How Does It Work</h3>
+<p>I placed the Pi near the switch so that it can use Ethernet. It gets results much faster so I recommend wired over wireless. So the initial version will work like this:</p>
+
+<ol>
+  <li>A cron job runs on Pi every n minutes. Executes Nmap and uploads the results in XML format to AWS S3.</li>
+  <li>A scheduled task runs on a Windows Server running Powershell. It gets the latest XML from S3 and gets the active hosts on the network.</li>
+  <li>Compares the results to a device list and sends a notification if an intruder is detected.</li>
+</ol>
+
+<p>Of course in order this to work first I need to assign static IPs to all my devices and record these addresses along with MAC addresses in the configuration.</p>
+
+<h3 id="lets-get-cracking">Let’s get cracking!</h3>
+
+<p>I covered Nmap basics <a href="https://volkanpaksoy.com/archive/2014/12/13/nmap-basics/">here</a>. In this project all I need is host discovery so I’m not interested in the services, machine names, operating systems etc. I’ll just run this command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo nmap -sn 172.16.1.0/24 -oX output.xml
+</code></pre></div></div>
+
+<p>Also I need my old friend s3cmd so I ran this</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install s3cmd
+</code></pre></div></div>
+
+<p>Then</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>s3cmd --configure
+</code></pre></div></div>
+
+<p>and entered the credentials for the new IAM user I created who has access only to a single S3 bucket.</p>
+
+<p>So to put it together in a shell script I created the simple script below.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nb">echo</span> <span class="s2">"Running Nmap"</span>
+<span class="nb">sudo </span>nmap <span class="nt">-sn</span> 172.16.1.0/24 <span class="nt">-oX</span> /home/pi/output.xml
+
+<span class="nv">timestamp</span><span class="o">=</span><span class="k">$(</span>date +%Y%m%d_%H%M%S<span class="k">)</span>
+<span class="nv">s3FileName</span><span class="o">=</span>nmap_output_<span class="nv">$timestamp</span>.xml
+
+<span class="nb">echo</span> <span class="s2">"Uploading the output to S3"</span>
+<span class="nb">sudo </span>s3cmd put /home/pi/output.xml s3://<span class="o">{</span>BUCKET<span class="o">}</span>/<span class="nv">$s3FileName</span>
+
+<span class="nb">sudo </span>rm /home/pi/output.xml
+</code></pre></div></div>
+
+<p>Also to make the script executable so I ran this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo chmod 755 my_script
+</code></pre></div></div>
+
+<h3 id="analyze-and-alert">Analyze and alert</h3>
+<p>So now I have a list of devices running on the network. The Nmap XML output looks something like this:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0"?&gt;</span>
+<span class="cp">&lt;?xml-stylesheet href="file:///usr/bin/../share/nmap/nmap.xsl" type="text/xsl"?&gt;</span>
+<span class="c">&lt;!-- Nmap 6.47 scan initiated Mon Dec 15 13:30:01 2014 as: nmap -sn -oX /home/pi/output.xml 172.16.1.0/24 --&gt;</span>
+<span class="nt">&lt;nmaprun</span> <span class="na">scanner=</span><span class="s">"nmap"</span> <span class="na">args=</span><span class="s">"nmap -sn -oX /home/pi/output.xml 172.16.1.0/24"</span> <span class="na">start=</span><span class="s">"1418650201"</span> <span class="na">startstr=</span><span class="s">"Mon Dec 15 13:30:01 2014"</span> <span class="na">version=</span><span class="s">"6.47"</span> <span class="na">xmloutputversion=</span><span class="s">"1.04"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;verbose</span> <span class="na">level=</span><span class="s">"0"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;debugging</span> <span class="na">level=</span><span class="s">"0"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;host&gt;</span>
+    <span class="nt">&lt;status</span> <span class="na">state=</span><span class="s">"up"</span> <span class="na">reason=</span><span class="s">"arp-response"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;address</span> <span class="na">addr=</span><span class="s">"172.16.1.10"</span> <span class="na">addrtype=</span><span class="s">"ipv4"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;address</span> <span class="na">addr=</span><span class="s">"AA:BB:CC:DD:EE:FF"</span> <span class="na">addrtype=</span><span class="s">"mac"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;hostnames&gt;</span>
+    <span class="nt">&lt;/hostnames&gt;</span>
+    <span class="nt">&lt;times</span> <span class="na">srtt=</span><span class="s">"1142"</span> <span class="na">rttvar=</span><span class="s">"5000"</span> <span class="na">to=</span><span class="s">"100000"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/host&gt;</span>
+  <span class="nt">&lt;runstats&gt;</span>
+    <span class="nt">&lt;finished</span> <span class="na">time=</span><span class="s">"1418650208"</span> <span class="na">timestr=</span><span class="s">"Mon Dec 15 13:30:08 2014"</span> <span class="na">elapsed=</span><span class="s">"6.40"</span> <span class="na">summary=</span><span class="s">"Nmap done at Mon Dec 15 13:30:08 2014; 256 IP addresses (11 hosts up) scanned in 6.40 seconds"</span> <span class="na">exit=</span><span class="s">"success"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;hosts</span> <span class="na">up=</span><span class="s">"11"</span> <span class="na">down=</span><span class="s">"245"</span> <span class="na">total=</span><span class="s">"256"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/runstats&gt;</span>
+<span class="nt">&lt;/nmaprun&gt;</span>
+</code></pre></div></div>
+
+<p>And my configuration file looks like this:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;assetList&gt;</span>
+  <span class="nt">&lt;host</span> <span class="na">name=</span><span class="s">"Dev"</span> <span class="na">ip=</span><span class="s">"172.16.1.10"</span> <span class="na">mac=</span><span class="s">"12:12:12:12:12:12"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;host</span> <span class="na">name=</span><span class="s">"Raspberry Pi XBMC"</span> <span class="na">ip=</span><span class="s">"172.16.1.11"</span> <span class="na">mac=</span><span class="s">"AA:AA:AA:AA:AA:AA"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;host</span> <span class="na">name=</span><span class="s">"Printer"</span> <span class="na">ip=</span><span class="s">"172.16.1.12"</span> <span class="na">mac=</span><span class="s">"BB:BB:BB:BB:BB:BB"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;host</span> <span class="na">name=</span><span class="s">"iPad"</span> <span class="na">ip=</span><span class="s">"172.16.1.13"</span> <span class="na">mac=</span><span class="s">"CC:CC:CC:CC:CC:CC"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/assetList&gt;</span>
+</code></pre></div></div>
+
+<p>A gem I discovered about Powershell is the Powershell ISE (Integrated Shell Environment). It supports IntelliSense-type discovery so makes it much easier and faster to write and run scripts.</p>
+
+<p><img src="/images/vpblogimg/2014/12/powershell-ise.png" alt="Powershell ISE"></p>
+
+<h3 id="into-the-powershell">Into the Powershell</h3>
+<p>The script does the following</p>
+
+<ol>
+  <li>Load the configuration</li>
+  <li>Get the latest asset list from S3 and load</li>
+  <li>Compare and see if there are any unknown devices on the network</li>
+  <li>If there is send an email notification</li>
+</ol>
+
+<p>Since Powershell is based on .NET framework, working with XML is nothing new. I just used standard XPath queries to match the MAC and IP addresses of the discovered devices to the ones I entered to the configuration file.</p>
+
+<p>Here’s the script:</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/0caef92a4562d17b404d37c8b0445902.js"> </script>
+
+<h3 id="time-for-some-action">Time for some action</h3>
+<p>OK let’s see how we are doing now. After I recorded all the known devices the output of the script was like below:</p>
+
+<p><img src="/images/vpblogimg/2014/12/powershell-script-output-no-alarm.png" alt="Script output"></p>
+
+<p>One interesting thing to note is Nmap cannot discover its own MAC address. I guess that’s because as it’s using ARP protocol to resolve MAC addresses on the local subnet and it doesn’t have its own MAC in its ARP table it cannot find it. I decided to skip the entry but may be a better choice to compare only the IP address if this is the case.
+Anyway, I will leave it as is for now.</p>
+
+<p>To test it I turned on my old phone and connected to the network. Within 10 minutes I received the following notification email:</p>
+
+<p><img src="/images/vpblogimg/2014/12/powershell-new-device-alert.png" alt=""></p>
+
+<p>So far so good!</p>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>I would never trust such a thing as the ultimate defence mechanism but even so I believe it may come in handy in some situations. More importantly this was a fun little project for me as it involved bash scripting, Powershell, AWS and XML. I’m glad I finally came up with a use for the idle Raspberry Pi also happy to discover Powershell ISE.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.alexrams.com/blog/2014/10/11/install-latest-version-nmap-ubuntu-12-04/" target="_blank" rel="noopener noreferrer">Installing Nmap from source</a></li>
+  <li><a href="http://technet.microsoft.com/en-us/library/dd315244.aspx" target="_blank" rel="noopener noreferrer">Introducing the Windows PowerShell ISE</a></li>
+  <li><a href="https://www.kali.org/tag/raspberry-pi/" target="_blank" rel="noopener noreferrer">Kali Linux for Raspberry Pi</a></li>
+  <li><a href="http://zxq9.com/archives/795" target="_blank" rel="noopener noreferrer">Most common Bash date commands for timestamping</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2014/12/13/nmap-basics/" title="Previous Post: 
+Nmap Basics">« Nmap Basics</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2015/01/02/enter-fsharp/" title="next Post: 
+Enter F#">Enter F# » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

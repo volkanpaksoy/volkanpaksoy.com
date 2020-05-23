@@ -1,0 +1,174 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>DevOps - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2013/12/10/devops/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">DevOps</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-12-10T22:01:42+00:00" itemprop="datePublished">December 10, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- devops -->
+
+
+
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags"></span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>DevOps (Development + Operations) is one of most popular terms in the IT world recently. From what I’ve read and listened to so far, my understanding is it is all about continuous deployment (or delivery). Basically, you have to automate everything from development to deployment to practice DevOps.</p>
+
+<h3 id="current-problem">Current problem</h3>
+<p>Traditionally, successful deployment is a huge challenge. It is mostly a manual and cumbersome process. Because of its sensitive nature the system admins are not huge fans of deployments. Also, another challenge is the miscommunication (or no communication in some cases) between system admin and development teams. They are generally run by different high-level executives and their priorities conflict most of the time.</p>
+
+<h3 id="solution">Solution</h3>
+<p>On the philosophical side, DevOps is bringing these teams together and work in harmony. Having social events with both teams’ attendance is a key to build confidence among team members. As Richard Campbell (from <a href="http://runasradio.com/" target="_blank" rel="noopener noreferrer">RunAsRadio</a> and <a href="http://dotnetrocks.com" target="_blank" rel="noopener noreferrer">.NET Rocks</a> podcasts) says “Pizza and beer is a global lubricant”.</p>
+
+<h4 id="dev">Dev…</h4>
+<p>On the development side, the key requirement is continuous integration. You have to able to run unit tests and acceptance tests automatically on build servers. This means development has to be done in short sprints in an agile way with frequent check-ins. One step further of this stage is continuous deployment.</p>
+
+<h4 id="ops">…Ops</h4>
+<p>This is where the IT team comes into play. When the whole system is automated, deploying to production frequently and without much headache becomes possible. Cloud computing is one of the core technologies that makes DevOps possible. Ability to manage virtual machines programmatically (i.e. AWS, OpenStack) leads to a whole bunch of possibilities.</p>
+
+<p>This is a fairly complex topic encompassing many disciplines and technologies. Also it’s quite dynamic and open to innovation. Definitely worth keeping an eye on.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://en.wikipedia.org/wiki/DevOps" target="_blank" rel="noopener noreferrer">Wikipedia article</a></li>
+  <li><a href="http://www.runasradio.com" target="_blank" rel="noopener noreferrer">RunAsRadio podcast - Building the Culture of DevOps with Steven Murawski</a></li>
+  <li><a href="http://www.cert.org/podcast/mp3/2/20130730kim-full.mp3" target="_blank" rel="noopener noreferrer">Cert.org podcast - DevOps - Transform Development and Operations for Fast, Secure Deployments</a></li>
+  <li><a href="http://vimeo.com/67110005" target="_blank" rel="noopener noreferrer">Richard Campbell DevOps talk on Vimeo</a></li>
+</ul>
+
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2013/11/27/256-bit-ssl-support-with-windows-server/" title="Previous Post: 
+256-bit SSL Support with Windows Server">« 256-bit SSL Support with Windows Server</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2013/12/11/auto-scaling-using-aws-management-console/" title="next Post: 
+Auto-Scaling using AWS Management Console">Auto-Scaling using AWS Management Console » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

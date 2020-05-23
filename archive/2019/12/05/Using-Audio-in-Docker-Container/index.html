@@ -1,0 +1,237 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Using Audio in Docker Container - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2019/12/05/Using-Audio-in-Docker-Container/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Using Audio in Docker Container</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-12-05T06:00:00+00:00" itemprop="datePublished">December  5, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- docker, dev -->
+
+
+
+
+    <a href="/category/docker">docker</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">audio</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>In this post I’m going to show an example of playing audio in a Docker container.</p>
+
+<h2 id="test-environment-setup">Test Environment Setup</h2>
+<p>I’m going to use dotnet core 3.1 runtime image:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull mcr.microsoft.com/dotnet/core/runtime:3.1
+</code></pre></div></div>
+
+<p>Here’s my Dockerfile:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM mcr.microsoft.com/dotnet/core/runtime:3.1
+
+RUN apt-get update -y
+
+RUN apt-get install mpg123 -y
+RUN apt-get install wget -y
+
+COPY ./play-audio.sh .
+RUN chmod +x ./play-audio.sh
+
+ENTRYPOINT ["/play-audio.sh"]
+</code></pre></div></div>
+
+<p>and the script (play-audio.sh) that plays the audio looks like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nv">url</span><span class="o">=</span><span class="nv">$1</span>
+<span class="nv">filename</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">url</span><span class="p">##*/</span><span class="k">}</span><span class="s2">"</span>
+
+<span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="nt">-f</span> <span class="nv">$filename</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"File doesn't exist. Downloading."</span>
+    wget <span class="nv">$url</span>
+<span class="k">fi</span>
+
+<span class="c"># check if the audio player program exists. helpful to test the script individually on macOS</span>
+<span class="k">if </span><span class="nb">hash </span>mpg123 2&gt;/dev/null<span class="p">;</span> <span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"Playing file using mpg123"</span>
+    mpg123 <span class="nv">$filename</span>
+<span class="k">elif </span><span class="nb">hash </span>afplay 2&gt;/dev/null<span class="p">;</span> <span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"Playing file using afplay"</span>
+    afplay <span class="nv">$filename</span>
+<span class="k">else 
+    </span><span class="nb">echo</span> <span class="s2">"No player could be found."</span>    
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>I built the image with the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build -t audio-test .
+</code></pre></div></div>
+
+<h2 id="testing-the-audio">Testing the audio</h2>
+<p>Initially I rana container like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run audio-test https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3
+</code></pre></div></div>
+
+<p>After running the container like this I got the error shown below:</p>
+
+<p><img src="/images/vpblogimg/2019/12/audio-in-docker/error-while-running-audio.png" alt=""></p>
+
+<h2 id="solution">Solution</h2>
+<p>The trick is ro run with the following parameter:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>--device /dev/snd
+</code></pre></div></div>
+
+<p>So the full Docker run command looks like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run --rm --device /dev/snd audio-test https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3
+</code></pre></div></div>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>This was a long-winded setup for a very short solution but I enjoyed practicing with Bash scripting and Docker.</p>
+
+<p>Unfortunately this solution works on Raspberry Pi only and not on Mac. Every resource I found points to installing Pulse Audio Server on macOS and Pulse Audio client in the Docker image. I haven’t tried it yet as it was beyond the scope of my requirements but I might need to implement it later in which case I will post about it.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://stackoverflow.com/questions/41083436/how-to-play-sound-in-a-docker-container" target="_blank" rel="noopener noreferrer">How to play sound in a docker container</a></li>
+  <li><a href="https://stackoverflow.com/questions/40136606/how-to-expose-audio-from-docker-container-to-a-mac" target="_blank" rel="noopener noreferrer">How to expose audio from Docker container to a Mac?</a></li>
+  <li><a href="https://devops.datenkollektiv.de/running-a-docker-soundbox-on-mac.html" target="_blank" rel="noopener noreferrer">Running a Docker Soundbox on Mac</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2019/11/06/Continuous-Integration-with-CodeBuild/" title="Previous Post: 
+Continuous Integration with CodeBuild">« Continuous Integration with CodeBuild</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2020/03/18/Migrating-EC2-Instance-to-a-Different-Account/" title="next Post: 
+Migrating an EC2 Instance to a Different AWS Account">Migrating an EC2 Instance to a Different AWS Account » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

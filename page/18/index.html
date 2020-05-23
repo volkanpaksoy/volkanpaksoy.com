@@ -1,0 +1,577 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/18/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2016/03/30/checking-domain-availability-with-aws-route53-part-4/" itemprop="url">Checking domain availability with AWS Route 53 Part 4: AngularJS Client</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2016-03-30T11:00:00+01:00" itemprop="datePublished">March 30, 2016</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">route53, angularjs</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Previously in this series:</p>
+
+<ul>
+  <li><a href="https://volkanpaksoy.com/archive/2015/08/04/checking-domain-availability-with-aws-route53-part-1">Part 1: Getting TLD List</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2015/08/06/checking-domain-availability-with-aws-route53-part-2">Part 2: Implementing API for TLD service</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2015/08/08/checking-domain-availability-with-aws-route53-part-3">Part 3: Consuming the APIs with Console Client</a></li>
+</ul>
+
+<p>So far I was using the console client but I thought I chould use a prettier web-based-UI and came up with this:</p>
+
+<p><a href="https://domchk53.com" target="_blank" rel="noopener noreferrer"><img src="/images/vpblogimg/2016/03/domchk53-mainview.png" alt="DomChk53 AngularJS Client"></a></p>
+
+<p>It’s using AngularJS and Bootstrap which significantly improved the development process.</p>
+
+<p>API in the backend is AWS API Gateway on a custom domain (api.domchk53.com) and using Lambda functions to do the actual work. One great thing about API Gatewayis that it’s very easy to set requests rates:</p>
+
+<p><img src="/images/vpblogimg/2016/03/domchk53-APIGatewayLimits.png" alt=""></p>
+
+<p>Currently I set it to max 5 requests per second. I chose this value because of the limitation on AWS API as stated <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html" target="_blank" rel="noopener noreferrer">here</a>:</p>
+
+<blockquote>
+  <p>All requests – Five requests per second per AWS account. If you submit more than five requests per second, Amazon Route 53 returns an HTTP 400 error (Bad request). The response header also includes a Code element with a value of Throttling and a Message element with a value of Rate exceeded.</p>
+</blockquote>
+
+<p>Of course limiting this on the client side assumes a single client so you may still get “Rate exceeded” errors even if running single query at a time. I’m planning to implement a Node server using SQS to move the queue to server side but that’s not one of my priorities right now.</p>
+
+<p>The Lambda function is straightforward enough. Just calls the checkDomainAvailability API method with the supplied parameters:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">exports</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">AWS</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'aws-sdk'</span><span class="p">);</span>
+	<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+	    <span class="na">region</span><span class="p">:</span> <span class="s2">"us-east-1"</span>
+	<span class="p">}</span>
+	
+	<span class="kd">var</span> <span class="nx">route53domains</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AWS</span><span class="p">.</span><span class="nx">Route53Domains</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+    
+    <span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">DomainName</span><span class="p">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">domain</span> <span class="o">+</span> <span class="s1">'.'</span> <span class="o">+</span> <span class="nx">event</span><span class="p">.</span><span class="nx">tld</span>
+    <span class="p">};</span>
+
+    <span class="nx">route53domains</span><span class="p">.</span><span class="nx">checkDomainAvailability</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">context</span><span class="p">.</span><span class="nx">fail</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="na">Domain</span><span class="p">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">domain</span><span class="p">,</span>
+                <span class="na">Tld</span><span class="p">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">tld</span><span class="p">,</span>
+                <span class="na">CheckDate</span><span class="p">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">toISOString</span><span class="p">(),</span>
+                <span class="na">RequestResult</span><span class="p">:</span> <span class="s2">"OK"</span><span class="p">,</span>
+                <span class="na">Availability</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">Availability</span>
+            <span class="p">};</span>
+            
+            <span class="nx">context</span><span class="p">.</span><span class="nx">succeed</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>  
+        <span class="p">}</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="usage">Usage</h2>
+<p>I wanted this tool as an improvement to AWS already provides. What you can do with Management Console is search a single domain and it searches it against the popular 13 TLDs. If you need anything outside these 13 you have to pick them manually.</p>
+
+<p>In DomChk53 you can search multiple domain names at once against all supported TLDs (293 as of this writing).</p>
+
+<p><img src="/images/vpblogimg/2016/03/domchk53-multipledomainsandTLDs.png" alt=""></p>
+
+<p>Also you can group TLDs into lists so you can for example search the most common ones (com, net, co.uk etc.) and say finance related ones (money, cash, finance etc.). Depending on the domain name one group may be more relevant.</p>
+
+<p><img src="/images/vpblogimg/2016/03/domchk53-NewList.PNG" alt=""></p>
+
+<p>You can cancel a query at any time to avoid wasting precious requests if you change your mind about the domain.</p>
+
+<p><img src="/images/vpblogimg/2016/03/domchk53-CancelWaitingRequests.png" alt=""></p>
+
+<h2 id="whats-missing">What’s missing</h2>
+<p>For a while I’m planning to leave it as is but when I have it in me to revisit the project I will implement:</p>
+
+<ul>
+  <li>Server-side queueing of requests</li>
+  <li>The option to export/email the results in PDF format</li>
+</ul>
+
+<p>I’m also open to other suggestions…</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/domchk53" target="_blank" rel="noopener noreferrer">DomChk53 Source Code</a></li>
+  <li><a href="https://domchk53.com" target="_blank" rel="noopener noreferrer">DomChk53 Live Site</a></li>
+  <li><a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html" target="_blank" rel="noopener noreferrer">Use a Custom Domain Name in API Gateway</a></li>
+  <li><a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-cors.html" target="_blank" rel="noopener noreferrer">Enable CORS for a Method in API Gateway</a></li>
+  <li><a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html" target="_blank" rel="noopener noreferrer">AWS Documentation on account limits</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2016/03/18/dynamic-dns-with-aws-route-53-part-2-angular-client/" itemprop="url">Dynamic DNS with AWS Route 53 - Part 2: AngularJS Client</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2016-03-18T13:00:00+00:00" itemprop="datePublished">March 18, 2016</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awsdev">aws</a></span> -->
+
+<!-- aws, dev -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">route53, angularjs</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I’ve been using my own dynamic DNS application (which I named <a href="https://dyndns53.com" target="_blank" rel="noopener noreferrer">DynDns53</a> and blogged about it <a href="https://volkanpaksoy.com/archive/2015/08/12/dynamic-dns-with-aws-route53/">here</a>). So far it had a WPF application and I was happy with it but I thought if I could develop a web-based application I wouldn’t have to install anything (which is what I’m shooting for these days) and achieve the same results.</p>
+
+<p>So I built a JavaScript client with AngularJS framework. The idea is exactly the same, the only difference is it’s all happening inside the browser.</p>
+
+<p><img src="/images/vpblogimg/2016/03/dyndns53-angularjs-client-overview.png" alt="DynDns53 web client"></p>
+
+<h2 id="ingredients">Ingredients</h2>
+<p>To have a dynamic DNS client you need to have the following</p>
+
+<ol>
+  <li>A way to get your external IP address</li>
+  <li>A way to update your DNS record</li>
+  <li>An application that performs Step 1 &amp; 2 perpetually</li>
+</ol>
+
+<h2 id="step-1-getting-the-ip-address">Step 1: Getting the IP Address</h2>
+<p>I have done and blogged about this several times now. (Feels like I’m repeating myself a bit, I guess I have to find something original to work with. But first I have to finish this project and have closure!)</p>
+
+<p>Since it’s a simple GET request it sounds easy but I quickly hit the <a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing" target="_blank" rel="noopener noreferrer">CORS</a> wall when I tried the following bit:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">'ExternalIP'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$http</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">$http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'http://checkip.amazonaws.com'</span><span class="p">,</span> <span class="p">{</span> <span class="na">cache</span><span class="p">:</span> <span class="kc">false</span> <span class="p">});</span>
+<span class="p">});</span> 
+</code></pre></div></div>
+
+<p>In my WPF client I can call whatever service I want whenever I want but when running inside the browser things are a bit different. So I decided to take a detour and create my own service that allowed cross-origin resource sharing.</p>
+
+<h2 id="aws-lambda--api-gateway">AWS Lambda &amp; API Gateway</h2>
+
+<p>First I thought I could do it even without Lambda function by using the HTTP proxy integration. I could return what the external site returns:</p>
+
+<p><img src="/images/vpblogimg/2016/03/dyndns53-external-ip-http-proxy.png" alt=""></p>
+
+<p>Unfortunately this didn’t work because it was returning the IP of the AWS machine that’s actually running the API gateway. So I had to get the client’s IP from the request and send it back in my own Lambda function.</p>
+
+<p><img src="/images/vpblogimg/2016/03/dyndns53-external-ip-api.png" alt=""></p>
+
+<p>Turns out in order to get HTTP headers you need to fiddle with some <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html" target="_blank" rel="noopener noreferrer">template mapping</a> and assign the client’s IP address to a variable:</p>
+
+<p><img src="/images/vpblogimg/2016/03/dyndns53-external-ip-template-mapping.png" alt=""></p>
+
+<p>This can be later referred to in the Lambda function through <em>event</em> parameter:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">exports</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">context</span><span class="p">.</span><span class="nx">succeed</span><span class="p">({</span>
+        <span class="s2">"ip"</span><span class="p">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">ip</span>
+    <span class="p">})</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>And now that we have our own service we can allow CORS and be able call it from our client inside the browser:</p>
+
+<p><img src="/images/vpblogimg/2016/03/dyndns53-external-ip-enable-cors.png" alt=""></p>
+
+<h2 id="step-2-updating-dns">Step 2: Updating DNS</h2>
+<p>This bit is very similar to WPF version. Instead of using the AWS .NET SDK I just used the JavaScript SDK. AWS has a great <a href="https://sdk.amazonaws.com/builder/js/" target="_blank" rel="noopener noreferrer">SDK builder</a> which lets you to select the pieces you need:</p>
+
+<p><img src="/images/vpblogimg/2016/03/dyndns53-update-dns-sdk-builder.png" alt=""></p>
+
+<p>It also shows if the service supports CORS. It’s a relief that Route53 does so we can keep going.</p>
+
+<p>The whole source code is on <a href="https://github.com/volkanpaksoy/dyndns53" target="_blank" rel="noopener noreferrer">GitHub</a> but here’s the gist of it: Loop through all the subdomains, get all the resource records in the zone, find the matching record and update it with the new IP:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">$scope</span><span class="p">.</span><span class="nx">updateAllDomains</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">angular</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">$rootScope</span><span class="p">.</span><span class="nx">domainList</span><span class="p">.</span><span class="nx">domains</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">updateDomainInfo</span><span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">.</span><span class="nx">zoneId</span><span class="p">);</span>
+      <span class="p">});</span>
+  <span class="p">}</span> 
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">$scope</span><span class="p">.</span><span class="nx">updateDomainInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">domainName</span><span class="p">,</span> <span class="nx">zoneId</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="s1">'accessKeyId'</span><span class="p">:</span> <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">accessKey</span><span class="p">,</span>
+      <span class="s1">'secretAccessKey'</span><span class="p">:</span> <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">secretKey</span>
+    <span class="p">};</span>
+    <span class="kd">var</span> <span class="nx">route53</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AWS</span><span class="p">.</span><span class="nx">Route53</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+    
+    <span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">HostedZoneId</span><span class="p">:</span> <span class="nx">zoneId</span>
+    <span class="p">};</span>
+
+    <span class="nx">route53</span><span class="p">.</span><span class="nx">listResourceRecordSets</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> 
+          <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$emit</span><span class="p">(</span><span class="s1">'rootScope:log'</span><span class="p">,</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="nx">angular</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">ResourceRecordSets</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+              <span class="k">if</span> <span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">Name</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="nx">domainName</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">externalIPAddress</span> <span class="o">=</span> <span class="s2">""</span><span class="p">;</span>
+                <span class="nx">ExternalIP</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">){</span>
+                     <span class="nx">externalIPAddress</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">ip</span><span class="p">;</span>
+                     <span class="nx">$scope</span><span class="p">.</span><span class="nx">changeIP</span><span class="p">(</span><span class="nx">domainName</span><span class="p">,</span> <span class="nx">zoneId</span><span class="p">,</span> <span class="nx">externalIPAddress</span><span class="p">)</span>
+                 <span class="p">});</span>
+              <span class="p">}</span>
+          <span class="p">});</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">$scope</span><span class="p">.</span><span class="nx">changeIP</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">domainName</span><span class="p">,</span> <span class="nx">zoneId</span><span class="p">,</span> <span class="nx">newIPAddress</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="s1">'accessKeyId'</span><span class="p">:</span> <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">accessKey</span><span class="p">,</span>
+      <span class="s1">'secretAccessKey'</span><span class="p">:</span> <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">secretKey</span>
+    <span class="p">};</span>
+
+    <span class="kd">var</span> <span class="nx">route53</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AWS</span><span class="p">.</span><span class="nx">Route53</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">ChangeBatch</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">Changes</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="na">Action</span><span class="p">:</span> <span class="s1">'UPSERT'</span><span class="p">,</span>
+            <span class="na">ResourceRecordSet</span><span class="p">:</span> <span class="p">{</span>
+              <span class="na">Name</span><span class="p">:</span> <span class="nx">domainName</span><span class="p">,</span>
+              <span class="na">Type</span><span class="p">:</span> <span class="s1">'A'</span><span class="p">,</span>
+              <span class="na">TTL</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span>
+              <span class="na">ResourceRecords</span><span class="p">:</span> <span class="p">[</span> <span class="p">{</span>
+                  <span class="na">Value</span><span class="p">:</span> <span class="nx">newIPAddress</span>
+                <span class="p">}</span>
+              <span class="p">]</span>
+            <span class="p">}</span>
+          <span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">},</span>
+      <span class="na">HostedZoneId</span><span class="p">:</span> <span class="nx">zoneId</span>
+    <span class="p">};</span>
+
+    <span class="nx">route53</span><span class="p">.</span><span class="nx">changeResourceRecordSets</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> 
+        <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$emit</span><span class="p">(</span><span class="s1">'rootScope:log'</span><span class="p">,</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span> 
+      <span class="p">}</span>
+      <span class="k">else</span> <span class="p">{</span> 
+        <span class="kd">var</span> <span class="nx">logMessage</span> <span class="o">=</span> <span class="s2">"Updated domain: "</span> <span class="o">+</span> <span class="nx">domainName</span> <span class="o">+</span> <span class="s2">" ZoneID: "</span> <span class="o">+</span> <span class="nx">zoneId</span> <span class="o">+</span> <span class="s2">" with IP Address: "</span> <span class="o">+</span> <span class="nx">externalIPAddress</span><span class="p">;</span>
+        <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$emit</span><span class="p">(</span><span class="s1">'rootScope:log'</span><span class="p">,</span> <span class="nx">logMessage</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+
+<p>The only part that trippped me up was that I wasn’t setting the TTL in the changeResourceRecordSets parameters and I was getting an error but found a <a href="http://stackoverflow.com/questions/31559137/getting-invalidinput-error-on-changeresourcerecordsets" target="_blank" rel="noopener noreferrer">StackOverflow question</a> that helped to get past the issue.</p>
+
+<h2 id="step-3-a-tool-to-bind-them">Step 3: A tool to bind them</h2>
+<p>Now the fun part: An AngularJS client to call these services. I guess the UI is straight-forward. Basically it just requires the user to enter AWS IAM keys and domains to update.</p>
+
+<p>I didn’t want to deal with the hassle of sending the keys to a remote server and host them securely. Instead I thought it would be simpler just to use browser’s local storage with HTML5. This way the keys never leave the browser.</p>
+
+<p>It also only updates the IP address if it has changed so saves unnecessary API calls.</p>
+
+<p>Also it’s possible to view what’s going on in the event log area.</p>
+
+<p><img src="/images/vpblogimg/2015/08/dyndns53-angularjs-client-settings-and-event-log.png" alt=""></p>
+
+<p>I guess I can have my closure now and move on!</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/dyndns53" target="_blank" rel="noopener noreferrer">DynDns53 Source code</a></li>
+  <li><a href="http://stackoverflow.com/questions/31559137/getting-invalidinput-error-on-changeresourcerecordsets" target="_blank" rel="noopener noreferrer">StackOverflow question regarding TTL</a></li>
+  <li><a href="https://sdk.amazonaws.com/builder/js/" target="_blank" rel="noopener noreferrer">AWS JavaScript SDK Builder</a></li>
+  <li><a href="http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Route53.html" target="_blank" rel="noopener noreferrer">AWS Route53 SDK Documentation</a></li>
+  <li><a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html" target="_blank" rel="noopener noreferrer">API Gateway Mapping Template Reference</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2015/08/12/dynamic-dns-with-aws-route53/">DynDns53 introduction blog post</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing" target="_blank" rel="noopener noreferrer">CORS Wikipedia article</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2016/03/02/free-ssl-certs-with-aws-certificate-manager/" itemprop="url">Free SSL certificates with AWS Certificate Manager</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2016-03-02T08:00:00+00:00" itemprop="datePublished">March  2, 2016</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
+
+<!-- aws -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">ssl, aws_certificate_manager, acm</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Paying a ton of money to a digital certificate, which costs nothing to generate, has always bugged me. Fortunately it isn’t just me and recently I heard about <a href="https://letsencrypt.org" target="_blank" rel="noopener noreferrer">Let’s Encrypt</a>.</p>
+
+<p>I was just planning to give it a go but I noticed a new service on AWS Management Console:</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-on-console.png" alt=""></p>
+
+<p>Apparently AWS is now issuing free SSL certificates, which was too tempting to pass on so I decided to dive in.</p>
+
+<h2 id="enter-aws-certificate-manager">Enter AWS Certificate Manager</h2>
+<p>Requesting a certificate just takes seconds as it’s a 3-step process:</p>
+
+<p>First, enter the list of domains you want the certificates for:</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-step-01.png" alt=""></p>
+
+<p>Wildcard SSL certificates don’t cover the zone apex so I had to enter both. (Hey it’s 
+free so no complaints here!)</p>
+
+<p>Then review and confirm and request has been made:</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-step-02.png" alt=""></p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-step-03.png" alt=""></p>
+
+<p>A verification email has been sent to the email addresses listed in the confirmation step.</p>
+
+<p>At this point I could define MX records and use Google Apps to create a new user and receive the verification email. The problem is I don’t want all this hassle and certainly don’t need another email account to monitor.</p>
+
+<h2 id="ses-to-the-rescue">SES to the rescue</h2>
+<p>I always considered SES as a simple SMTP service to send emails but while dabbling with alternatives I realized that now we can receive emails too!</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-ses-receiving-emails.png" alt=""></p>
+
+<p>To receive emails you need to verify your domain first. Also an MX record pointing to AWS SMTP server must be added. Fortunately since everything here is AWS it can be done automatically using Route53:</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-ses-verification.png" alt=""></p>
+
+<p>After this we can move on, we’ll receive a confirmation email once the domain has been verified:</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-ses-verification-result.png" alt=""></p>
+
+<p>In the next step we decide what to do with the incoming mails. We can bounce them, call a Lambda function, create a SNS notification etc. These all sound fun to experiment with but in this case I’ll opt for simplicity and just drop them to a S3 bucket.</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-ses-02.png" alt=""></p>
+
+<p>Great thing is I can even assign a prefix so I can a single bucket to collect emails from a bunch of different addresses all separated into their own folders.</p>
+
+<p>In step 3, we can specify more options. Another pleasant surprise was to see spam and virus protection:</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-ses-02.png" alt=""></p>
+
+<p>After reviewing everything and confirming we are ready to receive emails to our bucket. In fact nice folks at AWS are so considerate that they even sent us a test email already:</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-ses-verification-email.png" alt=""></p>
+
+<h2 id="back-to-certificates">Back to certificates</h2>
+<p>OK, after a short detour we are back on getting our SSL certificate. As I didn’t have my mailbox setup during the validation step I had to go to actions menu and select <em>Resend validation email</em>.</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-resend-verification-email.png" alt=""></p>
+
+<p>And after requesting it I immediately received the email containing a link to verify ownership of the domain.</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-approval.png" alt=""></p>
+
+<p>After the approval process we get ourselves a nice free wildcard SSL certificate:</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-status.png" alt=""></p>
+
+<h2 id="test-drive">Test drive</h2>
+<p>To leverage the new certificate we need to use CloudFront to create a distribution. Here again we benefit from the integrated services. The certificate we have been issued can be selected from the dropdown list:</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-cloudfront.png" alt=""></p>
+
+<p>So after entering simple basics like the domain name and default page I created the distribution and pointed the Route53 records to this distribution instead of the S3 bucket.</p>
+
+<p>And finally, after waiting (quite a bit) for the CloudFront distribution to be deployed we can see that little green padlock we’ve been looking forward to see!:</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-result.png" alt=""></p>
+
+<h2 id="update-1-03032016">UPDATE 1 [03/03/2016]</h2>
+<p>Yesterday I was so excited about discovering this I didn’t look any further like downloading the certificate and using it on your servers.</p>
+
+<p>Today unfortunately I realized that the usability is quite limited: It only works with AWS Elastic Load Balancer and CloudFront. I was hoping to use it with API Gateway but even that’s another AWS service it’s not integrated with ACM yet.</p>
+
+<p>I do hope they make the cert bits available so we can have full control over them and deploy to wherever we want. So I guess Let’s Encrpt is a better option for now considering this limitation.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://letsencrypt.org/" target="_blank" rel="noopener noreferrer">Let’s Encrypt Official Website</a></li>
+  <li><a href="https://aws.amazon.com/blogs/aws/new-aws-certificate-manager-deploy-ssltls-based-apps-on-aws/" target="_blank" rel="noopener noreferrer">AWS Official Blog: AWS Certificate Manager – Deploy SSL/TLS-Based Apps on AWS</a></li>
+  <li><a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html" target="_blank" rel="noopener noreferrer">AWS Documentation: Receiving Email with Amazon SES</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/17" class="prev">Prev</a>
+    
+    
+        <a href="/page/19" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

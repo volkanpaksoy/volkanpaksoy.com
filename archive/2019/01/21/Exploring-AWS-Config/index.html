@@ -1,0 +1,197 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Exploring AWS Config - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2019/01/21/Exploring-AWS-Config/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Exploring AWS Config</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-01-21T06:00:00+00:00" itemprop="datePublished">January 21, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- aws, security -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">aws_config, audit</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>In my previos <a href="https://volkanpaksoy.com/archive/2019/01/18/AWS-Security-Best-Practices-Use-IAM-instead-of-root/">blog post</a> I talked about creating an IAM admin user and using that instead of root user all the time. Applying such best practices is a good idea which also begs the question: How can I enforce these rules?</p>
+
+<h2 id="aws-config">AWS Config</h2>
+
+<p><img src="/images/vpblogimg/common/aws/aws-config.png" alt=""></p>
+
+<p>The official description of the service is: <em>“AWS Config is a service that enables you to assess, audit, and evaluate the configurations of your AWS resources”</em></p>
+
+<p>What this means is you select some pre-defined rules or implement your custom rules and AWS config constantly runs checks against your resources and notify you if you have non-compliant resources.</p>
+
+<p>Since currently I’m interested in hardening IAM users in the next example I’m going to use an IAM check</p>
+
+<h2 id="use-case-enforcing-mfa">Use case: Enforcing MFA</h2>
+
+<p>As of this writing there are 80 managed config rules. To enforce MFA, I simply searched MFA in the “Add rule” anf got 5 matches of which I selected only 3:</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-config-00-mfa-rules.png" alt=""></p>
+
+<p>After I accepted the default settings it was able to identify my IAM user without MFA:</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-config-01-rules.png" alt=""></p>
+
+<p>And it comes with a nice little dashboard that shows all your non-compliant resources:</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-config-02-dashboard.png" alt=""></p>
+
+<p>It also supports notifications via SNS. It creates a topic and all you have to do is subscribe to that via an email address and after confirming your address you can start receiving emails.</p>
+
+<p>I was only expecting to get emails about non-compliant resources but it’s bit noisy as it sends emails with subjects “Configuration History Delivery Completed” or “Configuration Snapshot Delivery Started” which didn’t mean much to me.</p>
+
+<h2 id="pricing">Pricing</h2>
+<p>I think the price is exteremely high. The details can be found on their <a href="https://aws.amazon.com/config/pricing/" target="_blank" rel="noopener noreferrer">pricing page</a> but in a nutshell a single rule costs $2/month. So for the above example I paid $6 which is a lot of money in terms of resources used.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>I like the idea of having an auditing system with notifications but for this price I don’t think I will use it.</p>
+
+<p>I will keep on exploring though as I’m keen on implementing my custom rules with AWS config and also implementing them without AWS config and see if this service adds any benefit over having scheduled Lambda functions.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://aws.amazon.com/config/" target="_blank" rel="noopener noreferrer">AWS Config</a></li>
+  <li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#enable-mfa-for-privileged-users" target="_blank" rel="noopener noreferrer">AWS IAM Best Practices: Enable MFA for Privileged Users</a></li>
+  <li><a href="https://aws.amazon.com/config/pricing/" target="_blank" rel="noopener noreferrer">AWS Config Pricing</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2019/01/18/AWS-Security-Best-Practices-Use-IAM-instead-of-root/" title="Previous Post: 
+AWS Security Best Practices: Use IAM user instead of root account">« AWS Security Best Practices: Use IAM user instead of root account</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2019/01/22/Auditing-AWS-events-with-CloudTrail/" title="next Post: 
+Auditing AWS events with CloudTrail">Auditing AWS events with CloudTrail » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

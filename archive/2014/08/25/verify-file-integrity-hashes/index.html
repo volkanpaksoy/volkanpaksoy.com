@@ -1,0 +1,169 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Verify file integrity with HashTab - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2014/08/25/verify-file-integrity-hashes/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Verify file integrity with HashTab</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-08-25T19:15:31+01:00" itemprop="datePublished">August 25, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- misc -->
+
+
+
+
+    <a href="/category/misc">misc</a>
+    
+</span>
+	<span class="tags">hashtab, software_review</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>Many times I used file hashes to verify that it’s been correctly downloaded or uploaded. It’s especially useful with large files where things are more likely to go wrong. That’s why most MD5 or SHA1 hashes provided with many large file downloads such Linux distros.</p>
+
+<p><img src="/images/vpblogimg/2014/08/FileHashes-01.png" alt="Ubuntu MD5 Hashes"></p>
+
+<h3 id="best-shell-extension-ever-hashtab">Best shell extension ever: HashTab!</h3>
+<p>This is a just quick plug about one of my favourite tools in Windows: HashTab. The best thing about it is that it’s a shell extension. So to find out the hash values of a file is simple as right-clicking and selecting File Hashes tab. So, using the MD5 has example above, if you have downloaded ubuntu-14.04.1-server-amd64.iso all you have to do is check it’s properties.</p>
+
+<p><img src="/images/vpblogimg/2014/08/FileHashes-02.png" alt="File Hashes"></p>
+
+<p>HahsTab also monitors the clipboard. So if you copy the MD5 value from Ubuntu’s site it automatically compares it with the calculated hash values and confirms file integrity with a large shiny green check!</p>
+
+<p>Out of the box it displays most common 3 hash algorithms but if you need more supported algorithms.</p>
+
+<p><img src="/images/vpblogimg/2014/08/FileHashes-03.png" alt="HashTab Settings"></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://implbits.com" target="_blank" rel="noopener noreferrer">Official site</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2014/08/22/windows-services-simplified-topshelf/" title="Previous Post: 
+Windows Services Simplified: TopShelf">« Windows Services Simplified: TopShelf</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2014/11/11/package-manager-windows-chocolatey/" title="next Post: 
+Package Manager for Windows: Chocolatey">Package Manager for Windows: Chocolatey » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Portable Online Library with Calibre and Raspberry Pi - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2015/03/07/portable-online-library-with-calibre-and-raspberry-pi/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Portable Online Library with Calibre and Raspberry Pi</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-03-07T00:30:00+00:00" itemprop="datePublished">March  7, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- aws, dev, hobby -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">gadget, raspberry_pi, route53</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>Everything is *-as-a-service nowadays and books are no exception. I have a <a href="https://www.safaribooksonline.com/" target="_blank" rel="noopener noreferrer">Safari Books Online</a> subscription which I enjoy a lot. It is extremely convenient to have thousands of books at your fingertips. But… DIY still rules! There are times you may still want to have your own collection and it doesn’t just have to be an e-book collection. And on top of all it’s purely fun and educational.</p>
+
+<h2 id="ingredients">Ingredients</h2>
+<p>Basically all you need is an up-and-running Raspberry Pi. If you have one, you can skip this section. These are just the components I used in my implementation:</p>
+
+<ul>
+  <li><a href="http://uk.rs-online.com/web/p/processor-microcontroller-development-kits/8326274/" target="_blank" rel="noopener noreferrer">Raspberry Pi 2</a></li>
+  <li><a href="http://uk.rs-online.com/web/p/plug-in-power-supply/8226373/" target="_blank" rel="noopener noreferrer">Raspberry Pi Power Supply</a></li>
+  <li><a href="http://www.amazon.co.uk/gp/product/B00J29D62Y" target="_blank" rel="noopener noreferrer">Samsung 32GB microSD card</a></li>
+  <li><a href="http://www.amazon.co.uk/Edimax-EW-7811UN-150Mbps-Wireless-Adapter/dp/B003MTTJOY/" target="_blank" rel="noopener noreferrer">Edimax EW-7811UN 150Mbps Wireless Nano USB Adapter </a></li>
+  <li>Keyboard</li>
+  <li>Display</li>
+</ul>
+
+<p>Keyboard and display are needed for the initial setup. Once it’s connected to network you can do everything over SSH.</p>
+
+<h2 id="calibre-my-old-friend">Calibre, my old friend!</h2>
+<p>I’ve been a fan of Calibre for many years now. With Calibre you can manage any document collection you want. I love its user interface which allows me to easily tag and categorize my collections. Also it can convert between a wide range of formats. And when I plug in my Kindle it automatically recognizes the device and I can right-click on a book and send to device very easily. Check out <a href="http://calibre-ebook.com/about" target="_blank" rel="noopener noreferrer">this</a> page for a full list of features.</p>
+
+<p>My favorite feature is that it can act as a server. I mainly use Stanza on my iPad and connect to my Calibre server to download comic books over WiFi. The downside of running it locally on my computer is that the machines needs to be on and I have to enable the content server on Calibre manually before connecting from iPad.</p>
+
+<h2 id="here-comes-the-project">Here comes the project</h2>
+<p>Instead, what I’d like to have is</p>
+
+<ul>
+  <li>
+    <p><strong>An online server available all the time:</strong> Raspberry pi is very power-efficient little monster so I can keep it running</p>
+  </li>
+  <li>
+    <p><strong>Isolated from my main machine:</strong> For security reasons I don’t want to open a port on my desktop computer</p>
+  </li>
+  <li>
+    <p><strong>Accessible both from inside and outside:</strong> Of course I could just launch a cheap AWS instance and use it as the content server but</p>
+
+    <ul>
+      <li>It’s not as fun!</li>
+      <li>If I need to move around GBs of data local network rocks!</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Also, as I said it’s mostly for fun so I don’t have to justify it completely to myself :-)</p>
+
+<h2 id="roll-up-your-sleeves">Roll up your sleeves!</h2>
+
+<h3 id="step-0-setup-raspberry-pi">Step 0: Setup Raspberry Pi</h3>
+<p>If you haven’t done it already you can easily set it up by following the <a href="http://www.raspberrypi.org/help/quick-start-guide/" target="_blank" rel="noopener noreferrer">Quick Start Guide on raspberrypi.org</a></p>
+
+<h3 id="step-1-install-calibre-on-raspberry-pi">Step 1: Install Calibre on Raspberry Pi</h3>
+<p>This one was a bit harder than I expected. The official site says <em>“Please do not use your distribution provided calibre package, as those are often buggy/outdated. Instead use the Binary install described below.”</em></p>
+
+<p>and the suggested command is</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo -v &amp;&amp; wget -nv -O- https://raw.githubusercontent.com/kovidgoyal/calibre/master/setup/linux-installer.py | sudo python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
+</code></pre></div></div>
+
+<p>Alas, after running the command I got the following error:</p>
+
+<p><img src="/images/vpblogimg/2015/03/calibre-on-raspberry-pi-01.png" alt="Calibre installation error"></p>
+
+<p>I asked in the Calibre forums about the error and I was advised to build it from source code. Because the compiled version is for Intel processors and it doesn’t work on an ARM processor which Raspberry Pi has. The instructions for building it from source is on the same <a href="http://calibre-ebook.com/download_linux" target="_blank" rel="noopener noreferrer">page</a> but I haven’t tried it myself.</p>
+
+<p>As a fallback method I simply used apt-get to install it:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get update &amp;&amp; sudo apt-get install calibre
+</code></pre></div></div>
+
+<p>It worked fine but the version is 0.8.51 (latest release at the time of this writing is 2.20.0 so you can see it’s a little bit outdated!). Content server has been implemented long time ago so for all intents and purposes it’s good enough for this project.</p>
+
+<h3 id="step-2-run-it-as-server">Step 2: Run it as server</h3>
+<p>Now that we have Calibre installed we can run the content server from command line:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>calibre-server --with-library=/home/pi/calibre/myLibrary --daemonize
+</code></pre></div></div>
+
+<p>This will run the process in the background (because of the <em>–daemonize</em> flag) but id the Pi restarts it will not run automatically. To fix that I added the command to crontab by first entering the following command</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>crontab -e
+</code></pre></div></div>
+
+<p>and adding the following line after the comments</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@reboot calibre-server --with-library=/home/pi/calibre/myLibrary --daemonize
+</code></pre></div></div>
+
+<p>so that the same command is run after every reboot.</p>
+
+<p><img src="/images/vpblogimg/2015/03/calibre-on-raspberry-pi-02.png" alt="Crontab on Raspberry Pi"></p>
+
+<p>Now let’s test if we’re online. By default, Calibre starts serving on port 8080 with no authentication required. So just find the IP address of the Raspberry Pi and try to connect it over HTTP from your machine such as <em>http://{Local IP}:8080</em></p>
+
+<p><img src="/images/vpblogimg/2015/03/calibre-on-raspberry-pi-03.png" alt=""></p>
+
+<p>and voila!</p>
+
+<p>Now we can add some books and start using it from any machine on the network.</p>
+
+<h3 id="step-3-add-some-books">Step 3: Add some books</h3>
+<p>First I uploaded some files to a different folder using <a href="http://winscp.net/eng/download.php" target="_blank" rel="noopener noreferrer">WinSCP</a>. If you are not on Windows I’m sure you can find a similar tool to transfer files to Raspberry Pi.</p>
+
+<p>We can add books by using <em>calibredb</em> command like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>calibredb add Raspberry_Pi_Education_Manual.pdf --with-library=/home/pi/calibre/myLibrary
+</code></pre></div></div>
+
+<p>Please note if you try to use calibre instead of <em>calibredb</em> you’d get the following error:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>calibre: cannot connect to X server 
+</code></pre></div></div>
+
+<p>Because we are using the GUI we cannot use <em>calibre</em> directly, instead we add it using <em>calibredb</em>.</p>
+
+<p><img src="/images/vpblogimg/2015/03/calibre-on-raspberry-pi-04.png" alt=""></p>
+
+<p>Calibre always copies the files to its own library so once the books are added you can delete the original ones.</p>
+
+<p>After the files are added refresh the page and you should get something like this:</p>
+
+<p><img src="/images/vpblogimg/2015/03/calibre-on-raspberry-pi-05.png" alt=""></p>
+
+<p>At this point we can download the books on any machine on the local network.</p>
+
+<h3 id="step-4-connect-from-clients">Step 4: Connect from clients</h3>
+
+<ul>
+  <li><strong>Kindle</strong></li>
+</ul>
+
+<p>Kindle has an experimental browser (I currently have a Paperwhite, I don’t know about the newer versions). So to download books, I simply go to Settings -&gt; Experimental Browser and enter the URL of my content server (<em>http://{Local IP}:8080</em>):</p>
+
+<p><img src="/images/vpblogimg/2015/03/calibre-on-raspberry-pi-06.png" alt=""></p>
+
+<p>And after you download the file you can go to home and enjoy the book on your Kindle.</p>
+
+<p><img src="/images/vpblogimg/2015/03/calibre-on-raspberry-pi-07.png" alt=""></p>
+
+<p>Please note that Kindle cannot download PDFs. When I tried to download Raspberry Pi manual I got the following error</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Only files with the extension .AZW, .PRC, .MOBI or .TXT can be downloaded to your Kindle.
+</code></pre></div></div>
+
+<p>So make sure you upload the the right file formats.</p>
+
+<ul>
+  <li><strong>iPad / Stanza</strong></li>
+</ul>
+
+<p>This is my favorite app on iPad. It’s not even on AppStore anymore but I still use it to download books from Calibre.</p>
+
+<p>All I had to do was click Get Books and it found the OPDS server on the network automatically so I could browse and download books right away.</p>
+
+<p><img src="/images/vpblogimg/2015/03/calibre-on-raspberry-pi-08.png" alt="Stanza"></p>
+
+<ul>
+  <li><strong>iPad / Web</strong></li>
+</ul>
+
+<p>Alternatively you can just browse to server and open it with any eBook reader app available on your iPad.</p>
+
+<p><img src="/images/vpblogimg/2015/03/calibre-on-raspberry-pi-09.png" alt="Calibre UI on iPad"></p>
+
+<h3 id="optional-step-5-setup-port-forwarding">[Optional] Step 5: Setup Port Forwarding</h3>
+<p>For internal usage we are done! If you want to access your library over the Internet you have to define port forwarding rule. The way to do it is completely dependant on your router so you have to fiddle with your router’s administration interface.</p>
+
+<p>Basically you map an external port to an internal IP and port.</p>
+
+<p><img src="/images/vpblogimg/2015/03/calibre-on-raspberry-pi-10.png" alt=""></p>
+
+<p>For example I mapped port 7373 to local 192.168.175:8080 so whenever I connect to my home network’s external IP on port 7373 I get my Calibre user interface.</p>
+
+<p>I recommend running the server with <em>–username</em> and <em>–password</em> flags so that only authenticated users can browse your library.</p>
+
+<h3 id="optional-step-6-setup-dynamic-dns">[Optional] Step 6: Setup Dynamic DNS</h3>
+<p>If you have a static IP you don’t need this step at all but generally personal broadbands don’t come with static IPs. My solution for this was using AWS Route 53 and updating the DNS using AWS Python SDK (Boto).</p>
+
+<p>First I had to install pip to be able to install boto</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install python3-pip
+</code></pre></div></div>
+
+<p>Then boto itself</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pip install boto
+</code></pre></div></div>
+
+<p>I created an IAM user that only has access to a single domain which I use for this kind of stuff on Route 53 and added its credentials to the AWS credentials file as explained in the nice and brief tutorial <a href="http://boto.readthedocs.org/en/latest/route53_tut.html" target="_blank" rel="noopener noreferrer">here</a></p>
+
+<p>The script calls AWS’s external IP checker and stores it in <em>currentIP</em>. Then gets the hosted zone and loops through all the record sets. When it finds the subdomain I’m going to use for Calibre (‘calibre.volki.info.’) it updates the IP address with the <em>currentIP</em> and commits the changes. Thanks to AWS that’s all it takes to create a Dynamic DNS application.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">boto.route53</span>
+<span class="kn">import</span> <span class="nn">urllib2</span>
+<span class="n">currentIP</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://checkip.amazonaws.com/"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">boto</span><span class="o">.</span><span class="n">connect_route53</span><span class="p">()</span>
+<span class="n">zone</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_zone</span><span class="p">(</span><span class="s">"volki.info."</span><span class="p">)</span>
+<span class="n">change_set</span> <span class="o">=</span> <span class="n">boto</span><span class="o">.</span><span class="n">route53</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">ResourceRecordSets</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s">'{HOSTED_ZONE_ID}'</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">rrset</span> <span class="ow">in</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_all_rrsets</span><span class="p">(</span><span class="n">zone</span><span class="o">.</span><span class="nb">id</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">rrset</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">'calibre.volki.info.'</span><span class="p">:</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">change_set</span><span class="o">.</span><span class="n">add_change</span><span class="p">(</span><span class="s">"UPSERT"</span><span class="p">,</span> <span class="n">rrset</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">rrset</span><span class="o">.</span><span class="nb">type</span><span class="p">,</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+        <span class="n">rrset</span><span class="o">.</span><span class="n">resource_records</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">currentIP</span>
+        <span class="n">u</span><span class="o">.</span><span class="n">add_value</span><span class="p">(</span><span class="n">rrset</span><span class="o">.</span><span class="n">resource_records</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">change_set</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Of course this script needs to be added to crontab and should be run every 5-10 minutes. If the external IP changes there might be some disturbance to the service but it should just take a few minutes before it’s resolved.</p>
+
+<p>With this script now we can access our library over the Internet and we don’t have to worry about changes in the IP address.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.raspberrypi.org/help/quick-start-guide/" target="_blank" rel="noopener noreferrer">Raspberry Pi Quick Start Guide</a></li>
+  <li><a href="http://calibre-ebook.com/download_linux" target="_blank" rel="noopener noreferrer">Calibre Linux Installation</a></li>
+  <li><a href="http://calibre-ebook.com/about" target="_blank" rel="noopener noreferrer">Calibre Feature List</a></li>
+  <li><a href="http://aws.amazon.com/sdk-for-python/" target="_blank" rel="noopener noreferrer">AWS SDK for Python (Boto)</a></li>
+  <li><a href="http://boto.readthedocs.org/en/latest/route53_tut.html" target="_blank" rel="noopener noreferrer">An Introduction to boto’s Route53 interface</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2015/03/03/inside-the-graph-cypher/" title="Previous Post: 
+Inside the Graph: Cypher">« Inside the Graph: Cypher</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2015/05/11/debugging-bindingfailure-exception/" title="next Post: 
+Debugging a BindingFailure Exception in Visual Studio">Debugging a BindingFailure Exception in Visual Studio » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Visual Studio Project Template for ASP.NET Web API - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2015/01/05/visual-studio-project-template-for-webapi/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Visual Studio Project Template for ASP.NET Web API</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-01-05T15:00:00+00:00" itemprop="datePublished">January  5, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">visual_studio, web_api</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>In Visual Studio 2013 they decided to create one web project called <em>ASP.NET Web Application</em> to make it simpler as opposed to VS 2012 which had 7 different templates. I like this project wizard but I think there is a gap in the templates it provides when you want to start a Web API project. If you select Web API it comes with a full blown ASP.NET MVC website. If you select Empty you don’t get anything. I feel like there should be something in between: A functional Web API project with no overhead of the website.</p>
+
+<h3 id="minimal-web-api">Minimal Web API</h3>
+<p>The steps to achieve this are simple. I found this <a href="http://www.daniellewis.me.uk/2014/02/21/asp-net-web-api-from-scratch-part-1/" target="_blank" rel="noopener noreferrer">blog post</a> that helped me to get what I wanted quickly.</p>
+
+<p>For the sake of completeness the steps to create the minimal Web API project is as follows (I changed some of the steps to suit my needs):</p>
+
+<ol>
+  <li>Create an Emptry ASP.NET Web Project</li>
+  <li>
+    <p>Install Web API package via Nuget</p>
+
+    <div class="highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> Install-Package Microsoft.AspNet.WebApi
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Add a <em>Global Configuration Class</em> and add the following line defining a default route to  <em>Application_Start</em> method</p>
+
+    <div class="language-csharp highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> <span class="k">protected</span> <span class="k">void</span> <span class="nf">Application_Start</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
+ <span class="p">{</span>
+     <span class="n">GlobalConfiguration</span><span class="p">.</span><span class="n">Configuration</span><span class="p">.</span><span class="n">Routes</span><span class="p">.</span><span class="nf">MapHttpRoute</span><span class="p">(</span><span class="s">"Default"</span><span class="p">,</span> <span class="s">"{controller}/{id}"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">id</span> <span class="p">=</span> <span class="n">RouteParameter</span><span class="p">.</span><span class="n">Optional</span> <span class="p">});</span>
+ <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Add a controller from Web API Controller Class (v2.1) template and rename it to DefaultController. By default it comes with method implementations for GET/POST/PUT/DELETE HTTP verbs:</p>
+
+    <div class="language-csharp highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> <span class="k">public</span> <span class="k">class</span> <span class="nc">DefaultController</span> <span class="p">:</span> <span class="n">ApiController</span>
+ <span class="p">{</span>
+     <span class="c1">// GET: api/Entry</span>
+     <span class="k">public</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="nf">Get</span><span class="p">()</span>
+     <span class="p">{</span>
+         <span class="k">return</span> <span class="k">new</span> <span class="kt">string</span><span class="p">[]</span> <span class="p">{</span> <span class="s">"value1"</span><span class="p">,</span> <span class="s">"value2"</span> <span class="p">};</span>
+     <span class="p">}</span>
+
+     <span class="c1">// GET: api/Entry/5</span>
+     <span class="k">public</span> <span class="kt">string</span> <span class="nf">Get</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">)</span>
+     <span class="p">{</span>
+         <span class="k">return</span> <span class="s">"value"</span><span class="p">;</span>
+     <span class="p">}</span>
+
+     <span class="c1">// POST: api/Entry</span>
+     <span class="k">public</span> <span class="k">void</span> <span class="nf">Post</span><span class="p">([</span><span class="n">FromBody</span><span class="p">]</span><span class="kt">string</span> <span class="k">value</span><span class="p">)</span>
+     <span class="p">{</span>
+     <span class="p">}</span>
+
+     <span class="c1">// PUT: api/Entry/5</span>
+     <span class="k">public</span> <span class="k">void</span> <span class="nf">Put</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">,</span> <span class="p">[</span><span class="n">FromBody</span><span class="p">]</span><span class="kt">string</span> <span class="k">value</span><span class="p">)</span>
+     <span class="p">{</span>
+     <span class="p">}</span>
+
+     <span class="c1">// DELETE: api/Entry/5</span>
+     <span class="k">public</span> <span class="k">void</span> <span class="nf">Delete</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">)</span>
+     <span class="p">{</span>
+     <span class="p">}</span>
+ <span class="p">}</span>	
+</code></pre></div>    </div>
+  </li>
+  <li>In order to run properly the following references need to be deployed:
+    <ul>
+      <li>System.Net.Http.Formatting</li>
+      <li>System.Web.Http</li>
+      <li>System.Web.Http.WebHost</li>
+    </ul>
+  </li>
+</ol>
+
+<p>So change <em>Copy Local</em> to true in the properties window.</p>
+
+<p>That’s all it takes to create a working Web API.</p>
+
+<h3 id="templates-in-action">Templates in action</h3>
+<p>Now I have what I want but when I need a new Web API project I don’t want to start from scratch every time. Instead I’d rather use the nice and easy templating feature of Visual Studio. To create the template:</p>
+
+<ol>
+  <li>
+    <p>Select File -&gt; Export Template</p>
+
+    <p><img src="/images/vpblogimg/2015/01/vs-project-template-wizard.png" alt="Visual Studio Project Template Wizard"></p>
+  </li>
+  <li>
+    <p>Leave “Project template” selected and click next. Give the template a name and description. It will automatically import the template to Visual Studio so leave the defaults.</p>
+
+    <p><img src="/images/vpblogimg/2015/01/vs-project-template-wizard-options.png" alt="Visual Studio Project Template Wizard Otions"></p>
+  </li>
+</ol>
+
+<p>When you need to create a simple Web API you can use this template from now on by simply searching webapi in the templates:</p>
+
+<p><img src="/images/vpblogimg/2015/01/vs-project-template-select-template.png" alt="Visual Studio Project Template Search"></p>
+
+<p>And when you create a new project based on this template (not surprisingly) you get something like this:</p>
+
+<p><img src="/images/vpblogimg/2015/01/vs-project-template-default-project.png" alt="Visual Studio Project Template-Based Project Output"></p>
+
+<p>Creating the project from scratch was easy enough but using templates is even easier so why not use it!</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.daniellewis.me.uk/2014/02/21/asp-net-web-api-from-scratch-part-1/" target="_blank" rel="noopener noreferrer">ASP.NET Web API from scratch</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2015/01/05/adventures-in-fsharp-part-4/" title="Previous Post: 
+Adventures in F# - Part 4">« Adventures in F# - Part 4</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2015/01/06/surface-pro-3-review/" title="next Post: 
+Surface Pro 3 Review">Surface Pro 3 Review » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,2869 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Playground for the mind]]></title>
+  <link href="https://volkanpaksoy.com/atom.xml" rel="self"/>
+  <link href="https://volkanpaksoy.com/"/>
+  <updated>2020-05-23T12:08:50+01:00</updated>
+  <id>https://volkanpaksoy.com/</id>
+  <author>
+    <name><![CDATA[Volkan Paksoy]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Migrating an EC2 Instance to a Different AWS Account]]></title>
+    <link href="https://volkanpaksoy.com/archive/2020/03/18/Migrating-EC2-Instance-to-a-Different-Account/"/>
+    <updated>2020-03-18T06:00:00+00:00</updated>
+    <id>https://volkanpaksoy.com/archive/2020/03/18/Migrating-EC2-Instance-to-a-Different-Account</id>
+    <content type="html"><![CDATA[<p>Recently I needed to migrate an EC2 instance to a different AWS account. There’s no built-in functionality to handle this. The solution is creating an AMI from the instance and sharing it with the target account. I scripted my solution with Powershell and AWS Tools for Powershell as below.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+<p>Since the operation involves a source account and a target account, first create 2 profiles with EC2 access. credentials files should look like this</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[source_profile]
+aws_access_key_id = xxxxxxxxx
+aws_secret_access_key = xxxxxxxxx
+
+[target_profile]
+aws_access_key_id = xxxxxxxxx
+aws_secret_access_key = xxxxxxxxx
+</code></pre></div></div>
+
+<h2 id="step-00-configuration">Step 00: Configuration</h2>
+<p>I put all the variables in a Powershell script file which I include in the following steps. To use the scripts you need to provide the values first. Hopefully the variable names are self-explanatory:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$sourceAccountAwsProfileName</span> <span class="o">=</span> <span class="s2">""</span>
+<span class="nv">$sourceRegion</span> <span class="o">=</span> <span class="s2">""</span>
+<span class="nv">$sourceAccountId</span> <span class="o">=</span> <span class="s2">""</span>
+<span class="nv">$instanceId</span> <span class="o">=</span> <span class="s2">""</span>
+<span class="nv">$amiName</span> <span class="o">=</span> <span class="s2">""</span>
+<span class="nv">$amiDescription</span> <span class="o">=</span> <span class="s2">""</span>
+<span class="nv">$targetAccountAwsProfileName</span> <span class="o">=</span> <span class="s2">""</span>
+<span class="nv">$targetAccountId</span> <span class="o">=</span> <span class="s2">""</span>
+<span class="nv">$targetRegion</span> <span class="o">=</span> <span class="s2">""</span>
+</code></pre></div></div>
+
+<h2 id="step-01-create-ami">Step 01: Create AMI</h2>
+<p>First step to migrate EC2 instance is to create an AMi from the instance.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">.</span> .\<span class="s2">"00. configuration.ps1"</span>
+
+<span class="c1"># Create AMI</span>
+<span class="nv">$imageId</span> <span class="o">=</span> New-EC2Image -InstanceId <span class="nv">$instanceId</span> -Name <span class="nv">$amiName</span> -Description <span class="nv">$amiDescription</span> -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
+
+<span class="nb">Set-Variable</span> -Scope global -Name AMI_ID -Value <span class="nv">$imageId</span>
+<span class="nb">Write-Host</span> <span class="s2">"AMI_ID: ["</span> <span class="nv">$AMI_ID</span> <span class="s2">"]"</span>
+</code></pre></div></div>
+
+<p>This operation takes a few minutes. The image has to become available before we can proceed to the next step.</p>
+
+<h2 id="step-02-share-ami">Step 02: Share AMI</h2>
+<p>Now the image is ready we have to share it with the target account. The script below shares the AMI and allows new volumes created from this AMI.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">.</span> .\<span class="s2">"00. configuration.ps1"</span>
+
+<span class="nv">$imageId</span> <span class="o">=</span> <span class="nb">Get-Variable </span>AMI_ID -valueOnly
+Edit-EC2ImageAttribute -ImageId <span class="nv">$imageId</span> -Attribute launchPermission -OperationType add -UserId <span class="nv">$targetAccountId</span> -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
+
+<span class="nv">$imageSnapshots</span> <span class="o">=</span> Get-EC2Snapshot -OwnerId <span class="nv">$sourceAccountId</span> -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
+                | <span class="nb">Where</span>-Object <span class="o">{</span><span class="nv">$_</span>.Description -like <span class="s2">"*</span><span class="nv">$imageId</span><span class="s2">*"</span> <span class="o">}</span>
+
+<span class="k">foreach</span> <span class="o">(</span><span class="nv">$snapshot</span> <span class="k">in</span> <span class="nv">$imageSnapshots</span><span class="o">)</span> <span class="o">{</span>
+    Edit-EC2SnapshotAttribute -SnapshotId <span class="nv">$snapshot</span>.SnapshotId -Attribute createVolumePermission -OperationType add -UserId <span class="nv">$targetAccountId</span> -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="step-03-copy-ami">Step 03: Copy AMI</h2>
+<p>At this point, if you go to the target account you should be able to see the image when you choose “Private images” category. Make sure to choose the same region as the source account to be able to see the image.</p>
+
+<p>We have access to this image but we want to have our own copy which we accomplish with the script below:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">.</span> .\<span class="s2">"00. configuration.ps1"</span>
+
+<span class="nv">$imageId</span> <span class="o">=</span> <span class="nb">Get-Variable </span>AMI_ID -valueOnly
+<span class="nb">Copy</span>-EC2Image -SourceImageId <span class="nv">$imageId</span> -SourceRegion <span class="nv">$sourceRegion</span> -Name <span class="nv">$amiName</span> -ProfileName <span class="nv">$targetAccountAwsProfileName</span> -Region <span class="nv">$targetRegion</span>
+</code></pre></div></div>
+
+<p>In my experience the whole copying process took about 5 minutes.</p>
+
+<p>Now that we have our own copy of the AMI we can launch instances as we please. Job (almost) done!</p>
+
+<h2 id="step-04-clean-up">Step 04: Clean Up</h2>
+
+<p>Final step is to clean up after ourselves. Since this AMI was created to migrate to the new account only I assume we won’t need it anymore in the source account. The following script deregisters the AMI and deletes all the associated snapshots.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">.</span> .\<span class="s2">"00. configuration.ps1"</span>
+
+<span class="c1"># Create image script writes the AMI ID to a variable. If it doesn't exist get the image id from AWS Management Console</span>
+<span class="nv">$imageId</span> <span class="o">=</span> <span class="nb">Get-Variable </span>AMI_ID -valueOnly
+
+<span class="nb">Write-Host</span> <span class="s2">"Unregistering image: ["</span> <span class="nv">$imageId</span> <span class="s2">"]"</span>
+Unregister-EC2Image -ImageId <span class="nv">$imageId</span> -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
+
+<span class="nv">$imageSnapshots</span> <span class="o">=</span> Get-EC2Snapshot -OwnerId <span class="nv">$sourceAccountId</span> -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
+                | <span class="nb">Where</span>-Object <span class="o">{</span><span class="nv">$_</span>.Description -like <span class="s2">"*</span><span class="nv">$imageId</span><span class="s2">*"</span> <span class="o">}</span>
+
+<span class="k">foreach</span> <span class="o">(</span><span class="nv">$snapshot</span> <span class="k">in</span> <span class="nv">$imageSnapshots</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nb">Write-Host</span> <span class="s2">"Removing snapshot: ["</span> <span class="nv">$snapshot</span>.SnapshotId <span class="s2">"]"</span>
+    Remove-EC2Snapshot -SnapshotId <span class="nv">$snapshot</span>.SnapshotId -Force -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
+<span class="o">}</span>
+
+<span class="c1"># Delete variable</span>
+<span class="nb">Remove-Variable </span>AMI_ID -Scope global
+</code></pre></div></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/migrate-ec2-instance-to-another-account">Source Code</a></li>
+  <li><a href="https://aws.amazon.com/premiumsupport/knowledge-center/account-transfer-ec2-instance/">How do I transfer an Amazon EC2 instance to a different AWS account?</a></li>
+  <li><a href="https://alestic.com/2014/02/ec2-create-image-reboot/">EC2 create-image Does Not Fully “Stop” The Instance</a></li>
+</ul>
+]]></content>
+  </entry>
+  
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Using Audio in Docker Container]]></title>
+    <link href="https://volkanpaksoy.com/archive/2019/12/05/Using-Audio-in-Docker-Container/"/>
+    <updated>2019-12-05T06:00:00+00:00</updated>
+    <id>https://volkanpaksoy.com/archive/2019/12/05/Using-Audio-in-Docker-Container</id>
+    <content type="html"><![CDATA[<p>In this post I’m going to show an example of playing audio in a Docker container.</p>
+
+<h2 id="test-environment-setup">Test Environment Setup</h2>
+<p>I’m going to use dotnet core 3.1 runtime image:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull mcr.microsoft.com/dotnet/core/runtime:3.1
+</code></pre></div></div>
+
+<p>Here’s my Dockerfile:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM mcr.microsoft.com/dotnet/core/runtime:3.1
+
+RUN apt-get update -y
+
+RUN apt-get install mpg123 -y
+RUN apt-get install wget -y
+
+COPY ./play-audio.sh .
+RUN chmod +x ./play-audio.sh
+
+ENTRYPOINT ["/play-audio.sh"]
+</code></pre></div></div>
+
+<p>and the script (play-audio.sh) that plays the audio looks like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nv">url</span><span class="o">=</span><span class="nv">$1</span>
+<span class="nv">filename</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">url</span><span class="p">##*/</span><span class="k">}</span><span class="s2">"</span>
+
+<span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="nt">-f</span> <span class="nv">$filename</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"File doesn't exist. Downloading."</span>
+    wget <span class="nv">$url</span>
+<span class="k">fi</span>
+
+<span class="c"># check if the audio player program exists. helpful to test the script individually on macOS</span>
+<span class="k">if </span><span class="nb">hash </span>mpg123 2&gt;/dev/null<span class="p">;</span> <span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"Playing file using mpg123"</span>
+    mpg123 <span class="nv">$filename</span>
+<span class="k">elif </span><span class="nb">hash </span>afplay 2&gt;/dev/null<span class="p">;</span> <span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"Playing file using afplay"</span>
+    afplay <span class="nv">$filename</span>
+<span class="k">else 
+    </span><span class="nb">echo</span> <span class="s2">"No player could be found."</span>    
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>I built the image with the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build -t audio-test .
+</code></pre></div></div>
+
+<h2 id="testing-the-audio">Testing the audio</h2>
+<p>Initially I rana container like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run audio-test https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3
+</code></pre></div></div>
+
+<p>After running the container like this I got the error shown below:</p>
+
+<p><img src="/images/vpblogimg/2019/12/audio-in-docker/error-while-running-audio.png" alt="" /></p>
+
+<h2 id="solution">Solution</h2>
+<p>The trick is ro run with the following parameter:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>--device /dev/snd
+</code></pre></div></div>
+
+<p>So the full Docker run command looks like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run --rm --device /dev/snd audio-test https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3
+</code></pre></div></div>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>This was a long-winded setup for a very short solution but I enjoyed practicing with Bash scripting and Docker.</p>
+
+<p>Unfortunately this solution works on Raspberry Pi only and not on Mac. Every resource I found points to installing Pulse Audio Server on macOS and Pulse Audio client in the Docker image. I haven’t tried it yet as it was beyond the scope of my requirements but I might need to implement it later in which case I will post about it.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://stackoverflow.com/questions/41083436/how-to-play-sound-in-a-docker-container">How to play sound in a docker container</a></li>
+  <li><a href="https://stackoverflow.com/questions/40136606/how-to-expose-audio-from-docker-container-to-a-mac">How to expose audio from Docker container to a Mac?</a></li>
+  <li><a href="https://devops.datenkollektiv.de/running-a-docker-soundbox-on-mac.html">Running a Docker Soundbox on Mac</a></li>
+</ul>
+]]></content>
+  </entry>
+  
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Continuous Integration with CodeBuild]]></title>
+    <link href="https://volkanpaksoy.com/archive/2019/11/06/Continuous-Integration-with-CodeBuild/"/>
+    <updated>2019-11-06T02:00:00+00:00</updated>
+    <id>https://volkanpaksoy.com/archive/2019/11/06/Continuous-Integration-with-CodeBuild</id>
+    <content type="html"><![CDATA[<p>In this post, I’d like to show how to achieve continuous integration using CodeBuild service.</p>
+
+<p>Main goals to achieve:</p>
+
+<ul>
+  <li>Run unit tests in a Docker container</li>
+  <li>Kick off build automatically when code is pushed</li>
+  <li>Show build status</li>
+  <li>Send notifications when tests fail</li>
+</ul>
+
+<h2 id="codebuild-setup">Codebuild Setup</h2>
+
+<h3 id="step-01-project-configuration">Step 01: Project Configuration</h3>
+<p>Specify a unique name and make sure to tick “Enable build badge” checkbox</p>
+
+<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/project-configuration.png" alt="" /></p>
+
+<h3 id="step-02-source-selection">Step 02: Source Selection</h3>
+<p>In this step select GitHub as source provider and select “Repository in my GitHub account” option. AWS will use OAuth and redirect to GitHub to ask for authoization to access your repositories. After granting access you should be able to see your repositories in the dropdown list:</p>
+
+<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/select-source.png" alt="" /></p>
+
+<p>I left “Source version” field blank as I want the build to run for all branches and for all commits.</p>
+
+<h3 id="step-03-webhook-configuration">Step 03: Webhook Configuration</h3>
+<p>Tick the “Rebuild every time a code change is pushed to this repository” checkbox and select PUSH from the event type list. You can select more events to trigger builds for CI purposes it should be enough to run after every time code is pushed.</p>
+
+<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/webhook-configuration.png" alt="" /></p>
+
+<p>What this does is add a CodeBuild webhook in GitHub that looks like this:</p>
+
+<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/webhook-in-github.png" alt="" /></p>
+
+<p>Whenever a push happens in the repository, GitHub posts the details to CodeBuild webhook and that triggers a build.</p>
+
+<h3 id="step-04-environment-configuration">Step 04: Environment configuration</h3>
+<p>The build takes place in a Docker container so we have to provide a Docker image with build tools installed. Alternatively we can use one of the managed images that AWS provides. In this example I’ll use a managed image:</p>
+
+<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/environment-configuration.png" alt="" /></p>
+
+<h3 id="step-05-other-configuration">Step 05: Other configuration</h3>
+<p>In this example, I will accept the defaults for the rest of the settings because I don’t need to generate artifacts to run unit tests. It’s generally wise to enable CloudWatch logs so that you can monitor the build process closely. Since I accept the default path for buildspec.yml, I have to place it at the root of the repository.</p>
+
+<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/buildspec-artifacts-logs-configuration.png" alt="" /></p>
+
+<h2 id="running-the-tests">Running the tests</h2>
+<p>The core responsibility of CI pipeline is to run the unit tests. CodeBuild is a generic service and it doesn’t come with any tools to run unit tests as it’s application and environment dependent. The way we configure is by using buildspec.yml file. In this example I’m running a dotnet core project and making sure the unit tests are run first is as easy as this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+        dotnet: 2.2
+  build:
+    commands:
+      - dotnet restore
+      - dotnet test
+      - dotnet publish Sample.UI.Web -c Release -o ./output
+</code></pre></div></div>
+
+<p>This way CodeBuild will execute the steps above and all the unit tests in the solution will be run.</p>
+
+<h2 id="run-build-automatically">Run build automatically</h2>
+<p>Now that the GitHub repository and CodeBuild projects are both ready, let’s see if we can kick off a build by pushing some code changes:</p>
+
+<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/auto-build-after-commit-1.png" alt="" /></p>
+
+<p>Also after pushing code to a feature branch I was able to see that build was triggered.</p>
+
+<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/auto-build-after-commit-2.png" alt="" /></p>
+
+<p>So now I could confirm running the build automatically.</p>
+
+<p>As a side note, the failed ones were failing due to this error</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>YAML_FILE_ERROR: This build image requires selecting at least one runtime version.
+</code></pre></div></div>
+
+<p>The solution was to specify the runtime in the buildspec.yml file explicitly by adding this bit:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>install:
+  runtime-versions:
+      dotnet: 2.2
+</code></pre></div></div>
+
+<p>Also it’s worth noting that the source version value in Codebuild corresponds to commit hash. For example the commit hash shown below</p>
+
+<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/commit-id-on-github.png" alt="" /></p>
+
+<p>appears on CodeBuild as</p>
+
+<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/commit-id-on-codebuild.png" alt="" /></p>
+
+<h2 id="showing-build-status">Showing build status</h2>
+<p>Showing the build status on GitHub repository is very easy. We already enabled build badge while creating the build project. Now we have to copy the badge URL as shown below:</p>
+
+<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/copy-badge-url.png" alt="" /></p>
+
+<p>Then in the GitHub repository, edit the readme.md file and add the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>![Build status](badge URL copied from AWS console)
+</code></pre></div></div>
+
+<p>Now if you go to the GitHub repository page and refresh you can see the latest status of the build (of master branch):</p>
+
+<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/displaying-build-status.png" alt="" /></p>
+
+<p>After I fixed the error and merged into master branch I could see the build passing badge as well:</p>
+
+<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/build-status-passing.png" alt="" /></p>
+
+<h2 id="notifications">Notifications</h2>
+<p>It would be nice to have a direct integration with notifications. This can be achieved using CloudWatch Events. In this sample project I’m going to use SNS to send email notifications.</p>
+
+<p>First, I went to CloudWatch and created a rule and added the build state changed events. Just gave it a name and created the rule so that it looked like this:</p>
+
+<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/cloudwatch-event-rule-view.png" alt="" /></p>
+
+<p>After that I broke the test intentionally and received email for build failure in JSON format.</p>
+
+<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/build-notification-json.png" alt="" /></p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>In this post I wanted to show a continuous integration pipeline using GitHub and CodeBuild. It can further be improved by posting the build status to Slack so that the whole team can get the notifications instantly. For the time being I achieved the goals I set out for initially so I’ll wrap it up here.</p>
+
+<h2 id="source-code">Source Code</h2>
+<p>Source code can be found in the repo below under blog/CodeBuild_CI_Pipeline folder</p>
+
+<p></p>
+<div class="github-widget" data-repo="volkanpaksoy/lab"></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://docs.aws.amazon.com/en_pv/codebuild/latest/userguide/sample-build-notifications.html">Build Notifications Sample for CodeBuild</a></li>
+  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/CodeBuild_CI_Pipeline">Source code</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Infrastructure as Code with AWS CloudFormation and Cloud Development Kit (CDK)]]></title>
+    <link href="https://volkanpaksoy.com/archive/2019/10/26/Infrastructure-as-Code-with-AWS-CloudFormation-and-Cloud-Development-Kit/"/>
+    <updated>2019-10-26T13:00:00+01:00</updated>
+    <id>https://volkanpaksoy.com/archive/2019/10/26/Infrastructure-as-Code-with-AWS-CloudFormation-and-Cloud-Development-Kit</id>
+    <content type="html"><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>Using AWS is great as it simplifies and improves infrastructure provisioning and maintenance quite a lot. As you depend more and more on AWS you quickly realize that managing everything through AWS Management Console is not an ideal way.</p>
+
+<p>Earlier this year, I published this <a href="https://volkanpaksoy.com/archive/2019/01/15/Infrastructure-as-code-with-AWS-CloudFormation/">post</a> about AWS CloudFormation. This post will also discuss using CloudFormation but by taking it a higher level by using AWS Cloud Development Kit (CDK).</p>
+
+<h2 id="levels-of-infrastructure">Levels of infrastructure</h2>
+<p>I liked the way the several approaches of infrastructure management is illustrated as levels here: <a href="https://www.youtube.com/watch?v=184S7ki6fJA">Develop a Web App Using Amazon ECS and AWS Cloud Development Kit (CDK) - AWS Online Tech Talks (YouTube Video)</a></p>
+
+<p>In a nutshell, those levels are:</p>
+
+<h3 id="level-0-by-hand">Level 0: By hand</h3>
+<p>This approach is simply using AWS Management Console user interface to manage the infrastructure.</p>
+
+<p><strong>Pros:</strong></p>
+
+<ul>
+  <li>Simple and easy</li>
+  <li>Helps to get results faster for exploratory projects</li>
+</ul>
+
+<p><strong>Cons:</strong></p>
+
+<ul>
+  <li>Hard to reproduce</li>
+  <li>Possible inconsistencies based on people’s preferences</li>
+  <li>Error-prone</li>
+  <li>Slow for complex systems</li>
+</ul>
+
+<h3 id="level-1-imperative-infrastructure-as-code">Level 1: Imperative Infrastructure as Code</h3>
+<p>In this approach you write your own scripts using AWS SDK and manage the resources programmatically.</p>
+
+<p><strong>Pros:</strong></p>
+
+<ul>
+  <li>Repeatable and reusable</li>
+  <li>Can be source-controlled</li>
+</ul>
+
+<p><strong>Cons:</strong></p>
+
+<ul>
+  <li>Lots of boilerplate code</li>
+  <li>It needs to address all edge cases</li>
+</ul>
+
+<h3 id="level-2-declarative-infrastructure-as-code">Level 2: Declarative Infrastructure as Code</h3>
+<p>Describe the infrastructure as a script (in JSON or YAML) and use an resource provisioning engine such as AWS CloudFormation or HashiCorp Terraform which in turn use AWS SDK to manage the infrastructure.</p>
+
+<p><strong>Pros:</strong></p>
+
+<ul>
+  <li>No boilerplate</li>
+  <li>Creating and updating resources is handled automatically</li>
+</ul>
+
+<p><strong>Cons:</strong></p>
+
+<ul>
+  <li>Templates can become verbose</li>
+  <li>Implementing logic is limited to some built-in helper functions</li>
+</ul>
+
+<h3 id="level-3-aws-cloud-development-kit">Level 3: AWS Cloud Development Kit</h3>
+<p>In this approach software is developed using AWS CDK which generates the input for AWS CloudFormation.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws_cdk/aws-cdk-overview.jpg" alt="" /></p>
+
+<p>The application can be developed in a number of languages. At the time of this writing the following languages are supported: TypeScript, JavaScript, Python, Java, C#.</p>
+
+<p><strong>Pros:</strong></p>
+
+<ul>
+  <li>Handles creation of underlying resources. For example, when creating a VPC it also automatically generates YAML for all other networking resources (routing tables, NAT gateways etc) that are required by VPC.</li>
+  <li>Helps with local workflow</li>
+  <li>CDK constructs are reusable. Can be developed by AWS or third parties and can be installed separately.</li>
+  <li>Ability to use familiar programming languages</li>
+</ul>
+
+<p><strong>Cons:</strong></p>
+
+<ul>
+  <li>Extra installation</li>
+</ul>
+
+<h2 id="basic-concepts">Basic Concepts</h2>
+<ul>
+  <li><strong>Construct:</strong> Basic building block for an AWS CDK app. Represents a “cloud component” and encapsulates everything AWS CloudFormation needs to create the component. They can be developed or downloaded from <a href="https://docs.aws.amazon.com/cdk/api/latest/docs/aws-construct-library.html">AWS Construct Library</a></li>
+  <li><strong>Stack:</strong> Constructs need to be created within the scope of a Stack. This corresponds to a CloudFormation template.</li>
+  <li><strong>App:</strong> Stacks are created in the scope of an App. An App can contain multiple stacks.</li>
+</ul>
+
+<h2 id="cdk-basics">CDK Basics</h2>
+<ul>
+  <li>In order to create an application that uses CDK we need to install the CDK</li>
+  <li>The application can have one of the 3 supported templates:
+    <ul>
+      <li>app: General purpose application. This is the default template</li>
+      <li>lib: Used to develop a CDK construct</li>
+      <li>sample-app: Creates an application already populated with a sample CDK application.</li>
+    </ul>
+  </li>
+  <li>The following diagram illustrates the app lifecycle:</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2019/10/aws_cdk/aws-cdk-app-lifecycle.png" alt="" /></p>
+
+<h2 id="installing-cdk">Installing CDK</h2>
+<p>AWS CDK is developed using TypeScript. It’s available via npm:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install -g aws-cdk
+</code></pre></div></div>
+
+<h2 id="using-cdk">Using CDK</h2>
+<p>In my example, I will use C#. A new project can be created by using <strong>cdk init</strong> command:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws_cdk/aws-cdk-init.png" alt="" /></p>
+
+<p>It expects 2 parameters: Language (Can be one of these: csharp, fsharp, java, javascript, python or typescript).</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk init app --language csharp
+</code></pre></div></div>
+
+<p>To test my first app, I followed the sample app provided and added an S3 construct to my code:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">CdkWorkoutStack</span> <span class="p">:</span> <span class="n">Stack</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nf">CdkWorkoutStack</span><span class="p">(</span><span class="n">Construct</span> <span class="n">parent</span><span class="p">,</span> <span class="kt">string</span> <span class="n">id</span><span class="p">,</span> <span class="n">IStackProps</span> <span class="n">props</span><span class="p">)</span> <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Bucket</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s">"CdkBucket"</span><span class="p">,</span> <span class="k">new</span> <span class="n">BucketProps</span>
+        <span class="p">{</span>
+            <span class="n">Versioned</span> <span class="p">=</span> <span class="k">true</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>Next step is to synnthesize a CloudFormation template by running</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk synth
+</code></pre></div></div>
+
+<p>This generates a folder called cdk.out which contains a file named CdkWorkoutStack.template.json and with the following contents:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"Resources"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"CdkBucket2FB0D10E"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AWS::S3::Bucket"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"Properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"VersioningConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"Status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Enabled"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"UpdateReplacePolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Retain"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"DeletionPolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Retain"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"Metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"aws:cdk:path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CdkWorkoutStack/CdkBucket/Resource"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">  
+</span></code></pre></div></div>
+
+<p>Final step is to create the resources by running</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk deploy
+</code></pre></div></div>
+
+<p>This produces the following results:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws_cdk/aws-cdk-deployment-results.png" alt="" /></p>
+
+<p>And not surprisingly a CloudFormation stack with the bucket is created in AWS.</p>
+
+<p>In the next version I’m going to change some properties of the bucket such as:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">CdkWorkoutStack</span> <span class="p">:</span> <span class="n">Stack</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nf">CdkWorkoutStack</span><span class="p">(</span><span class="n">Construct</span> <span class="n">parent</span><span class="p">,</span> <span class="kt">string</span> <span class="n">id</span><span class="p">,</span> <span class="n">IStackProps</span> <span class="n">props</span><span class="p">)</span> <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Bucket</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s">"CdkBucket"</span><span class="p">,</span> <span class="k">new</span> <span class="n">BucketProps</span>
+        <span class="p">{</span>
+            <span class="n">Versioned</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+            <span class="n">BlockPublicAccess</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">BlockPublicAccess</span><span class="p">(</span><span class="k">new</span> <span class="nf">BlockPublicAccessOptions</span><span class="p">()</span>
+            <span class="p">{</span>
+                <span class="n">BlockPublicAcls</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+                <span class="n">BlockPublicPolicy</span> <span class="p">=</span> <span class="k">true</span>
+            <span class="p">})</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>After this change in the code we can review what’s going to be updated by running the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk diff
+</code></pre></div></div>
+
+<p>and it produces the following result outlining the changes between the current code and the deployed version:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws_cdk/aws-cdk-diff-results.png" alt="" /></p>
+
+<p>And the stack can be deleted by running the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk destroy
+</code></pre></div></div>
+
+<p>In the CDK version I’m using the default deletion policy is to retain. That’s why when I deleted the stack via CDK it didn’t delete the bucket. In order to change that behaviour I had to change the value to delete as such:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">CdkWorkoutStack</span> <span class="p">:</span> <span class="n">Stack</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nf">CdkWorkoutStack</span><span class="p">(</span><span class="n">Construct</span> <span class="n">parent</span><span class="p">,</span> <span class="kt">string</span> <span class="n">id</span><span class="p">,</span> <span class="n">IStackProps</span> <span class="n">props</span><span class="p">)</span> <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">bucket</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Bucket</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s">"CdkBucket"</span><span class="p">,</span> <span class="k">new</span> <span class="n">BucketProps</span>
+        <span class="p">{</span>
+            <span class="n">Versioned</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+            <span class="n">BlockPublicAccess</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">BlockPublicAccess</span><span class="p">(</span><span class="k">new</span> <span class="nf">BlockPublicAccessOptions</span><span class="p">()</span>
+            <span class="p">{</span>
+                <span class="n">BlockPublicAcls</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+                <span class="n">BlockPublicPolicy</span> <span class="p">=</span> <span class="k">true</span>
+            <span class="p">})</span>
+        <span class="p">});</span>
+
+        <span class="kt">var</span> <span class="n">resource</span> <span class="p">=</span> <span class="n">bucket</span><span class="p">.</span><span class="n">Node</span><span class="p">.</span><span class="nf">FindChild</span><span class="p">(</span><span class="s">"Resource"</span><span class="p">)</span> <span class="k">as</span> <span class="n">Amazon</span><span class="p">.</span><span class="n">CDK</span><span class="p">.</span><span class="n">CfnResource</span><span class="p">;</span>
+        <span class="n">resource</span><span class="p">.</span><span class="nf">ApplyRemovalPolicy</span><span class="p">(</span><span class="n">RemovalPolicy</span><span class="p">.</span><span class="n">DESTROY</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This time it produces a CloudFormation template with a different policy:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"Resources"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"CdkBucket2FB0D10E"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AWS::S3::Bucket"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"Properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"PublicAccessBlockConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"BlockPublicAcls"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"BlockPublicPolicy"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"VersioningConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"Status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Enabled"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"UpdateReplacePolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Delete"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"DeletionPolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Delete"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"Metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"aws:cdk:path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CdkWorkoutStack/CdkBucket/Resource"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This time after destroy command it did delete the bucket as well.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>I think infrastructure as code is definitely the way to manage cloud resources and CDK provides a great way to simplify the process. It’s at early stages for the time being as the NuGet packages are in devpreview mode but it’s good enough to rely on and start developing with CDK.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.youtube.com/watch?v=Lh-kVC2r2AU">AWS re:Invent 2018: Infrastructure Is Code with the AWS Cloud Development Kit (DEV372) (YouTube Video)</a></li>
+  <li><a href="https://www.youtube.com/watch?v=184S7ki6fJA">Develop a Web App Using Amazon ECS and AWS Cloud Development Kit (CDK) - AWS Online Tech Talks (YouTube Video)</a></li>
+  <li><a href="https://docs.aws.amazon.com/en_pv/cdk/latest/guide/getting_started.html">AWS Documentation: Getting Started With the AWS CDK</a></li>
+  <li><a href="https://docs.aws.amazon.com/cdk/api/latest/docs/aws-construct-library.html">AWS CDK Construct Library</a></li>
+</ul>
+]]></content>
+  </entry>
+  
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Building Robots with Lego Mindstorms EV3]]></title>
+    <link href="https://volkanpaksoy.com/archive/2019/10/26/Building-Robots-with-Lego-Mindstorms-EV3/"/>
+    <updated>2019-10-26T05:00:00+01:00</updated>
+    <id>https://volkanpaksoy.com/archive/2019/10/26/Building-Robots-with-Lego-Mindstorms-EV3</id>
+    <content type="html"><![CDATA[<p>In <a href="https://volkanpaksoy.com/archive/2019/10/24/Playing-with-Lego-Mindstorms/">this</a> I made an introduction to building robots with Lego Mindstorms. In this post I will not develop my own robot but will build one of Lego’s creations: Track3r</p>
+
+<p><img src="/images/vpblogimg/2019/10/lego-2/lego-track3r.jpg" alt="Lego Track3r" /></p>
+
+<h2 id="building">Building</h2>
+<p><a href="https://github.com/volkanpaksoy/lego/blob/master/docs/Lego-Track3r-Instructions.pdf">Instructions</a> are quite simple and I was able to build in a few hours.</p>
+
+<p><img src="/images/vpblogimg/2019/10/lego-2/lab-in-use.jpeg" alt="Lab in use" /></p>
+
+<h2 id="connecting">Connecting</h2>
+<p>I tested it with IR remote control and it works but I think the easiest and best way to control the robot is the iOS app.</p>
+
+<p>To control the robot via app, first you need to have Bluetooth enabled both on your phone and EV3 brick:</p>
+
+<p><img src="/images/vpblogimg/2019/10/lego-2/turn-on-bluetooth-onev3.jpeg" alt="" /></p>
+
+<p>After you install the app, connect it to the brick:</p>
+
+<p><img src="/images/vpblogimg/2019/10/lego-2/bluetooth-connection-instructions.jpg" alt="" /></p>
+
+<p>Once connected, selected the robot you want to control (Track3r in this case):</p>
+
+<p><img src="/images/vpblogimg/2019/10/lego-2/app-control-panel.jpg" alt="" /></p>
+
+<p>and the rest is just taking it to a test drive:</p>
+
+<p><img src="/images/vpblogimg/2019/10/lego-2/lego-track3r-complete.jpg" alt="" /></p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>One problem I had was I ran out of batteries very quickly. EV3 brick take 6 AA batteries and I use rechargable batteries. After playing around with the robot for about half an hour I ran out of batteries. Unfortunately the design of the robot doesn’t take replacing batteries into account. It seems it would be a bit painful to remove the brick only to replace the batteries and put it back in. Well, there are other models I wanted to build anyway at least I have now more experience with building and controlling the pre-designed robots. I think the most fun is programming the brick so I will explore more of that in the future.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/lego/blob/master/docs/Lego-Track3r-Instructions.pdf">Lego Track3r Instructions</a></li>
+  <li><a href="https://github.com/volkanpaksoy/lego/blob/master/docs/Lego-Mindstorms-EV3-User-Guide.pdf">EV3 User Guide</a></li>
+</ul>
+]]></content>
+  </entry>
+  
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Playing with Lego Mindstorms NXT and EV3]]></title>
+    <link href="https://volkanpaksoy.com/archive/2019/10/24/Playing-with-Lego-Mindstorms/"/>
+    <updated>2019-10-24T07:00:00+01:00</updated>
+    <id>https://volkanpaksoy.com/archive/2019/10/24/Playing-with-Lego-Mindstorms</id>
+    <content type="html"><![CDATA[<p><img src="/images/vpblogimg/2019/10/lego-1/lego-mindstorms-ev3.jpg" alt="Lego Mindstorms EV3" /></p>
+
+<p>Whenever I see my Lego Mindstorms kit on the shelf gathering dust I sigh then I tell myself one day I’ll find enough time to build soemthing with it again. That day was last weekend! This post is a collection of notes that I started taking when I started playing.</p>
+
+<h2 id="terminology">Terminology</h2>
+<p>I have 2 older bricks and one of the newer ones. At first glance the naming was a bit confusing. So to clarify there are 3 versions of the brick out there as outlines <a href="http://robotsquare.com/2013/07/16/ev3-nxt-compatibility/">here</a>.</p>
+
+<ul>
+  <li>The programmable bricks are all called <strong>Lego Mindstorms</strong></li>
+  <li>The names of the versions are:
+    <ul>
+      <li>1998: LEGO MINDSTORMS <strong>RCX</strong></li>
+      <li>2006: LEGO MINDSTORMS <strong>NXT</strong></li>
+      <li>2013: LEGO MINDSTORMS <strong>EV3</strong></li>
+    </ul>
+  </li>
+  <li>Also NXT has several sets:
+    <ul>
+      <li>LEGO MINDSTORMS NXT (8527)</li>
+      <li>LEGO MINDSTORMS NXT 2.0 (8547)</li>
+      <li>LEGO MINDSTORMS NXT Education Base Set (9797)</li>
+    </ul>
+  </li>
+</ul>
+
+<p>I have one of the education sets and one regular so I was getting confused about identifying which one was which as all the contents are mixed up at this point. The good news is shown in the same <a href="http://robotsquare.com/2012/02/18/understanding-nxt-versions/">article</a> that lists NXT sets:</p>
+
+<ul>
+  <li>The NXT Intelligent Brick is the same in all versions of the Mindstorms NXT sets.</li>
+  <li>The NXT motors are the same in all versions of the Mindstorms NXT sets. Each version has three of such motors</li>
+</ul>
+
+<p>Since the brick is the heart and soul of the whole thing, it’s much easier to say that I have 2 NXT and 1 EV3 bricks.</p>
+
+<h2 id="programming-the-brick">Programming the brick</h2>
+<p>First, I downloaded the software and installed it:</p>
+
+<p><img src="/images/vpblogimg/2019/10/lego-1/lego-mindstorms-software-installation.png" alt="" /></p>
+
+<p>Then plugged in the EV3 brick via USB cable:</p>
+
+<p><img src="/images/vpblogimg/2019/10/lego-1/lego-mindstorms-connect-brick.png" alt="" /></p>
+
+<p>Unfortunately, macoOS Catalina doesn’t seem to support programming yet. Even though it installs fine and sees the EV3 brick connected I couldn’t make it work. So I reverted to my Surface Pro 3 and tried Windows to do the job.</p>
+
+<p>I guess this time it really worked as it asked me to upgrade firmware on the brick which I did.</p>
+
+<p><img src="/images/vpblogimg/2019/10/lego-1/lego-mindstorms-firmware-update.png" alt="" /></p>
+
+<p>After that I was able to start using NXT-G to develop my first program: An infinite loop of 2 motors moving forward</p>
+
+<p><img src="/images/vpblogimg/2019/10/lego-1/lego-mindstorms-first-program.png" alt="" /></p>
+
+<p>And the result is simple but good enough for the time being:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3RE---CIvbI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.lego.com/en-gb/mindstorms/downloads/download-software">Lego Software Download</a></li>
+  <li><a href="http://robotsquare.com/2013/07/16/ev3-nxt-compatibility/">EV3 and NXT: Difference and Compatibility</a></li>
+  <li><a href="http://robotsquare.com/2012/02/18/understanding-nxt-versions/">Tutorial: Understanding the difference between NXT set versions</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2014/05/24/programming-lego-mindstorms-ev3-net-api">Old blog post: Programming EV3 with .NET</a></li>
+  <li><a href="https://www.ev3dev.org/">ev3dev</a></li>
+</ul>
+]]></content>
+  </entry>
+  
+  
+  
+  <entry>
+    <title type="html"><![CDATA[AWS Developer Tools Services Part 4: AWS CodePipeline]]></title>
+    <link href="https://volkanpaksoy.com/archive/2019/10/23/AWS-Developer-Tools-Services-Part-4-AWS-CodePipeline/"/>
+    <updated>2019-10-23T04:00:00+01:00</updated>
+    <id>https://volkanpaksoy.com/archive/2019/10/23/AWS-Developer-Tools-Services-Part 4-AWS-CodePipeline</id>
+    <content type="html"><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>This post is part of my mini-series about <a href="https://aws.amazon.com/products/developer-tools/">AWS Developer Tools Services</a></p>
+
+<ul>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/15/AWS-Developer-Tools-Services-Part-1-AWS-CodeCommit/">Part 1: AWS CodeCommit</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/19/AWS-Developer-Tools-Services-Part-2-AWS-CodeBuild/">Part 2: AWS CodeBuild</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/20/AWS-Developer-Tools-Services-Part-3-AWS-CodeDeploy/">Part 3: AWS CodeDeploy</a></li>
+  <li>Part 4: AWS CodePipeline</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-icon.png" alt="" /></p>
+
+<h2 id="aws-codepipeline">AWS CodePipeline</h2>
+<p>In the previous posts I was able to create a Git repository in CodeCommit, create a build and upload the artifacts to an S3 bucket using CodeBuild and deploy the artifacts to an EC2 instance. In this post I will use CodePipeline service to tie these steps together.</p>
+
+<p>AWS CodePipeline is more like an umbrella service that it combines the the source, build and deploy steps together with some added benefits:</p>
+
+<ul>
+  <li>Ability to retry deployment: In CodeDeploy, if the deployment fails you have to create a new deployment manually but with Pipeline we have the option to retry the deployment which clones the failed deployment and runs the new one automatically.</li>
+  <li>Trigger build upon code changes: You can start builds manually or on schedule by creating triggers but you can not trigger a build when you push your code to the repository. CodePipeline handles this automatically.</li>
+</ul>
+
+<h2 id="create-a-pipeline">Create a pipeline</h2>
+
+<h3 id="step-1-give-it-a-name">Step 1: Give it a name</h3>
+<p>First step is to simply give the pipeline a name. CodePipeline can automatically create an IAM role with the required permissions. Required permissions are not really clear at this point as we haven’t connected any of the services yet. That’s why it’s very useful to keep the “Allow AWS CodePipeline to create a service role so it can be used with this new pipeline” checkbox ticked.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-create-pipeline.png" alt="" /></p>
+
+<h4 id="step-2-add-source">Step 2: Add source</h4>
+<p>Next, we choose the source provider. In this example, I will use CodeCommit. It also support Amazon ECR, Amazon S3 and GitHub.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-add-source.png" alt="" /></p>
+
+<p>At this stage, by using CloudWatch events we can automatically start the build. This option os provided because CodeCommit is an AWS service. If you choose GitHub as your provider you’ll see GitHub webhooks which do the same job.</p>
+
+<h4 id="step-3-add-build">Step 3: Add build</h4>
+<p>By default two build services are supported: CodeBuild and Jenkins. It’s easier to connect to CodeBuild as you just have to select your build project from the dropdown list:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-add-build.png" alt="" /></p>
+
+<p>You can also choose to skip this stage. If you are copying static assets from an S3 bucket for instance you wouldn’t need to build anything and would choose to skip this stage.</p>
+
+<h4 id="step-4-add-deployment">Step 4: Add deployment</h4>
+<p>At deployment stage, we have quite a few options:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-add-deployment-1.png" alt="" /></p>
+
+<p>As stated before, I will use the CodeDeploy deployment I created before:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-add-deployment-2.png" alt="" /></p>
+
+<p>Finally we review and create the pipeline.</p>
+
+<h2 id="troubleshooting-the-pipeline">Troubleshooting the pipeline</h2>
+<p>Even though my CodeBuild and CodeDeploy projects succeeded, running the CodePipeline at this point fails. The reason for this error is CodePipeline creates its own S3 bucket and CodeDeploy agent needs access to that bucket as well to be able to download the deployment artifacts. So I had to modify my policy as such:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:Get*",
+        "s3:List*"
+      ],
+      "Resource": [
+        "arn:aws:s3:::replace-with-your-s3-bucket-name/*",
+        "arn:aws:s3:::aws-codedeploy-us-east-1/*",
+        "arn:aws:s3:::codepipeline-us-east-1-XXXXXXXXXXX/*"
+      ]
+    }
+  ]
+}
+</code></pre></div></div>
+
+<h2 id="see-it-in-action">See it in action</h2>
+<p>After fixing the policy I retried the deployment (which creates a new deployment, doesn’t actually retry the failed one)</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-results.png" alt="" /></p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>In this mini-series, I investigated creating a full pipeline using AWS developer services. In future posts I will delve deeper into these services and start using other complementary services as well.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://aws.amazon.com/codepipeline">AWS CodePipeline</a></li>
+</ul>
+]]></content>
+  </entry>
+  
+  
+  
+  <entry>
+    <title type="html"><![CDATA[AWS Developer Tools Services Part 3: AWS CodeDeploy]]></title>
+    <link href="https://volkanpaksoy.com/archive/2019/10/20/AWS-Developer-Tools-Services-Part-3-AWS-CodeDeploy/"/>
+    <updated>2019-10-20T07:00:00+01:00</updated>
+    <id>https://volkanpaksoy.com/archive/2019/10/20/AWS-Developer-Tools-Services-Part-3-AWS-CodeDeploy</id>
+    <content type="html"><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>This post is part of my mini-series about <a href="https://aws.amazon.com/products/developer-tools/">AWS Developer Tools Services</a></p>
+
+<ul>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/15/AWS-Developer-Tools-Services-Part-1-AWS-CodeCommit/">Part 1: AWS CodeCommit</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/19/AWS-Developer-Tools-Services-Part-2-AWS-CodeBuild/">Part 2: AWS CodeBuild</a></li>
+  <li>Part 3: AWS CodeDeploy</li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/23/AWS-Developer-Tools-Services-Part-4-AWS-CodePipeline/">Part 4: AWS CodePipeline</a></li>
+</ul>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-icon.png" alt="" /></p>
+
+<h2 id="aws-codedeploy">AWS CodeDeploy</h2>
+<p>CodeDeploy is a flexible deployment service that can integrate with a number of different services. It can deploy to EC2/On-premises instances as well as AWS Lambda and Amazon ECS. In my example I’ll use EC2 deployment on a Windows server.</p>
+
+<h2 id="agent">Agent</h2>
+<p>CodeDeploy requires an agent application installed on the target machines. This is only a requirement for EC2 though. For containers (ECS) and serverless (Lambda) deployments this is not necessary.</p>
+
+<p>As of this writing it’s officially supported by the following versions of Windows Server: 2016, 2012 R2, and 2008 R2.</p>
+
+<p>The installer for the agent program can be downloaded from <a href="https://docs.aws.amazon.com/en_pv/codedeploy/latest/userguide/codedeploy-agent-operations-install-windows.html">here</a></p>
+
+<p>The agent setup is a bit unintuitive in the sense that once it’s done it just disappears without any confirmation of successful installation.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-agent-service-running.png" alt="" /></p>
+
+<h2 id="creating-an-application">Creating an Application</h2>
+<p>Now that we have the EC2 instance running with the CodeDeploy agent we are ready to configure CodeDeploy service.</p>
+
+<p>First we need to create our application and specify the target platform (EC2 / ECS / Lambda).</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-create-application.png" alt="" /></p>
+
+<h2 id="create-a-deployment-group">Create a Deployment Group</h2>
+<p>In order to create a deployment group we need to supply a few details.</p>
+
+<h3 id="iam-role">IAM Role</h3>
+<p>We need to provide a CodeDeploy service role. So first we need go to IAM, create a role and select CodeDeploy from the AWS Services list. Then select the use case (in my case it’s the first option):</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-create-iam-service-role.png" alt="" /></p>
+
+<p>This comes with a role with <strong>AWSCodeDeployRole</strong> policy attached.</p>
+
+<p>Finally we give it a name and copy the ARN and use it in CodeDeploy configuration.</p>
+
+<h3 id="deployment-type">Deployment Type</h3>
+<p>CodeDeploy supports 2 types of deployment:</p>
+
+<ul>
+  <li>In-place</li>
+  <li>Blue/green</li>
+</ul>
+
+<p>In this example I will have 1 EC2 instance and I will use In-place deployment type. But Blue/green is very important to have a new system with no downtime so I’ll cover that bit in a separate post.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-deployment-type-selection.png" alt="" /></p>
+
+<h3 id="environment-configuration">Environment Configuration</h3>
+<p>The way CodeDeploy finds the target instances is via <strong>tags</strong>. You can provide multiple groups of tags. In that case, for an instance to be targeted by CodeDeploy</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-environment-configuration.png" alt="" /></p>
+
+<h3 id="other-settings">Other Settings</h3>
+
+<p>There are more settings such as deployment configuration (deploy all at once, one at a time, half at a time) and configuring Load Balancer. Since I’m only covering the basics in this example I’ll not explore those features. They don’t mean much with a single EC2 instance anyway.</p>
+
+<h2 id="deploying-the-application">Deploying the Application</h2>
+<p>We have at this point defined the target of the deployment and now we need to define what to deploy.</p>
+
+<p>To tie it to the previous configuration we have done, we first select the deployment group. Then we choose the location of the deployment package: In my example I’ll use the artifacts built by CodeBuild and uploaded to Amazon S3.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-deployment-settings.png" alt="" /></p>
+
+<p>After you create the deployment, it automatically starts it. Make sure there are running instances with the correct tags other wise you might see an error like this:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-no-instances-found-error.png" alt="" /></p>
+
+<p>For each deployment you need to create a new deployment. The good news is that you can an existing deployment and create it very quickly that way.</p>
+
+<p>After the deployment starts on the instances you can see the progress on the screen right away:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-deployment-in-progress.png" alt="" /></p>
+
+<h2 id="iam-instance-profile">IAM Instance Profile</h2>
+<p>If you are having an error like this</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>InstanceAgent::Plugins::CodeDeployPlugin::CommandPoller: Missing credentials - please check if this instance was started with an IAM instance profile
+</code></pre></div></div>
+
+<p>that is probably because you skipped creating an instance profile for your EC2 instances like I did. It is explained <a href="https://docs.aws.amazon.com/en_pv/codedeploy/latest/userguide/getting-started-create-iam-instance-profile.html#getting-started-create-iam-instance-profile-console">here</a>.</p>
+
+<p>Basically the CodeDeploy agent running in EC2 instance needs to communicate with CodeDeploy service and Amazon S3 to get the deployment package.</p>
+
+<p>To resolve this issue:</p>
+
+<ol>
+  <li>Create an IAM policy like this:</li>
+</ol>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"s3:Get*"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"s3:List*"</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"arn:aws:s3:::replace-with-your-s3-bucket-name/*"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"arn:aws:s3:::aws-codedeploy-us-east-1/*"</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<ol>
+  <li>Create an IAM service role for EC2. In permissions, attach the policy created in Step 1.</li>
+</ol>
+
+<p>In EC2, select the instance and attach the role:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-attach-iam-role.png" alt="" /></p>
+
+<p>Make sure to restart the service after attaching the role.</p>
+
+<h2 id="appspecyml">AppSpec.yml</h2>
+<p>At this point the agent can locate the deployment package but it doesn’t know what to do with. We need to define installation steps. Just like we had to provide a buildspec.yml file to CodeBuild service, we need to provide an appspec.yml file to CodeDeploy service to define these deployment steps.</p>
+
+<p>appspec.yml file must be placed in application source code’s root folder.</p>
+
+<p>In this example, the deployment is basically just copying the new application to the destination and my appspec.yml file looks like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 0.0
+os: windows
+files:
+  - source: \
+    destination: c:\website
+</code></pre></div></div>
+
+<p>In addition to this basic configuration, it’s possible to run scripts before and after installation. So if there are dependencies or clean up tasks they can be carried out that way.</p>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>I created this sample project on a MacBook Pro and when I tested the deployment had the following error:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-appspec-version-error.png" alt="" /></p>
+
+<p>The problem is the line endings. Windows expects \r\n line endings whereas on unix-baseds systems the line ending is \n. So the solution for that is to save the appsepc.yml file with UTF-8 encoding and the agent was able to read the file correctly and automatically unzips the contents of the deployment package to the target folder:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-successful-deployment.png" alt="" /></p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>In this post I used basic features of AWS CodeDeploy service to deploy my artifacts from the previous post and carry out the actual deployment. In future posts I will focus on more advanced features and other AWS code services.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://docs.aws.amazon.com/en_pv/codedeploy/latest/userguide/codedeploy-agent.html">Working with the CodeDeploy Agent</a></li>
+  <li><a href="https://docs.amazonaws.cn/en_us/codedeploy/latest/userguide/troubleshooting-deployments.html#troubleshooting-agent-commandpoller-error">Troubleshoot EC2/On-Premises Deployment Issues</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  
+  
+  <entry>
+    <title type="html"><![CDATA[AWS Developer Tools Services Part 2: AWS CodeBuild]]></title>
+    <link href="https://volkanpaksoy.com/archive/2019/10/19/AWS-Developer-Tools-Services-Part-2-AWS-CodeBuild/"/>
+    <updated>2019-10-19T07:00:00+01:00</updated>
+    <id>https://volkanpaksoy.com/archive/2019/10/19/AWS-Developer-Tools-Services-Part-2-AWS-CodeBuild</id>
+    <content type="html"><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>This post is part of my mini-series about <a href="https://aws.amazon.com/products/developer-tools/">AWS Developer Tools Services</a></p>
+
+<ul>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/15/AWS-Developer-Tools-Services-Part-1-AWS-CodeCommit/">Part 1: AWS CodeCommit</a></li>
+  <li>Part 2: AWS CodeBuild</li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/20/AWS-Developer-Tools-Services-Part-3-AWS-CodeDeploy/">Part 3: AWS CodeDeploy</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/23/AWS-Developer-Tools-Services-Part-4-AWS-CodePipeline/">Part 4: AWS CodePipeline</a></li>
+</ul>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-icon.png" alt="" /></p>
+
+<h2 id="aws-codebuild">AWS CodeBuild</h2>
+<p>As the name implies, AWS CodeBuild is Amazon’s build service that compiles your code, runs unit tests etc. As this is quite broad and changes from project to project and technology to technology it requires some customization.</p>
+
+<h2 id="hook-up-the-source-code">Hook up the source code</h2>
+<p>First step is to select the source. It’s quite flexible in the sense that it integrates with top Git providers such as GitHub and Bitbucket. The easiest way is to use CodeCommit because of the direct integration between services. No extra authentication is required to connect to the repository.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-selecting-source.png" alt="" /></p>
+
+<p>It also support Amazon S3 as source but I cannot think of a practical use for it.</p>
+
+<p>Another interesting feature is that it supports multiple input sources. If your build depends on source from multiple repositories I would consider merging them into a single repository but if that’s not possible this is a nice option to make it work.</p>
+
+<h2 id="hook-up-the-docker-image-with-build-tools">Hook up the Docker image with build tools</h2>
+<p>The build process takes place in a Docker container. By default AWS provides their own build images for different operating systems:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-environment.png" alt="" /></p>
+
+<p>A couple of notes on build images:</p>
+
+<ul>
+  <li>AWS provides some build images but we can provide our own images as well.</li>
+  <li>
+    <p>How the managed images configured can be found here: <a href="https://docs.aws.amazon.com/en_pv/codebuild/latest/userguide/build-env-ref-available.html">Docker Images Provided by CodeBuild</a>. They have build tools installed on these images for all runtimes they support. As of this writing dotnet core 3.0 is not supported in any of the images though.</p>
+  </li>
+  <li>The image availability may differ between regions. For example N.Virginia regions has 3 supported OS images whereas London region doesn’t have Windows image.</li>
+  <li>Running this build process is not free and pricing details can be found <a href="https://aws.amazon.com/codebuild/pricing">here</a>. If you’re running long build processes that you run frequently these costs can quickly add up.</li>
+</ul>
+
+<h2 id="configuring-the-build">Configuring the build</h2>
+<p>If you run the build after selecting the source and the build image, you get the following error:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-buildspec-missing-error.png" alt="" /></p>
+
+<p>By default CodeBuild requires a special configuration file called buildspec.yml to reside at the root of the repository:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-buildspec-settings.png" alt="" /></p>
+
+<p>In my example, the folder structure is like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[Root]
+	[Src]
+   		[Sample.UI.Web]
+   		[Sample.Core]
+   		[Sample.Core.UnitTests]
+   		Sample.sln
+   		buildspec.yml
+</code></pre></div></div>
+
+<p>I’m using a dotnet core 2.2 project on Windows-based Docker image and my buildspec.yml looks like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 0.2
+
+phases:
+  build:
+    commands:
+      - cd ./src
+      - dotnet restore
+      - dotnet test
+      - dotnet publish Sample.UI.Web -c Release -o ../output
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: ./src/output
+</code></pre></div></div>
+
+<h2 id="running-the-unit-tests">Running the unit tests</h2>
+<p>As you can see in my buildspec file I’m running the unit tests using <em>dotnet test</em> command. There’s no built-in facility in CodeBuild to run unit tests as it’s a general-purpose tool. You have to provide your own mechanism to achieve this.</p>
+
+<p>To test running the unit tests I deliberately broke a test and checked in the code. After running the build again I got this result:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-running-tests.png" alt="" /></p>
+
+<p>So it actually runs the tests and fails the build if there’s a failing test. Ideally you want to run the tests whenever there are code changes. Looks like currently this is possible via CodePipeline service. I’ll explore that later and will cover running the build and unit tests automatically.</p>
+
+<h2 id="artifacts">Artifacts</h2>
+<p>Now that we can build the project we need to upload the output of the build to somewhere so that we can deploy it. Currently you can only choose Amazon S3 to upload the artifacts or no artifacts at all.</p>
+
+<p>If you had created a bucket already you can simply select it from the dropdown list.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-artifacts.png" alt="" /></p>
+
+<p>The options are pretty basic. You can choose to compress the output and upload as a single zip file or the artifacts you defined in the buildspec in their original format.</p>
+
+<p>You can also choose to create a folder named as the build GUID so that you can keep the unique outputs for each release. You can do this by specifying Build ID as the namespace type.</p>
+
+<p>When you’re running the build make sure to view the full logs to get the latest status quickly. I noticed that if you just watch the main page and check out the results you may experience some delays.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>In my experience CodeBuild doesn’t provide too much to help with the build process because by nature it’s a generic tool. But it provides flexibility and full integration with other AWS services such as CodeCommit and CodeDeploy so I believe it’s worht using.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://aws.amazon.com/codebuild/pricing/">AWS CodeBuild Pricing</a></li>
+  <li><a href="https://docs.aws.amazon.com/en_pv/codebuild/latest/userguide/build-env-ref-available.html">Docker Images Provided by CodeBuild</a></li>
+</ul>
+]]></content>
+  </entry>
+  
+  
+  
+  <entry>
+    <title type="html"><![CDATA[AWS Developer Tools Services Part 1: AWS CodeCommit]]></title>
+    <link href="https://volkanpaksoy.com/archive/2019/10/15/AWS-Developer-Tools-Services-Part-1-AWS-CodeCommit/"/>
+    <updated>2019-10-15T07:00:00+01:00</updated>
+    <id>https://volkanpaksoy.com/archive/2019/10/15/AWS-Developer-Tools-Services-Part-1-AWS-CodeCommit</id>
+    <content type="html"><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>This post is part of my mini-series about <a href="https://aws.amazon.com/products/developer-tools/">AWS Developer Tools Services</a></p>
+
+<ul>
+  <li>Part 1: AWS CodeCommit</li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/19/AWS-Developer-Tools-Services-Part-2-AWS-CodeBuild/">Part 2: AWS CodeBuild</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/20/AWS-Developer-Tools-Services-Part-3-AWS-CodeDeploy/">Part 3: AWS CodeDeploy</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/23/AWS-Developer-Tools-Services-Part-4-AWS-CodePipeline/">Part 4: AWS CodePipeline</a></li>
+</ul>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codecommit-icon.png" alt="" /></p>
+
+<h2 id="aws-codecommit">AWS CodeCommit</h2>
+<p>I’m looking for GitHub alternatives and thought CodeCommit would be worth a shot.</p>
+
+<h2 id="creating-a-repository">Creating a Repository</h2>
+<p>Like any other Git provider, you start with creating a repository.</p>
+
+<p>As a side-note, I always thought what was lacking in GitHub was a way of grouping repositories. You can use topics which are essentially labels</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codecommit-github-topics.png" alt="" /></p>
+
+<p>I was hoping there would be a way to create folders or another way to group related repositories together but the closest thing they provide is using tags:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codecommit-create-repo.png" alt="" /></p>
+
+<h2 id="connecting-to-repositories">Connecting to repositories</h2>
+<p>After creating the repository it shows all the information needed for different protocols (HTTPS / SSH) and platforms (MacOS / Windows / Linux). One thing to note is that because of the security risks, it doesn’t allow you to connect with root credentials so you have to be logged in as an IAM user with CodeCommit full access.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codecommit-connection-info.png" alt="" /></p>
+
+<p>I’m writing this blog post on a Windows laptop and so followed <a href="https://docs.aws.amazon.com/en_pv/codecommit/latest/userguide/setting-up-ssh-windows.html">this</a> guide for generating public/private keys.</p>
+
+<p>It’s similar to any other Git guide with the exception that you have to add your access key to your SSH config file (~/.ssh/config):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host git-codecommit.*.amazonaws.com
+  User APKAEIBAERJR2EXAMPLE
+  IdentityFile ~/.ssh/codecommit_rsa
+</code></pre></div></div>
+
+<p>Then to test your connection, run:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh git-codecommit.us-east-2.amazonaws.com
+</code></pre></div></div>
+
+<p>After adding the host to known hosts list you should see this message:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>You have successfully authenticated over SSH. You can use Git to interact with AWS CodeCommit. Interactive shells are not supported.Connection to git-codecommit.us-east-2.amazonaws.com closed by remote host.
+</code></pre></div></div>
+
+<h2 id="clone-the-repo">Clone the repo</h2>
+<p>On the same, click on the Clone URL dropdown and choose the protocol you’d like to use (ideally SSH):</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codecommit-clone-repo-url.png" alt="" /></p>
+
+<p>and try it in your shell (Powershell in my case). You should see your repository locally:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codecommit-cloned-repo.png" alt="" /></p>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>In my experience in Windows, everything worked find on command line but when I tried to use my Git client (Git Extensions) I started having connection issues. The fix for that was to add my AWS SSH Key Id in the URL:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone ssh://Your-SSH-Key-ID@git-codecommit.us-east-2.amazonaws.com/v1/repos/MyDemoRepo my-demo-repo
+</code></pre></div></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://docs.aws.amazon.com/en_pv/codecommit/latest/userguide/setting-up-ssh-windows.html">Setup Steps for SSH Connections to AWS CodeCommit Repositories on Windows</a></li>
+  <li><a href="https://docs.aws.amazon.com/en_pv/codecommit/latest/userguide/troubleshooting-ssh.html">Troubleshooting SSH Connections to AWS CodeCommit</a></li>
+  <li><a href="https://aws.amazon.com/products/developer-tools/">AWS Developer Tools services</a></li>
+</ul>
+]]></content>
+  </entry>
+  
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Git Branching Strategies: GitHub Flow]]></title>
+    <link href="https://volkanpaksoy.com/archive/2019/09/06/Git-Branching-Strategies-GitHub-Flow/"/>
+    <updated>2019-09-06T07:00:00+01:00</updated>
+    <id>https://volkanpaksoy.com/archive/2019/09/06/Git-Branching-Strategies-GitHub-Flow</id>
+    <content type="html"><![CDATA[<p>In this post I woud like to talk about GitHub Flow branching strategy:</p>
+
+<h2 id="basic-approach">Basic approach</h2>
+<ul>
+  <li>Main diagram of the workflow:</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2019/09/git-github-flow-01-diagram.png" alt="" /></p>
+
+<ul>
+  <li>It’s a branch-based workflow mostly targeting projects where deployments are made regularly. In other words, it’s more suitable for continuos deployment environments.</li>
+  <li>There’s only one rule about branching: anything in the <strong>master</strong> branch is always deployable. Because of this, it’s extremely important that your <strong>new branch is created off of master</strong> when working on a feature or a fix.</li>
+  <li>Branch names should be descriptive</li>
+  <li>Once the changes are done, create a pull request.</li>
+  <li>Discuss the pull request and apply changes where necessary</li>
+  <li>Merge into master and deploy straight away</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://guides.github.com/introduction/flow/">Understanding the GitHub flow</a></li>
+  <li><a href="https://www.youtube.com/watch?v=juLIxo42A_s">YouTube Video: The GitHub Flow - GitHub Universe 2016</a></li>
+  <li><a href="https://www.youtube.com/watch?v=47E-jcuQz5c">YouTube Video: Git &amp; GitHub: GitHub Workflow (A very concise explanation in 1 minute and 13 seconds)</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Git Branching Strategies: Git Flow]]></title>
+    <link href="https://volkanpaksoy.com/archive/2019/09/06/Git-Branching-Strategies-Git-Flow/"/>
+    <updated>2019-09-06T07:00:00+01:00</updated>
+    <id>https://volkanpaksoy.com/archive/2019/09/06/Git-Branching-Strategies-Git-Flow</id>
+    <content type="html"><![CDATA[<p>In this post I woud like to talk about a common Git branching strategy: Git Flow.</p>
+
+<h2 id="basic-approach">Basic approach</h2>
+
+<ul>
+  <li>Main diagram of the workflow:</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-00-diagram.png" alt="" /></p>
+
+<ul>
+  <li>
+    <p>The central repo holds two main branches with an infinite lifetime:</p>
+
+    <ul>
+      <li>master</li>
+      <li>develop</li>
+    </ul>
+  </li>
+  <li>origin/master is the main branch where the source code of HEAD always reflects a production-ready state</li>
+  <li>origin/develop is the main branch where the source code of HEAD always reflects a state with the latest delivered development changes for the next release (also called as integration branch)</li>
+  <li>When the source code in the develop branch reaches a stable point and is ready to be released, all of the changes should be merged back into master somehow and then tagged with a release number.</li>
+  <li>There are also supporting branches with limited lifetime such as:
+    <ul>
+      <li>Feature branches</li>
+      <li>Release branches</li>
+      <li>Hotfix branches</li>
+    </ul>
+  </li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>Supporting branch</th>
+      <th>May branch off</th>
+      <th>Must merge back into</th>
+      <th>Naming convention</th>
+      <th>Lifetime</th>
+      <th>Remarks</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Feature</td>
+      <td>develop</td>
+      <td>develop</td>
+      <td>anything except master, develop, release-*, or hotfix-*</td>
+      <td>as long as the feature is in development</td>
+      <td>Features should never interact directly with master.</td>
+    </tr>
+    <tr>
+      <td>Release</td>
+      <td>develop</td>
+      <td>develop and master</td>
+      <td>release-*</td>
+      <td>preparation of the release</td>
+      <td>Starts after feature-freeze. Allows minor bugfixes. Adding large new features here is strictly prohibited.</td>
+    </tr>
+    <tr>
+      <td>Hotfix</td>
+      <td>master</td>
+      <td>develop and master</td>
+      <td>hotfix-*</td>
+      <td>preparation of the release</td>
+      <td>Similar to release in that used to prepare a production release but unplanned.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="automation">Automation</h2>
+<p>Most tools have plugins to support Git Flow. In the example below I will use SourceTree which is available in Windows and Mac.</p>
+
+<p>In this example I’m going to use a GitHub repository called <em>gitflow-automation-test</em>. I’ve already created it in GitHub and in my development environment.</p>
+
+<h3 id="initialization-and-working-with-features">Initialization and working with features</h3>
+<p>First thing to do with Git Flow in SourceTree is to initialize the repository.</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-01-init.png" alt="" /></p>
+
+<p>It sounds confusing at first because the git repo itself is already initialized. What it actually does is explained <a href="https://community.atlassian.com/t5/Sourcetree-questions/What-does-quot-Initialising-repository-for-git-flow-quot-is/qaq-p/433782">here</a>. It shows a dialog box to configure the plugin:</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-02-init-configure.png" alt="" /></p>
+
+<p>It also created the local develop branch.</p>
+
+<p>At this point we have the three types of branches explained above to choose from to start. Let’s start with a new feature named “users”</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-03-start-feature.png" alt="" /></p>
+
+<p>I just added a blank file that represents the changes required for that feature and commmited my changes.</p>
+
+<p>Now that the feature has been implemented, I want to finish the feature. Similar to start, I went to Repository -&gt; Git Flow -&gt; Hg Flow -&gt; Finish Feature</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-04-finish-feature.png" alt="" /></p>
+
+<p>As the options in the window suggests, this action merges the changes into develop and deletes the local branch. It doesn’t push to remote so we have to push it ourselves.</p>
+
+<h3 id="releasing-new-version">Releasing new version</h3>
+<p>Now let’s assume we’ve implemented all the features planned for this release and we want to deploy a new version of our application.</p>
+
+<p>To achieve this we start a new release:</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-05-start-release.png" alt="" /></p>
+
+<p>Once we are ready to ship this release, we end the release similarly:</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-06-finish-release.png" alt="" /></p>
+
+<p>We can choose to push to the origin directly too. If we switch to detail view in Sourcetree output we can see a nice summary of actions that took place:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Summary of actions:
+- Release branch 'release/1.0' has been merged into 'master'
+- The release was tagged '1.0'
+- Release tag '1.0' has been back-merged into 'develop'
+- Release branch 'release/1.0' has been locally deleted
+- 'develop', 'master' and tags have been pushed to 'origin'
+- You are now on branch 'develop' 
+</code></pre></div></div>
+
+<h3 id="working-with-hotfixes">Working with hotfixes</h3>
+<p>As the development continues, let’s assume we implemented another feature named “orders”. Finished the feature and pushed to origin. Now we have a new feature in develop. Suddenly we noticed there’s a bug in the production and we need to deploy a hotfix. We cannot create a new release branch off of develop because the new “orders” feature would be deployed along with the bugfix. So we create out hotfix branch off of master which always points to production.</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-07-start-hotfix.png" alt="" /></p>
+
+<p>As we can see the code reverted back to master:</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-08-hotfix-contents.png" alt="" /></p>
+
+<p>So I added another file to represent the changes for the hotfix and finished the hotfix:</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-09-finish-hotfix.png" alt="" /></p>
+
+<p>And the summary of actions looks like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Summary of actions:
+- Hotfix branch 'hotfix/1.0-hotfix-1' has been merged into 'master'
+- The hotfix was tagged '1.0-hotfix-1'
+- Hotfix tag '1.0-hotfix-1' has been back-merged into 'develop'
+- Hotfix branch 'hotfix/1.0-hotfix-1' has been locally deleted
+- 'develop', 'master' and tags have been pushed to 'origin'
+- You are now on branch 'develop'
+</code></pre></div></div>
+
+<p>As we can see the process is very similar to release. The only difference is the originating branch which was master in this case.</p>
+
+<h2 id="working-with-pull-requests">Working with pull requests</h2>
+<p>It’s a good practice to create pull requests and ask colleagues to review the code before merging into develop. This can still be part of Git Flow.</p>
+
+<p>In this example I’ve created a new feature called “customers”. The changes are represented by the file “Implemented Customers Feature in This File.md”. I’ve commited my code to my feature branch and pushed it to GitHub.</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-10-new-feature-on-github.png" alt="" /></p>
+
+<p>Now I can click a new Pull Request by clicking Compare &amp; pull request button:</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-11-open-pr-on-github.png" alt="" /></p>
+
+<p>I’ve clicked on Create Pull Request and now it’s open on GitHub.</p>
+
+<p>At this point there are several strategies you can take such as reviewed handling the merge and the developer deleting the local branch themselves (as there won’t be a Finish Feature step).</p>
+
+<p>My suggestion is for the reviewer to Approve the pull request but not to merge it. Once the PR is approved, the developer receives a notification. Also the status of the PR can be seen on GitHub as well:</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-12-approved-pr-on-github.png" alt="" /></p>
+
+<p>At this point the developer can go back to Git Flow and finish feature as shown previously.</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-13-select-feature-to-finish.png" alt="" /></p>
+
+<p>Now that we know customers feature have been approved we can select that and finish that feature:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Summary of actions:
+- The feature branch 'feature/customers' was merged into 'develop'
+- Feature branch 'feature/customers' has been locally deleted; it has been remotely deleted from 'origin'
+- You are now on branch 'develop'
+</code></pre></div></div>
+
+<p>At this point developer needs to push the merged develop branch to GitHub otherwise the recent change (approved customers change) doesn’t appear in remote even though the pull request was merged.</p>
+
+<p>Even if you’re in the middle of another feature and have uncommited files you can still finish the approved feature so it doesn’t interrupt with your work.</p>
+
+<h2 id="command-line">Command Line</h2>
+<p>All the Git Flow commands explained above are also supported by command line but to be able to use them you have to install it:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew install git-flow
+</code></pre></div></div>
+
+<p>Then you can start using it as</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git flow &lt;subcommand&gt;
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-14-command-line.png" alt="" /></p>
+
+<p>In Windows, command line tools come with the installer so no extra installation is necessary.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://nvie.com/posts/a-successful-git-branching-model">Git Flow Original Blog Post: A successful Git branching model</a></li>
+  <li><a href="/assets/docs/Git-branching-model.pdf">Full branching model PDF</a></li>
+  <li><a href="https://www.codingblocks.net/podcast/comparing-git-workflows/">Coding Blocks Podcast: Comparing Git Workflows</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Alarm Pi]]></title>
+    <link href="https://volkanpaksoy.com/archive/2019/09/04/alarm-pi/"/>
+    <updated>2019-09-04T07:00:00+01:00</updated>
+    <id>https://volkanpaksoy.com/archive/2019/09/04/alarm-pi</id>
+    <content type="html"><![CDATA[<h2 id="the-problem">The Problem</h2>
+<p>Snoozing is the worst possible thing you can do to yourself! You start the day with a feeling of guilt and being late for everything from the start. To avoid this I’ve been working on improving my toolkit and techniques. I posted <a href="https://volkanpaksoy.com/archive/2019/03/09/No-More-Snoozing-Tips-Tools-and-Techniques/">this</a> as a list of my current methods and tools.</p>
+
+<p>Whilst these methods worked for me a while I’ve started having an issue with Alexa playing my playlist from Spotify: It always starts with the same song. My idea was to have a different song every morning so this bug in Spotify impeded me from achieving my goal.</p>
+
+<h2 id="the-idea">The Idea</h2>
+<p>As the saying goes: If all you have is a hammer, everything looks like a nail!</p>
+
+<p>Even though I have other means of developing tools and software, I wanted to use another Raspberry Pi to replace Alexa morning routine (it still turns on the light though).</p>
+
+<h2 id="the-execution">The Execution</h2>
+<p>So I decided to dust off my OG Raspberry Pi 1 Model B and implement my own custom solution for playing a random song every morning to help wake me up.</p>
+
+<p><img src="/images/vpblogimg/2019/09/alarm-pi-angmar.jpg" alt="" /></p>
+
+<p>Here’s how I implemented it from start to finish:</p>
+
+<h3 id="step-01-download-raspbian-image-and-prepare-sdmicrosd-card">Step 01: Download Raspbian image and prepare SD/MicroSD card</h3>
+<p>I downloaded Raspbian Buster Lite as I don’t need desktop and other extra software for this project.</p>
+
+<p>I followed the official guide from raspberrypi.org to burn the image. It’s basically just a few commands:</p>
+
+<p>Insert the card and run the following to identify the card:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil list
+</code></pre></div></div>
+
+<p>Then</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo dd bs=1m if=path_of_your_image.img of=/dev/rdiskn conv=sync
+</code></pre></div></div>
+
+<p>where n is the number of disk which I found from the first step.</p>
+
+<p>If you get “resource is busy” error, then run the following</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil unmountDisk /dev/diskn
+</code></pre></div></div>
+
+<h3 id="step-02-carry-out-necessary-configuration-updates">Step 02: Carry Out Necessary Configuration Updates</h3>
+<p>It’s a good practice to change the default passwords so I ran</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>passwd
+</code></pre></div></div>
+
+<p>and updated the password.</p>
+
+<p>Also for remote installations I enabled SSH:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable ssh
+sudo systemctl start ssh
+</code></pre></div></div>
+
+<p>And I like to give a specific name to all my devices so that I can keep an eye on the machines connected to my network more easily.</p>
+
+<p>To achieve that I ran:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo hostname NEW_HOSTNAME
+</code></pre></div></div>
+
+<p>I used raspi-config to connect to WiFi network</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo raspi-config
+</code></pre></div></div>
+
+<p>and enter the details and rebooted to connect to the network.</p>
+
+<p>In this MVP implementation I don’t even need Internet connectivity (after the initial installations below) as all my MP3 files are on the device already. But in my tests I noticed that when the Pi is disconnected the system time wasn’t updating so scheduled job wasn’t being triggered. This is probably because I’m using a Pi 1. I’m guessing the newer version can work offline as well.</p>
+
+<h3 id="step-03-install-mp3-player-software">Step 03: Install MP3 Player Software</h3>
+<p>In this simple project I’m going to install mpg123 and run it via a Python script</p>
+
+<p>Installation is as simple as this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install mpg123 -y
+</code></pre></div></div>
+
+<h3 id="step-04-develop-the-script">Step 04: Develop the script</h3>
+<p>The following script points to a folder which supposedly have all the local MP3 files, picks one randomly and starts playing.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="n">path</span> <span class="o">=</span><span class="s">'/path/to/mp3/folder'</span> 
+<span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="n">index</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">))</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">f</span><span class="s">'/usr/bin/mpg123 {files[index]}'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="step-05-copy-music-and-script-to-raspberry-pi">Step 05: Copy music and script to Raspberry Pi</h3>
+<p>Save the script above in a USB drive along with the MP3 files. To copy the files from USB drive to Pi microSD card, I inserted my USB and ran the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo fdisk -l
+sudo mkdir /media/usb
+sudo mount /dev/sda1 /media/usb
+</code></pre></div></div>
+
+<p>Then</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir /home/pi/music
+cp /media/usb/*.mp3 /home/pi/music
+</code></pre></div></div>
+
+<p>and copy the script to home folder</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cp /media/usb/alarm-pi.py /home/pi
+</code></pre></div></div>
+
+<h3 id="step-06-schedule-the-script">Step 06: Schedule the script</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>crontab -e
+</code></pre></div></div>
+
+<p>Then add to run at a certain time. The example below runs at 7:30am everyday:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>30 7 * * * /usr/bin/python3 /home/pi/alarm-pi.py
+</code></pre></div></div>
+
+<p>If you want to run the script multiple times you can another one (like another one after 10 minutes as a snooze-prevention mechanism!)</p>
+
+<h3 id="step-07-test-the-schedule">Step 07: Test the schedule</h3>
+<p>Update your schedule temporarily and set it to a few minutes later and start playing the waiting game! Once you hear a random song playing make sure to set it back to your actual alarm time.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>I meant to run this in a Docker container and develop the application with dotnet core but turns out playing MP3 with dotnet core in Linux is not easy. Also playing sound from inside a container has its own issues. So for those reasons I chose the easiest possible path to achieve the goal. If I find time I’ll improve this and make it more flexible but for the time being it does the job so I’ll assume MVP is done now.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://volkanpaksoy.com/archive/2019/03/09/No-More-Snoozing-Tips-Tools-and-Techniques">No more snoozing: Tips, tools and techniques</a></li>
+  <li><a href="https://www.raspberrypi.org/documentation/installation/installing-images/mac.md">Installing operating system images on Mac OS</a></li>
+  <li><a href="https://blog.docker.com/2019/03/happy-pi-day-docker-raspberry-pi/">Docker Blog: Happy Pi Day with Docker and Raspberry Pi</a></li>
+  <li><a href="https://downloads.raspberrypi.org/raspbian/images/">Raspbian Downloads Page</a></li>
+  <li><a href="https://downloads.raspberrypi.org/raspbian_lite/images/">Raspbian Lite Downloads Page</a></li>
+  <li><a href="https://electrondust.com/2017/11/25/setting-raspberry-pi-wifi-static-ip-raspbian-stretch-lite/">Setting up Raspberry Pi WiFi with Static IP on Raspbian Stretch Lite</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Setting Up a Pi Hole with a Raspberry Pi]]></title>
+    <link href="https://volkanpaksoy.com/archive/2019/08/31/Setting-Up-a-Pi-Hole-with-a-Raspberry-Pi/"/>
+    <updated>2019-08-31T07:00:00+01:00</updated>
+    <id>https://volkanpaksoy.com/archive/2019/08/31/Setting-Up-a-Pi-Hole-with-a-Raspberry-Pi</id>
+    <content type="html"><![CDATA[<p><img src="/images/vpblogimg/2019/08/pi-hole-logo.png" alt="" /></p>
+
+<p>For some time I’d been wanting to set up my own Pi Hole in my network.</p>
+
+<p>In <a href="https://volkanpaksoy.com/archive/2019/08/10/Implementing-a-Self-Hosted-Docker-Registry-on-Raspberry-Pi/">this</a> previous post I implemented a Docker registry on Raspberry Pi. I was planning to install it using Docker on that Pi but then I decided to set up a new Pi from scratch due to performance concerns. After I get the hang of it I might migrate it to Docker.</p>
+
+<h2 id="preparations-download-raspbian-image-and-prepare-micro-sd-card">Preparations: Download Raspbian image and prepare Micro SD card</h2>
+<p>As of this writing, the latest Raspbian release is Buster but in the <a href="https://docs.pi-hole.net/main/prerequesites/#supported-operating-systems">official supported OS list</a> the latest supported Raspbian is Stretch. So I went to <a href="https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-04-09/">this</a> page to download Raspbian Stretch Lite.</p>
+
+<p>I downloaded Raspbian Buster Lite as I don’t need desktop and other extra software for this project.I followed the official guide from raspberrypi.org to burn the image. It’s basically just a few commands:</p>
+
+<p>I inserted the card and run the following to identify the card:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil list
+</code></pre></div></div>
+
+<p>Then</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo dd bs=1m if=path_of_your_image.img of=/dev/rdiskn conv=sync
+</code></pre></div></div>
+
+<p>where n is the number of disk which I found from the first step.</p>
+
+<p>If you get “resource is busy” error, then run the following</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil unmountDisk /dev/diskn
+</code></pre></div></div>
+
+<h2 id="carry-out-necessary-configuration-updates">Carry Out Necessary Configuration Updates</h2>
+<p>It’s a good practice to change the default passwords so I ran</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>passwd
+</code></pre></div></div>
+
+<p>and updated the password.</p>
+
+<p>Also for remote installations I enabled SSH:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable ssh
+sudo systemctl start ssh
+</code></pre></div></div>
+
+<p>And I like to give a specific name to all my devices so that I can keep an eye on the machines connected to my network more easily.</p>
+
+<p>To achieve that I ran:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo hostname NEW_HOSTNAME
+</code></pre></div></div>
+
+<p>No need to set a static IP address at this point as Pi Hole setup takes care of that:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pihole-static-ip-needed.png" alt="" /></p>
+
+<h2 id="install-pi-hole">Install Pi-Hole</h2>
+<p>There is an easy one-step installation:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -sSL https://install.pi-hole.net | bash
+</code></pre></div></div>
+
+<p>I changed my IP to a different static IP and rebooted the Pi.</p>
+
+<p>After that I could go to the admin page via http://{Pi Hole Static IP}/admin/ and see the dashboard:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pihole-admin-page.png" alt="" /></p>
+
+<h2 id="test">Test</h2>
+<p>Now it’s time to see if it’s working at all. I have 2 MacBooks connected to the same network. I changed one of the laptop’s DNS server to point to Pi Hole and left the other one intact.</p>
+
+<p>In the laptop that’s still using the old DNS settings, I opened a Chrome window in incognito mode and visited a site and at top it shows an ad:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pihole-page-with-ads.png" alt="" /></p>
+
+<p>And on the other laptop I repeated the process and I got the same page without ads this time:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pihole-page-without-ads.png" alt="" /></p>
+
+<p>When I go to the admin page I can see what calls are blocked:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pi-hole-admin-page-with-results.png" alt="" /></p>
+
+<p>Also a nice thing about it you can choose to Whitelist certain providers. For instance in the image below it looks like Google Analytics is blocked and I can whitelist it easily:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pi-hole-admin-page-query-logs.png" alt="" /></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://pi-hole.net/">Official Pi-Hole Website</a></li>
+  <li><a href="https://www.hanselman.com/blog/BlockingAdsBeforeTheyEnterYourHouseAtTheDNSLevelWithPiholeAndACheapRaspberryPi.aspx">Scott Hanselman: Blocking ads before they enter your house at the DNS level with pi-hole and a cheap Raspberry Pi</a></li>
+  <li><a href="https://blog.codinghorror.com/an-exercise-program-for-the-fat-web/">Jeff Atwood: An Exercise Program for the Fat Web</a></li>
+  <li><a href="https://twit.tv/shows/know-how/episodes/355">TWiT Know How Episode 355: Raspberry Pi-Hole!</a></li>
+  <li><a href="https://hub.docker.com/r/pihole/pihole/">Docker Pi-hole DockerHub repository</a></li>
+  <li><a href="https://discourse.pi-hole.net/">Pi-Hole Forum</a></li>
+</ul>
+]]></content>
+  </entry>
+  
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Exploring AWS DeepLens]]></title>
+    <link href="https://volkanpaksoy.com/archive/2019/08/21/Exploring-AWS-DeepLens/"/>
+    <updated>2019-08-21T06:00:00+01:00</updated>
+    <id>https://volkanpaksoy.com/archive/2019/08/21/Exploring-AWS-DeepLens</id>
+    <content type="html"><![CDATA[<p>I recently bought this device in anticipation of getting accustomed with AWS Machine Learning services. I thought it would be a nice and fun introduction to build a DIY project using ML. This weekend I had a chance to play around with it.</p>
+
+<h2 id="unboxing">Unboxing</h2>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-unboxing-1.jpeg" alt="" /></p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-unboxing-2.jpeg" alt="" /></p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-unboxing-3.jpeg" alt="" /></p>
+
+<h2 id="registering">Registering</h2>
+
+<p>First thing you need to do is register your DeepLens which can be done <a href="https://docs.aws.amazon.com/deeplens/latest/dg/deeplens-getting-started-register.html">here</a></p>
+
+<p>Alternatively, you can log in to AWS Console, go to AWS DeepLens service and click Register Device. As of this writing this service is only available in Tokyo, N.Virginia and Frankfurt. As closest to me is Frankfurt I chose that one.</p>
+
+<h2 id="creating-a-project">Creating a Project</h2>
+
+<p>Now that the devices is ready, I went to Projects section and created a new project based on a template. For this initial exploration mission I chose Bird Classification template.</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-project-templates.png" alt="" /></p>
+
+<p>When you choose your template it shows a description of the template and how it works</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-project-overview.png" alt="" /></p>
+
+<p>Once you create the project it creates the necessary resources. For example in my template it created 2 Lambda functions:</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-lambda.png" alt="" /></p>
+
+<p>Now we are ready to deploy the project to the device so we can simply click on Deploy to Device button on top right-hand corner in the project page:</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-deploy-to-device.png" alt="" /></p>
+
+<p>After that you choose your DeepLens from the avialble device list (in my case I had one device) and click Review then Deploy</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-deploy-review.png" alt="" /></p>
+
+<h2 id="testing-the-project">Testing the project</h2>
+
+<p>First I followed the steps to install custom certificate so that I can start viewing the video feed in my browser:</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-video-feed-1.png" alt="" /></p>
+
+<p>Because DeepLens doesn’t know if there’s a bird or not in the picture it constantly makes a guess. Even an empty carton box looks like a Long Tailed Jaeger with 2.1% confidence apparently!</p>
+
+<p>When I presented an image I found from the Internet the results significantly improved though (thankfully, otherwise this would all be for nothing!)</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-video-feed-2.png" alt="" /></p>
+
+<p>According to Google the bird in the picture is indeed a Kingfisher.</p>
+
+<p>Next test is the bird I saw on the roof and identified as a Mallard. Let’s see what DeepLens thinks about it:</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-video-feed-3.png" alt="" /></p>
+
+<p>So with 17.5% confidens DeepLenms agrees that it is a Mallard. One thing to note is that the angle of the image significantly changes the prediction. Even a slight change in the angle makes the prediction shift from 3% to 45%. But it’s just a test project template anyway so I’m not looking for too much accuracy at this point.</p>
+
+<p>Final test: I downloaded the dataset used to train the algorithm. It’s a 1.1GB download full of images. To compare with the last Mallard test I got one picture from the Mallard folder and showed it to DeepLens:</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-video-feed-4.png" alt="" /></p>
+
+<p>As shown above the confidence increased to 55%. So probably if I use the pictures I took to train the algorithm I would be able to get much better results.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>This was just a first step to set up and explore the device. Hopefully in the comin days I’ll be doing more meaningful projects with it and post those too.</p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="https://aws.amazon.com/deeplens/">AWS DeepLens Site</a></li>
+  <li><a href="https://aws.amazon.com/blogs/aws/aws-deeplens-now-orderable-in-seven-additional-countries">AWS DeepLens – Now Orderable in Seven Additional Countries</a></li>
+  <li><a href="http://www.vision.caltech.edu/visipedia/CUB-200-2011.html">Caltech-UCSD Birds-200-2011</a></li>
+</ul>
+]]></content>
+  </entry>
+  
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Implementing a Self-Hosted Docker Registry on Raspberry Pi]]></title>
+    <link href="https://volkanpaksoy.com/archive/2019/08/10/Implementing-a-Self-Hosted-Docker-Registry-on-Raspberry-Pi/"/>
+    <updated>2019-08-10T05:00:00+01:00</updated>
+    <id>https://volkanpaksoy.com/archive/2019/08/10/Implementing-a-Self-Hosted Docker-Registry-on-Raspberry-Pi</id>
+    <content type="html"><![CDATA[<p>Working with Docker is great but when you want to deploy your applications to another server you need a registry to push your images so that you can pull them from the other end. To have that capability in my dev environment I decided to setup my own self-hosted Docker registry.</p>
+
+<p>For the sake of brevity, I will omit creating Raspberry Pi SD Card and installing Docker on it. There are lots of gret videos and articles out there already.</p>
+
+<h2 id="self-hosted-vs-hosted">Self-hosted vs Hosted</h2>
+<p>When it comes to hosted Docker registries, there are lots of free and paid options.</p>
+
+<p><strong>Benefits of self-hosted registry:</strong></p>
+
+<ul>
+  <li>See the storage size and number of repos required for your system early on without having to pay anything</li>
+  <li>Push/pull images on the go without Internet connection during development phase</li>
+  <li>No privacy concerns: If you upload your image with your application in it you may have some sensitive data inside the image which may pose a risk if the 3rd party registry has full access to them</li>
+  <li>Free!</li>
+</ul>
+
+<p><strong>Benefits of hosted registry:</strong></p>
+
+<ul>
+  <li>Hassle-free: No backups or server management</li>
+</ul>
+
+<p>There are great Docker registries such as Docker Hub and Amazon ECR. I wouldn’t recommend usign a self-hosted registry for production. But if the price or privacy is a concern it can certainly be an option.</p>
+
+<h2 id="creating-self-hosted-registry">Creating Self-Hosted Registry</h2>
+<p>It sounds like it requires installing a server application but the nice thing about Docker is, even it is a Docker registry it can run in a container itself. So first off we pull the registry repo for Docker Hub:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull registry
+</code></pre></div></div>
+
+<p>Now let’s create a container that will act as our registry:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d -p 5000:5000 --restart always --name registry registry
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-repo-list-before.png" alt="" /></p>
+
+<p>In my case the hostname of the Raspbeery Pi is</p>
+
+<p>Now to test how we can push and pull images let’s download Docker’s hello-world image from Docker Hub:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull hello-world
+</code></pre></div></div>
+
+<p>Now to push this inot our own registry running in Raspbeery Pi all we have to do is tag it with the server URL such as:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker tag hello-world HOBBITON.local:5000/hello-world
+</code></pre></div></div>
+
+<p>At this point if we take look at the images on our local machine we can see the hello-world image is duplicated.</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-registry-tagged-image.png" alt="" /></p>
+
+<p>Now let’s push it to Pi:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker push HOBBITON.local:5000/hello-world
+</code></pre></div></div>
+
+<p>This doesn’t work because of the following reason:</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-push-failed.png" alt="" /></p>
+
+<p>This is because the reigstry is considered to be insecure and by default it’s rejected by the client. We can confirm it’s deemed to be insecure if we check the server by running the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker info
+</code></pre></div></div>
+
+<p>At the bottom of the bottom we can see the localhost registry is insecure:</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-info-insecure-registry.png" alt="" /></p>
+
+<p>To address this we can add this registry to the list of insecure registries. For example in a Mac client we add go to Preferences –&gt; Daemon and add the Raspberry Pi registry as shown below:</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-add-insecure-registry.png" alt="" /></p>
+
+<p>After this, if we try once again to push to Pi we can see it succeded:</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-push-to-pi-successful.png" alt="" /></p>
+
+<p>If you’re pulling from a client without a user interface, another Raspberry Pi for example, try the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo nano  /etc/docker/daemon.json
+</code></pre></div></div>
+
+<p>and add the following (with the correct registry name):</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w"> </span><span class="s2">"insecure-registries"</span><span class="p">:[</span><span class="s2">"myregistry.example.com:5000"</span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>and restart Docker:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo service docker restart
+</code></pre></div></div>
+
+<p>Now if we check the repository list on the registry again we can see the hello-world image hosted on our Pi:</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-repo-list-after.png" alt="" /></p>
+
+<p>Let’s now see if we can pull this image from another client.</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-pull.png" alt="" /></p>
+
+<p>And after pulling the image we can see it in the image list:</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-list-on-puller.png" alt="" /></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.pluralsight.com/courses/implementing-self-hosted-docker-registry">Pluralsight course: Implementing a Self-hosted Docker Registry</a></li>
+  <li><a href="https://hub.docker.com/_/registry">Docker registry repo</a></li>
+</ul>
+]]></content>
+  </entry>
+  
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Elasticsearch Workout]]></title>
+    <link href="https://volkanpaksoy.com/archive/2019/07/05/ElasticSearch-Workout/"/>
+    <updated>2019-07-05T05:00:00+01:00</updated>
+    <id>https://volkanpaksoy.com/archive/2019/07/05/ElasticSearch-Workout</id>
+    <content type="html"><![CDATA[<p><img src="/images/vpblogimg/2019/07/logo-elastic-elasticsearch-lt.svg" alt="" /></p>
+
+<p>I’ve been playing around with Elasticsearch on several occasions. This post is to organize those thoughts and experiences and show an easy way to setup ElasticSearch and start playing around with it.</p>
+
+<h2 id="setup">Setup</h2>
+<p>Easiest way to setup Elasticsearch locally is using Docker. As of this writing the latest version of Elasticsearch is 7.2.0 and I’ll be using that in this example:</p>
+
+<p>If you don’t already have the image, simply pull from Docker hub:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+</code></pre></div></div>
+
+<p>For development environment suggested command to run a container is</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+</code></pre></div></div>
+
+<p>which keeps it very simple and straightforward but in my workout I’d like to insert a whole bunch of data and run some queries on it and I don’t want to re-generate my data over and over again. So I decided to persist my data on host.</p>
+
+<h3 id="persisting-elasticsearch-data">Persisting Elasticsearch Data</h3>
+<p>Instead of running containers one by one in the command line a better approach is to create a docker-compose.yml file file and use Docker compose to start services. I used the sample YAML file provided in official Elastic <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html">documentation</a></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '2.2'
+services:
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    container_name: es01
+    environment:
+      - node.name=es01
+      - discovery.seed_hosts=es02
+      - cluster.initial_master_nodes=es01,es02
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - esnet
+  es02:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    container_name: es02
+    environment:
+      - node.name=es02
+      - discovery.seed_hosts=es01
+      - cluster.initial_master_nodes=es01,es02
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata02:/usr/share/elasticsearch/data
+    networks:
+      - esnet
+
+volumes:
+  esdata01:
+    driver: local
+  esdata02:
+    driver: local
+
+networks:
+  esnet:
+</code></pre></div></div>
+
+<p>This example creates an Elasticsearch cluster with 2 nodes and uses named volumes to persist data so next time when we bring this cluster up again we should be able to continue where we left off data-wise.</p>
+
+<h2 id="sample-application">Sample Application</h2>
+<p>In <a href="https://volkanpaksoy.com/archive/2019/06/27/Generating-Test-Data-with-Bogus/">my previous blog post</a> I developed a simple test data generator to generate fake bank statement data with a library called Bogus. In this project, I will use that generator to generate lots and lots of test data, insert them into Elasticsearch and have fun with it!</p>
+
+<p>When you start a C# project and start looking for a library to interact with Elasticsearch, it’s a bit confusing to find out there are actually two of them: Elasticsearch.net and NEST. The gist of it is NEST is a high-level library that uses Elasticsearch.net under the hood. It also exposes low-level client so that it actually enhances Elasticsearch.net and allows using strongly typed DSL queries. In the sample application I used NEST.</p>
+
+<h3 id="creating-elasticsearch-client">Creating Elasticsearch client</h3>
+<p>Creating a client with some basic settings is straightforward:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">connectionSettings</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ConnectionSettings</span><span class="p">(</span><span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="s">"http://localhost:9200"</span><span class="p">)))</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">settings</span> <span class="p">=</span> <span class="n">connectionSettings</span>
+        <span class="p">.</span><span class="nf">DefaultIndex</span><span class="p">(</span><span class="s">"bankstatementindex"</span><span class="p">)</span>
+        <span class="p">.</span><span class="nf">ThrowExceptions</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+	<span class="n">IElasticClient</span> <span class="n">elasticClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ElasticClient</span><span class="p">(</span><span class="n">settings</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="indexing-data">Indexing data</h3>
+<p>To index a single document **IndexDocument<T>** method can be called. However, using this method to loop through a large number of documents is not recommended.</T></p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">elasticClient</span><span class="p">.</span><span class="n">IndexDocument</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;(</span><span class="n">testData</span><span class="p">.</span><span class="nf">First</span><span class="p">());</span>
+</code></pre></div></div>
+
+<p>For multiple documents, <strong>IndexMany</strong> method should be called. If the data size too large then using <strong>BulkAll</strong> method and <strong>BulkAllObservable</strong> helper is recommended.</p>
+
+<p>To see the difference I created a test to index 5,000 documents with a looping over the array and using BulkAll after that. Looping over the collection took around 26 seconds whereas bulk index took only 1.2 seconds as shown in the screenshot.</p>
+
+<p><img src="/images/vpblogimg/2019/07/indexdocument-vs-bulkall.png" alt="" /></p>
+
+<p>Also it displays “Done” 5 times because I set the size to 1,000 and I requested 5,000 documents to be indexed so it automatically divided the load into 5 and made 5 calls:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">bulkAll</span> <span class="p">=</span> <span class="n">elasticClient</span><span class="p">.</span><span class="nf">BulkAll</span><span class="p">(</span><span class="n">testData</span><span class="p">,</span> <span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span>
+                <span class="p">.</span><span class="nf">BackOffRetries</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+                <span class="p">.</span><span class="nf">BackOffTime</span><span class="p">(</span><span class="s">"30s"</span><span class="p">)</span>
+                <span class="p">.</span><span class="nf">RefreshOnCompleted</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
+                <span class="p">.</span><span class="nf">MaxDegreeOfParallelism</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
+                <span class="p">.</span><span class="nf">Size</span><span class="p">(</span><span class="m">1000</span><span class="p">));</span>
+
+<span class="n">bulkAll</span><span class="p">.</span><span class="nf">Wait</span><span class="p">(</span><span class="n">TimeSpan</span><span class="p">.</span><span class="nf">FromSeconds</span><span class="p">(</span><span class="m">60</span><span class="p">),</span>
+    <span class="n">onNext</span><span class="p">:</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="n">Console</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="s">"Done"</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<p>Same result can also be achieved by subscribing to BulkAll observer:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">waitHandle</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CountdownEvent</span><span class="p">(</span><span class="m">1</span><span class="p">);</span>
+
+<span class="n">bulkAll</span><span class="p">.</span><span class="nf">Subscribe</span><span class="p">(</span><span class="k">new</span> <span class="nf">BulkAllObserver</span><span class="p">(</span>
+    <span class="n">onNext</span><span class="p">:</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="n">Console</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="s">"."</span><span class="p">);</span> <span class="p">},</span>
+    <span class="n">onError</span><span class="p">:</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="k">throw</span> <span class="n">e</span><span class="p">;</span> <span class="p">},</span>
+    <span class="n">onCompleted</span><span class="p">:</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="n">waitHandle</span><span class="p">.</span><span class="nf">Signal</span><span class="p">()</span>
+<span class="p">));</span>
+
+<span class="n">waitHandle</span><span class="p">.</span><span class="nf">Wait</span><span class="p">();</span>
+</code></pre></div></div>
+
+<h3 id="showing-progress">Showing progress</h3>
+<p>In the sample code below I showed displaying progress using onNext action delegate:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var testData = dataGen.Generate(statementConfig.StartDate, statementConfig.EndDate, statementConfig.OpeningBalance, statementConfig.DebitTransactionRatio, statementConfig.TransactionDateInterval, statementConfig.NumberOfStatementLines);
+var cancellationToken = new CancellationToken();
+var batchSize = 250;
+var bulkAll = elasticClient.BulkAll(testData, x =&gt; x
+    .BackOffRetries(2)
+    .BackOffTime("30s")
+    .RefreshOnCompleted(true)
+    .MaxDegreeOfParallelism(4)
+    .Size(batchSize), cancellationToken);
+var totalIndexed = 0;
+var stopWatch = new Stopwatch();
+stopWatch.Start();
+bulkAll.Wait(TimeSpan.FromSeconds(60),
+    onNext: (b) =&gt;
+    {
+        totalIndexed += batchSize;
+        Console.WriteLine($"Total indexed documents: {totalIndexed}");
+    }
+);
+</code></pre></div></div>
+
+<p>and the output looked like this:</p>
+
+<p><img src="/images/vpblogimg/2019/07/bulkall-parallel-threads.png" alt="" /></p>
+
+<p>Even though the numbers seem a bit wonky I think it’s a good example to illustrate the multi-threaded nature of BulkAll. Because I set the maximum degree of paralleism to 4 and first 1,000 were inserted in a mixed order suggesting that they were running in parallel.</p>
+
+<h3 id="cancellation-with-bulk-operations">Cancellation with bulk operations</h3>
+<p>BulkAll observer can also be cancelled for longer processes if necessary. The code excerpt below shows the relevant pieces to cancellation</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">cancellationTokenSource</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CancellationTokenSource</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">cancellationToken</span> <span class="p">=</span> <span class="n">cancellationTokenSource</span><span class="p">.</span><span class="n">Token</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">batchSize</span> <span class="p">=</span> <span class="m">250</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">bulkAll</span> <span class="p">=</span> <span class="n">elasticClient</span><span class="p">.</span><span class="nf">BulkAll</span><span class="p">(</span><span class="n">testData</span><span class="p">,</span> <span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span>
+    <span class="p">.</span><span class="nf">BackOffRetries</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">BackOffTime</span><span class="p">(</span><span class="s">"30s"</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">RefreshOnCompleted</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">MaxDegreeOfParallelism</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">Size</span><span class="p">(</span><span class="n">batchSize</span><span class="p">),</span> <span class="n">cancellationToken</span><span class="p">);</span>
+<span class="kt">var</span> <span class="n">totalIndexed</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">stopWatch</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Stopwatch</span><span class="p">();</span>
+<span class="n">stopWatch</span><span class="p">.</span><span class="nf">Start</span><span class="p">();</span>
+<span class="n">Task</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="nf">StartNew</span><span class="p">(()</span> <span class="p">=&gt;</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Started monitor thread"</span><span class="p">);</span>
+        <span class="kt">var</span> <span class="n">cancelled</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(!</span><span class="n">cancelled</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">stopWatch</span><span class="p">.</span><span class="n">Elapsed</span> <span class="p">&gt;=</span> <span class="n">TimeSpan</span><span class="p">.</span><span class="nf">FromSeconds</span><span class="p">(</span><span class="m">60</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">cancellationToken</span><span class="p">.</span><span class="n">CanBeCanceled</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Cancelling. Elapsed time: </span><span class="p">{</span><span class="n">stopWatch</span><span class="p">.</span><span class="n">Elapsed</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(</span><span class="s">"mm\\:ss\\.ff"</span><span class="p">)}</span><span class="s">"</span><span class="p">);</span>
+                    <span class="n">cancellationTokenSource</span><span class="p">.</span><span class="nf">Cancel</span><span class="p">();</span>
+                    <span class="n">cancelled</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="n">Thread</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="m">100</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">);</span>
+
+<span class="k">try</span>
+<span class="p">{</span>
+    <span class="n">bulkAll</span><span class="p">.</span><span class="nf">Wait</span><span class="p">(</span><span class="n">TimeSpan</span><span class="p">.</span><span class="nf">FromSeconds</span><span class="p">(</span><span class="m">60</span><span class="p">),</span>
+        <span class="n">onNext</span><span class="p">:</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">=&gt;</span>
+        <span class="p">{</span>
+            <span class="n">totalIndexed</span> <span class="p">+=</span> <span class="n">batchSize</span><span class="p">;</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Total indexed documents: </span><span class="p">{</span><span class="n">totalIndexed</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">);</span>
+<span class="p">}</span>
+<span class="k">catch</span> <span class="p">(</span><span class="n">OperationCanceledException</span> <span class="n">e</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Taking longer than allowed. Cancelled."</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="querying-data">Querying Data</h3>
+<p>Querying data can be done by calling Search method of ElasticsearchClient. Here’s a few examples below. There are more in the sample accompanying source code:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Get the first 100 documents</span>
+<span class="kt">var</span> <span class="n">searchResponse</span> <span class="p">=</span> <span class="n">elasticClient</span><span class="p">.</span><span class="n">Search</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;(</span><span class="n">s</span> <span class="p">=&gt;</span> <span class="n">s</span>
+    <span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="n">q</span> <span class="p">=&gt;</span> <span class="n">q</span>
+        <span class="p">.</span><span class="nf">MatchAll</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="p">.</span><span class="nf">Size</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Get transactions with date between 01/01/2018 and 10/01/2018</span>
+<span class="kt">var</span> <span class="n">searchResponse</span> <span class="p">=</span> <span class="n">elasticClient</span><span class="p">.</span><span class="n">Search</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;(</span><span class="n">s</span> <span class="p">=&gt;</span> <span class="n">s</span>
+    <span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="n">q</span> <span class="p">=&gt;</span> <span class="n">q</span>
+        <span class="p">.</span><span class="nf">DateRange</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span>
+            <span class="p">.</span><span class="nf">Field</span><span class="p">(</span><span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">TransactionDate</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">GreaterThanOrEquals</span><span class="p">(</span><span class="k">new</span> <span class="nf">DateTime</span><span class="p">(</span><span class="m">2018</span><span class="p">,</span> <span class="m">01</span><span class="p">,</span> <span class="m">01</span><span class="p">))</span>
+            <span class="p">.</span><span class="nf">LessThanOrEquals</span><span class="p">(</span><span class="k">new</span> <span class="nf">DateTime</span><span class="p">(</span><span class="m">2018</span><span class="p">,</span> <span class="m">01</span><span class="p">,</span> <span class="m">10</span><span class="p">))</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="p">.</span><span class="nf">Size</span><span class="p">(</span><span class="m">10000</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<h3 id="deleting-data">Deleting data</h3>
+<p>For my tests I had to delete all frequently and it can be achieved by running the query below:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">elasticClient</span><span class="p">.</span><span class="n">DeleteByQuery</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;(</span><span class="n">del</span> <span class="p">=&gt;</span> <span class="n">del</span>
+    <span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="n">q</span> <span class="p">=&gt;</span> <span class="n">q</span><span class="p">.</span><span class="nf">QueryString</span><span class="p">(</span><span class="n">qs</span> <span class="p">=&gt;</span> <span class="n">qs</span><span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="s">"*"</span><span class="p">)))</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="source-code">Source Code</h2>
+<p></p>
+<div class="github-widget" data-repo="volkanpaksoy/lab"></div>
+
+<p>Sample application can be found under blog/ElasticsearchWorkout folder in the repository.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/ElasticsearchWorkout">Sample source code</a></li>
+  <li><a href="https://www.elastic.co/guide/en/elasticsearch/client/net-api/current/nest-getting-started.html">NEST Getting Started</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/06/27/Generating-Test-Data-with-Bogus/">Blog post: Generating Test Data with Bogus</a></li>
+  <li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.2/index.html">Elasticsearch Reference</a></li>
+  <li><a href="https://www.elastic.co/guide/en/elasticsearch/client/net-api/7.x/index.html">Elasticsearch.Net and NEST: the .NET clients 7.x</a></li>
+  <li><a href="https://www.elastic.co/blog/a-practical-introduction-to-elasticsearch">A Practical Introduction to Elasticsearch</a></li>
+  <li><a href="https://rimdev.io/bulk-import-documents-into-elasticsearch-using-nest/">Bulk Import Documents Into Elasticsearch Using NEST</a></li>
+</ul>
+]]></content>
+  </entry>
+  
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Generating Test Data with Bogus]]></title>
+    <link href="https://volkanpaksoy.com/archive/2019/06/27/Generating-Test-Data-with-Bogus/"/>
+    <updated>2019-06-27T07:00:00+01:00</updated>
+    <id>https://volkanpaksoy.com/archive/2019/06/27/Generating-Test-Data-with-Bogus</id>
+    <content type="html"><![CDATA[<p>Generating high-quality test data can have an impact on the accuracy of the tests overall. In this post I’ll show using a helpful C# library called <a href="https://github.com/bchavez/Bogus">Bogus</a></p>
+
+<h2 id="showcase-project-bank-statement-generator">Showcase project: Bank Statement Generator</h2>
+<p>In this example I’ll generate fake bank statements. Normally they come in CSV files and have the following model:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">BankStatementLine</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="n">DateTime</span> <span class="n">TransactionDate</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">TransactionType</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">SortCode</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">AccountNumber</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">TransactionDescription</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">decimal</span><span class="p">?</span> <span class="n">DebitAmount</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">decimal</span><span class="p">?</span> <span class="n">CreditAmount</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">decimal</span> <span class="n">Balance</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>I’ll use Bogus to generate realistic fake statement lines and finally save it as a CSV and see if it looks real.</p>
+
+<h2 id="rules-and-restrictions">Rules and restrictions</h2>
+<p>I want the fields in the model above conform to certain set of rules to be realistic:</p>
+
+<ul>
+  <li>Transaction Date must be within a certain range I provide as bank statements are generated for a date range.</li>
+  <li>Dates should be incremental and not random</li>
+  <li>Sort Code must be in the following format: NN-NN-NN and must be the same for the entire statement.</li>
+  <li>Account number must be an 8-digit number and same for the entire statement.</li>
+  <li>Transaction Description must be free text</li>
+  <li>Debit Amount and Credit Amount must be decimal numbers but only one of them can be present at any given line</li>
+  <li>Transaction Type must be one of the pre-defined values and also some types can be for credit and some for debit only.</li>
+  <li>Balance should be sum of all debit and credit amounts plus the first balance in the statement. So this value is dependent on the values that come before it.</li>
+  <li>The number of lines in a statement should be random.</li>
+</ul>
+
+<h2 id="rule-implementations">Rule implementations</h2>
+<p>Some rules stated above are very straightforward and easy to implement. These are some samples of what Bogus is capable of. For the full documentation check out the GitHub repository.</p>
+
+<h3 id="date-range-support">Date range support</h3>
+<p>Generating a date between a range is simple:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">TransactionDate</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Date</span><span class="p">.</span><span class="nf">Between</span><span class="p">(</span><span class="n">startDate</span><span class="p">,</span> <span class="n">endDate</span><span class="p">))</span>
+</code></pre></div></div>
+
+<h3 id="enum-and-array-support">Enum and array support</h3>
+<p>For Transaction Type I want to select a random value from a list of set values. This can be done in 2 ways: By using an enum or an IEnumerable.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">transactionTypes</span> <span class="p">=</span> <span class="k">new</span><span class="p">[]</span> <span class="p">{</span> <span class="s">"FPO"</span><span class="p">,</span> <span class="s">"DEB"</span><span class="p">,</span> <span class="s">"DB"</span><span class="p">,</span> <span class="s">"FPI"</span> <span class="p">};</span>
+</code></pre></div></div>
+
+<p>and in the rule description it can be used as</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">TransactionType</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="nf">PickRandom</span><span class="p">(</span><span class="n">transactionTypes</span><span class="p">)</span> <span class="p">)</span>
+</code></pre></div></div>
+
+<p>Another way is using enums such as:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">enum</span> <span class="n">TransactionType</span>
+<span class="p">{</span>
+    <span class="n">FPO</span><span class="p">,</span>
+    <span class="n">DEB</span><span class="p">,</span>
+    <span class="n">DB</span><span class="p">,</span>
+    <span class="n">FPI</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>and the rule becomes:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">TransactionType</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">PickRandom</span><span class="p">&lt;</span><span class="n">TransactionType</span><span class="p">&gt;().</span><span class="nf">ToString</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>In my final implementation I used selecting from a list of objects. You can check out the <a href="https://github.com/volkanpaksoy/lab/tree/master/blog/GeneratingTestDataWithBogus">sample code</a> to see that version.</p>
+
+<h3 id="number-range">Number range</h3>
+<p>For the account number I need an 8-digit number which can be achieved with something like this rule:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">AccountNumber</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Long</span><span class="p">(</span><span class="m">100000000</span><span class="p">,</span> <span class="m">99999999</span><span class="p">).</span><span class="nf">ToString</span><span class="p">())</span>
+</code></pre></div></div>
+
+<p>Bogus API also has builtin support for account number so the following is a more elegant and expressive way of achieving the same:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">AccountNumber</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Finance</span><span class="p">.</span><span class="nf">Account</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h3 id="formatting-string">Formatting string</h3>
+<p>Formatting Sort Code can be achieved by Field.Random.Replace method</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">SortCode</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Replace</span><span class="p">(</span><span class="s">"##-##-##"</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>Similar to account number, it also has built-in support for sort code:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">SortCode</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Finance</span><span class="p">.</span><span class="nf">SortCode</span><span class="p">())</span>
+</code></pre></div></div>
+
+<h3 id="null-values">Null values</h3>
+<p>In my case in some fields I’d like to have null values too. This can be achieved by <em>OrNull</em> extension method. For example, in the code below it generates %20 of DebitAmount values null.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">DebitAmount</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Decimal</span><span class="p">(</span><span class="m">0.00</span><span class="n">m</span><span class="p">,</span> <span class="m">9999.00</span><span class="n">m</span><span class="p">).</span><span class="nf">OrNull</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="m">0.2f</span><span class="p">))</span>
+</code></pre></div></div>
+
+<h3 id="common-fields">Common fields</h3>
+<p>In my case some values in each statement line repeat throughout the entire statement such as account number and sort code. To achieve that I created a “base” statement line and every fake statement line used these shared fields instead of generating new ones.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">commonFields</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Faker</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;()</span>
+    <span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">AccountNumber</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Finance</span><span class="p">.</span><span class="nf">Account</span><span class="p">())</span>
+    <span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">SortCode</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Finance</span><span class="p">.</span><span class="nf">SortCode</span><span class="p">())</span>
+    <span class="p">.</span><span class="nf">Generate</span><span class="p">();</span>
+
+
+<span class="kt">var</span> <span class="n">fakeTransactions</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Faker</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;()</span>
+    <span class="p">.</span><span class="nf">StrictMode</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">AccountNumber</span><span class="p">,</span> <span class="n">commonFields</span><span class="p">.</span><span class="n">AccountNumber</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">SortCode</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">commonFields</span><span class="p">.</span><span class="n">SortCode</span><span class="p">)</span>
+	<span class="p">...</span>
+	<span class="p">...</span>
+</code></pre></div></div>
+
+<h3 id="random-number-of-objects">Random number of objects</h3>
+<p>It’s more realistic to have varying number of lines in statements. With Generate method you can specify the exact number of items you want to generate which is good for unit tests. For my purposes I just wanted to create random of rows in each statement as I only needed the data to be imported. This can be achieved by GenerateBetween:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">statementLines</span> <span class="p">=</span> <span class="n">fakeTransactions</span><span class="p">.</span><span class="nf">GenerateBetween</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">20</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h3 id="dependent-values">Dependent values</h3>
+<p>The tricky part in this scenario was the dependent values. Normally when you use RuleFor extension method it generates the value for that field alone in isolation. In my case, one restriction was Debit Amount and Credit Amount could not both have values in the same line. Also Balance depends on these values and needs to be calculated in each line.</p>
+
+<p>As far as I can tell there’s no built-in support to define these dependencies. Based on my tests I was able to achieve this in 2 ways</p>
+
+<ol>
+  <li>Update the values accordingly in <strong>FinishWith</strong> extension method</li>
+  <li>Use <strong>Rules</strong> extension method to define multiple rules at once and implement the restrictions inside it.</li>
+</ol>
+
+<p>I think the latter is a better solution as FinishWith sounds more like clean up, logging or similar extra activity where Rules sound more like actual business logic implementation.</p>
+
+<p>So with that in mind my rules for Debit Amount, Credit Amount and Balance fields looked like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">Rules</span><span class="p">((</span><span class="n">f</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">debitAmount</span> <span class="p">=</span> <span class="p">(</span><span class="kt">decimal</span><span class="p">?)</span><span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Decimal</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">100</span><span class="p">).</span><span class="nf">OrNull</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="m">1.0f</span> <span class="p">-</span> <span class="n">statementconfig</span><span class="p">.</span><span class="n">DebitTransactionRatio</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">debitAmount</span><span class="p">.</span><span class="n">HasValue</span><span class="p">)</span> <span class="c1">// Is it a debit transaction?</span>
+    <span class="p">{</span>
+        <span class="n">x</span><span class="p">.</span><span class="n">CreditAmount</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+        <span class="n">x</span><span class="p">.</span><span class="n">DebitAmount</span> <span class="p">=</span> <span class="n">debitAmount</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span>
+        <span class="n">balance</span> <span class="p">-=</span> <span class="n">x</span><span class="p">.</span><span class="n">DebitAmount</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span>
+
+        <span class="n">x</span><span class="p">.</span><span class="n">TransactionType</span> <span class="p">=</span> <span class="n">f</span><span class="p">.</span><span class="nf">PickRandom</span><span class="p">(</span><span class="n">TransactionType</span><span class="p">.</span><span class="n">AllTransactionTypes</span>
+            <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">tt</span> <span class="p">=&gt;</span> <span class="n">tt</span><span class="p">.</span><span class="n">Direction</span> <span class="p">==</span> <span class="n">TransactionDirection</span><span class="p">.</span><span class="n">Debit</span> <span class="p">||</span> <span class="n">tt</span><span class="p">.</span><span class="n">Direction</span> <span class="p">==</span> <span class="n">TransactionDirection</span><span class="p">.</span><span class="n">DebitOrCredit</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">tt</span> <span class="p">=&gt;</span> <span class="n">tt</span><span class="p">.</span><span class="n">Code</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">creditAmount</span> <span class="p">=</span> <span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Decimal</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">100</span><span class="p">);</span>
+        <span class="n">x</span><span class="p">.</span><span class="n">DebitAmount</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+        <span class="n">x</span><span class="p">.</span><span class="n">CreditAmount</span> <span class="p">=</span> <span class="n">creditAmount</span><span class="p">;</span>
+
+        <span class="n">balance</span> <span class="p">+=</span> <span class="n">x</span><span class="p">.</span><span class="n">CreditAmount</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span>
+
+        <span class="n">x</span><span class="p">.</span><span class="n">TransactionType</span> <span class="p">=</span> <span class="n">f</span><span class="p">.</span><span class="nf">PickRandom</span><span class="p">(</span><span class="n">TransactionType</span><span class="p">.</span><span class="n">AllTransactionTypes</span>
+            <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">tt</span> <span class="p">=&gt;</span> <span class="n">tt</span><span class="p">.</span><span class="n">Direction</span> <span class="p">==</span> <span class="n">TransactionDirection</span><span class="p">.</span><span class="n">Credit</span> <span class="p">||</span> <span class="n">tt</span><span class="p">.</span><span class="n">Direction</span> <span class="p">==</span> <span class="n">TransactionDirection</span><span class="p">.</span><span class="n">DebitOrCredit</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">tt</span> <span class="p">=&gt;</span> <span class="n">tt</span><span class="p">.</span><span class="n">Code</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="n">x</span><span class="p">.</span><span class="n">Balance</span> <span class="p">=</span> <span class="n">balance</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>A caveat with this approach is that I cannot use <strong>StrictMode</strong> anymore as it complains about those 3 fields having null values. It specifically mentions that in the exception. If you use Rules you’re on your own to ensure that all fields are populated properly.</p>
+
+<p>Another drawback of setting multiple rules at once is that it can easily make the code harder to read. Fortunately for me, the author of the library <a href="https://bchavez.bitarmory.com/">Brian Chavez</a> kindly reviewed the code and suggested some refactorings one of which proved it was still possible to use <strong>RuleFor</strong> method and strict mode. I’ve updated the final source code with these refactorings. So with individual rules the implementation looks like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">DebitAmount</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="kt">decimal</span><span class="p">?)</span><span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Decimal</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">100</span><span class="p">).</span><span class="nf">OrNull</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="m">1.0f</span> <span class="p">-</span> <span class="n">statementconfig</span><span class="p">.</span><span class="n">DebitTransactionRatio</span><span class="p">);</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">CreditAmount</span><span class="p">,</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">.</span><span class="nf">IsCredit</span><span class="p">()</span> <span class="p">?</span> <span class="p">(</span><span class="kt">decimal</span><span class="p">?)</span><span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Decimal</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">100</span><span class="p">)</span> <span class="p">:</span> <span class="k">null</span><span class="p">;</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">TransactionType</span><span class="p">,</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="nf">IsCredit</span><span class="p">())</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">RandomTxCode</span><span class="p">(</span><span class="n">TransactionDirection</span><span class="p">.</span><span class="n">Credit</span><span class="p">);</span> <span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">RandomTxCode</span><span class="p">(</span><span class="n">TransactionDirection</span><span class="p">.</span><span class="n">Debit</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">string</span> <span class="nf">RandomTxCode</span><span class="p">(</span><span class="n">TransactionDirection</span> <span class="n">direction</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">.</span><span class="nf">PickRandom</span><span class="p">(</span><span class="n">TransactionType</span><span class="p">.</span><span class="n">AllTransactionTypes</span>
+            <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">tt</span> <span class="p">=&gt;</span> <span class="n">tt</span><span class="p">.</span><span class="n">Direction</span> <span class="p">==</span> <span class="n">direction</span> <span class="p">||</span> <span class="n">tt</span><span class="p">.</span><span class="n">Direction</span> <span class="p">==</span> <span class="n">TransactionDirection</span><span class="p">.</span><span class="n">DebitOrCredit</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">tt</span> <span class="p">=&gt;</span> <span class="n">tt</span><span class="p">.</span><span class="n">Code</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Balance</span><span class="p">,</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="nf">IsCredit</span><span class="p">())</span>
+        <span class="n">balance</span> <span class="p">+=</span> <span class="n">x</span><span class="p">.</span><span class="n">CreditAmount</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="n">balance</span> <span class="p">-=</span> <span class="n">x</span><span class="p">.</span><span class="n">DebitAmount</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">balance</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>IsDebit and IsCredit methods referred to above are extension methods defined like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">static</span> <span class="k">class</span> <span class="nc">Extensions</span>
+<span class="p">{</span>
+   <span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="nf">IsCredit</span><span class="p">(</span><span class="k">this</span> <span class="n">BankStatementLine</span> <span class="n">bsl</span><span class="p">)</span>
+   <span class="p">{</span>
+      <span class="k">return</span> <span class="n">bsl</span><span class="p">.</span><span class="n">DebitAmount</span> <span class="k">is</span> <span class="k">null</span><span class="p">;</span>
+   <span class="p">}</span>
+   <span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="nf">IsDebit</span><span class="p">(</span><span class="k">this</span> <span class="n">BankStatementLine</span> <span class="n">bsl</span><span class="p">)</span>
+   <span class="p">{</span>
+      <span class="k">return</span> <span class="p">!</span><span class="nf">IsCredit</span><span class="p">(</span><span class="n">bsl</span><span class="p">);</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="random-text">Random text</h3>
+<p>For the transaction description for now I’ll go with random Lorem Ipsum texts. Bogus has support for this too</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">TransactionDescription</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Lorem</span><span class="p">.</span><span class="nf">Sentence</span><span class="p">(</span><span class="m">3</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>I probably will need to use a fixed list of descriptions soon but for the time being it’s fine. Also as shown below it’s very easy to switch to that too.</p>
+
+<h3 id="incremental-values">Incremental values</h3>
+<p>Similar to balance being dependent on the previous values, transaction date is also dependent as it needs to go in an incremental fashion. I couldn’t find built-in support for this so implemented it using my own shared variable like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">TransactionDate</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="n">lastDate</span> <span class="p">=</span> <span class="n">lastDate</span><span class="p">.</span><span class="nf">AddDays</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Double</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">statementconfig</span><span class="p">.</span><span class="n">TransactionDateInterval</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">lastDate</span><span class="p">.</span><span class="n">Date</span> <span class="p">&gt;</span> <span class="n">statementconfig</span><span class="p">.</span><span class="n">EndDate</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">lastDate</span> <span class="p">=</span> <span class="n">statementconfig</span><span class="p">.</span><span class="n">EndDate</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">lastDate</span><span class="p">;</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<h2 id="putting-it-all-together">Putting It All Together</h2>
+<p>So let’s see the output with the help of another nice library called <a href="https://github.com/khalidabuhakmeh/ConsoleTables">Console Tables</a></p>
+
+<p><img src="/images/vpblogimg/2019/06/generating-test-data-with-bogus-output.png" alt="" /></p>
+
+<h2 id="source-code">Source Code</h2>
+<p></p>
+<div class="github-widget" data-repo="volkanpaksoy/lab"></div>
+
+<p>Sample application can be found under blog/GeneratingTestDataWithBogus folder in the repository.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/bchavez/Bogus">Bogus GitHub repository</a></li>
+  <li><a href="https://github.com/khalidabuhakmeh/ConsoleTables">Console Tables repository</a></li>
+  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/GeneratingTestDataWithBogus">Sample source code</a></li>
+  <li><a href="https://bchavez.bitarmory.com/">Author Brian Chavez’s website</a></li>
+</ul>
+]]></content>
+  </entry>
+  
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Docker in Depth]]></title>
+    <link href="https://volkanpaksoy.com/archive/2019/06/10/Docker-in-Depth/"/>
+    <updated>2019-06-10T07:00:00+01:00</updated>
+    <id>https://volkanpaksoy.com/archive/2019/06/10/Docker-in-Depth</id>
+    <content type="html"><![CDATA[<p>In this post I’d like to cover a wider variery of Docker commands and features. My goal is to be able to use it as a quick reference while working with Docker without duplicating the official documentation. It consists of the notes I took at various times.</p>
+
+<h2 id="docker-commands">Docker commands</h2>
+
+<ul>
+  <li><strong>docker ps</strong>: Shows the list of running containers</li>
+  <li><strong>docker ps -a</strong>: Shows all containers including the stopped ones</li>
+  <li><strong>docker images</strong>: Shows the list of local images</li>
+  <li>
+    <p><strong>docker inspect {container id}</strong>: Gets information about the container. It can be filtered by providing –format flag.</p>
+
+    <p>Example:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    Command: docker inspect --format="{{ .Image }}" abcdabcdabcd
+	
+  Output: sha256:abcdabcdabcdabcdabcdabcd.....
+</code></pre></div>    </div>
+
+    <p>The data is in JSON format so it can be filtered by piping to <a href="https://stedolan.github.io/jq/">jq</a>.</p>
+
+    <p>Example:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  docker inspect 7c1297c30159 | jq -r '.[0].Path'
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>docker rm {container id or name}</strong>: Deletes the container</p>
+
+    <p>run command accepts –rm parameter which deletes the container right after it finishes.</p>
+
+    <p>To delete all the containers the following command can be used:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  docker rm $(docker ps -aq) 
+</code></pre></div>    </div>
+
+    <p>where docker ps -aq only returns the container ids.</p>
+  </li>
+  <li>
+    <p><strong>docker rmi {image id or name}</strong>: Seletes the image (provided that there are no containers created off that image)</p>
+
+    <p>To delete all images the following command can be used:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  docker rmi $(docker images -q)
+</code></pre></div>    </div>
+
+    <p>This command is equivalent of</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  docker image rm {image name or id}
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>docker build</strong>: Creates a new image from Dockerfile</p>
+
+    <p>It is equivalent of</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  docker image build ...
+</code></pre></div>    </div>
+
+    <p>It can be used to build images straight from GitHub:</p>
+
+    <p>Example:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  docker build https://github.com/docker/rootfs.git#container:docker
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>docker history {image name}</strong>: Shows the history of an image</p>
+  </li>
+  <li>
+    <p><strong>docker run -it {image name} bash</strong>: Runs a container in interactive mode with bash shell</p>
+
+    <p>Same as:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  docker container run -it ...
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>docker start/stop</strong>: Starts/stops an existing container</p>
+
+    <p>If a command is specified the first time the container was run, then it uses the same command when it’s started.</p>
+
+    <p>Example:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  docker run -it {image name} bash
+</code></pre></div>    </div>
+
+    <p>This creates a container in interactive mode</p>
+
+    <p>We can exit the container by running exit in the terminal (leaving the container running in the background) ???? (or Ctrl P+Q??). We can then stop the container:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  docker stop {container id}
+</code></pre></div>    </div>
+
+    <p>Stop command sends a signal to the process with pid = 1 in the container to stop gracefully. Docker gives the container 10 seconds to stop before it forcefully stops it itself.</p>
+
+    <p>We can start it again with interactive flag to run bash again	
+      docker run -i {container id}</p>
+
+    <p>This runs bash automatically because that was the command we used while creating the container.</p>
+  </li>
+  <li>
+    <p><strong>docker run -p {host port}:{container port}</strong>: Forwards a host port to container</p>
+  </li>
+  <li>
+    <p><strong>docker run -v {host path}:{container path}</strong>: Maps a path on host to a path on container.</p>
+
+    <p>If the container path exists it will be overwritten by the contents of host path. In other words, the container will see the host files while accessing that path incestead of its local files.</p>
+  </li>
+  <li>
+    <p><strong>docker diff</strong>: Lists the differences between the container and the base image. Shows the added, deleted and changed files.</p>
+  </li>
+  <li>
+    <p><strong>docker commit</strong>: Creates a new image based on the container</p>
+  </li>
+  <li>
+    <p><strong>docker logs {container id}</strong>: Shows the logs of the container.</p>
+
+    <p>Docker logging mechanism listens to stdout and stderr. We can link other logs to stdout and stderr so that we can view them using docker logs {container id}</p>
+
+    <p>Example:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  RUN ln -sf /dev/stdout /var/log/nginx/access.log &amp;&amp; ln -sf /dev/stderr /var/log/nginx/error.log
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>docker network</strong>:</p>
+
+    <p><strong>docker network create {network name}</strong>: Creates a new network</p>
+
+    <p><strong>docker network ls</strong>: Lists all networks</p>
+
+    <p><strong>docker network inspect {network name}</strong>: Gets information of a specific network</p>
+
+    <p><strong>docker run –network {network name}</strong>: Creates a container inside the specified network</p>
+
+    <p>Containers can address each other by name within the network.</p>
+  </li>
+  <li>
+    <p><strong>docker container exec</strong>: Can be used to run commands in a running container. Also can be used to connect to the container by running a shell</p>
+
+    <p>Example:</p>
+
+    <p>docker container exec {container id} sh</p>
+  </li>
+</ul>
+
+<p>It starts a new process inside the container</p>
+
+<h2 id="docker-compose">Docker Compose</h2>
+<p>A tool for defining and running multi-container Docker applications.</p>
+
+<ul>
+  <li>Instead of stand-alone containers, “services” are defined in “docker-compose.yml” file</li>
+  <li><strong>docker-compose up</strong> command will create the entire application with all the components (containers, networks, volumes etc)</li>
+  <li><strong>docker-compose config</strong>: It is used to verify a docker-compose yml file.</li>
+  <li><strong>docker-compose up -d</strong>: Starts the services in detached mode. Uses the current directory name to prepend the objects (networks, volumes, containers etc) created.</li>
+  <li><strong>docker-compose ps</strong>: Shows the full stack with names, commands, states and ports</li>
+  <li><strong>docker-compose logs -f</strong>: Shows logs of the whole stack. tails and shows the updates.</li>
+  <li><strong>docker-compose down</strong>: Stops and removes the containers and networks. Volumes are NOT deleted.</li>
+</ul>
+
+<p>Environment variables can be used in docker-compose.yml files in ${VAR_NAME} format.</p>
+
+<ul>
+  <li><strong>docker-compose -f {filename}</strong>: Used to specify non-default config files.</li>
+  <li>
+    <p>Multiple YML files can be used and can be extended using “extends:” key in the following format:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  extends: 
+      file: original.yml
+      service: service name
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h2 id="general-concepts">General Concepts</h2>
+
+<p><strong>Container:</strong> Isolated area of an OS with resource usage limits applied. VMs virtualize hardware resources, containers virtualize OS resources (file system, network stack etc)</p>
+
+<p><strong>Namespaces:</strong> Isolation (like hypervisors)</p>
+
+<p><strong>Control groups:</strong> Grouping objects and setting limits. In Windows they are also called Job Objects.</p>
+
+<p><strong>Daemon:</strong> Includes REST API.</p>
+
+<p><strong>containerd:</strong> Handles container operations like start, stop etc.. on Windows, Compute Services, includes runc</p>
+
+<p><strong>runtime:</strong> OCI (Linux -&gt; runc) runc creates the container than exits</p>
+
+<p>containerd cannot create containers by itself. That capability is with the OCI layer.</p>
+
+<p>Windows containers are 2 kinds:</p>
+
+<ul>
+  <li>Native containers</li>
+  <li>
+    <p>Hyper-V</p>
+  </li>
+  <li>Layering
+    <ul>
+      <li>Base Layer: At the bottom (OS Files &amp; objects)</li>
+      <li>App Code: Built on top of base layer</li>
+    </ul>
+
+    <p>Each layer is located under /var/lib/docker/aufs/diff/{layer id}</p>
+
+    <p>Layer id is different from the hash value of the layer</p>
+  </li>
+  <li>
+    <p>Images live in registries. Docker defaults to Docker Hub</p>
+  </li>
+  <li>
+    <p>Docker Trusted Registry comes with Docker Enterprise Edition</p>
+  </li>
+  <li>
+    <p>Official images can be addressed as docker.io/image name or just the image name</p>
+  </li>
+  <li>
+    <p>Naming convention: Registry / Repo / Image (Tag)</p>
+  </li>
+  <li>Registry: docker.io is default</li>
+  <li>
+    <p>Image: latest is default</p>
+  </li>
+  <li>
+    <p>Image layers are read-only. Containers have their read-write layers. Container adds a writable layer on top of the read-only layers from the image.
+If they need to change something on a read-only layer, they use copy-on-write operation and create a copy of the existing layer and apply the change on that new layer. Anytime container needs to change a file, creates a copy of the file in its own writable layer and changes it there.</p>
+  </li>
+  <li>
+    <p>Cmd vs entrypoint: runtime arguments overrides default arguments. Entrypoint runtime arguments are appended</p>
+  </li>
+  <li>Dockerfile commands
+    <ul>
+      <li>FROM is always the first instruction</li>
+      <li>Good practice to label with maintainer email address</li>
+      <li>RUN: Executes command and creates a layer</li>
+      <li>COPY: Copies files into image in a new layer</li>
+      <li>EXPOSE: Specifies which port to liste to. Doesn’t create a new layer. Adds metadata.</li>
+      <li>ENTRYPOINT: Specifies what to run when a container starts.</li>
+      <li>WORKDIR: Specifies the default directory. Doesn’t create layer.</li>
+    </ul>
+  </li>
+  <li>Multi-stage builds
+    <ul>
+      <li>Helps to remove unnecessary packages / files from the final production image.</li>
+      <li>It can get specific files from intermediary builds</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li>A container will run one process only</li>
+  <li>If the command is a background process, the container will stop right after it ran. It needs to be something like a shell and not like a web server.</li>
+  <li>As of v1.12 Docker runs in either single-image mode or swarm mode.</li>
+  <li>Recent Docker versions support logging drivers. They forward the logs to external systems such as dusk of, splunk etc (–log-driver and –log-opts)</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://serversforhackers.com/shipping-docker">Online course: Shipping Docker</a></li>
+  <li><a href="https://www.pluralsight.com/courses/docker-deep-dive-update">Online course: Docker Deep Dive</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Developing a Web API with ASP.NET Core]]></title>
+    <link href="https://volkanpaksoy.com/archive/2019/05/22/Developing-a-Web-API-with-ASP.NET-Core/"/>
+    <updated>2019-05-22T05:00:00+01:00</updated>
+    <id>https://volkanpaksoy.com/archive/2019/05/22/Developing-a-Web-API-with-ASP.NET-Core</id>
+    <content type="html"><![CDATA[<p>Developing projects is fun and a great way to learn new stuff. The things is everything moves so fast, you constantly need to maintain the projects as well. In that spirit, I decided to re-write my old AngularJS DomChk53.</p>
+
+<p>First, I developed an API. This way I won’t have to maintain my AWS Lambda functions. Even though nobody uses them, still opening a public API poses risks and maintenance hassle. Now everybody can run their own system locally using their own AWS accounts.</p>
+
+<h2 id="api-implementation">API Implementation</h2>
+
+<p></p>
+<div class="github-widget" data-repo="volkanpaksoy/domchk53"></div>
+
+<p>Full source code of the API can be found in DomChk53 repo under <em>aspnet-api</em> folder. There’s not much benefit in covering the code line by line but I want to talk about some of the stuff that stood out in one way or the other:</p>
+
+<h3 id="cs5001-program-does-not-contain-a-static-main-method-error">CS5001: Program does not contain a static ‘Main’ method” error</h3>
+<p>I started this API with the intention of deploying it to Docker so right after I created a new project I tested Docker deployment but it kept giving the error above. After some searching I found that the Dockerfile was in the wrong folder! I moved it one level up as suggested in <a href="https://developercommunity.visualstudio.com/content/problem/344880/dotnet-core-build-linux-returns-error-cs5001-progr.html">this</a> answer and it worked like a charm!</p>
+
+<h3 id="reading-config-values">Reading config values</h3>
+<p>I appreciated the ease of using configuration files. IConfiguration provider is provided out-of-the-box which handles appsettings.json config file.</p>
+
+<p>So for example I was able to inject it easily:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="nf">TldService</span><span class="p">(</span><span class="n">IConfiguration</span> <span class="n">configuration</span><span class="p">,</span> <span class="n">IFetchHtmlService</span> <span class="n">fetchHtmlService</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="n">configuration</span> <span class="p">=</span> <span class="n">configuration</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="n">fetchHtmlService</span> <span class="p">=</span> <span class="n">fetchHtmlService</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>and use it like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">awsDocumentationUrl</span> <span class="p">=</span> <span class="n">configuration</span><span class="p">[</span><span class="s">"AWS.DocumentationURL"</span><span class="p">];</span>
+</code></pre></div></div>
+
+<h3 id="using-dependency-injection">Using dependency injection</h3>
+<p>ASP.NET Core Web API has built-in dependency injection so when I needed to use it all I had to do was register my classes in ConfigureServices method:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// This method gets called by the runtime. Use this method to add services to the container.</span>
+<span class="k">public</span> <span class="k">void</span> <span class="nf">ConfigureServices</span><span class="p">(</span><span class="n">IServiceCollection</span> <span class="n">services</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">services</span><span class="p">.</span><span class="nf">AddMvc</span><span class="p">().</span><span class="nf">SetCompatibilityVersion</span><span class="p">(</span><span class="n">CompatibilityVersion</span><span class="p">.</span><span class="n">Version_2_1</span><span class="p">);</span>
+
+    <span class="n">services</span><span class="p">.</span><span class="n">AddTransient</span><span class="p">&lt;</span><span class="n">ITldService</span><span class="p">,</span> <span class="n">TldService</span><span class="p">&gt;();</span>
+    <span class="n">services</span><span class="p">.</span><span class="n">AddTransient</span><span class="p">&lt;</span><span class="n">IFetchHtmlService</span><span class="p">,</span> <span class="n">FetchHtmlService</span><span class="p">&gt;();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="documentation">Documentation</h3>
+<p>Adding Swagger documentation was a breeze. I just followed the steps in the <a href="https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle">documentation</a> and now I have a pretty documentation. More on that in the usage section below.</p>
+
+<h2 id="aws-implementation">AWS Implementation</h2>
+<p>Even though the code will run locally in a Docker container, you still need to setup an IAM user with the appropriate permissions. So make sure the policy below is attached to the user:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": "route53domains:CheckDomainAvailability",
+            "Resource": "*"
+        }
+    ]
+}
+</code></pre></div></div>
+
+<h2 id="usage">Usage</h2>
+<p>Nice thing about Swagger is it can used as a full-blown API client as well. So instead of developing a dummy client I just used Swagger UI for simple domain availability enquiries. This is until I develop a better frontend on my own. For now at least it works.</p>
+
+<p>To use Swagger, simply run the Domchk53.API application and change the URL to https://localhost:{port number}/docs, port number being whatever your local web server is running on.</p>
+
+<p><img src="/images/vpblogimg/2019/05/aspnet-webapi-swagger-01.png" alt="" /></p>
+
+<h3 id="curl-usage">curl usage:</h3>
+<p>Windows:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -i -X POST -H "Content-Type: application/json" -d "{\"domainList\": [\"volkan\"], \"tldList\": [\"com\", \"net\"]}" https://localhost:5001/api/domain
+</code></pre></div></div>
+
+<p>Mac:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl --insecure -X POST -H "Content-Type: application/json" -d '{"domainList": ["volkan"], "tldList": ["com", "net"]}' https://localhost:5001/api/domain
+</code></pre></div></div>
+
+<h3 id="example-test-data">Example Test data:</h3>
+<p>This is just a quick reference to be used as template:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  "domainList": ["domain1", "domain2"],
+  "tldList": ["com", "net"]
+}
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{ "domainList": ["volkan"], "tldList": ["com", "net"] }
+</code></pre></div></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://developercommunity.visualstudio.com/content/problem/344880/dotnet-core-build-linux-returns-error-cs5001-progr.html">Solution for “CS5001: Program does not contain a static ‘Main’ method” error</a></li>
+  <li><a href="https://weblog.west-wind.com/posts/2018/Feb/18/Accessing-Configuration-in-NET-Core-Test-Projects">Accessing Configuration in .NET Core Test Projects</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-2.1">Dependency injection in ASP.NET Core</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle">Get started with Swashbuckle and ASP.NET Core</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  
+</feed>

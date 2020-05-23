@@ -1,0 +1,537 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/35/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/13/nmap-basics/" itemprop="url">Nmap Basics</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-13T20:00:00+00:00" itemprop="datePublished">December 13, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/security">security</a></span> -->
+
+<!-- security -->
+
+
+
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">network, nmap</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<h3 id="what-is-nmap">What is Nmap?</h3>
+<p>Nmap (Network Mapper) is a powerful network scanner that lets you discover the hosts and services on a network. It sends specific packets to remote hosts and analyses the responses to map the network. These packets can be standard ICMP/TCP/UDP packets as well as deliberately malformed packets to observe the hosts’ behaviour.</p>
+
+<p>I believe it is very important to keep an eye on what’s going on in your network. As Nmap is one of the basic tools for this kind of job, I decided to spend some time to cover it and harness it in my own projects.</p>
+
+<h3 id="specifying-target">Specifying Target</h3>
+<p>First you need to specify your targets. Nmap is very flexible and accepts different notations for specifying targets:</p>
+
+<ul>
+  <li>
+<strong>Single IP:</strong> i.e. 192.168.1.15</li>
+  <li>
+<strong>Name:</strong> i.e: www.google.com</li>
+  <li>
+<strong>List:</strong> For example, 192.168.1,2.1,10 will scan 192.168.1.1, 192.168.1.10, 192.168.2.1 and 192.168.2.10. Note that the comma separated values are not ranges but single values</li>
+  <li>
+<strong>Range:</strong> i.e: 192.168.1.1-10 For ranges hyphen is used as the separator. The start and end values are inclusive. Also one octet can be omitted such as 192.168.-.1. In this case Nmap will scan all IPs from 192.168.0.1 to 192.168.255.1</li>
+  <li>
+<strong>CIDR (Classless Inter-Domain Routing):</strong> For example 192.168.1.240/29 will scan 8 IPs from 192.168.1.240 to 192.168.1.247</li>
+</ul>
+
+<p>You can use any combinations of these values as a list separated with spaces such as: 192.168.1.42 www.google.com will scan the single LAN IP and Google. You can use <strong>-sL</strong> parameter to view the target list without scanning them.</p>
+
+<p><img src="/images/vpblogimg/2014/12/nmap-list-hosts.png" alt="Nmap list hosts"></p>
+
+<p>In complex scenarios you can use an input file to load the target list by using the <strong>-iL</strong> flag and providing the file name.</p>
+
+<p>To exclude specific IP addresses <strong>–exclude</strong> flag is used with the same notations.</p>
+
+<h3 id="port-scanning">Port Scanning</h3>
+<p>Ports can be specified in 2 ways:</p>
+
+<ul>
+  <li>Using -p flag: Single value, comma-separated list, or hyphen-separated values as a range. If just hyphen is specified it scans all ports from 1 to 65535. Also protocol can be specified such as T:80 U:53</li>
+  <li>Using nmap-services file: You can refer to a service by name and this file is used to look it up.</li>
+</ul>
+
+<p>Both methods can be used in combinations such as:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -p http*,25,U:53 192.168.1.15
+</code></pre></div></div>
+
+<h3 id="output">Output</h3>
+<p>While a scan is running you can an updated status by hitting enter. Also you can save the output results to a file in different formats with the values below following the <strong>-o</strong> flag:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* N: Normal
+* X: XML
+* G: Grepable
+</code></pre></div></div>
+
+<p>such as</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -v 172.16.1.0/24 -oG output.gnmap
+</code></pre></div></div>
+
+<p>Also a helpful flag is <strong>-v</strong> for verbose output</p>
+
+<p>An added bonus about using output files is that you can resume a scan by using the <strong>–resume</strong> flag and specifying the output file name such as</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap --resume output.gnmap
+</code></pre></div></div>
+
+<h3 id="basic-scanning-options">Basic scanning options</h3>
+<ul>
+  <li>
+    <p><strong>TCP SYN scan (-sS):</strong> This is the default option Nmap uses. It’s very fast and can scan thousands of ports per second. It sends a SYN packet to target and if the port is open target sends back a SYN/ACK packet. Thus far it’s just like a normal 3-way TCP handshake but in the final step instead of sending an ACK Nmap sends RST (Reset) packet and cancels the process. Since it has already acquired the information it’s looking for it doesn’t need to establish an actual connection. If the port is closed the target sends a RST packet. SYN scan is very powerful because it’s fast and quiet as it doesn’t create a session. on Linux, it requires root privileges to run it.</p>
+  </li>
+  <li>
+    <p><strong>TCP connect() Scan (-sT):</strong> This one uses a full handshake and opens a session. Then sends a RST packet to close the session. The advantage of this method over SYN scan is that it doesn’t require root privileges. As it opens sessions they are logged so it’s noisies than SYN scan.</p>
+  </li>
+  <li>
+    <p><strong>Ping scan (-sn formerly known as -sP):</strong> This is the quickest scan method.For local subnets it uses ARP (Address Resolution Protocol) to identify active hosts. ARP only works on local subnets so for remote subnets, it uses ICMP echo requests. It also sends a TCP ACK packet to port 80 which is completely unexpected for the host as it’s just sent out of the blue. So the host sends a RST packet to end connection (as it’s the right thing to do!) but that helps Nmap to identify there is a host up with that address. This scan is only helpful to identify hosts rather than ports and services.</p>
+  </li>
+  <li>
+    <p><strong>UDP scan (-sU):</strong> This is the only scan that can identify open UDP ports. Since there’s no handshake the overhead is lower compared to TCP scan. When a port is closed the target returns ICMP port unreachable packet so this may increase the number of packets. Like SYN scan it requires privileged access.</p>
+  </li>
+</ul>
+
+<p>In total there are lots of scanning options. You can find the full list <a href="http://nmap.org/book/man-port-scanning-techniques.html" target="_blank" rel="noopener noreferrer">here</a></p>
+
+<h3 id="os-and-service-version-detection">OS and Service Version Detection</h3>
+<p>To detect version <strong>-sV</strong> flag is used. An intensity level between 0-9 can be specified. Default is 7</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	nmap -sV --version-intensity 9 172.16.1.10
+</code></pre></div></div>
+
+<p>Versioning can be useful in some cases but also significantly increases the scan time.</p>
+
+<p>For operating system detection <strong>-O</strong> flag can be used</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	nmap -O -v 172.16.1.10
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2014/12/nmap-os-detection.png" alt="Nmap OS detection"></p>
+
+<h3 id="timing-categories">Timing Categories</h3>
+<p>If you are concerned about being detected when scanning the network</p>
+
+<ol>
+  <li>You might be doing something nasty!</li>
+  <li>You might consider using timing categories so add some delay between each packets to evade IDSs</li>
+</ol>
+
+<p>There are 6 categories that can be specified by T flag followed by a number from 0 to 5. Alternatively you can use the templates’ names:</p>
+
+<ul>
+  <li>paranoid (0)</li>
+  <li>sneaky (1)</li>
+  <li>polite (2)</li>
+  <li>normal (3)</li>
+  <li>aggressive (4)</li>
+  <li>insane (5)</li>
+</ul>
+
+<p>With “Paranoid” template Nmap will wait 5 minutes between each probe making the total scan time very very long. “Insane” will speed up the process to a point that the delay is down to 5ms. So be careful which option you use. There are many more flags for tailoring the scans to your performance requirements: <a href="http://nmap.org/book/man-performance.html" target="_blank" rel="noopener noreferrer">http://nmap.org/book/man-performance.html</a></p>
+
+<h3 id="scripting-engine">Scripting engine</h3>
+<p>Nmap comes with an embedded Lua interpreter which is the core of its scripting engine.</p>
+
+<p>By using <strong>-sC</strong> flag all scripts in the default category can be executed such as</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -sC -p www.google.com
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2014/12/nmap-script-output.png" alt="Nmap script output"></p>
+
+<p>There are lots of scripts which can be found at <a href="http://nmap.org/nsedoc" target="_blank" rel="noopener noreferrer">NSE(Nmap Scripting Engine) documentation page</a></p>
+
+<p>For example there is a script to scan OpenSSL Heartbleed vulnerability. It can be executed as follows:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -p 443 --script ssl-heartbleed &lt;target&gt;
+</code></pre></div></div>
+
+<p>On my machine this script was blocked by Norton!</p>
+
+<p><img src="/images/vpblogimg/2014/12/nmap-script-attack.png" alt="Norton attack block"></p>
+
+<p>So be careful which script to run. Your intentions may be misinterpreted if you are running them against systems that you are not authorized.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>Nmap is one of the core tools that hackers (white or black hat) use. So it has many more options geared towards attacking and being stealthy. You can spoof your IP address, use idle stations to avoid detection etc. I left out many of those options as my intention for studying Nmap is discovering devices on my network so that I can take action if any unknown devices appear. Based on these notes I will develop a simple script/applicaton to find out if anything fishy is going on in my network. I’ll blog about it when it’s ready. Stay tuned!</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://nmap.org/book/man.html" target="_blank" rel="noopener noreferrer">Nmap documentation</a></li>
+  <li><a href="http://nmap.org/nsedoc" target="_blank" rel="noopener noreferrer">Scripting engine documentation</a></li>
+  <li><a href="https://www.youtube.com/watch?v=Hk-21p2m8YY" target="_blank" rel="noopener noreferrer">DEFCON 16: Nmap: Scanning the Internet by Fyodor</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/12/homebrew-security-camera-with-raspberry-pi/" itemprop="url">Homebrew Security Camera with Raspberry Pi</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-12T12:45:00+00:00" itemprop="datePublished">December 12, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/securityawsdev">security</a></span> -->
+
+<!-- security, aws, dev -->
+
+
+
+
+    <a href="/category/security">security</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">raspberry_pi, gadget, powershell, s3</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I know there are very cheap security cameras that you can setup in a few minutes. They may provide security but they cannot provide the satisfaction you get after a DIY project! So let’s dig in just for the fun of it.</p>
+
+<h3 id="ingredients">Ingredients</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Price</th>
+      <th>Where to buy?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Raspberry Pi Starter Kit</td>
+      <td>£36</td>
+      <td><a href="http://www.amazon.co.uk/Raspberry-Pi-Motherboard-Starter-Kit/dp/B00LU2FDG8/" target="_blank" rel="noopener noreferrer">Amazon</a></td>
+    </tr>
+    <tr>
+      <td>Camera module</td>
+      <td>£17</td>
+      <td><a href="http://www.amazon.co.uk/gp/product/B00E1GGE40" target="_blank" rel="noopener noreferrer">Amazon</a></td>
+    </tr>
+    <tr>
+      <td>Protective case for the camera module</td>
+      <td>£4</td>
+      <td><a href="http://www.amazon.co.uk/gp/product/B00IJZOT5A" target="_blank" rel="noopener noreferrer">Amazon</a></td>
+    </tr>
+    <tr>
+      <td>Wireless adaptor</td>
+      <td>£6</td>
+      <td><a href="http://www.amazon.co.uk/gp/product/B003MTTJOY" target="_blank" rel="noopener noreferrer">Amazon</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Once all put together this is what you are going to end up with:</p>
+
+<p><img src="/images/vpblogimg/2014/12/raspberry-pi-security-camera-1.png" alt="Raspberry Pi Security Camera"></p>
+
+<h3 id="bring-it-to-life">Bring it to life</h3>
+<ol>
+  <li>Download a standard distro for Raspberry Pi. I used <a href="http://www.raspberrypi.org/downloads/" target="_blank" rel="noopener noreferrer">Rasbian</a>.</li>
+  <li>Write the image to the SD card. I use <a href="http://sourceforge.net/projects/win32diskimager/" target="_blank" rel="noopener noreferrer">Win32 Disk Imager</a> on Windows.</li>
+</ol>
+
+<h3 id="main-course-motion">Main course: Motion</h3>
+<p>There is a great tutorial <a href="http://www.instructables.com/id/Raspberry-Pi-as-low-cost-HD-surveillance-camera/" target="_blank" rel="noopener noreferrer">here</a> for converting your Pi into a security camera  which I mostly followed. Basically you enable WiFi, install Motion software and tweak the configuration a bit (image size, framerate etc) and it’s (hopefully) good to go.</p>
+
+<p>The video didn’t work for me unfortunately. It was recording something but only the first frame was visible so it wasn’t any better than a still image. So I decided to ignore videos completely.</p>
+
+<p>Instead of using a network share I decided to upload footage to AWS S3 directly using <a href="http://s3tools.org/s3cmd" target="_blank" rel="noopener noreferrer">Amazon S3 Tools</a>. Also don’t forget to clear old footage. Otherwise you can run out of space very quickly. I added a few cron jobs to carry out these tasks for me:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* * * * * s3cmd sync /var/surv/*.jpg s3://{BUCKET NAME}/
+* */2 * * * sudo rm /var/surv/*.avi
+* */6 * * *  find /var/surv/* -mtime +1 -exec rm {} \;
+</code></pre></div></div>
+
+<p>It syncs the local folder with S3 bucket, deletes all local video files and files older than a day. I delete the video files more frequently as they take up a lot of space.</p>
+
+<h3 id="monitoring-and-notifications">Monitoring and Notifications</h3>
+<p>No system is complete without proper monitoring and notifications. It’s especially important for systems like this that’s supposed to run quietly in the background.</p>
+
+<p>Unfortunately in my case it stopped working a few times which made monitoring even more important. I don’t know what’s causing the issue. Maybe it’s because I’m using an older version of Raspberry Pi and it’s not capable of handling all the motion software and S3 uploads etc.</p>
+
+<p>To keep an eye on it, I decided to create a small PowerShell script to check S3 for incoming files and send me a notification if it seems to have stopped uploading.</p>
+
+<h3 id="powershell-as-the-glue">PowerShell as the glue</h3>
+<p>Built on .NET framework PowerShell is a very powerful (no pun intended) tool to write quick and dirty solutions. So first here’s the Send-Mail function:</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/672433f21d0748c1a399a1bd574e1687.js"> </script>
+
+<p>I created a separate function for it as it’s a general-purpose feature which can be used in many places. To make it even more generic you can take out the from and to email addresses and add them as parameters to the function.</p>
+
+<p>And here’s the actual notification logic:</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/c711c19e19799b1ba4193d79d364dc76.js"> </script>
+
+<p>It finds the latest image by sorting them by LastModified field and compares this date with the current date. If it’s been more than 1 day it sends an email. Depending on how often you expect images to be uploaded you can change the alert condition.</p>
+
+<p>To use these scripts you’ll AWS accounts with S3 and SES privileges. Also you have to change the path of the send-mail.ps1 in the line it’s included.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.instructables.com/id/Raspberry-Pi-as-low-cost-HD-surveillance-camera/" target="_blank" rel="noopener noreferrer">Tutorial on Instructables.com</a></li>
+  <li><a href="http://www.fl3m.com/2012/08/sending-email-through-amazon-ses-with.html" target="_blank" rel="noopener noreferrer">PowerShell script to send email</a></li>
+  <li><a href="http://www.raspberrypi.org/downloads/" target="_blank" rel="noopener noreferrer">Raspberry Pi downloads</a></li>
+  <li><a href="http://s3tools.org/s3cmd" target="_blank" rel="noopener noreferrer">Amazon S3 Tools</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/12/update-aws-security-groups-with-powershell/" itemprop="url">Update AWS Security Groups with PowerShell</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-12T00:30:00+00:00" itemprop="datePublished">December 12, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awssecurity">aws</a></span> -->
+
+<!-- aws, security -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">powershell, ec2</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Here’s the scenario:</p>
+
+<ul>
+  <li>You use AWS</li>
+  <li>You don’t have a static IP</li>
+  <li>You connect to your EC2 instances via SSH and/or RDP only from your IP</li>
+  <li>You are too lazy to update the security groups manually when your IP changes!</li>
+</ul>
+
+<p>You’ve come to the right place: I’ve got the solution.</p>
+
+<p>Let’s have a look how it’s built step-by-step:</p>
+
+<h3 id="step-1-create-an-iam-account-to-access-security-groups">Step 1: Create an IAM account to access security groups</h3>
+<p>As a general rule of thumb always grant the minimum privileges possible to the accounts you use. Create a new user and go to the user’s details. Select <em>Attach User Policy</em> and then <em>Policy Generator</em>. Select <em>AWS EC2</em> from the services list. For our script to run we need 3 privileges: List security groups (<em>DescribeSecurityGroups</em>), delete old IP permissions (<em>RevokeSecurityGroupIngress</em>) and add new IP permissions (<em>AuthorizeSecurityGroupIngress</em>).</p>
+
+<p><img src="/images/vpblogimg/2014/12/iam-security-group-user.png" alt=""></p>
+
+<p>Alternatively you can just attach the following policy to your user:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1418339796000",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:AuthorizeSecurityGroupIngress",
+        "ec2:DescribeSecurityGroups",
+        "ec2:RevokeSecurityGroupIngress"
+      ],
+      "Resource": [
+        "*"
+      ]
+    }
+  ]
+}
+</code></pre></div></div>
+
+<p>IAM has a very nice simulation feature. Before you proceed I recommend you run it and verify only 3 actions are allowed.</p>
+
+<p><img src="/images/vpblogimg/2014/12/aws-iam-policy-simulator.png" alt=""></p>
+
+<h3 id="step-2-modify-the-powershell-script">Step 2: Modify the PowerShell script</h3>
+<p>The script I created is on Gist as seen below. Before you can use it you have to update it with the access and secret keys of the user created above.</p>
+
+<p>Also since fiddling with security groups can become messy very quickly I’d strongly recommend you perform a dry run first. By default <em>$dryRun</em> is set to true. Unless you set it to <em>$false</em> it will only display what it is going to do but will not take any action. So make sure you know what you’re doing before you give it a go. I don’t think this script will be a ready-made script for anyone. Probably would need some tweaking here and there to tailor to your needs. But this version works for me so here it is:</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/c99400aec7e519626d9b6d0d1cf409aa.js"> </script>
+
+<p>First it gets a list of security groups that have SSH and RDP permissions in them. Then loops through these permissions and compares the IP address with the current one. I used my own external IP checker service that I’ve recently developed as I <a href="https://volkanpaksoy.com/archive/2014/12/08/simple-api-with-nodejs/">blogged here</a>. You can use other services as well. Just make sure you change the URL in the script. My service returns a JSON object so if the method you use returns a different format you need to modify the parsing code as well.</p>
+
+<p>If the IP addresses are different, it revokes the old permission and creates a new one with your current IP. Protocol and ports remain intact.</p>
+
+<p>This is the output of the script:</p>
+
+<p><img src="/images/vpblogimg/2014/12/aws-security-group-update-script.png" alt=""></p>
+
+<p>If the IP addresses for port 22 an 3389 are up-to-date it just displays “<em>Security group is up-to-date</em>” so it can be run consecutively. So you can schedule it to run as often as you want.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://docs.aws.amazon.com/powershell/latest/userguide/pstools-welcome.html" target="_blank" rel="noopener noreferrer">AWS PowerShell Tools documentation</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/34" class="prev">Prev</a>
+    
+    
+        <a href="/page/36" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

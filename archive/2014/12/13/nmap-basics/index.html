@@ -1,0 +1,299 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Nmap Basics - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2014/12/13/nmap-basics/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Nmap Basics</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-13T20:00:00+00:00" itemprop="datePublished">December 13, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- security -->
+
+
+
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">network, nmap</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<h3 id="what-is-nmap">What is Nmap?</h3>
+<p>Nmap (Network Mapper) is a powerful network scanner that lets you discover the hosts and services on a network. It sends specific packets to remote hosts and analyses the responses to map the network. These packets can be standard ICMP/TCP/UDP packets as well as deliberately malformed packets to observe the hosts’ behaviour.</p>
+
+<p>I believe it is very important to keep an eye on what’s going on in your network. As Nmap is one of the basic tools for this kind of job, I decided to spend some time to cover it and harness it in my own projects.</p>
+
+<h3 id="specifying-target">Specifying Target</h3>
+<p>First you need to specify your targets. Nmap is very flexible and accepts different notations for specifying targets:</p>
+
+<ul>
+  <li>
+<strong>Single IP:</strong> i.e. 192.168.1.15</li>
+  <li>
+<strong>Name:</strong> i.e: www.google.com</li>
+  <li>
+<strong>List:</strong> For example, 192.168.1,2.1,10 will scan 192.168.1.1, 192.168.1.10, 192.168.2.1 and 192.168.2.10. Note that the comma separated values are not ranges but single values</li>
+  <li>
+<strong>Range:</strong> i.e: 192.168.1.1-10 For ranges hyphen is used as the separator. The start and end values are inclusive. Also one octet can be omitted such as 192.168.-.1. In this case Nmap will scan all IPs from 192.168.0.1 to 192.168.255.1</li>
+  <li>
+<strong>CIDR (Classless Inter-Domain Routing):</strong> For example 192.168.1.240/29 will scan 8 IPs from 192.168.1.240 to 192.168.1.247</li>
+</ul>
+
+<p>You can use any combinations of these values as a list separated with spaces such as: 192.168.1.42 www.google.com will scan the single LAN IP and Google. You can use <strong>-sL</strong> parameter to view the target list without scanning them.</p>
+
+<p><img src="/images/vpblogimg/2014/12/nmap-list-hosts.png" alt="Nmap list hosts"></p>
+
+<p>In complex scenarios you can use an input file to load the target list by using the <strong>-iL</strong> flag and providing the file name.</p>
+
+<p>To exclude specific IP addresses <strong>–exclude</strong> flag is used with the same notations.</p>
+
+<h3 id="port-scanning">Port Scanning</h3>
+<p>Ports can be specified in 2 ways:</p>
+
+<ul>
+  <li>Using -p flag: Single value, comma-separated list, or hyphen-separated values as a range. If just hyphen is specified it scans all ports from 1 to 65535. Also protocol can be specified such as T:80 U:53</li>
+  <li>Using nmap-services file: You can refer to a service by name and this file is used to look it up.</li>
+</ul>
+
+<p>Both methods can be used in combinations such as:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -p http*,25,U:53 192.168.1.15
+</code></pre></div></div>
+
+<h3 id="output">Output</h3>
+<p>While a scan is running you can an updated status by hitting enter. Also you can save the output results to a file in different formats with the values below following the <strong>-o</strong> flag:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* N: Normal
+* X: XML
+* G: Grepable
+</code></pre></div></div>
+
+<p>such as</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -v 172.16.1.0/24 -oG output.gnmap
+</code></pre></div></div>
+
+<p>Also a helpful flag is <strong>-v</strong> for verbose output</p>
+
+<p>An added bonus about using output files is that you can resume a scan by using the <strong>–resume</strong> flag and specifying the output file name such as</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap --resume output.gnmap
+</code></pre></div></div>
+
+<h3 id="basic-scanning-options">Basic scanning options</h3>
+<ul>
+  <li>
+    <p><strong>TCP SYN scan (-sS):</strong> This is the default option Nmap uses. It’s very fast and can scan thousands of ports per second. It sends a SYN packet to target and if the port is open target sends back a SYN/ACK packet. Thus far it’s just like a normal 3-way TCP handshake but in the final step instead of sending an ACK Nmap sends RST (Reset) packet and cancels the process. Since it has already acquired the information it’s looking for it doesn’t need to establish an actual connection. If the port is closed the target sends a RST packet. SYN scan is very powerful because it’s fast and quiet as it doesn’t create a session. on Linux, it requires root privileges to run it.</p>
+  </li>
+  <li>
+    <p><strong>TCP connect() Scan (-sT):</strong> This one uses a full handshake and opens a session. Then sends a RST packet to close the session. The advantage of this method over SYN scan is that it doesn’t require root privileges. As it opens sessions they are logged so it’s noisies than SYN scan.</p>
+  </li>
+  <li>
+    <p><strong>Ping scan (-sn formerly known as -sP):</strong> This is the quickest scan method.For local subnets it uses ARP (Address Resolution Protocol) to identify active hosts. ARP only works on local subnets so for remote subnets, it uses ICMP echo requests. It also sends a TCP ACK packet to port 80 which is completely unexpected for the host as it’s just sent out of the blue. So the host sends a RST packet to end connection (as it’s the right thing to do!) but that helps Nmap to identify there is a host up with that address. This scan is only helpful to identify hosts rather than ports and services.</p>
+  </li>
+  <li>
+    <p><strong>UDP scan (-sU):</strong> This is the only scan that can identify open UDP ports. Since there’s no handshake the overhead is lower compared to TCP scan. When a port is closed the target returns ICMP port unreachable packet so this may increase the number of packets. Like SYN scan it requires privileged access.</p>
+  </li>
+</ul>
+
+<p>In total there are lots of scanning options. You can find the full list <a href="http://nmap.org/book/man-port-scanning-techniques.html" target="_blank" rel="noopener noreferrer">here</a></p>
+
+<h3 id="os-and-service-version-detection">OS and Service Version Detection</h3>
+<p>To detect version <strong>-sV</strong> flag is used. An intensity level between 0-9 can be specified. Default is 7</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	nmap -sV --version-intensity 9 172.16.1.10
+</code></pre></div></div>
+
+<p>Versioning can be useful in some cases but also significantly increases the scan time.</p>
+
+<p>For operating system detection <strong>-O</strong> flag can be used</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	nmap -O -v 172.16.1.10
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2014/12/nmap-os-detection.png" alt="Nmap OS detection"></p>
+
+<h3 id="timing-categories">Timing Categories</h3>
+<p>If you are concerned about being detected when scanning the network</p>
+
+<ol>
+  <li>You might be doing something nasty!</li>
+  <li>You might consider using timing categories so add some delay between each packets to evade IDSs</li>
+</ol>
+
+<p>There are 6 categories that can be specified by T flag followed by a number from 0 to 5. Alternatively you can use the templates’ names:</p>
+
+<ul>
+  <li>paranoid (0)</li>
+  <li>sneaky (1)</li>
+  <li>polite (2)</li>
+  <li>normal (3)</li>
+  <li>aggressive (4)</li>
+  <li>insane (5)</li>
+</ul>
+
+<p>With “Paranoid” template Nmap will wait 5 minutes between each probe making the total scan time very very long. “Insane” will speed up the process to a point that the delay is down to 5ms. So be careful which option you use. There are many more flags for tailoring the scans to your performance requirements: <a href="http://nmap.org/book/man-performance.html" target="_blank" rel="noopener noreferrer">http://nmap.org/book/man-performance.html</a></p>
+
+<h3 id="scripting-engine">Scripting engine</h3>
+<p>Nmap comes with an embedded Lua interpreter which is the core of its scripting engine.</p>
+
+<p>By using <strong>-sC</strong> flag all scripts in the default category can be executed such as</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -sC -p www.google.com
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2014/12/nmap-script-output.png" alt="Nmap script output"></p>
+
+<p>There are lots of scripts which can be found at <a href="http://nmap.org/nsedoc" target="_blank" rel="noopener noreferrer">NSE(Nmap Scripting Engine) documentation page</a></p>
+
+<p>For example there is a script to scan OpenSSL Heartbleed vulnerability. It can be executed as follows:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -p 443 --script ssl-heartbleed &lt;target&gt;
+</code></pre></div></div>
+
+<p>On my machine this script was blocked by Norton!</p>
+
+<p><img src="/images/vpblogimg/2014/12/nmap-script-attack.png" alt="Norton attack block"></p>
+
+<p>So be careful which script to run. Your intentions may be misinterpreted if you are running them against systems that you are not authorized.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>Nmap is one of the core tools that hackers (white or black hat) use. So it has many more options geared towards attacking and being stealthy. You can spoof your IP address, use idle stations to avoid detection etc. I left out many of those options as my intention for studying Nmap is discovering devices on my network so that I can take action if any unknown devices appear. Based on these notes I will develop a simple script/applicaton to find out if anything fishy is going on in my network. I’ll blog about it when it’s ready. Stay tuned!</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://nmap.org/book/man.html" target="_blank" rel="noopener noreferrer">Nmap documentation</a></li>
+  <li><a href="http://nmap.org/nsedoc" target="_blank" rel="noopener noreferrer">Scripting engine documentation</a></li>
+  <li><a href="https://www.youtube.com/watch?v=Hk-21p2m8YY" target="_blank" rel="noopener noreferrer">DEFCON 16: Nmap: Scanning the Internet by Fyodor</a></li>
+</ul>
+
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2014/12/12/homebrew-security-camera-with-raspberry-pi/" title="Previous Post: 
+Homebrew Security Camera with Raspberry Pi">« Homebrew Security Camera with Raspberry Pi</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2014/12/15/simple-ids-with-nmap/" title="next Post: 
+Simple IDS with Nmap">Simple IDS with Nmap » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

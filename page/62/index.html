@@ -1,0 +1,395 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/62/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/01/19/namespace-collision/" itemprop="url">Namespace collision</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-01-19T16:47:12+00:00" itemprop="datePublished">January 19, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Today I came across an interesting namespace collision. I’m writing a library to wrap a 3rd party API. So without getting into specifics I’ll try to illustrate the situation on a sample piece of code. Let’s say we have a class called <em>Test</em> in <em>TestNamespace</em> namespace.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">namespace</span> <span class="nn">TestNamespace</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">Test</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">StaticMethod</span><span class="p">()</span>
+        <span class="p">{</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>and the calling class is something like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">namespace</span> <span class="nn">DifferentNamespace.TestNamespace</span>
+<span class="p">{</span>
+    <span class="k">class</span> <span class="nc">Program</span>
+    <span class="p">{</span>
+        <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">TestNamespace</span><span class="p">.</span><span class="n">Test</span><span class="p">.</span><span class="nf">StaticMethod</span><span class="p">();</span>
+        <span class="p">}</span>
+     <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This code doesn’t compile because compiler thinks “TestNamespace.Test” is actually “DifferentNamespace.TestNamespace.Test”.</p>
+
+<p>Adding a using directive doesn’t help either. As it has the same namespace as the subnamespace of the calling class it always resolves to calling class’s namespace. The solution is using “global” namespace.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">namespace</span> <span class="nn">DifferentNamespace.TestNamespace</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="nn">TestNamespace</span> <span class="p">=</span> <span class="k">global</span><span class="p">::</span><span class="n">TestNamespace</span><span class="p">;</span>
+
+    <span class="k">class</span> <span class="nc">Program</span>
+    <span class="p">{</span>
+        <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">TestNamespace</span><span class="p">.</span><span class="n">Test</span><span class="p">.</span><span class="nf">StaticMethod</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>By explicitly specifying which TestNamespace we are referring to we resolve the conflict. One thing to keep in mind is that we have to define it inside the namespace. If we used it outside the DifferentNamespace.TestNamespace, then inside the namespace TestNamespace would still mean “DifferentNamespace.TestNamespace”</p>
+
+<p>Before this incident, I never had to use the global keyword. Probably the best way to avoid this is by naming conventions but sometimes you may not be able to change the namespace name. You can break lots of things if there are dependant parties on that code. So every now and then this tip may come in handy, just like it did to me in this instance.</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/01/14/code-snippet-for-methods/" itemprop="url">Code snippet for methods</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-01-14T17:48:32+00:00" itemprop="datePublished">January 14, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">productivity, csharp, visual_studio</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Some code snippets are extremely helpful like <em>prop</em> for properties and <em>ctor</em> for constructors. But writing a method is always taking relatively long time as there is no snippet for methods. For good reason I guess as there are all different shapes and colours of methods but I think a snippet can save some time for simple methods. So I decided to create my own snippets. Here’s how to do it in 3 simple steps:</p>
+
+<p><strong>STEP 01:</strong> Download the snippet designer from here: <a title="http://snippetdesigner.codeplex.com" href="http://snippetdesigner.codeplex.com" target="_blank" rel="noopener noreferrer">http://snippetdesigner.codeplex.com</a>
+Install and restart visual studio. From File –&gt; New menu select Code Snippet file type.</p>
+
+<p><strong>STEP 02:</strong> Save the output of the snippet designer under code snippets folder
+%USERPROFILE%\Documents\Visual Studio 2012\Code Snippets\Visual C#\My Code Snippets
+which looks like this</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="p">&lt;?</span><span class="n">xml</span> <span class="n">version</span><span class="p">=</span><span class="s">"1.0"</span> <span class="n">encoding</span><span class="p">=</span><span class="s">"utf-8"</span><span class="p">?&gt;</span>
+<span class="p">&lt;</span><span class="n">CodeSnippets</span> <span class="n">xmlns</span><span class="p">=</span><span class="s">"http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet"</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="n">CodeSnippet</span> <span class="n">Format</span><span class="p">=</span><span class="s">"1.0.0"</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="n">Header</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="n">SnippetTypes</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="n">SnippetType</span><span class="p">&gt;</span><span class="n">Expansion</span><span class="p">&lt;/</span><span class="n">SnippetType</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="n">SnippetTypes</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="n">Title</span><span class="p">&gt;</span><span class="n">MethodVoid</span><span class="p">&lt;/</span><span class="n">Title</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="n">Author</span><span class="p">&gt;</span><span class="n">dummy</span><span class="p">&lt;/</span><span class="n">Author</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="n">Description</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="n">Description</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="n">HelpUrl</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="n">HelpUrl</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="n">Shortcut</span><span class="p">&gt;</span><span class="n">method_void</span><span class="p">&lt;/</span><span class="n">Shortcut</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="n">Header</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="n">Snippet</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="n">Declarations</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="n">Literal</span> <span class="n">Editable</span><span class="p">=</span><span class="s">"false"</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="n">ID</span><span class="p">&gt;</span><span class="n">Method1</span><span class="p">&lt;/</span><span class="n">ID</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="n">ToolTip</span><span class="p">&gt;&lt;/</span><span class="n">ToolTip</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="n">Default</span><span class="p">&gt;</span>
+          <span class="p">&lt;/</span><span class="n">Default</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="n">Function</span><span class="p">&gt;</span>
+          <span class="p">&lt;/</span><span class="n">Function</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="n">Literal</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="n">Declarations</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="n">Code</span> <span class="n">Language</span><span class="p">=</span><span class="s">"csharp"</span><span class="p">&gt;&lt;![</span><span class="n">CDATA</span><span class="p">[</span><span class="k">public</span> <span class="k">void</span> <span class="nf">MyMetHod</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="p">}]</span><span class="k">]&gt;</span><span class="p">&lt;/</span><span class="n">Code</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="n">Snippet</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="n">CodeSnippet</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="n">CodeSnippets</span><span class="p">&gt;</span>
+
+</code></pre></div></div>
+
+<p><strong>STEP 03:</strong> Restart Visual Studio for the changes to take effect.
+I created a few snippets for simple methods returning primitive types. Depending on your needs you can choose the optimum number of snippets. I especially like using the test method snippet which looks like this:</p>
+
+<p><img src="/images/vpblogimg/2013/01/TestMethodSnippet.png" alt="TestMethodSnippet"></p>
+
+<p>Another great feature about this tool is you can export a selected text block as a snippet. All you have to do is right-click and select Export as Snippet, make the final touches in the editor and save.</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/01/06/diy-network-cables/" itemprop="url">DIY - Network cables</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-01-06T22:18:15+00:00" itemprop="datePublished">January  6, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
+
+<!-- hobby -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">electronics, network</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>There aren’t too many reasons why someone would like to make their own Ethernet cables. Sheer fun, learning the nitty-gritty (and useless in most cases) details of how they are made are to name a few. Also as I have too many gadgets making my own cables at any length I please would be convenient and can save a few bucks in the long run. So let’s get started.</p>
+
+<h3 id="the-toolkit">The toolkit</h3>
+
+<h4 id="cable">Cable:</h4>
+
+<p><strong>CAT6:</strong> <a href="http://www.amazon.co.uk/gp/product/B002SQPDXS/ref=oh_details_o00_s00_i00" target="_blank" rel="noopener noreferrer">http://www.amazon.co.uk/gp/product/B002SQPDXS/ref=oh_details_o00_s00_i00</a></p>
+
+<p><strong>CAT5:</strong> <a href="http://www.amazon.co.uk/gp/product/B000HWY304/ref=wms_ohs_product" target="_blank" rel="noopener noreferrer">http://www.amazon.co.uk/gp/product/B000HWY304/ref=wms_ohs_product</a></p>
+
+<p>For the obvious reasons! It’s best to get the latest version generally. I will use CAT6 all around my network but I also bought CAT5e as I was anticipating some errors at the beginning so I’d better make them by wasting cheaper cable.</p>
+
+<h4 id="rj45-modular-connectors">RJ45 Modular Connectors:</h4>
+
+<p><a title="http://www.amazon.co.uk/gp/product/B004HTK30M/ref=oh_details_o01_s00_i00" href="http://www.amazon.co.uk/gp/product/B004HTK30M/ref=oh_details_o01_s00_i00" target="_blank" rel="noopener noreferrer">http://www.amazon.co.uk/gp/product/B004HTK30M/ref=oh_details_o01_s00_i00</a></p>
+
+<p>I’ve watched a lot of tutorial videos. When an expert is showing it, it looks quite easy but I quickly found out it’s not. Aligning all 8 cables and placing them in the correct order is not as easy as it seems. So I definitely recommend two-piece crimps that come with a “guide”. It’s a small piece that allows you to insert all the cables relatively easily and then you insert the whole block into the crimp.</p>
+
+<p><strong>RJ45 Crimp Tool:</strong> <a href="http://www.amazon.co.uk/gp/product/B004J02DRU/ref=oh_details_o00_s00_i00" target="_blank" rel="noopener noreferrer">http://www.amazon.co.uk/gp/product/B004J02DRU/ref=oh_details_o00_s00_i00</a></p>
+
+<p>The set I bought comes with a crimper and a cutter. It looks good enough to do tis job and quite cheap. After the cables are inserted in the connector, the crimper is used to press them all in and connect with the</p>
+
+<h4 id="tester">Tester:</h4>
+
+<p><a href="http://www.amazon.co.uk/gp/product/B007CJUEDA/ref=wms_ohs_product" target="_blank" rel="noopener noreferrer">http://www.amazon.co.uk/gp/product/B007CJUEDA/ref=wms_ohs_product</a></p>
+
+<p>Altough it is easy to test the cable by connecting to a machine, it is generally recommended to use a tester. I guess it makes sense especially when you have to make lots of cables. I bought one for £4 so I guess it’s good deal. The downside is doesn’t support CAT6 which I didn’t notice at the or ordering. If manual testing doesn’t prove to be helpful I would consider buying a better product.</p>
+
+<h4 id="boots">Boots:</h4>
+
+<p><a href="http://www.amazon.co.uk/gp/product/B009EPCOP6/ref=wms_ohs_product" target="_blank" rel="noopener noreferrer">http://www.amazon.co.uk/gp/product/B009EPCOP6/ref=wms_ohs_product</a></p>
+
+<p>These are plastic sleeves over the connector. They are helpful sometimes to avoid the connector clip from getting broken</p>
+
+<h4 id="technical-details">Technical Details</h4>
+
+<p><strong>CAT5 vs. CAT5e vs. CAT6:</strong> The difference is that CAT6 supports 1000Base-T/1000Base-TX (Gigabit Ethernet). CAT5 and CAT5e supports 10Base-T/100Base-TX (Maximum 100Mbit/s)  CAT5e is an improvement over CAT5. It introduces new crosstalk specifications. (Crosstalk means a signal creating a detrimental effect on another channel)</p>
+
+<p><strong>T568A vs. T568B:</strong> The order of the cables matters and they have to be in the same order in both ends. These specific orders are named as T568A and B. What I understand you can use as long as you use it for both ends but all resources I’ve found favoured using T568B so I’ll use that one as well.</p>
+
+<p><strong>Crossover cable:</strong> When you connect one end in T568A and the other T568B it becomes a crossover cable (Regular ones are called patch cables). Crossover cables are used to connect two computers instead connecting a computer to a switch or router. I’ll test creating one of these as well.</p>
+
+<h4 id="action">Action!</h4>
+
+<p>I think we have everything ready to get started. Here’s what I did step-by-step:</p>
+
+<ol>
+  <li>Cut the required length of cable.</li>
+  <li>Remove the outer jacket.</li>
+  <li>Arrange the wires by referring to the wiring standard (T568B) and insert them into the guide of the connector.</li>
+  <li>Insert the guide into the connector.</li>
+  <li>Insert the connector to the crimp tool and press it firmly.</li>
+  <li>Repeat Steps 1- 5 for the other end.
+10 minutes later I had my first homebrew CAT5 cable:</li>
+</ol>
+
+<p><img src="/images/vpblogimg/2013/01/Cat5Final.jpg" alt="CAT5"></p>
+
+<p>Let’s use the tester to verify we did good. Using the tester is quite simple: Just plug in the both ends to the device. If you lights blinking from 1 to 8 simultaneously on both sides that means we are good. I tested it with a broken table too. In that case no lights were on so it’s easy to see if it works or not.</p>
+
+<p><img src="/images/vpblogimg/2013/01/CableTester.jpg" alt="Cable Tester"></p>
+
+<p>CAT6 is slightly different: It has plastic part in the middle of the cable which holds the cables apart as shown in the image below.</p>
+
+<p><img src="/images/vpblogimg/2013/01/Cat6.jpg" alt="CAT6"></p>
+
+<p>All we have to do cut that piece before separating the pairs and the rest is exactly the same as CAT5.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.youtube.com/watch?v=-5uXqZlC9GU#t=15m33s" target="_blank" rel="noopener noreferrer">KnowHow episode about Arduino and cable making</a></li>
+  <li><a href="http://www.lanshack.com/cat5e-tutorial.aspx" target="_blank" rel="noopener noreferrer">A detailed and in-depth page</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/61" class="prev">Prev</a>
+    
+    
+        <a href="/page/63" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

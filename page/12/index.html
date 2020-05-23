@@ -1,0 +1,556 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/12/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2018/09/04/AWS-Organisations/" itemprop="url">Managing Accounts with AWS Organizations</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2018-09-04T05:00:00+01:00" itemprop="datePublished">September  4, 2018</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awssecurity">aws</a></span> -->
+
+<!-- aws, security -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">organizations, iam</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p><img src="/images/vpblogimg/2018/09/aws-organizations-01-logo.png" alt=""></p>
+
+<p>I have never been a huge fan of AWS Management Console. Some reasons for that being:</p>
+
+<ul>
+  <li>Inconsistencies: In some services you can search by anything (such as tag value in EC2 dashboard) whereas in others you have to put in the exact start of the object (such as CloudWatch)</li>
+  <li>Regional separation: Some might like it but I find it confusing and error-prone. If you need to work in multiple regions you have to constantly change the region from the dropdown menu. If you accidentally create a resource in another region you wouldn’t see it’s still running until you accidentally switch back to that region again. But S3 seems to be an exception to this as you can select the region while creating the bucket and you can see all in the same list (speaking of inconsistencies…)</li>
+  <li>Flat resource structure: Every resource is mixed together in an account. If you have multiple projects or teams in your company, you would see all the resources they created among yours. Also there is no environment concept. Your test and production resources live side by side.</li>
+</ul>
+
+<p>This post is about AWS Organizations which addresses the 3rd point in the list above.</p>
+
+<h2 id="what-is-aws-organizations">What is AWS Organizations?</h2>
+<p>It is a way to centrally manage multiple accounts inside an organization by creating a hierarchy between accounts.</p>
+
+<p>Benefits of having an account structure</p>
+
+<ul>
+  <li>No need to label everything with project/team/environment name</li>
+  <li>Production and non-production resources don’t live side by side</li>
+  <li>Better access controls: No need to grant access on resource level. It can be done much easily on account-level</li>
+</ul>
+
+<p>Also from a cost point of view it has the following benefits (taken from <a href="https://docs.aws.amazon.com/aws-technical-content/latest/cost-optimization-laying-the-foundation/aws-account-structure.html" target="_blank" rel="noopener noreferrer">AWS Account Structure Considerations</a>)</p>
+
+<ul>
+  <li>Grouping resources that require different payment instruments</li>
+  <li>Providing groups with different levels of administrative control over AWS resources</li>
+  <li>Better controlling Reserved Instances for specific workloads</li>
+  <li>Identifying untaggable costs such as data transfer</li>
+  <li>Using accounts associated with different business units or functional teams</li>
+</ul>
+
+<h2 id="key-concepts">Key Concepts</h2>
+<p><strong>Account</strong>: Your regular AWS account. The first account you create is called a <em>Master Account</em>, the rest are <em>Member Accounts</em>.</p>
+
+<p><strong>Organization</strong>: A group of related accounts. The account creating the organization becomes the master account.</p>
+
+<p><img src="/images/vpblogimg/2018/09/aws-organizations-02-default-organization.png" alt=""></p>
+
+<p>The star next to the account indicates it is the master account.</p>
+
+<p><strong>Organizational Unit</strong>: You can use organizational units (OUs) to group accounts together to administer as a single unit. This can be any logical grouping such as team, project, environment etc.</p>
+
+<p><img src="/images/vpblogimg/2018/09/aws-organizations-03-create-organizational-unit.png" alt=""></p>
+
+<p><strong>Service Control Policies (SCPs)</strong>: Enables you to restrict, at the account level of granularity, what services and actions the users, groups, and roles in those accounts can do</p>
+
+<h2 id="managing-projects-and-environments">Managing Projects and Environments</h2>
+<p>First I was tempted to separate projects as well but I’d end up with too many accounts so abandoned that idea and adopted an environment-based organizational structure. I ended up having these AWS accounts in my organization:</p>
+
+<ul>
+  <li>Dev</li>
+  <li>Integration</li>
+  <li>UAT (User Acceptance Test)</li>
+  <li>Sandbox</li>
+  <li>Production</li>
+</ul>
+
+<p>Then I created an organizational unit named Stages and moved all these accounts under that OU. This is just one way of structuring projects. Based on organizational needs it can be customized. In my case I decided to keep all shared services (logging, auditing, source code) in the master account.</p>
+
+<h2 id="logging-into-accounts">Logging into accounts</h2>
+<p>This baffled me at first. Initially I created a test account which I wanted to delete later on. But I wasn’t able to do that until I completed the sign up steps which in turn I wasn’t able to because I didn’t have the credentials to log in!</p>
+
+<p>As stated in <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html" target="_blank" rel="noopener noreferrer">this</a> document:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>When you create a new account, AWS Organizations initially assigns password 
+to the root user that is a minimum of 64 characters long. All characters 
+are randomly generated with no guarantees on the appearance of certain 
+character sets. You can't retrieve this initial password. To access the
+account as the root user for the first time, you must go through the
+process for password recovery.
+</code></pre></div></div>
+
+<p>So when you follow the sign-in link it redirects you to IAM login page. I needed to switch to root account login and recover my password by using the Forgot My Password link. On that note: Don’t use fake email addresses as you will need the confirmation email to recover your password.</p>
+
+<h2 id="removing-account-issues">Removing account issues</h2>
+<p>This one was tricky. In order to leave an organization first you need to enter a payment method and select a support plan. This way the account becomes eligible to be a standalone account. Only after that, you can Leave organization. But not right away!</p>
+
+<p>After I entered all the data and completed the setup steps, I clicked Leave organization and I got this error:</p>
+
+<p><img src="/images/vpblogimg/2018/09/aws-organizations-04-leave-org-wait-period.png" alt=""></p>
+
+<p>I waited almost a full day after getting this error but to no avail. I kept getting the same error: <em>“This operation requires a wait period. Try again later.”</em></p>
+
+<p>I had a chat with a support engineer and created a case for this. Nothing helped at first but after a few days I tried again and it worked! So either the waiting period was very long or they fixed something in my account unbenownst to me.</p>
+
+<h2 id="deleting-the-account-without-removing">Deleting the account without removing</h2>
+<p>Another issue I had was deleting an account before removing from the organization. I was assuming that if the account was closed permanently it would be removed from the organization as well. This was not the case. It remains listed as Suspended</p>
+
+<p><img src="/images/vpblogimg/2018/09/aws-organizations-05-suspended-account.png" alt=""></p>
+
+<p>Unfortunately, once this happens there is no way of resolving it using the tools at our disposal. The only solution is to contact AWS support, reactivated the suspended account, leave the organization and close it again!</p>
+
+<p>But you have to do it from the suspended account, not from the master account. Since technically you’re requesting support for another account, they won’t do it (as they told in their response). Good news is that we still have access to support even though the account is suspended. Si I went to <a href="https://aws.amazon.com/contact-us/" target="_blank" rel="noopener noreferrer">support page</a> and created a support request to reinstate my account (so that I could close it again shortly after!)</p>
+
+<p>Another option might be just to wait. I haven’t tried it myself bu in the account closure email it states “After 90 days, you will not be able to reopen your account, and any remaining content in your closed account will be deleted.” So I’m guessing it will be gone completely if I could just for 90 days.</p>
+
+<h2 id="managing-accounts-programmatically">Managing Accounts Programmatically</h2>
+<p>The coolest thing about AWS Organizations is accounts can be created via command line. It’s easy as this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>JOTUNHEIM:~ volkan$ aws organizations create-account --account-name {NAME}  --email {EMAIL}
+{
+    "CreateAccountStatus": {
+        "Id": "xyz-abcabcabcabcabcabcabcabcabcabcab",
+        "AccountName": "{NAME}",
+        "State": "IN_PROGRESS",
+        "RequestedTimestamp": 1532494396.633
+    }
+}
+</code></pre></div></div>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li>Free tier is shared among all accounts in the organization: “If your company creates your AWS account through AWS Organizations, free tier eligibility for all member accounts begins on the day the organization is created.”</li>
+</ul>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>This post is meant to be an introduction to AWS Organizations rather than a complete guide. I will post similar ones as I use this as basis of my infrastructure and build on this.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.youtube.com/watch?v=pfetMIlo_2s" target="_blank" rel="noopener noreferrer">YouTube video: AWS Organizations - Account management at enterprise scale</a></li>
+  <li><a href="https://aws.amazon.com/blogs/security/announcing-aws-organizations-centrally-manage-multiple-aws-accounts/" target="_blank" rel="noopener noreferrer">AWS blog post: Announcing AWS Organizations</a></li>
+  <li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_ous.html" target="_blank" rel="noopener noreferrer">Managing Organisational Units</a></li>
+  <li><a href="https://docs.aws.amazon.com/organizations/latest/APIReference/API_LeaveOrganization.html" target="_blank" rel="noopener noreferrer">LeaveOrganization</a></li>
+  <li><a href="https://www.youtube.com/watch?v=ZKpkF17d0Oo" target="_blank" rel="noopener noreferrer">AWS re:Invent 2017: How Capital One Applies AWS Organizations Best Practices to Mana (SID321)</a></li>
+  <li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_getting-started_concepts.html" target="_blank" rel="noopener noreferrer">AWS Organizations Terminology and Concepts</a></li>
+  <li><a href="https://docs.aws.amazon.com/aws-technical-content/latest/cost-optimization-laying-the-foundation/aws-account-structure.html" target="_blank" rel="noopener noreferrer">AWS Account Structure Considerations</a></li>
+  <li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scp.html" target="_blank" rel="noopener noreferrer">Service Control Policies</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2018/07/28/Setting-up-RAID1-in-Ubuntu-18.04-and-Monitoring-Disk-Health/" itemprop="url">Setting up RAID1 in Ubuntu 18.04 and Monitoring Disk Health</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2018-07-28T07:00:00+01:00" itemprop="datePublished">July 28, 2018</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/linuxsysops">linux</a></span> -->
+
+<!-- linux, sysops -->
+
+
+
+
+    <a href="/category/linux">linux</a>
+    , 
+
+    <a href="/category/sysops">sysops</a>
+    
+</span>
+	<span class="tags">raid</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p><img src="/images/vpblogimg/2018/07/linux-raid1-01-tux.svg" alt=""></p>
+
+<p>AWS and cloud computing are awesome but I still enjoy having a server at home. I’ve decided to reinstate my old desktop. Replaced the disks with shiny new ones (A 500GB SSD and 2 4TB drives for data) and installed Ubuntu 18.04.</p>
+
+<p>My primary goals were:</p>
+
+<ul>
+  <li>Partition SSD drive and use it for data that needs performance</li>
+  <li>Set up RAID1 on 2 4TB disks so that 1 disk failure wouldn’t result in data loss</li>
+  <li>Set up some sort of notifications to monitor SSD disk health</li>
+  <li>Set up some sort of notifications to monitor RAID disk health</li>
+</ul>
+
+<p>Having all these in place was important for me to have a solid, reliable system before I started building stuff on top of it.</p>
+
+<h2 id="partitioning">Partitioning</h2>
+
+<p>By default Ubuntu only adds a 512MB /boot/efi partition and leaves the rest for root (/). But since I recently had some free space issues in the boot drive recently I decided to create a boot partition as well. Also added a 32GB Swap partition. Swap is is virtual memory and it should have the same size as the computer’s memory.</p>
+
+<p>So I ended up allocating 32GB for home as well and left the rest for the root. Going forward now I have more than 300GB to use for application data, Docker images etc.</p>
+
+<p><img src="/images/vpblogimg/2018/07/linux-raid1-02-partitions.png" alt=""></p>
+
+<h2 id="raid1">RAID1</h2>
+<p>Now it’s time to set up a RAID array to have some redundancy. They are shiny new disks but you can never fully rely on them and they will eventually fail. Probably it’s not the best idea to install 2 identical disks at the same time as their lifecycle will likely end at similar times. So I’ll need to keep an eye on them and set up some monitoring and notifications (more on that later).</p>
+
+<p>As my guide I started using this article called <a href="https://www.tecmint.com/create-raid1-in-linux/" target="_blank" rel="noopener noreferrer">Setting up RAID 1 (Mirroring) using ‘Two Disks’ in Linux – Part 3</a> to set up my RAID.</p>
+
+<p>This is a very nice article and explains everything step by step already so I’m not going to duplicate it here. But I bumped into an issue while following the guide: 4TB drives. My disks were MBR which only supported up to 2TB and I had to convert them into GPT disks.</p>
+
+<p>The answer was <strong>parted</strong>. I followed the steps in this <a href="https://askubuntu.com/a/586721" target="_blank" rel="noopener noreferrer">answer</a> and managed to partition the drives to 4TB (3.7 to be exact!)</p>
+
+<h2 id="testing-raid1">Testing RAID1</h2>
+
+<p>Now that I had a RAID it was time to go out and test it. First thing I wanted to see was it mounted automatically after a reboot. It did mount the drives but there was a problem with RAID. At boot the device was showing as md127 instead of md0 and it was failing to sync.</p>
+
+<p>My mdadm.conf file looked like this when this was happening:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ARRAY /dev/md0 level=raid1 num-devices=2 metadata=1.2 name=asgard:0 UUID={device id}
+   devices=/dev/sda1,/dev/sdb1
+</code></pre></div></div>
+
+<p>After some Googling I found the answere <a href="https://ubuntuforums.org/showthread.php?t=1764861" target="_blank" rel="noopener noreferrer">here</a></p>
+
+<p>The solution was simply removing the name parameter from the file!. After that, when I rebooted and entered the following commands I was able to see a healthy RAID:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat /proc/mdstat
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2018/07/linux-raid1-03-mdadm-stat.png" alt=""></p>
+
+<p>and</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mdadm -D /dev/md0
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2018/07/linux-raid1-04-mdadm-status.png" alt=""></p>
+
+<h2 id="monitoring-system-disk-with-smartmontols">Monitoring System Disk with smartmontols</h2>
+<p>Now that everything looked in place, I needed to ensure it stays that way!</p>
+
+<p>To achieve that goal, I edited this file /etc/smartd.conf and added this line:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DEVICESCAN -o on -H -l error -l selftest -t -m my.email@address.com -M test
+</code></pre></div></div>
+
+<h3 id="set-up-sending-emails-from-server">Set up sending emails from server</h3>
+<p>When I first installed smartmontools, it asked Postfix configuration which looks like this:</p>
+
+<p><img src="/images/vpblogimg/2018/07/linux-raid1-05-postfix-configuration.png" alt=""></p>
+
+<p>Since I was interested in getting results fast, I selected No Configuration and moved on. Now it’s time to configure it.</p>
+
+<p>To bring up this screen again I entered the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dpkg-reconfigure postfix
+</code></pre></div></div>
+
+<p>I followed the wizard, entered my email domain. Then followed this documentation from AWS: <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/postfix.html" target="_blank" rel="noopener noreferrer">Integrating Amazon SES with Postfix</a></p>
+
+<p>As always, I ended up having some issues :-).</p>
+
+<p>First problem was it didn’t work! It wasn’t finding the SES SMTP server as relay server and was always trying to send emails from localhost. The solution was <a href="https://devanswers.co/postfix-statusbounced-unknown-user-user/" target="_blank" rel="noopener noreferrer">here</a></p>
+
+<p>As the instructions say, I updated /etc/postfix/main.cf with the values below:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>myhostname = localhost
+mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+</code></pre></div></div>
+
+<p>and I was able to send emails to the SMTP server. But the SES didn’t like my IP address and the email bounced. The solution to that was to create an IP filter in SES and allow the traffic from that address.</p>
+
+<p><img src="/images/vpblogimg/2018/07/linux-raid1-06-aws-ses-create-filter.png" alt=""></p>
+
+<p>Then I restarted the service to test</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>service smartmontools restart
+</code></pre></div></div>
+
+<p>and received the notification. Actually received 3 emails for some reason.</p>
+
+<p><img src="/images/vpblogimg/2018/07/linux-raid1-07-aws-ses-notifications.png" alt=""></p>
+
+<p>The service runs at startup so this way I can be notified whenever it reboots too.</p>
+
+<h2 id="monitoring-raid-with-mdadm">Monitoring RAID with mdadm</h2>
+
+<p>Took some time to complete synchronizing 4TB disks but finally I was ready to rock:</p>
+
+<p><img src="/images/vpblogimg/2018/07/linux-raid1-08-mdadm-status-complete.png" alt=""></p>
+
+<p>Apart from smartmontools, mdadm application is also capable of sending emails when a disk fails.</p>
+
+<p>The documentation tells to add MAILADDR followed by an email address to specify target email address but in my tests adding the line didn’t change anything.</p>
+
+<p>In fact, turns out by default it’s sending the notifications. As my server was set up to send emails now, by just entering the following command to send out a test email I was able to receive it</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mdadm --monitor --scan --test -1
+</code></pre></div></div>
+
+<p>The problem is it’s now using root@mydomain.com all the time now. I wasn’t able to change it. But as long as that mailbox exists at least I can receive notifications.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>All hardware eventually fails. Disk failure is especially annoying because it may cause some precious data loss. Apart from good backup practices, it’s also helpful to have a good monitoring system and redundancy on the disks we use.</p>
+
+<p>It took me some time to set up my system but now at least I have 1 disk redundancy for large amounts of data and the ability to be notified whenever something goes wrong with the disks which gives me some peace of mind (not too much though :-)).</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.tecmint.com/create-raid1-in-linux/" target="_blank" rel="noopener noreferrer">Setting up RAID 1 (Mirroring) using ‘Two Disks’ in Linux – Part 3</a></li>
+  <li><a href="https://askubuntu.com/a/586721" target="_blank" rel="noopener noreferrer">Create GUID partition table (GPT) during Ubuntu Server install</a></li>
+  <li><a href="https://ubuntuforums.org/showthread.php?t=1764861" target="_blank" rel="noopener noreferrer">RAID starting at md127 instead of md0</a></li>
+  <li><a href="https://dustymabe.com/2012/03/10/hard-drive-monitoring-and-e-mail-alerts-using-smartd/" target="_blank" rel="noopener noreferrer">Hard Drive Monitoring and E-mail Alerts Using smartd</a></li>
+  <li><a href="https://help.ubuntu.com/community/Smartmontools" target="_blank" rel="noopener noreferrer">Smartmontools documentation</a></li>
+  <li><a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/postfix.html" target="_blank" rel="noopener noreferrer">Integrating Amazon SES with Postfix</a></li>
+  <li><a href="https://devanswers.co/postfix-statusbounced-unknown-user-user/" target="_blank" rel="noopener noreferrer">Can’t send mail to own domain. Postfix: status=bounced (unknown user: “user”)</a></li>
+  <li><a href="https://www.systutorials.com/docs/linux/man/5-mdadm.conf/" target="_blank" rel="noopener noreferrer">mdadm.conf (5) - Linux Man Pages</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2018/07/21/Row-Against-the-Machine-Getting-Rowing-Data-Out-of-Concept2-Model-D/" itemprop="url">Row Against the Machine: Getting Rowing Data Out of Concept2 Model D</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2018-07-21T07:00:00+01:00" itemprop="datePublished">July 21, 2018</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
+
+<!-- hobby -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">fitness, concept2, rowing</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I’ve been using a Concept2 Model D rowing machine for some time now and quite enjoying it as a form of workout. (Primarily because I can still watch Netflix or Youtube while rowing!)</p>
+
+<p><img src="/images/vpblogimg/2018/07/concept2-model-c.jpg" alt="Concept2 Model C Rowing Machine"></p>
+
+<p>Since I have some data accumulated in it I decided to have a look into ways of getting it and working on it hoping that it give me some insights about possible ways of improving my stats.</p>
+
+<h2 id="official-tools">Official Tools</h2>
+<p>To be honest the existing toolset that comes out of the box is quite sufficient.</p>
+
+<h3 id="logbook">LogBook</h3>
+<p>This is the official web application where you can monitor your workouts.</p>
+
+<p><img src="/images/vpblogimg/2018/07/concept2-logbook.png" alt="Concept LogBook"></p>
+
+<p>This application is quite good really. You can manually enter your workouts, view the existing history. Create teams and participate in challenges so there’s also a social aspect to it.</p>
+
+<h3 id="ios-app-ergdata">iOS App: ErgData</h3>
+<p>The monitor connected to the rowing machine (Performance Monitor - PM5) supports Bluetooth connection which can be easily paired with an iPhone. If you install ErgData app on your phone you can sync the device with your phone  and get them out that way very easily. Better yet, it allows you to upload your workouts to LogBook. After you complete a workout, you can easily upload the results by clicking Sync.</p>
+
+<p><img src="/images/vpblogimg/2018/07/concept2-ergdata.jpeg" alt="Concept2 ErgData app"></p>
+
+<h2 id="unofficial-tools">Unofficial Tools</h2>
+
+<h3 id="raspirowing">RasPiRowing</h3>
+<p>I found this nice Raspberry Pi based project called <a href="https://raspirowing.com/" target="_blank" rel="noopener noreferrer">RasPiRowing</a> developed one of the staff members of Concept.</p>
+
+<p>Since I’m a fan of Raspberry Pi have a whole bunch of them lyting around, it didn’t take me long to install it and use it. It works just fine and comes with a fun fish game too:</p>
+
+<p><img src="/images/vpblogimg/2018/07/concept2-fish-pi-game.jpg" alt="FishPi Game"></p>
+
+<p>It’s a nice way of interacting with the Concept2. Since it can be accessed by a Python application I can build my own applications as well to get data out of the erg.</p>
+
+<h2 id="developer-tools">Developer Tools</h2>
+
+<h3 id="sdk">SDK</h3>
+<p>There is an <a href="http://www.concept2.co.uk/service/software/software-development-kit" target="_blank" rel="noopener noreferrer">SDK</a> available to download for both Mac and Windows.</p>
+
+<p>I installed the Mac version which extracts the files under /Users/{username}/C2 PM SDK/</p>
+
+<p>But I couldn’t find much useful stuff in there:</p>
+
+<p><img src="/images/vpblogimg/2018/07/concept2-sdk.png" alt="SDK contents"></p>
+
+<p>Tried to build the XCode project but gave a build error and I just left it at that.</p>
+
+<h3 id="api">API</h3>
+<p>They also provide an API wich can be used to get the data out. This sounds the most interesting part to me as I can develop my own custom tools based on this API.</p>
+
+<p>In the documentation, they advise to use the dev site first while trying out the API and then request using the live data. Also you need to register your application with Concept2 to be able to use their APIs.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://log.concept2.com/login" target="_blank" rel="noopener noreferrer">Concept2 Logbook</a></li>
+  <li><a href="http://www.concept2.co.uk/service/software/software-development-kit" target="_blank" rel="noopener noreferrer">Concept2 SDK</a></li>
+  <li><a href="http://log.concept2.com/developers/documentation/" target="_blank" rel="noopener noreferrer">Logbook API Documentation</a></li>
+  <li><a href="https://raspirowing.com/" target="_blank" rel="noopener noreferrer">RasPiRowing</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/11" class="prev">Prev</a>
+    
+    
+        <a href="/page/13" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

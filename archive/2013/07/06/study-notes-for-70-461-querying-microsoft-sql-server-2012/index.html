@@ -1,0 +1,270 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Study Notes for 70-461: Querying Microsoft SQL Server 2012 – Part 1 - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2013/07/06/study-notes-for-70-461-querying-microsoft-sql-server-2012/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Study Notes for 70-461: Querying Microsoft SQL Server 2012 – Part 1</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-07-06T11:22:13+01:00" itemprop="datePublished">July  6, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">certification, sql_server</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>As I mentioned before I like certification because it gives me a chance to cover all topics related to a subject no matter how trivial. During my preparations for this exam I learned some useful stuff. I believe they can be very useful in real-life scenarios. A compiled a list of items that I learned while studying for this exam:</p>
+
+<h3 id="01-common-table-expressions">01. Common Table Expressions</h3>
+<p>Not a new feature in SQL 2012 actually. I have used it a few times but I didn’t know its name back then. A Common Table Expression (CTE) is basically a temporary result set that you can use in the scope statement. For example</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>WITH DepartmentCTE (Name, GroupName)
+AS
+(
+    SELECT Name, GroupName
+    FROM HumanResources.Department
+    WHERE GroupName = 'Executive General and Administration'
+)
+
+SELECT NationalIDNumber
+FROM DepartmentCTE cte
+INNER JOIN HumanResources.Employee e ON cte.Name = e.JobTitle
+</code></pre></div></div>
+
+<p>This is not a very good example because a simple join could be used instead. But for the demonstration purposes it should be enough to layout the syntax and usage.</p>
+
+<p>Source: <a href="http://msdn.microsoft.com/en-us/library/ms190766(v=sql.105).aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/ms190766(v=sql.105).aspx</a></p>
+
+<h3 id="02-pivot--unpivot">02. Pivot / Unpivot</h3>
+<p>I had one question about Pivot and that was just the definition of it so it was easy. Basically, pivot converts row values to columns. For example, take this query:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT o.TerritoryID, YEAR(OrderDate) AS SaleYear, SUM(SubTotal) AS Total
+FROM Sales.SalesOrderHeader o
+WHERE o.TerritoryID = 1
+GROUP BY o.TerritoryID, YEAR(OrderDate)
+ORDER BY SaleYear ASC, o.TerritoryID ASC
+</code></pre></div></div>
+
+<p>which yields this output:</p>
+
+<p><img src="/images/vpblogimg/2013/07/QueryOutput01.png" alt="Query Output"></p>
+
+<p>Say we want to get all years as columns and the totals as the values in the row. Using pivots we can rewrite the query as follows:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT 'Total Sales' AS TotalSales, [2005], [2006], [2007], [2008]
+FROM
+(
+    SELECT o.TerritoryID, YEAR(OrderDate) AS SaleYear, SubTotal
+    FROM Sales.SalesOrderHeader o
+    WHERE o.TerritoryID = 1
+) AS SourceTable
+PIVOT
+(
+    SUM(SubTotal)
+    FOR SaleYear IN ([2005], [2006], [2007], [2008])
+) AS PivotTable;
+</code></pre></div></div>
+
+<p>and we get this resultset:</p>
+
+<p><img src="/images/vpblogimg/2013/07/QueryOutput02.png" alt="Query Output"></p>
+
+<p>Source: <a href="http://msdn.microsoft.com/en-us/library/ms177410(v=sql.105).aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/ms177410(v=sql.105).aspx</a></p>
+
+<h3 id="03-for-xml">03. FOR XML</h3>
+<p>I think XML lost a lot of ground after the rise of JSON over the last few years but still it is used very commonly. I never used FOR XML in a real-life project but I was aware the Microsoft cares about it and not surprisingly I got 4 questions. It’s is very simple and intuitive actually. The keywords you need to know are: RAW, AUTO, EXPLICIT, PATH and ELEMENTS</p>
+
+<p><em>Raw:</em> Returns a single <row> element for row.</row></p>
+
+<p>Query:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT TOP 1 *
+FROM HumanResources.Department
+FOR XML RAW
+</code></pre></div></div>
+
+<p>Output:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;row DepartmentID="1" Name="Engineering" GroupName="Research and Development" ModifiedDate="2002-06-01T00:00:00"/&gt;
+</code></pre></div></div>
+<p><em>Auto:</em> Generates the name of the elements from the query</p>
+
+<p>Query:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT TOP 1 *
+FROM HumanResources.Department
+FOR XML AUTO
+</code></pre></div></div>
+
+<p>Output:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;HumanResources.Department DepartmentID="1" Name="Engineering" GroupName="Research and Development" ModifiedDate="2002-06-01T00:00:00"&gt;
+</code></pre></div></div>
+<p><em>Elements:</em> Returns the values in elements rather than attributes.</p>
+
+<p>Query:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT TOP 1 *
+FROM HumanResources.Department
+FOR XML AUTO, ELEMENTS
+</code></pre></div></div>
+
+<p>Output:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;HumanResources.Department&gt;
+&lt;DepartmentID&gt;1&lt;/DepartmentID&gt;
+&lt;Name&gt;Engineering&lt;/Name&gt;
+&lt;GroupName&gt;Research and Development&lt;/GroupName&gt;
+&lt;ModifiedDate&gt;2002-06-01T00:00:00&lt;/ModifiedDate&gt;
+&lt;/HumanResources.Department&gt;
+</code></pre></div></div>
+
+<p><em>Path:</em> Gives more control over the path of the nodes</p>
+
+<p>Query:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT TOP 1 *
+FROM HumanResources.Department
+FOR XML PATH('Department'), ROOT('HumanResources')
+</code></pre></div></div>
+
+<p>Output:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;HumanResources&gt;
+&lt;Department&gt;
+&lt;DepartmentID&gt;1&lt;/DepartmentID&gt;
+&lt;Name&gt;Engineering&lt;/Name&gt;
+&lt;GroupName&gt;Research and Development&lt;/GroupName&gt;
+&lt;ModifiedDate&gt;2002-06-01T00:00:00&lt;/ModifiedDate&gt;
+&lt;/Department&gt;
+&lt;/HumanResources&gt;
+</code></pre></div></div>
+
+<p>Source: <a href="http://msdn.microsoft.com/en-us/library/ms178107.aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/ms178107.aspx</a></p>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2013/07/05/on-microsoft-exam-70-461-querying-microsoft-sql-server-2012/" title="Previous Post: 
+On Microsoft Exam 70-461: Querying Microsoft SQL Server 2012">« On Microsoft Exam 70-461: Querying Microsoft SQL Server 2012</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2013/07/07/study-notes-for-70-461-querying-microsoft-sql-server-2012-part-2/" title="next Post: 
+Study Notes for 70-461: Querying Microsoft SQL Server 2012 – Part 2">Study Notes for 70-461: Querying Microsoft SQL Server 2012 – Part 2 » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,2 +1,5 @@
 # volkanpaksoy.com
-Blog
+
+Tech blog
+
+...

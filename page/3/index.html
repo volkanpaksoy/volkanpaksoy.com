@@ -1,0 +1,589 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/page/3/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<div itemscope itemtype="http://schema.org/Blog">
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2019/10/23/AWS-Developer-Tools-Services-Part-4-AWS-CodePipeline/" itemprop="url">AWS Developer Tools Services Part 4: AWS CodePipeline</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-10-23T04:00:00+01:00" itemprop="datePublished">October 23, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devopsaws">devops</a></span> -->
+
+<!-- devops, aws -->
+
+
+
+
+    <a href="/category/devops">devops</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">codepipeline, git, aws_developer_tools_services</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<h2 id="introduction">Introduction</h2>
+<p>This post is part of my mini-series about <a href="https://aws.amazon.com/products/developer-tools/" target="_blank" rel="noopener noreferrer">AWS Developer Tools Services</a></p>
+
+<ul>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/15/AWS-Developer-Tools-Services-Part-1-AWS-CodeCommit/">Part 1: AWS CodeCommit</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/19/AWS-Developer-Tools-Services-Part-2-AWS-CodeBuild/">Part 2: AWS CodeBuild</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/20/AWS-Developer-Tools-Services-Part-3-AWS-CodeDeploy/">Part 3: AWS CodeDeploy</a></li>
+  <li>Part 4: AWS CodePipeline</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-icon.png" alt=""></p>
+
+<h2 id="aws-codepipeline">AWS CodePipeline</h2>
+<p>In the previous posts I was able to create a Git repository in CodeCommit, create a build and upload the artifacts to an S3 bucket using CodeBuild and deploy the artifacts to an EC2 instance. In this post I will use CodePipeline service to tie these steps together.</p>
+
+<p>AWS CodePipeline is more like an umbrella service that it combines the the source, build and deploy steps together with some added benefits:</p>
+
+<ul>
+  <li>Ability to retry deployment: In CodeDeploy, if the deployment fails you have to create a new deployment manually but with Pipeline we have the option to retry the deployment which clones the failed deployment and runs the new one automatically.</li>
+  <li>Trigger build upon code changes: You can start builds manually or on schedule by creating triggers but you can not trigger a build when you push your code to the repository. CodePipeline handles this automatically.</li>
+</ul>
+
+<h2 id="create-a-pipeline">Create a pipeline</h2>
+
+<h3 id="step-1-give-it-a-name">Step 1: Give it a name</h3>
+<p>First step is to simply give the pipeline a name. CodePipeline can automatically create an IAM role with the required permissions. Required permissions are not really clear at this point as we haven’t connected any of the services yet. That’s why it’s very useful to keep the “Allow AWS CodePipeline to create a service role so it can be used with this new pipeline” checkbox ticked.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-create-pipeline.png" alt=""></p>
+
+<h4 id="step-2-add-source">Step 2: Add source</h4>
+<p>Next, we choose the source provider. In this example, I will use CodeCommit. It also support Amazon ECR, Amazon S3 and GitHub.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-add-source.png" alt=""></p>
+
+<p>At this stage, by using CloudWatch events we can automatically start the build. This option os provided because CodeCommit is an AWS service. If you choose GitHub as your provider you’ll see GitHub webhooks which do the same job.</p>
+
+<h4 id="step-3-add-build">Step 3: Add build</h4>
+<p>By default two build services are supported: CodeBuild and Jenkins. It’s easier to connect to CodeBuild as you just have to select your build project from the dropdown list:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-add-build.png" alt=""></p>
+
+<p>You can also choose to skip this stage. If you are copying static assets from an S3 bucket for instance you wouldn’t need to build anything and would choose to skip this stage.</p>
+
+<h4 id="step-4-add-deployment">Step 4: Add deployment</h4>
+<p>At deployment stage, we have quite a few options:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-add-deployment-1.png" alt=""></p>
+
+<p>As stated before, I will use the CodeDeploy deployment I created before:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-add-deployment-2.png" alt=""></p>
+
+<p>Finally we review and create the pipeline.</p>
+
+<h2 id="troubleshooting-the-pipeline">Troubleshooting the pipeline</h2>
+<p>Even though my CodeBuild and CodeDeploy projects succeeded, running the CodePipeline at this point fails. The reason for this error is CodePipeline creates its own S3 bucket and CodeDeploy agent needs access to that bucket as well to be able to download the deployment artifacts. So I had to modify my policy as such:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:Get*",
+        "s3:List*"
+      ],
+      "Resource": [
+        "arn:aws:s3:::replace-with-your-s3-bucket-name/*",
+        "arn:aws:s3:::aws-codedeploy-us-east-1/*",
+        "arn:aws:s3:::codepipeline-us-east-1-XXXXXXXXXXX/*"
+      ]
+    }
+  ]
+}
+</code></pre></div></div>
+
+<h2 id="see-it-in-action">See it in action</h2>
+<p>After fixing the policy I retried the deployment (which creates a new deployment, doesn’t actually retry the failed one)</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-results.png" alt=""></p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>In this mini-series, I investigated creating a full pipeline using AWS developer services. In future posts I will delve deeper into these services and start using other complementary services as well.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://aws.amazon.com/codepipeline" target="_blank" rel="noopener noreferrer">AWS CodePipeline</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2019/10/20/AWS-Developer-Tools-Services-Part-3-AWS-CodeDeploy/" itemprop="url">AWS Developer Tools Services Part 3: AWS CodeDeploy</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-10-20T07:00:00+01:00" itemprop="datePublished">October 20, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awsdevops">aws</a></span> -->
+
+<!-- aws, devops -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags">codedeploy, git, aws_developer_tools_services</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<h2 id="introduction">Introduction</h2>
+<p>This post is part of my mini-series about <a href="https://aws.amazon.com/products/developer-tools/" target="_blank" rel="noopener noreferrer">AWS Developer Tools Services</a></p>
+
+<ul>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/15/AWS-Developer-Tools-Services-Part-1-AWS-CodeCommit/">Part 1: AWS CodeCommit</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/19/AWS-Developer-Tools-Services-Part-2-AWS-CodeBuild/">Part 2: AWS CodeBuild</a></li>
+  <li>Part 3: AWS CodeDeploy</li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/23/AWS-Developer-Tools-Services-Part-4-AWS-CodePipeline/">Part 4: AWS CodePipeline</a></li>
+</ul>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-icon.png" alt=""></p>
+
+<h2 id="aws-codedeploy">AWS CodeDeploy</h2>
+<p>CodeDeploy is a flexible deployment service that can integrate with a number of different services. It can deploy to EC2/On-premises instances as well as AWS Lambda and Amazon ECS. In my example I’ll use EC2 deployment on a Windows server.</p>
+
+<h2 id="agent">Agent</h2>
+<p>CodeDeploy requires an agent application installed on the target machines. This is only a requirement for EC2 though. For containers (ECS) and serverless (Lambda) deployments this is not necessary.</p>
+
+<p>As of this writing it’s officially supported by the following versions of Windows Server: 2016, 2012 R2, and 2008 R2.</p>
+
+<p>The installer for the agent program can be downloaded from <a href="https://docs.aws.amazon.com/en_pv/codedeploy/latest/userguide/codedeploy-agent-operations-install-windows.html" target="_blank" rel="noopener noreferrer">here</a></p>
+
+<p>The agent setup is a bit unintuitive in the sense that once it’s done it just disappears without any confirmation of successful installation.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-agent-service-running.png" alt=""></p>
+
+<h2 id="creating-an-application">Creating an Application</h2>
+<p>Now that we have the EC2 instance running with the CodeDeploy agent we are ready to configure CodeDeploy service.</p>
+
+<p>First we need to create our application and specify the target platform (EC2 / ECS / Lambda).</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-create-application.png" alt=""></p>
+
+<h2 id="create-a-deployment-group">Create a Deployment Group</h2>
+<p>In order to create a deployment group we need to supply a few details.</p>
+
+<h3 id="iam-role">IAM Role</h3>
+<p>We need to provide a CodeDeploy service role. So first we need go to IAM, create a role and select CodeDeploy from the AWS Services list. Then select the use case (in my case it’s the first option):</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-create-iam-service-role.png" alt=""></p>
+
+<p>This comes with a role with <strong>AWSCodeDeployRole</strong> policy attached.</p>
+
+<p>Finally we give it a name and copy the ARN and use it in CodeDeploy configuration.</p>
+
+<h3 id="deployment-type">Deployment Type</h3>
+<p>CodeDeploy supports 2 types of deployment:</p>
+
+<ul>
+  <li>In-place</li>
+  <li>Blue/green</li>
+</ul>
+
+<p>In this example I will have 1 EC2 instance and I will use In-place deployment type. But Blue/green is very important to have a new system with no downtime so I’ll cover that bit in a separate post.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-deployment-type-selection.png" alt=""></p>
+
+<h3 id="environment-configuration">Environment Configuration</h3>
+<p>The way CodeDeploy finds the target instances is via <strong>tags</strong>. You can provide multiple groups of tags. In that case, for an instance to be targeted by CodeDeploy</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-environment-configuration.png" alt=""></p>
+
+<h3 id="other-settings">Other Settings</h3>
+
+<p>There are more settings such as deployment configuration (deploy all at once, one at a time, half at a time) and configuring Load Balancer. Since I’m only covering the basics in this example I’ll not explore those features. They don’t mean much with a single EC2 instance anyway.</p>
+
+<h2 id="deploying-the-application">Deploying the Application</h2>
+<p>We have at this point defined the target of the deployment and now we need to define what to deploy.</p>
+
+<p>To tie it to the previous configuration we have done, we first select the deployment group. Then we choose the location of the deployment package: In my example I’ll use the artifacts built by CodeBuild and uploaded to Amazon S3.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-deployment-settings.png" alt=""></p>
+
+<p>After you create the deployment, it automatically starts it. Make sure there are running instances with the correct tags other wise you might see an error like this:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-no-instances-found-error.png" alt=""></p>
+
+<p>For each deployment you need to create a new deployment. The good news is that you can an existing deployment and create it very quickly that way.</p>
+
+<p>After the deployment starts on the instances you can see the progress on the screen right away:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-deployment-in-progress.png" alt=""></p>
+
+<h2 id="iam-instance-profile">IAM Instance Profile</h2>
+<p>If you are having an error like this</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>InstanceAgent::Plugins::CodeDeployPlugin::CommandPoller: Missing credentials - please check if this instance was started with an IAM instance profile
+</code></pre></div></div>
+
+<p>that is probably because you skipped creating an instance profile for your EC2 instances like I did. It is explained <a href="https://docs.aws.amazon.com/en_pv/codedeploy/latest/userguide/getting-started-create-iam-instance-profile.html#getting-started-create-iam-instance-profile-console" target="_blank" rel="noopener noreferrer">here</a>.</p>
+
+<p>Basically the CodeDeploy agent running in EC2 instance needs to communicate with CodeDeploy service and Amazon S3 to get the deployment package.</p>
+
+<p>To resolve this issue:</p>
+
+<ol>
+  <li>Create an IAM policy like this:</li>
+</ol>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"s3:Get*"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"s3:List*"</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"arn:aws:s3:::replace-with-your-s3-bucket-name/*"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"arn:aws:s3:::aws-codedeploy-us-east-1/*"</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<ol>
+  <li>Create an IAM service role for EC2. In permissions, attach the policy created in Step 1.</li>
+</ol>
+
+<p>In EC2, select the instance and attach the role:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-attach-iam-role.png" alt=""></p>
+
+<p>Make sure to restart the service after attaching the role.</p>
+
+<h2 id="appspecyml">AppSpec.yml</h2>
+<p>At this point the agent can locate the deployment package but it doesn’t know what to do with. We need to define installation steps. Just like we had to provide a buildspec.yml file to CodeBuild service, we need to provide an appspec.yml file to CodeDeploy service to define these deployment steps.</p>
+
+<p>appspec.yml file must be placed in application source code’s root folder.</p>
+
+<p>In this example, the deployment is basically just copying the new application to the destination and my appspec.yml file looks like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 0.0
+os: windows
+files:
+  - source: \
+    destination: c:\website
+</code></pre></div></div>
+
+<p>In addition to this basic configuration, it’s possible to run scripts before and after installation. So if there are dependencies or clean up tasks they can be carried out that way.</p>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>I created this sample project on a MacBook Pro and when I tested the deployment had the following error:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-appspec-version-error.png" alt=""></p>
+
+<p>The problem is the line endings. Windows expects \r\n line endings whereas on unix-baseds systems the line ending is \n. So the solution for that is to save the appsepc.yml file with UTF-8 encoding and the agent was able to read the file correctly and automatically unzips the contents of the deployment package to the target folder:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-successful-deployment.png" alt=""></p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>In this post I used basic features of AWS CodeDeploy service to deploy my artifacts from the previous post and carry out the actual deployment. In future posts I will focus on more advanced features and other AWS code services.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://docs.aws.amazon.com/en_pv/codedeploy/latest/userguide/codedeploy-agent.html" target="_blank" rel="noopener noreferrer">Working with the CodeDeploy Agent</a></li>
+  <li><a href="https://docs.amazonaws.cn/en_us/codedeploy/latest/userguide/troubleshooting-deployments.html#troubleshooting-agent-commandpoller-error" target="_blank" rel="noopener noreferrer">Troubleshoot EC2/On-Premises Deployment Issues</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2019/10/19/AWS-Developer-Tools-Services-Part-2-AWS-CodeBuild/" itemprop="url">AWS Developer Tools Services Part 2: AWS CodeBuild</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-10-19T07:00:00+01:00" itemprop="datePublished">October 19, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awsdevops">aws</a></span> -->
+
+<!-- aws, devops -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags">codebuild, git, aws_developer_tools_services</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<h2 id="introduction">Introduction</h2>
+<p>This post is part of my mini-series about <a href="https://aws.amazon.com/products/developer-tools/" target="_blank" rel="noopener noreferrer">AWS Developer Tools Services</a></p>
+
+<ul>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/15/AWS-Developer-Tools-Services-Part-1-AWS-CodeCommit/">Part 1: AWS CodeCommit</a></li>
+  <li>Part 2: AWS CodeBuild</li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/20/AWS-Developer-Tools-Services-Part-3-AWS-CodeDeploy/">Part 3: AWS CodeDeploy</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/23/AWS-Developer-Tools-Services-Part-4-AWS-CodePipeline/">Part 4: AWS CodePipeline</a></li>
+</ul>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-icon.png" alt=""></p>
+
+<h2 id="aws-codebuild">AWS CodeBuild</h2>
+<p>As the name implies, AWS CodeBuild is Amazon’s build service that compiles your code, runs unit tests etc. As this is quite broad and changes from project to project and technology to technology it requires some customization.</p>
+
+<h2 id="hook-up-the-source-code">Hook up the source code</h2>
+<p>First step is to select the source. It’s quite flexible in the sense that it integrates with top Git providers such as GitHub and Bitbucket. The easiest way is to use CodeCommit because of the direct integration between services. No extra authentication is required to connect to the repository.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-selecting-source.png" alt=""></p>
+
+<p>It also support Amazon S3 as source but I cannot think of a practical use for it.</p>
+
+<p>Another interesting feature is that it supports multiple input sources. If your build depends on source from multiple repositories I would consider merging them into a single repository but if that’s not possible this is a nice option to make it work.</p>
+
+<h2 id="hook-up-the-docker-image-with-build-tools">Hook up the Docker image with build tools</h2>
+<p>The build process takes place in a Docker container. By default AWS provides their own build images for different operating systems:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-environment.png" alt=""></p>
+
+<p>A couple of notes on build images:</p>
+
+<ul>
+  <li>AWS provides some build images but we can provide our own images as well.</li>
+  <li>
+    <p>How the managed images configured can be found here: <a href="https://docs.aws.amazon.com/en_pv/codebuild/latest/userguide/build-env-ref-available.html" target="_blank" rel="noopener noreferrer">Docker Images Provided by CodeBuild</a>. They have build tools installed on these images for all runtimes they support. As of this writing dotnet core 3.0 is not supported in any of the images though.</p>
+  </li>
+  <li>The image availability may differ between regions. For example N.Virginia regions has 3 supported OS images whereas London region doesn’t have Windows image.</li>
+  <li>Running this build process is not free and pricing details can be found <a href="https://aws.amazon.com/codebuild/pricing" target="_blank" rel="noopener noreferrer">here</a>. If you’re running long build processes that you run frequently these costs can quickly add up.</li>
+</ul>
+
+<h2 id="configuring-the-build">Configuring the build</h2>
+<p>If you run the build after selecting the source and the build image, you get the following error:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-buildspec-missing-error.png" alt=""></p>
+
+<p>By default CodeBuild requires a special configuration file called buildspec.yml to reside at the root of the repository:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-buildspec-settings.png" alt=""></p>
+
+<p>In my example, the folder structure is like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[Root]
+	[Src]
+   		[Sample.UI.Web]
+   		[Sample.Core]
+   		[Sample.Core.UnitTests]
+   		Sample.sln
+   		buildspec.yml
+</code></pre></div></div>
+
+<p>I’m using a dotnet core 2.2 project on Windows-based Docker image and my buildspec.yml looks like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 0.2
+
+phases:
+  build:
+    commands:
+      - cd ./src
+      - dotnet restore
+      - dotnet test
+      - dotnet publish Sample.UI.Web -c Release -o ../output
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: ./src/output
+</code></pre></div></div>
+
+<h2 id="running-the-unit-tests">Running the unit tests</h2>
+<p>As you can see in my buildspec file I’m running the unit tests using <em>dotnet test</em> command. There’s no built-in facility in CodeBuild to run unit tests as it’s a general-purpose tool. You have to provide your own mechanism to achieve this.</p>
+
+<p>To test running the unit tests I deliberately broke a test and checked in the code. After running the build again I got this result:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-running-tests.png" alt=""></p>
+
+<p>So it actually runs the tests and fails the build if there’s a failing test. Ideally you want to run the tests whenever there are code changes. Looks like currently this is possible via CodePipeline service. I’ll explore that later and will cover running the build and unit tests automatically.</p>
+
+<h2 id="artifacts">Artifacts</h2>
+<p>Now that we can build the project we need to upload the output of the build to somewhere so that we can deploy it. Currently you can only choose Amazon S3 to upload the artifacts or no artifacts at all.</p>
+
+<p>If you had created a bucket already you can simply select it from the dropdown list.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-artifacts.png" alt=""></p>
+
+<p>The options are pretty basic. You can choose to compress the output and upload as a single zip file or the artifacts you defined in the buildspec in their original format.</p>
+
+<p>You can also choose to create a folder named as the build GUID so that you can keep the unique outputs for each release. You can do this by specifying Build ID as the namespace type.</p>
+
+<p>When you’re running the build make sure to view the full logs to get the latest status quickly. I noticed that if you just watch the main page and check out the results you may experience some delays.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>In my experience CodeBuild doesn’t provide too much to help with the build process because by nature it’s a generic tool. But it provides flexibility and full integration with other AWS services such as CodeCommit and CodeDeploy so I believe it’s worht using.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://aws.amazon.com/codebuild/pricing/" target="_blank" rel="noopener noreferrer">AWS CodeBuild Pricing</a></li>
+  <li><a href="https://docs.aws.amazon.com/en_pv/codebuild/latest/userguide/build-env-ref-available.html" target="_blank" rel="noopener noreferrer">Docker Images Provided by CodeBuild</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+</div>
+<nav id="pagenavi">
+    
+        <a href="/page/2" class="prev">Prev</a>
+    
+    
+        <a href="/page/4" class="next">Next</a>
+    
+    <div class="center"><a href="/archive">Blog Archives</a></div>
+</nav>
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

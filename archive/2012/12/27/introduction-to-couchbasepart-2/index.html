@@ -1,0 +1,242 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Introduction to Couchbase - Part 2 - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2012/12/27/introduction-to-couchbasepart-2/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Introduction to Couchbase - Part 2</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2012-12-27T10:59:41+00:00" itemprop="datePublished">December 27, 2012</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">nosql</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>In this post, I’ll talk about some technical details and terminology of Couchbase. The official documentation is very comprehensive and I highly recommend taking a look at it: <a href="http://www.couchbase.com/docs/" target="_blank" rel="noopener noreferrer">http://www.couchbase.com/docs/</a></p>
+
+<h2 id="installation">Installation</h2>
+<p>First of all I recommend you check the supported OS list <a href="http://www.couchbase.com/docs/couchbase-manual-2.0/couchbase-getting-started-prepare-platforms.html" target="_blank" rel="noopener noreferrer">here</a>. I tried to install it on Windows 8 but turns out it’s not supported yet. Then I installed it on Windows Server 2008 R2 and a Ubuntu Server 12.10. You can find Linux installation instructions <a href="http://www.couchbase.com/download" target="_blank" rel="noopener noreferrer">here</a>.</p>
+
+<p>Installation is quite easy. There are a few things that need to paid attention though.</p>
+
+<ol>
+  <li>File locations: Actually this step is very easy, just accept the default location. But Couchbase recommends storing document and index data on different disks to get the best performance,</li>
+  <li>Memory Size: First node in the cluster determines the quota and that value is inherited to the following nodes. To update it, on the management console, select Data Buckets and click on the arrow on the left of the bucket name. Then by clicking on Edit you can change this value.</li>
+  <li>Bucket Type: memcached and Couchbase bucket types are significantly different so you have to choose carefully. memcached buckets don’t support persistence nor replication. They are meant to be an in-memory caching solution.</li>
+  <li>Bucket Name: During setup you cannot change the name of the default bucket. Couchbase recommends to use it for testing purposes only. So it’s best to create your own bucket  for the actual data once the installation is over.</li>
+  <li>Flush: This is a very dangerous operation. It allows you delete all the data in a bucket. Default is disabled and I’d recommend to keep it that way.</li>
+</ol>
+
+<h2 id="basic-concepts">Basic concepts</h2>
+<ul>
+  <li>A couch database is called a <em>bucket</em>.</li>
+  <li>A <em>document</em> is a self-contained piece of data. It is a JSON object. A row in a RDBMS would be stored in a document with all the data it’s related to. (i.e: A customer record may contain a list of orders). This approach is called Single-Document approach and the document is called an <em>aggregate</em>. More about it in Modeling Documents section later in this post. A new feature that came with v2.0 is these records can be indexed and queried.</li>
+  <li>
+<em>vBucket</em> is short for “Virtual Bucket” and they work functionally equivalent to database shards in traditional relational databases. Good news is that Couchbase will automatically manage vBuckets.</li>
+  <li>
+<em>XDCR</em> stands for Cross Data Center Replication. It’s a very cool feature that can be used in a multiple of scenarios such as spreading data geographically or creating an active offsite backup.</li>
+</ul>
+
+<h2 id="modelling-documents-has-many-vs-belongs-to">Modelling Documents: <em>has-many</em> vs. <em>belongs-to</em>
+</h2>
+<p>The way we model data should depend on the structure and nature of the data. There are two approaches when modelling the data.
+has-many means storing all the child records with the parent. For example a standard Customer – Order relation could be expressed like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+    <span class="s">"id"</span> <span class="p">:</span> <span class="m">123</span><span class="p">,</span>
+    <span class="s">"name"</span><span class="p">:</span> <span class="n">Valued</span><span class="p">,</span>
+    <span class="s">"surname"</span><span class="p">:</span> <span class="s">"Customer"</span>
+    <span class="s">"orders"</span><span class="p">:</span> <span class="p">[</span> <span class="s">"order1"</span><span class="p">,</span> <span class="s">"order2"</span><span class="p">,</span> <span class="s">"order3"</span> <span class="p">]</span>
+<span class="p">}</span>
+<span class="p">{</span>
+    <span class="s">"id"</span><span class="p">:</span> <span class="s">"order1"</span><span class="p">,</span>
+    <span class="s">"orderDate"</span><span class="p">:</span> <span class="s">"2012-12-20"</span><span class="p">,</span>
+    <span class="s">"status"</span><span class="p">:</span> <span class="s">"sent"</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The Customer stores the IDs of the orders. This method can be problematic if the parent (Customer in this example) is updated frequently. As orders can be accessed via customer this will effect the overall query performance.
+belongs-to approach suggests approaching it from the other direction. If we modeled the above example with belongs-to approach we would come up with something like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+    <span class="s">"id"</span> <span class="p">:</span> <span class="m">123</span><span class="p">,</span>
+    <span class="s">"name"</span><span class="p">:</span> <span class="n">Valued</span><span class="p">,</span>
+    <span class="s">"surname"</span><span class="p">:</span> <span class="s">"Customer"</span>
+<span class="p">}</span>
+<span class="p">{</span>
+    <span class="s">"id"</span><span class="p">:</span> <span class="s">"order1"</span><span class="p">,</span>
+    <span class="s">"orderDate"</span><span class="p">:</span> <span class="s">"2012-12-20"</span><span class="p">,</span>
+    <span class="s">"status"</span><span class="p">:</span> <span class="s">"sent"</span><span class="p">,</span>
+    <span class="s">"customerId"</span><span class="p">:</span> <span class="m">123</span>
+<span class="p">}</span>
+<span class="p">{</span>
+    <span class="s">"id"</span><span class="p">:</span> <span class="s">"order2"</span><span class="p">,</span>
+    <span class="s">"orderDate"</span><span class="p">:</span> <span class="s">"2012-12-10"</span><span class="p">,</span>
+    <span class="s">"status"</span><span class="p">:</span> <span class="s">"pending"</span><span class="p">,</span>
+    <span class="s">"customerId"</span><span class="p">:</span> <span class="m">123</span>
+ <span class="p">}</span>
+</code></pre></div></div>
+
+<p>This is preferable to avoid contention. With this method we need to use indexing to be able query all orders by customerId. has-many approach performs better because a multiple-retrieve query is faster than indexing and querying.</p>
+
+<h2 id="backup-and-restore">Backup and Restore</h2>
+<p>Before diving into playing with the data it’s always a good practice to backup the original data. Couchbase provides 2 options to accomplish these tasks:</p>
+
+<ol>
+  <li>
+    <p>Good ol’ file copy
+Copy the data files stored under the default path (which is <em>“C:\Program Files\couchbase\server\var\lib\couchbase\data”</em> for Windows). The disadvantage of this method is that it can only be restored to offline nodes in an identical cluster environment. Also database is not compressed.</p>
+  </li>
+  <li>
+    <p>cbbackup / cbrestore
+These tools can be found in the bin folder.</p>
+  </li>
+</ol>
+
+<p><img src="/images/vpblogimg/2012/12/Couchbase_Backup.png" alt="Couchbase_Backup"></p>
+
+<p>I think a slight disadvantage is that you have to specify password in clear text in the command line. I was expecting just providing –p parameter would end up it asking me the password after I enter the command. Instead I got an error saying the password cannot be empty.</p>
+
+<p><img src="/images/vpblogimg/2012/12/Couchbase_Restore.png" alt="Couchbase_Restore"></p>
+
+<p>Advantages are that it allows a backup to be restored onto a different size and configuration. Also it compresses the data so it’s disk-space friendly.</p>
+
+<p>Tip: When specifying the backup path to cbrestore make sure to remove the trailing backslash from the path.
+  
+In the next instalment of this series I’ll post a sample application using the Beer sample database that is shipped with Couchbase 2.0</p>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2012/12/19/raspberry-pi-installation-and-setup/" title="Previous Post: 
+Raspberry Pi - Installation and Setup">« Raspberry Pi - Installation and Setup</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2013/01/05/introduction-to-couchbase-part-3/" title="next Post: 
+Introduction to Couchbase – Part 3">Introduction to Couchbase – Part 3 » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

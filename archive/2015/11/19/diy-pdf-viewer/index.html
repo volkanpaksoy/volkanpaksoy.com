@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>A DIY PDF Reader - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2015/11/19/diy-pdf-viewer/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">A DIY PDF Reader</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-11-19T12:00:00+00:00" itemprop="datePublished">November 19, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp, wpf, syncfusion, pdf</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>Every few months I have to clean up my desktop computer as dust gets stuck in the CPU fan and it gets hot and slow and loud and annoying! A few days ago I snapped and decided to phase out the desktop and made my laptop as main machine. Even though I love making a fresh start on a new computer it comes with re-installing a bunch of stuff.</p>
+
+<p>One missing thing that made itself obvious at the very start was a PDF reader. So far I’ve always been disappointed with PDF viewers. They are too bloated with unnecessary features and they always try to install a browser toolbar or an anti-virus trial.</p>
+
+<h2 id="my-diy-pdf-reader">My DIY PDF Reader</h2>
+<p>I started looking into my options to build my own PDF viewer and fortunately didn’t have to look too much. SyncFusion is offering a <a href="https://www.syncfusion.com/downloads/communitylicense" target="_blank" rel="noopener noreferrer">free license</a> to their products for indie developers and small startups. I used their great wizard control in a past project (<a href="https://github.com/volkanpaksoy/image2pdf" target="_blank" rel="noopener noreferrer">Image2PDF</a>) so I first checked if they had something for me. Turns out they have exactly everything I needed wrapped in an easy to use control. Their WPF suite comes with a <a href="https://www.syncfusion.com/products/wpf/pdf-viewer" target="_blank" rel="noopener noreferrer">PdfViewerControl</a>. It supports standard navigation and zooming functions which is pretty much what I need from a PDF viewer. So all I had to do was a start a new WPF project, drag &amp; drop PdfViewerControl and run!</p>
+
+<p>The whole XAML code looks like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">&lt;</span><span class="n">Window</span>
+        <span class="n">xmlns</span><span class="p">=</span><span class="s">"http://schemas.microsoft.com/winfx/2006/xaml/presentation"</span>
+        <span class="n">xmlns</span><span class="p">:</span><span class="n">x</span><span class="p">=</span><span class="s">"http://schemas.microsoft.com/winfx/2006/xaml"</span>
+        <span class="n">xmlns</span><span class="p">:</span><span class="n">d</span><span class="p">=</span><span class="s">"http://schemas.microsoft.com/expression/blend/2008"</span>
+        <span class="n">xmlns</span><span class="p">:</span><span class="n">mc</span><span class="p">=</span><span class="s">"http://schemas.openxmlformats.org/markup-compatibility/2006"</span>
+        <span class="n">xmlns</span><span class="p">:</span><span class="n">local</span><span class="p">=</span><span class="s">"clr-namespace:PdfViewer"</span>
+        <span class="n">xmlns</span><span class="p">:</span><span class="n">PdfViewer</span><span class="p">=</span><span class="s">"clr-namespace:Syncfusion.Windows.PdfViewer;assembly=Syncfusion.PdfViewer.WPF"</span> <span class="n">x</span><span class="p">:</span><span class="n">Class</span><span class="p">=</span><span class="s">"PdfViewer.MainWindow"</span>
+        <span class="n">mc</span><span class="p">:</span><span class="n">Ignorable</span><span class="p">=</span><span class="s">"d"</span>
+        <span class="n">Title</span><span class="p">=</span><span class="s">"Easy PDF Viewer"</span> 
+        <span class="n">WindowState</span><span class="p">=</span><span class="s">"Maximized"</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="n">Grid</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="n">PdfViewer</span><span class="p">:</span><span class="n">PdfViewerControl</span>  <span class="n">HorizontalAlignment</span><span class="p">=</span><span class="s">"Stretch"</span> <span class="n">VerticalAlignment</span><span class="p">=</span><span class="s">"Stretch"</span><span class="p">/&gt;</span>
+    <span class="p">&lt;/</span><span class="n">Grid</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="n">Window</span><span class="p">&gt;</span>
+</code></pre></div></div>
+
+<p>And for my 5 minutes, this is the application I got:</p>
+
+<p><img src="/images/vpblogimg/2015/11/diy-pdf-viewer-output.png" alt=""></p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>If I need more features in the future I think I’ll just build on this. I always have the open source PDF library iTextSharp which I like quite a lot and now have SyncFusion PDF components and libraries in my arsenal, I have no intention to deal with adware-ridden, bloated applications with lots of security flaws.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/diy-pdf-viewer" target="_blank" rel="noopener noreferrer">DIY PDF Viewer Source Code</a></li>
+  <li><a href="https://www.syncfusion.com/products/wpf/pdf-viewer" target="_blank" rel="noopener noreferrer">SyncFusion PDF Viewer product page</a></li>
+  <li><a href="https://www.syncfusion.com/downloads/communitylicense" target="_blank" rel="noopener noreferrer">SyncFusion Community License</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2015/11/13/playing-with-tfl-api-with-csharp-xamarin-and-swift/" title="Previous Post: 
+Playing with TFL API with C#, Xamarin and Swift">« Playing with TFL API with C#, Xamarin and Swift</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2016/01/11/aws-gotchas/" title="next Post: 
+Top 3 AWS Gotchas">Top 3 AWS Gotchas » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

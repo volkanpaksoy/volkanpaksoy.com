@@ -1,0 +1,271 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Weight Tracking with Fitbit Aria - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2016/01/28/weight-tracking-with-fitbit-aria/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  	
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/projects">projects</a></li>
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Weight Tracking with Fitbit Aria</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2016-01-28T08:00:00+00:00" itemprop="datePublished">January 28, 2016</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp, gadget, fitbit, aria</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"What gets measured, gets managed." - Peter Drucker
+</code></pre></div></div>
+
+<p>It’s important to have goals, especially <a href="https://en.wikipedia.org/wiki/SMART_criteria" target="_blank" rel="noopener noreferrer">SMART</a> goals. The “M” in S.M.A.R.T. stands for <em>Measurable</em>. Having enough data about a process helps tremendously to improve that process. To this effect, I started to collect exercise data from my Microsoft band which I blogged about <a href="https://volkanpaksoy.com/archive/2016/01/18/playing-with-microsoft-band/">here</a>.</p>
+
+<p>Weight tracking is also crucial for me. I used to record my weight manually on a piece of paper but, for the obvious reasons, I abandoned it quickly and decided to give Fitbit Aria a shot.</p>
+
+<p><img src="/images/vpblogimg/2016/01/fitbit-aria-main.png" alt=""></p>
+
+<h2 id="fitbit-aria-wi-fi-smart-scale">Fitbit Aria Wi-Fi Smart Scale</h2>
+
+<p>Aria is basically a scale that can connect to your Wi-Fi network and send your weight results to Fitbit automatically which can then be viewed via Fitbit web application.</p>
+
+<p><img src="/images/vpblogimg/2016/01/fitbit-aria-dashboard.png" alt=""></p>
+
+<h2 id="setup">Setup</h2>
+
+<p>Since it doesn’t have a keyboard or any other way to interact directly setup is carried out by running a program on your computer</p>
+
+<p><img src="/images/vpblogimg/2016/01/fitbit-aria-setup-page.png" alt=""></p>
+
+<p>It’s mostly just following the steps on the setup tool. You basically let it connect to your Wi-Fi network so that it can synchronize with Fitbit servers.</p>
+
+<p><img src="/images/vpblogimg/2016/01/fitbit-aria-setup-application.png" alt=""></p>
+
+<p>Putting the scale into setup mode proved to be tricky in the past though. Also it was not easy to change Wi-Fi so I had to reset the go back to factory settings and ran the setup tool again.</p>
+
+<h2 id="getting-the-data-via-api">Getting the data via API</h2>
+
+<p>Here comes the fun part! Similar to my <a href="https://github.com/volkanpaksoy/microsoft-band-workout" target="_blank" rel="noopener noreferrer">MS Band workout demo</a>, I developed a WPF program to get my data from Fitbit’s API. Ultimately the goal is to combine all these data in one application and make sense of it.</p>
+
+<p>Like MS Health API, FitBit uses OAuth 2.0 authorization and  requires a registered application.</p>
+
+<p><img src="/images/vpblogimg/2016/01/fitbit-aria-registered-application.png" alt=""></p>
+
+<p>The endpoint that returns weight data accepts a few various formats depending on your needs. As I wanted a range instead of a single day I used the following format:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://api.fitbit.com/1/user/{user ID}/body/log/weight/date/{startDate}/{endDate}.json
+</code></pre></div></div>
+
+<p>This call returns an array of the following JSON objects:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+	</span><span class="s2">"bmi"</span><span class="p">:</span><span class="w"> </span><span class="err">xx.xx</span><span class="p">,</span><span class="w">
+	</span><span class="s2">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"yyyy-mm-dd"</span><span class="p">,</span><span class="w">
+	</span><span class="s2">"fat"</span><span class="p">:</span><span class="w"> </span><span class="err">xx.xxxxxxxxxxxxxxx</span><span class="p">,</span><span class="w">
+	</span><span class="s2">"logId"</span><span class="p">:</span><span class="w"> </span><span class="err">xxxxxxxxxxxxx</span><span class="p">,</span><span class="w">
+	</span><span class="s2">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Aria"</span><span class="p">,</span><span class="w">
+	</span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"hh:mm:ss"</span><span class="p">,</span><span class="w">
+	</span><span class="s2">"weight"</span><span class="p">:</span><span class="w"> </span><span class="err">xx.xx</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="sample-application">Sample application</h2>
+
+<p>The bulk of the application is very similar to MS Band sample: It first opens an authorization window and once the client consents for the app to be granted some privileges it uses the access token to retrieve the actual data.</p>
+
+<p>There are a few minor differences though:</p>
+
+<ul>
+  <li>Unlike MS Health API it requires Authorization header in the authorization code request calls which is basically Base64 encoded client ID and client secret</li>
+</ul>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">string</span> <span class="n">base64String</span> <span class="p">=</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToBase64String</span><span class="p">(</span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="nf">GetBytes</span><span class="p">(</span><span class="s">$"</span><span class="p">{</span><span class="n">Settings</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="n">ClientID</span><span class="p">}</span><span class="s">:</span><span class="p">{</span><span class="n">Settings</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="n">ClientSecret</span><span class="p">}</span><span class="s">"</span><span class="p">));</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span> <span class="s">$"Basic </span><span class="p">{</span><span class="n">base64String</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>It requires a POST request to redeem URL. Apparently RestSharp has a weird behaviour. You’d think a method called AddBody could be used to send the request body, right? Not quite! It doesn’t transmit the header so I kept getting a missing field error. So instead I used AddParameter:</li>
+</ul>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">string</span> <span class="n">requestBody</span> <span class="p">=</span> <span class="s">$"client_id=</span><span class="p">{</span><span class="n">Settings</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="n">ClientID</span><span class="p">}</span><span class="s">&amp;grant_type=authorization_code&amp;redirect_uri=</span><span class="p">{</span><span class="n">_redirectUri</span><span class="p">}</span><span class="s">&amp;code=</span><span class="p">{</span><span class="n">code</span><span class="p">}</span><span class="s">"</span><span class="p">;</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">AddParameter</span><span class="p">(</span><span class="s">"application/x-www-form-urlencoded"</span><span class="p">,</span> <span class="n">requestBody</span><span class="p">,</span> <span class="n">ParameterType</span><span class="p">.</span><span class="n">RequestBody</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>I found a lot of SO questions and a hillarious <a href="http://matthewschrager.com/2013/02/19/restsharp-post-body/" target="_blank" rel="noopener noreferrer">blog post</a> addressing the issue. It’s good to know I wasn’t alone in this!</p>
+
+<p>The rest is very straightforward. Make the request, parse JSON and assign the list to the chart:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">GetWeightData</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">endDate</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Today</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(</span><span class="s">"yyyy-MM-dd"</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">startDate</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Today</span><span class="p">.</span><span class="nf">AddDays</span><span class="p">(-</span><span class="m">30</span><span class="p">).</span><span class="nf">ToString</span><span class="p">(</span><span class="s">"yyyy-MM-dd"</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">url</span> <span class="p">=</span> <span class="s">$"https://api.fitbit.com/1/user/XXXXXX/body/log/weight/date/</span><span class="p">{</span><span class="n">startDate</span><span class="p">}</span><span class="s">/</span><span class="p">{</span><span class="n">endDate</span><span class="p">}</span><span class="s">.json"</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">response</span> <span class="p">=</span> <span class="nf">SendRequest</span><span class="p">(</span><span class="n">url</span><span class="p">);</span>
+
+    <span class="nf">ParseWeightData</span><span class="p">(</span><span class="n">response</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">void</span> <span class="nf">ParseWeightData</span><span class="p">(</span><span class="kt">string</span> <span class="n">rawContent</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">weightJsonArray</span> <span class="p">=</span> <span class="n">JObject</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="n">rawContent</span><span class="p">)[</span><span class="s">"weight"</span><span class="p">].</span><span class="nf">ToArray</span><span class="p">();</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">weightJson</span> <span class="k">in</span> <span class="n">weightJsonArray</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">weight</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FitbitWeightResult</span><span class="p">();</span>
+        <span class="n">weight</span><span class="p">.</span><span class="n">Weight</span> <span class="p">=</span> <span class="n">weightJson</span><span class="p">[</span><span class="s">"weight"</span><span class="p">]?.</span><span class="n">Value</span><span class="p">&lt;</span><span class="kt">decimal</span><span class="p">&gt;()</span> <span class="p">??</span> <span class="m">0</span><span class="p">;</span>
+        <span class="n">weight</span><span class="p">.</span><span class="n">Date</span> <span class="p">=</span> <span class="n">weightJson</span><span class="p">[</span><span class="s">"date"</span><span class="p">].</span><span class="n">Value</span><span class="p">&lt;</span><span class="n">DateTime</span><span class="p">&gt;();</span>
+        <span class="n">WeightResultList</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">weight</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>And the output is:</p>
+
+<p><img src="/images/vpblogimg/2016/01/fitbit-aria-weight-chart.png" alt=""></p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>So far I managed to collect walking data from MS Band, weight data from Fitbit Aria. In this demo I limited the scope with weight data only but Fitbit API can be used to track sleep, exercise and nutrition.</p>
+
+<p>I currently use My Fitness Pal to log what I eat. They too have an API but even though I requested twice they haven’t given me a key yet! Good news is Fitbit has a key and I can get my MFP logs through Fitbit API. I also log my sleep on Fitbit manually so next step is to combine all these in one application to have a nice overview.</p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/fitbit-aria-workout" target="_blank" rel="noopener noreferrer">Source code for demo application </a></li>
+  <li><a href="https://en.wikipedia.org/wiki/SMART_criteria" target="_blank" rel="noopener noreferrer">Wikipedia: SMART criteria</a></li>
+  <li><a href="https://dev.fitbit.com/docs/" target="_blank" rel="noopener noreferrer">Fitbit API Reference</a></li>
+  <li><a href="http://matthewschrager.com/2013/02/19/restsharp-post-body/" target="_blank" rel="noopener noreferrer">RestSharp POST Body Problems</a></li>
+  <li><a href="https://www.fitbit.com/uk/setup/aria" target="_blank" rel="noopener noreferrer">Setup application</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2016/01/18/playing-with-microsoft-band/" title="Previous Post: 
+Playing with Microsoft Band">« Playing with Microsoft Band</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2016/03/02/free-ssl-certs-with-aws-certificate-manager/" title="next Post: 
+Free SSL certificates with AWS Certificate Manager">Free SSL certificates with AWS Certificate Manager » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2020 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>
