@@ -144,10 +144,10 @@
     <span class="n">IS3PublisherSettings</span> <span class="n">s3PublishSettings</span> <span class="p">=</span> <span class="n">configFactory</span><span class="p">.</span><span class="nf">GetS3PublisherSettings</span><span class="p">();</span>
     <span class="n">IOfflineClientSettings</span> <span class="n">offlineClientSettings</span> <span class="p">=</span> <span class="n">configFactory</span><span class="p">.</span><span class="nf">GetOfflineClientSettings</span><span class="p">();</span>
 
-    <span class="kt">var</span> <span class="n">rareburgClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">OfflineRareburgClient</span><span class="p">(</span><span class="n">offlineClientSettings</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">rareburgArticleFeedService</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RareburgArticleFeedService</span><span class="p">(</span><span class="n">feedServiceSettings</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">OfflineClient</span><span class="p">(</span><span class="n">offlineClientSettings</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">articleFeedService</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ArticleFeedService</span><span class="p">(</span><span class="n">feedServiceSettings</span><span class="p">);</span>
     <span class="kt">var</span> <span class="n">publishService</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">S3PublishService</span><span class="p">(</span><span class="n">s3PublishSettings</span><span class="p">,</span> <span class="n">feedSettings</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">feedGenerator</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ArticleFeedGenerator</span><span class="p">(</span><span class="n">rareburgClient</span><span class="p">,</span> <span class="n">rareburgArticleFeedService</span><span class="p">,</span> <span class="n">publishService</span><span class="p">,</span> <span class="n">feedSettings</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">feedGenerator</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ArticleFeedGenerator</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">articleFeedService</span><span class="p">,</span> <span class="n">publishService</span><span class="p">,</span> <span class="n">feedSettings</span><span class="p">);</span>
 
     <span class="n">feedGenerator</span><span class="p">.</span><span class="nf">Run</span><span class="p">();</span>
 <span class="p">}</span>
@@ -224,12 +224,12 @@
 <span class="p">{</span>
     <span class="k">public</span> <span class="kt">string</span> <span class="n">ApiKey</span>
     <span class="p">{</span>
-        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"Rareburg.ApiKey"</span><span class="p">];</span> <span class="p">}</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"ApiKey"</span><span class="p">];</span> <span class="p">}</span>
     <span class="p">}</span>
 
     <span class="k">public</span> <span class="kt">string</span> <span class="n">ApiEndPoint</span>
     <span class="p">{</span>
-        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"Rareburg.ApiEndPoint"</span><span class="p">];</span> <span class="p">}</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"ApiEndPoint"</span><span class="p">];</span> <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
@@ -245,12 +245,12 @@
 
     <span class="k">public</span> <span class="kt">string</span> <span class="n">ApiKey</span>
     <span class="p">{</span>
-        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="nf">GetValue</span><span class="p">(</span><span class="s">"Rareburg.ApiKey"</span><span class="p">);</span> <span class="p">}</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="nf">GetValue</span><span class="p">(</span><span class="s">"ApiKey"</span><span class="p">);</span> <span class="p">}</span>
     <span class="p">}</span>
 
     <span class="k">public</span> <span class="kt">string</span> <span class="n">ApiEndPoint</span>
     <span class="p">{</span>
-        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="nf">GetValue</span><span class="p">(</span><span class="s">"Rareburg.ApiEndPoint"</span><span class="p">);</span> <span class="p">}</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="nf">GetValue</span><span class="p">(</span><span class="s">"ApiEndPoint"</span><span class="p">);</span> <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
@@ -262,7 +262,7 @@
 <h2 id="resources">Resources</h2>
 <ul>
   <li><a href="https://github.com/volkanpaksoy/design-pattern-workout" target="_blank" rel="noopener noreferrer">Sample project source code</a></li>
-  <li><a href="https://github.com/volkanpaksoy/rareburg-article-feed-generator" target="_blank" rel="noopener noreferrer">Rareburg article feed generator source code</a></li>
+  <li><a href="https://github.com/volkanpaksoy/rss-feed-generator" target="_blank" rel="noopener noreferrer">RSS feed generator source code</a></li>
   <li><a href="http://www.amazon.co.uk/Design-patterns-elements-reusable-object-oriented/dp/0201633612/" target="_blank" rel="noopener noreferrer">Book: GoF Book</a></li>
   <li><a href="http://www.amazon.co.uk/Head-First-Design-Patterns-Freeman/dp/0596007124/" target="_blank" rel="noopener noreferrer">Book: Head First Design Patterns</a></li>
 </ul>

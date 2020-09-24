@@ -124,7 +124,7 @@
 	
 </div>
 	<div class="entry-content" itemprop="articleBody">
-		<p>I recently developed a toy project called <a href="https://github.com/volkanpaksoy/rareburg-article-feed-generator" target="_blank" rel="noopener noreferrer">Rareburg article feed generator</a>. It basically gets the articles from Rareburg.com (a marketplace for collectors) and creates an RSS feed. One challenge I had was picking the feed formatter class (RSS vs Atom). I utilised Factory Method design pattern to solve that and this post discusses the usage of the pattern over that use case.</p>
+		<p>I recently developed a toy project. It basically creates an RSS feed. One challenge I had was picking the feed formatter class (RSS vs Atom). I utilised Factory Method design pattern to solve that and this post discusses the usage of the pattern over that use case.</p>
 
 <h3 id="use-case-creating-rss-feed-formatter">Use case: Creating RSS feed formatter</h3>
 <p>I wanted my feed generator to support both RSS and Atom feeds based on the value specified in the configuration. In order to pass the XML validations they needed to modified a bit and I wanted these details hidden from the client code.</p>
@@ -229,8 +229,8 @@
         <span class="kt">string</span> <span class="n">feedFormat</span> <span class="p">=</span> <span class="n">feedSettings</span><span class="p">.</span><span class="n">FeedFormat</span><span class="p">;</span>
         <span class="k">switch</span> <span class="p">(</span><span class="n">feedFormat</span><span class="p">.</span><span class="nf">ToLower</span><span class="p">())</span>
         <span class="p">{</span>
-            <span class="k">case</span> <span class="s">"atom"</span><span class="p">:</span> <span class="k">return</span> <span class="k">new</span> <span class="nf">AtomFeedGenerator</span><span class="p">(</span><span class="k">new</span> <span class="nf">RareburgClient</span><span class="p">(),</span> <span class="k">new</span> <span class="nf">RareburgArticleFeedService</span><span class="p">(),</span> <span class="k">new</span> <span class="nf">S3PublishService</span><span class="p">(),</span> <span class="n">feedSettings</span><span class="p">);</span>
-            <span class="k">case</span> <span class="s">"rss"</span><span class="p">:</span> <span class="k">return</span> <span class="k">new</span> <span class="nf">RssFeedGenerator</span><span class="p">(</span><span class="k">new</span> <span class="nf">RareburgClient</span><span class="p">(),</span> <span class="k">new</span> <span class="nf">RareburgArticleFeedService</span><span class="p">(),</span> <span class="k">new</span> <span class="nf">S3PublishService</span><span class="p">(),</span> <span class="n">feedSettings</span><span class="p">);</span>
+            <span class="k">case</span> <span class="s">"atom"</span><span class="p">:</span> <span class="k">return</span> <span class="k">new</span> <span class="nf">AtomFeedGenerator</span><span class="p">(</span><span class="k">new</span> <span class="nf">ApiClient</span><span class="p">(),</span> <span class="k">new</span> <span class="nf">rticleFeedService</span><span class="p">(),</span> <span class="k">new</span> <span class="nf">S3PublishService</span><span class="p">(),</span> <span class="n">feedSettings</span><span class="p">);</span>
+            <span class="k">case</span> <span class="s">"rss"</span><span class="p">:</span> <span class="k">return</span> <span class="k">new</span> <span class="nf">RssFeedGenerator</span><span class="p">(</span><span class="k">new</span> <span class="nf">ApiClient</span><span class="p">(),</span> <span class="k">new</span> <span class="nf">ArticleFeedService</span><span class="p">(),</span> <span class="k">new</span> <span class="nf">S3PublishService</span><span class="p">(),</span> <span class="n">feedSettings</span><span class="p">);</span>
             <span class="k">default</span><span class="p">:</span> <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentException</span><span class="p">(</span><span class="s">"Unknown feed format"</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -240,7 +240,7 @@
 <h2 id="resources">Resources</h2>
 <ul>
   <li><a href="https://github.com/volkanpaksoy/design-pattern-workout" target="_blank" rel="noopener noreferrer">Sample project source code</a></li>
-  <li><a href="https://github.com/volkanpaksoy/rareburg-article-feed-generator" target="_blank" rel="noopener noreferrer">Rareburg article feed generator source code</a></li>
+  <li><a href="https://github.com/volkanpaksoy/rss-feed-generator" target="_blank" rel="noopener noreferrer">RSS feed generator source code</a></li>
   <li><a href="http://www.amazon.co.uk/Design-patterns-elements-reusable-object-oriented/dp/0201633612/" target="_blank" rel="noopener noreferrer">Book: GoF Book</a></li>
   <li><a href="http://www.amazon.co.uk/Head-First-Design-Patterns-Freeman/dp/0596007124/" target="_blank" rel="noopener noreferrer">Book: Head First Design Patterns</a></li>
 </ul>
