@@ -1,5 +1,0 @@
-# volkanpaksoy.com
-
-Tech blog
-
-...

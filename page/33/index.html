@@ -99,6 +99,145 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/01/05/visual-studio-project-template-for-webapi/" itemprop="url">Visual Studio Project Template for ASP.NET Web API</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-01-05T15:00:00+00:00" itemprop="datePublished">January  5, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">visual_studio, web_api</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>In Visual Studio 2013 they decided to create one web project called <em>ASP.NET Web Application</em> to make it simpler as opposed to VS 2012 which had 7 different templates. I like this project wizard but I think there is a gap in the templates it provides when you want to start a Web API project. If you select Web API it comes with a full blown ASP.NET MVC website. If you select Empty you don’t get anything. I feel like there should be something in between: A functional Web API project with no overhead of the website.</p>
+
+<h3 id="minimal-web-api">Minimal Web API</h3>
+<p>The steps to achieve this are simple. I found this <a href="http://www.daniellewis.me.uk/2014/02/21/asp-net-web-api-from-scratch-part-1/" target="_blank" rel="noopener noreferrer">blog post</a> that helped me to get what I wanted quickly.</p>
+
+<p>For the sake of completeness the steps to create the minimal Web API project is as follows (I changed some of the steps to suit my needs):</p>
+
+<ol>
+  <li>Create an Emptry ASP.NET Web Project</li>
+  <li>
+    <p>Install Web API package via Nuget</p>
+
+    <div class="highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> Install-Package Microsoft.AspNet.WebApi
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Add a <em>Global Configuration Class</em> and add the following line defining a default route to  <em>Application_Start</em> method</p>
+
+    <div class="language-csharp highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> <span class="k">protected</span> <span class="k">void</span> <span class="nf">Application_Start</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
+ <span class="p">{</span>
+     <span class="n">GlobalConfiguration</span><span class="p">.</span><span class="n">Configuration</span><span class="p">.</span><span class="n">Routes</span><span class="p">.</span><span class="nf">MapHttpRoute</span><span class="p">(</span><span class="s">"Default"</span><span class="p">,</span> <span class="s">"{controller}/{id}"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">id</span> <span class="p">=</span> <span class="n">RouteParameter</span><span class="p">.</span><span class="n">Optional</span> <span class="p">});</span>
+ <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Add a controller from Web API Controller Class (v2.1) template and rename it to DefaultController. By default it comes with method implementations for GET/POST/PUT/DELETE HTTP verbs:</p>
+
+    <div class="language-csharp highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> <span class="k">public</span> <span class="k">class</span> <span class="nc">DefaultController</span> <span class="p">:</span> <span class="n">ApiController</span>
+ <span class="p">{</span>
+     <span class="c1">// GET: api/Entry</span>
+     <span class="k">public</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="nf">Get</span><span class="p">()</span>
+     <span class="p">{</span>
+         <span class="k">return</span> <span class="k">new</span> <span class="kt">string</span><span class="p">[]</span> <span class="p">{</span> <span class="s">"value1"</span><span class="p">,</span> <span class="s">"value2"</span> <span class="p">};</span>
+     <span class="p">}</span>
+
+     <span class="c1">// GET: api/Entry/5</span>
+     <span class="k">public</span> <span class="kt">string</span> <span class="nf">Get</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">)</span>
+     <span class="p">{</span>
+         <span class="k">return</span> <span class="s">"value"</span><span class="p">;</span>
+     <span class="p">}</span>
+
+     <span class="c1">// POST: api/Entry</span>
+     <span class="k">public</span> <span class="k">void</span> <span class="nf">Post</span><span class="p">([</span><span class="n">FromBody</span><span class="p">]</span><span class="kt">string</span> <span class="k">value</span><span class="p">)</span>
+     <span class="p">{</span>
+     <span class="p">}</span>
+
+     <span class="c1">// PUT: api/Entry/5</span>
+     <span class="k">public</span> <span class="k">void</span> <span class="nf">Put</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">,</span> <span class="p">[</span><span class="n">FromBody</span><span class="p">]</span><span class="kt">string</span> <span class="k">value</span><span class="p">)</span>
+     <span class="p">{</span>
+     <span class="p">}</span>
+
+     <span class="c1">// DELETE: api/Entry/5</span>
+     <span class="k">public</span> <span class="k">void</span> <span class="nf">Delete</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">)</span>
+     <span class="p">{</span>
+     <span class="p">}</span>
+ <span class="p">}</span>	
+</code></pre></div>    </div>
+  </li>
+  <li>In order to run properly the following references need to be deployed:
+    <ul>
+      <li>System.Net.Http.Formatting</li>
+      <li>System.Web.Http</li>
+      <li>System.Web.Http.WebHost</li>
+    </ul>
+  </li>
+</ol>
+
+<p>So change <em>Copy Local</em> to true in the properties window.</p>
+
+<p>That’s all it takes to create a working Web API.</p>
+
+<h3 id="templates-in-action">Templates in action</h3>
+<p>Now I have what I want but when I need a new Web API project I don’t want to start from scratch every time. Instead I’d rather use the nice and easy templating feature of Visual Studio. To create the template:</p>
+
+<ol>
+  <li>
+    <p>Select File -&gt; Export Template</p>
+
+    <p><img src="/images/vpblogimg/2015/01/vs-project-template-wizard.png" alt="Visual Studio Project Template Wizard"></p>
+  </li>
+  <li>
+    <p>Leave “Project template” selected and click next. Give the template a name and description. It will automatically import the template to Visual Studio so leave the defaults.</p>
+
+    <p><img src="/images/vpblogimg/2015/01/vs-project-template-wizard-options.png" alt="Visual Studio Project Template Wizard Otions"></p>
+  </li>
+</ol>
+
+<p>When you need to create a simple Web API you can use this template from now on by simply searching webapi in the templates:</p>
+
+<p><img src="/images/vpblogimg/2015/01/vs-project-template-select-template.png" alt="Visual Studio Project Template Search"></p>
+
+<p>And when you create a new project based on this template (not surprisingly) you get something like this:</p>
+
+<p><img src="/images/vpblogimg/2015/01/vs-project-template-default-project.png" alt="Visual Studio Project Template-Based Project Output"></p>
+
+<p>Creating the project from scratch was easy enough but using templates is even easier so why not use it!</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.daniellewis.me.uk/2014/02/21/asp-net-web-api-from-scratch-part-1/" target="_blank" rel="noopener noreferrer">ASP.NET Web API from scratch</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/01/05/adventures-in-fsharp-part-4/" itemprop="url">Adventures in F# - Part 4</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -294,56 +433,6 @@
   <li><a href="http://en.wikibooks.org/wiki/F_Sharp_Programming/Higher_Order_Functions#How_Currying_Works" target="_blank" rel="noopener noreferrer">How Currying Works</a></li>
   <li><a href="http://en.wikibooks.org/wiki/F_Sharp_Programming/Active_Patterns" target="_blank" rel="noopener noreferrer">Active Patterns</a></li>
 </ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/01/04/jekyll-drafts/" itemprop="url">Jekyll drafts</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-01-04T00:30:00+00:00" itemprop="datePublished">January  4, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
-
-<!-- misc -->
-
-
-
-
-    <a href="/category/misc">misc</a>
-    
-</span>
-	<span class="tags">tips_and_tricks, jekyll</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I’m glad I moved my blog to GitHub pages (especially after I saw this <a href="http://gizmodo.com/mysterious-russian-malware-is-infecting-over-100-000-wo-1671419522" target="_blank" rel="noopener noreferrer">news</a>) and I’m very happy using Jekyll locally while working on my posts. But as a recent Surface Pro 3 owner (review pending) I thought I could work outside home more often which broached the subject how do I synchronize the posts that are not ready to be published.</p>
-
-<p>So far, I was storing them locally on my machine until they are finished which always posed the risk of losing them as they are the sole copy of the post.</p>
-
-<p>Today I discovered a neat feature of Jekyll to end my local copy problem and making all my posts easily synced to everywhere: <strong>_drafts</strong> folder</p>
-
-<p>Normally the posts go to <strong>_posts</strong> folder. Now I keep all incomplete posts under _drafts folder. I can checkin anytime as they don’t go live. And I can still use local Jekyll server by using the –drafts flag such as</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle exec jekyll serve --drafts
-</code></pre></div></div>
-
-<p>With this flag they are compiled like normal posts which allows me to preview them easily.</p>
-
-<p>Best of both worlds!</p>
-
 
 		
 		

@@ -99,6 +99,64 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/02/12/raspberry-pi2-first-impressions/" itemprop="url">Raspberry Pi 2: First Impressions</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-02-12T15:00:00+00:00" itemprop="datePublished">February 12, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
+
+<!-- misc -->
+
+
+
+
+    <a href="/category/misc">misc</a>
+    
+</span>
+	<span class="tags">review, gadget, raspberry_pi</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I already had 3 Raspberry Pis so you might think it’s ridiculous to get excited for a 4th one but you would be wrong! Because this time they revised the hardware and made major upgrades.</p>
+
+<p><img src="/images/vpblogimg/2015/02/raspberry-pi-2.jpg" alt="Raspberry Pi 2"></p>
+
+<p>The new Pi is rocking a quad-core Cortex A7 processor and it comes with 1GB memory. Rest of the specs remained the same (including the price!) but the processor and memory made a huge impact.</p>
+
+<p>For more detailed comparison check the <a href="http://www.raspberrypi.org/blog/#benchmarking-raspberry-pi-2" target="_blank" rel="noopener noreferrer">benchmark results on the official website</a></p>
+
+<p>I tried using a web browser in the old versions and it was painfully slow. So I decided to use the previous versions for background tasks like a security camera or network scanning. The B+ is powerful enough to run XBMC and play videos but even that is slow when it transitions between different screens. So seeing the new Pi can be a full desktop replacement is really exciting.</p>
+
+<h3 id="what-else-is-new">What else is new</h3>
+<p>Pi 2 comes with a few applications installed like Mathematica and Wolfram, utilities like a PDF reader and text editor and even Minecraft!</p>
+
+<p><img src="/images/vpblogimg/2015/02/pi2-minecraft.png" alt="Minecraft on Raspberry Pi 2"></p>
+
+<h3 id="whats-next">What’s next</h3>
+<p>I don’t have a project in mind at the moment for this one yet. Since the architecture has breaking changes a lot of existing OS versions don’t work on it yet like Raspbmc and Kali Linux. Maybe I can wait and install Kali Linux on it and practice some security features. Or hopefully Microsoft releases Windows 10 for IoT soon enough so I can play with it. I’ll keep posting as I find more about my new toy! In the meantime I’m open to all project ideas so please leave a comment if you anything in mind!</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.amazon.co.uk/gp/product/B00MQLB1N6" target="_blank" rel="noopener noreferrer">Case on Amazon</a></li>
+  <li><a href="http://www.raspberrypi.org/blog/#benchmarking-raspberry-pi-2" target="_blank" rel="noopener noreferrer">Benchmarking Raspberry Pi 2</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/02/05/adventures-in-fsharp/" itemprop="url">Adventures in F# - Miscellaneous Notes</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -263,160 +321,6 @@ if result &gt;= 3 then computer wins
   <li><a href="http://www.pluralsight.com/courses/fsintro" target="_blank" rel="noopener noreferrer">Pluralsight course: Introduction to F#</a></li>
 </ul>
 
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/01/21/adventures-in-fsharp-interfaces-exception-handling-and-unit-testing/" itemprop="url">Adventures in F# - Interfaces, Exception Handling and Unit Testing</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-01-21T22:00:00+00:00" itemprop="datePublished">January 21, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">fsharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>When I first came up with a complete program <a href="https://volkanpaksoy.com/archive/2015/01/13/adventures-in-fsharp-rock-paper-scissors-lizard-spock/">here</a> I was extremely happy. Functional programming feels like insurmountable (less so now but still) and building a fully functional program in F# felt great. Unfortunately, the moment has passed very quickly! Now it’s time to revisit and improve the Rock-Paper-Scissors-Lizard-Spock game. My main goal now is add</p>
-
-<ul>
-  <li>Convert the game into a class</li>
-  <li>Add exception handling to handle invalid user input</li>
-  <li>Add unit tests</li>
-</ul>
-
-<h3 id="whats-needed">What’s needed</h3>
-<p>So first I had to investigate a few concepts to accomplish these goals. <a href="http://www.pluralsight.com/courses/fsintro" target="_blank" rel="noopener noreferrer">PluralSight course on F#</a> was a very helpful resource.</p>
-
-<p>First version was not testable because it generated random moves inside the game and there was no way of anticipating the outcome. So I needed to harness some constructor Dependency Injection like this.</p>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="nc">RPSLS</span><span class="p">(</span><span class="n">userInput</span><span class="p">:</span> <span class="kt">string</span><span class="p">,</span> <span class="n">moveGenerator</span><span class="p">:</span> <span class="nc">IMoveGenerator</span><span class="p">)</span> <span class="p">=</span> 
-    <span class="k">let</span> <span class="k">mutable</span> <span class="n">playerScore</span> <span class="p">=</span> <span class="mi">0</span>
-    <span class="k">let</span> <span class="k">mutable</span> <span class="n">computerScore</span> <span class="p">=</span> <span class="mi">0</span>
-    <span class="k">let</span> <span class="n">moveGen</span> <span class="p">=</span> <span class="n">moveGenerator</span>
-</code></pre></div></div>
-
-<p>When the game is run from the console application the RPSLS object is created with a random move generator as usual so the gameplay has not been affected. But now the tests can build the object with a FakeMoveGenerator that implements the same IMoveGenerator interface.</p>
-
-<p>So the actual move generator the game uses becomes a separate object like this:</p>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="nc">RandomMoveGenerator</span><span class="bp">()</span> <span class="p">=</span> 
-    <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">GenerateMove</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">=</span> <span class="p">(</span><span class="n">this</span> <span class="p">:&gt;</span> <span class="nc">IMoveGenerator</span><span class="o">).</span><span class="nc">GenerateMove</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-    <span class="k">interface</span> <span class="nc">IMoveGenerator</span> <span class="k">with</span>
-        <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">GenerateMove</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">=</span> 
-            <span class="k">let</span> <span class="n">rnd</span> <span class="p">=</span> <span class="nn">System</span><span class="p">.</span><span class="nc">Random</span><span class="bp">()</span>
-            <span class="k">let</span> <span class="n">output</span> <span class="p">=</span> <span class="p">[</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span> <span class="p">..</span> <span class="n">n</span> <span class="p">-&gt;</span> 
-                <span class="k">let</span> <span class="n">index</span> <span class="p">=</span> <span class="n">rnd</span><span class="p">.</span><span class="nc">Next</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-                <span class="k">match</span> <span class="n">index</span> <span class="k">with</span>
-                <span class="p">|</span> <span class="mi">0</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span>
-                <span class="p">|</span> <span class="mi">1</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span>
-                <span class="p">|</span> <span class="mi">2</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span>
-                <span class="p">|</span> <span class="mi">3</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span>
-                <span class="p">|</span> <span class="mi">4</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span>
-                <span class="p">|</span> <span class="p">_</span> <span class="p">-&gt;</span> <span class="n">failwith</span> <span class="s2">"Unexpected move"</span>
-            <span class="p">]</span>
-            <span class="n">output</span>
-</code></pre></div></div>
-
-<p>and the one tests use is like this:</p>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="nc">FakeMoveGenerator</span><span class="p">(</span><span class="n">moves</span> <span class="p">:</span> <span class="nc">List</span><span class="p">&lt;</span><span class="nc">Move</span><span class="o">&gt;)</span> <span class="p">=</span> 
-    <span class="k">let</span> <span class="k">mutable</span> <span class="n">moveList</span> <span class="p">=</span> <span class="n">moves</span>
-    
-    <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">MoveList</span> 
-        <span class="k">with</span> <span class="n">get</span> <span class="bp">()</span> <span class="p">=</span> <span class="n">moveList</span>
-        <span class="k">and</span> <span class="n">set</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="p">=</span> <span class="p">(</span><span class="n">moveList</span> <span class="p">&lt;-</span> <span class="n">value</span><span class="p">)</span>
-
-    <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">GenerateMove</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">=</span> <span class="p">(</span><span class="n">this</span> <span class="p">:&gt;</span> <span class="nc">IMoveGenerator</span><span class="o">).</span><span class="nc">GenerateMove</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-    
-    <span class="k">interface</span> <span class="nc">IMoveGenerator</span> <span class="k">with</span>
-        <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">GenerateMove</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">=</span> 
-            <span class="k">let</span> <span class="n">output</span> <span class="p">=</span> <span class="p">[</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span> <span class="p">..</span> <span class="n">n</span> <span class="p">-&gt;</span> 
-                <span class="n">moveList</span><span class="p">.</span><span class="nc">Item</span><span class="p">(</span><span class="n">i</span><span class="p">-</span><span class="mi">1</span><span class="p">)</span>
-            <span class="p">]</span>
-            <span class="n">output</span>
-</code></pre></div></div>
-
-<p>And they both implement the same interface IMoveGenerator:</p>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="nc">IMoveGenerator</span> <span class="p">=</span>
-    <span class="k">abstract</span> <span class="k">member</span> <span class="nc">GenerateMove</span> <span class="p">:</span> <span class="kt">int</span> <span class="p">-&gt;</span>  <span class="nc">List</span><span class="p">&lt;</span><span class="nc">Move</span><span class="p">&gt;</span>
-</code></pre></div></div>
-
-<p>Another benefit of this is the game can be improved easily with advanced move generators. For example a move generator can be implemented to generate specific move sequences. There is an advanced strategy guide <a href="http://www.worldrps.com/advanced.html" target="_blank" rel="noopener noreferrer">here</a> which is an interesting read.</p>
-
-<h3 id="installing-xunit-and-xunit-runner">Installing xUnit and xUnit Runner</h3>
-<p>Installing xUnit is pretty straightforward. Just use NuGet and add the package. For runner, apparently there was VS etension that needed to be installed separately but it’s no longer the case. Check out <a href="http://xunit.github.io/docs/running-tests-in-vs.html" target="_blank" rel="noopener noreferrer">this guide</a> to find out how to install xUnit test runner. It makes</p>
-
-<h3 id="testing">Testing</h3>
-<p>I added a library to project for my tests, added xUnit and xUnit runner from NuGet I was ready to go.</p>
-
-<p>So by decorating the test methoids with [<fact>] attributes I was able to run my tests to my predictable version of the game:</fact></p>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[&lt;</span><span class="nc">Fact</span><span class="p">&gt;]</span>
-<span class="k">let</span> <span class="nc">Game_Ends_With_Correct_Output_3_Moves_0_to_1</span><span class="bp">()</span> <span class="p">=</span>
-    <span class="k">let</span> <span class="n">fakeGen</span> <span class="p">=</span> <span class="k">new</span> <span class="nc">FakeMoveGenerator</span><span class="o">([</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="o">])</span>
-    <span class="k">let</span> <span class="n">newGame</span> <span class="p">=</span> <span class="k">new</span> <span class="nc">RPSLS</span><span class="p">(</span><span class="s2">"r r r"</span><span class="p">,</span> <span class="n">fakeGen</span><span class="p">)</span>
-    <span class="n">newGame</span><span class="p">.</span><span class="nc">RunGame</span><span class="bp">()</span>
-    <span class="nn">Assert</span><span class="p">.</span><span class="nc">Equal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">newGame</span><span class="p">.</span><span class="nc">PlayerScore</span><span class="p">)</span>
-    <span class="nn">Assert</span><span class="p">.</span><span class="nc">Equal</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">newGame</span><span class="p">.</span><span class="nc">ComputerScore</span><span class="p">)</span>
-</code></pre></div></div>
-
-<h3 id="exception-handling">Exception Handling</h3>
-<p>As the game is created with the user input I wanted it to check the user input before it ran the game and throw an exception if the input was erroneous. Throwing an exception is carried out with <em>failwith</em> keyword. That’s straightforward. Handling it on the other hand came with a little surprise:</p>
-
-<p>There is a try…with block which is corresponds to standard try…catch. And there is a try…finally block but they is no try…catch…finally block so they had to be used separately:</p>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[&lt;</span><span class="nc">EntryPoint</span><span class="p">&gt;]</span>
-<span class="k">let</span> <span class="n">main</span> <span class="n">argv</span> <span class="p">=</span> 
-
-    <span class="k">try</span>
-        <span class="k">try</span>
-            <span class="k">let</span> <span class="n">userInput</span> <span class="p">=</span> <span class="nn">Console</span><span class="p">.</span><span class="nc">ReadLine</span><span class="bp">()</span>
-            <span class="k">let</span> <span class="n">newGame</span> <span class="p">=</span> <span class="k">new</span> <span class="nc">RPSLS</span><span class="p">(</span><span class="n">userInput</span><span class="p">,</span> <span class="k">new</span> <span class="nc">RandomMoveGenerator</span><span class="bp">()</span><span class="p">)</span>
-            <span class="n">newGame</span><span class="p">.</span><span class="nc">RunGame</span><span class="bp">()</span>
-        <span class="k">with</span>
-            <span class="p">_</span> <span class="p">-&gt;</span> <span class="n">printfn</span> <span class="s2">"An error occured"</span>
-    <span class="k">finally</span>
-        <span class="n">printfn</span> <span class="s2">"Press any key to quit"</span>
-        <span class="nn">Console</span><span class="p">.</span><span class="nc">ReadKey</span><span class="bp">()</span>
-
-    <span class="mi">0</span>
-</code></pre></div></div>
-
-<p>In order to accomplish what I set out for I had to use two nested try blocks. Can’t say it looks great but until I get more accustomed with it I’ll just go along with quirks. At the moment it’s entirely possible that there’s a better alternative so I hope that’s the case here. Either way, it does the job after all.</p>
-
-<h3 id="conclusion">Conclusion</h3>
-<p>Final version is on GitHub. I might set sail to other seas and start new small projects before I revisit this one.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://www.pluralsight.com/courses/fsintro" target="_blank" rel="noopener noreferrer">PluralSight Course: Introduction to F#</a></li>
-  <li><a href="http://msdn.microsoft.com/en-us/library/dd233223.aspx" target="_blank" rel="noopener noreferrer">MSDN Article: Exception Handling</a></li>
-  <li><a href="http://xunit.github.io/docs/running-tests-in-vs.html" target="_blank" rel="noopener noreferrer">Installing test runner on Visual Studio</a></li>
-  <li><a href="https://github.com/volkanpaksoy/rock-paper-scissors-lizard-spock" target="_blank" rel="noopener noreferrer">Source Code</a></li>
-</ul>
 
 		
 		

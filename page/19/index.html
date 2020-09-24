@@ -99,6 +99,133 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2016/03/02/free-ssl-certs-with-aws-certificate-manager/" itemprop="url">Free SSL certificates with AWS Certificate Manager</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2016-03-02T08:00:00+00:00" itemprop="datePublished">March  2, 2016</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
+
+<!-- aws -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">ssl, aws_certificate_manager, acm</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Paying a ton of money to a digital certificate, which costs nothing to generate, has always bugged me. Fortunately it isn’t just me and recently I heard about <a href="https://letsencrypt.org" target="_blank" rel="noopener noreferrer">Let’s Encrypt</a>.</p>
+
+<p>I was just planning to give it a go but I noticed a new service on AWS Management Console:</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-on-console.png" alt=""></p>
+
+<p>Apparently AWS is now issuing free SSL certificates, which was too tempting to pass on so I decided to dive in.</p>
+
+<h2 id="enter-aws-certificate-manager">Enter AWS Certificate Manager</h2>
+<p>Requesting a certificate just takes seconds as it’s a 3-step process:</p>
+
+<p>First, enter the list of domains you want the certificates for:</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-step-01.png" alt=""></p>
+
+<p>Wildcard SSL certificates don’t cover the zone apex so I had to enter both. (Hey it’s 
+free so no complaints here!)</p>
+
+<p>Then review and confirm and request has been made:</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-step-02.png" alt=""></p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-step-03.png" alt=""></p>
+
+<p>A verification email has been sent to the email addresses listed in the confirmation step.</p>
+
+<p>At this point I could define MX records and use Google Apps to create a new user and receive the verification email. The problem is I don’t want all this hassle and certainly don’t need another email account to monitor.</p>
+
+<h2 id="ses-to-the-rescue">SES to the rescue</h2>
+<p>I always considered SES as a simple SMTP service to send emails but while dabbling with alternatives I realized that now we can receive emails too!</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-ses-receiving-emails.png" alt=""></p>
+
+<p>To receive emails you need to verify your domain first. Also an MX record pointing to AWS SMTP server must be added. Fortunately since everything here is AWS it can be done automatically using Route53:</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-ses-verification.png" alt=""></p>
+
+<p>After this we can move on, we’ll receive a confirmation email once the domain has been verified:</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-ses-verification-result.png" alt=""></p>
+
+<p>In the next step we decide what to do with the incoming mails. We can bounce them, call a Lambda function, create a SNS notification etc. These all sound fun to experiment with but in this case I’ll opt for simplicity and just drop them to a S3 bucket.</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-ses-02.png" alt=""></p>
+
+<p>Great thing is I can even assign a prefix so I can a single bucket to collect emails from a bunch of different addresses all separated into their own folders.</p>
+
+<p>In step 3, we can specify more options. Another pleasant surprise was to see spam and virus protection:</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-ses-02.png" alt=""></p>
+
+<p>After reviewing everything and confirming we are ready to receive emails to our bucket. In fact nice folks at AWS are so considerate that they even sent us a test email already:</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-ses-verification-email.png" alt=""></p>
+
+<h2 id="back-to-certificates">Back to certificates</h2>
+<p>OK, after a short detour we are back on getting our SSL certificate. As I didn’t have my mailbox setup during the validation step I had to go to actions menu and select <em>Resend validation email</em>.</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-resend-verification-email.png" alt=""></p>
+
+<p>And after requesting it I immediately received the email containing a link to verify ownership of the domain.</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-approval.png" alt=""></p>
+
+<p>After the approval process we get ourselves a nice free wildcard SSL certificate:</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-status.png" alt=""></p>
+
+<h2 id="test-drive">Test drive</h2>
+<p>To leverage the new certificate we need to use CloudFront to create a distribution. Here again we benefit from the integrated services. The certificate we have been issued can be selected from the dropdown list:</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-cloudfront.png" alt=""></p>
+
+<p>So after entering simple basics like the domain name and default page I created the distribution and pointed the Route53 records to this distribution instead of the S3 bucket.</p>
+
+<p>And finally, after waiting (quite a bit) for the CloudFront distribution to be deployed we can see that little green padlock we’ve been looking forward to see!:</p>
+
+<p><img src="/images/vpblogimg/2016/03/aws-cert-manager-result.png" alt=""></p>
+
+<h2 id="update-1-03032016">UPDATE 1 [03/03/2016]</h2>
+<p>Yesterday I was so excited about discovering this I didn’t look any further like downloading the certificate and using it on your servers.</p>
+
+<p>Today unfortunately I realized that the usability is quite limited: It only works with AWS Elastic Load Balancer and CloudFront. I was hoping to use it with API Gateway but even that’s another AWS service it’s not integrated with ACM yet.</p>
+
+<p>I do hope they make the cert bits available so we can have full control over them and deploy to wherever we want. So I guess Let’s Encrpt is a better option for now considering this limitation.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://letsencrypt.org/" target="_blank" rel="noopener noreferrer">Let’s Encrypt Official Website</a></li>
+  <li><a href="https://aws.amazon.com/blogs/aws/new-aws-certificate-manager-deploy-ssltls-based-apps-on-aws/" target="_blank" rel="noopener noreferrer">AWS Official Blog: AWS Certificate Manager – Deploy SSL/TLS-Based Apps on AWS</a></li>
+  <li><a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html" target="_blank" rel="noopener noreferrer">AWS Documentation: Receiving Email with Amazon SES</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2016/01/28/weight-tracking-with-fitbit-aria/" itemprop="url">Weight Tracking with Fitbit Aria</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -406,77 +533,6 @@
   <li><a href="https://developer.microsoftband.com/cloudAPI/Explorer" target="_blank" rel="noopener noreferrer">Microsoft Health Cloud API reference</a></li>
 </ul>
 
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2016/01/11/aws-gotchas/" itemprop="url">Top 3 AWS Gotchas</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2016-01-11T18:00:00+00:00" itemprop="datePublished">January 11, 2016</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
-
-<!-- aws -->
-
-
-
-
-    <a href="/category/aws">aws</a>
-    
-</span>
-	<span class="tags">s3, ec2, eip</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I’ve been using AWS for a few years now and over the years I noticed there some questions that keep popping up. I was confused by these issues at first and as they look like they are tripping everybody up at some point I decided to compile of a small list of common gotchas. I’ll update this or post another when if I come across more of these.</p>
-
-<h2 id="1-the-s3-folder-delusion">1. The S3 folder delusion</h2>
-
-<p>When you AWS console you can create folders to group objects but this is just a delusion deliberately created by AWS to simplify the usage. In reality, S3 has a flat structure and all the objects are on the same level. Here’s the excerpt from AWS documentation that states this fact:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>In Amazon S3, buckets and objects are the primary resources, where objects are stored in buckets. Amazon S3 has a flat structure with no hierarchy like you would see in a typical file system. However, for the sake of organizational simplicity, the Amazon S3 console supports the folder concept as a means of grouping objects. Amazon S3 does this by using key name prefixes for objects.
-</code></pre></div></div>
-
-<p>So essentially AWS is just smart enough to recognize the standard folder notation we’ve been using for ages to make this things easier for us.</p>
-
-<h2 id="2-reserved-instance-confusion">2. Reserved instance confusion</h2>
-
-<p>Reserved instances cost less but require some resource planning and paying some money up-front. Although there is now an option to buy reserved instances with no upfront payment they generally shine on long-term commitments with heavy usage (always-on machines). The confusing bit you don’t reserve actual instances. Unfortunately management console doesn’t do a great job in bridging that gap and when you buy a reserved instance you don’t even know which running instance it covers.</p>
-
-<p>Basically you just buy a subscription for 1 or 3 years and you pay less for any machine that meets that criteria. For instance, say you reserved 1 Linux t1.small instance for 12 months and you are running 2 t1.small Linux instances at the moment. You will pay reserved instance prices for one of them and on-demand price for the other. From a financial point of view it doesn’t matter which one is which. If you shut down one of those instances, again regardless of the instance, you still pay for reserved instance price as it matches your reserved instance criteria.</p>
-
-<p>So that’s all there is to it really. Reserved instance is just about billing and has nothing to do with the actual running instances.</p>
-
-<h2 id="3-publicelastic-ip-uncertainty">3. Public/Elastic IP uncertainty</h2>
-
-<p>There are 3 types of IP addresses in AWS:</p>
-
-<p>Private IPs are internal IP that every instance are assigned. They remain the same throughout the lifespan of the instance and as the name implies they are not addressable from the Internet.</p>
-
-<p>Public IPs are optional. They remain the same as long as the instance is running but they are likely to change after a reboot. So they are not reliable for web-accessible applications.</p>
-
-<p>Elastic IPs are basically static IPs that never change. By default AWS gives up to 5 EIPs. If you need more you have to contact their support. They come free of charge as long as they are associated with a running instance. It costs a small amount if you just want to keep them around without using them though.</p>
-
-<h2 id="resources">Resources</h2>
-
-<ul>
-  <li><a href="http://docs.aws.amazon.com/AmazonS3/latest/UG/FolderOperations.html" target="_blank" rel="noopener noreferrer">AWS Documentation: Working with Folders</a></li>
-  <li><a href="https://aws.amazon.com/ec2/faqs/#Reserved_Instances" target="_blank" rel="noopener noreferrer">Reserved Instances FAQ</a></li>
-  <li><a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-instance-addressing.html" target="_blank" rel="noopener noreferrer">Amazon EC2 Instance IP Addressing</a></li>
-</ul>
 
 		
 		

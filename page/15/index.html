@@ -99,6 +99,255 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2018/03/14/Updated-DynDns53-with-DotNet-Core-Docker-and-Angular5/" itemprop="url">Updated DynDns53 with .NET Core, Docker and Angular 5</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2018-03-14T06:00:00+00:00" itemprop="datePublished">March 14, 2018</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">route53, angular, dotnet_core, dynamic_dns, csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>A few years back I developed a project called DynDns53. I was fed up with the dynamic DNS tools available and thought could easily achieve the same functionality since I had already been using AWS Route53.</p>
+
+<p>Fast forward a few years, due to some neglect on my part and technology moving so fast the project started to feel outdated and abandoned. So I decided to revise it.</p>
+
+<p>Key improvements in this version are:</p>
+
+<ul>
+  <li>Core library is now available in NuGet so anyone can build their own clients around it</li>
+  <li>A new client built with .NET Core so that it runs on all platforms now</li>
+  <li>A Docker version is available that runs the .NET Core client</li>
+  <li>A new client built with Angular 5 to replace the legacy AngularJS</li>
+  <li>CI integration: Travis is running the unit tests of core library</li>
+  <li>Revised WPF and Windows Service clients and fixed bugs</li>
+  <li>Added more detailed documentation on how to set up the environment for various clients</li>
+</ul>
+
+<p>Also kept the old repository but renamed it to <a href="https://github.com/volkanpaksoy/dyndns53-legacy" target="_blank" rel="noopener noreferrer">dyndns53-legacy</a>. I might archive it at some point as I’m not planning to support it any longer.</p>
+
+<h2 id="available-on-nuget">Available on NuGet</h2>
+<p>NuGet is a great way of installing and updating libraries. I thought it would be a good idea to make use of it in this project so that it can be used without cloning the repository.</p>
+
+<p>With DotNetCore it’s quite easy to create a NuGet package. Just navigate to project folder (where .csproj file is located) and run this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet pack -c Release
+</code></pre></div></div>
+
+<p>The default configuration it uses is Debug so make sure you’re using the correct build and a matching pack command. You should be able to see a screen similar to this</p>
+
+<p><img src="/images/vpblogimg/2018/03/dyndns53-nuget-package-creation.png" alt=""></p>
+
+<p>Then push it to Nuget</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet nuget push ./bin/Release/DynDns53.CoreLib.1.0.0.nupkg -k {NUGET.ORG API_KEY} -s https://api.nuget.org/v3/index.json
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2018/03/dyndns53-nuget-package-push-result.png" alt=""></p>
+
+<p>To double-check you can go to your NuGet account page and under Manage Packages you should be able to see your newly published package:</p>
+
+<p><img src="/images/vpblogimg/2018/03/dyndns53-nuget-package-list.png" alt=""></p>
+
+<p>Now we play the waiting game! Becuase it may take some time for the package to be processed by NuGet. For exmaple I saw the warning shown in the screenshot 15 minutes after I pushed the package:</p>
+
+<p><img src="/images/vpblogimg/2018/03/dyndns53-nuget-package-validating.png" alt=""></p>
+
+<p>Generally this is a quick process but the first time I published my package, I got my confirmation email about 7 hours later so your mileage may vary.</p>
+
+<p>If you need to update your package after it’s been published, make sure to increment the version number before running dotnet pack. In order to do that, you can simply edit the .csproj file and change the Version value:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nt">&lt;PropertyGroup&gt;</span>
+    <span class="nt">&lt;TargetFramework&gt;</span>netstandard2.0<span class="nt">&lt;/TargetFramework&gt;</span>
+    <span class="nt">&lt;PackageId&gt;</span>DynDns53.CoreLib<span class="nt">&lt;/PackageId&gt;</span>
+    <span class="nt">&lt;Version&gt;</span>1.0.1<span class="nt">&lt;/Version&gt;</span>
+    <span class="nt">&lt;Authors&gt;</span>Volkan Paksoy<span class="nt">&lt;/Authors&gt;</span>
+    <span class="nt">&lt;Company&gt;&lt;/Company&gt;</span>
+  <span class="nt">&lt;/PropertyGroup&gt;</span>
+</code></pre></div></div>
+
+<h3 id="notes">Notes</h3>
+<ul>
+  <li>
+    <p>Regarding the NuGet API Key: They recently changed their approach about keys. Now you only have one chance to save your key somewhere else. If you don’t save it, you won’t be able to access ti via their UI. You can create a new one of course so no big deal. But to avoid key pollution you might wanna save it in a safe place for future reference.</p>
+  </li>
+  <li>
+    <p>If you are publishing packages frequently, you may not be able to get the updates even after they had been published. The reason for that is the packages are cached locally. So make sure to clean your cache before you try to update the packages. On Mac, Visual Studio doesn’t have a Clean Cache option as of this writing (unlike Windows) so you have to go to your user folder and remove the packages under {user}/.nuget/packages folder. After this, you update the packages and you should get the latest validated version from Nuget.</p>
+  </li>
+</ul>
+
+<h2 id="net-core-client">.NET Core Client</h2>
+
+<h3 id="prerequisites">Prerequisites</h3>
+<p>First, you’d need an IAM user who has access to Route53. You can use the policy template below to give the minimum possible permissions:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "route53:ListResourceRecordSets",
+                "route53:ChangeResourceRecordSets"
+            ],
+            "Resource": "arn:aws:route53:::hostedzone/{ZONE ID}"
+        }
+    ]
+}
+</code></pre></div></div>
+
+<p>Only 2 actions are performed so as long as you remmeber to update the policy with the new zone IDs if you need to manage other domains this should work fine work you.</p>
+
+<h3 id="usage">Usage</h3>
+<p>Basic usage is very straightforward. Once compiled you can supply the IAM Access and Secret Keys and the domains to update with their Route53 Zone IDs as shown below:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet DynDns53.Client.DotNetCore.dll --AccessKey {ACCESS KEY} --SecretKey {SECRET KEY} --Domains ZoneId1:Domain1 ZoneId2:Domain2 
+</code></pre></div></div>
+
+<h3 id="notes-1">Notes</h3>
+<ul>
+  <li>.NET Core Console Application uses the NuGet package. One difference between .NET Core and classis .NET application is that the packages are no longer stored along with the application. Instead they are downloaded to the user’s folder under .nuget folder (e.g. on a Mac it’s located at /Users/{USERNAME}/.nuget/packages)</li>
+</ul>
+
+<h2 id="available-on-docker-hub">Available on Docker Hub</h2>
+<p>Even though it’s not a complex application I think it’s easier and hassle-free to run it in a self-contained Docker container. Currently it only supports Linux containers. I might need to develop a multi-architecture image in the future in need be but for now Linux only is sufficient for my needs.</p>
+
+<h3 id="usage-1">Usage</h3>
+<p>You can get the image from Docker hub with the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull volkanpaksoy/dyndns53
+</code></pre></div></div>
+
+<p>and running it is very similar to running the .NET Core Client as that’s what’s running inside the container anyway:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d volkanpaksoy/dyndns53 --AccessKey {ACCESS KEY} --SecretKey {SECRET KEY} --Domains ZoneId1:Domain1 ZoneId2:Domain2 --Interval 300
+</code></pre></div></div>
+
+<p>The command above would run the container in daemon mode so that it can keep on updating the DNS every 5 minutes (300 seconds)</p>
+
+<h3 id="notes-2">Notes</h3>
+<ul>
+  <li>I had an older Visual Studio 2017 for Mac installation and it didn’t have Docker support. The setup is not very granular to pick specific features. So my solution was to reinstall the whole thing at which point Docker support was available in my project.</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/03/dyndns53-vs-2017-docker-support.png" alt=""></p>
+
+<ul>
+  <li>
+    <p>After adding Docker support the default build configuration becomes docker-compose. But it doesn’t work straight away as it throws an exception saying</p>
+
+    <div class="highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>  ERROR: for dyndns53.client.dotnetcore  Cannot start service 	dyndns53.client.dotnetcore: Mounts denied: 
+  The path /usr/local/share/dotnet/sdk/NuGetFallbackFolder
+  is not shared from OS X and is not known to Docker.
+  You can configure shared paths from Docker -&gt; Preferences... -&gt; File Sharing.
+  See https://docs.docker.com/docker-for-mac/osxfs/#namespaces for more info.
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>I added the folder it mentions in the error message to shared folders as shown below and it worked fine afterwards:</p>
+
+<p><img src="/images/vpblogimg/2018/03/dyndns53-docker-shared-folders.png" alt=""></p>
+
+<ul>
+  <li>Currently it only works on Linux containers. There’s a nice article<a href="http://callistaenterprise.se/blogg/teknik/2017/12/28/multi-platform-docker-images/" target="_blank" rel="noopener noreferrer">here</a> about creating multi-architecture Docker images. I’ll try to make mine multi-arch as well when I revisit the project or there is an actual need for that.</li>
+</ul>
+
+<h2 id="angular-5-client">Angular 5 Client</h2>
+<p>I’ve updated the web-based client using Angular 5 and Bootstrap 4 (Currently in Beta) which now looks like this:</p>
+
+<p><img src="/images/vpblogimg/2018/03/dyndns53-new-ui.png" alt=""></p>
+
+<p>I kept a copy of the old version which was developed with AngularJS. It’s available at this address: <a href="http://legacy.dyndns53.myvirtualhome.net/" target="_blank" rel="noopener noreferrer">http://legacy.dyndns53.myvirtualhome.net/</a></p>
+
+<h3 id="notes-3">Notes</h3>
+<ul>
+  <li>
+    <p>After I added AWS SDK package I started getting a nasty error:</p>
+
+    <div class="highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>  ERROR in node_modules/aws-sdk/lib/http_response.d.ts(1,25): error TS2307: Cannot find module 'stream'.
+</code></pre></div>    </div>
+
+    <p>Fortunately the solution is easy as shown in the accepted answer <a href="https://stackoverflow.com/questions/43017736/integrating-aws-sdk-to-angular2-gives-cannot-find-module-stream" target="_blank" rel="noopener noreferrer">here</a>. Just remove “types: []” line in tsconfig.app.json file. Make sure you’re updating the correct file though as there is similarly named tsconfig.json in the root. What we are after is the tsconfig.app.json under src folder.</p>
+  </li>
+  <li>
+    <p>In this project, I use 3 different IP checkers (AWS, DynDns and a custom one I developed myself a while back and running on Heroku). Calling these from other clients is fine but when in the web application I bumped into CORS issues. There are possible solutions for this:</p>
+
+    <ol>
+      <li>
+        <p>Create you own API to return the IP address: In the previous version, I created an API with AWS API Gateway which uses a very simple Lambda function to return caller’s IP address</p>
+
+        <div class="highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> exports.handler = function(event, context) {
+   	 context.succeed({
+         "ip": event.ip
+     })
+ }
+</code></pre></div>        </div>
+
+        <p>I create a GET method for my API and used the above Lambda function. Now that I had full control over it I was able to enable CORS as shown below:</p>
+
+        <p><img src="/images/vpblogimg/2018/03/dyndns53-enable-CORS.png" alt=""></p>
+      </li>
+      <li>
+        <p>The other solution is “tricking” the browser by injecting CORS headers by using a Chrome extension. There is an umber of them but I use the one aptly named “Allow-Control-Allow-Origin: *”</p>
+
+        <p><img src="/images/vpblogimg/2018/03/dyndns53-CORS-Chrome-Extension-1.png" alt=""></p>
+
+        <p>After installed you just enable it and the getting external IP works fine.</p>
+
+        <p><img src="/images/vpblogimg/2018/03/dyndns53-CORS-Chrome-Extension-2.png" alt=""></p>
+
+        <p>It’s a good practice to filter it for your specific needs so that it doesn’t affect other sites (I had some issues with Google Docs when this is turned on)</p>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+<h2 id="ci-integration">CI Integration</h2>
+<p>I created a Travis integration which is free since my project is open-source. It runs the unit tests of the core library automatically. Also added the shiny badge on the project’s readme file that shows the build status.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/dyndns53" target="_blank" rel="noopener noreferrer">DynDns53 Source Code</a></li>
+  <li><a href="https://hub.docker.com/r/volkanpaksoy/dyndns53/" target="_blank" rel="noopener noreferrer">Docker Repository</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/nuget/quickstart/create-and-publish-a-package-using-the-dotnet-cli" target="_blank" rel="noopener noreferrer">NuGet Documentation: Create and publish a package</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/dotnet/core/docker/docker-basics-dotnet-core" target="_blank" rel="noopener noreferrer">Microsoft Docs: Learn Docker Basics with .NET Core</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/azure/vs-azure-tools-docker-troubleshooting-docker-errors" target="_blank" rel="noopener noreferrer">Microsoft Docs: Troubleshoot Visual Studio 2017 development with Docker</a></li>
+  <li><a href="http://callistaenterprise.se/blogg/teknik/2017/12/28/multi-platform-docker-images/" target="_blank" rel="noopener noreferrer">Create multi-platform Docker images</a></li>
+  <li><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-cors.html" target="_blank" rel="noopener noreferrer">Enable CORS for an API Gateway Resource</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2017/12/12/Playing-with-Google-Speech-API/" itemprop="url">Playing with Google Speech API</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -486,144 +735,6 @@ git reset --hard origin/master
   <li><a href="https://github.com/pcgeek86/PSGitHub" target="_blank" rel="noopener noreferrer">PSGitHub Repository</a></li>
   <li>​<a href="https://github.com/PowerShell/PowerShell/blob/master/docs/installation/linux.md#macos-1012" target="_blank" rel="noopener noreferrer">Installing PowerShell on Mac</a>
 </li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2017/11/20/Backing-up-MySQL-To-AWS-S3-with-Powershell/" itemprop="url">Backing Up MySQL to AWS S3 with PowerShell</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2017-11-20T06:00:00+00:00" itemprop="datePublished">November 20, 2017</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/awsdevops">aws</a></span> -->
-
-<!-- aws, devops -->
-
-
-
-
-    <a href="/category/aws">aws</a>
-    , 
-
-    <a href="/category/devops">devops</a>
-    
-</span>
-	<span class="tags">s3, mysql, powershell</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I have an application that uses MySQL database. Because of cost concerns it’s running on an EC2 instance instead of RDS. As it’s not a managed environment, the burden of backing up my data falls on me. This is a small step by step guide that details how I’m backing up my MySQL database to AWS S3 with PowerShell</p>
-
-<h2 id="part-01---aws-setup">PART 01 - AWS SETUP</h2>
-
-<ol>
-  <li>Create a bucket named (e.g. “application-backups”) on AWS S3 using AWS Management Console.</li>
-  <li>Create a new IAM user (e.g “upload-backup-to-s3”)</li>
-  <li>Create a new policy using management console. The policy will only give enough permissions to put objects into a single S3 bucket:</li>
-</ol>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-                </span><span class="s2">"s3:ListBucket"</span><span class="w">
-            </span><span class="p">],</span><span class="w">
-            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-                </span><span class="s2">"arn:aws:s3:::xxxxxxx"</span><span class="w">
-            </span><span class="p">]</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s3:PutObject"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-                </span><span class="s2">"arn:aws:s3:::xxxxxxx/*"</span><span class="w">
-            </span><span class="p">]</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div></div>
-
-<p>In S3 bucket properties copy ARN and replace the x’s above with that.</p>
-
-<ol>
-  <li>
-    <p>Customize S3 bucket LifeCycle settings to determine how long you want the old logs retain in your bucket. In my case I set it to expire at 21 days which I think it’s large enough window for relevant database backups. I probably wouldn’t restore anything older than 21 days anyway.</p>
-  </li>
-  <li>
-    <p>[Optional - For email notifications] Create an SES user by clicking SES -&gt; SMTP Settings -&gt; Create My SMTP Credentials</p>
-  </li>
-</ol>
-
-<p>Make sure you don’t make the mistake I made which was creating an IAM user with a policy that can send emails. In the SMTP settings page there’s a note right below the button:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Your SMTP user name and password are not the same as your AWS access key ID and secret access key. Do not attempt to use your AWS credentials to authenticate yourself against the SMTP endpoint.
-</code></pre></div></div>
-
-<p>When you click the button it creates an IAM user basically for the secret key is 44 bytes whereas the IAM user I created had a secret key of 40 characters. Anyway, bottom line is in order to be able to send emails via SES create the user as described above and all should be fine.</p>
-
-<h2 id="part-02---powershell-script">PART 02 - POWERSHELL SCRIPT</h2>
-
-<ol>
-  <li>
-    <p>Download and install AWS Tools for Windows PowerShell (https://aws.amazon.com/powershell/)</p>
-  </li>
-  <li>
-    <p>Create a script as shown below. In a nutshell what the script does is:</p>
-  </li>
-</ol>
-
-<p>a. Execute mysqldump command (Comes with MySQL Server)</p>
-
-<p>b. Zip the backup file (which reduces the size significantly)</p>
-
-<p>c. Upload the zip file to S3 bucket</p>
-
-<p>d. Send a notification email using SES</p>
-
-<p>e. Delete the local files</p>
-
-<p>This is the full script:</p>
-
-<noscript><pre>400: Invalid request</pre></noscript>
-<script src="https://gist.github.com/e75f2d861de8604868bec0897768896e.js"> </script>
-
-<ul>
-  <li>
-    <p>For SQL Server databases, there’s a PowerShell cmdlet called <a href="https://docs.microsoft.com/en-us/powershell/module/sqlserver/backup-sqldatabase?view=sqlserver-ps" target="_blank" rel="noopener noreferrer">Backup-SQLDatabase</a> but for MySQL I think the most straightforward way is using mysqldump that comes with MySQL server.</p>
-  </li>
-  <li>
-    <p>For password-protected zip files, you can take a look at <a href="https://cyber-defense.sans.org/blog/2016/06/06/powershell-7-zip-compress-archive-encryption#" target="_blank" rel="noopener noreferrer">this article</a> (I haven’t tried it myself)</p>
-  </li>
-</ul>
-
-<p>Final step: Schedule the script by using Windows Task Scheduler</p>
-
-<p>This is quite straightforward. Just create a task, schedule it to how often you want to backup your database.</p>
-
-<p>In the actions section, enter “powershell” as “program/script” and the path of your PowerShell script as “argument” and that’s it.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://docs.microsoft.com/en-us/powershell/module/sqlserver/backup-sqldatabase?view=sqlserver-ps" target="_blank" rel="noopener noreferrer">Backup-SQLDatabase cmdlet reference</a></li>
-  <li><a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.archive/compress-archive?view=powershell-5.1" target="_blank" rel="noopener noreferrer">Compress-Archive cmdlet reference</a></li>
-  <li><a href="https://aws.amazon.com/powershell/" target="_blank" rel="noopener noreferrer">AWS Tools Download</a></li>
-  <li><a href="https://www.vexasoft.com/blogs/powershell/7255220-powershell-tutorial-try-catch-finally-and-error-handling-in-powershell" target="_blank" rel="noopener noreferrer">PowerShell Tutorial – Try Catch Finally and error handling in PowerShell</a></li>
-  <li><a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/smtp-credentials.html" target="_blank" rel="noopener noreferrer">AWS Documentation: Obtaining Your Amazon SES SMTP Credentials</a></li>
 </ul>
 
 		

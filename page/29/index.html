@@ -99,6 +99,188 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/02/19/visual-tools-for-neo4j/" itemprop="url">Visual Tools for Neo4J</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-02-19T14:30:00+00:00" itemprop="datePublished">February 19, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">graph_databases, neo4j</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>It always helps to know the ecosystem to get the maximum performance out of any development platform. In this post I will cover some of the tools that can be used to manage a Neo4J database.</p>
+
+<h3 id="neo4j-browser">Neo4J Browser</h3>
+<p>This tool comes out of the box and very handy to run Cypher queries and get visual results. I covered some of the stuff you can do with this tool in <a href="https://volkanpaksoy.com/archive/2015/02/16/neo4j-browser-tips-and-tricks/">an earlier post</a> but it’s capable of much more so very nice tool to have in your toolbelt. I think the only shortcoming is you cannot edit data visually. I think it would be very helpful to have the ability to manually add nodes or create new relationships in a drag &amp; drop fashion. It would save time to write the queries from scratch every time but maybe it can have that feature in the future releases.</p>
+
+<h3 id="linkurious">Linkurious</h3>
+<p>This is a paid online service. Unfortunately they don’t have a trial option. You can sign up for an online demo though.</p>
+
+<p><img src="/images/vpblogimg/2015/02/linkurious-tutorial.png" alt="Linkurious tutorial"></p>
+
+<p>It has a nice intuitive user interface that allows you to search and edit data via the UI.</p>
+
+<p><img src="/images/vpblogimg/2015/02/linkurious-tutorial-2.png" alt="Linkurious tutorial"></p>
+
+<p>When I tried to edit data or try the “Save as a Neo4J Database” feature I got errors.</p>
+
+<p><img src="/images/vpblogimg/2015/02/linkurious-server-error.png" alt="Linkurious server error"></p>
+
+<p>I don’t know if it’s a limitation of the demo version or their system was having a bad day but I’m not convinced to fork over €249 for this tool yet.</p>
+
+<p><em>UPDATE: After I published this post I’ve been informed that adding/editing feature is disabled in the demo. So the error messages were intentional and not because of a system failure.</em></p>
+
+<h3 id="neoclipse">Neoclipse</h3>
+<p>This is a free an open-source desktop application written in Java. It has some flaws (e.g. sometimes you have to reconnect to server to see the affects or your changes) but in general it’s a nice tool for visual editing. You can also run Cyper queries.</p>
+
+<p>Another neat feature to further embellish the visualization is assigning icons to nodes.</p>
+
+<p><img src="/images/vpblogimg/2015/02/neoclipse-preferences.png" alt="Neoclipse preferences"></p>
+
+<p>You can specify a folder that contains your images. The image name must match the property specified in the “Node icon filename properties” textbox.</p>
+
+<p>For example when I ran my sample <a href="https://gist.github.com/volkanpaksoy/8cd4fcda784b27b47e6e183edc36682b" target="_blank" rel="noopener noreferrer">Simpsons Cypher script</a> I get the following graph:</p>
+
+<p><img src="/images/vpblogimg/2015/02/neoclipse-simpsons.png" alt="Neoclipse visualisation with icons"></p>
+
+<p>Note that the values that should match the filename is case-sensitive and you may need to reconnect to server to see the changes (refresh doesn’t cut it). I learned it the hard-way :-)</p>
+
+<p>Managing the properties of a node is very easy. You can edit the current values in-place on the grid and add new values by right-clicking on the Properties grid and select New and type of the property.</p>
+
+<p><img src="/images/vpblogimg/2015/02/neoclipse-add-property.png" alt="Neoclipse - Adding new property"></p>
+
+<p>It’s a nice tool for quickly editing data but it can easily be a memory-hog too! Once I noticed it was using 1.5GB RAM and the graph only around 100 nodes and relationships so I have some performance concerns about it with large datasets.</p>
+
+<h3 id="gephi">Gephi</h3>
+<p>Gephi is a general visualisation tool and thanks to its plugin support it could be extended to support Neo4J databases. (You need at least JDK 7 to install the plugin.)</p>
+
+<p><img src="/images/vpblogimg/2015/02/gephi-plugins.png" alt="Gephi plugins"></p>
+
+<p>You can download and install the <a href="https://marketplace.gephi.org/plugin/neo4j-graph-database-support/" target="_blank" rel="noopener noreferrer">Neo4J plugin</a> manually or better yet you can just select Tools -&gt; Plugins -&gt; Available Plugins and search Neo4J.</p>
+
+<p>Once installed you can then import a Neo4J database by selecting <em>File -&gt; Neo4J Database -&gt; Full Import</em></p>
+
+<p>Make sure to shutdown the Neo4J server before the import or you will get this very informative error message from Gephi:</p>
+
+<p><img src="/images/vpblogimg/2015/02/gephi-db-use-error.png" alt="Gephi database in use error"></p>
+
+<p>Apparently it locks the database as well so if you try to run Neo4J again while Gephi is still running you get this error:</p>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-lock-errror.png" alt="Neo4J lock error"></p>
+
+<p>Clearly they don’t play well together so it’s best to run them separately.</p>
+
+<p>After the import you can view the graph visually like this</p>
+
+<p><img src="/images/vpblogimg/2015/02/gephi-imported-database.png" alt="Gephi imported Neo4J database"></p>
+
+<p>Doesn’t look as impressive as Neoclipse IMHO!</p>
+
+<p>To view the data you can switch to Data Laboratory tab:</p>
+
+<p><img src="/images/vpblogimg/2015/02/gephi-nodes.png" alt="Gephi Nodes"></p>
+
+<p><img src="/images/vpblogimg/2015/02/gephi-edges.png" alt="Gephi Edges"></p>
+
+<p>In theory you can add nodes and export the database but that wasn’t a very successful endeavour for me. When you add a new node you can set the label but you cannot edit any properties.</p>
+
+<p><img src="/images/vpblogimg/2015/02/gephi-new-node.png" alt="Gephi new node"></p>
+
+<p>So that wasn’t quite helpful. I don’t know what you can do with a graph without any properties.</p>
+
+<p>Gephi is still in beta phase. Also as plugins are developed by third-parties there might be some inconsistencies sometimes. I’ll leave this tool for the moment but it looks promising so I’ll put a pin to it for the time being.</p>
+
+<h3 id="tom-sawyer-perspectives">Tom Sawyer Perspectives</h3>
+<p>This is also a generic visualisation tools that can work with multiple data sources. It can integrate with Neo4J as well as <a href="www.objectivity.com/infinitegraph">InfiniteGraph</a>, a distributed graph database.</p>
+
+<p>Downloading the trial software is a bit tricky. First you apply for an account. Your application is processed manually. After you are accepted, you first apply for a code to evaluate the product. Luckily it’s handled automatically and you receive the code right away. You then enter the code to have the privilege(!) to submit another form that details what type of project you’re planning to develop, what programming language you are using etc. That application is also processed manually. Currently I’m still waiting to be granted a trial license so I will not review the software for the time being. If I get to try it someday I will update this post.</p>
+
+<h3 id="comparison">Comparison</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tool</th>
+      <th>Price</th>
+      <th>Requirements</th>
+      <th>Pros</th>
+      <th>Cons</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Neo4J Browser</td>
+      <td>Free</td>
+      <td>Web browser</td>
+      <td>&lt;ul&gt;&lt;li&gt;Comes with the server&lt;/li&gt;&lt;li&gt;Rich feature set&lt;/li&gt;&lt;/ul&gt;</td>
+      <td>&lt;ul&gt;&lt;li&gt;No editing visually&lt;/li&gt;&lt;/ul&gt;</td>
+    </tr>
+    <tr>
+      <td>Linkurious</td>
+      <td>€249</td>
+      <td>Web browser</td>
+      <td>&lt;ul&gt;&lt;li&gt;Visual editing&lt;/li&gt;&lt;/ul&gt;</td>
+      <td>&lt;ul&gt;&lt;li&gt; Expensive &lt;/li&gt;&lt;/ul&gt;</td>
+    </tr>
+    <tr>
+      <td>Neoclipse</td>
+      <td>Free	/ Open Source</td>
+      <td>Java 1.6</td>
+      <td>&lt;ul&gt;&lt;li&gt;Easy to use and edit data&lt;/li&gt;&lt;li&gt;Nice decoration options&lt;/li&gt;&lt;/ul&gt;</td>
+      <td>&lt;ul&gt;&lt;li&gt;High memory usage&lt;/li&gt;&lt;li&gt;Glitches may cause disruption&lt;/li&gt;&lt;/ul&gt;</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="prototyping-tools">Prototyping tools</h3>
+<p>My main goal in this quest was to find a tool that would allow me to edit data visually to speed up data entry. Apart from tools that can directly manipulate data there are also a bunch of modelling tools. I won’t cover them in depth in this post but might be helpful to have a short list of them at least so that to give some pointers.</p>
+
+<h4 id="omnigraffle">OmniGraffle</h4>
+<p><a href="https://www.omnigroup.com/omnigraffle" target="_blank" rel="noopener noreferrer">OmniGraffle</a> is a general purpose diagramming tool. It’s not free nor cheap but it has an iPad version so you can keep modelling on-the-go!</p>
+
+<h4 id="arrow-tool">Arrow Tool</h4>
+<p><a href="https://github.com/apcj/arrows" target="_blank" rel="noopener noreferrer">Arrow Tool</a> is an open-source project developed by a Neo4J developer. It’s as simple as it gets and helps you to quickly create a model.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>This is by no means an exhaustive list of the tools in the market. As graph databases gain more traction the number of such tools will exponentially increase.</p>
+
+<p>Visual tools help a great deal sometimes to make sense of and see how the data is connected. But you need to have good Cypher skills to be able to run complex queries. In the next post I’ll go over Cypher and cover the basics.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://linkurio.us/" target="_blank" rel="noopener noreferrer">linkurious</a></li>
+  <li><a href="https://github.com/neo4j-contrib/neoclipse" target="_blank" rel="noopener noreferrer">Neoclipse</a></li>
+  <li><a href="http://gephi.github.io/" target="_blank" rel="noopener noreferrer">Gephi</a></li>
+  <li><a href="https://www.tomsawyer.com/products/perspectives/" target="_blank" rel="noopener noreferrer">Tom Sawyer Perspectives</a></li>
+  <li><a href="https://gist.github.com/volkanpaksoy/8cd4fcda784b27b47e6e183edc36682b" target="_blank" rel="noopener noreferrer">Cypher query for Simpsons sample</a></li>
+  <li><a href="http://www.amazon.co.uk/Learning-Neo4j-Graph-Databases-Bruggen/dp/1849517169" target="_blank" rel="noopener noreferrer">Book: Learning Neo4J</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/02/16/neo4j-browser-tips-and-tricks/" itemprop="url">Neo4J Browser Tips &amp; Tricks</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -342,64 +524,6 @@ Base64-encoded value --&gt; bmVvNGo6cGFzcw==
   <li><a href="http://www.pluralsight.com/courses/graph-databases-neo4j-introduction" target="_blank" rel="noopener noreferrer">Pluralsight Course: Introduction to Graph Databases and Neo4j</a></li>
   <li><a href="http://www.lynda.com/Neo4j-tutorials/Up-Running-Neo4j/155604-2.html" target="_blank" rel="noopener noreferrer">Lynda Course: Up and Running with Neo4J</a></li>
   <li><a href="http://en.wikipedia.org/wiki/Graph_database#Graph_database_projects" target="_blank" rel="noopener noreferrer">Wikipedia article: Graph Databases</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/02/12/raspberry-pi2-first-impressions/" itemprop="url">Raspberry Pi 2: First Impressions</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-02-12T15:00:00+00:00" itemprop="datePublished">February 12, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
-
-<!-- misc -->
-
-
-
-
-    <a href="/category/misc">misc</a>
-    
-</span>
-	<span class="tags">review, gadget, raspberry_pi</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I already had 3 Raspberry Pis so you might think it’s ridiculous to get excited for a 4th one but you would be wrong! Because this time they revised the hardware and made major upgrades.</p>
-
-<p><img src="/images/vpblogimg/2015/02/raspberry-pi-2.jpg" alt="Raspberry Pi 2"></p>
-
-<p>The new Pi is rocking a quad-core Cortex A7 processor and it comes with 1GB memory. Rest of the specs remained the same (including the price!) but the processor and memory made a huge impact.</p>
-
-<p>For more detailed comparison check the <a href="http://www.raspberrypi.org/blog/#benchmarking-raspberry-pi-2" target="_blank" rel="noopener noreferrer">benchmark results on the official website</a></p>
-
-<p>I tried using a web browser in the old versions and it was painfully slow. So I decided to use the previous versions for background tasks like a security camera or network scanning. The B+ is powerful enough to run XBMC and play videos but even that is slow when it transitions between different screens. So seeing the new Pi can be a full desktop replacement is really exciting.</p>
-
-<h3 id="what-else-is-new">What else is new</h3>
-<p>Pi 2 comes with a few applications installed like Mathematica and Wolfram, utilities like a PDF reader and text editor and even Minecraft!</p>
-
-<p><img src="/images/vpblogimg/2015/02/pi2-minecraft.png" alt="Minecraft on Raspberry Pi 2"></p>
-
-<h3 id="whats-next">What’s next</h3>
-<p>I don’t have a project in mind at the moment for this one yet. Since the architecture has breaking changes a lot of existing OS versions don’t work on it yet like Raspbmc and Kali Linux. Maybe I can wait and install Kali Linux on it and practice some security features. Or hopefully Microsoft releases Windows 10 for IoT soon enough so I can play with it. I’ll keep posting as I find more about my new toy! In the meantime I’m open to all project ideas so please leave a comment if you anything in mind!</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://www.amazon.co.uk/gp/product/B00MQLB1N6" target="_blank" rel="noopener noreferrer">Case on Amazon</a></li>
-  <li><a href="http://www.raspberrypi.org/blog/#benchmarking-raspberry-pi-2" target="_blank" rel="noopener noreferrer">Benchmarking Raspberry Pi 2</a></li>
 </ul>
 
 		

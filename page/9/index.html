@@ -99,6 +99,72 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2019/03/23/Repurposing-A-10-Year-Old-MacBook/" itemprop="url">Repurposing a 10-Year-Old MacBook</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-03-23T06:00:00+00:00" itemprop="datePublished">March 23, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/linux">linux</a></span> -->
+
+<!-- linux -->
+
+
+
+
+    <a href="/category/linux">linux</a>
+    
+</span>
+	<span class="tags">macbook, ubuntu</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p><img src="/images/vpblogimg/2019/03/repurposing-macbook-initial.jpeg" alt=""></p>
+
+<p>This is my old MacBook Mid 2009. It was sitting in the closet for so long I thought I could invent some purpose and use it before it finally dies. Looks like latest macOS version don’t even support this device so I thought maybe I could use it as a learning tool for Ubuntu.</p>
+
+<p>Since SSDs are so cheap these days I just decided to keep the old macOS drive as backup and install Ubuntu on one of these babies:</p>
+
+<p><img src="/images/vpblogimg/2019/03/repurposing-macbook-ssd-on-amazon.png" alt=""></p>
+
+<p>I think around £18 is a small price to pay for a brand new SSD so went with it.</p>
+
+<h2 id="installing-ubuntu">Installing Ubuntu</h2>
+
+<ol>
+  <li>
+    <p>Download the ISO <a href="https://www.ubuntu.com/download" target="_blank" rel="noopener noreferrer">here</a></p>
+  </li>
+  <li>Burn the ISO to a USB Drive. Instead of installing extra software I followed this guide: <a href="https://docs.kali.org/downloading/kali-linux-live-usb-install" target="_blank" rel="noopener noreferrer">Making a Kali Bootable USB Drive</a>. It’s for Kali Linux but this bit works for burning any Linux distro.</li>
+  <li>For the rest follow the steps <a href="https://www.macworld.co.uk/how-to/mac/how-install-linux-on-mac-3637265/" target="_blank" rel="noopener noreferrer">here</a> starting with Step 9</li>
+</ol>
+
+<p>And after the installation this is what my MacBook looks like:</p>
+
+<p><img src="/images/vpblogimg/2019/03/repurposing-macbook-with-ubuntu.jpeg" alt=""></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.youtube.com/watch?time_continue=56&amp;v=k22795agwmw" target="_blank" rel="noopener noreferrer">iFixit How To: MacBook Hard Drive Replacement/Upgrade</a></li>
+  <li><a href="https://www.macworld.co.uk/how-to/mac/how-install-linux-on-mac-3637265/" target="_blank" rel="noopener noreferrer">How to install &amp; set up Linux on a Mac</a></li>
+  <li><a href="https://docs.kali.org/downloading/kali-linux-live-usb-install" target="_blank" rel="noopener noreferrer">Making a Kali Bootable USB Drive</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2019/03/09/No-More-Snoozing-Tips-Tools-and-Techniques/" itemprop="url">No more snoozing: Tips, tools and techniques</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -415,95 +481,6 @@
   <li><a href="https://www.tobetester.com/how-to-find-docker-volume-on-host-machine/" target="_blank" rel="noopener noreferrer">How to find Docker volume on host machine</a></li>
   <li><a href="https://docs.docker.com/engine/swarm/how-swarm-mode-works/services/" target="_blank" rel="noopener noreferrer">How services work</a></li>
 </ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2019/02/22/Setting-Up-New-EBS-Volume-in-EC2/" itemprop="url">Setting Up a New EC2 Linux Instance</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2019-02-22T06:00:00+00:00" itemprop="datePublished">February 22, 2019</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/linuxaws">linux</a></span> -->
-
-<!-- linux, aws -->
-
-
-
-
-    <a href="/category/linux">linux</a>
-    , 
-
-    <a href="/category/aws">aws</a>
-    
-</span>
-	<span class="tags">ec2, ebs</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I recently decided to purchase a reserved t3.nano instance to run some Docker containers and for general testing purposes. In addition to the default volume I decided to add a new one to separate my files from the OS. It required a few steps to get everything in place so I decided to post this mostly for future reference!</p>
-
-<h2 id="attach-a-volume-during-creation">Attach a volume during creation</h2>
-<p>First I added a new volume to the instance while creating it.</p>
-
-<p><img src="/images/vpblogimg/2019/02/Setting-Up-New-EBS-Volume-in-EC2-Add-Storage.png" alt=""></p>
-
-<h2 id="connecting-to-instance">Connecting to instance</h2>
-<p>Now we have to connect to the instance to format the new volume. To achieve that we must have access to the private we generated while we created the instance. So to SSH into the machine we run this command:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh -i {/Path/To/Key/file_name.pem} ec2-user@{public DNS name of the instance}
-</code></pre></div></div>
-
-<h2 id="format-the-volume">Format the volume</h2>
-<p>I found some AWS documentation to achieve this which was very useful: <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html" target="_blank" rel="noopener noreferrer">Making an Amazon EBS Volume Available for Use on Linux</a></p>
-
-<p>No need to repeat every command in that documentation. It’s a simple step-by-step guide. Just follow it and you have a volume in use which is also mounted at start up.</p>
-
-<h2 id="install-and-configure-docker">Install and configure Docker</h2>
-<p>Installing Docker is as simple as running this:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo yum update -y
-sudo yum install -y docker
-</code></pre></div></div>
-
-<p>To be able to use Docker without sudoing everything ad ec2-user to docker group:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo usermod -aG docker ec2-user
-</code></pre></div></div>
-
-<p>We need to make sure that Docker daemon starts on reboot too. To achieve this run this:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable docker
-</code></pre></div></div>
-
-<h2 id="copy-files-to-the-instance">Copy files to the instance</h2>
-<p>To copy some files to the new instance I used SCP command:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo scp -i {/Path/To/Key/file_name.pem} -r {/Path/To/Local/Folder/} ec2-user@{public DNS name of the instance}:/Remote/Folder
-</code></pre></div></div>
-
-<p>The issue was ec2-user didn’t initially have access to write on the remote folder. In that case you can run  the following command to have access:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>setfacl -m u:ec2-user:rwx /Remote/Folder
-</code></pre></div></div>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html" target="_blank" rel="noopener noreferrer">Making an Amazon EBS Volume Available for Use on Linux</a></li>
-</ul>
-
 
 		
 		

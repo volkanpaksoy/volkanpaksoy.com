@@ -99,6 +99,46 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2020/09/24/A-New-Blog/" itemprop="url">A New Blog</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2020-09-24T05:00:00+01:00" itemprop="datePublished">September 24, 2020</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
+
+<!-- misc -->
+
+
+
+
+    <a href="/category/misc">misc</a>
+    
+</span>
+	<span class="tags">lego, blog, news</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I love blogging because it motivates me to do more on that specific subject. Recently I blogged less and less here though. One reason for that is I started my own private Confluence. Since I can still document everything without being public, I put more time and effort in the wiki than the blog. As long as I get everything where I can find them I’ll probably keep it this way.</p>
+
+<p>In the meantime I’ve started a new public blog on LEGO. My new hobby. I dadbbled in LEGO for some time with some toy Mindstorms projects but I want to build on that and discover more about it. I didn’t want to mix LEGO with programming content so I am going to write about LEGO here: <a href="https://lego.volkanpaksoy.com/" target="_blank" rel="noopener noreferrer">My LEGO Blog</a></p>
+
+<p>Let the journey in bricks begin!</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2020/03/18/Migrating-EC2-Instance-to-a-Different-Account/" itemprop="url">Migrating an EC2 Instance to a Different AWS Account</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -346,183 +386,6 @@ ENTRYPOINT ["/play-audio.sh"]
   <li><a href="https://stackoverflow.com/questions/40136606/how-to-expose-audio-from-docker-container-to-a-mac" target="_blank" rel="noopener noreferrer">How to expose audio from Docker container to a Mac?</a></li>
   <li><a href="https://devops.datenkollektiv.de/running-a-docker-soundbox-on-mac.html" target="_blank" rel="noopener noreferrer">Running a Docker Soundbox on Mac</a></li>
 </ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2019/11/06/Continuous-Integration-with-CodeBuild/" itemprop="url">Continuous Integration with CodeBuild</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2019-11-06T02:00:00+00:00" itemprop="datePublished">November  6, 2019</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/devopsaws">devops</a></span> -->
-
-<!-- devops, aws -->
-
-
-
-
-    <a href="/category/devops">devops</a>
-    , 
-
-    <a href="/category/aws">aws</a>
-    
-</span>
-	<span class="tags">github, codebuild, continuous_integration, ci</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>In this post, I’d like to show how to achieve continuous integration using CodeBuild service.</p>
-
-<p>Main goals to achieve:</p>
-
-<ul>
-  <li>Run unit tests in a Docker container</li>
-  <li>Kick off build automatically when code is pushed</li>
-  <li>Show build status</li>
-  <li>Send notifications when tests fail</li>
-</ul>
-
-<h2 id="codebuild-setup">Codebuild Setup</h2>
-
-<h3 id="step-01-project-configuration">Step 01: Project Configuration</h3>
-<p>Specify a unique name and make sure to tick “Enable build badge” checkbox</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/project-configuration.png" alt=""></p>
-
-<h3 id="step-02-source-selection">Step 02: Source Selection</h3>
-<p>In this step select GitHub as source provider and select “Repository in my GitHub account” option. AWS will use OAuth and redirect to GitHub to ask for authoization to access your repositories. After granting access you should be able to see your repositories in the dropdown list:</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/select-source.png" alt=""></p>
-
-<p>I left “Source version” field blank as I want the build to run for all branches and for all commits.</p>
-
-<h3 id="step-03-webhook-configuration">Step 03: Webhook Configuration</h3>
-<p>Tick the “Rebuild every time a code change is pushed to this repository” checkbox and select PUSH from the event type list. You can select more events to trigger builds for CI purposes it should be enough to run after every time code is pushed.</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/webhook-configuration.png" alt=""></p>
-
-<p>What this does is add a CodeBuild webhook in GitHub that looks like this:</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/webhook-in-github.png" alt=""></p>
-
-<p>Whenever a push happens in the repository, GitHub posts the details to CodeBuild webhook and that triggers a build.</p>
-
-<h3 id="step-04-environment-configuration">Step 04: Environment configuration</h3>
-<p>The build takes place in a Docker container so we have to provide a Docker image with build tools installed. Alternatively we can use one of the managed images that AWS provides. In this example I’ll use a managed image:</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/environment-configuration.png" alt=""></p>
-
-<h3 id="step-05-other-configuration">Step 05: Other configuration</h3>
-<p>In this example, I will accept the defaults for the rest of the settings because I don’t need to generate artifacts to run unit tests. It’s generally wise to enable CloudWatch logs so that you can monitor the build process closely. Since I accept the default path for buildspec.yml, I have to place it at the root of the repository.</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/buildspec-artifacts-logs-configuration.png" alt=""></p>
-
-<h2 id="running-the-tests">Running the tests</h2>
-<p>The core responsibility of CI pipeline is to run the unit tests. CodeBuild is a generic service and it doesn’t come with any tools to run unit tests as it’s application and environment dependent. The way we configure is by using buildspec.yml file. In this example I’m running a dotnet core project and making sure the unit tests are run first is as easy as this:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 0.2
-
-phases:
-  install:
-    runtime-versions:
-        dotnet: 2.2
-  build:
-    commands:
-      - dotnet restore
-      - dotnet test
-      - dotnet publish Sample.UI.Web -c Release -o ./output
-</code></pre></div></div>
-
-<p>This way CodeBuild will execute the steps above and all the unit tests in the solution will be run.</p>
-
-<h2 id="run-build-automatically">Run build automatically</h2>
-<p>Now that the GitHub repository and CodeBuild projects are both ready, let’s see if we can kick off a build by pushing some code changes:</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/auto-build-after-commit-1.png" alt=""></p>
-
-<p>Also after pushing code to a feature branch I was able to see that build was triggered.</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/auto-build-after-commit-2.png" alt=""></p>
-
-<p>So now I could confirm running the build automatically.</p>
-
-<p>As a side note, the failed ones were failing due to this error</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>YAML_FILE_ERROR: This build image requires selecting at least one runtime version.
-</code></pre></div></div>
-
-<p>The solution was to specify the runtime in the buildspec.yml file explicitly by adding this bit:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>install:
-  runtime-versions:
-      dotnet: 2.2
-</code></pre></div></div>
-
-<p>Also it’s worth noting that the source version value in Codebuild corresponds to commit hash. For example the commit hash shown below</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/commit-id-on-github.png" alt=""></p>
-
-<p>appears on CodeBuild as</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/commit-id-on-codebuild.png" alt=""></p>
-
-<h2 id="showing-build-status">Showing build status</h2>
-<p>Showing the build status on GitHub repository is very easy. We already enabled build badge while creating the build project. Now we have to copy the badge URL as shown below:</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/copy-badge-url.png" alt=""></p>
-
-<p>Then in the GitHub repository, edit the readme.md file and add the following:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>![Build status](badge URL copied from AWS console)
-</code></pre></div></div>
-
-<p>Now if you go to the GitHub repository page and refresh you can see the latest status of the build (of master branch):</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/displaying-build-status.png" alt=""></p>
-
-<p>After I fixed the error and merged into master branch I could see the build passing badge as well:</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/build-status-passing.png" alt=""></p>
-
-<h2 id="notifications">Notifications</h2>
-<p>It would be nice to have a direct integration with notifications. This can be achieved using CloudWatch Events. In this sample project I’m going to use SNS to send email notifications.</p>
-
-<p>First, I went to CloudWatch and created a rule and added the build state changed events. Just gave it a name and created the rule so that it looked like this:</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/cloudwatch-event-rule-view.png" alt=""></p>
-
-<p>After that I broke the test intentionally and received email for build failure in JSON format.</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/build-notification-json.png" alt=""></p>
-
-<h2 id="conclusion">Conclusion</h2>
-<p>In this post I wanted to show a continuous integration pipeline using GitHub and CodeBuild. It can further be improved by posting the build status to Slack so that the whole team can get the notifications instantly. For the time being I achieved the goals I set out for initially so I’ll wrap it up here.</p>
-
-<h2 id="source-code">Source Code</h2>
-<p>Source code can be found in the repo below under blog/CodeBuild_CI_Pipeline folder</p>
-
-<p></p>
-<div class="github-widget" data-repo="volkanpaksoy/lab"></div>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://docs.aws.amazon.com/en_pv/codebuild/latest/userguide/sample-build-notifications.html" target="_blank" rel="noopener noreferrer">Build Notifications Sample for CodeBuild</a></li>
-  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/CodeBuild_CI_Pipeline" target="_blank" rel="noopener noreferrer">Source code</a></li>
-</ul>
-
 
 		
 		

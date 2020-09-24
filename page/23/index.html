@@ -99,6 +99,169 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/10/07/mail-automation-with-aws-lambda-and-sns/" itemprop="url">Mail automation with AWS Lambda and SNS</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-10-07T15:00:00+01:00" itemprop="datePublished">October  7, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">lambda, s3, sns</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<blockquote>
+  <p>UPDATE: Yesterday (October 8th, 2015) Amazon announced official support for scheduled events so I updated my function to use this feature. 
+For the most up-to-date version of this project please visit the <a href="https://volkanpaksoy.com/archive/2015/10/09/aws-lambda-official-scheduling-support/">updated version</a></p>
+</blockquote>
+
+<p>I have a great accountant but he has one flaw: I have to ask for the invoice every month! While waiting for him to automate the process, I decided to automate what I can on my end. There are many ways to skin a cat, as the saying goes, the way I picked for this task was developing an AWS Lambda funciton and trigger it by subscribing to a public SNS topic.</p>
+
+<h2 id="step-1-prepare-a-function-to-send-emails">Step 1: Prepare a function to send emails</h2>
+<p>Developing a simple node.js function that sends E-mails was simple. First I needed the install two modules:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install nodemailer
+npm install nodemailer-smtp-transport
+</code></pre></div></div>
+
+<p>And the function is straightforward:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">transporter</span> <span class="o">=</span> <span class="nx">nodemailer</span><span class="p">.</span><span class="nx">createTransport</span><span class="p">(</span><span class="nx">smtpTransport</span><span class="p">({</span>
+    <span class="na">host</span><span class="p">:</span> <span class="s1">'email-smtp.eu-west-1.amazonaws.com'</span><span class="p">,</span>
+    <span class="na">port</span><span class="p">:</span> <span class="mi">587</span><span class="p">,</span>
+    <span class="na">auth</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">user</span><span class="p">:</span> <span class="s1">'{ACCESS KEY}'</span><span class="p">,</span>
+        <span class="na">pass</span><span class="p">:</span> <span class="s1">'{SECRET KEY}'</span>
+    <span class="p">}</span>
+<span class="p">}));</span>
+
+<span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s1">'Hi, Invoice! Thanks!'</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">mailOptions</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">from</span><span class="p">:</span> <span class="s1">'from@me.net'</span><span class="p">,</span>
+    <span class="na">to</span><span class="p">:</span> <span class="s1">'to@someone.net'</span><span class="p">,</span>
+    <span class="na">bcc</span><span class="p">:</span> <span class="s1">'me2@me.com'</span><span class="p">,</span>
+    <span class="na">subject</span><span class="p">:</span> <span class="s1">'Invoice'</span><span class="p">,</span>
+    <span class="na">text</span><span class="p">:</span> <span class="nx">text</span> 
+<span class="p">};</span>
+
+<span class="nx">transporter</span><span class="p">.</span><span class="nx">sendMail</span><span class="p">(</span><span class="nx">mailOptions</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">info</span><span class="p">){</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+		<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+		<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Message sent'</span><span class="p">);</span>
+      <span class="p">}</span>
+  <span class="p">});</span>
+</code></pre></div></div>
+
+<p>The challenge was deployment as the script had some dependencies. If you choose Edit Inline and just paste the script you would get an error like this</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"errorMessage": "Cannot find module 'nodemailer'",
+</code></pre></div></div>
+
+<p>But it’s very easy to deploy a full package with dependencies. Just zip everything in the folder (wihtout the folder itself) and upload the zip file. The downside of this method is you can no longer edit the code inline. So even just for fixing a trivial typo you need to re-zip and re-upload.</p>
+
+<h2 id="step-2-schedule-the-process">Step 2: Schedule the process</h2>
+<p>One simple method to schedule the process is to invoke the method using Powershell and schedule a task to run the script:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Invoke-LMFunction -FunctionName automatedEmails -AccessKey accessKey -SecretKey secretKey -Region eu-west-1
+</code></pre></div></div>
+
+<p>But I don’t want a dependency on any machine (local or EC2 instance). Otherwise I could write a few lines of code in C# to do the same job anyway. The idea of using Lambda is to avoid maintenance and let everything run on infrastructure that’s maintained by AWS.</p>
+
+<h3 id="unreliable-town-clock">Unreliable Town Clock</h3>
+<p>Unfortunately AWS doesn’t provide an easy method to schedule Lambda function invocations. For the sake of simplicity I decided to use <a href="https://alestic.com/2015/05/aws-lambda-recurring-schedule/" target="_blank" rel="noopener noreferrer">Unreliable Town Clock (UTC)</a> which is essentially a public SNS topic that sends “chime” messages every 15 minutes.</p>
+
+<p><img src="/images/vpblogimg/2015/10/mail-automation-sns-subscription.png" alt=""></p>
+
+<p>Since all I need is one email, I don’t care if it skips a beat or two as long as it chimes at least once throughout the day.</p>
+
+<h3 id="state-management">State management</h3>
+<p>Of course to avoid bombarding my accountant with emails I have to maintain a state so that I would only send one email per month. But Lambda functions must be stateless. Some alternatives are using AWS S3 or DynamoDB. Since all I need is one simple integer value I decided to store in a text file on S3. So first I download the log file and check the last sent email month:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">downloadLog</span><span class="p">(</span><span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">s3</span><span class="p">.</span><span class="nx">getObject</span><span class="p">({</span>
+			<span class="na">Bucket</span><span class="p">:</span> <span class="nx">bucketName</span><span class="p">,</span>
+			<span class="na">Key</span><span class="p">:</span> <span class="nx">fileName</span>
+		<span class="p">},</span>
+		<span class="nx">next</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">checkDate</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">currentDay</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">Records</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">Sns</span><span class="p">.</span><span class="nx">Message</span><span class="p">.</span><span class="nx">day</span><span class="p">);</span>
+	<span class="nx">currentMonth</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">Records</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">Sns</span><span class="p">.</span><span class="nx">Message</span><span class="p">.</span><span class="nx">month</span><span class="p">);</span>
+	<span class="kd">var</span> <span class="nx">lastMailMonth</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+	<span class="k">if</span> <span class="p">(</span><span class="nb">isNaN</span><span class="p">(</span><span class="nx">lastMailMonth</span><span class="p">))</span> <span class="p">{</span>
+		<span class="nx">lastMailMonth</span> <span class="o">=</span> <span class="nx">currentMonth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="p">((</span><span class="nx">currentDay</span> <span class="o">==</span> <span class="nx">targetDayOfMonth</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">currentMonth</span> <span class="o">&gt;</span> <span class="nx">lastMailMonth</span><span class="p">))</span> <span class="p">{</span>
+		<span class="nx">next</span><span class="p">();</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="putting-it-together">Putting it together</h3>
+<p>So putting it all together the final code is:</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/01d54e98dcc1cd0b3dcfaf12e57bc4fe.js"> </script>
+
+<p>Let’s see if it’s going to help me get my invoices automatically!</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<ul>
+  <li>
+    <p>A better approach would be to check emails for the invoice and send only if it wasn’t received already. Also a copule of reminders after the initial email would be nice. But as my new resolution is to progress in small, incremental steps I’ll call it version 1.0 and leave the remaining tasks for a later version.</p>
+  </li>
+  <li>
+    <p>My main goal was to achieve this task without having to worry about the infrastructure. I still don’t but that’s only because a nice guy (namely Eric Hammond) decided to setup a public service for the rest of us.</p>
+  </li>
+  <li>
+    <p>During my research I came across a few references saying that the same task can be done using AWS Simple Workflow (SWF). I haven’t used this service before. Looked complicated and felt like there is a steep learning curve to go through. In Version 2 I should look into SWF which would…</p>
+
+    <ul>
+      <li>allow me to handle a complex workflow</li>
+      <li>make dependency to public SNS topic redundant</li>
+      <li>handle state properly</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://javascript.tutorialhorizon.com/2015/07/02/send-email-node-js-express/" target="_blank" rel="noopener noreferrer">Send email using nodejs and express in 5 simple steps</a></li>
+  <li><a href="https://aws.amazon.com/blogs/compute/nodejs-packages-in-lambda/" target="_blank" rel="noopener noreferrer">Using Packages and Native nodejs Modules in AWS Lambda</a></li>
+  <li><a href="http://docs.aws.amazon.com/lambda/latest/dg/walkthrough-s3-events-adminuser-create-test-function-create-function.html" target="_blank" rel="noopener noreferrer">Create a Lambda Function Deployment Package</a></li>
+  <li><a href="https://alestic.com/2015/05/aws-lambda-recurring-schedule/" target="_blank" rel="noopener noreferrer">Schedule Recurring AWS Lambda Invocations With The Unreliable Town Clock (UTC)</a></li>
+  <li><a href="https://aws.amazon.com/about-aws/whats-new/2015/08/trigger-aws-lambda-functions-using-amazon-simple-workflow/" target="_blank" rel="noopener noreferrer">Trigger AWS Lambda Functions Using Amazon Simple Workflow</a></li>
+  <li><a href="http://docs.aws.amazon.com/amazonswf/latest/awsflowguide/lambda-task.html" target="_blank" rel="noopener noreferrer">Implementing AWS Lambda Tasks</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/10/01/creating-pdfs-from-images-with-csharp-and-wpf/" itemprop="url">Creating PDFs from Images with C# and WPF</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -325,151 +488,6 @@ neo4jshell -file relationships.cql
   <li><a href="http://stackoverflow.com/questions/21778435/multiple-unrelated-queries-in-neo4j-cypher" target="_blank" rel="noopener noreferrer">Workaround for running multiple statements on Neo4J browser</a></li>
   <li><a href="http://neo4j.com/docs/stable/query-load-csv.html" target="_blank" rel="noopener noreferrer">Neo4J documentation for LOAD CSV</a></li>
 </ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/09/14/innerworkings-of-tempdata-in-aspnet-mvc5/" itemprop="url">Inner-workings of TempData in ASP.NET MVC 5</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-09-14T12:30:00+01:00" itemprop="datePublished">September 14, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">csharp, asp_net, mvc</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>In ASP.NET, TempData is one of the mechanisms used to pass data from controller to the view. In this post I’ll dive into its source code to investigate its behaviour.</p>
-
-<h3 id="what-is-tempdata">What is TempData</h3>
-<p>TempData is an instance of <em>TempDataDictionary</em> that is used to pass data from the controller to the view.</p>
-
-<h3 id="lifespan">Lifespan</h3>
-<p>The lifespan of TempData is rather unusual: It lives for one request only. In order to achieve this it maintains two HashSets to manage keys as well as the data dictionary:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span> <span class="n">_data</span><span class="p">;</span>
-<span class="k">private</span> <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">_initialKeys</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="n">StringComparer</span><span class="p">.</span><span class="n">OrdinalIgnoreCase</span><span class="p">);</span>
-<span class="k">private</span> <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">_retainedKeys</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="n">StringComparer</span><span class="p">.</span><span class="n">OrdinalIgnoreCase</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p>When we read some data using an indexer or TryGetValue method it removes that key from _initalKeys collection.</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="kt">bool</span> <span class="nf">TryGetValue</span><span class="p">(</span><span class="kt">string</span> <span class="n">key</span><span class="p">,</span> <span class="k">out</span> <span class="kt">object</span> <span class="k">value</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">_initialKeys</span><span class="p">.</span><span class="nf">Remove</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">_data</span><span class="p">.</span><span class="nf">TryGetValue</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="k">out</span> <span class="k">value</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>The actual dictionary that holds the data is intact at this point. That’s why we can read same data consecutively without any issues. It only removes the key from <em>_initialKeys</em> collection, basically marking it to be deleted when the data is persisted.</p>
-
-<h3 id="peek-and-keep">Peek and keep</h3>
-<p>If we want the values in TempData last longer we can use Peek and Keep methods. What <em>Peek</em> does is return the value without removing it from the _initialKeys:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="kt">object</span> <span class="nf">Peek</span><span class="p">(</span><span class="kt">string</span> <span class="n">key</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">object</span> <span class="k">value</span><span class="p">;</span>
-    <span class="n">_data</span><span class="p">.</span><span class="nf">TryGetValue</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="k">out</span> <span class="k">value</span><span class="p">);</span>
-    <span class="k">return</span> <span class="k">value</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Alternatively, we can call <em>Keep</em> method. Similarly it doesn’t manipulate the data directly but just marks the key to be persisted by adding it to the <em>_retainedKeys</em> collection.</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">Keep</span><span class="p">(</span><span class="kt">string</span> <span class="n">key</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">_retainedKeys</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Parameterless overload of Keep method add all keys in the _data dictionary to _retainedKeys.</p>
-
-<h3 id="which-keys-to-persist">Which keys to persist</h3>
-<p>So as seen above when we get values and call Peek/Keep methods, operations are carried out on <em>_initialKeys</em> and <em>_retainedKeys</em> collections and nothing happens to the actual data. These operations take effect when the _data is actually saved:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">Save</span><span class="p">(</span><span class="n">ControllerContext</span> <span class="n">controllerContext</span><span class="p">,</span> <span class="n">ITempDataProvider</span> <span class="n">tempDataProvider</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">_data</span><span class="p">.</span><span class="nf">RemoveFromDictionary</span><span class="p">((</span><span class="n">KeyValuePair</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span> <span class="n">entry</span><span class="p">,</span> <span class="n">TempDataDictionary</span> <span class="n">tempData</span><span class="p">)</span> <span class="p">=&gt;</span>
-        <span class="p">{</span>
-            <span class="kt">string</span> <span class="n">key</span> <span class="p">=</span> <span class="n">entry</span><span class="p">.</span><span class="n">Key</span><span class="p">;</span>
-            <span class="k">return</span> <span class="p">!</span><span class="n">tempData</span><span class="p">.</span><span class="n">_initialKeys</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> 
-                <span class="p">&amp;&amp;</span> <span class="p">!</span><span class="n">tempData</span><span class="p">.</span><span class="n">_retainedKeys</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
-        <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
-
-    <span class="n">tempDataProvider</span><span class="p">.</span><span class="nf">SaveTempData</span><span class="p">(</span><span class="n">controllerContext</span><span class="p">,</span> <span class="n">_data</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Before the data is passed on to the provider it’s pruned. The keys that don’t exist in the _retainedKeys (the keys we explicitly told to keep) and _initialKeys (the keys that have not been touched so far or accessed through Peek method) collections are removed.</p>
-
-<h3 id="providers">Providers</h3>
-<p>By default, TempData uses session variables to persist data from one request to the next. Serializing and deserializing data is carried out via an object implementing <em>ITempDataProvider</em>. By default SessionStateTempDataProvider class is used to provide this functionality. It occurs in the CreateTempDataProvider method in Controller.cs class:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">protected</span> <span class="k">virtual</span> <span class="n">ITempDataProvider</span> <span class="nf">CreateTempDataProvider</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="n">Resolver</span><span class="p">.</span><span class="n">GetService</span><span class="p">&lt;</span><span class="n">ITempDataProvider</span><span class="p">&gt;()</span> <span class="p">??</span> <span class="k">new</span> <span class="nf">SessionStateTempDataProvider</span><span class="p">();</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>This also means we can replace the provider with our own custom class. For demonstration purposes I wrote my own provider which uses a simple text file to persist TempData:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">TextFileTempDataProvider</span> <span class="p">:</span> <span class="n">ITempDataProvider</span>
-<span class="p">{</span>
-    <span class="k">internal</span> <span class="k">readonly</span> <span class="kt">string</span> <span class="n">FileName</span> <span class="p">=</span> <span class="n">Path</span><span class="p">.</span><span class="nf">Combine</span><span class="p">(</span><span class="n">HttpContext</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Server</span><span class="p">.</span><span class="nf">MapPath</span><span class="p">(</span><span class="s">@"~/App_Data"</span><span class="p">),</span> <span class="s">@"TempData.txt"</span><span class="p">);</span>
-
-    <span class="k">public</span> <span class="n">IDictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span> <span class="nf">LoadTempData</span><span class="p">(</span><span class="n">ControllerContext</span> <span class="n">controllerContext</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">File</span><span class="p">.</span><span class="nf">Exists</span><span class="p">(</span><span class="n">FileName</span><span class="p">))</span>
-        <span class="p">{</span>
-            <span class="kt">string</span> <span class="n">json</span> <span class="p">=</span> <span class="n">File</span><span class="p">.</span><span class="nf">ReadAllText</span><span class="p">(</span><span class="n">FileName</span><span class="p">);</span>
-            <span class="k">return</span> <span class="n">Newtonsoft</span><span class="p">.</span><span class="n">Json</span><span class="p">.</span><span class="n">JsonConvert</span><span class="p">.</span><span class="n">DeserializeObject</span><span class="p">&lt;</span><span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;&gt;(</span><span class="n">json</span><span class="p">);</span>
-        <span class="p">}</span>
-
-        <span class="k">return</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;(</span><span class="n">StringComparer</span><span class="p">.</span><span class="n">OrdinalIgnoreCase</span><span class="p">);</span>
-    <span class="p">}</span>
-    
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">SaveTempData</span><span class="p">(</span><span class="n">ControllerContext</span> <span class="n">controllerContext</span><span class="p">,</span> <span class="n">IDictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span> <span class="n">values</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">string</span> <span class="n">json</span> <span class="p">=</span> <span class="n">Newtonsoft</span><span class="p">.</span><span class="n">Json</span><span class="p">.</span><span class="n">JsonConvert</span><span class="p">.</span><span class="nf">SerializeObject</span><span class="p">(</span><span class="n">values</span><span class="p">);</span>
-        <span class="n">File</span><span class="p">.</span><span class="nf">WriteAllText</span><span class="p">(</span><span class="n">FileName</span><span class="p">,</span> <span class="n">json</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>In order to use this class it needs to be assigned to TempDataProvider in the controller’s constructor</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="nf">FirstController</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">TempDataProvider</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TextFileTempDataProvider</span><span class="p">();</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Of course it’s not a bright idea to use disk for such operations, this is just for demonstration purposes and makes it easier to observe the behaviour.</p>
-
-<h3 id="conclusion">Conclusion</h3>
-<p>Often times I’ve found knowledge about the internals of a construct useful. Applications and frameworks are getting more complex each day, adding more layers and hiding the complexity from the consumers. It’s great because we can focus on the actual business logic and application we are building but when we get stuck it takes quite a while to figure out what’s going on. Having in-depth knowledge on the internals can save a lot if time.</p>
-
 
 		
 		

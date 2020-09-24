@@ -99,6 +99,46 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2012/10/11/online-networking-course-from-stanford/" itemprop="url">Online networking course from Stanford</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2012-10-11T15:15:03+01:00" itemprop="datePublished">October 11, 2012</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
+
+<!-- misc -->
+
+
+
+
+    <a href="/category/misc">misc</a>
+    
+</span>
+	<span class="tags">online_course, education</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Last week another online course started at Stanford University called An Introduction to Computer Networks. It started on 8th of October and they released a good deal of materials for the first week. I hope I’ll follow it until the end. If you’re interested you better hurry up because it’s not easy to catch once the videos pile up!</p>
+
+<p>Here’s the link to access the site: <del>https://class.stanford.edu/networking</del></p>
+
+<p>UPDATE: The above link seems to have stopped working. This should be the current one now: <a href="http://networking.class.stanford.edu" target="_blank" rel="noopener noreferrer">Stanford CS144 Networking Class</a></p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2012/10/06/on-cloud-nine/" itemprop="url">On cloud nine!</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -407,55 +447,6 @@ mv CARootCert.crt /etc/ssl/certs/&lt;br /&gt;
   <li><a href="http://www.ted.com/talks/lang/en/" target="_blank" rel="noopener noreferrer">Daphne Koller’s TED talk about online education</a></li>
 </ul>
 
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2011/10/23/download-once-install-forever/" itemprop="url">Download Once, Install Forever!</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2011-10-23T16:55:29+01:00" itemprop="datePublished">October 23, 2011</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
-
-<!-- misc -->
-
-
-
-
-    <a href="/category/misc">misc</a>
-    
-</span>
-	<span class="tags">wsus</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I’ve been using my own domain in my home network for a few years now but I hadn’t tried Windows Server Update Services (WSUS) until recently. After re-organizing my network, I ended up having almost 20 virtual machines. Since most of them are running various flavours of Windows, keeping them up-to-date became an issue. That’s when I recalled the existence of WSUS. What it does is basically allowing you to download Windows updates on one of your own servers and then distributing them to other machines over LAN. So no more downloading 300M of service packs over and over again.</p>
-
-<p>Installing WSUS is quite easy. You just have to open server manager and add the Windows Server Update Services role.</p>
-
-<p><img src="/images/vpblogimg/2011/10/ss3.png" alt="SQL Server Roles"></p>
-
-<p>Then you can select for which products you want to download updates. And also what types of updates you want to download.</p>
-
-<p><img src="/images/vpblogimg/2011/10/ss4.png" alt="SQL Server">
-<img src="/images/vpblogimg/2011/10/ss5.png" alt="SQL Server"></p>
-
-<p>The most tricky part is enforcing the client machines in the domain to download the updates from your server. That goal is achieved by Group Policy Management. TechNet has a nice article describing the necessary actions: <a href="http://technet.microsoft.com/en-us/library/cc708574(WS.10).aspx" target="_blank" rel="noopener noreferrer">http://technet.microsoft.com/en-us/library/cc708574(WS.10).aspx</a></p>
-
-<p>Normally, its target is not home users obviously. But after I’ve seen the benefits of it, I strongly recommend it to anyone running his own domain.</p>
 
 		
 		
