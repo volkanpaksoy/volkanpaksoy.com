@@ -4,7 +4,7 @@
   <title><![CDATA[Playground for the mind]]></title>
   <link href="https://volkanpaksoy.com/atom.xml" rel="self"/>
   <link href="https://volkanpaksoy.com/"/>
-  <updated>2021-08-12T04:58:43+01:00</updated>
+  <updated>2021-08-12T05:29:31+01:00</updated>
   <id>https://volkanpaksoy.com/</id>
   <author>
     <name><![CDATA[Volkan Paksoy]]></name>
@@ -12,21 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  
-  <entry>
-    <title type="html"><![CDATA[A New Blog]]></title>
-    <link href="https://volkanpaksoy.com/archive/2020/09/24/A-New-Blog/"/>
-    <updated>2020-09-24T05:00:00+01:00</updated>
-    <id>https://volkanpaksoy.com/archive/2020/09/24/A-New-Blog</id>
-    <content type="html"><![CDATA[<p>I love blogging because it motivates me to do more on that specific subject. Recently I blogged less and less here though. One reason for that is I started my own private Confluence. Since I can still document everything without being public, I put more time and effort in the wiki than the blog. As long as I get everything where I can find them I’ll probably keep it this way.</p>
-
-<p>In the meantime I’ve started a new public blog on LEGO. My new hobby. I dadbbled in LEGO for some time with some toy Mindstorms projects but I want to build on that and discover more about it. I didn’t want to mix LEGO with programming content so I am going to write about LEGO here: <a href="https://lego.volkanpaksoy.com/">My LEGO Blog</a></p>
-
-<p>Let the journey in bricks begin!</p>
-]]></content>
-  </entry>
-  
   
   
   <entry>
@@ -2766,6 +2751,115 @@ If they need to change something on a read-only layer, they use copy-on-write op
 <ul>
   <li><a href="https://serversforhackers.com/shipping-docker">Online course: Shipping Docker</a></li>
   <li><a href="https://www.pluralsight.com/courses/docker-deep-dive-update">Online course: Docker Deep Dive</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Developing a Web API with ASP.NET Core]]></title>
+    <link href="https://volkanpaksoy.com/archive/2019/05/22/Developing-a-Web-API-with-ASP.NET-Core/"/>
+    <updated>2019-05-22T05:00:00+01:00</updated>
+    <id>https://volkanpaksoy.com/archive/2019/05/22/Developing-a-Web-API-with-ASP.NET-Core</id>
+    <content type="html"><![CDATA[<p>Developing projects is fun and a great way to learn new stuff. The things is everything moves so fast, you constantly need to maintain the projects as well. In that spirit, I decided to re-write my old AngularJS DomChk53.</p>
+
+<p>First, I developed an API. This way I won’t have to maintain my AWS Lambda functions. Even though nobody uses them, still opening a public API poses risks and maintenance hassle. Now everybody can run their own system locally using their own AWS accounts.</p>
+
+<h2 id="api-implementation">API Implementation</h2>
+
+<p></p>
+<div class="github-widget" data-repo="volkanpaksoy/domchk53"></div>
+
+<p>Full source code of the API can be found in DomChk53 repo under <em>aspnet-api</em> folder. There’s not much benefit in covering the code line by line but I want to talk about some of the stuff that stood out in one way or the other:</p>
+
+<h3 id="cs5001-program-does-not-contain-a-static-main-method-error">CS5001: Program does not contain a static ‘Main’ method” error</h3>
+<p>I started this API with the intention of deploying it to Docker so right after I created a new project I tested Docker deployment but it kept giving the error above. After some searching I found that the Dockerfile was in the wrong folder! I moved it one level up as suggested in <a href="https://developercommunity.visualstudio.com/content/problem/344880/dotnet-core-build-linux-returns-error-cs5001-progr.html">this</a> answer and it worked like a charm!</p>
+
+<h3 id="reading-config-values">Reading config values</h3>
+<p>I appreciated the ease of using configuration files. IConfiguration provider is provided out-of-the-box which handles appsettings.json config file.</p>
+
+<p>So for example I was able to inject it easily:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="nf">TldService</span><span class="p">(</span><span class="n">IConfiguration</span> <span class="n">configuration</span><span class="p">,</span> <span class="n">IFetchHtmlService</span> <span class="n">fetchHtmlService</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="n">configuration</span> <span class="p">=</span> <span class="n">configuration</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="n">fetchHtmlService</span> <span class="p">=</span> <span class="n">fetchHtmlService</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>and use it like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">awsDocumentationUrl</span> <span class="p">=</span> <span class="n">configuration</span><span class="p">[</span><span class="s">"AWS.DocumentationURL"</span><span class="p">];</span>
+</code></pre></div></div>
+
+<h3 id="using-dependency-injection">Using dependency injection</h3>
+<p>ASP.NET Core Web API has built-in dependency injection so when I needed to use it all I had to do was register my classes in ConfigureServices method:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// This method gets called by the runtime. Use this method to add services to the container.</span>
+<span class="k">public</span> <span class="k">void</span> <span class="nf">ConfigureServices</span><span class="p">(</span><span class="n">IServiceCollection</span> <span class="n">services</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">services</span><span class="p">.</span><span class="nf">AddMvc</span><span class="p">().</span><span class="nf">SetCompatibilityVersion</span><span class="p">(</span><span class="n">CompatibilityVersion</span><span class="p">.</span><span class="n">Version_2_1</span><span class="p">);</span>
+
+    <span class="n">services</span><span class="p">.</span><span class="n">AddTransient</span><span class="p">&lt;</span><span class="n">ITldService</span><span class="p">,</span> <span class="n">TldService</span><span class="p">&gt;();</span>
+    <span class="n">services</span><span class="p">.</span><span class="n">AddTransient</span><span class="p">&lt;</span><span class="n">IFetchHtmlService</span><span class="p">,</span> <span class="n">FetchHtmlService</span><span class="p">&gt;();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="documentation">Documentation</h3>
+<p>Adding Swagger documentation was a breeze. I just followed the steps in the <a href="https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle">documentation</a> and now I have a pretty documentation. More on that in the usage section below.</p>
+
+<h2 id="aws-implementation">AWS Implementation</h2>
+<p>Even though the code will run locally in a Docker container, you still need to setup an IAM user with the appropriate permissions. So make sure the policy below is attached to the user:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": "route53domains:CheckDomainAvailability",
+            "Resource": "*"
+        }
+    ]
+}
+</code></pre></div></div>
+
+<h2 id="usage">Usage</h2>
+<p>Nice thing about Swagger is it can used as a full-blown API client as well. So instead of developing a dummy client I just used Swagger UI for simple domain availability enquiries. This is until I develop a better frontend on my own. For now at least it works.</p>
+
+<p>To use Swagger, simply run the Domchk53.API application and change the URL to https://localhost:{port number}/docs, port number being whatever your local web server is running on.</p>
+
+<p><img src="/images/vpblogimg/2019/05/aspnet-webapi-swagger-01.png" alt="" /></p>
+
+<h3 id="curl-usage">curl usage:</h3>
+<p>Windows:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -i -X POST -H "Content-Type: application/json" -d "{\"domainList\": [\"volkan\"], \"tldList\": [\"com\", \"net\"]}" https://localhost:5001/api/domain
+</code></pre></div></div>
+
+<p>Mac:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl --insecure -X POST -H "Content-Type: application/json" -d '{"domainList": ["volkan"], "tldList": ["com", "net"]}' https://localhost:5001/api/domain
+</code></pre></div></div>
+
+<h3 id="example-test-data">Example Test data:</h3>
+<p>This is just a quick reference to be used as template:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  "domainList": ["domain1", "domain2"],
+  "tldList": ["com", "net"]
+}
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{ "domainList": ["volkan"], "tldList": ["com", "net"] }
+</code></pre></div></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://developercommunity.visualstudio.com/content/problem/344880/dotnet-core-build-linux-returns-error-cs5001-progr.html">Solution for “CS5001: Program does not contain a static ‘Main’ method” error</a></li>
+  <li><a href="https://weblog.west-wind.com/posts/2018/Feb/18/Accessing-Configuration-in-NET-Core-Test-Projects">Accessing Configuration in .NET Core Test Projects</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-2.1">Dependency injection in ASP.NET Core</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle">Get started with Swashbuckle and ASP.NET Core</a></li>
 </ul>
 
 ]]></content>

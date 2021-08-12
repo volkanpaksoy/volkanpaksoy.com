@@ -101,95 +101,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2014/12/04/uploading-files-to-s3-using-windows-powershell/" itemprop="url">Uploading files to AWS S3 using Windows PowerShell</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-12-04T22:30:00+00:00" itemprop="datePublished">December  4, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
-
-<!-- aws -->
-
-
-
-
-    <a href="/category/aws">aws</a>
-    
-</span>
-	<span class="tags">s3, powershell</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Cloud computing is a relatively new concept, especially when compared to FTP which dates back to 70s (<a href="http://en.wikipedia.org/wiki/File_Transfer_Protocol#History_of_FTP_server" target="_blank" rel="noopener noreferrer">History of FTP server</a>). So not every device supports S3 uploads. If you cannot force a device to upload directly to S3 and have control over the FTP server machine (and assuming it’s running Windows) you can create a simple PowerShell script to upload files to S3.</p>
-
-<h3 id="ftp-to-s3">FTP to S3</h3>
-<p>First you need to install <a href="http://aws.amazon.com/powershell/" target="_blank" rel="noopener noreferrer">AWS Tools for Windows</a>. I tested on a couple of machines and the results were dramatically different. My main development machine is running Windows 8.1 and has PowerShell v4 on it. I had no issues with using AWS commandlets in this environment. The VM I tested has PS v2 on it and I had to make some changes first.</p>
-
-<h3 id="v2-vs-v4">v2 vs. v4</h3>
-<p>The problem is AWS module is not loaded and you have to do it yourself with this command</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import-module "C:\Program Files (x86)\AWS Tools\PowerShell\AWSPowerShell\AWSPowerShell.psd1"
-</code></pre></div></div>
-
-<p>After this command you can use AWS commandlets but when you close and open another shell it will be completely oblivious and will deny knowing what you’re talking about! To automate this process you need to add it to your profile. AWS documentation tells you to edit your profile straight away but the profile did not exist in my case. So first check if the profile exists:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Test-Path $profile
-</code></pre></div></div>
-<p>If you get “False” like I did then you need to create a new profile first.</p>
-
-<p><img src="/images/vpblogimg/2014/12/PowerShell-Profile-Check.png" alt=""></p>
-
-<p>To create the profile run the following command:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>New-Item -path $profile -type file –force
-</code></pre></div></div>
-
-<p>then you can edit the profile by simply running</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>notepad $profile
-</code></pre></div></div>
-
-<p>Add the import-module command above and save the file. From now on every time you run PowerShell it will be ready to run AWS commandlets.</p>
-
-<h3 id="time-to-upload">Time to upload</h3>
-<p>Now that we got over with troubleshooting we can finally upload our files. The commandlet we need is called Write-S3Object. The parameters it requires are the target bucket name, source file, target path, and the credentials.</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Write-S3Object -BucketName my-bucket -File file.txt -Key subfolder/remote-file.txt -CannedACLName Private -AccessKey accesskey -SecretKey secretKey
-</code></pre></div></div>
-
-<p>Most likely you would like to upload a bunch of files under a folder. In order to accomplish that you can create a simple PowerShell script like this one:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$results = Get-ChildItem .\path\to\files -Recurse -Include "*.pdf" 
-foreach ($path in $results) {
-	Write-Host $path
-	$filename = [System.IO.Path]::GetFileName($path)
-	Write-S3Object -BucketName my-bucket -File $path -Key subfolder/$filename -CannedACLName Private -AccessKey accessKey -SecretKey secretKey
-}
-</code></pre></div></div>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://aws.amazon.com/powershell/" target="_blank" rel="noopener noreferrer">AWS Tools Download</a></li>
-  <li><a href="http://docs.aws.amazon.com/powershell/latest/userguide/pstools-getting-set-up.html" target="_blank" rel="noopener noreferrer">Setting up AWS Tools</a></li>
-  <li><a href="http://www.howtogeek.com/50236/customizing-your-powershell-profile/" target="_blank" rel="noopener noreferrer">Customizing Your Powershell Profile</a></li>
-</ul>
-
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/12/03/update-markdown-posts/" itemprop="url">Update Imported Markdown Posts</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -366,6 +277,69 @@ comments: true
   <li><a href="aka.ms/winappspublishhack">Windows Apps JumpStart LIVE Series: Publish Hackathon</a></li>
   <li><a href="https://github.com/mrlacey/cs6" target="_blank" rel="noopener noreferrer">Demo code</a></li>
   <li><a href="http://www.visualstudio.com/en-us/news/vs2013-community-vs.aspx" target="_blank" rel="noopener noreferrer">Visual Studio 2013 Community Edition</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2014/11/26/static-blog-ftw/" itemprop="url">Static blog for the win!</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-11-26T00:30:27+00:00" itemprop="datePublished">November 26, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
+
+<!-- misc -->
+
+
+
+
+    <a href="/category/misc">misc</a>
+    
+</span>
+	<span class="tags">site_news</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<h3 id="on-the-road-again">On the road again…</h3>
+<p>Using WordPress for my blog had been bugging me for quite some time. So I’ve started using the popular static site generator Jekyll and host my blog on GitHub pages. Main reasons for this were:</p>
+
+<ul>
+  <li>Security: Over time you install a lot of plugins and any number of them can come with vulnerabilities. Granted they are optional and they are installed because they provide nice functionality but it would be much better to delegate the security of the system to GitHub.</li>
+  <li>Maintenance: I used to host my blog on AWS which is relatively easy to maintain but still I was responsible for keeping that machine up and running at all times.</li>
+  <li>Database: Using a database is overkill when all I’m doing is generating some static content. Database comes with performance impact, maintenance and backup requirements.</li>
+  <li>Scalability: No need to worry about scaling as GitHub takes care of it all for free!</li>
+  <li>Versioning: Just like any project on GitHub you have full control over the content and you can rollback to a previous version anytime.</li>
+  <li>Performance: All content is served in static pages. So compared to retrieving it from the database and generating the page on the fly it’s obviously much faster and scalable.</li>
+</ul>
+
+<h3 id="beautifying-the-content">Beautifying the content</h3>
+<p>Compared to HTML, markdown is so elegant and concise. No more pesky attributes and ugly tags mingled with text. Granted WordPress has plugins for writing posts in Markdown but in GitHub it’s a first-class citizen and supported from the get-go.</p>
+
+<h3 id="drawbacks">Drawbacks</h3>
+<ul>
+  <li>WordPress has its own merits like having a gazillion of plugins and themes. GitHub Pages supports a limited number of plugins due to security reasons.</li>
+  <li>SEO must be taken care of manually whereas WordPress already has lots of plugins for that purpose too</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.slant.co/topics/330/compare/~jekyll_vs_octopress_vs_docpad" target="_blank" rel="noopener noreferrer">Static website generator comparison</a></li>
+  <li><a href="http://haacked.com/archive/2013/12/02/dr-jekyll-and-mr-haack/" target="_blank" rel="noopener noreferrer">Phil Haack Blog Migration</a></li>
+  <li><a href="http://jekyll-windows.juthilo.com/2-jekyll-gem/" target="_blank" rel="noopener noreferrer">Installing Jekyll on local Windows machine</a></li>
 </ul>
 
 

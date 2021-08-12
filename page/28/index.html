@@ -101,279 +101,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2015/03/03/inside-the-graph-cypher/" itemprop="url">Inside the Graph: Cypher</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-03-03T16:00:00+00:00" itemprop="datePublished">March  3, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">neo4j, graph_databases, cypher</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Visual tools are nice and all but they are not as fun as playing with a query language. When you write your own queries the possibilities are endless! In this post I’ll cover the basics of Cypher query language. Cypher is a declarative, SQL-like, pattern-matching query language for Neo4J graph databases.</p>
-
-<h3 id="basic-crud-operations">Basic CRUD Operations</h3>
-
-<h4 id="match">MATCH</h4>
-
-<p>Match clause allows to define patterns to search the database. It is similar to <em>SELECT</em> in the RDBMS-world.</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (n) RETURN n
-</code></pre></div></div>
-
-<p>The query above returns all nodes in the database. In this example n is a temporary variable to store the result. The results can be filtered based on labels such as:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (n:Person) RETURN n
-</code></pre></div></div>
-
-<p>Property-based filters can be used in both MATCH and WHERE clauses. For example the two queries below return the same results:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (n:Movie {title: "Ninja Assassin"})
-RETURN n
-</code></pre></div></div>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (n:Movie)
-WHERE n.title = "Ninja Assassin"
-RETURN n
-</code></pre></div></div>
-
-<p>Instead of returning the entire node we can just select some specific properties. If a node doesn’t have the property it simply returns null.</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (a:Person)
-RETURN a.name, a.born
-</code></pre></div></div>
-
-<p><img src="/images/vpblogimg/2015/03/cypher-query-01.png" alt="Query returning all actors' names and years they were born in"></p>
-
-<p>Results can be filtered by relationships as well. For example the query below returns the movies Tom Hanks acted in</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (p {name:"Tom Hanks"})-[:ACTED_IN]-&gt;(m)
-RETURN p, m
-</code></pre></div></div>
-
-<p><img src="/images/vpblogimg/2015/03/cypher-query-00.png" alt="Query results for movies Tom Hanks acted in"></p>
-
-<p>Sometimes we might need to learn the relationship from the query. In that case we can use <em>TYPE</em> function to get the name of the relationship:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (a)-[r1]-&gt;(m)&lt;-[r2]-(a)
-RETURN a.name, m.title, type(r1), type(r2)
-</code></pre></div></div>
-
-<p><img src="/images/vpblogimg/2015/03/cypher-query-02.png" alt="Actors having multiple relationships with the same movie"></p>
-
-<p>Relationship type and direction can be omitted in the queries. The following query returns the names of the movies that have “some sort of relationship” with Tom Hanks:</p>
-
-<p><img src="/images/vpblogimg/2015/03/cypher-query-03.png" alt="Movie with Tom Hanks"></p>
-
-<p><em>OPTIONAL MATCH</em>: OPTIONAL keyword fills in the missing parts in the results with nulls. For example the query below returns 1 row as null because there is no outgoing relationship from the movie <em>The Matrix</em>. If we didn’t use OPTIONAL we would have an empty resultset.</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (a:Movie {title: 'The Matrix'})
-OPTIONAL MATCH (a)-[]-&gt;(d)
-RETURN d  
-</code></pre></div></div>
-
-<h4 id="create">CREATE</h4>
-
-<p>To add new data <em>CREATE</em> query is used. In the simplest form the following query creates (a rather useless) node:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE ()
-</code></pre></div></div>
-
-<p>Labels and properties can be set while creating new nodes such as:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE (a:Actor {name: "Leonard Nimoy", born: 1931, died: 2015})
-</code></pre></div></div>
-
-<p>Relationships are created with <em>CREATE</em> as well. For example the following query creates 2 nodes with Person label and creates a <em>MARRIED_TO</em> relationship between them:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE (NedStark:Person {firstname: "Eddard", lastname: "Stark", alias: "Ned", gender: "male"}),
-	   (CatelynStark:Person {firstname: "Catelyn", lastname: "Stark", maidenName: "Tully", gender: "female"})
-CREATE (NedStark)-[:MARRIED_TO]-&gt;(CatelynStark)
-</code></pre></div></div>
-
-<p>Relationships can have properties too:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE
-	(WaymarRoyce)-[:MEMBER_OF {order:"Ranger"}]-&gt;(NightsWatch)
-</code></pre></div></div>
-
-<p>Properties can be added or updated by using SET keyword such as:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (p:Person {firstname: "Eddard"})
-SET p.title = "Lord of Winterfell"
-RETURN p
-</code></pre></div></div>
-
-<p>The above query adds a “title” property to the nodes with label Person and with firstname “Eddard”.</p>
-
-<p>An existing property can be deleted by REMOVE keyword</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (p:Person {firstname: "Eddard"})
-REMOVE p.aliasList
-</code></pre></div></div>
-
-<h4 id="merge">MERGE</h4>
-
-<p>Merge can be used to create new nodes/relationships or update them if they already exist. In the case of update, all the existing properties must match. For example the following query adds a new property to the node named <em>House Stark of Winterfell</em></p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE (houseStark:House {name: "House Stark of Winterfell", words: "Winter is coming"})
-
-MERGE (houseStark {name: "House Stark of Winterfell", words: "Winter is coming"})
-SET houseStark.founded = "Age of Heroes"
-</code></pre></div></div>
-
-<p>The following one, on the other hand creates a new node with the same name (because the <em>words</em> properties don’t match):</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MERGE (houseStark:House {name: "House Stark of Winterfell", words: "Winter is coming!!!"})
-SET houseStark.founded = "Age of Heroes"
-RETURN houseStark
-</code></pre></div></div>
-
-<p>I find helpful when you have a long Cyper query and you might run it multiple times. If you just use CREATE every time you run the query you will end up with new nodes. If you use MERGE it will not give any errors and will not create new nodes.</p>
-
-<p>Another way to prevent this is unique constraints. For example the following query will enforce uniqueness on <em>_id</em> property for nodes labelled as <em>Book</em>.</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE CONSTRAINT ON (book:Book) ASSERT book._id IS UNIQUE
-</code></pre></div></div>
-
-<p>Now we can run this query and create the books:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE 
-	(AGameOfThrones:Book {_id: "7abe0a1c-b9bd-4f00-b094-a82dfb32b053", title: "A Game of Thrones", orderInSeries: 1, released:"August 1996"}),
- 	(AClashOfKings:Book {_id: "051dae64-dfdb-4134-bc43-f6d2b4b57d37", title: "A Clash of Kings", orderInSeries: 2, released:"November 1998"}),
- 	(AStormOfSwords:Book {_id: "e9baa042-2fc8-49a6-adcc-6dd455f0ba12", title: "A Storm of Swords", orderInSeries: 3, released:"August 2000"}),
- 	(AFeastOfCrows:Book {_id: "edffaa47-0110-455a-9390-ad8becf5c549", title: "A Feast for Crows", orderInSeries: 4, released:"October 2005"}),
- 	(ADanceWithDragons:Book {_id: "5a21b80e-f4c4-4c15-bfa9-1a3d7a7992e3", title: "A Dance with Dragons", orderInSeries: 5, released:"July 2011"}),
- 	(TheWindsOfWinter:Book {_id: "77144f63-46fa-49ef-8acf-350cdc20bf07", title: "The Winds of Winter", orderInSeries: 6 })
-</code></pre></div></div>
-
-<p>If we try to run it again we get the following error:</p>
-
-<p><img src="/images/vpblogimg/2015/03/cypher-query-04.png" alt="Cypher constraint error"></p>
-
-<p>Unique constraint enforces the existing data to be unique as well. So if we run the book creation query twice, before the constraint, then try to create the constraint we get an error:</p>
-
-<p><img src="/images/vpblogimg/2015/03/cypher-query-05.png" alt=""></p>
-
-<p>To delete the constraint we use DROP keyword such as</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DROP CONSTRAINT ON (book:Book) ASSERT book._id IS UNIQUE
-</code></pre></div></div>
-
-<h4 id="delete">DELETE</h4>
-
-<p>To delete nodes first we find them by MATCH. Instead of RETURN in the above examples we use DELETE to remove them.</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (b:Book {_id: "7abe0a1c-b9bd-4f00-b094-a82dfb32b053"})
-DELETE b
-</code></pre></div></div>
-
-<p>The above query would only work if the node doesn’t have any relationships. To delete a node as well as its relationships we can use the following:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (b {_id: "7abe0a1c-b9bd-4f00-b094-a82dfb32b053"})-[r]-()
-DELETE b, r
-</code></pre></div></div>
-
-<p>We can generalize the above query to clean the entire database:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (n)
-OPTIONAL MATCH (n)-[r]-() 
-DELETE n, r
-</code></pre></div></div>
-
-<p>I find this quite useful during test and development phase as I need to start over quite often.</p>
-
-<h3 id="useful-keywords">Useful keywords</h3>
-
-<ul>
-  <li><strong>ORDER BY</strong></li>
-</ul>
-
-<p>It is almost mandatory in all SQL-variants. Eventually you have to sort the data. For example the following returns all actors order by their names in alphabetical order:</p>
-
-<p><img src="/images/vpblogimg/2015/03/cypher-query-07.png" alt=""></p>
-
-<ul>
-  <li><strong>LIMIT</strong></li>
-</ul>
-
-<p>Sometimes your query may return a lot of values that you’re not interested in. For example you may want to get top n results. In this case you can restrict the number of rows returned by <em>LIMIT</em> keyword such as:</p>
-
-<p><img src="/images/vpblogimg/2015/03/cypher-query-09.png" alt=""></p>
-
-<p>The above query returns the top 3 actors who have the most <em>ACTED_IN</em> relationships with movies in descending order.</p>
-
-<ul>
-  <li><strong>UNION</strong></li>
-</ul>
-
-<p>Another similar keyword from RDBMS is <em>UNION</em>. Similar to standard SQL, the returned columns must have the same number and names. For example the following will fail:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (p:Person)
-RETURN p.name
-UNION
-MATCH (m:Movie)
-RETURN m.title
-</code></pre></div></div>
-
-<p><img src="/images/vpblogimg/2015/03/cypher-query-08.png" alt=""></p>
-
-<p>But with using an alias it can be fixed like this:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (p:Person)
-RETURN p.name AS name
-UNION
-MATCH (m:Movie)
-RETURN m.title AS name
-</code></pre></div></div>
-
-<h3 id="measuring-query-performance">Measuring Query Performance</h3>
-
-<p>PROFILE keyword is very helpful as it lets you see the query plan and optimize it. It is very simple to use: You just put it before the MATCH clause such as</p>
-
-<p><img src="/images/vpblogimg/2015/03/cypher-query-06.png" alt=""></p>
-
-<p>This is obviously a very simplistic example but I strongly recommend the <a href="http://graphaware.com/neo4j/2015/01/16/neo4j-graph-model-design-labels-versus-indexed-properties.html" target="_blank" rel="noopener noreferrer">GrapAware article on Labels vs Indexed Properties</a>. PROFILE is heavily used to identify which option performs better in a given scenario. Also a great read to learn more about modelling Neo4J database.</p>
-
-<h3 id="conclusion">Conclusion</h3>
-
-<p>Cypher is quite powerful and it can be very expressive in the right hands. It is quite comprehensive to cover in a blog post. I just wanted this post to contain various samples for the basic queries. I hope it can be of some help for someone new to Cypher in conjunction with the references I listed below.</p>
-
-<h2 id="resources">Resources</h2>
-
-<ul>
-  <li><a href="http://www.amazon.co.uk/Learning-Cypher-Onofrio-Panzarino/dp/1783287756/" target="_blank" rel="noopener noreferrer">Book: Learning Cypher</a></li>
-  <li><a href="http://neo4j.com/developer/cypher-query-language/" target="_blank" rel="noopener noreferrer">Neo4J Cypher Tutorial</a></li>
-  <li><a href="http://neo4j.com/docs/stable/cypher-query-lang.html" target="_blank" rel="noopener noreferrer">Neo4J: Cypher Reference</a></li>
-  <li><a href="http://assets.neo4j.org/download/Neo4j_CheatSheet_v3.pdf" target="_blank" rel="noopener noreferrer">Neo4J Cyper Cheat Sheet</a></li>
-  <li><a href="http://graphaware.com/neo4j/2015/01/16/neo4j-graph-model-design-labels-versus-indexed-properties.html" target="_blank" rel="noopener noreferrer">Article: Modelling Data in Neo4j: Labels vs. Indexed Properties</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/02/27/new-aws-features-and-improvements/" itemprop="url">New AWS features and improvements</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -576,6 +303,188 @@ Since SSID names are more likely to be kept as a secret it helps to collect this
   <li><a href="http://hak5.org/episodes/haktip-23" target="_blank" rel="noopener noreferrer">Haktip 23 – WiFi 101: Probe Requests and Responses</a></li>
   <li><a href="http://www.thoughtcrime.org/software/sslstrip/" target="_blank" rel="noopener noreferrer">BlackHat Presentation on SSL Stripping</a></li>
   <li><a href="http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security" target="_blank" rel="noopener noreferrer">Wikipedia article on HSTS</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/02/19/visual-tools-for-neo4j/" itemprop="url">Visual Tools for Neo4J</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-02-19T14:30:00+00:00" itemprop="datePublished">February 19, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">graph_databases, neo4j</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>It always helps to know the ecosystem to get the maximum performance out of any development platform. In this post I will cover some of the tools that can be used to manage a Neo4J database.</p>
+
+<h3 id="neo4j-browser">Neo4J Browser</h3>
+<p>This tool comes out of the box and very handy to run Cypher queries and get visual results. I covered some of the stuff you can do with this tool in <a href="https://volkanpaksoy.com/archive/2015/02/16/neo4j-browser-tips-and-tricks/">an earlier post</a> but it’s capable of much more so very nice tool to have in your toolbelt. I think the only shortcoming is you cannot edit data visually. I think it would be very helpful to have the ability to manually add nodes or create new relationships in a drag &amp; drop fashion. It would save time to write the queries from scratch every time but maybe it can have that feature in the future releases.</p>
+
+<h3 id="linkurious">Linkurious</h3>
+<p>This is a paid online service. Unfortunately they don’t have a trial option. You can sign up for an online demo though.</p>
+
+<p><img src="/images/vpblogimg/2015/02/linkurious-tutorial.png" alt="Linkurious tutorial"></p>
+
+<p>It has a nice intuitive user interface that allows you to search and edit data via the UI.</p>
+
+<p><img src="/images/vpblogimg/2015/02/linkurious-tutorial-2.png" alt="Linkurious tutorial"></p>
+
+<p>When I tried to edit data or try the “Save as a Neo4J Database” feature I got errors.</p>
+
+<p><img src="/images/vpblogimg/2015/02/linkurious-server-error.png" alt="Linkurious server error"></p>
+
+<p>I don’t know if it’s a limitation of the demo version or their system was having a bad day but I’m not convinced to fork over €249 for this tool yet.</p>
+
+<p><em>UPDATE: After I published this post I’ve been informed that adding/editing feature is disabled in the demo. So the error messages were intentional and not because of a system failure.</em></p>
+
+<h3 id="neoclipse">Neoclipse</h3>
+<p>This is a free an open-source desktop application written in Java. It has some flaws (e.g. sometimes you have to reconnect to server to see the affects or your changes) but in general it’s a nice tool for visual editing. You can also run Cyper queries.</p>
+
+<p>Another neat feature to further embellish the visualization is assigning icons to nodes.</p>
+
+<p><img src="/images/vpblogimg/2015/02/neoclipse-preferences.png" alt="Neoclipse preferences"></p>
+
+<p>You can specify a folder that contains your images. The image name must match the property specified in the “Node icon filename properties” textbox.</p>
+
+<p>For example when I ran my sample <a href="https://gist.github.com/volkanpaksoy/8cd4fcda784b27b47e6e183edc36682b" target="_blank" rel="noopener noreferrer">Simpsons Cypher script</a> I get the following graph:</p>
+
+<p><img src="/images/vpblogimg/2015/02/neoclipse-simpsons.png" alt="Neoclipse visualisation with icons"></p>
+
+<p>Note that the values that should match the filename is case-sensitive and you may need to reconnect to server to see the changes (refresh doesn’t cut it). I learned it the hard-way :-)</p>
+
+<p>Managing the properties of a node is very easy. You can edit the current values in-place on the grid and add new values by right-clicking on the Properties grid and select New and type of the property.</p>
+
+<p><img src="/images/vpblogimg/2015/02/neoclipse-add-property.png" alt="Neoclipse - Adding new property"></p>
+
+<p>It’s a nice tool for quickly editing data but it can easily be a memory-hog too! Once I noticed it was using 1.5GB RAM and the graph only around 100 nodes and relationships so I have some performance concerns about it with large datasets.</p>
+
+<h3 id="gephi">Gephi</h3>
+<p>Gephi is a general visualisation tool and thanks to its plugin support it could be extended to support Neo4J databases. (You need at least JDK 7 to install the plugin.)</p>
+
+<p><img src="/images/vpblogimg/2015/02/gephi-plugins.png" alt="Gephi plugins"></p>
+
+<p>You can download and install the <a href="https://marketplace.gephi.org/plugin/neo4j-graph-database-support/" target="_blank" rel="noopener noreferrer">Neo4J plugin</a> manually or better yet you can just select Tools -&gt; Plugins -&gt; Available Plugins and search Neo4J.</p>
+
+<p>Once installed you can then import a Neo4J database by selecting <em>File -&gt; Neo4J Database -&gt; Full Import</em></p>
+
+<p>Make sure to shutdown the Neo4J server before the import or you will get this very informative error message from Gephi:</p>
+
+<p><img src="/images/vpblogimg/2015/02/gephi-db-use-error.png" alt="Gephi database in use error"></p>
+
+<p>Apparently it locks the database as well so if you try to run Neo4J again while Gephi is still running you get this error:</p>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-lock-errror.png" alt="Neo4J lock error"></p>
+
+<p>Clearly they don’t play well together so it’s best to run them separately.</p>
+
+<p>After the import you can view the graph visually like this</p>
+
+<p><img src="/images/vpblogimg/2015/02/gephi-imported-database.png" alt="Gephi imported Neo4J database"></p>
+
+<p>Doesn’t look as impressive as Neoclipse IMHO!</p>
+
+<p>To view the data you can switch to Data Laboratory tab:</p>
+
+<p><img src="/images/vpblogimg/2015/02/gephi-nodes.png" alt="Gephi Nodes"></p>
+
+<p><img src="/images/vpblogimg/2015/02/gephi-edges.png" alt="Gephi Edges"></p>
+
+<p>In theory you can add nodes and export the database but that wasn’t a very successful endeavour for me. When you add a new node you can set the label but you cannot edit any properties.</p>
+
+<p><img src="/images/vpblogimg/2015/02/gephi-new-node.png" alt="Gephi new node"></p>
+
+<p>So that wasn’t quite helpful. I don’t know what you can do with a graph without any properties.</p>
+
+<p>Gephi is still in beta phase. Also as plugins are developed by third-parties there might be some inconsistencies sometimes. I’ll leave this tool for the moment but it looks promising so I’ll put a pin to it for the time being.</p>
+
+<h3 id="tom-sawyer-perspectives">Tom Sawyer Perspectives</h3>
+<p>This is also a generic visualisation tools that can work with multiple data sources. It can integrate with Neo4J as well as <a href="www.objectivity.com/infinitegraph">InfiniteGraph</a>, a distributed graph database.</p>
+
+<p>Downloading the trial software is a bit tricky. First you apply for an account. Your application is processed manually. After you are accepted, you first apply for a code to evaluate the product. Luckily it’s handled automatically and you receive the code right away. You then enter the code to have the privilege(!) to submit another form that details what type of project you’re planning to develop, what programming language you are using etc. That application is also processed manually. Currently I’m still waiting to be granted a trial license so I will not review the software for the time being. If I get to try it someday I will update this post.</p>
+
+<h3 id="comparison">Comparison</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tool</th>
+      <th>Price</th>
+      <th>Requirements</th>
+      <th>Pros</th>
+      <th>Cons</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Neo4J Browser</td>
+      <td>Free</td>
+      <td>Web browser</td>
+      <td>&lt;ul&gt;&lt;li&gt;Comes with the server&lt;/li&gt;&lt;li&gt;Rich feature set&lt;/li&gt;&lt;/ul&gt;</td>
+      <td>&lt;ul&gt;&lt;li&gt;No editing visually&lt;/li&gt;&lt;/ul&gt;</td>
+    </tr>
+    <tr>
+      <td>Linkurious</td>
+      <td>€249</td>
+      <td>Web browser</td>
+      <td>&lt;ul&gt;&lt;li&gt;Visual editing&lt;/li&gt;&lt;/ul&gt;</td>
+      <td>&lt;ul&gt;&lt;li&gt; Expensive &lt;/li&gt;&lt;/ul&gt;</td>
+    </tr>
+    <tr>
+      <td>Neoclipse</td>
+      <td>Free	/ Open Source</td>
+      <td>Java 1.6</td>
+      <td>&lt;ul&gt;&lt;li&gt;Easy to use and edit data&lt;/li&gt;&lt;li&gt;Nice decoration options&lt;/li&gt;&lt;/ul&gt;</td>
+      <td>&lt;ul&gt;&lt;li&gt;High memory usage&lt;/li&gt;&lt;li&gt;Glitches may cause disruption&lt;/li&gt;&lt;/ul&gt;</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="prototyping-tools">Prototyping tools</h3>
+<p>My main goal in this quest was to find a tool that would allow me to edit data visually to speed up data entry. Apart from tools that can directly manipulate data there are also a bunch of modelling tools. I won’t cover them in depth in this post but might be helpful to have a short list of them at least so that to give some pointers.</p>
+
+<h4 id="omnigraffle">OmniGraffle</h4>
+<p><a href="https://www.omnigroup.com/omnigraffle" target="_blank" rel="noopener noreferrer">OmniGraffle</a> is a general purpose diagramming tool. It’s not free nor cheap but it has an iPad version so you can keep modelling on-the-go!</p>
+
+<h4 id="arrow-tool">Arrow Tool</h4>
+<p><a href="https://github.com/apcj/arrows" target="_blank" rel="noopener noreferrer">Arrow Tool</a> is an open-source project developed by a Neo4J developer. It’s as simple as it gets and helps you to quickly create a model.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>This is by no means an exhaustive list of the tools in the market. As graph databases gain more traction the number of such tools will exponentially increase.</p>
+
+<p>Visual tools help a great deal sometimes to make sense of and see how the data is connected. But you need to have good Cypher skills to be able to run complex queries. In the next post I’ll go over Cypher and cover the basics.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://linkurio.us/" target="_blank" rel="noopener noreferrer">linkurious</a></li>
+  <li><a href="https://github.com/neo4j-contrib/neoclipse" target="_blank" rel="noopener noreferrer">Neoclipse</a></li>
+  <li><a href="http://gephi.github.io/" target="_blank" rel="noopener noreferrer">Gephi</a></li>
+  <li><a href="https://www.tomsawyer.com/products/perspectives/" target="_blank" rel="noopener noreferrer">Tom Sawyer Perspectives</a></li>
+  <li><a href="https://gist.github.com/volkanpaksoy/8cd4fcda784b27b47e6e183edc36682b" target="_blank" rel="noopener noreferrer">Cypher query for Simpsons sample</a></li>
+  <li><a href="http://www.amazon.co.uk/Learning-Neo4j-Graph-Databases-Bruggen/dp/1849517169" target="_blank" rel="noopener noreferrer">Book: Learning Neo4J</a></li>
 </ul>
 
 		

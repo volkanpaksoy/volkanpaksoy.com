@@ -101,55 +101,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2013/11/16/developing-for-leapmotion/" itemprop="url">Developing for Leap Motion</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2013-11-16T17:30:56+00:00" itemprop="datePublished">November 16, 2013</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">gadget, leap_motion</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="tictactoe">TicTacToe</h3>
-<p>Like most people I got my hopes high when ordering this gizmo and again like most people I was disappointed by it. It’s not quite the mouse-replacement as I hoped it would be. Anyway, I mostly bought it to develop applications using it. It comes with an SDK and libraries for .NET so I cannot complain much about that.
-I wanted to develop something simple just to get the grasp of it. Recently PluralSight published a course for Leap Motion development and I thought it was a great chance to start my own little app: Tic-Tac-Toe. The course was very helpful and I’d recommend it as a starting point for Leap Motion development.</p>
-
-<p>So there is still work needed on my TicTacToe but you can find below a sneak preview of the current version.</p>
-
-<iframe src="//www.youtube.com/embed/G-J4geh8yBw" frameborder="0" width="560" height="315"></iframe>
-
-<p>Basically it does what it’s supposed to do at the moment: draw things on screen using your finger! So I think I accomplished what I set out for. What I want to add is a custom gesture for X. Circle gesture is built-in to SDK so drawing circles is easy. But I implemented ScreenTap gesture for playing Xs which is not intuitive obviously. Also it requires precision because it’s not quite easy to target a cell while tapping. If you watched the video you may have noticed I missed the cell for Xs second move for example. So that would be the most improvement I can make apart from the basic things like player info, statistics, undo moves etc. But as they are not directly related to Leap Motion development they are not very important in this context.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://pluralsight.com/training/Courses/TableOfContents/developing-leap-motion-csharp" target="_blank" rel="noopener noreferrer">PluralSight course</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2013/11/01/commodore-64-on-raspberry-pi/" itemprop="url">Commodore 64 on Raspberry Pi</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -233,6 +184,65 @@ The other day I was working on cleaning up old security camera images which beco
   <li><a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/ObjectExpiration.html" target="_blank" rel="noopener noreferrer">Amazon documentation on object expiration</a></li>
   <li><a href="http://docs.aws.amazon.com/AmazonS3/latest/UG/LifecycleConfiguration.html" target="_blank" rel="noopener noreferrer">Amazon documentation on lifecycle configuration</a></li>
   <li><a href="http://aws.typepad.com/aws/2011/12/amazon-s3-object-expiration.html" target="_blank" rel="noopener noreferrer">Amazon Blog</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/09/28/free-static-web-site-hosting/" itemprop="url">Free static web site hosting</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-09-28T15:42:55+01:00" itemprop="datePublished">September 28, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devopsaws">devops</a></span> -->
+
+<!-- devops, aws -->
+
+
+
+
+    <a href="/category/devops">devops</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">github_pages, static_website</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Sometimes you need a microsite with no server-side code. All you need is to display a pretty-looking entry page. In such scenarios you don’t need to use your own servers and use your precious resources on such trivial sites. The 2 ways to achieve this (that I know about) are:</p>
+
+<ul>
+  <li>Using Amazon Web Services S3</li>
+  <li>Using GitHub Pages</li>
+</ul>
+
+<p>Both methods are very well documented. You can find the links to the official tutorials.</p>
+
+<h3 id="aws-s3">AWS S3</h3>
+<p>First, my favourite IT company: Amazon! S3 method requires to create a bucket with the name of your domain or subdomain. In the properties enable Static Website Hosting and point to your index document. In order for this to work, you have to use AWS Route 53 as your DNS provider. In Route 53, all you have to do is define an A record as an alias and select the S3 bucket that contains your site. If you have multiple accounts make sure that Route 53 DNS records and S3 bucket are under the same account. Otherwise you cannot point to the bucket as en endpoint.</p>
+
+<h3 id="github-pages">GitHub Pages</h3>
+<p>GitHub method is also quite easy. All it takes is create a public repository, create a branch called “gh-pages” and check in your source code. To let GitHub know that you want to host a site there, you have to create a file called CNAME which includes the domain name. And in your DNS settings you have to point your site to GitHub’s IP address. The downside of this method is, obviously, your site will stop working if GitHub decides to change their IP address.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/website-hosting-custom-domain-walkthrough.html" target="_blank" rel="noopener noreferrer">Guide for hosting with AWS S3</a></li>
+  <li><a href="https://help.github.com/articles/setting-up-a-custom-domain-with-pages" target="_blank" rel="noopener noreferrer">Guide for hosting with GitHub Pages</a></li>
 </ul>
 
 

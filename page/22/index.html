@@ -101,165 +101,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2015/10/16/design-patterns-factory-method/" itemprop="url">Design Patterns: Factory Method</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-10-16T01:30:00+01:00" itemprop="datePublished">October 16, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/designdev">design</a></span> -->
-
-<!-- design, dev -->
-
-
-
-
-    <a href="/category/design">design</a>
-    , 
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">design_patterns, csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I recently developed a toy project. It basically creates an RSS feed. One challenge I had was picking the feed formatter class (RSS vs Atom). I utilised Factory Method design pattern to solve that and this post discusses the usage of the pattern over that use case.</p>
-
-<h3 id="use-case-creating-rss-feed-formatter">Use case: Creating RSS feed formatter</h3>
-<p>I wanted my feed generator to support both RSS and Atom feeds based on the value specified in the configuration. In order to pass the XML validations they needed to modified a bit and I wanted these details hidden from the client code.</p>
-
-<h3 id="what-is-factory-method">What is Factory Method?</h3>
-<p>Here’s the official definition from GoF:</p>
-
-<blockquote>
-  <p>Define an interface for creating an object, but let subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses</p>
-</blockquote>
-
-<p>Factory Method pattern is one of the creational patterns which make it easy to separate object creation from the actual system. The actual business logic doesn’t need to care about these object creation details.</p>
-
-<h3 id="implementation">Implementation</h3>
-<p>To see the implementation at a glance let’s have a look at the class diagram:</p>
-
-<p><img src="/images/vpblogimg/2015/10/design-pattern-factory-method-class-diagram-1.png" alt=""></p>
-
-<p>The base abstract class is called ArticleFeedGenerator (it corresponds to <em>Creator</em> in the GoF book). Here’s a shortened version:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">abstract</span> <span class="k">class</span> <span class="nc">ArticleFeedGenerator</span>
-<span class="p">{</span>
-    <span class="k">private</span> <span class="n">SyndicationFeedFormatter</span> <span class="n">_feedFormatter</span><span class="p">;</span>
-
-    <span class="c1">// Factory method</span>
-    <span class="k">public</span> <span class="k">abstract</span> <span class="n">SyndicationFeedFormatter</span> <span class="nf">CreateFeedFormatter</span><span class="p">();</span>
-
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">Run</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">allArticles</span> <span class="p">=</span> <span class="n">_feedDataClient</span><span class="p">.</span><span class="nf">GetAllArticles</span><span class="p">();</span>
-        <span class="n">_feed</span> <span class="p">=</span> <span class="n">_feedService</span><span class="p">.</span><span class="nf">GetFeed</span><span class="p">(</span><span class="n">allArticles</span><span class="p">);</span>
-
-        <span class="n">_feedFormatter</span> <span class="p">=</span> <span class="nf">CreateFeedFormatter</span><span class="p">();</span>
-
-        <span class="n">_publishService</span><span class="p">.</span><span class="nf">Publish</span><span class="p">(</span><span class="n">_feedFormatter</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>ArticleFeedGenerator does all the work except creating a conccrete implementation of SyndicationFeedFormatter. It delegates it to the derived class who provide the implementation for CreateFeedFormatter abstract method.</p>
-
-<p>And here comes the concrete implementations (which correspond to <em>ConcreteCreator</em>)</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">AtomFeedGenerator</span> <span class="p">:</span> <span class="n">ArticleFeedGenerator</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="nf">AtomFeedGenerator</span><span class="p">(</span>
-        <span class="n">IFeedDataClient</span> <span class="n">feedDataClient</span><span class="p">,</span>
-        <span class="n">IFeedService</span> <span class="n">feedService</span><span class="p">,</span>
-        <span class="n">IPublishService</span> <span class="n">publishService</span><span class="p">,</span>
-        <span class="n">IFeedSettings</span> <span class="n">feedSettings</span><span class="p">)</span>
-        <span class="p">:</span> <span class="k">base</span> <span class="p">(</span><span class="n">feedDataClient</span><span class="p">,</span> <span class="n">feedService</span><span class="p">,</span> <span class="n">publishService</span><span class="p">,</span> <span class="n">feedSettings</span><span class="p">)</span>
-    <span class="p">{</span>
-    <span class="p">}</span>
-
-    <span class="k">public</span> <span class="k">override</span> <span class="n">SyndicationFeedFormatter</span> <span class="nf">CreateFeedFormatter</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">Atom10FeedFormatter</span><span class="p">(</span><span class="n">_feed</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>In order to pass RSS validations RSS formatter needed more “love” than the Atom version above:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">RssFeedGenerator</span> <span class="p">:</span> <span class="n">ArticleFeedGenerator</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="nf">RssFeedGenerator</span><span class="p">(</span>
-        <span class="n">IFeedDataClient</span> <span class="n">feedDataClient</span><span class="p">,</span>
-        <span class="n">IFeedService</span> <span class="n">feedService</span><span class="p">,</span>
-        <span class="n">IPublishService</span> <span class="n">publishService</span><span class="p">,</span>
-        <span class="n">IFeedSettings</span> <span class="n">feedSettings</span><span class="p">)</span>
-        <span class="p">:</span> <span class="k">base</span> <span class="p">(</span><span class="n">feedDataClient</span><span class="p">,</span> <span class="n">feedService</span><span class="p">,</span> <span class="n">publishService</span><span class="p">,</span> <span class="n">feedSettings</span><span class="p">)</span>
-    <span class="p">{</span>
-    <span class="p">}</span>
-    
-    <span class="k">public</span> <span class="k">override</span> <span class="n">SyndicationFeedFormatter</span> <span class="nf">CreateFeedFormatter</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">formatter</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Rss20FeedFormatter</span><span class="p">(</span><span class="n">_feed</span><span class="p">);</span>
-        <span class="n">formatter</span><span class="p">.</span><span class="n">SerializeExtensionsAsAtom</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-        <span class="n">XNamespace</span> <span class="n">atom</span> <span class="p">=</span> <span class="s">"http://www.w3.org/2005/Atom"</span><span class="p">;</span>
-        <span class="n">_feed</span><span class="p">.</span><span class="n">AttributeExtensions</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="nf">XmlQualifiedName</span><span class="p">(</span><span class="s">"atom"</span><span class="p">,</span> <span class="n">XNamespace</span><span class="p">.</span><span class="n">Xmlns</span><span class="p">.</span><span class="n">NamespaceName</span><span class="p">),</span> <span class="n">atom</span><span class="p">.</span><span class="n">NamespaceName</span><span class="p">);</span>
-        <span class="n">_feed</span><span class="p">.</span><span class="n">ElementExtensions</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="nf">XElement</span><span class="p">(</span><span class="n">atom</span> <span class="p">+</span> <span class="s">"link"</span><span class="p">,</span> <span class="k">new</span> <span class="nf">XAttribute</span><span class="p">(</span><span class="s">"href"</span><span class="p">,</span> <span class="n">_feedSettings</span><span class="p">.</span><span class="n">FeedUrl</span><span class="p">),</span> <span class="k">new</span> <span class="nf">XAttribute</span><span class="p">(</span><span class="s">"rel"</span><span class="p">,</span> <span class="s">"self"</span><span class="p">),</span> <span class="k">new</span> <span class="nf">XAttribute</span><span class="p">(</span><span class="s">"type"</span><span class="p">,</span> <span class="s">"application/rss+xml"</span><span class="p">)));</span>
-        <span class="k">return</span> <span class="n">formatter</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Concerete creators create concrete products but the factory method returns the abstract product which ArticleFeedGenerator (abstract creator) works with.</p>
-
-<p>To avoid hard-coding the class name, a helper method called CreateFeedGenerator is added. The client code calls this method to get either a AtomFeedGenerator or a RssFeedGenerator based on configuration value.</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Program</span>
-<span class="p">{</span>
-    <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">feedSettings</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AppConfigFeedSettings</span><span class="p">();</span>
-        <span class="n">ArticleFeedGenerator</span> <span class="n">feedGenerator</span> <span class="p">=</span> <span class="nf">CreateFeedGenerator</span><span class="p">(</span><span class="n">feedSettings</span><span class="p">);</span>
-        <span class="n">feedGenerator</span><span class="p">.</span><span class="nf">Run</span><span class="p">();</span>
-    <span class="p">}</span>
-    
-    <span class="k">private</span> <span class="k">static</span> <span class="n">ArticleFeedGenerator</span> <span class="nf">CreateFeedGenerator</span><span class="p">(</span><span class="n">IFeedSettings</span> <span class="n">feedSettings</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">string</span> <span class="n">feedFormat</span> <span class="p">=</span> <span class="n">feedSettings</span><span class="p">.</span><span class="n">FeedFormat</span><span class="p">;</span>
-        <span class="k">switch</span> <span class="p">(</span><span class="n">feedFormat</span><span class="p">.</span><span class="nf">ToLower</span><span class="p">())</span>
-        <span class="p">{</span>
-            <span class="k">case</span> <span class="s">"atom"</span><span class="p">:</span> <span class="k">return</span> <span class="k">new</span> <span class="nf">AtomFeedGenerator</span><span class="p">(</span><span class="k">new</span> <span class="nf">ApiClient</span><span class="p">(),</span> <span class="k">new</span> <span class="nf">rticleFeedService</span><span class="p">(),</span> <span class="k">new</span> <span class="nf">S3PublishService</span><span class="p">(),</span> <span class="n">feedSettings</span><span class="p">);</span>
-            <span class="k">case</span> <span class="s">"rss"</span><span class="p">:</span> <span class="k">return</span> <span class="k">new</span> <span class="nf">RssFeedGenerator</span><span class="p">(</span><span class="k">new</span> <span class="nf">ApiClient</span><span class="p">(),</span> <span class="k">new</span> <span class="nf">ArticleFeedService</span><span class="p">(),</span> <span class="k">new</span> <span class="nf">S3PublishService</span><span class="p">(),</span> <span class="n">feedSettings</span><span class="p">);</span>
-            <span class="k">default</span><span class="p">:</span> <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentException</span><span class="p">(</span><span class="s">"Unknown feed format"</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://github.com/volkanpaksoy/design-pattern-workout" target="_blank" rel="noopener noreferrer">Sample project source code</a></li>
-  <li><a href="https://github.com/volkanpaksoy/rss-feed-generator" target="_blank" rel="noopener noreferrer">RSS feed generator source code</a></li>
-  <li><a href="http://www.amazon.co.uk/Design-patterns-elements-reusable-object-oriented/dp/0201633612/" target="_blank" rel="noopener noreferrer">Book: GoF Book</a></li>
-  <li><a href="http://www.amazon.co.uk/Head-First-Design-Patterns-Freeman/dp/0596007124/" target="_blank" rel="noopener noreferrer">Book: Head First Design Patterns</a></li>
-</ul>
-
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/10/12/design-patterns-strategy/" itemprop="url">Design Patterns: Strategy</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -474,6 +315,169 @@
 <ul>
   <li><a href="https://aws.amazon.com/blogs/aws/aws-lambda-update-python-vpc-increased-function-duration-scheduling-and-more/" target="_blank" rel="noopener noreferrer">AWS Lambda Update – Python, VPC, Increased Function Duration, Scheduling, and More</a></li>
   <li><a href="http://docs.aws.amazon.com/lambda/latest/dg/getting-started-scheduled-events.html" target="_blank" rel="noopener noreferrer">Documentation on scheduling</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/10/07/mail-automation-with-aws-lambda-and-sns/" itemprop="url">Mail automation with AWS Lambda and SNS</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-10-07T15:00:00+01:00" itemprop="datePublished">October  7, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">lambda, s3, sns</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<blockquote>
+  <p>UPDATE: Yesterday (October 8th, 2015) Amazon announced official support for scheduled events so I updated my function to use this feature. 
+For the most up-to-date version of this project please visit the <a href="https://volkanpaksoy.com/archive/2015/10/09/aws-lambda-official-scheduling-support/">updated version</a></p>
+</blockquote>
+
+<p>I have a great accountant but he has one flaw: I have to ask for the invoice every month! While waiting for him to automate the process, I decided to automate what I can on my end. There are many ways to skin a cat, as the saying goes, the way I picked for this task was developing an AWS Lambda funciton and trigger it by subscribing to a public SNS topic.</p>
+
+<h2 id="step-1-prepare-a-function-to-send-emails">Step 1: Prepare a function to send emails</h2>
+<p>Developing a simple node.js function that sends E-mails was simple. First I needed the install two modules:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install nodemailer
+npm install nodemailer-smtp-transport
+</code></pre></div></div>
+
+<p>And the function is straightforward:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">transporter</span> <span class="o">=</span> <span class="nx">nodemailer</span><span class="p">.</span><span class="nx">createTransport</span><span class="p">(</span><span class="nx">smtpTransport</span><span class="p">({</span>
+    <span class="na">host</span><span class="p">:</span> <span class="s1">'email-smtp.eu-west-1.amazonaws.com'</span><span class="p">,</span>
+    <span class="na">port</span><span class="p">:</span> <span class="mi">587</span><span class="p">,</span>
+    <span class="na">auth</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">user</span><span class="p">:</span> <span class="s1">'{ACCESS KEY}'</span><span class="p">,</span>
+        <span class="na">pass</span><span class="p">:</span> <span class="s1">'{SECRET KEY}'</span>
+    <span class="p">}</span>
+<span class="p">}));</span>
+
+<span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s1">'Hi, Invoice! Thanks!'</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">mailOptions</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">from</span><span class="p">:</span> <span class="s1">'from@me.net'</span><span class="p">,</span>
+    <span class="na">to</span><span class="p">:</span> <span class="s1">'to@someone.net'</span><span class="p">,</span>
+    <span class="na">bcc</span><span class="p">:</span> <span class="s1">'me2@me.com'</span><span class="p">,</span>
+    <span class="na">subject</span><span class="p">:</span> <span class="s1">'Invoice'</span><span class="p">,</span>
+    <span class="na">text</span><span class="p">:</span> <span class="nx">text</span> 
+<span class="p">};</span>
+
+<span class="nx">transporter</span><span class="p">.</span><span class="nx">sendMail</span><span class="p">(</span><span class="nx">mailOptions</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">info</span><span class="p">){</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+		<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+		<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Message sent'</span><span class="p">);</span>
+      <span class="p">}</span>
+  <span class="p">});</span>
+</code></pre></div></div>
+
+<p>The challenge was deployment as the script had some dependencies. If you choose Edit Inline and just paste the script you would get an error like this</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"errorMessage": "Cannot find module 'nodemailer'",
+</code></pre></div></div>
+
+<p>But it’s very easy to deploy a full package with dependencies. Just zip everything in the folder (wihtout the folder itself) and upload the zip file. The downside of this method is you can no longer edit the code inline. So even just for fixing a trivial typo you need to re-zip and re-upload.</p>
+
+<h2 id="step-2-schedule-the-process">Step 2: Schedule the process</h2>
+<p>One simple method to schedule the process is to invoke the method using Powershell and schedule a task to run the script:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Invoke-LMFunction -FunctionName automatedEmails -AccessKey accessKey -SecretKey secretKey -Region eu-west-1
+</code></pre></div></div>
+
+<p>But I don’t want a dependency on any machine (local or EC2 instance). Otherwise I could write a few lines of code in C# to do the same job anyway. The idea of using Lambda is to avoid maintenance and let everything run on infrastructure that’s maintained by AWS.</p>
+
+<h3 id="unreliable-town-clock">Unreliable Town Clock</h3>
+<p>Unfortunately AWS doesn’t provide an easy method to schedule Lambda function invocations. For the sake of simplicity I decided to use <a href="https://alestic.com/2015/05/aws-lambda-recurring-schedule/" target="_blank" rel="noopener noreferrer">Unreliable Town Clock (UTC)</a> which is essentially a public SNS topic that sends “chime” messages every 15 minutes.</p>
+
+<p><img src="/images/vpblogimg/2015/10/mail-automation-sns-subscription.png" alt=""></p>
+
+<p>Since all I need is one email, I don’t care if it skips a beat or two as long as it chimes at least once throughout the day.</p>
+
+<h3 id="state-management">State management</h3>
+<p>Of course to avoid bombarding my accountant with emails I have to maintain a state so that I would only send one email per month. But Lambda functions must be stateless. Some alternatives are using AWS S3 or DynamoDB. Since all I need is one simple integer value I decided to store in a text file on S3. So first I download the log file and check the last sent email month:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">downloadLog</span><span class="p">(</span><span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">s3</span><span class="p">.</span><span class="nx">getObject</span><span class="p">({</span>
+			<span class="na">Bucket</span><span class="p">:</span> <span class="nx">bucketName</span><span class="p">,</span>
+			<span class="na">Key</span><span class="p">:</span> <span class="nx">fileName</span>
+		<span class="p">},</span>
+		<span class="nx">next</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">checkDate</span><span class="p">(</span><span class="nx">response</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">currentDay</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">Records</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">Sns</span><span class="p">.</span><span class="nx">Message</span><span class="p">.</span><span class="nx">day</span><span class="p">);</span>
+	<span class="nx">currentMonth</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">Records</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">Sns</span><span class="p">.</span><span class="nx">Message</span><span class="p">.</span><span class="nx">month</span><span class="p">);</span>
+	<span class="kd">var</span> <span class="nx">lastMailMonth</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+	<span class="k">if</span> <span class="p">(</span><span class="nb">isNaN</span><span class="p">(</span><span class="nx">lastMailMonth</span><span class="p">))</span> <span class="p">{</span>
+		<span class="nx">lastMailMonth</span> <span class="o">=</span> <span class="nx">currentMonth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">if</span> <span class="p">((</span><span class="nx">currentDay</span> <span class="o">==</span> <span class="nx">targetDayOfMonth</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">currentMonth</span> <span class="o">&gt;</span> <span class="nx">lastMailMonth</span><span class="p">))</span> <span class="p">{</span>
+		<span class="nx">next</span><span class="p">();</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="putting-it-together">Putting it together</h3>
+<p>So putting it all together the final code is:</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/01d54e98dcc1cd0b3dcfaf12e57bc4fe.js"> </script>
+
+<p>Let’s see if it’s going to help me get my invoices automatically!</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<ul>
+  <li>
+    <p>A better approach would be to check emails for the invoice and send only if it wasn’t received already. Also a copule of reminders after the initial email would be nice. But as my new resolution is to progress in small, incremental steps I’ll call it version 1.0 and leave the remaining tasks for a later version.</p>
+  </li>
+  <li>
+    <p>My main goal was to achieve this task without having to worry about the infrastructure. I still don’t but that’s only because a nice guy (namely Eric Hammond) decided to setup a public service for the rest of us.</p>
+  </li>
+  <li>
+    <p>During my research I came across a few references saying that the same task can be done using AWS Simple Workflow (SWF). I haven’t used this service before. Looked complicated and felt like there is a steep learning curve to go through. In Version 2 I should look into SWF which would…</p>
+
+    <ul>
+      <li>allow me to handle a complex workflow</li>
+      <li>make dependency to public SNS topic redundant</li>
+      <li>handle state properly</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://javascript.tutorialhorizon.com/2015/07/02/send-email-node-js-express/" target="_blank" rel="noopener noreferrer">Send email using nodejs and express in 5 simple steps</a></li>
+  <li><a href="https://aws.amazon.com/blogs/compute/nodejs-packages-in-lambda/" target="_blank" rel="noopener noreferrer">Using Packages and Native nodejs Modules in AWS Lambda</a></li>
+  <li><a href="http://docs.aws.amazon.com/lambda/latest/dg/walkthrough-s3-events-adminuser-create-test-function-create-function.html" target="_blank" rel="noopener noreferrer">Create a Lambda Function Deployment Package</a></li>
+  <li><a href="https://alestic.com/2015/05/aws-lambda-recurring-schedule/" target="_blank" rel="noopener noreferrer">Schedule Recurring AWS Lambda Invocations With The Unreliable Town Clock (UTC)</a></li>
+  <li><a href="https://aws.amazon.com/about-aws/whats-new/2015/08/trigger-aws-lambda-functions-using-amazon-simple-workflow/" target="_blank" rel="noopener noreferrer">Trigger AWS Lambda Functions Using Amazon Simple Workflow</a></li>
+  <li><a href="http://docs.aws.amazon.com/amazonswf/latest/awsflowguide/lambda-task.html" target="_blank" rel="noopener noreferrer">Implementing AWS Lambda Tasks</a></li>
 </ul>
 
 		

@@ -101,54 +101,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2012/10/24/wreak-havoc-on-your-own-system/" itemprop="url">Wreak havoc on your own system</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2012-10-24T13:42:14+01:00" itemprop="datePublished">October 24, 2012</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">jmeter, siege, chaos_monkey</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Know thy limits! This is especially important when you’re developing a system that expects a high traffic. Moving systems onto the cloud makes it easier to adapt and scale out to match the load but you have to prepare for node failures and instant spikes in the traffic. Also you have to make sure that your system is responsive under long heavy load. Below I recommend 3 tools to test your system against such situations:</p>
-
-<h2 id="01-jmeter">01. JMeter</h2>
-<p>Apache JMeter, is a Java-based open-source desktop application. I submitted a basic introduction to JMeter <a href="https://volkanpaksoy.com/archive/2012/10/17/load-it-up-with-jmeter-part-1-basics/">here</a>. But it has many advanced feature which I’m planning to cover in a post in the near future.</p>
-
-<h2 id="02-siege">02. Siege</h2>
-<p>Siege is an HTTP load testing tool. It’s not complex as JMeter but works the job well and it is very simple to use. It supports UNIX variants but not on Windows. It can obtained from <a href="http://www.joedog.org/siege-home/" target="_blank" rel="noopener noreferrer">here</a>.</p>
-
-<h2 id="03-chaos-monkey">03. Chaos Monkey</h2>
-
-<p><img src="/images/vpblogimg/2012/10/ChaosMonkey.jpg" alt="Chaos Monkey"></p>
-
-<p>Originally developed by Netflix and open-sourced later. It is AWS specific tool. What is does is connect to your AWS system and terminate instances randomly. So that you can observe your system in such worst case scenarios. The good thing about it is, it selects its “victims” by looking at a tag you provide. So if you don’t want a single node such as a database server, you can easily exclude it. Source code can be downloaded from <a href="https://github.com/simonmunro/ChaosMonkey" target="_blank" rel="noopener noreferrer">here</a>.</p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2012/10/19/otp-everywhere/" itemprop="url">OTP Everywhere</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -252,6 +204,46 @@
   <li><a href="http://jmeter.apache.org/usermanual" target="_blank" rel="noopener noreferrer">Official user manual</a></li>
   <li><a href="http://www.amazon.com/Apache-JMeter-practical-performance-measurement/dp/1847192955" target="_blank" rel="noopener noreferrer">Apache JMeter</a></li>
 </ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2012/10/11/online-networking-course-from-stanford/" itemprop="url">Online networking course from Stanford</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2012-10-11T15:15:03+01:00" itemprop="datePublished">October 11, 2012</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
+
+<!-- misc -->
+
+
+
+
+    <a href="/category/misc">misc</a>
+    
+</span>
+	<span class="tags">online_course, education</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Last week another online course started at Stanford University called An Introduction to Computer Networks. It started on 8th of October and they released a good deal of materials for the first week. I hope I’ll follow it until the end. If you’re interested you better hurry up because it’s not easy to catch once the videos pile up!</p>
+
+<p>Here’s the link to access the site: <del>https://class.stanford.edu/networking</del></p>
+
+<p>UPDATE: The above link seems to have stopped working. This should be the current one now: <a href="http://networking.class.stanford.edu" target="_blank" rel="noopener noreferrer">Stanford CS144 Networking Class</a></p>
 
 		
 		

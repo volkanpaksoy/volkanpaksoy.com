@@ -101,74 +101,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2014/01/04/framework-design-guidelines/" itemprop="url">Book Review: Framework Design Guidelines</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-01-04T14:58:06+00:00" itemprop="datePublished">January  4, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
-
-<!-- misc -->
-
-
-
-
-    <a href="/category/misc">misc</a>
-    
-</span>
-	<span class="tags">review, book</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="framework-design-guidelines">Framework Design Guidelines</h3>
-
-<p><img src="/images/vpblogimg/2014/01/Framework_Design_Guidelines_Cover.jpg" alt="Fitbit Flex"></p>
-
-<p>Having a common framework is quite important to reduce code reuse. But designing that framework properly and consistently is a huge challenge. Even though we are living in a RESTful world now, I think having a framework or a set of common libraries for personal or commercial projects is still relevant. A well-designed well-tested framework would significantly improve any application built on top of it.</p>
-
-<p>I had referred to this book partially before but this time decided to read it from cover to cover and make sure I “digest” all. It contains countless gems that every developer should know. Anyone developing even small libraries can benefit from this book a lot. You don’t need to design the .NET framework (like the authors). Also it comes with a DVD full of presentations of authors.</p>
-
-<h3 id="companion-dvd">Companion DVD</h3>
-<p>Unfortunately I lost my DVD. Probably it’s inside one of the many CD cake boxes. I was hoping to check it out as I went along the book. But luckily I found out that it is freely available from the publisher. Check you the download link in the resources section. One thing to beware about the download is that you can come across another link in the Brad Abrams’s blog <a href="http://blogs.msdn.com/b/brada/archive/2009/04/01/framework-design-guidelines-book-extra-content-from-the-dvd-posted.aspx" target="_blank" rel="noopener noreferrer">here</a>. The download works fine but one of the presentations inside it is corrupted so I suggest you download each section separately from the site in the resources.</p>
-
-<h3 id="some-notes">Some notes</h3>
-<p>The book is full of gems and very useful tips. Here are just a few:</p>
-
-<ul>
-  <li>Keep it simple: “You can always add, you cannot ever remove”</li>
-  <li>There is no perfect design: You always have to make some sacrifices and consider the trade-offs</li>
-  <li>Well-designed frameworks are consistent</li>
-  <li>Scenario-driven design: Imagine scenarios to visualize the real-world use of the API When in doubt leave the feature out, add it later. Conduct usability studies to get developers’ opinions</li>
-  <li>Keep type initialization as simple as possible. It lowers the barrier of entry.</li>
-  <li>Throw exceptions to communicate the proper usage of API. It makes the API self-documenting and supports the learning-by-doing approach.</li>
-  <li>Going overboard with abstractions may deteriorate the performance and usability of the framework.</li>
-</ul>
-
-<p>Even though it’s been a few years since this books was released it is still a very helpful resource.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://www.amazon.co.uk/Framework-Design-Guidelines-Conventions-Development/dp/0321545613" target="_blank" rel="noopener noreferrer">Amazon link</a></li>
-  <li><a href="http://www.informit.com/store/framework-design-guidelines-conventions-idioms-and-9780321545619" target="_blank" rel="noopener noreferrer">DVD download</a></li>
-  <li><a href="http://msdn.microsoft.com/en-us/library/ms229042(v=vs.110).aspx" target="_blank" rel="noopener noreferrer">Excerpt on MSDN</a></li>
-</ul>
-
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2013/12/19/moving-s3-bucket-to-another-account/" itemprop="url">Moving S3 bucket to another account</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -401,6 +333,65 @@ OK, so the system can withstand a spike and scale itself but it costs money. Wha
   <li><a href="http://aws.typepad.com/aws/2013/12/aws-management-console-auto-scaling-support.html" target="_blank" rel="noopener noreferrer">AWS Blog post announcing AWS in management console</a></li>
   <li><a href="http://aws.amazon.com/developertools/2535" target="_blank" rel="noopener noreferrer">Autoscaling command line tool</a></li>
   <li><a href="http://www.joedog.org/siege-home" target="_blank" rel="noopener noreferrer">Siege website</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/12/10/devops/" itemprop="url">DevOps</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-12-10T22:01:42+00:00" itemprop="datePublished">December 10, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devops">devops</a></span> -->
+
+<!-- devops -->
+
+
+
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags"></span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>DevOps (Development + Operations) is one of most popular terms in the IT world recently. From what I’ve read and listened to so far, my understanding is it is all about continuous deployment (or delivery). Basically, you have to automate everything from development to deployment to practice DevOps.</p>
+
+<h3 id="current-problem">Current problem</h3>
+<p>Traditionally, successful deployment is a huge challenge. It is mostly a manual and cumbersome process. Because of its sensitive nature the system admins are not huge fans of deployments. Also, another challenge is the miscommunication (or no communication in some cases) between system admin and development teams. They are generally run by different high-level executives and their priorities conflict most of the time.</p>
+
+<h3 id="solution">Solution</h3>
+<p>On the philosophical side, DevOps is bringing these teams together and work in harmony. Having social events with both teams’ attendance is a key to build confidence among team members. As Richard Campbell (from <a href="http://runasradio.com/" target="_blank" rel="noopener noreferrer">RunAsRadio</a> and <a href="http://dotnetrocks.com" target="_blank" rel="noopener noreferrer">.NET Rocks</a> podcasts) says “Pizza and beer is a global lubricant”.</p>
+
+<h4 id="dev">Dev…</h4>
+<p>On the development side, the key requirement is continuous integration. You have to able to run unit tests and acceptance tests automatically on build servers. This means development has to be done in short sprints in an agile way with frequent check-ins. One step further of this stage is continuous deployment.</p>
+
+<h4 id="ops">…Ops</h4>
+<p>This is where the IT team comes into play. When the whole system is automated, deploying to production frequently and without much headache becomes possible. Cloud computing is one of the core technologies that makes DevOps possible. Ability to manage virtual machines programmatically (i.e. AWS, OpenStack) leads to a whole bunch of possibilities.</p>
+
+<p>This is a fairly complex topic encompassing many disciplines and technologies. Also it’s quite dynamic and open to innovation. Definitely worth keeping an eye on.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://en.wikipedia.org/wiki/DevOps" target="_blank" rel="noopener noreferrer">Wikipedia article</a></li>
+  <li><a href="http://www.runasradio.com" target="_blank" rel="noopener noreferrer">RunAsRadio podcast - Building the Culture of DevOps with Steven Murawski</a></li>
+  <li><a href="http://www.cert.org/podcast/mp3/2/20130730kim-full.mp3" target="_blank" rel="noopener noreferrer">Cert.org podcast - DevOps - Transform Development and Operations for Fast, Secure Deployments</a></li>
+  <li><a href="http://vimeo.com/67110005" target="_blank" rel="noopener noreferrer">Richard Campbell DevOps talk on Vimeo</a></li>
 </ul>
 
 

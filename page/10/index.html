@@ -101,95 +101,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2019/02/22/Setting-Up-New-EBS-Volume-in-EC2/" itemprop="url">Setting Up a New EC2 Linux Instance</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2019-02-22T06:00:00+00:00" itemprop="datePublished">February 22, 2019</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/linuxaws">linux</a></span> -->
-
-<!-- linux, aws -->
-
-
-
-
-    <a href="/category/linux">linux</a>
-    , 
-
-    <a href="/category/aws">aws</a>
-    
-</span>
-	<span class="tags">ec2, ebs</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I recently decided to purchase a reserved t3.nano instance to run some Docker containers and for general testing purposes. In addition to the default volume I decided to add a new one to separate my files from the OS. It required a few steps to get everything in place so I decided to post this mostly for future reference!</p>
-
-<h2 id="attach-a-volume-during-creation">Attach a volume during creation</h2>
-<p>First I added a new volume to the instance while creating it.</p>
-
-<p><img src="/images/vpblogimg/2019/02/Setting-Up-New-EBS-Volume-in-EC2-Add-Storage.png" alt=""></p>
-
-<h2 id="connecting-to-instance">Connecting to instance</h2>
-<p>Now we have to connect to the instance to format the new volume. To achieve that we must have access to the private we generated while we created the instance. So to SSH into the machine we run this command:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh -i {/Path/To/Key/file_name.pem} ec2-user@{public DNS name of the instance}
-</code></pre></div></div>
-
-<h2 id="format-the-volume">Format the volume</h2>
-<p>I found some AWS documentation to achieve this which was very useful: <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html" target="_blank" rel="noopener noreferrer">Making an Amazon EBS Volume Available for Use on Linux</a></p>
-
-<p>No need to repeat every command in that documentation. It’s a simple step-by-step guide. Just follow it and you have a volume in use which is also mounted at start up.</p>
-
-<h2 id="install-and-configure-docker">Install and configure Docker</h2>
-<p>Installing Docker is as simple as running this:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo yum update -y
-sudo yum install -y docker
-</code></pre></div></div>
-
-<p>To be able to use Docker without sudoing everything ad ec2-user to docker group:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo usermod -aG docker ec2-user
-</code></pre></div></div>
-
-<p>We need to make sure that Docker daemon starts on reboot too. To achieve this run this:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable docker
-</code></pre></div></div>
-
-<h2 id="copy-files-to-the-instance">Copy files to the instance</h2>
-<p>To copy some files to the new instance I used SCP command:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo scp -i {/Path/To/Key/file_name.pem} -r {/Path/To/Local/Folder/} ec2-user@{public DNS name of the instance}:/Remote/Folder
-</code></pre></div></div>
-
-<p>The issue was ec2-user didn’t initially have access to write on the remote folder. In that case you can run  the following command to have access:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>setfacl -m u:ec2-user:rwx /Remote/Folder
-</code></pre></div></div>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html" target="_blank" rel="noopener noreferrer">Making an Amazon EBS Volume Available for Use on Linux</a></li>
-</ul>
-
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2019/01/22/Auditing-AWS-events-with-CloudTrail/" itemprop="url">Auditing AWS events with CloudTrail</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -337,6 +248,107 @@ sudo yum install -y docker
   <li><a href="https://aws.amazon.com/config/" target="_blank" rel="noopener noreferrer">AWS Config</a></li>
   <li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#enable-mfa-for-privileged-users" target="_blank" rel="noopener noreferrer">AWS IAM Best Practices: Enable MFA for Privileged Users</a></li>
   <li><a href="https://aws.amazon.com/config/pricing/" target="_blank" rel="noopener noreferrer">AWS Config Pricing</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2019/01/18/AWS-Security-Best-Practices-Use-IAM-instead-of-root/" itemprop="url">AWS Security Best Practices: Use IAM user instead of root account</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-01-18T06:00:00+00:00" itemprop="datePublished">January 18, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awssecurity">aws</a></span> -->
+
+<!-- aws, security -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">iam, best_practices</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>When you create a new AWS account you are the root user who has unlimited access to everything. Using such a powerful user as root on a day-to-day basis is not such a good idea because if it gets compromised you may not have a way to override and/or undo the changes done by the hacker.</p>
+
+<p><img src="/images/vpblogimg/common/aws/aws-iam.png" alt=""></p>
+
+<h2 id="using-iam-user-instead-of-root-account">Using IAM user instead of root account</h2>
+<p>Instead, suggested best practice is to create an admin-level IAM account and use it for normal operations. At first I was hesitant to adopt this practice. I didn’t see the point and thought attaching AdministratorAccess policy awould make the use as powerful as root. But there’s a whole list of things that even the most powerful IAM user cannot do. Here’s the list: <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html" target="_blank" rel="noopener noreferrer">AWS Tasks That Require AWS Account Root User Credentials</a></p>
+
+<p>So as you can see root user has important privileges such as closing the account and changing billing information. Even if your account gets compromised and some mailicous person gains access using an IAM account, you can still log in as root and take necessary action.</p>
+
+<p>In a nutshell, based on AWS documentation the following practices are recommended:</p>
+
+<ul>
+  <li><strong>Use the root user only to create your first IAM user</strong></li>
+  <li><strong>Create an IAM user for yourself as well, give that user administrative permissions, and use that IAM user for all your work.</strong></li>
+</ul>
+
+<p>In addition to Eric Hammond suggests in his <a href="https://alestic.com/2014/09/aws-root-password/" target="_blank" rel="noopener noreferrer">blog</a> to delete the root account password as well and use Forgot Password option to create a new one when needed. I keep my passwords in a password manager so if that application is compromised, the hacker can reset my password as well so I don’t follow this practice but it might come in handy if you have to write your password down somewhere.</p>
+
+<h2 id="templated-iam-user-creation">Templated IAM user creation</h2>
+<p>It’s a good practice to create an IAM user right after you create your AWS account. It’s even a better practice to automate this process. To achieve this I created a CloudFormation template. The YAML template below does the following:</p>
+
+<ul>
+  <li>Creates an IAM group named <em>administrators</em>
+</li>
+  <li>Creates a user named <em>admin</em>
+</li>
+  <li>Attaches AdministratorAccess policy to the group</li>
+  <li>Forces the user to change their password first time they log in (by attaching IAMUserChangePassword policy to the user)</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Resources:
+  AdministratorsGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: "administrators"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+      Path: /
+
+  AdminUser:
+    Type: AWS::IAM::User
+    Properties: 
+      Groups:
+        - !Ref AdministratorsGroup
+      LoginProfile:
+        Password: "CHANGE_THIS"
+        PasswordResetRequired: true
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/IAMUserChangePassword
+      Path: /
+      UserName: "admin"
+</code></pre></div></div>
+
+<p><a href="https://console.aws.amazon.com/cloudformation/home?region=eu-west-2#/stacks/new?stackName=AdminGroupAndUser&amp;templateURL=https://s3.eu-west-2.amazonaws.com/blog-cloudformation-templates/2019-01-18-AWS-Security-Best-Practices-Use-IAM-instead-of-root-IAM-sysadmin-template.yaml" target="_blank" rel="noopener noreferrer"><img src="/images/vpblogimg/common/aws/aws-cloudformation-launch-stack.svg" alt=""></a></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#create-iam-users" target="_blank" rel="noopener noreferrer">IAM Best Practices: Create Individual IAM Users</a></li>
+  <li><a href="https://docs.aws.amazon.com/general/latest/gr/aws_tasks-that-require-root.html" target="_blank" rel="noopener noreferrer">AWS Tasks That Require AWS Account Root User Credentials</a></li>
+  <li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html" target="_blank" rel="noopener noreferrer">The AWS Account Root User</a></li>
+  <li><a href="https://alestic.com/2014/09/aws-root-password/" target="_blank" rel="noopener noreferrer">Throw Away The Password To Your AWS Account</a></li>
+  <li><a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html" target="_blank" rel="noopener noreferrer">CloudFormation Template Reference for IAM User</a></li>
 </ul>
 
 		

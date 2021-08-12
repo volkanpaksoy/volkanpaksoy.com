@@ -101,63 +101,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2013/07/23/leapmotion-initialization/" itemprop="url">Introducing Leap Motion</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2013-07-23T21:04:55+01:00" itemprop="datePublished">July 23, 2013</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
-
-<!-- hobby -->
-
-
-
-
-    <a href="/category/hobby">hobby</a>
-    
-</span>
-	<span class="tags">leap_motion, gadget, review</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Yes!!! Finally it arrived. It looks very tiny and elegant. This is what the package and contents look like:</p>
-
-<p><img src="/images/vpblogimg/2013/07/LeapMotion.jpg" alt="Leap Motion"></p>
-
-<h4 id="installation">Installation</h4>
-<p>Good thing it comes with 2 USB cables of different lengths. One is bout half a meter, probably for laptop users and the other is about 2 meters, better suited for desktop users like myself.
-It doesn’t come with any instructions or user guide but a card that tells you to go to <a href="http://leapmotion.com/setup" target="_blank" rel="noopener noreferrer">leapmotion.com/setup</a>. And that’s where I went.</p>
-
-<p>The setup file is about 56MB. As this is a new file, Norton 360 didn’t like it and issued a warning.
-Another interesting note is right after I plugged it in Skype icon started blinking. I checked the window and it was saying “Your video works fine”.  as I don’t normally keep my webcam plugged in, the video doesn’t work. But it became happy to detect a camera! I’m not sure if it would work with Skype though. Probably not.</p>
-
-<h4 id="app-store">App Store</h4>
-<p>After the installation you have to login to Airspace which is the app store for Leap Motion. I logged in with my LeapMotion account. It comes with a few free apps. Cut the Rope didn’t run unfortunately. Didn’t bother to give an error message either. So I tried the others. Lotus looks like a weird psychedelic app. As far as I could understand you make music with your fingers. Here’s a little demo of how it looks:</p>
-
-<iframe src="http://www.youtube.com/embed/2Wi8vPsPaPE" frameborder="0" width="560" height="315"></iframe>
-
-<h4 id="development">Development</h4>
-<p>What’s more interesting than downloading and using apps is developing one on my own! In order to do this you have to sign up for a developer account at: <a href="http://developer.leapmotion.com" target="_blank" rel="noopener noreferrer">http://developer.leapmotion.com</a>
-After the sign up you download their SDK. So far I managed to install the drivers, tried a few apps and downloaded the SDK and I’ll post the development experience in another post.</p>
-
-<h4 id="final-words">Final words</h4>
-<p>I’m not so sure if this gizmo will take off but as long as it’s an interface for the OS, not some custom apps, I don’t see much use for it. Keeping hands in the air for long tasks is tiring. I think it only might make some games more fun but that’s a very small market.</p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2013/07/22/customizing-phone-with-nfc-task-launcher/" itemprop="url">Customizing phone with NFC Task Launcher</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -335,6 +278,77 @@ After the sign up you download their SDK. So far I managed to install the driver
   <li><a href="http://channel9.msdn.com/Series/KinectQuickstart" target="_blank" rel="noopener noreferrer">Channel 9 Kinect QuickStart series</a></li>
   <li><a href="http://www.microsoft.com/en-us/kinectforwindows" target="_blank" rel="noopener noreferrer">Official site</a></li>
   <li><a href="https://kinectmouse.codeplex.com" target="_blank" rel="noopener noreferrer">Kinect Mouse Application</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/07/13/msp430-launchpad/" itemprop="url">MSP430 LaunchPad</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-07-13T23:44:05+01:00" itemprop="datePublished">July 13, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
+
+<!-- hobby -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">electronics, msp430</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I have a number of electronics kits and boards like Netduino, Arduino and Gadgeteer. Among all the cheapest one I’ve ever seen is Texas Instrument’s MSP430 LaunchPad. Last year I bough one of these just because it was so cheap but couldn’t spend much time on it. I recently found out it has dropped to £8 and I decided to buy the latest version. Now that I have 2 of these babies I definitely need to spend some time to play with them.</p>
+
+<p><img src="/images/vpblogimg/2013/07/MSP430_02.jpg" alt="MSP 430"></p>
+
+<p>Looks like there are a few differences between the two. The one on the left in the picture above is the old version. The new version comes with better controllers and male pins on the side.</p>
+
+<h3 id="installation">Installation</h3>
+<p>First thing to do is go to its official site and download Code Composer Studio to develop programs to run on it. It is an Eclipse-based IDE so I’m hoping it won’t take to long to get acquainted with it.</p>
+
+<h4 id="first-program">First Program</h4>
+<p>Good thing there are plenty of tutorials about it. I decided to follow one of the simplest ones which just blinks one of the on-board LEDs. To be honest, the code looks hideous:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>unsigned int i = 0; 
+void main(void)
+{
+  WDTCTL = WDTPW + WDTHOLD;     
+  P1DIR |= 0x01;
+
+  for (;;)
+  {
+    P1OUT ^= 0x01;
+    for(i=0; i&amp;lt; 20000; i++);
+  }
+}
+</code></pre></div></div>
+
+<p>I deleted the comments to keep it short. But even with detailed comments it looks hard to develop complex applications with this. Anyway, I’ll see how far I can get with it. So far, for this amound of work, the results are not so bad:</p>
+
+<iframe src="//www.youtube.com/embed/ZhPRVO6UKbk" frameborder="0" width="560" height="315"></iframe>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://ti.com/launchpad" target="_blank" rel="noopener noreferrer">MSP430 LaunchPad home site</a></li>
+  <li><a href="http://processors.wiki.ti.com/index.php/Blink_your_first_LED" target="_blank" rel="noopener noreferrer">Blinking LED tutorial</a></li>
+  <li><a href="http://www.youtube.com/watch?v=JfXz3x1tQFA" target="_blank" rel="noopener noreferrer">Blinking LED video tutorial</a></li>
 </ul>
 
 		
