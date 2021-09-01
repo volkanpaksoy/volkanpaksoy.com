@@ -109,6 +109,159 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/07/24/configuration-file-management-on-GitHub/" itemprop="url">Configuration File Management on GitHub</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-07-24T22:30:00+01:00" itemprop="datePublished">July 24, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">dotnet, configuration, github</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I hate configuration files! They contain highly sensitive information and there is always a risk of them leaking out. Especially when I read horror stories like <a href="http://wptavern.com/ryan-hellyers-aws-nightmare-leaked-access-keys-result-in-a-6000-bill-overnight" target="_blank" rel="noopener noreferrer">this</a> I remind myself to be more careful about it. It is particularly important when starting off with a private repository and converting it to open-source.</p>
+
+<p>There are a few approaches and I will try to make pros and cons list for each of them which hopefully would make it easier for me to make a decision.</p>
+
+<h3 id="method-1-ignore-config-files-completely">Method 1: Ignore config files completely</h3>
+<p>Simply add to gitignore before checking in the config files. This is not really a viable option but to cover all basis I wanted to add this one as well.</p>
+
+<h4 id="pros">Pros</h4>
+<ul>
+  <li>Very easy to implement</li>
+  <li>Easy to be consistent (use the same gitignore everywhere)</li>
+</ul>
+
+<h4 id="cons">Cons</h4>
+<ul>
+  <li>When someone checks out the project initially it wouldn’t compile because of the missing config file.</li>
+  <li>For a new user there is no way to figure out what the actual config should look like</li>
+  <li>For internal applications, you have to maintain local copies and handle distribution among developers manually.</li>
+</ul>
+
+<h3 id="method-2-check-in-configuration-with-placeholders">Method 2: Check in configuration with placeholders</h3>
+<p>Check in the initial file then run the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git update-index --assume-unchanged &lt;file&gt;
+</code></pre></div></div>
+
+<p>After this you can add the actual values and use the config as usual. But those values will be ignored. This way when someone checks out they can at least compile the project.</p>
+
+<h4 id="pros-1">Pros</h4>
+<ul>
+  <li>Less disruptive as the project can be compiled</li>
+</ul>
+
+<h4 id="cons-1">Cons</h4>
+<ul>
+  <li>When you make a change to the config file (e.g. add/rename keys) you can’t check in those changes as well</li>
+</ul>
+
+<h3 id="method-3-ignore-config-file-check-in-a-sample-file-instead">Method 3: Ignore config file, check in a sample file instead</h3>
+<p>This is essentially a merger of Method 1 and 2. Maintain two files (e.g. App.config and App.config.sample). Ignore the app.config from the getgo and only check in .sample file. Structurally it will be exactly the same as app.config without the confidential values.</p>
+
+<h4 id="pros-2">Pros</h4>
+<ul>
+  <li>Won’t compile by default, extra step for the people who check out (small one but still)</li>
+</ul>
+
+<h4 id="cons-2">Cons</h4>
+<ul>
+  <li>Both files need to be kept in sync manually</li>
+  <li>Still no online copy of the actual config file available</li>
+</ul>
+
+<h3 id="method-4-reference-to-another-configuration-file">Method 4: Reference to another configuration file</h3>
+<p>A slight variation of the previous method. .NET allows cascading and linking with configuration files. For example say this is my app.config file:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;configuration&gt;</span>
+	<span class="nt">&lt;appSettings</span> <span class="na">file=</span><span class="s">"Actual.config"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Twilio.AccountSID"</span> <span class="na">value=</span><span class="s">"SAMPLE SID"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Twilio.AuthToken"</span> <span class="na">value=</span><span class="s">"SAMPLE TOKEN"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Non-sensitive-info"</span> <span class="na">value=</span><span class="s">"some value"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;/appSettings&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div></div>
+
+<p>I can link the appSettings section to another file named actual.config which would look like this:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;appSettings&gt;</span>
+  <span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Twilio.AccountSID"</span> <span class="na">value=</span><span class="s">"REAL 123456"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Twilio.AuthToken"</span> <span class="na">value=</span><span class="s">"REAL Token"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Non-sensitive-info"</span> <span class="na">value=</span><span class="s">"some value"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/appSettings&gt;</span>
+</code></pre></div></div>
+
+<p>Actual.config never goes into source control. When the application cannot find the actual.config it just uses the values in the app.config. When the actual.config is present, those values override the sample values.</p>
+
+<h4 id="pros-3">Pros</h4>
+<ul>
+  <li>Only keys with sensitive values can be hidden</li>
+</ul>
+
+<h4 id="cons-3">Cons</h4>
+<ul>
+  <li>Doesn’t work with custom config sections</li>
+  <li>Still no online copy of the actual config file available</li>
+</ul>
+
+<h3 id="method-5-use-submodules-to-link-to-config-files">Method 5: Use submodules to link to config files</h3>
+<p>The idea is to maintain a private repository that contains the config files and add it as a submodule:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git submodule add git@github.com:volkanpaksoy/private-config.git
+</code></pre></div></div>
+
+<p>And link to that configuration file in the app.config as in Method 4.</p>
+
+<h4 id="pros-4">Pros</h4>
+<ul>
+  <li>Actual values are online and accessible</li>
+</ul>
+
+<h4 id="cons-4">Cons</h4>
+<ul>
+  <li>Requires a paid account for private repositories</li>
+  <li>More complicated</li>
+</ul>
+
+<h3 id="verdict">Verdict</h3>
+<p>As I already have a paid GitHub account the con for Method 5 is not quite valid for me so I think I will go with that one. Otherwise the actual values will be stored locally on the disk only and will eventually get lost. Looks like there is no convenient and easy way of doing it after all. If you have any suggestions I’m all ears.</p>
+
+<p>As I said, I hate configuration files!</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://gitready.com/intermediate/2009/02/18/temporarily-ignoring-files.html" target="_blank" rel="noopener noreferrer">Temporarily ignoring files</a></li>
+  <li><a href="http://stackoverflow.com/questions/4743770/git-collaboration-how-to-manage-configuration-files" target="_blank" rel="noopener noreferrer">SO Thread: Git sample and default files</a></li>
+  <li><a href="http://msdevshow.com/2014/07/github-with-phil-haack/" target="_blank" rel="noopener noreferrer">Phil Haack on MSDevShow</a></li>
+  <li><a href="http://stackoverflow.com/questions/5252450/using-someone-elses-repo-as-a-git-submodule-on-github" target="_blank" rel="noopener noreferrer">SO Thread: Using other repositories as submodules</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/07/22/disassembling-and-decompiling-dotnet-assemblies/" itemprop="url">Disassembling And Decompiling .NET Assemblies</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -705,458 +858,6 @@
   <li><a href="https://msdn.microsoft.com/en-us/library/system.servicemodel.syndication.syndicationfeed(v=vs.110).aspx" target="_blank" rel="noopener noreferrer">MSDN Reference: SyndicationFeed</a></li>
   <li><a href="http://stackoverflow.com/questions/15678635/syndicationfeed-change-namespace-prefix-from-a10-to-atom" target="_blank" rel="noopener noreferrer">StackOverflow solution to fix RSS warnings</a></li>
   <li><a href="http://nullprogram.com/blog/2013/09/23/" target="_blank" rel="noopener noreferrer">Blogpost: Atom vs. RSS</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/06/10/csharp-xml-serialization-tips/" itemprop="url">C# XML Serialization Tips</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-06-10T14:00:00+01:00" itemprop="datePublished">June 10, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">xml, csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Even though it’s a noisy data format it’s still commonly used and I happen to end up in situations that I need to use .NET to serialize and deserialize to and from XML documents. Here are a few problems that I had to tackle in the past. All the sample  source code can be found in a <a href="https://github.com/volkanpaksoy/xml-serialization-workout" target="_blank" rel="noopener noreferrer">GitHub repository</a>.</p>
-
-<h2 id="01-skip-serializing-unassigned-values">01. Skip serializing unassigned values</h2>
-
-<p>Let’s assume we have a hypothetical <em>Player</em> class that has a few fields that looks like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Player</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">FirstName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">LastName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">int</span> <span class="n">TotalGoalsScored</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">double</span> <span class="n">AverageGoalsPerGame</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="n">Team</span> <span class="n">Team</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="k">public</span> <span class="k">class</span> <span class="nc">Team</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">int</span> <span class="n">YearEstablished</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>So it contains both value and reference fields.</p>
-
-<p>Now let’s create two random players and serialize them:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">XmlSerializer</span> <span class="n">serializer</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">XmlSerializer</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Player</span><span class="p">&gt;));</span>
-<span class="n">Player</span> <span class="n">player1</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Player</span><span class="p">()</span> <span class="p">{</span> <span class="n">Id</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">FirstName</span> <span class="p">=</span> <span class="s">"John"</span><span class="p">,</span> <span class="n">LastName</span> <span class="p">=</span> <span class="s">"Smith"</span><span class="p">,</span> <span class="n">TotalGoalsScored</span> <span class="p">=</span> <span class="m">50</span><span class="p">,</span> <span class="n">AverageGoalsPerGame</span> <span class="p">=</span> <span class="m">0.7</span><span class="p">,</span> <span class="n">Team</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Team</span><span class="p">()</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="s">"Arsenal"</span> <span class="p">}</span> <span class="p">};</span>
-<span class="n">Player</span> <span class="n">player2</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Player</span><span class="p">()</span> <span class="p">{</span> <span class="n">Id</span> <span class="p">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">FirstName</span> <span class="p">=</span> <span class="s">"Jack"</span> <span class="p">};</span>
-<span class="k">using</span> <span class="p">(</span><span class="n">StringWriter</span> <span class="n">writer</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringWriter</span><span class="p">())</span>
-<span class="p">{</span>
-    <span class="n">serializer</span><span class="p">.</span><span class="nf">Serialize</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Player</span><span class="p">&gt;()</span> <span class="p">{</span> <span class="n">player1</span><span class="p">,</span> <span class="n">player2</span> <span class="p">});</span>
-    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">writer</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>This code yields the following XML:</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-16"?&gt;</span>
-<span class="nt">&lt;ArrayOfPlayer</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="na">xmlns:xsd=</span><span class="s">"
-http://www.w3.org/2001/XMLSchema"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;Player&gt;</span>
-    <span class="nt">&lt;Id&gt;</span>1<span class="nt">&lt;/Id&gt;</span>
-    <span class="nt">&lt;FirstName&gt;</span>John<span class="nt">&lt;/FirstName&gt;</span>
-    <span class="nt">&lt;LastName&gt;</span>Smith<span class="nt">&lt;/LastName&gt;</span>
-    <span class="nt">&lt;TotalGoalsScored&gt;</span>50<span class="nt">&lt;/TotalGoalsScored&gt;</span>
-    <span class="nt">&lt;AverageGoalsPerGame&gt;</span>0.7<span class="nt">&lt;/AverageGoalsPerGame&gt;</span>
-    <span class="nt">&lt;Team&gt;</span>
-      <span class="nt">&lt;Name&gt;</span>Arsenal<span class="nt">&lt;/Name&gt;</span>
-      <span class="nt">&lt;YearEstablished&gt;</span>0<span class="nt">&lt;/YearEstablished&gt;</span>
-    <span class="nt">&lt;/Team&gt;</span>
-  <span class="nt">&lt;/Player&gt;</span>
-  <span class="nt">&lt;Player&gt;</span>
-    <span class="nt">&lt;Id&gt;</span>2<span class="nt">&lt;/Id&gt;</span>
-    <span class="nt">&lt;FirstName&gt;</span>Jack<span class="nt">&lt;/FirstName&gt;</span>
-    <span class="nt">&lt;TotalGoalsScored&gt;</span>0<span class="nt">&lt;/TotalGoalsScored&gt;</span>
-    <span class="nt">&lt;AverageGoalsPerGame&gt;</span>0<span class="nt">&lt;/AverageGoalsPerGame&gt;</span>
-  <span class="nt">&lt;/Player&gt;</span>
-<span class="nt">&lt;/ArrayOfPlayer&gt;</span>
-</code></pre></div></div>
-
-<p>The thing to note here is that reference types were not serialized when they were unassigned, i.e <em>Team</em> object and <em>LastName</em> field in <em>Player2</em>. But same didn’t go for values fields. <em>TotalScore</em>, <em>AverageScorePerGame</em> and <em>YearEstablished</em> fields were serialized as 0. Of course this might be the desired outcome depending on your business requirements but in my case I didn’t want this because it might mislead the client consuming this data. At the very least I find it inconsistent as some unassigned values are serialized and some aren’t.</p>
-
-<p>So to change the behaviour all we have to do is set the <strong><em>DefaultValue</em></strong> attribute for the numeric values like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Player</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">FirstName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">LastName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-
-    <span class="p">[</span><span class="nf">DefaultValue</span><span class="p">(</span><span class="m">0</span><span class="p">)]</span>
-    <span class="k">public</span> <span class="kt">int</span> <span class="n">TotalGoalsScored</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-
-    <span class="p">[</span><span class="nf">DefaultValue</span><span class="p">(</span><span class="m">0</span><span class="p">)]</span>
-    <span class="k">public</span> <span class="kt">double</span> <span class="n">AverageGoalsPerGame</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    
-    <span class="k">public</span> <span class="n">Team</span> <span class="n">Team</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="k">public</span> <span class="k">class</span> <span class="nc">Team</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-
-    <span class="p">[</span><span class="nf">DefaultValue</span><span class="p">(</span><span class="m">0</span><span class="p">)]</span>
-    <span class="k">public</span> <span class="kt">int</span> <span class="n">YearEstablished</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>With this change the output becomes:</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-16"?&gt;</span>
-<span class="nt">&lt;ArrayOfPlayer</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="na">xmlns:xsd=</span><span class="s">"
-http://www.w3.org/2001/XMLSchema"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;Player&gt;</span>
-    <span class="nt">&lt;Id&gt;</span>1<span class="nt">&lt;/Id&gt;</span>
-    <span class="nt">&lt;FirstName&gt;</span>John<span class="nt">&lt;/FirstName&gt;</span>
-    <span class="nt">&lt;LastName&gt;</span>Smith<span class="nt">&lt;/LastName&gt;</span>
-    <span class="nt">&lt;TotalGoalsScored&gt;</span>50<span class="nt">&lt;/TotalGoalsScored&gt;</span>
-    <span class="nt">&lt;AverageGoalsPerGame&gt;</span>0.7<span class="nt">&lt;/AverageGoalsPerGame&gt;</span>
-    <span class="nt">&lt;Team&gt;</span>
-      <span class="nt">&lt;Name&gt;</span>Arsenal<span class="nt">&lt;/Name&gt;</span>
-    <span class="nt">&lt;/Team&gt;</span>
-  <span class="nt">&lt;/Player&gt;</span>
-  <span class="nt">&lt;Player&gt;</span>
-    <span class="nt">&lt;Id&gt;</span>2<span class="nt">&lt;/Id&gt;</span>
-    <span class="nt">&lt;FirstName&gt;</span>Jack<span class="nt">&lt;/FirstName&gt;</span>
-  <span class="nt">&lt;/Player&gt;</span>
-<span class="nt">&lt;/ArrayOfPlayer&gt;</span>
-</code></pre></div></div>
-
-<p>So as the <em>int</em> and <em>double</em> values defaulted to 0 and we explicitly set the default value they won’t be serialized unless they are assigned a value other than zero.</p>
-
-<p>In case you are wondering making the <em>int</em> and <em>double</em> nullable doesn’t produce the same result. In that case they are serialized with null values:</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;TotalScore</span> <span class="na">xsi:nil=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;AverageScorePerGame</span> <span class="na">xsi:nil=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
-</code></pre></div></div>
-
-<p>I think this if-you-set-it-you-get-it-back approach is consistent and makes most sense to me. I created a test project to fiddle with these classes. It has all 3 versions of the classes under different names and a console application displaying the outputs. If you want to play around you can get the source code <a href="github...">here</a></p>
-
-<h2 id="02-deserialize-straight-to-list">02. Deserialize straight to list</h2>
-
-<p>Sometimes what you get in an XML document is just a list of items and the list is just a container so that the XML is well-formed. For example in the following example we have a list of players:</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;PlayerList&gt;</span>
-  <span class="nt">&lt;Player&gt;</span>
-    <span class="nt">&lt;Id&gt;</span>1<span class="nt">&lt;/Id&gt;</span>
-    <span class="nt">&lt;FirstName&gt;</span>John<span class="nt">&lt;/FirstName&gt;</span>
-    <span class="nt">&lt;LastName&gt;</span>Smith<span class="nt">&lt;/LastName&gt;</span>
-    <span class="nt">&lt;TotalGoalsScored&gt;</span>50<span class="nt">&lt;/TotalGoalsScored&gt;</span>
-    <span class="nt">&lt;AverageGoalsPerGame&gt;</span>0.7<span class="nt">&lt;/AverageGoalsPerGame&gt;</span>
-    <span class="nt">&lt;Team&gt;</span>
-      <span class="nt">&lt;Name&gt;</span>Arsenal<span class="nt">&lt;/Name&gt;</span>
-      <span class="nt">&lt;YearEstablished&gt;</span>0<span class="nt">&lt;/YearEstablished&gt;</span>
-    <span class="nt">&lt;/Team&gt;</span>
-  <span class="nt">&lt;/Player&gt;</span>
-  <span class="nt">&lt;Player&gt;</span>
-    <span class="nt">&lt;Id&gt;</span>2<span class="nt">&lt;/Id&gt;</span>
-    <span class="nt">&lt;FirstName&gt;</span>Jack<span class="nt">&lt;/FirstName&gt;</span>
-    <span class="nt">&lt;TotalGoalsScored&gt;</span>0<span class="nt">&lt;/TotalGoalsScored&gt;</span>
-    <span class="nt">&lt;AverageGoalsPerGame&gt;</span>0<span class="nt">&lt;/AverageGoalsPerGame&gt;</span>
-  <span class="nt">&lt;/Player&gt;</span>
-<span class="nt">&lt;/PlayerList&gt;</span>
-</code></pre></div></div>
-
-<p>The sole purpose of PlayerList tag is to act as root and contain multiple objects. Other than that it has no function. When we deserialize this to C# objects we would  normally need 2 objects like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Player</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">FirstName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">LastName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">int</span> <span class="n">TotalGoalsScored</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">double</span> <span class="n">AverageGoalsPerGame</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>and</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[XmlRoot]</span>
-<span class="k">public</span> <span class="k">class</span> <span class="nc">PlayerList</span>
-<span class="p">{</span>
-    <span class="p">[</span><span class="nf">XmlElement</span><span class="p">(</span><span class="s">"Player"</span><span class="p">)]</span>
-    <span class="k">public</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Player</span><span class="p">&gt;</span> <span class="n">Players</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>and we can get the list of objects by:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>string inputXmlPath1 = @".\InputXml.xml";
-using (StreamReader reader = new StreamReader(inputXmlPath1))
-{
-    XmlSerializer playerListSerializer = new XmlSerializer(typeof(PlayerList));
-    PlayerList playerList = (PlayerList)playerListSerializer.Deserialize(reader);
-}
-</code></pre></div></div>
-
-<p>In such cases I generally tend to eliminate the “middle man”. I don’t want a container class which only holds a List. So I’d like to deserialize this XML directly into List<player>.</player></p>
-
-<p>What I want to do is actually this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="p">(</span><span class="n">StreamReader</span> <span class="n">reader</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StreamReader</span><span class="p">(</span><span class="n">inputXmlPath1</span><span class="p">))</span>
-<span class="p">{</span>
-    <span class="n">XmlSerializer</span> <span class="n">playerListSerializer</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">XmlSerializer</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="n">FinalPlayer</span><span class="p">&gt;));</span>
-    <span class="n">List</span><span class="p">&lt;</span><span class="n">FinalPlayer</span><span class="p">&gt;</span> <span class="n">playerList</span> <span class="p">=</span> <span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="n">FinalPlayer</span><span class="p">&gt;)</span><span class="n">playerListSerializer</span><span class="p">.</span><span class="nf">Deserialize</span><span class="p">(</span><span class="n">reader</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<p>But without any modifications to our classes it throws an exception:</p>
-
-<p><img src="/images/vpblogimg/2015/06/xml-serialization-exception-01.png" alt=""></p>
-
-<p>By eliminating PlayerList class we actually stopped providing XmlRoot info to the serializer. But that can quickly be remedied by using a constructor overload of XmlSerializer:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="p">(</span><span class="n">StreamReader</span> <span class="n">reader</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StreamReader</span><span class="p">(</span><span class="n">inputXmlPath1</span><span class="p">))</span>
-<span class="p">{</span>
-    <span class="n">XmlSerializer</span> <span class="n">playerListSerializer</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">XmlSerializer</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="n">FinalPlayer</span><span class="p">&gt;),</span> <span class="k">new</span> <span class="nf">XmlRootAttribute</span><span class="p">(</span><span class="s">"PlayerList"</span><span class="p">));</span>
-    <span class="n">List</span><span class="p">&lt;</span><span class="n">FinalPlayer</span><span class="p">&gt;</span> <span class="n">playerList</span> <span class="p">=</span> <span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="n">FinalPlayer</span><span class="p">&gt;)</span><span class="n">playerListSerializer</span><span class="p">.</span><span class="nf">Deserialize</span><span class="p">(</span><span class="n">reader</span><span class="p">);</span>
-<span class="p">}</span>     
-</code></pre></div></div>
-
-<p>This works when the class name matches the <em>XmlElement</em> name. If you need to customize your class’s name (like <em>FinalPlayer</em> in my example) you need to decorate the class with <em>XmlType</em> and supply the element name so that the serializer can do the mapping.</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[XmlType("Player")]</span>
-<span class="k">public</span> <span class="k">class</span> <span class="nc">FinalPlayer</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">FirstName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">LastName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">int</span> <span class="n">TotalGoalsScored</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">double</span> <span class="n">AverageGoalsPerGame</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>So now we can have any class name mapping to corresponding elements and deserialized straight to a List.</p>
-
-<h2 id="03-remove-namespaces">03. Remove namespaces</h2>
-
-<p>I know using namespaces is considered a good practice as it helps avoid name conflicts but honestly I never suffered from such a problem before so I don’t mind removing them from my XML documents and clean the clutter. XML is already a noisy data format no need to bloat it any further. I think it might help when you are working with data from different sources but if you are only working with your own classes and data structures name conflict is generally not something to worry about (assuming you name your objects properly)</p>
-
-<p>So say you have a simple Player class and you serialize it with a out-of-the-box XmlSerializer:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Player</span> <span class="n">player</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Player</span><span class="p">()</span> <span class="p">{</span> <span class="n">Id</span> <span class="p">=</span> <span class="m">102</span><span class="p">,</span> <span class="n">FirstName</span> <span class="p">=</span> <span class="s">"Danny"</span><span class="p">,</span> <span class="n">LastName</span> <span class="p">=</span> <span class="s">"TopScorer"</span><span class="p">,</span> <span class="n">AverageGoalsPerGame</span> <span class="p">=</span> <span class="m">3.5</span><span class="p">,</span> <span class="n">TotalGoalsScored</span> <span class="p">=</span> <span class="m">150</span> <span class="p">};</span>
-<span class="n">XmlSerializer</span> <span class="n">serializer</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">XmlSerializer</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">Player</span><span class="p">));</span>
-<span class="n">XmlWriterSettings</span> <span class="n">settings</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">XmlWriterSettings</span><span class="p">()</span> <span class="p">{</span> <span class="n">OmitXmlDeclaration</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">Indent</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">Encoding</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span> <span class="p">};</span>
-<span class="n">StringBuilder</span> <span class="n">output</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringBuilder</span><span class="p">();</span>
-<span class="n">XmlWriter</span> <span class="n">writer</span> <span class="p">=</span> <span class="n">XmlWriter</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">settings</span><span class="p">);</span>
-<span class="n">serializer</span><span class="p">.</span><span class="nf">Serialize</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">player</span><span class="p">);</span>
-<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
-</code></pre></div></div>
-
-<p>This yields the following output:</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;Player</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="na">xmlns:xsd=</span><span class="s">"http://
-www.w3.org/2001/XMLSchema"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;Id&gt;</span>102<span class="nt">&lt;/Id&gt;</span>
-  <span class="nt">&lt;FirstName&gt;</span>Danny<span class="nt">&lt;/FirstName&gt;</span>
-  <span class="nt">&lt;LastName&gt;</span>TopScorer<span class="nt">&lt;/LastName&gt;</span>
-  <span class="nt">&lt;TotalGoalsScored&gt;</span>150<span class="nt">&lt;/TotalGoalsScored&gt;</span>
-  <span class="nt">&lt;AverageGoalsPerGame&gt;</span>3.5<span class="nt">&lt;/AverageGoalsPerGame&gt;</span>
-<span class="nt">&lt;/Player&gt;</span>
-</code></pre></div></div>
-
-<p>So in order to get rid of namespaces we have to specify our custom namespaces, which is empty in this case and use the overloaded XmlSerializer constructor to pass it in:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">XmlSerializerNamespaces</span> <span class="n">xns</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">XmlSerializerNamespaces</span><span class="p">();</span>
-<span class="n">xns</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">,</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">);</span>
-<span class="n">serializer</span><span class="p">.</span><span class="nf">Serialize</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">xns</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p>to get the XML without any namespaces:</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;Player&gt;</span>
-  <span class="nt">&lt;Id&gt;</span>102<span class="nt">&lt;/Id&gt;</span>
-  <span class="nt">&lt;FirstName&gt;</span>Danny<span class="nt">&lt;/FirstName&gt;</span>
-  <span class="nt">&lt;LastName&gt;</span>TopScorer<span class="nt">&lt;/LastName&gt;</span>
-  <span class="nt">&lt;TotalGoalsScored&gt;</span>150<span class="nt">&lt;/TotalGoalsScored&gt;</span>
-  <span class="nt">&lt;AverageGoalsPerGame&gt;</span>3.5<span class="nt">&lt;/AverageGoalsPerGame&gt;</span>
-<span class="nt">&lt;/Player&gt;</span>
-</code></pre></div></div>
-
-<h2 id="04-change-output-encoding">04. Change output encoding</h2>
-
-<p>When you serialize with the default options and with the XML declaration the encoding is UTF-16. Oddly enough there is no option to specify the output encoding. In order to achieve that and sometimes you may need to change it. For example a 3rd party was expecting UTF-8 in my case so the default value didn’t cut it for me.</p>
-
-<p>So using the same Player class from the last example the following code produces an output with UTF-16</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Player</span> <span class="n">player</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Player</span><span class="p">()</span> <span class="p">{</span> <span class="n">Id</span> <span class="p">=</span> <span class="m">102</span><span class="p">,</span> <span class="n">FirstName</span> <span class="p">=</span> <span class="s">"Danny"</span><span class="p">,</span> <span class="n">LastName</span> <span class="p">=</span> <span class="s">"TopScorer"</span><span class="p">,</span> <span class="n">AverageGoalsPerGame</span> <span class="p">=</span> <span class="m">3.5</span><span class="p">,</span> <span class="n">TotalGoalsScored</span> <span class="p">=</span> <span class="m">150</span> <span class="p">};</span>
-<span class="n">XmlSerializer</span> <span class="n">serializer</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">XmlSerializer</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">Player</span><span class="p">));</span>
-<span class="n">XmlWriterSettings</span> <span class="n">settings</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">XmlWriterSettings</span><span class="p">()</span> <span class="p">{</span> <span class="n">OmitXmlDeclaration</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span> <span class="n">Indent</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">Encoding</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span> <span class="p">};</span>
-<span class="n">StringBuilder</span> <span class="n">output</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringBuilder</span><span class="p">();</span>
-<span class="n">XmlWriter</span> <span class="n">writer</span> <span class="p">=</span> <span class="n">XmlWriter</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">settings</span><span class="p">);</span>
-<span class="n">XmlSerializerNamespaces</span> <span class="n">xns</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">XmlSerializerNamespaces</span><span class="p">();</span>
-<span class="n">xns</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">,</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">);</span>
-<span class="n">serializer</span><span class="p">.</span><span class="nf">Serialize</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">xns</span><span class="p">);</span>
-<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">output</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
-</code></pre></div></div>
-
-<p>Output:</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-16"?&gt;</span>
-<span class="nt">&lt;Player&gt;</span>
-  <span class="nt">&lt;Id&gt;</span>102<span class="nt">&lt;/Id&gt;</span>
-  <span class="nt">&lt;FirstName&gt;</span>Danny<span class="nt">&lt;/FirstName&gt;</span>
-  <span class="nt">&lt;LastName&gt;</span>TopScorer<span class="nt">&lt;/LastName&gt;</span>
-  <span class="nt">&lt;TotalGoalsScored&gt;</span>150<span class="nt">&lt;/TotalGoalsScored&gt;</span>
-  <span class="nt">&lt;AverageGoalsPerGame&gt;</span>3.5<span class="nt">&lt;/AverageGoalsPerGame&gt;</span>
-<span class="nt">&lt;/Player&gt;</span>
-</code></pre></div></div>
-
-<p>I found the solution <a href="http://stackoverflow.com/questions/427725/how-to-put-an-encoding-attribute-to-xml-other-that-utf-16-with-xmlwriter/427737#427737" target="_blank" rel="noopener noreferrer">here</a> on StackOverflow.</p>
-
-<p>So the solution is to extend from StringWriter and add a new constructor that accepts Encoding. StringWriter already has an Encoding property as shown below, but unfortunately it doesn’t have a public setter so we need a subclass to fiddle with it.</p>
-
-<p><img src="/images/vpblogimg/2015/06/dotnet-stringwriter-encoding.png" alt=""></p>
-
-<p>StringWriterWithEncoding simply overrides th encoding field:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">sealed</span> <span class="k">class</span> <span class="nc">StringWriterWithEncoding</span> <span class="p">:</span> <span class="n">StringWriter</span>
-<span class="p">{</span>
-    <span class="k">private</span> <span class="k">readonly</span> <span class="n">Encoding</span> <span class="n">encoding</span><span class="p">;</span>
-
-    <span class="k">public</span> <span class="nf">StringWriterWithEncoding</span><span class="p">(</span><span class="n">Encoding</span> <span class="n">encoding</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">encoding</span> <span class="p">=</span> <span class="n">encoding</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">public</span> <span class="k">override</span> <span class="n">Encoding</span> <span class="n">Encoding</span>
-    <span class="p">{</span>
-        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">encoding</span><span class="p">;</span> <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>By using the new class the following code produces the desired outcome:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">StringWriterWithEncoding</span> <span class="n">utf8StringWriter</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringWriterWithEncoding</span><span class="p">(</span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">);</span>
-<span class="n">Player</span> <span class="n">player</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Player</span><span class="p">()</span> <span class="p">{</span> <span class="n">Id</span> <span class="p">=</span> <span class="m">102</span><span class="p">,</span> <span class="n">FirstName</span> <span class="p">=</span> <span class="s">"Danny"</span><span class="p">,</span> <span class="n">LastName</span> <span class="p">=</span> <span class="s">"TopScorer"</span><span class="p">,</span> <span class="n">AverageGoalsPerGame</span> <span class="p">=</span> <span class="m">3.5</span><span class="p">,</span> <span class="n">TotalGoalsScored</span> <span class="p">=</span> <span class="m">150</span> <span class="p">};</span>
-<span class="n">XmlSerializer</span> <span class="n">serializer</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">XmlSerializer</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">Player</span><span class="p">));</span>
-<span class="n">XmlWriterSettings</span> <span class="n">settings</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">XmlWriterSettings</span><span class="p">()</span> <span class="p">{</span> <span class="n">OmitXmlDeclaration</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span> <span class="n">Indent</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">Encoding</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span> <span class="p">};</span>
-<span class="n">XmlWriter</span> <span class="n">writer</span> <span class="p">=</span> <span class="n">XmlWriter</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="n">utf8StringWriter</span><span class="p">,</span> <span class="n">settings</span><span class="p">);</span>
-<span class="n">XmlSerializerNamespaces</span> <span class="n">xns</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">XmlSerializerNamespaces</span><span class="p">();</span>
-<span class="n">xns</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">,</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">);</span>
-<span class="n">serializer</span><span class="p">.</span><span class="nf">Serialize</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">xns</span><span class="p">);</span>
-<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">utf8StringWriter</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
-<span class="n">Console</span><span class="p">.</span><span class="nf">ReadLine</span><span class="p">();</span>
-</code></pre></div></div>
-
-<p>Output:</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
-<span class="nt">&lt;Player&gt;</span>
-  <span class="nt">&lt;Id&gt;</span>102<span class="nt">&lt;/Id&gt;</span>
-  <span class="nt">&lt;FirstName&gt;</span>Danny<span class="nt">&lt;/FirstName&gt;</span>
-  <span class="nt">&lt;LastName&gt;</span>TopScorer<span class="nt">&lt;/LastName&gt;</span>
-  <span class="nt">&lt;TotalGoalsScored&gt;</span>150<span class="nt">&lt;/TotalGoalsScored&gt;</span>
-  <span class="nt">&lt;AverageGoalsPerGame&gt;</span>3.5<span class="nt">&lt;/AverageGoalsPerGame&gt;</span>
-<span class="nt">&lt;/Player&gt;</span>
-</code></pre></div></div>
-
-<h2 id="05-fail-deserialization-when-unexpected-elements-are-encountered">05. Fail deserialization when unexpected elements are encountered</h2>
-
-<p>By default XMLSerializer is very fault tolerant. It just salvages whatever it can and leaves alone the unmatching values. Sometimes you may need to be stricter. For example I had a case when the external source returned a whole different XML when there was an error on its end. So when that happened I wanted to be notified about it instead of getting null objects quietly.</p>
-
-<p>For example, assume we have the usual PlayerList that we are deserializing to List<player>. If for some reason we get a weird Player list like this:</player></p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;PlayerList&gt;</span>
-  <span class="nt">&lt;Customer&gt;</span>
-    <span class="nt">&lt;Id&gt;</span>1<span class="nt">&lt;/Id&gt;</span>
-    <span class="nt">&lt;FirstName&gt;</span>John<span class="nt">&lt;/FirstName&gt;</span>
-    <span class="nt">&lt;LastName&gt;</span>Smith<span class="nt">&lt;/LastName&gt;</span>
-    <span class="nt">&lt;TotalGoalsScored&gt;</span>50<span class="nt">&lt;/TotalGoalsScored&gt;</span>
-    <span class="nt">&lt;AverageGoalsPerGame&gt;</span>0.7<span class="nt">&lt;/AverageGoalsPerGame&gt;</span>
-  <span class="nt">&lt;/Customer&gt;</span>
-<span class="nt">&lt;/PlayerList&gt;</span>
-</code></pre></div></div>
-
-<p>When we deserialize it with the following code block</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">try</span>
-<span class="p">{</span>
-    <span class="k">using</span> <span class="p">(</span><span class="n">MemoryStream</span> <span class="n">memoryStream</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MemoryStream</span><span class="p">(</span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="nf">GetBytes</span><span class="p">(</span><span class="n">rawXml</span><span class="p">)))</span>
-    <span class="p">{</span>
-        <span class="n">XmlSerializer</span> <span class="n">serializer</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">XmlSerializer</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Player</span><span class="p">&gt;),</span> <span class="k">new</span> <span class="nf">XmlRootAttribute</span><span class="p">(</span><span class="s">"PlayerList"</span><span class="p">));</span>
-        <span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Player</span><span class="p">&gt;)</span><span class="n">serializer</span><span class="p">.</span><span class="nf">Deserialize</span><span class="p">(</span><span class="n">memoryStream</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-<span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">ex</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">ex</span><span class="p">.</span><span class="n">InnerException</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">ex</span><span class="p">.</span><span class="n">InnerException</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>    
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>XmlSerializer doesn’t complain at all. Instead it just returns an empty list because it cannot find any Player objects. In order to change this behaviour we can use the events it exposes such as UnknownNode, UnknownElement, UnknownAttribute. UnknownNode is just the combination of the first two events. In my case I didn’t want to be too strict so I didn’t want an exception in case of a missing attribute but hooked into the UnknownElement event:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">try</span>
-<span class="p">{</span>
-    <span class="k">using</span> <span class="p">(</span><span class="n">MemoryStream</span> <span class="n">memoryStream</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">MemoryStream</span><span class="p">(</span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="nf">GetBytes</span><span class="p">(</span><span class="n">rawXml</span><span class="p">)))</span>
-    <span class="p">{</span>
-        <span class="n">XmlSerializer</span> <span class="n">serializer</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">XmlSerializer</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Player</span><span class="p">&gt;),</span> <span class="k">new</span> <span class="nf">XmlRootAttribute</span><span class="p">(</span><span class="s">"PlayerList"</span><span class="p">));</span>
-        <span class="n">serializer</span><span class="p">.</span><span class="n">UnknownElement</span> <span class="p">+=</span> <span class="n">serializer_UnknownElement</span><span class="p">;</span>
-        <span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Player</span><span class="p">&gt;)</span><span class="n">serializer</span><span class="p">.</span><span class="nf">Deserialize</span><span class="p">(</span><span class="n">memoryStream</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-<span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">ex</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">ex</span><span class="p">.</span><span class="n">InnerException</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">ex</span><span class="p">.</span><span class="n">InnerException</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>and added the event handler:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">void</span> <span class="nf">serializer_UnknownElement</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">XmlElementEventArgs</span> <span class="n">e</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentException</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"Unknown element: {0}"</span><span class="p">,</span> <span class="n">e</span><span class="p">.</span><span class="n">Element</span><span class="p">.</span><span class="n">LocalName</span><span class="p">));</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>So now at least I can distinguish a weird list from a really empty list.</p>
-
-<p><img src="/images/vpblogimg/2015/06/unknown-node-exception.png" alt=""></p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://github.com/volkanpaksoy/xml-serialization-workout" target="_blank" rel="noopener noreferrer">Github repository for sample applications</a></li>
-  <li><a href="https://msdn.microsoft.com/en-us/library/system.componentmodel.defaultvalueattribute(v=vs.110).aspx" target="_blank" rel="noopener noreferrer">MSDN Article: DefaultValueAttribute</a></li>
-  <li><a href="http://stackoverflow.com/questions/427725/how-to-put-an-encoding-attribute-to-xml-other-that-utf-16-with-xmlwriter/427737#427737" target="_blank" rel="noopener noreferrer">StackOverflow answer for changing output encoding</a></li>
 </ul>
 
 		

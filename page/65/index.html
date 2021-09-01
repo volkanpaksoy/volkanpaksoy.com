@@ -109,6 +109,97 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2012/12/07/easy-way-to-monitor-windows-services/" itemprop="url">Easy way to monitor Windows Services</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2012-12-07T14:11:13+00:00" itemprop="datePublished">December  7, 2012</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/sysops">sysops</a></span> -->
+
+<!-- sysops -->
+
+
+
+
+    <a href="/category/sysops">sysops</a>
+    
+</span>
+	<span class="tags">windows_service</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>When you have Windows Services you must also implement a monitoring solution to make sure that they are running at all times. Some time ago I needed a quick and dirty solution to notify myself when one of the services stopped. The solution I depict here is by no means an ideal one. The only advantage of it is it’s very fast to implement if you don’t already have a monitoring system. Disclaimer aside let’s get to work!</p>
+
+<p>The tools we need come with Windows so no need to install anything. The idea is simple: Create a task scheduler that is triggered on an event. The triggering even will be the stopping of the monitored service and action that will be taken will be sending the notification email.</p>
+
+<p><strong>STEP 01: Create a new filter</strong>
+a. Launch Task Scheduler.
+b. Right click Task Scheduler Library and select Create Task
+c. Select the Triggers tab.
+d. Click New…
+e. In the Begin the task list select “On an event”
+f. In the Settings section select Custom and click New Event Filter
+g. In the New Event Filter dialog, select XML tab and check “Edit query manually”
+h. As the query text type in the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;QueryList&gt;
+ &lt;Query Id="0"&gt;
+ &lt;Select Path="Application"&gt;
+ *[System[Provider[@Name='Service1']]]
+ *[EventData[Data and (Data='Service stopped successfully.')]]
+ &lt;/Select&gt;
+ &lt;/Query&gt;
+&lt;/QueryList&gt;
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2012/12/TaskScheduler_NewEventFilter.png" alt="TaskScheduler_NewEventFilter"></p>
+
+<p>Change the name of the service name and the message it displays when it stops. Note that service name is not what you see in the services list. You have to right –click and view properties. For example, as shown in the picture below, service name for DNS client is “Dnscache” where as display name is “DNS Client”.</p>
+
+<p><img src="/images/vpblogimg/2012/12/ServiceName.png" alt="Service Name"></p>
+
+<p><strong>STEP 02: Create action to send mail</strong>
+a. Select the Actions tab and click on New
+b. From the Action list select “Send an e-mail”
+c. Fill in the details for the notification email.
+At this point we are good to go. An email will be fired when the service stops and logs the text we are looking for. Keep in my mind that it’s quite fragile because it will stop working if the text the service logs changes.
+Having a built-in send mail capability is great but if you need more features, like adding Cc/Bcc recipients or setting the priority of the mail this option would not be enough for you. In that case, playing around with PowerShell would do the trick.</p>
+
+<p><strong>STEP 03: [Optional] Create a script to send mails</strong>
+PowerShell is built on top of .NET framework so with a few lines of code we can send mails just like we can in C#:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$email = New-Object System.Net.Mail.MailMessage
+$email.From = "user1@someDomain.com"
+$email.To.Add("user2@anotherDomain.com")
+$email.CC.Add("user3@yetAnotherOne.com")
+$email.Priority = [System.Net.Mail.MailPriority]::High
+$email.Subject = "Your notification subject"
+$email.Body = "A bleak and gloomy text to drive the recipient into panic"
+$smtpClient = New-Object Net.Mail.SmtpClient("SMTP hostname or IP address", 587)
+$smtpClient.EnableSsl = $true
+$smtpClient.Credentials = New-Object System.Net.NetworkCredential("username", "password");
+$smtpClient.Send($email)
+</code></pre></div></div>
+
+<p>This example uses port 587 and SSL, your configuration may vary. That’s all there is to it to send a mail with PowerShell and you have full control over it.</p>
+
+<p>To run this script in the actions list select “Start a program” from the actions list. In the Program/script textbox enter “powershell” and enter the full path of the script in the arguments textbox. Don’t forget to save it with a ps1 extension.</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2012/11/29/share-your-machines-with-vmware-workstation/" itemprop="url">Share your machines with VMWare Workstation</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -217,92 +308,6 @@ When you terminate an instance make sure you delete all the attached EBS volumes
 <p><strong>TIP 08: Reserve as early as you can</strong>
 This is another budget tip. If you are certain about the size of an instance then buy a reserved instance for that type. Reserved instance is not a technical concept. When you buy one you start paying less by the hour for an instance of that type. For a comparison to see how much you can save check out here: <a href="http://aws.amazon.com/pricing/ec2/" target="_blank" rel="noopener noreferrer">http://aws.amazon.com/pricing/ec2/</a></p>
 
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2012/11/08/tidy-up-your-code-with-stylecop/" itemprop="url">Tidy up your code with StyleCop</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2012-11-08T23:52:15+00:00" itemprop="datePublished">November  8, 2012</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">stylecop, csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>It’s been a while since I’ve started using StyleCop in my projects. Last year I managed to sneak it in to my company’s projects as well. Applying it to existing projects and fixing all the errors was a tiring process at first but I believe it was worth it. It really helps for consistency. Regardless of the developer of a certain block of code it’s very easy to read it because everybody has to adhere to same rules across the company. Here are a few tips to manage this:</p>
-
-<p><strong>01. Force StyleCop warnings to be treated as errors.</strong>
-I hate warnings completely actually. That’s why I set treat warnings as errors to All on the projects I work on. This helps to eliminate many potential bugs
-before they become an issue.</p>
-
-<p><img src="/images/vpblogimg/2012/11/TreatWarningsAsErrors.png" alt="Treat warnings as errors"></p>
-
-<p>Unfortunately, StyleCop errors are not included in this. But with a little tweak we can turn on this feature for StyleCop warnings as well. Just add the following line to your project’s .csproj file inside the first PropertyGroup tag:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;stylecoptreaterrorsaswarnings&gt;false&lt;/stylecoptreaterrorsaswarnings&gt;
-</code></pre></div></div>
-
-<p>The wording is the opposite of Visual Studio’s (treat errors as warnings instead of the other way around) so we have to set this to false.
-After reloading the project, you won’t be able to successfully build your project without fixing all the StyleCop rule violations (which is a good thing!)</p>
-
-<p><strong>02. Integrate StyleCop to MSBuild</strong>
-Naturally if the process is not automatic it won’t work. If, as a developer, it’s left to me to right-click on the project and run StyleCop manually I’d forget it after a few times. The easiest way to integrate it with MSBuild is adding StyleCop.MSBuild NuGet package to your project. Alternatively if you have installed full StyleCop application you have StyleCop.Targets file under your installation directory. By adding that file to the project you can achieve MSBuild integration.</p>
-<blockquote>
-  <import project="R:\StyleCop.BuildTarget\StyleCop.Targets"></import>
-
-</blockquote>
-
-<p>For multiple developer environment it’s best to use a fixed path so that when someone new starts working on the project they can still build the project. To accomplish that, we mapped R drive to a folder that contains the targets file so that the build doesn’t break. Of course needless to say new developers have to do the mapping to make this work.</p>
-
-<p><strong>03. Run StyleCop on the server as well</strong>
-The problem with manually enabling treating warnings as errors feature on the developer system is that it can be easily forgotten or can be temporarily disabled for some reason. When the developer forgets to re-enable it,he/she can check-in code that violates code convention rules. To avoid that we should reject code on the source control during the check-in process.This is where StyleCopSVN comes in. Of course as the name implies this solution works only for SVN. I haven’t yet looked into other source control systems like Git or TFS for this feature yet.
-You can get SVNStyleCop here: <a href="http://svnstylecop.codeplex.com/" target="_blank" rel="noopener noreferrer">http://svnstylecop.codeplex.com/</a></p>
-
-<p>The way it works is quite simple and the official page has a good tutorial about it. Mainly you override the pre-commit hook and run StyleCop from before the code is submitted. The problem with this is that you have to maintain a separate copy of rules and StyleCop files so when you update your rules you have to remember to update it on the server as well.</p>
-
-<p><strong>04. Use symbolic links to maintain one global rule set</strong>
-Windows Vista (and above) comes with a handy utility called <em>mklink</em>. By entering the following command you can create a symbolic link to Settings.StyleCop file anywhere you please.</p>
-<blockquote>
-  <p>mklink /H Settings.StyleCop {Path for the actual file}</p>
-</blockquote>
-
-<p>This way all projects are going use the same settings file. The problem is it’s a tad cumbersome especially if your project involves lots of projects.</p>
-
-<p><strong>05. A better approach for one rule set to rule them all</strong>
-I was pondering for minimizing user efforts to deploy StyleCop and it hit me! Our beloved NuGet could take care of it as well. StyleCop has already a package in the official NuGet repository but the problem with it is that it comes with its own StyleCop rule file so it’s not quite suitable for a team environment. Even not for a single developer because all projects will have different rules and it can quickly become a maintenance nightmare. The idea of using NuGet is creating a package that contains StyleCop rules and libraries. When the package is installed it copies the libraries, rules and targets file under the project. Also an install script can be used to add the import project and treat warnings as errors settings mentioned in tips 1 &amp; 2. The advantages of this method are:</p>
-
-<ul>
-  <li>All projects installing the package will be using the same rule set downloaded from server</li>
-  <li>MSBuild integration is done automatically</li>
-  <li>Treat warnings as errors update is done automatically</li>
-  <li>No configuration needed (i.e: Mapping drives, creating symbolic links etc)</li>
-</ul>
-
-<p>The disadvantage is if rules are updated the package needs to be re-installed for he projects.
-It’s still not perfect but compared to other methods I think it’s a neat way of distributing and enforcing StyleCop rules.</p>
 
 		
 		

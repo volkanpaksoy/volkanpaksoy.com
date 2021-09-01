@@ -109,6 +109,77 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2013/07/13/msp430-launchpad/" itemprop="url">MSP430 LaunchPad</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-07-13T23:44:05+01:00" itemprop="datePublished">July 13, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
+
+<!-- hobby -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">electronics, msp430</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I have a number of electronics kits and boards like Netduino, Arduino and Gadgeteer. Among all the cheapest one I’ve ever seen is Texas Instrument’s MSP430 LaunchPad. Last year I bough one of these just because it was so cheap but couldn’t spend much time on it. I recently found out it has dropped to £8 and I decided to buy the latest version. Now that I have 2 of these babies I definitely need to spend some time to play with them.</p>
+
+<p><img src="/images/vpblogimg/2013/07/MSP430_02.jpg" alt="MSP 430"></p>
+
+<p>Looks like there are a few differences between the two. The one on the left in the picture above is the old version. The new version comes with better controllers and male pins on the side.</p>
+
+<h3 id="installation">Installation</h3>
+<p>First thing to do is go to its official site and download Code Composer Studio to develop programs to run on it. It is an Eclipse-based IDE so I’m hoping it won’t take to long to get acquainted with it.</p>
+
+<h4 id="first-program">First Program</h4>
+<p>Good thing there are plenty of tutorials about it. I decided to follow one of the simplest ones which just blinks one of the on-board LEDs. To be honest, the code looks hideous:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>unsigned int i = 0; 
+void main(void)
+{
+  WDTCTL = WDTPW + WDTHOLD;     
+  P1DIR |= 0x01;
+
+  for (;;)
+  {
+    P1OUT ^= 0x01;
+    for(i=0; i&amp;lt; 20000; i++);
+  }
+}
+</code></pre></div></div>
+
+<p>I deleted the comments to keep it short. But even with detailed comments it looks hard to develop complex applications with this. Anyway, I’ll see how far I can get with it. So far, for this amound of work, the results are not so bad:</p>
+
+<iframe src="//www.youtube.com/embed/ZhPRVO6UKbk" frameborder="0" width="560" height="315"></iframe>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://ti.com/launchpad" target="_blank" rel="noopener noreferrer">MSP430 LaunchPad home site</a></li>
+  <li><a href="http://processors.wiki.ti.com/index.php/Blink_your_first_LED" target="_blank" rel="noopener noreferrer">Blinking LED tutorial</a></li>
+  <li><a href="http://www.youtube.com/watch?v=JfXz3x1tQFA" target="_blank" rel="noopener noreferrer">Blinking LED video tutorial</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2013/07/12/new-toy-beaglebone-black/" itemprop="url">New toy: BeagleBone Black</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -262,152 +333,6 @@ Overall, it’s better to have it than not having it at all I think.</p>
   <li><a href="http://download.microsoft.com/download/7/A/A/7AA570E7-92DF-4C28-BE12-E72831797666/EMET%20User's%20Guide.pdf" target="_blank" rel="noopener noreferrer">Download EMET 4.0 and User’s Guide</a></li>
   <li><a href="http://technet.microsoft.com/en-us/security/dn283932.aspx" target="_blank" rel="noopener noreferrer">Technet article</a></li>
 </ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2013/07/07/study-notes-for-70-461-querying-microsoft-sql-server-2012-part-2/" itemprop="url">Study Notes for 70-461: Querying Microsoft SQL Server 2012 – Part 2</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2013-07-07T18:46:51+01:00" itemprop="datePublished">July  7, 2013</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">certification, sql_server</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>This the Part 2 of my Study notes for 70-461 exam. You can find the Part 1 <a href="https://volkanpaksoy.com/archive/2013/07/06/study-notes-for-70-461-querying-microsoft-sql-server-2012/">here</a></p>
-
-<h3 id="04-aggregate-functions">04. Aggregate Functions</h3>
-
-<ol>
-  <li>
-    <p>GROUPING SETS
- Using GROUPING SETS operator returns the same result set generated by using a GROUP BY, ROLLUP and CUBE operator. For example, this query generates the following result set:</p>
-
-    <div class="highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code> SELECT o.TerritoryID, YEAR(OrderDate) AS SaleYear, SUM(SubTotal) AS Total
- FROM Sales.SalesOrderHeader o
- GROUP BY GROUPING SETS ((), o.TerritoryID, YEAR(OrderDate))
- ORDER BY SaleYear ASC, o.TerritoryID ASC, Total ASC
-</code></pre></div>    </div>
-
-    <p>Output:
- <img src="/images/vpblogimg/2013/07/QueryOutput03.png" alt="Query Output"></p>
-
-    <p>Source: <a href="http://technet.microsoft.com/en-us/library/bb522495(v=sql.105).aspx" target="_blank" rel="noopener noreferrer">http://technet.microsoft.com/en-us/library/bb522495(v=sql.105).aspx</a></p>
-  </li>
-  <li>
-    <p>RANK / DENSE_RANK / NTILE / ROW_NUMBER
- These functions may be quite helpful for reporting queries.</p>
-
-    <p>RANK – DENSE_RANK: These functions help to order rows by assigning an incrementing number based on the criteria used in ORDER BY clause. The difference between them is rank skips the next value when there are two of the same one and dense_rank doesn’t.</p>
-
-    <p><em>Example:</em></p>
-    <div class="highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code> SELECT o.TerritoryID, YEAR(OrderDate) AS SaleYear, SUM(SubTotal) AS Total,
- RANK() OVER(ORDER BY SUM(SubTotal) DESC) AS Rank
- FROM Sales.SalesOrderHeader o
- GROUP BY o.TerritoryID, YEAR(OrderDate)
- ORDER BY Rank, SaleYear ASC, o.TerritoryID ASC, Total ASC
-</code></pre></div>    </div>
-
-    <p><em>Output:</em></p>
-
-    <p><img src="/images/vpblogimg/2013/07/QueryOutput04.png" alt="Query Output"></p>
-  </li>
-  <li>
-    <p>NTILE
- Works like rank but it takes an integer parameter (n) and partitions the results to n-pieces. For example, the query below with NTILE returns 40 rows. As n is 4 in this example, the first 10 rows got rank 1 and 11 – 20 got rank 2 and so forth.
- Example:</p>
-    <div class="highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code> SELECT o.TerritoryID, YEAR(OrderDate) AS SaleYear, SUM(SubTotal) AS Total,
- NTILE(4) OVER(ORDER BY SUM(SubTotal) DESC) AS Rank
- FROM Sales.SalesOrderHeader o
- GROUP BY o.TerritoryID, YEAR(OrderDate)
- ORDER BY Rank, SaleYear ASC, o.TerritoryID ASC, Total ASC
-</code></pre></div>    </div>
-
-    <p><em>Output:</em></p>
-
-    <p><img src="/images/vpblogimg/2013/07/QueryOutput05.png" alt="Query Output"></p>
-
-    <p><em>ROW_NUMBER:</em> Just increments the rank no matter what.
- <em>Example:</em></p>
-
-    <div class="highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code> SELECT o.TerritoryID, YEAR(OrderDate) AS SaleYear, SUM(SubTotal) AS Total,
- ROW_NUMBER() OVER(ORDER BY SUM(SubTotal) DESC) AS Rank
- FROM Sales.SalesOrderHeader o
- GROUP BY o.TerritoryID, YEAR(OrderDate)
- ORDER BY Rank, SaleYear ASC, o.TerritoryID ASC, Total ASC
-</code></pre></div>    </div>
-
-    <p><em>Output:</em></p>
-
-    <p><img src="/images/vpblogimg/2013/07/QueryOutput06.png" alt="Query Output"></p>
-  </li>
-</ol>
-
-<p>Source: <a href="http://msdn.microsoft.com/en-us/library/ms189798.aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/ms189798.aspx</a></p>
-
-<h3 id="05-analytic-functions">05. Analytic Functions</h3>
-<p>LAG / LEAD: When I first saw these I instantly loved them! They prevent an unnecessary costly self-join to access previous and next rows in a result set.</p>
-
-<p>So for example check out the following query and its output:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT o.TerritoryID, YEAR(OrderDate) AS SaleYear, SUM(SubTotal) AS Total,
-LAG(SUM(SubTotal)) OVER(ORDER BY YEAR(OrderDate)) AS PrevYear,
-LEAD(SUM(SubTotal)) OVER(ORDER BY YEAR(OrderDate))  AS NextYear
-FROM Sales.SalesOrderHeader o
-WHERE o.TerritoryID = 1
-GROUP BY o.TerritoryID, YEAR(OrderDate)
-ORDER BY SaleYear ASC, o.TerritoryID ASC, Total ASC
-</code></pre></div></div>
-
-<p><em>Output:</em></p>
-
-<p><img src="/images/vpblogimg/2013/07/QueryOutput07.png" alt="Query Output"></p>
-
-<p>Notice that every row has the previous row’s current value in its PrevYear column. Except the first one obviously as it doesn’t have a previous year. And the same logic applies to the NextYear value with the difference that LEAD function is used to obtain those values.</p>
-
-<p>Source: <a href="http://msdn.microsoft.com/en-us/library/hh213234.aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/hh213234.aspx</a></p>
-
-<h3 id="06-transaction-tips">06. TRANSACTION TIPS</h3>
-<p>One important topic to grasp is transaction isolation levels. I had a few questions related to this topic. Also it is crucial to create high-performance queries.
-The isolation levels you need to pay attention are:</p>
-
-<p>READ UNCOMMITTED: This one is most loose one as it allows dirty reads. But much faster than the others as it doesn’t lock the rows.</p>
-
-<p>READ COMMITTED: It doesn’t allow reading uncommitted data. This is the default level.</p>
-
-<p>REPEATABLE READ: Prevents dirty reads. Concurrent operations cannot modify or delete data.</p>
-
-<p>SERIALIZABLE: This level takes it one step further: In  addition to REPEATABLE READ it prevents concurrent operations from inserting data too.</p>
-
-<p>SNAPSHOT: Specifies that data read by any statement in a transaction will be the transactionally consistent version of the data that existed at the start of the transaction.</p>
-
-<p>Source: <a href="http://msdn.microsoft.com/en-us/library/ms173763.aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/ms173763.aspx</a></p>
 
 		
 		

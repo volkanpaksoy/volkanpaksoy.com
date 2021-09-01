@@ -109,6 +109,119 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2019/08/21/Exploring-AWS-DeepLens/" itemprop="url">Exploring AWS DeepLens</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-08-21T06:00:00+01:00" itemprop="datePublished">August 21, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/machine_learningaws">machine_learning</a></span> -->
+
+<!-- machine_learning, aws -->
+
+
+
+
+    <a href="/category/machine_learning">machine_learning</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">deeplens</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I recently bought this device in anticipation of getting accustomed with AWS Machine Learning services. I thought it would be a nice and fun introduction to build a DIY project using ML. This weekend I had a chance to play around with it.</p>
+
+<h2 id="unboxing">Unboxing</h2>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-unboxing-1.jpeg" alt=""></p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-unboxing-2.jpeg" alt=""></p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-unboxing-3.jpeg" alt=""></p>
+
+<h2 id="registering">Registering</h2>
+
+<p>First thing you need to do is register your DeepLens which can be done <a href="https://docs.aws.amazon.com/deeplens/latest/dg/deeplens-getting-started-register.html" target="_blank" rel="noopener noreferrer">here</a></p>
+
+<p>Alternatively, you can log in to AWS Console, go to AWS DeepLens service and click Register Device. As of this writing this service is only available in Tokyo, N.Virginia and Frankfurt. As closest to me is Frankfurt I chose that one.</p>
+
+<h2 id="creating-a-project">Creating a Project</h2>
+
+<p>Now that the devices is ready, I went to Projects section and created a new project based on a template. For this initial exploration mission I chose Bird Classification template.</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-project-templates.png" alt=""></p>
+
+<p>When you choose your template it shows a description of the template and how it works</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-project-overview.png" alt=""></p>
+
+<p>Once you create the project it creates the necessary resources. For example in my template it created 2 Lambda functions:</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-lambda.png" alt=""></p>
+
+<p>Now we are ready to deploy the project to the device so we can simply click on Deploy to Device button on top right-hand corner in the project page:</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-deploy-to-device.png" alt=""></p>
+
+<p>After that you choose your DeepLens from the avialble device list (in my case I had one device) and click Review then Deploy</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-deploy-review.png" alt=""></p>
+
+<h2 id="testing-the-project">Testing the project</h2>
+
+<p>First I followed the steps to install custom certificate so that I can start viewing the video feed in my browser:</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-video-feed-1.png" alt=""></p>
+
+<p>Because DeepLens doesn’t know if there’s a bird or not in the picture it constantly makes a guess. Even an empty carton box looks like a Long Tailed Jaeger with 2.1% confidence apparently!</p>
+
+<p>When I presented an image I found from the Internet the results significantly improved though (thankfully, otherwise this would all be for nothing!)</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-video-feed-2.png" alt=""></p>
+
+<p>According to Google the bird in the picture is indeed a Kingfisher.</p>
+
+<p>Next test is the bird I saw on the roof and identified as a Mallard. Let’s see what DeepLens thinks about it:</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-video-feed-3.png" alt=""></p>
+
+<p>So with 17.5% confidens DeepLenms agrees that it is a Mallard. One thing to note is that the angle of the image significantly changes the prediction. Even a slight change in the angle makes the prediction shift from 3% to 45%. But it’s just a test project template anyway so I’m not looking for too much accuracy at this point.</p>
+
+<p>Final test: I downloaded the dataset used to train the algorithm. It’s a 1.1GB download full of images. To compare with the last Mallard test I got one picture from the Mallard folder and showed it to DeepLens:</p>
+
+<p><img src="/images/vpblogimg/2019/08/deeplens-video-feed-4.png" alt=""></p>
+
+<p>As shown above the confidence increased to 55%. So probably if I use the pictures I took to train the algorithm I would be able to get much better results.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>This was just a first step to set up and explore the device. Hopefully in the comin days I’ll be doing more meaningful projects with it and post those too.</p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="https://aws.amazon.com/deeplens/" target="_blank" rel="noopener noreferrer">AWS DeepLens Site</a></li>
+  <li><a href="https://aws.amazon.com/blogs/aws/aws-deeplens-now-orderable-in-seven-additional-countries" target="_blank" rel="noopener noreferrer">AWS DeepLens – Now Orderable in Seven Additional Countries</a></li>
+  <li><a href="http://www.vision.caltech.edu/visipedia/CUB-200-2011.html" target="_blank" rel="noopener noreferrer">Caltech-UCSD Birds-200-2011</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2019/08/10/Implementing-a-Self-Hosted-Docker-Registry-on-Raspberry-Pi/" itemprop="url">Implementing a Self-Hosted Docker Registry on Raspberry Pi</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -538,305 +651,6 @@ bulkAll.Wait(TimeSpan.FromSeconds(60),
   <li><a href="https://www.elastic.co/guide/en/elasticsearch/client/net-api/7.x/index.html" target="_blank" rel="noopener noreferrer">Elasticsearch.Net and NEST: the .NET clients 7.x</a></li>
   <li><a href="https://www.elastic.co/blog/a-practical-introduction-to-elasticsearch" target="_blank" rel="noopener noreferrer">A Practical Introduction to Elasticsearch</a></li>
   <li><a href="https://rimdev.io/bulk-import-documents-into-elasticsearch-using-nest/" target="_blank" rel="noopener noreferrer">Bulk Import Documents Into Elasticsearch Using NEST</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2019/06/27/Generating-Test-Data-with-Bogus/" itemprop="url">Generating Test Data with Bogus</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2019-06-27T07:00:00+01:00" itemprop="datePublished">June 27, 2019</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">csharp, fake, test, data</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Generating high-quality test data can have an impact on the accuracy of the tests overall. In this post I’ll show using a helpful C# library called <a href="https://github.com/bchavez/Bogus" target="_blank" rel="noopener noreferrer">Bogus</a></p>
-
-<h2 id="showcase-project-bank-statement-generator">Showcase project: Bank Statement Generator</h2>
-<p>In this example I’ll generate fake bank statements. Normally they come in CSV files and have the following model:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">BankStatementLine</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="n">DateTime</span> <span class="n">TransactionDate</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">TransactionType</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">SortCode</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">AccountNumber</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">TransactionDescription</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">decimal</span><span class="p">?</span> <span class="n">DebitAmount</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">decimal</span><span class="p">?</span> <span class="n">CreditAmount</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">decimal</span> <span class="n">Balance</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>I’ll use Bogus to generate realistic fake statement lines and finally save it as a CSV and see if it looks real.</p>
-
-<h2 id="rules-and-restrictions">Rules and restrictions</h2>
-<p>I want the fields in the model above conform to certain set of rules to be realistic:</p>
-
-<ul>
-  <li>Transaction Date must be within a certain range I provide as bank statements are generated for a date range.</li>
-  <li>Dates should be incremental and not random</li>
-  <li>Sort Code must be in the following format: NN-NN-NN and must be the same for the entire statement.</li>
-  <li>Account number must be an 8-digit number and same for the entire statement.</li>
-  <li>Transaction Description must be free text</li>
-  <li>Debit Amount and Credit Amount must be decimal numbers but only one of them can be present at any given line</li>
-  <li>Transaction Type must be one of the pre-defined values and also some types can be for credit and some for debit only.</li>
-  <li>Balance should be sum of all debit and credit amounts plus the first balance in the statement. So this value is dependent on the values that come before it.</li>
-  <li>The number of lines in a statement should be random.</li>
-</ul>
-
-<h2 id="rule-implementations">Rule implementations</h2>
-<p>Some rules stated above are very straightforward and easy to implement. These are some samples of what Bogus is capable of. For the full documentation check out the GitHub repository.</p>
-
-<h3 id="date-range-support">Date range support</h3>
-<p>Generating a date between a range is simple:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">TransactionDate</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Date</span><span class="p">.</span><span class="nf">Between</span><span class="p">(</span><span class="n">startDate</span><span class="p">,</span> <span class="n">endDate</span><span class="p">))</span>
-</code></pre></div></div>
-
-<h3 id="enum-and-array-support">Enum and array support</h3>
-<p>For Transaction Type I want to select a random value from a list of set values. This can be done in 2 ways: By using an enum or an IEnumerable.</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">transactionTypes</span> <span class="p">=</span> <span class="k">new</span><span class="p">[]</span> <span class="p">{</span> <span class="s">"FPO"</span><span class="p">,</span> <span class="s">"DEB"</span><span class="p">,</span> <span class="s">"DB"</span><span class="p">,</span> <span class="s">"FPI"</span> <span class="p">};</span>
-</code></pre></div></div>
-
-<p>and in the rule description it can be used as</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">TransactionType</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="nf">PickRandom</span><span class="p">(</span><span class="n">transactionTypes</span><span class="p">)</span> <span class="p">)</span>
-</code></pre></div></div>
-
-<p>Another way is using enums such as:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">enum</span> <span class="n">TransactionType</span>
-<span class="p">{</span>
-    <span class="n">FPO</span><span class="p">,</span>
-    <span class="n">DEB</span><span class="p">,</span>
-    <span class="n">DB</span><span class="p">,</span>
-    <span class="n">FPI</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>and the rule becomes:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">TransactionType</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">PickRandom</span><span class="p">&lt;</span><span class="n">TransactionType</span><span class="p">&gt;().</span><span class="nf">ToString</span><span class="p">())</span>
-</code></pre></div></div>
-
-<p>In my final implementation I used selecting from a list of objects. You can check out the <a href="https://github.com/volkanpaksoy/lab/tree/master/blog/GeneratingTestDataWithBogus" target="_blank" rel="noopener noreferrer">sample code</a> to see that version.</p>
-
-<h3 id="number-range">Number range</h3>
-<p>For the account number I need an 8-digit number which can be achieved with something like this rule:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">AccountNumber</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Long</span><span class="p">(</span><span class="m">100000000</span><span class="p">,</span> <span class="m">99999999</span><span class="p">).</span><span class="nf">ToString</span><span class="p">())</span>
-</code></pre></div></div>
-
-<p>Bogus API also has builtin support for account number so the following is a more elegant and expressive way of achieving the same:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">AccountNumber</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Finance</span><span class="p">.</span><span class="nf">Account</span><span class="p">())</span>
-</code></pre></div></div>
-
-<h3 id="formatting-string">Formatting string</h3>
-<p>Formatting Sort Code can be achieved by Field.Random.Replace method</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">SortCode</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Replace</span><span class="p">(</span><span class="s">"##-##-##"</span><span class="p">))</span>
-</code></pre></div></div>
-
-<p>Similar to account number, it also has built-in support for sort code:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">SortCode</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Finance</span><span class="p">.</span><span class="nf">SortCode</span><span class="p">())</span>
-</code></pre></div></div>
-
-<h3 id="null-values">Null values</h3>
-<p>In my case in some fields I’d like to have null values too. This can be achieved by <em>OrNull</em> extension method. For example, in the code below it generates %20 of DebitAmount values null.</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">DebitAmount</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Decimal</span><span class="p">(</span><span class="m">0.00</span><span class="n">m</span><span class="p">,</span> <span class="m">9999.00</span><span class="n">m</span><span class="p">).</span><span class="nf">OrNull</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="m">0.2f</span><span class="p">))</span>
-</code></pre></div></div>
-
-<h3 id="common-fields">Common fields</h3>
-<p>In my case some values in each statement line repeat throughout the entire statement such as account number and sort code. To achieve that I created a “base” statement line and every fake statement line used these shared fields instead of generating new ones.</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">commonFields</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Faker</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;()</span>
-    <span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">AccountNumber</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Finance</span><span class="p">.</span><span class="nf">Account</span><span class="p">())</span>
-    <span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">SortCode</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Finance</span><span class="p">.</span><span class="nf">SortCode</span><span class="p">())</span>
-    <span class="p">.</span><span class="nf">Generate</span><span class="p">();</span>
-
-
-<span class="kt">var</span> <span class="n">fakeTransactions</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Faker</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;()</span>
-    <span class="p">.</span><span class="nf">StrictMode</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
-    <span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">AccountNumber</span><span class="p">,</span> <span class="n">commonFields</span><span class="p">.</span><span class="n">AccountNumber</span><span class="p">)</span>
-    <span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">SortCode</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">commonFields</span><span class="p">.</span><span class="n">SortCode</span><span class="p">)</span>
-	<span class="p">...</span>
-	<span class="p">...</span>
-</code></pre></div></div>
-
-<h3 id="random-number-of-objects">Random number of objects</h3>
-<p>It’s more realistic to have varying number of lines in statements. With Generate method you can specify the exact number of items you want to generate which is good for unit tests. For my purposes I just wanted to create random of rows in each statement as I only needed the data to be imported. This can be achieved by GenerateBetween:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">statementLines</span> <span class="p">=</span> <span class="n">fakeTransactions</span><span class="p">.</span><span class="nf">GenerateBetween</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">20</span><span class="p">);</span>
-</code></pre></div></div>
-
-<h3 id="dependent-values">Dependent values</h3>
-<p>The tricky part in this scenario was the dependent values. Normally when you use RuleFor extension method it generates the value for that field alone in isolation. In my case, one restriction was Debit Amount and Credit Amount could not both have values in the same line. Also Balance depends on these values and needs to be calculated in each line.</p>
-
-<p>As far as I can tell there’s no built-in support to define these dependencies. Based on my tests I was able to achieve this in 2 ways</p>
-
-<ol>
-  <li>Update the values accordingly in <strong>FinishWith</strong> extension method</li>
-  <li>Use <strong>Rules</strong> extension method to define multiple rules at once and implement the restrictions inside it.</li>
-</ol>
-
-<p>I think the latter is a better solution as FinishWith sounds more like clean up, logging or similar extra activity where Rules sound more like actual business logic implementation.</p>
-
-<p>So with that in mind my rules for Debit Amount, Credit Amount and Balance fields looked like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">Rules</span><span class="p">((</span><span class="n">f</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="p">=&gt;</span>
-<span class="p">{</span>
-    <span class="kt">var</span> <span class="n">debitAmount</span> <span class="p">=</span> <span class="p">(</span><span class="kt">decimal</span><span class="p">?)</span><span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Decimal</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">100</span><span class="p">).</span><span class="nf">OrNull</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="m">1.0f</span> <span class="p">-</span> <span class="n">statementconfig</span><span class="p">.</span><span class="n">DebitTransactionRatio</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">debitAmount</span><span class="p">.</span><span class="n">HasValue</span><span class="p">)</span> <span class="c1">// Is it a debit transaction?</span>
-    <span class="p">{</span>
-        <span class="n">x</span><span class="p">.</span><span class="n">CreditAmount</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
-        <span class="n">x</span><span class="p">.</span><span class="n">DebitAmount</span> <span class="p">=</span> <span class="n">debitAmount</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span>
-        <span class="n">balance</span> <span class="p">-=</span> <span class="n">x</span><span class="p">.</span><span class="n">DebitAmount</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span>
-
-        <span class="n">x</span><span class="p">.</span><span class="n">TransactionType</span> <span class="p">=</span> <span class="n">f</span><span class="p">.</span><span class="nf">PickRandom</span><span class="p">(</span><span class="n">TransactionType</span><span class="p">.</span><span class="n">AllTransactionTypes</span>
-            <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">tt</span> <span class="p">=&gt;</span> <span class="n">tt</span><span class="p">.</span><span class="n">Direction</span> <span class="p">==</span> <span class="n">TransactionDirection</span><span class="p">.</span><span class="n">Debit</span> <span class="p">||</span> <span class="n">tt</span><span class="p">.</span><span class="n">Direction</span> <span class="p">==</span> <span class="n">TransactionDirection</span><span class="p">.</span><span class="n">DebitOrCredit</span><span class="p">)</span>
-            <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">tt</span> <span class="p">=&gt;</span> <span class="n">tt</span><span class="p">.</span><span class="n">Code</span><span class="p">));</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">creditAmount</span> <span class="p">=</span> <span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Decimal</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">100</span><span class="p">);</span>
-        <span class="n">x</span><span class="p">.</span><span class="n">DebitAmount</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
-        <span class="n">x</span><span class="p">.</span><span class="n">CreditAmount</span> <span class="p">=</span> <span class="n">creditAmount</span><span class="p">;</span>
-
-        <span class="n">balance</span> <span class="p">+=</span> <span class="n">x</span><span class="p">.</span><span class="n">CreditAmount</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span>
-
-        <span class="n">x</span><span class="p">.</span><span class="n">TransactionType</span> <span class="p">=</span> <span class="n">f</span><span class="p">.</span><span class="nf">PickRandom</span><span class="p">(</span><span class="n">TransactionType</span><span class="p">.</span><span class="n">AllTransactionTypes</span>
-            <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">tt</span> <span class="p">=&gt;</span> <span class="n">tt</span><span class="p">.</span><span class="n">Direction</span> <span class="p">==</span> <span class="n">TransactionDirection</span><span class="p">.</span><span class="n">Credit</span> <span class="p">||</span> <span class="n">tt</span><span class="p">.</span><span class="n">Direction</span> <span class="p">==</span> <span class="n">TransactionDirection</span><span class="p">.</span><span class="n">DebitOrCredit</span><span class="p">)</span>
-            <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">tt</span> <span class="p">=&gt;</span> <span class="n">tt</span><span class="p">.</span><span class="n">Code</span><span class="p">));</span>
-    <span class="p">}</span>
-
-    <span class="n">x</span><span class="p">.</span><span class="n">Balance</span> <span class="p">=</span> <span class="n">balance</span><span class="p">;</span>
-<span class="p">});</span>
-</code></pre></div></div>
-
-<p>A caveat with this approach is that I cannot use <strong>StrictMode</strong> anymore as it complains about those 3 fields having null values. It specifically mentions that in the exception. If you use Rules you’re on your own to ensure that all fields are populated properly.</p>
-
-<p>Another drawback of setting multiple rules at once is that it can easily make the code harder to read. Fortunately for me, the author of the library <a href="https://bchavez.bitarmory.com/" target="_blank" rel="noopener noreferrer">Brian Chavez</a> kindly reviewed the code and suggested some refactorings one of which proved it was still possible to use <strong>RuleFor</strong> method and strict mode. I’ve updated the final source code with these refactorings. So with individual rules the implementation looks like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">DebitAmount</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="p">(</span><span class="kt">decimal</span><span class="p">?)</span><span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Decimal</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">100</span><span class="p">).</span><span class="nf">OrNull</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="m">1.0f</span> <span class="p">-</span> <span class="n">statementconfig</span><span class="p">.</span><span class="n">DebitTransactionRatio</span><span class="p">);</span>
-<span class="p">})</span>
-<span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">CreditAmount</span><span class="p">,</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="p">=&gt;</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="n">x</span><span class="p">.</span><span class="nf">IsCredit</span><span class="p">()</span> <span class="p">?</span> <span class="p">(</span><span class="kt">decimal</span><span class="p">?)</span><span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Decimal</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">100</span><span class="p">)</span> <span class="p">:</span> <span class="k">null</span><span class="p">;</span>
-<span class="p">})</span>
-<span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">TransactionType</span><span class="p">,</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="p">=&gt;</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="nf">IsCredit</span><span class="p">())</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="nf">RandomTxCode</span><span class="p">(</span><span class="n">TransactionDirection</span><span class="p">.</span><span class="n">Credit</span><span class="p">);</span> <span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="nf">RandomTxCode</span><span class="p">(</span><span class="n">TransactionDirection</span><span class="p">.</span><span class="n">Debit</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="kt">string</span> <span class="nf">RandomTxCode</span><span class="p">(</span><span class="n">TransactionDirection</span> <span class="n">direction</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="n">f</span><span class="p">.</span><span class="nf">PickRandom</span><span class="p">(</span><span class="n">TransactionType</span><span class="p">.</span><span class="n">AllTransactionTypes</span>
-            <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">tt</span> <span class="p">=&gt;</span> <span class="n">tt</span><span class="p">.</span><span class="n">Direction</span> <span class="p">==</span> <span class="n">direction</span> <span class="p">||</span> <span class="n">tt</span><span class="p">.</span><span class="n">Direction</span> <span class="p">==</span> <span class="n">TransactionDirection</span><span class="p">.</span><span class="n">DebitOrCredit</span><span class="p">)</span>
-            <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">tt</span> <span class="p">=&gt;</span> <span class="n">tt</span><span class="p">.</span><span class="n">Code</span><span class="p">));</span>
-    <span class="p">}</span>
-<span class="p">})</span>
-<span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Balance</span><span class="p">,</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="p">=&gt;</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="nf">IsCredit</span><span class="p">())</span>
-        <span class="n">balance</span> <span class="p">+=</span> <span class="n">x</span><span class="p">.</span><span class="n">CreditAmount</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span>
-    <span class="k">else</span>
-        <span class="n">balance</span> <span class="p">-=</span> <span class="n">x</span><span class="p">.</span><span class="n">DebitAmount</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span>
-
-    <span class="k">return</span> <span class="n">balance</span><span class="p">;</span>
-<span class="p">});</span>
-</code></pre></div></div>
-
-<p>IsDebit and IsCredit methods referred to above are extension methods defined like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">static</span> <span class="k">class</span> <span class="nc">Extensions</span>
-<span class="p">{</span>
-   <span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="nf">IsCredit</span><span class="p">(</span><span class="k">this</span> <span class="n">BankStatementLine</span> <span class="n">bsl</span><span class="p">)</span>
-   <span class="p">{</span>
-      <span class="k">return</span> <span class="n">bsl</span><span class="p">.</span><span class="n">DebitAmount</span> <span class="k">is</span> <span class="k">null</span><span class="p">;</span>
-   <span class="p">}</span>
-   <span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="nf">IsDebit</span><span class="p">(</span><span class="k">this</span> <span class="n">BankStatementLine</span> <span class="n">bsl</span><span class="p">)</span>
-   <span class="p">{</span>
-      <span class="k">return</span> <span class="p">!</span><span class="nf">IsCredit</span><span class="p">(</span><span class="n">bsl</span><span class="p">);</span>
-   <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="random-text">Random text</h3>
-<p>For the transaction description for now I’ll go with random Lorem Ipsum texts. Bogus has support for this too</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">TransactionDescription</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">Lorem</span><span class="p">.</span><span class="nf">Sentence</span><span class="p">(</span><span class="m">3</span><span class="p">))</span>
-</code></pre></div></div>
-
-<p>I probably will need to use a fixed list of descriptions soon but for the time being it’s fine. Also as shown below it’s very easy to switch to that too.</p>
-
-<h3 id="incremental-values">Incremental values</h3>
-<p>Similar to balance being dependent on the previous values, transaction date is also dependent as it needs to go in an incremental fashion. I couldn’t find built-in support for this so implemented it using my own shared variable like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">.</span><span class="nf">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">TransactionDate</span><span class="p">,</span> <span class="n">f</span> <span class="p">=&gt;</span>
-<span class="p">{</span>
-    <span class="n">lastDate</span> <span class="p">=</span> <span class="n">lastDate</span><span class="p">.</span><span class="nf">AddDays</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">Random</span><span class="p">.</span><span class="nf">Double</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">statementconfig</span><span class="p">.</span><span class="n">TransactionDateInterval</span><span class="p">));</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">lastDate</span><span class="p">.</span><span class="n">Date</span> <span class="p">&gt;</span> <span class="n">statementconfig</span><span class="p">.</span><span class="n">EndDate</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">lastDate</span> <span class="p">=</span> <span class="n">statementconfig</span><span class="p">.</span><span class="n">EndDate</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">lastDate</span><span class="p">;</span>
-<span class="p">})</span>
-</code></pre></div></div>
-
-<h2 id="putting-it-all-together">Putting It All Together</h2>
-<p>So let’s see the output with the help of another nice library called <a href="https://github.com/khalidabuhakmeh/ConsoleTables" target="_blank" rel="noopener noreferrer">Console Tables</a></p>
-
-<p><img src="/images/vpblogimg/2019/06/generating-test-data-with-bogus-output.png" alt=""></p>
-
-<h2 id="source-code">Source Code</h2>
-<p></p>
-<div class="github-widget" data-repo="volkanpaksoy/lab"></div>
-
-<p>Sample application can be found under blog/GeneratingTestDataWithBogus folder in the repository.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://github.com/bchavez/Bogus" target="_blank" rel="noopener noreferrer">Bogus GitHub repository</a></li>
-  <li><a href="https://github.com/khalidabuhakmeh/ConsoleTables" target="_blank" rel="noopener noreferrer">Console Tables repository</a></li>
-  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/GeneratingTestDataWithBogus" target="_blank" rel="noopener noreferrer">Sample source code</a></li>
-  <li><a href="https://bchavez.bitarmory.com/" target="_blank" rel="noopener noreferrer">Author Brian Chavez’s website</a></li>
 </ul>
 
 		

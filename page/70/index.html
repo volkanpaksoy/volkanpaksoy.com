@@ -109,6 +109,65 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2011/09/11/my-rss-feeds-came-back-from-the-dead/" itemprop="url">My RSS feeds came back from the dead</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2011-09-11T05:18:42+01:00" itemprop="datePublished">September 11, 2011</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
+
+<!-- misc -->
+
+
+
+
+    <a href="/category/misc">misc</a>
+    
+</span>
+	<span class="tags">rss, google_reader, sqlite</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I use RSS feeds extensively to follow the tech news. I love Google Reader and i’ve been using it since forever. But lately i realized that i didn’t have much experience in tweaking the settings. I didn’t feel the urge to go into settings and manage my subscriptions. Until 10 ten days ago.</p>
+
+<p>I decided to eliminate some feeds because they seemed to be inactive for a long time. So i clicked on Manage subscriptions link which, by the way has a horrible place from a UI standpoint. It is not even always visible. When you hover on feeds the URL of the feed covers the button.</p>
+
+<p><img src="/images/vpblogimg/2011/09/image.png" alt="Google Reader"></p>
+
+<p>After fiddling a little with the labels, I made a horrible mistake: I selected all items and clicked Unsubscribe. As one may easily guess, it deleted all my subscriptions.</p>
+
+<p><img src="/images/vpblogimg/2011/09/image1.png" alt="Google Reader"></p>
+
+<p>I had an OPML backup long ago but i don’t even know where it is now. Even if I looked for and found it would probably be out-dated beyond use. <em>Lesson learnt: Start backing up RSS feeds regularly and automatically.</em>
+While i was desperately pondering what i should do to recover my beloved little messengers, it hit me! I had an application on My iPad called Mr. Reader. It syncs with Google Reader so i also had my entire list of feeds on my iPad. I was hoping the app to support OPML exports so that everything would get back to normal in 5 minutes. Unfortunately, it didn’t! At least i was lucky that iPad was offline at the moment so it couldn’t sync and kept my feeds on the device. (Needless to say, i immediately turned off network access, quarantining my list!)
+I contacted the support of app’s company, which is the developer himself and he was very kind to respond quickly and offering me a few solutions. One of them was extracting the data from iPad by using a tool called JuicePhone (<a href="http://www.addpod.de/juicephone" target="_blank" rel="noopener noreferrer">http://www.addpod.de/juicephone</a>). It’s a free application. I installed it to my Mac immediately, hooked up my iPad and extracted all my data from it. <em>Lesson learnt: Start backing up iPad regularly via JuicePhone as well as iTunes.</em></p>
+
+<p>After a quick examination, I found out that the app is using an SQLite database to store its data. I downloaded SQLite Expert (<a href="http://www.sqliteexpert.com" target="_blank" rel="noopener noreferrer">http://www.sqliteexpert.com</a>)</p>
+
+<p><img src="/images/vpblogimg/2011/09/image2.png" alt="sqlite expert"></p>
+
+<p>It has a free version called Personal Edition and it seems to have a quite nice UI. Browsing through tables and viewing their data I felt quite relieved when I saw that the list of my feeds safe and sound.</p>
+
+<p><img src="/images/vpblogimg/2011/09/image3.png" alt="sqlite expert"></p>
+
+<p>Now that I have all my feeds, I think it’s a great chance to organize and add or remove them controllably.
+By the way, after I completed getting my list I sent an email to the author of the app thanking and telling him that i managed to extract my data. A few days later the software updated itself mentioning some change about database. Then i added a new feed and applied the same steps above, to use if it still works, but the database seemed to be the same. I mean the app synced and deleted all my subscriptions and added the new test feed. But the list on the table is the same as before. Maybe he decided to keep its data privately somewhere else to keep it from people like me. Anyway, his advice worked out for me perfectly so I thank him again from here.</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2011/07/19/niceties-of-trialpay/" itemprop="url">Niceties of TrialPay</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -192,47 +251,13 @@
     </article>
 
 
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2011/06/14/blind-password-masking/" itemprop="url">Blind Password Masking</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2011-06-14T04:46:18+01:00" itemprop="datePublished">June 14, 2011</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
-
-<!-- misc -->
-
-
-
-
-    <a href="/category/misc">misc</a>
-    
-</span>
-	<span class="tags">password_masking, security</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I hate blind password masking. I want to see what i type. If there is  nobody around to peep at my screen, which is most of the time, then  masked passwords provides me no protection. Only helps for creating  occasional troubles..</p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
 </div>
 <nav id="pagenavi">
     
         <a href="/page/69" class="prev">Prev</a>
     
+    
+        <a href="/page/71" class="next">Next</a>
     
     <div class="center"><a href="/archive">Blog Archives</a></div>
 </nav>

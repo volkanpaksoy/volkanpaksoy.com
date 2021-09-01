@@ -109,6 +109,65 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2013/12/10/devops/" itemprop="url">DevOps</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-12-10T22:01:42+00:00" itemprop="datePublished">December 10, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devops">devops</a></span> -->
+
+<!-- devops -->
+
+
+
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags"></span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>DevOps (Development + Operations) is one of most popular terms in the IT world recently. From what I’ve read and listened to so far, my understanding is it is all about continuous deployment (or delivery). Basically, you have to automate everything from development to deployment to practice DevOps.</p>
+
+<h3 id="current-problem">Current problem</h3>
+<p>Traditionally, successful deployment is a huge challenge. It is mostly a manual and cumbersome process. Because of its sensitive nature the system admins are not huge fans of deployments. Also, another challenge is the miscommunication (or no communication in some cases) between system admin and development teams. They are generally run by different high-level executives and their priorities conflict most of the time.</p>
+
+<h3 id="solution">Solution</h3>
+<p>On the philosophical side, DevOps is bringing these teams together and work in harmony. Having social events with both teams’ attendance is a key to build confidence among team members. As Richard Campbell (from <a href="http://runasradio.com/" target="_blank" rel="noopener noreferrer">RunAsRadio</a> and <a href="http://dotnetrocks.com" target="_blank" rel="noopener noreferrer">.NET Rocks</a> podcasts) says “Pizza and beer is a global lubricant”.</p>
+
+<h4 id="dev">Dev…</h4>
+<p>On the development side, the key requirement is continuous integration. You have to able to run unit tests and acceptance tests automatically on build servers. This means development has to be done in short sprints in an agile way with frequent check-ins. One step further of this stage is continuous deployment.</p>
+
+<h4 id="ops">…Ops</h4>
+<p>This is where the IT team comes into play. When the whole system is automated, deploying to production frequently and without much headache becomes possible. Cloud computing is one of the core technologies that makes DevOps possible. Ability to manage virtual machines programmatically (i.e. AWS, OpenStack) leads to a whole bunch of possibilities.</p>
+
+<p>This is a fairly complex topic encompassing many disciplines and technologies. Also it’s quite dynamic and open to innovation. Definitely worth keeping an eye on.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://en.wikipedia.org/wiki/DevOps" target="_blank" rel="noopener noreferrer">Wikipedia article</a></li>
+  <li><a href="http://www.runasradio.com" target="_blank" rel="noopener noreferrer">RunAsRadio podcast - Building the Culture of DevOps with Steven Murawski</a></li>
+  <li><a href="http://www.cert.org/podcast/mp3/2/20130730kim-full.mp3" target="_blank" rel="noopener noreferrer">Cert.org podcast - DevOps - Transform Development and Operations for Fast, Secure Deployments</a></li>
+  <li><a href="http://vimeo.com/67110005" target="_blank" rel="noopener noreferrer">Richard Campbell DevOps talk on Vimeo</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2013/11/27/256-bit-ssl-support-with-windows-server/" itemprop="url">256-bit SSL Support with Windows Server</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -214,78 +273,6 @@
 <p><img src="/images/vpblogimg/2013/11/BeerExplorer.png" alt="Beer Explorer"></p>
 
 <p>It’s just a simple exercise to browse Couchbase repositories. It was helpful for me and I hope you find it helpful too.</p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2013/11/22/exploring-cloud-further-rackspace/" itemprop="url">Exploring cloud further: Rackspace</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2013-11-22T21:06:29+00:00" itemprop="datePublished">November 22, 2013</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/devops">devops</a></span> -->
-
-<!-- devops -->
-
-
-
-
-    <a href="/category/devops">devops</a>
-    
-</span>
-	<span class="tags">rackspace</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>**It’s been a while since I’ve started using Amazon Web Services (AWS) to host my sites. I think it’s a great platform as you only pay for what you use and there are lots of options. And the best part is anything you can do via their user interface (and more) can be done programmatically via their API. I’m extremely happy using AWS but still I wanted to see what its competitors are doing.</p>
-
-<h3 id="enter-rackspace">Enter RackSpace</h3>
-<p><img src="/images/vpblogimg/2013/11/RackSpaceLogo.jpg" alt="RackSpace"></p>
-
-<p>So I decided to test RackSpace first. One reason for selecting it is that it has a data centre in London (the closest AWS data centre to UK is in Dublin). Also it is based on <a href="http://www.openstack.org/" target="_blank" rel="noopener noreferrer">OpenStack</a> platform which I wanted to play with for some time. I created my free account but it needs to be activated after you receive a call from a staff member. He just asked basic questions like my username and the reason I created the account. After the call the account was activated and I was ready to explore this new land.</p>
-
-<p><img src="/images/vpblogimg/2013/11/RackSpace_01.png" alt="Servers"></p>
-
-<h3 id="first-impressions">First Impressions</h3>
-<p>This is still a work in progress actually, I cannot say I have fully covered everything about it. Here are just my first impressions and comparisons with AWS:</p>
-
-<h4 id="pricing--billing">Pricing &amp; Billing</h4>
-<p>Maybe I’m cheap but my first order of business was compare the prices! The cheapest Linux configuration starts from £0.030/hr. You can find the entire list <a href="http://www.rackspace.co.uk/cloud/servers/pricing" target="_blank" rel="noopener noreferrer">here</a>. As the site I’m planning to migrate didn’t need much resources I decided to go with the cheapest one: 1GB RAM, 1vCPU, 20GB SSD. After the migration I’m quite happy with its performance.</p>
-
-<p>One interesting thing I noticed is, unlike AWS, you pay for the machine even if you stop it. Excerpt from a documentation says “<em>Shutting down a server will <strong>NOT</strong> stop billing, since the virtual hard drives are persistent, server resources are always in use whether the servers is powered on or not.”</em>
-Now that’s not cool! Actually if you are running web-based systems you never stop the machines anyway. But there are many times I preferred to keep the old machine stopped for a period until the new machine proves to functioning fully for example. It’s nice to have the chance to rollback easily if need be. Of course you can do it here too, but you just have to pay twice as much during that period.</p>
-
-<h4 id="features">Features</h4>
-<p>When trying to configure the machine I noticed there isn’t a feature like Security Groups of AWS. I had to update the <em>iptables</em> configuration on the machine. Which would make it hard to manage firewall rules in a multi-machine environment. In AWS you just add the new machine to an existing security group and forget about it because all the existing rules are applied to the new one automatically.</p>
-
-<h4 id="programmability-and-api">Programmability and API</h4>
-<p><img src="/images/vpblogimg/2013/11/OpenStackLogo.jpg" alt="OpenStack"></p>
-
-<p>Even though I haven’t developed anything for it yet, I just wanted to see what are our capabilities and how would I develop something when I needed. All I needed to do was get the NuGet package and I was ready to get the list of my machines in a a few minutes. Basically you can manage machines, images, volumes pretty much like AWS. I’ll put a pin to it for now and develop some tools for myself later.</p>
-
-<p><img src="/images/vpblogimg/2013/11/RackSpace_02.png" alt="Program"></p>
-
-<h3 id="conclusion">Conclusion</h3>
-<p>I think the best thing about RackSpace is that it is built on top of OpenStack. This means if you your system to another vendor your applications using the API can remain intact. Also as it is open source software you can build your own data centre if you wanted to. Of course it sounds good to geek ears but I guess in real world it doesn’t have much value as such migration of systems are quite often. Other than that I didn’t see any advantages over AWS but I’ll keep the machine running for a while and see how it goes.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://www.openstack.org/" target="_blank" rel="noopener noreferrer">OpenStack website</a></li>
-  <li><a href="https://github.com/rackspace/openstack.net" target="_blank" rel="noopener noreferrer">OpenStack .NET SDK Source</a></li>
-</ul>
-
 
 		
 		

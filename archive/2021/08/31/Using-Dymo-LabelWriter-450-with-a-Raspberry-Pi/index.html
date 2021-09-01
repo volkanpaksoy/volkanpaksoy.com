@@ -1,0 +1,263 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Using Dymo LabelWriter 450 with a Raspberry Pi - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2021/08/31/Using-Dymo-LabelWriter-450-with-a-Raspberry-Pi/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+  
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+<br>
+<br>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+<!-- AdUnit01 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Using Dymo LabelWriter 450 with a Raspberry Pi</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2021-08-31T07:00:00+01:00" itemprop="datePublished">August 31, 2021</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- hobby -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">raspberry_pi, productivity, dymo. labelwriter_450</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>I have a Dymo LabelWriter 450 for years and I love using it. Especially it worked a miracle recently when I organised all ny shelves and bagged and labelled everything. To have the ability of keeping the printer online all the time and print easily I decided to plug it in a Raspberry Pi and share over the network. The steps below explain how it can be done easily:</p>
+
+<h2 id="step-01-plug-in-the-printer-to-the-pi-via-usb">Step 01: Plug in the printer to the Pi via USB</h2>
+<p>Simply plug it in and power it on.</p>
+
+<h2 id="step-02">Step 02:</h2>
+<ul>
+  <li>Click Pi -&gt; Preferences -&gt; Add / Remove Software</li>
+  <li>Search “dymo”</li>
+  <li>Tick the checkbox next to “printer driver for DYMO label printers”</li>
+  <li>Click Apply and wait for the installation to complete</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/01-add-drivers.jpg" alt=""></p>
+
+<h2 id="step-03-configure-printer">Step 03: Configure printer</h2>
+<ul>
+  <li>On the Pi itself, open a browser and go to “http://localhost:631”</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/02-configure-printer.jpg" alt=""></p>
+
+<ul>
+  <li>Click Administration and Add Printer. In the username/password prompt, use the account you used to log in (most likely username “pi”)</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/03-printer-administration.jpg" alt=""></p>
+
+<ul>
+  <li>You should see DYMO printer in the list of Local Printers</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/04-local-printer-list.jpg" alt=""></p>
+
+<ul>
+  <li>Change the name of the printer if you like and click Continue</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/05-add-printer-step-01.jpg" alt=""></p>
+
+<ul>
+  <li>Change the drivers if it’s incorrect and click Add Printer</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/06-add-printer-step-02.jpg" alt=""></p>
+
+<ul>
+  <li>Accept or modify the default options and click Set Default Options</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/07-add-printer-step-03.jpg" alt=""></p>
+
+<ul>
+  <li>Confirm the printer is listed in the printers list</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/08-add-printer-confirm.jpg" alt=""></p>
+
+<h2 id="step-04-share-the-printer">Step 04: Share the printer</h2>
+<ul>
+  <li>Click Pi -&gt; Preferences -&gt; Print Settings</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/09-share-printer-step-01.jpg" alt=""></p>
+
+<ul>
+  <li>From Printer menu select Shared to share it over the network</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/10-share-printer-step-02.jpg" alt=""></p>
+
+<h2 id="step-05-setup-client-machine">Step 05: Setup client machine</h2>
+
+<h3 id="option-1-add-network-printer">Option 1: Add network printer</h3>
+
+<ul>
+  <li>Download and install DYMO software</li>
+  <li>Upon first run, application asks to run Add Network Printer Utility</li>
+  <li>Click Yes</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/11-add-network-printer-utility.png" alt=""></p>
+
+<p>For me, this method did work on one machine and did not work on another one. So for the other machine I used Option 2</p>
+
+<h3 id="option-2-add-printer-using-oss-add-printer-functionality">Option 2: Add printer using OS’s add printer functionality</h3>
+
+<p>I used a Mac for this but should be similar on Windows.</p>
+
+<ul>
+  <li>Search for Printers &amp; Scanners</li>
+  <li>Click + button</li>
+  <li>It should show the printer on the network:</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/12-add-printer.png" alt=""></p>
+
+<h2 id="step-06-test">Step 06: Test</h2>
+
+<p>Now that printer is recognized on the client machine, just design your labels and print using DYMO Label app.</p>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/13-print-results.jpg" alt=""></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.dymo.com/support?cfid=user-guide" target="_blank" rel="noopener noreferrer">Official DYMO site to download drivers and software</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2020/03/18/Migrating-EC2-Instance-to-a-Different-Account/" title="Previous Post: 
+Migrating an EC2 Instance to a Different AWS Account">« Migrating an EC2 Instance to a Different AWS Account</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2021 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

@@ -109,6 +109,68 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/index-initializers/" itemprop="url">C# 6.0 New Features - Index Initializers</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-08T11:30:00+00:00" itemprop="datePublished">December  8, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>In current C# a collection initialization can be done like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;();</span>
+<span class="n">result</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="s">"index1"</span><span class="p">,</span> <span class="s">"value1"</span><span class="p">);</span>
+<span class="n">result</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="s">"index2"</span><span class="p">,</span> <span class="s">"value2"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>or key - value pairs can be added during initialization</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;()</span> 
+<span class="p">{</span>
+	<span class="p">{</span><span class="s">"index1"</span><span class="p">,</span> <span class="s">"value1"</span><span class="p">},</span>
+	<span class="p">{</span><span class="s">"index2"</span><span class="p">,</span> <span class="s">"value2"</span><span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>With C# 6.0 values at specific indices can be initialized like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;()</span> 
+<span class="p">{</span>
+	<span class="p">[</span><span class="s">"index1"</span><span class="p">]</span> <span class="p">=</span> <span class="s">"value1"</span><span class="p">,</span>
+	<span class="p">[</span><span class="s">"index2"</span><span class="p">]</span> <span class="p">=</span> <span class="s">"value2"</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>It’s a shorthand but not so much! I don’t see much value in this notation but I’m sure in time it will prove itself. I don’t think the guys in the language team are just adding random features!</p>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/string-interpolation/" itemprop="url">C# 6.0 New Features - String Interpolation</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -197,64 +259,6 @@
 
 <p>It may come in handy for helper methods. The only benefit I can see is getting rid of opening and closing curly braces which generally don’t bother me much. But I know lots of people trying to avoid curly braces as much as possible. I’m sure this feature will be popular among them.</p>
 
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/12/07/using-statements-for-static-classess/" itemprop="url">C# 6.0 New Features - Using statements for static classes</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-12-07T16:00:00+00:00" itemprop="datePublished">December  7, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Currently using statements are for namespaces only. With this new feature they can used for static classes as well. Like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.IO</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.IO.File</span><span class="p">;</span>
-
-<span class="k">namespace</span> <span class="nn">CSharp6Features</span>
-<span class="p">{</span>
-    <span class="k">class</span> <span class="nc">UsingStaticClass</span>
-    <span class="p">{</span>
-        <span class="k">public</span> <span class="k">class</span> <span class="nc">StaticUsing</span>
-        <span class="p">{</span>
-            <span class="k">public</span> <span class="nf">StaticUsing</span><span class="p">()</span>
-            <span class="p">{</span>
-                <span class="n">File</span><span class="p">.</span><span class="nf">WriteAllText</span><span class="p">(</span><span class="s">"C:\test.txt"</span><span class="p">,</span> <span class="s">"test"</span><span class="p">);</span>
-                <span class="nf">WriteAllText</span><span class="p">(</span><span class="s">"C:\test.txt"</span><span class="p">,</span> <span class="s">"test"</span><span class="p">);</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-</code></pre></div></div>
-
-<p>I don’t think I liked this new feature. If you see a direct method call it feels like it’s a member of that method. But now it’s possible that method can be defined inside a static class somewhere else. I think it would just cause confusion and doesn’t add any benefit.</p>
 
 		
 		

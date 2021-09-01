@@ -109,6 +109,144 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2017/11/20/Backing-up-MySQL-To-AWS-S3-with-Powershell/" itemprop="url">Backing Up MySQL to AWS S3 with PowerShell</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2017-11-20T06:00:00+00:00" itemprop="datePublished">November 20, 2017</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awsdevops">aws</a></span> -->
+
+<!-- aws, devops -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags">s3, mysql, powershell</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I have an application that uses MySQL database. Because of cost concerns it’s running on an EC2 instance instead of RDS. As it’s not a managed environment, the burden of backing up my data falls on me. This is a small step by step guide that details how I’m backing up my MySQL database to AWS S3 with PowerShell</p>
+
+<h2 id="part-01---aws-setup">PART 01 - AWS SETUP</h2>
+
+<ol>
+  <li>Create a bucket named (e.g. “application-backups”) on AWS S3 using AWS Management Console.</li>
+  <li>Create a new IAM user (e.g “upload-backup-to-s3”)</li>
+  <li>Create a new policy using management console. The policy will only give enough permissions to put objects into a single S3 bucket:</li>
+</ol>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"s3:ListBucket"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"arn:aws:s3:::xxxxxxx"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s3:PutObject"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"arn:aws:s3:::xxxxxxx/*"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>In S3 bucket properties copy ARN and replace the x’s above with that.</p>
+
+<ol>
+  <li>
+    <p>Customize S3 bucket LifeCycle settings to determine how long you want the old logs retain in your bucket. In my case I set it to expire at 21 days which I think it’s large enough window for relevant database backups. I probably wouldn’t restore anything older than 21 days anyway.</p>
+  </li>
+  <li>
+    <p>[Optional - For email notifications] Create an SES user by clicking SES -&gt; SMTP Settings -&gt; Create My SMTP Credentials</p>
+  </li>
+</ol>
+
+<p>Make sure you don’t make the mistake I made which was creating an IAM user with a policy that can send emails. In the SMTP settings page there’s a note right below the button:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Your SMTP user name and password are not the same as your AWS access key ID and secret access key. Do not attempt to use your AWS credentials to authenticate yourself against the SMTP endpoint.
+</code></pre></div></div>
+
+<p>When you click the button it creates an IAM user basically for the secret key is 44 bytes whereas the IAM user I created had a secret key of 40 characters. Anyway, bottom line is in order to be able to send emails via SES create the user as described above and all should be fine.</p>
+
+<h2 id="part-02---powershell-script">PART 02 - POWERSHELL SCRIPT</h2>
+
+<ol>
+  <li>
+    <p>Download and install AWS Tools for Windows PowerShell (https://aws.amazon.com/powershell/)</p>
+  </li>
+  <li>
+    <p>Create a script as shown below. In a nutshell what the script does is:</p>
+  </li>
+</ol>
+
+<p>a. Execute mysqldump command (Comes with MySQL Server)</p>
+
+<p>b. Zip the backup file (which reduces the size significantly)</p>
+
+<p>c. Upload the zip file to S3 bucket</p>
+
+<p>d. Send a notification email using SES</p>
+
+<p>e. Delete the local files</p>
+
+<p>This is the full script:</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/e75f2d861de8604868bec0897768896e.js"> </script>
+
+<ul>
+  <li>
+    <p>For SQL Server databases, there’s a PowerShell cmdlet called <a href="https://docs.microsoft.com/en-us/powershell/module/sqlserver/backup-sqldatabase?view=sqlserver-ps" target="_blank" rel="noopener noreferrer">Backup-SQLDatabase</a> but for MySQL I think the most straightforward way is using mysqldump that comes with MySQL server.</p>
+  </li>
+  <li>
+    <p>For password-protected zip files, you can take a look at <a href="https://cyber-defense.sans.org/blog/2016/06/06/powershell-7-zip-compress-archive-encryption#" target="_blank" rel="noopener noreferrer">this article</a> (I haven’t tried it myself)</p>
+  </li>
+</ul>
+
+<p>Final step: Schedule the script by using Windows Task Scheduler</p>
+
+<p>This is quite straightforward. Just create a task, schedule it to how often you want to backup your database.</p>
+
+<p>In the actions section, enter “powershell” as “program/script” and the path of your PowerShell script as “argument” and that’s it.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://docs.microsoft.com/en-us/powershell/module/sqlserver/backup-sqldatabase?view=sqlserver-ps" target="_blank" rel="noopener noreferrer">Backup-SQLDatabase cmdlet reference</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.archive/compress-archive?view=powershell-5.1" target="_blank" rel="noopener noreferrer">Compress-Archive cmdlet reference</a></li>
+  <li><a href="https://aws.amazon.com/powershell/" target="_blank" rel="noopener noreferrer">AWS Tools Download</a></li>
+  <li><a href="https://www.vexasoft.com/blogs/powershell/7255220-powershell-tutorial-try-catch-finally-and-error-handling-in-powershell" target="_blank" rel="noopener noreferrer">PowerShell Tutorial – Try Catch Finally and error handling in PowerShell</a></li>
+  <li><a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/smtp-credentials.html" target="_blank" rel="noopener noreferrer">AWS Documentation: Obtaining Your Amazon SES SMTP Credentials</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2017/09/05/DIY-Streaming-Service-with-Synology/" itemprop="url">DIY Streaming Service with Synology</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -282,98 +420,6 @@
 <ul>
   <li><a href="https://www.synology.com/en-uk/knowledgebase/DSM/tutorial/Application/How_to_set_up_your_domain_with_Synology_DNS_Server" target="_blank" rel="noopener noreferrer">How to set up your domain with Synology DNS Server</a></li>
   <li><a href="https://www.laurivan.com/set-up-a-local-dns-with-synology-diskstation/" target="_blank" rel="noopener noreferrer">Set Up a Local DNS with Synology DiskStation</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2017/05/09/merging-pdfs/" itemprop="url">Merging PDFs</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2017-05-09T05:00:00+01:00" itemprop="datePublished">May  9, 2017</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">pdf, csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I like playing around with PDFs especially when planning my week. I have my daily plans and often need to merge them into a single PDF to print easily. As I decided to migrate to Mac for daily use now I can merge them very easily from command line as I described in my TIL site <a href="http://learnedtoday.net/post/159893278830/combining-pdfs-on-mac" target="_blank" rel="noopener noreferrer">here</a>.</p>
-
-<p>Mac’s PDF viewer is great as it also allows to simply drag and drop a PDF into another one to merge them. Windows doesn’t have this kind of nicety so I had to develop my own application to achieve this. I was planning to ad more PDF operations but since I’m not using it anymore I don’t think it will happen anytime soon so I decided to open the source.</p>
-
-<p>Very simple application anyway but hope it helps someone save some time.</p>
-
-<h2 id="implementation">Implementation</h2>
-<p>It uses iTextSharp NuGet package to handle the merge operation:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">PdfMerger</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="nf">MergePdfs</span><span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">sourceFileList</span><span class="p">,</span> <span class="kt">string</span> <span class="n">outputFilePath</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">stream</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FileStream</span><span class="p">(</span><span class="n">outputFilePath</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">Create</span><span class="p">))</span>
-        <span class="p">{</span>
-            <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">pdfDoc</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Document</span><span class="p">())</span>
-            <span class="p">{</span>
-                <span class="kt">var</span> <span class="n">pdf</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">PdfCopy</span><span class="p">(</span><span class="n">pdfDoc</span><span class="p">,</span> <span class="n">stream</span><span class="p">);</span>
-                <span class="n">pdfDoc</span><span class="p">.</span><span class="nf">Open</span><span class="p">();</span>
-                <span class="k">foreach</span> <span class="p">(</span><span class="kt">string</span> <span class="n">file</span> <span class="k">in</span> <span class="n">sourceFileList</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="n">pdf</span><span class="p">.</span><span class="nf">AddDocument</span><span class="p">(</span><span class="k">new</span> <span class="nf">PdfReader</span><span class="p">(</span><span class="n">file</span><span class="p">));</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-
-        <span class="k">return</span> <span class="n">outputFilePath</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Also uses Fluent Command Line Parse, another of my favourite NuGet packages to take care of the input parameters:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">parser</span> <span class="p">=</span> <span class="k">new</span> <span class="n">FluentCommandLineParser</span><span class="p">&lt;</span><span class="n">Settings</span><span class="p">&gt;();</span>
-<span class="n">parser</span><span class="p">.</span><span class="nf">Setup</span><span class="p">(</span><span class="n">arg</span> <span class="p">=&gt;</span> <span class="n">arg</span><span class="p">.</span><span class="n">RootFolder</span><span class="p">).</span><span class="nf">As</span><span class="p">(</span><span class="sc">'d'</span><span class="p">,</span> <span class="s">"directory"</span><span class="p">);</span>
-<span class="n">parser</span><span class="p">.</span><span class="nf">Setup</span><span class="p">(</span><span class="n">arg</span> <span class="p">=&gt;</span> <span class="n">arg</span><span class="p">.</span><span class="n">FileList</span><span class="p">).</span><span class="nf">As</span><span class="p">(</span><span class="sc">'f'</span><span class="p">,</span> <span class="s">"files"</span><span class="p">);</span>
-<span class="n">parser</span><span class="p">.</span><span class="nf">Setup</span><span class="p">(</span><span class="n">arg</span> <span class="p">=&gt;</span> <span class="n">arg</span><span class="p">.</span><span class="n">OutputPath</span><span class="p">).</span><span class="nf">As</span><span class="p">(</span><span class="sc">'o'</span><span class="p">,</span> <span class="s">"output"</span><span class="p">).</span><span class="nf">Required</span><span class="p">();</span>
-<span class="n">parser</span><span class="p">.</span><span class="nf">Setup</span><span class="p">(</span><span class="n">arg</span> <span class="p">=&gt;</span> <span class="n">arg</span><span class="p">.</span><span class="n">AllInFolder</span><span class="p">).</span><span class="nf">As</span><span class="p">(</span><span class="sc">'a'</span><span class="p">,</span> <span class="s">"all"</span><span class="p">);</span>
-    
-<span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="n">parser</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="n">args</span><span class="p">);</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">HasErrors</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="nf">DisplayUsage</span><span class="p">();</span>
-    <span class="k">return</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">var</span> <span class="n">p</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Program</span><span class="p">();</span>
-<span class="n">p</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="n">parser</span><span class="p">.</span><span class="n">Object</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p>The full source code can be found in the GitHub repository (link down below).</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://github.com/volkanpaksoy/simple-pdf-merger" target="_blank" rel="noopener noreferrer">Source Code</a></li>
-  <li><a href="http://learnedtoday.net/post/159893278830/combining-pdfs-on-mac" target="_blank" rel="noopener noreferrer">TIL: Combining PDFs on Mac</a></li>
 </ul>
 
 		

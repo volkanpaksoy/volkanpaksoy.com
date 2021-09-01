@@ -109,6 +109,98 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2017/05/09/merging-pdfs/" itemprop="url">Merging PDFs</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2017-05-09T05:00:00+01:00" itemprop="datePublished">May  9, 2017</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">pdf, csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I like playing around with PDFs especially when planning my week. I have my daily plans and often need to merge them into a single PDF to print easily. As I decided to migrate to Mac for daily use now I can merge them very easily from command line as I described in my TIL site <a href="http://learnedtoday.net/post/159893278830/combining-pdfs-on-mac" target="_blank" rel="noopener noreferrer">here</a>.</p>
+
+<p>Mac’s PDF viewer is great as it also allows to simply drag and drop a PDF into another one to merge them. Windows doesn’t have this kind of nicety so I had to develop my own application to achieve this. I was planning to ad more PDF operations but since I’m not using it anymore I don’t think it will happen anytime soon so I decided to open the source.</p>
+
+<p>Very simple application anyway but hope it helps someone save some time.</p>
+
+<h2 id="implementation">Implementation</h2>
+<p>It uses iTextSharp NuGet package to handle the merge operation:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">PdfMerger</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="nf">MergePdfs</span><span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">sourceFileList</span><span class="p">,</span> <span class="kt">string</span> <span class="n">outputFilePath</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">stream</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FileStream</span><span class="p">(</span><span class="n">outputFilePath</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">Create</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">pdfDoc</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Document</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="kt">var</span> <span class="n">pdf</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">PdfCopy</span><span class="p">(</span><span class="n">pdfDoc</span><span class="p">,</span> <span class="n">stream</span><span class="p">);</span>
+                <span class="n">pdfDoc</span><span class="p">.</span><span class="nf">Open</span><span class="p">();</span>
+                <span class="k">foreach</span> <span class="p">(</span><span class="kt">string</span> <span class="n">file</span> <span class="k">in</span> <span class="n">sourceFileList</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">pdf</span><span class="p">.</span><span class="nf">AddDocument</span><span class="p">(</span><span class="k">new</span> <span class="nf">PdfReader</span><span class="p">(</span><span class="n">file</span><span class="p">));</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">outputFilePath</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Also uses Fluent Command Line Parse, another of my favourite NuGet packages to take care of the input parameters:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">parser</span> <span class="p">=</span> <span class="k">new</span> <span class="n">FluentCommandLineParser</span><span class="p">&lt;</span><span class="n">Settings</span><span class="p">&gt;();</span>
+<span class="n">parser</span><span class="p">.</span><span class="nf">Setup</span><span class="p">(</span><span class="n">arg</span> <span class="p">=&gt;</span> <span class="n">arg</span><span class="p">.</span><span class="n">RootFolder</span><span class="p">).</span><span class="nf">As</span><span class="p">(</span><span class="sc">'d'</span><span class="p">,</span> <span class="s">"directory"</span><span class="p">);</span>
+<span class="n">parser</span><span class="p">.</span><span class="nf">Setup</span><span class="p">(</span><span class="n">arg</span> <span class="p">=&gt;</span> <span class="n">arg</span><span class="p">.</span><span class="n">FileList</span><span class="p">).</span><span class="nf">As</span><span class="p">(</span><span class="sc">'f'</span><span class="p">,</span> <span class="s">"files"</span><span class="p">);</span>
+<span class="n">parser</span><span class="p">.</span><span class="nf">Setup</span><span class="p">(</span><span class="n">arg</span> <span class="p">=&gt;</span> <span class="n">arg</span><span class="p">.</span><span class="n">OutputPath</span><span class="p">).</span><span class="nf">As</span><span class="p">(</span><span class="sc">'o'</span><span class="p">,</span> <span class="s">"output"</span><span class="p">).</span><span class="nf">Required</span><span class="p">();</span>
+<span class="n">parser</span><span class="p">.</span><span class="nf">Setup</span><span class="p">(</span><span class="n">arg</span> <span class="p">=&gt;</span> <span class="n">arg</span><span class="p">.</span><span class="n">AllInFolder</span><span class="p">).</span><span class="nf">As</span><span class="p">(</span><span class="sc">'a'</span><span class="p">,</span> <span class="s">"all"</span><span class="p">);</span>
+    
+<span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="n">parser</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="n">args</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">HasErrors</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nf">DisplayUsage</span><span class="p">();</span>
+    <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">var</span> <span class="n">p</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Program</span><span class="p">();</span>
+<span class="n">p</span><span class="p">.</span><span class="nf">Run</span><span class="p">(</span><span class="n">parser</span><span class="p">.</span><span class="n">Object</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>The full source code can be found in the GitHub repository (link down below).</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/simple-pdf-merger" target="_blank" rel="noopener noreferrer">Source Code</a></li>
+  <li><a href="http://learnedtoday.net/post/159893278830/combining-pdfs-on-mac" target="_blank" rel="noopener noreferrer">TIL: Combining PDFs on Mac</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2017/04/11/Integrating-c-applications-with-slack/" itemprop="url">Integrating C# applications with Slack</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -271,438 +363,6 @@
   <li><a href="https://www.microsoft.com/en-gb/developers/articles/week01dec14/what-is-http-2-and-what-does-it-mean-to-web-developers/" target="_blank" rel="noopener noreferrer">Microsoft article: What is HTTP/2, and what does it mean to web developers?</a></li>
   <li><a href="https://aws.amazon.com/blogs/aws/new-http2-support-for-cloudfront/" target="_blank" rel="noopener noreferrer">AWS Blog: HTTP/2 Support for Amazon CloudFront</a></li>
   <li><a href="https://jimshaver.net/2015/02/11/decrypting-tls-browser-traffic-with-wireshark-the-easy-way/" target="_blank" rel="noopener noreferrer">Blogpost: Decrypting TLS Browser Traffic With Wireshark – The Easy Way!</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2016/04/12/swift-notes-the-basics/" itemprop="url">Swift Notes - The Basics</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2016-04-12T06:00:00+01:00" itemprop="datePublished">April 12, 2016</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">ios, swift</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>When I started learning Swift for iOS development I also started to  compile some notes along the way. This post is the first instalment of my notes. First some basic concepts (in no particular order):</p>
-
-<h2 id="repl">REPL</h2>
-<ul>
-  <li>Swift supports REPL (Read Evaluate Print Loop) and you can write code and get feedback very quickly this way by using XCode Playground or command line.</li>
-</ul>
-
-<p><img src="/images/vpblogimg/2016/04/swift-notes-the-basics-playground-repl.png" alt=""></p>
-
-<p>As seen in the screenshot there is no need to explicitly print the values, they are automatically displayed on the right-hand side of the screen.</p>
-
-<p><img src="/images/vpblogimg/2016/04/swift-notes-the-basics-command-line.png" alt=""></p>
-
-<p>It can also be executed without specifying the interpreter by adding #!/usr/bin/swift at the top of the file.</p>
-
-<h2 id="comments">Comments</h2>
-<p>Swift supports C-style comments like // for single-line comments and /* */ for multi-line comments.</p>
-
-<p>The great thing about the multi-line comments is that you can nest them. For example the following is a valid comment:</p>
-
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* This is a 
-    /* valid mult-line */
-    comment that is not available in C#
-*/</span>
-</code></pre></div></div>
-<p>Considering how many times Visual Studio punished me while trying to comment out a block of code that had multi-line comments in it, this feature looks fantastic!</p>
-
-<p>It also supports doc comments (///) and supports markdown. It even supports emojis (Ctrl + Cmd + Space for the emoji keyboard)</p>
-
-<p><img src="/images/vpblogimg/2016/04/swift-notes-the-basics-comments.png" alt=""></p>
-
-<h2 id="imports">Imports</h2>
-<p>Standard libraries are imported automatically but the main frameworks such as Foundation, UIKit need to be imported explicitly.</p>
-
-<p>Swift 2 supports a new type of import which is preceded by @testable keyword.</p>
-
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">@testable</span> <span class="kd">import</span> <span class="kt">CustomFramework</span>
-</code></pre></div></div>
-
-<p>It allows to access non-public members of a class. So that you can access them externally from a unit test project. Before this they all needed to be public in order to be testable.</p>
-
-<h2 id="strings">Strings</h2>
-<p>Built-in string type is String. There is also NSString in the Foundation framework. They can be used interchangably sometimes, for example you can assign a String to a NSString but the opposite is not valid. You have cast it explicitly to String first:</p>
-
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">import</span> <span class="kt">Foundation</span>
-
-<span class="k">var</span> <span class="nv">string</span> <span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"swiftString"</span>
-<span class="k">var</span> <span class="nv">nsString</span> <span class="p">:</span> <span class="kt">NSString</span> <span class="o">=</span> <span class="s">"foundationString"</span>
-
-<span class="n">nsString</span> <span class="o">=</span> <span class="n">string</span> <span class="c1">// Works fine</span>
-<span class="n">string</span> <span class="o">=</span> <span class="n">nsString</span> <span class="k">as</span> <span class="kt">String</span> <span class="c1">// Wouldn't work without the cast</span>
-</code></pre></div></div>
-
-<ul>
-  <li>startIndex is not an int but an object. To get the next character</li>
-</ul>
-
-<p>s[s.startIndex.successor()]</p>
-
-<p>To get the last character</p>
-
-<p>s[s.startIndex.predecessor()]</p>
-
-<p>For a specific position s[advance(s.startIndex, 1)]</p>
-
-<h2 id="let-vs-var">let vs. var</h2>
-<p>Values created with <strong>let</strong> keyword are immutable. So let is used to create constants. Variables can be created with <strong>var</strong> keyword. If you create a value</p>
-
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="nv">x1</span> <span class="o">=</span> <span class="mi">7</span>
-<span class="n">x1</span> <span class="o">=</span> <span class="mi">8</span> <span class="c1">// won't compile</span>
-
-<span class="k">var</span> <span class="nv">x2</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">x2</span> <span class="o">=</span> <span class="mi">11</span> <span class="c1">// this works</span>
-</code></pre></div></div>
-
-<p>The same principle applies to arrays:</p>
-
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="nv">x3</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
-<span class="n">x3</span><span class="o">.</span><span class="nf">append</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="c1">// no go!</span>
-</code></pre></div></div>
-
-<h2 id="type-conversion">Type conversion</h2>
-
-<p>Types are inferred and there is no need to declare them while declaring a variable.</p>
-
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="nv">someInt</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="k">let</span> <span class="nv">someDouble</span> <span class="o">=</span> <span class="mf">10.0</span>
-<span class="k">let</span> <span class="nv">x</span> <span class="o">=</span> <span class="n">someDouble</span> <span class="o">+</span> <span class="kt">Double</span><span class="p">(</span><span class="n">someInt</span><span class="p">)</span>
-</code></pre></div></div>
-
-<h2 id="structs-and-classes">Structs and Classes</h2>
-
-<ul>
-  <li>
-    <p>Structs are value objects and a copy of the value is passed around. Classess are reference objects.</p>
-  </li>
-  <li>
-    <p>Constructors are called initializers and they are special methods named <em>init</em>. Must specify an init method or default values when declaring the class.</p>
-  </li>
-</ul>
-
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="kt">Person</span> <span class="p">{</span>
-  <span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">""</span>
-  <span class="k">var</span> <span class="nv">age</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span>
-
-  <span class="nf">init</span> <span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">age</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-    <span class="k">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<ul>
-  <li>There is no <em>new</em> operator. So declaring a new object looks simply like this:</li>
-</ul>
-
-<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="nv">p</span> <span class="o">=</span> <span class="kt">Person</span><span class="p">()</span>
-</code></pre></div></div>
-
-<ul>
-  <li>The equivalent of <em>destructor</em> is <em>deinit</em> method. Only classes can have deinitializers.</li>
-</ul>
-
-<h2 id="collections">Collections</h2>
-
-<h3 id="array-an-ordered-list-of-items">Array: An ordered list of items</h3>
-
-<ul>
-  <li>
-    <p>An empty array xan be declared in a verbose way such as</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="k">var</span> <span class="nv">n</span> <span class="o">=</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">()</span>
-</code></pre></div>    </div>
-
-    <p>or with the shorthand notation</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="k">var</span> <span class="nv">n</span> <span class="o">=</span> <span class="p">[</span><span class="kt">Int</span><span class="p">]()</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>An array with items can be intialized with</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="k">var</span> <span class="nv">n</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>Arrays can be concatenated with +=</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="n">n</span> <span class="o">+=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>Items can be added by <em>append</em> method</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="n">n</span><span class="o">.</span><span class="nf">append</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>Items can be inserted to a specific index</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="n">n</span><span class="o">.</span><span class="nf">insert</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="nv">atIndex</span><span class="p">:</span> <span class="mi">3</span><span class="p">)</span>
-  <span class="nf">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="c1">// -&gt; "[1, 2, 3, 8, 4, 5, 6, 7]"</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>Items can be deleted by removeAtIndex</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="n">n</span><span class="o">.</span><span class="nf">removeAtIndex</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
-  <span class="nf">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="c1">// -&gt; "[1, 2, 3, 8, 4, 5, 7]"</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>Items can be accessed by their index</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="k">let</span> <span class="nv">aNumber</span> <span class="o">=</span> <span class="n">n</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>A range of items can be replaced at once</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="k">var</span> <span class="nv">n</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
-  <span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="o">...</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
-  <span class="nf">print</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="c1">// prints [1, 5, 6, 7, 4]"</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>2-dimensional arrays can be declared as elements as arrays and multiple subscripts can be used to access sub items</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="k">var</span> <span class="nv">n</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span> <span class="p">]</span>
-  <span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="c1">// value 2</span>
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<h3 id="dictionary-a-collection-of-key-value-pairs">Dictionary: A collection of key-value pairs</h3>
-
-<ul>
-  <li>
-    <p>Can be initialized without items</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="k">var</span> <span class="nv">dict</span> <span class="o">=</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span><span class="kt">Int</span><span class="p">]()</span>
-</code></pre></div>    </div>
-
-    <p>or with items</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="k">var</span> <span class="nv">dict</span> <span class="o">=</span> <span class="p">[</span><span class="s">"key1"</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s">"key2"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s">"key3"</span><span class="p">:</span> <span class="mi">4</span><span class="p">]</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>To add items, assign a value to a key using subscript syntax</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="n">dict</span><span class="p">[</span><span class="s">"key4"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">666</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>To remove an item, assign nil</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="n">dict</span><span class="p">[</span><span class="s">"key2"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">nil</span>
-  <span class="nf">print</span><span class="p">(</span><span class="n">dict</span><span class="p">)</span> <span class="c1">// prints ["key1": 5, "key4": 666, "key3": 4]"</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>To update a value, subscript can be used as adding the item or <em>updateValue</em> method can be called.</p>
-
-    <p><em>updateValue</em> returns an optional. If it didn’t update anything the optional has nil in it. So it can be used to check the value was actually updated or not.</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="k">var</span> <span class="nv">result</span> <span class="o">=</span> <span class="n">dict</span><span class="o">.</span><span class="nf">updateValue</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span> <span class="nv">forKey</span><span class="p">:</span> <span class="s">"key2"</span><span class="p">)</span>
-  <span class="k">if</span> <span class="k">let</span> <span class="nv">r</span> <span class="o">=</span> <span class="n">result</span> <span class="p">{</span>
-      <span class="nf">print</span> <span class="p">(</span><span class="n">dict</span><span class="p">[</span><span class="s">"key2"</span><span class="p">])</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-      <span class="nf">print</span> <span class="p">(</span><span class="s">"could not update"</span><span class="p">)</span> <span class="c1">// --&gt; This line would be printed</span>
-  <span class="p">}</span>	
-</code></pre></div>    </div>
-
-    <p>The interesting behaviour is that if it can’t update it, it will add the new value.</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="k">var</span> <span class="nv">dict</span> <span class="o">=</span> <span class="p">[</span><span class="s">"key1"</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span> <span class="s">"key2"</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="s">"key3"</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
-  <span class="k">var</span> <span class="nv">result</span> <span class="o">=</span> <span class="n">dict</span><span class="o">.</span><span class="nf">updateValue</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span> <span class="nv">forKey</span><span class="p">:</span> <span class="s">"key4"</span><span class="p">)</span>
-  <span class="k">if</span> <span class="k">let</span> <span class="nv">r</span> <span class="o">=</span> <span class="n">result</span> <span class="p">{</span>
-      <span class="nf">print</span> <span class="p">(</span><span class="n">dict</span><span class="p">[</span><span class="s">"key4"</span><span class="p">])</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-      <span class="nf">print</span> <span class="p">(</span><span class="s">"could not update"</span><span class="p">)</span>
-  <span class="p">}</span>
-	
-  <span class="nf">print</span><span class="p">(</span><span class="n">dict</span><span class="p">)</span> <span class="c1">// prints "["key1": 5, "key4": 45, "key2": 3, "key3": 4]"</span>
-                <span class="c1">// key4 has been added after calling updateValue</span>
-</code></pre></div>    </div>
-
-    <p>After a successful update it would return the old value</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="n">result</span> <span class="o">=</span> <span class="n">dict</span><span class="o">.</span><span class="nf">updateValue</span><span class="p">(</span><span class="mi">45</span><span class="p">,</span> <span class="nv">forKey</span><span class="p">:</span> <span class="s">"key1"</span><span class="p">)</span>
-  <span class="k">if</span> <span class="k">let</span> <span class="nv">r</span> <span class="o">=</span> <span class="n">result</span> <span class="p">{</span>
-      <span class="nf">print</span> <span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="c1">// --&gt; This would run and print "5"</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-      <span class="nf">print</span> <span class="p">(</span><span class="s">"could not update"</span><span class="p">)</span>
-  <span class="p">}</span>
-</code></pre></div>    </div>
-
-    <p>This is consistent with the unsuccessful update returning nil. It always returns the former value.</p>
-  </li>
-  <li>
-    <p>To get a value subscript syntax is used</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="k">var</span> <span class="nv">i</span> <span class="o">=</span> <span class="n">dict</span><span class="p">[</span><span class="s">"key1"</span><span class="p">]</span> <span class="c1">// 45</span>
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<h3 id="set-an-unordered-list-of-distinct-values">Set: An unordered list of distinct values</h3>
-
-<ul>
-  <li>
-    <p>Initialization notation is similar to the others</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="k">var</span> <span class="nv">emo</span> <span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">Character</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[</span> <span class="s">"😡"</span><span class="p">,</span> <span class="s">"😎"</span><span class="p">,</span> <span class="s">"😬"</span> <span class="p">]</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>If duplicate items are added it doesn’t throw an error but prunes the list automatically</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="k">var</span> <span class="nv">emo</span> <span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">Character</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[</span> <span class="s">"😡"</span><span class="p">,</span> <span class="s">"😎"</span><span class="p">,</span> <span class="s">"😬"</span><span class="p">,</span> <span class="s">"😬"</span> <span class="p">]</span>
-  <span class="n">emo</span><span class="o">.</span><span class="n">count</span> <span class="c1">// prints 3</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>New items can be added with insert method</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="k">var</span> <span class="nv">emo</span> <span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">Character</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[</span> <span class="s">"😡"</span><span class="p">,</span> <span class="s">"😎"</span><span class="p">,</span> <span class="s">"😬"</span><span class="p">,</span> <span class="s">"😬"</span> <span class="p">]</span>
-  <span class="n">emo</span><span class="o">.</span><span class="nf">insert</span><span class="p">(</span><span class="s">"😱"</span><span class="p">)</span>
-  <span class="n">emo</span><span class="o">.</span><span class="nf">insert</span><span class="p">(</span><span class="s">"🤔"</span><span class="p">)</span>
-  <span class="nf">print</span><span class="p">(</span><span class="n">emo</span><span class="p">)</span> <span class="c1">// prints "["😱", "😎", "🤔", "😬", "😡"]"</span>
-</code></pre></div>    </div>
-
-    <p>There is no atIndex parameter like array and the index is unpredicatable as shown above</p>
-  </li>
-</ul>
-
-<p>Among the three, only arrays have ordered and can have repeated values.</p>
-
-<h2 id="miscellaneous">Miscellaneous</h2>
-
-<ul>
-  <li>
-    <p>Semi-colons are not required at the end of each line</p>
-  </li>
-  <li>
-    <p>Supports string interpolation</p>
-  </li>
-  <li>
-    <p>Swift uses reference counting and there is garbage collection.</p>
-  </li>
-  <li>
-    <p>Curly braces are required even if there is only one statement inside the body. For instance the following block wouldn’t compile:</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="k">let</span> <span class="nv">x</span> <span class="o">=</span> <span class="mi">10</span>
-  <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">10</span>
-      <span class="nf">print</span><span class="p">(</span><span class="s">"Ten!"</span><span class="p">)</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p><em>println</em> function has been renamed to <em>print</em>. <em>print</em> adds a new line to the end automatically. This behaviour can be overriden by explicitly specfying appendNewLine attribute</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="nf">print</span> <span class="p">(</span><span class="s">"Hello, world without a new line"</span><span class="p">,</span> <span class="nv">appendNewLine</span><span class="p">:</span> <span class="kc">false</span><span class="p">)</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>#available can be used to check compatibility</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="k">if</span> <span class="kd">#available(iOS 9, *)</span> <span class="p">{</span>
-      <span class="c1">// use NSDataAsset</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-      <span class="c1">// Panic!</span>
-  <span class="p">}</span>
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>Range can be checked with … and ~= operators. For example:</p>
-
-    <div class="language-swift highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="k">let</span> <span class="nv">x</span> <span class="o">=</span> <span class="mi">10</span>
-	
-  <span class="k">if</span> <span class="mi">1</span><span class="o">...</span><span class="mi">100</span> <span class="o">~=</span> <span class="n">x</span> <span class="p">{</span>
-      <span class="nf">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-  <span class="p">}</span>
-</code></pre></div>    </div>
-
-    <p>The variable is on the right in this expression. It wouldn’t compile the other way around.</p>
-  </li>
-  <li>
-    <p>There is Range object that can be used to define, well, ranges!</p>
-
-    <div class="highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  var ageRange = 18...45
-  print(ageRange) // prints "18..&lt;46"
-  print(ageRange.count) // prints "28"
-</code></pre></div>    </div>
-
-    <p>The other range operator is ..&lt; which doesn’t include the end value</p>
-
-    <div class="highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  var ageRange = 18..&lt;45
-  ageRange.contains(45) // prints "false"
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<h2 id="resources">Resources</h2>
-
-<ul>
-  <li><a href="http://swiftlang.eu/" target="_blank" rel="noopener noreferrer">Official Swift Programming Language Book</a></li>
-  <li><a href="https://www.pluralsight.com/courses/swift-in-depth" target="_blank" rel="noopener noreferrer">Pluralsight Course: Swift in Depth</a></li>
-  <li><a href="https://www.udacity.com/course/learn-swift-programming-syntax--ud902" target="_blank" rel="noopener noreferrer">Udacity Course: Learn Swift Programming Syntax</a></li>
 </ul>
 
 		

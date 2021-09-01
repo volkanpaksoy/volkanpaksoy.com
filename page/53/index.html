@@ -109,6 +109,65 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2013/09/28/free-static-web-site-hosting/" itemprop="url">Free static web site hosting</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-09-28T15:42:55+01:00" itemprop="datePublished">September 28, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devopsaws">devops</a></span> -->
+
+<!-- devops, aws -->
+
+
+
+
+    <a href="/category/devops">devops</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">github_pages, static_website</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Sometimes you need a microsite with no server-side code. All you need is to display a pretty-looking entry page. In such scenarios you don’t need to use your own servers and use your precious resources on such trivial sites. The 2 ways to achieve this (that I know about) are:</p>
+
+<ul>
+  <li>Using Amazon Web Services S3</li>
+  <li>Using GitHub Pages</li>
+</ul>
+
+<p>Both methods are very well documented. You can find the links to the official tutorials.</p>
+
+<h3 id="aws-s3">AWS S3</h3>
+<p>First, my favourite IT company: Amazon! S3 method requires to create a bucket with the name of your domain or subdomain. In the properties enable Static Website Hosting and point to your index document. In order for this to work, you have to use AWS Route 53 as your DNS provider. In Route 53, all you have to do is define an A record as an alias and select the S3 bucket that contains your site. If you have multiple accounts make sure that Route 53 DNS records and S3 bucket are under the same account. Otherwise you cannot point to the bucket as en endpoint.</p>
+
+<h3 id="github-pages">GitHub Pages</h3>
+<p>GitHub method is also quite easy. All it takes is create a public repository, create a branch called “gh-pages” and check in your source code. To let GitHub know that you want to host a site there, you have to create a file called CNAME which includes the domain name. And in your DNS settings you have to point your site to GitHub’s IP address. The downside of this method is, obviously, your site will stop working if GitHub decides to change their IP address.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/website-hosting-custom-domain-walkthrough.html" target="_blank" rel="noopener noreferrer">Guide for hosting with AWS S3</a></li>
+  <li><a href="https://help.github.com/articles/setting-up-a-custom-domain-with-pages" target="_blank" rel="noopener noreferrer">Guide for hosting with GitHub Pages</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2013/09/11/microcontroller-vs-microprocessor/" itemprop="url">Microcontroller vs. Microprocessor</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -195,118 +254,6 @@
 <ul>
   <li><a href="http://pjrc.com/teensy/" target="_blank" rel="noopener noreferrer">Official site</a></li>
   <li><a href="http://www.pjrc.com/teensy/teensyduino.html" target="_blank" rel="noopener noreferrer">Teensyduino</a></li>
-</ul>
-
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2013/08/03/imdb-data-parsing-with-regular-expressions/" itemprop="url">IMDB data parsing with regular expressions</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2013-08-03T17:04:24+01:00" itemprop="datePublished">August  3, 2013</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">imdb, regular_expressions</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I need a large dataset to practice on SQL server while preparing to exams. One idea is to generate random data but there is no fun in that. Because it is hard to create real-life scenarios but gibberish data. Then I found out that IMDB actually releases all their data and allows usage for non-commercial applications.</p>
-
-<h3 id="data-analysis">Data Analysis</h3>
-<p>Unfortunately, IMDB data doesn’t come in a very structured format. You have to deal with the exceptional cases and create your own data structures. I found some nice info in a Github repo called imdb-blaster (link in the resources section).</p>
-
-<p>I started with the main file to parse: Movies.lst. This file contains movies, TV shows and their episodes. I want to store these in separate tables so I wanted to treat them separately. What they look like in a nutshell is as follows:</p>
-
-<ul>
-  <li>Movies: The Lord of the Rings: The Return of the King (2003)    2003</li>
-  <li>TV Shows: “Seinfeld” (1990)                    1990-1998</li>
-  <li>Episodes: “Seinfeld” (1990) {Male Unbonding (#1.4)}        1990</li>
-</ul>
-
-<p>All TV Shows are enclosed with double-quotes. There are also some other optional attributes that need to be taken into account. Such as deleted items are marked with  like “Seinfeld” (1990) {Good News, Bad News (#1.0)}     1989</p>
-
-<h3 id="start-parsing">Start parsing</h3>
-<p>I don’t like regular expressions too much as they are very hard to read. But they are very helpful and powerful in scenarios like this. The goal is validating and parsing it to groups so that it can be inserted easily to a relational database. So I developed 3 regular expression patterns for the type of data in the file.
-One thing I learned about regular expressions is that you can group parts by using parenthesises. This creates an unnamed group. If you want to name them you can use angle brackets and assign a name to group such as: (<name>subexpression)</name></p>
-
-<h3 id="parsing-movies">Parsing movies</h3>
-<p>As most regular expressions tend to wind up with hard-to-read complex queries this was no exception! Even if the structure is simple because of the optional parameters and exceptional cases it became very complex very soon. Here’s the sample code to run in LINQPad to parse a sample line for a movie:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">string</span> <span class="n">line</span> <span class="p">=</span> <span class="s">@"America the Punchline (2009) 		2009"</span><span class="p">;</span>
-<span class="kt">string</span> <span class="n">pattern</span> <span class="p">=</span> <span class="s">@"(^.*)\((\d{4}|\?{4})(/I|II|III)?\)([ ]?)()(\(V\)|\(TV\))?\t*(\d{4})$"</span><span class="p">;</span>
-<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">Regex</span><span class="p">.</span><span class="nf">IsMatch</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">pattern</span><span class="p">));</span>
-
-<span class="n">MatchCollection</span> <span class="n">matches</span> <span class="p">=</span> <span class="n">Regex</span><span class="p">.</span><span class="nf">Matches</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">pattern</span><span class="p">);</span>
-<span class="k">foreach</span> <span class="p">(</span><span class="n">Match</span> <span class="n">match</span> <span class="k">in</span> <span class="n">matches</span><span class="p">)</span>
-<span class="p">{</span>
-	<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Group count: {0}"</span><span class="p">,</span> <span class="n">match</span><span class="p">.</span><span class="n">Groups</span><span class="p">.</span><span class="n">Count</span><span class="p">);</span>
-	<span class="k">foreach</span> <span class="p">(</span><span class="n">Group</span> <span class="n">matchGroup</span> <span class="k">in</span> <span class="n">match</span><span class="p">.</span><span class="n">Groups</span><span class="p">)</span>
-	<span class="p">{</span>
-		<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"{0}"</span><span class="p">,</span> <span class="n">matchGroup</span><span class="p">.</span><span class="n">Value</span><span class="p">);</span>
-	<span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>And the output is:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>True
-Group count: 8
-America the Punchline (2009)     2009
-America the Punchline
-2009
-
-2009
-</code></pre></div></div>
-
-<p>The first group is the whole string. The second one is the title, the third is the year. There is an optional group because some titles come with I, II or III after the release date. I have no idea what that means but had to break it into a group to avoid an unmatch. The last two parameters are the type (V: Video, TV: Television, VG: Video game) and another date. I don’t know why the movies have two dates and they almost always match so I’ll ignore one of them.
-So the actual code is very simple:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">regexMovie</span><span class="p">.</span><span class="nf">IsMatch</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
-<span class="p">{</span>
-	<span class="n">Match</span> <span class="n">match</span> <span class="p">=</span> <span class="n">regexMovie</span><span class="p">.</span><span class="nf">Match</span><span class="p">(</span><span class="n">line</span><span class="p">);</span>
-
-	<span class="n">commandMovie</span><span class="p">.</span><span class="n">Parameters</span><span class="p">.</span><span class="nf">Clear</span><span class="p">();</span>
-	<span class="n">commandMovie</span><span class="p">.</span><span class="n">Parameters</span><span class="p">.</span><span class="nf">AddWithValue</span><span class="p">(</span><span class="s">"@Name"</span><span class="p">,</span> <span class="n">match</span><span class="p">.</span><span class="n">Groups</span><span class="p">[</span><span class="m">1</span><span class="p">].</span><span class="n">Value</span><span class="p">);</span>
-	<span class="n">commandMovie</span><span class="p">.</span><span class="n">Parameters</span><span class="p">.</span><span class="nf">AddWithValue</span><span class="p">(</span><span class="s">"@ProductionYear"</span><span class="p">,</span> <span class="n">match</span><span class="p">.</span><span class="n">Groups</span><span class="p">[</span><span class="m">2</span><span class="p">].</span><span class="n">Value</span><span class="p">);</span>
-	<span class="n">commandMovie</span><span class="p">.</span><span class="n">Parameters</span><span class="p">.</span><span class="nf">AddWithValue</span><span class="p">(</span><span class="s">"@IsDeleted"</span><span class="p">,</span> <span class="p">(</span><span class="n">match</span><span class="p">.</span><span class="n">Groups</span><span class="p">[</span><span class="m">5</span><span class="p">].</span><span class="n">Value</span> <span class="p">==</span> <span class="s">""</span><span class="p">));</span>
-	<span class="n">commandMovie</span><span class="p">.</span><span class="n">Parameters</span><span class="p">.</span><span class="nf">AddWithValue</span><span class="p">(</span><span class="s">"@ReleasedFor"</span><span class="p">,</span> <span class="n">match</span><span class="p">.</span><span class="n">Groups</span><span class="p">[</span><span class="m">6</span><span class="p">].</span><span class="n">Value</span><span class="p">);</span>
-	<span class="n">commandMovie</span><span class="p">.</span><span class="nf">ExecuteNonQuery</span><span class="p">();</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>All the hard work is done by regular expressions already. All we have to do is to check is a line matches a movie definition and if it does just insert the data that is already broken up into groups.</p>
-
-<h3 id="parsing-the-rest">Parsing the rest</h3>
-<p>I’ll publish the full source code in a Github repository and will update this post with the link. But I guess to start parsing the movies file the other two patterns suffice for now:
-TV Show Pattern: (^””.<em>””) (((\d{4}|\?{4})(/I|II|III)?))\t.</em>(\d{4}-\d{4}|\?{4})$
-Episode Pattern: (^””.<em>””) ((\d{4}|\?{4})(/I|II|III)?) {(.</em>?)(#(\d<em>).(\d</em>))}\t*(\d{4}|\?{4})$</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://www.imdb.com/interfaces" target="_blank" rel="noopener noreferrer">IMDB Data download</a></li>
-  <li><a href="https://github.com/jongillies/imdb-blaster" target="_blank" rel="noopener noreferrer">IMDB Blaster GitHub repository</a></li>
-  <li><a href="http://msdn.microsoft.com/en-us/library/az24scfc.aspx" target="_blank" rel="noopener noreferrer">.NET Regular Expression Quick Reference</a></li>
 </ul>
 
 
