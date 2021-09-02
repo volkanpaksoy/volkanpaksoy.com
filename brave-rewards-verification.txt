@@ -1,4 +1,0 @@
-This is a Brave Rewards publisher verification file.
-
-Domain: volkanpaksoy.com
-Token: d462dd6315c0af7775c9644e05572f92961e8d77f52dd40b1fdca6944ea73bff
