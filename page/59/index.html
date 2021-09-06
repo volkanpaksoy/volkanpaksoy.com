@@ -109,6 +109,92 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2013/07/10/hardening-windows-with-emet/" itemprop="url">Hardening Windows with EMET</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-07-10T18:06:56+01:00" itemprop="datePublished">July 10, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/security">security</a></span> -->
+
+<!-- security -->
+
+
+
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">emet</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p><img src="/images/vpblogimg/2013/07/EMET.png" alt="EMET"></p>
+
+<p>EMET (Enhanced Mitigation Experience Toolkit) is a free utility that helps prevent memory corruption vulnerabilities and is designed to prevent hackers from gaining access to a system.
+I haven’t used it before but according to the documentation the new features are:</p>
+
+<ul>
+  <li>
+<strong>Certificate Trust:</strong> Allows to detect Man in the Middle attacks that leverage fraudulent SSL certificates</li>
+  <li>
+<strong>ROP mitigations:</strong> Block exploit that leverage the Return Oriented Programming exploitation technique.</li>
+  <li>
+<strong>Early Warning Program:</strong> Allows enterprise customers and Microsoft to analyze the details of an attack and respond effectively.</li>
+  <li>
+<strong>Audit Mode:</strong> Provides monitoring functionalities for testing purposes.</li>
+  <li>
+<strong>Redesigned User Interface:</strong> Streamlines the configuration operations and provides accessibility.</li>
+</ul>
+
+<p>Under the hood this tool performs very low-level operations and honestly I don’t know what they all mean. For me the biggest benefit was learning about advanced attacks and exploits and how to avoid them. I strongly recommend reading the user’s guide. Apparently there are many interesting attack techniques when it comes to exploiting the memory. EMET provides mitigation methods against these attacks. For instance:</p>
+
+<ul>
+  <li>
+<strong>Structured Exception Handler Overwrite Protection (SEHOP):</strong> This mitigation was shipped with Windows Vista SP1 but with EMET it can be used in previous versions as well.</li>
+  <li>
+<strong>Data Execution Prevention (DEP):</strong> This mitigation exists since Windows XP but applications need to be compiled with a special flag to opt-in to DEP. With EMET allows applications without that flag to opt as well.</li>
+  <li>
+<strong>Heapspray allocation:</strong> “When an exploit runs, it often cannot be sure of the address where its shellcode resides and must guess when taking control of the instruction pointer. To increase the odds of success, most exploits now use heapspray techniques to place copies of their shellcode at as many memory locations as possible.”</li>
+  <li>
+<strong>Mandatory Address Space Layout Randomization (ASLR):</strong> ASLR randomizes the address space of the loaded modules so that attackers cannot predict their locations. Like in DEP, EMET allows applications without the special flag to use this feature.</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2013/07/EMT_Scr.png" alt="EMET"></p>
+
+<h3 id="certificate-trust">Certificate Trust</h3>
+<p>I was wondering about this feature as it’s more “visible” than the others. Basically what you do is define protected websites and pinning rules. Pinning Rule is essentially importing an SSL certificate’s thumbprint. Once you import it you create a protected website which is simply entering the domain name of the site and you associate the certificate with the site.</p>
+
+<p><img src="/images/vpblogimg/2013/07/EMET_CertTrustConfig.png" alt="EMET"></p>
+
+<p>From now on if the certificate changes EMET displays a message like below:</p>
+
+<p><img src="/images/vpblogimg/2013/07/EMET_SSL.png" alt="EMET"></p>
+
+<p>Actually, I didn’t want to spend a great deal to test it first so the easiest way to test is running Fiddler (allow it to install it’s own certificate) and visit login.live.com. EMET comes with that site already configured so as soon as it notices the certificate doesn’t match its rule it fires the alarm.
+Looks like a nice feature but it only works with IE which I almost never use other than testing my code. Also I was expecting more fuss about it actually. It just displays the window for a few seconds and you can keep visiting the site. If for instance you were looking at something else in that brief period while the site is loading you may completely miss the fact you are being “Man-in-the-Middle”d.
+Overall, it’s better to have it than not having it at all I think.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://download.microsoft.com/download/7/A/A/7AA570E7-92DF-4C28-BE12-E72831797666/EMET%20User's%20Guide.pdf" target="_blank" rel="noopener noreferrer">Download EMET 4.0 and User’s Guide</a></li>
+  <li><a href="http://technet.microsoft.com/en-us/security/dn283932.aspx" target="_blank" rel="noopener noreferrer">Technet article</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2013/07/07/study-notes-for-70-461-querying-microsoft-sql-server-2012-part-2/" itemprop="url">Study Notes for 70-461: Querying Microsoft SQL Server 2012 – Part 2</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -397,67 +483,6 @@ FOR XML PATH('Department'), ROOT('HumanResources')
 </code></pre></div></div>
 
 <p>Source: <a href="http://msdn.microsoft.com/en-us/library/ms178107.aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/ms178107.aspx</a></p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2013/07/05/on-microsoft-exam-70-461-querying-microsoft-sql-server-2012/" itemprop="url">On Microsoft Exam 70-461: Querying Microsoft SQL Server 2012</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2013-07-05T17:07:39+01:00" itemprop="datePublished">July  5, 2013</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">certification, sql_server</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I believe I had a considerable amount of experience with SQL Server throughout my career. Recently I decided to get SQL Server MSCA title which requires taking 3 exams (70-461, 70-462 and 70-463 namely). I think it’s a good way of polishing existing knowledge and learning new stuff. Hands on experience is great but generally you only learn enough to get things done, which is the desired result of course but when studying for certification you have to cover all details. Some of them may be quite trivial and don’t have much practical usage but I think they all may come in handy sometime so it doesn’t hurt to learn more.</p>
-
-<h3 id="on-to-70-461">On to 70-461</h3>
-<p>The number of questions vary between 40 – 60 and test duration is between 2 – 3 hours. In my exam, I had <strong>44 questions</strong> and the time given was <strong>2 hours</strong>.</p>
-
-<p>Total score is 1000 and the passing score is 700. I’ve got a whopping <strong>906</strong>. Actually at the end of the day doesn’t really matter if you get a full 1000 but it feels better to pass with a high mark.</p>
-
-<h3 id="study-notes">Study Notes</h3>
-<p>I decided to release my notes on a separate blog post as it became very lengthy very quickly.</p>
-
-<h3 id="study-materials">Study Materials</h3>
-
-<p><img src="/images/vpblogimg/2013/07/70-461_Training_Kit.jpg" alt="70-461 Training Kit"></p>
-
-<p>I used several different sources preparing for the exam. One of the most important ones is the official Training Kit. Also, I found the CBT Nuggets video series quite useful. You can move at a much faster pace to cover the topics with a video. So I recommend those videos (despite the steep price of CBT Nuggets subscription)</p>
-
-<p>There is another series in TrainSignal but I haven’t tried it.Finally I’ve found a short introductory video (around 1h 15m) to the exam. You can find the find link in the resorces section. It’s a very fast-paced introduction mainly underlining the exam topics that are not commonly used in real life.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://www.90daystomcsa.com" target="_blank" rel="noopener noreferrer">MCSA videos</a></li>
-  <li><a href="http://www.youtube.com/watch?v=K7zaBb4mxWI" target="_blank" rel="noopener noreferrer">70-461 video</a></li>
-  <li><a href="http://www.amazon.co.uk/Querying-Microsoft-Server-Training-Package/dp/0735666059/04" target="_blank" rel="noopener noreferrer">Training Kit</a></li>
-  <li><a href="https://secure.cbtnuggets.com/it-training-videos/series/mcrsft_sql_70-461" target="_blank" rel="noopener noreferrer">CBT Nuggets</a></li>
-  <li><a href="http://www.trainsignal.com/course/180/sql-server-2012-querying-70-461" target="_blank" rel="noopener noreferrer">TrainSignal</a></li>
-</ul>
 
 		
 		

@@ -109,6 +109,152 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2017/11/30/Backing-up-GitHub-Account-with-PowerShell/" itemprop="url">Backing up GitHub Account with PowerShell</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2017-11-30T06:00:00+00:00" itemprop="datePublished">November 30, 2017</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devops">devops</a></span> -->
+
+<!-- devops -->
+
+
+
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags">git, powershell</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Having lots of projects and assets stored on GitHub I thought it might be a good idea to create periodical backups of my entire GitHub account (all repositories, both public and private). The beauty of it is since Git is open source, this way I can migrate my account to anywhere and even host it on my own server on AWS.</p>
+
+<h2 id="challenges">Challenges</h2>
+<p>With the above goal in mind, I started to outline what’s necessary to achieve this task:</p>
+
+<ol>
+  <li>Automate calling GitHub API to get all repos including private ones. (Of course one should be aware of <a href="https://developer.github.com/v3/#rate-limiting" target="_blank" rel="noopener noreferrer">GitHub API rate limits</a> which is currently 5000 requests per hour. If you use up all your allowance with your scripts you may not be able to use it yourself. Good thing is they are returning how many calls are left before you exceed your quota in <em>x-ratelimit-remaining</em> HTTP header in their responses.)</li>
+  <li>Pull all the latest versions for all branches. Overwrite local versions in cases of conflict.</li>
+  <li>Find a way to easily transfer a git repository (A compressed single file version rather than individual files) if transferring to another medium is required (such as an S3 bucket)</li>
+</ol>
+
+<p>With these challenges ahead, I first started looking into getting the repos from GitHub:</p>
+
+<h2 id="consuming-github-api-via-powershell">Consuming GitHub API via PowerShell</h2>
+<p>First, I shopped around for existing libraries for this task (such as <a href="https://github.com/PowerShell/PowerShellForGitHub" target="_blank" rel="noopener noreferrer">PowerShellForGitHub</a> by Microsoft but it didn’t work for me. Basically I couldn’t even manage the samples on their Wiki. It kept giving cmdlet not found error so I gave up.)</p>
+
+<p>Found a nice <a href="https://channel9.msdn.com/Blogs/trevor-powershell/Automating-the-GitHub-REST-API-Using-PowerShell" target="_blank" rel="noopener noreferrer">video on Channel 9</a> about consuming REST APIs via PowerShell which uses GitHub API as a case study. It was perfect for me as my goal was to use GitHub API anyway. And since this is a generic approach to consume APIs it can come handy in the future as well. It’s quite easy using basic authentication.</p>
+
+<h3 id="authorization">Authorization</h3>
+<p>First step, is to create a <a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer">Personal Access Token</a> with repo scope. (Make sure to copy the value before you close the page, there is no way to retrieve it afterwards.)</p>
+
+<p>After the access token has been obtained, I had to generate authorization header as shown in the Channel 9 video:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$token = '&lt;YOUR GITHUB ACCOUNT NAME&gt;:&lt;PERSONAL ACCESS TOKEN&gt;'
+$base64Token = [System.Convert]::ToBase64String([char[]]$token)
+$headers = @{
+    Authorization = 'Basic {0}' -f $base64Token
+};
+
+$response = Invoke-RestMethod -Headers $headers -Uri https://api.github.com/user/repos
+</code></pre></div></div>
+
+<p>This way I was able to get the repositories including the private ones but by default it returns 30 records on a page so I had to traverse over the pages .</p>
+
+<h3 id="handling-pagination">Handling pagination</h3>
+<p>GitHub sends the next and the last page URLs in link header:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;https://api.github.com/user/repos?page=2&gt;; rel="next", &lt;https://api.github.com/user/repos?page=3&gt;; rel="last"
+</code></pre></div></div>
+
+<p>The challenge here is that 	looks like Invoke-RestMethod response doesn’t allow to access headers which is a huge bummer as there are useful info in the headers as shown in the screenshot:</p>
+
+<p><img src="/images/vpblogimg/2017/11/github-api-response-headers.png" alt="GitHub response headers in Postman"></p>
+
+<p>At this point, I wanted to use <a href="https://github.com/pcgeek86/PSGitHub" target="_blank" rel="noopener noreferrer">PSGitHub</a> mentioned in the video but as of this writing it doesn’t support getting all repositories. In fact in a note it says “<em>We need to figure out how to handle data pagination</em>” which made me think we are on the same page here (no pun intended!)</p>
+
+<p>GitHub supports a page size parameter (e.g. per_page=50) but the documentation says the maximum value is 100. Although it is tempting to use that one as that would bring all my repos and leave some room for the future ones as well I wanted to go with a more permanent solution. So I decided to request more pages as longs as there are objects returning like this</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$page = 1
+
+Do
+{
+    $response = Invoke-RestMethod -Headers $headers -Uri "https://api.github.com/user/repos?page=$page"
+    
+    foreach ($obj in $response)
+    {
+        Write-Host ($obj.id)
+    }
+    
+    $page = $page + 1
+}
+While ($response.Count -gt 0)
+</code></pre></div></div>
+
+<p>Now in the foreach loop of course  I have to do something with the repo information instead of just printing the id.</p>
+
+<h3 id="cloning--pulling-repositories">Cloning / pulling repositories</h3>
+<p>At this point I was able to get all my repositories. GitHub API only handles account information so now I needed to able to run actual git commands to get my code.</p>
+
+<p>First I had installed PowerShell on Mac which is quite simple as specified in the documentation:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew tap caskroom/cask
+brew cask install powershell
+</code></pre></div></div>
+
+<p>With Git already installed on my machine, all is left was using Git commands to clone or update repo on PowerShell terminal such as:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git fetch --all
+git reset --hard origin/master
+</code></pre></div></div>
+
+<p>Since this is just going to be a backup copy I don’t want to deal with merge conflicts and just overwriting everything local.</p>
+
+<p>Another approach could be deleting the old repo and cloning it from scratch but I think this would be a bit wasteful to do it everytime for each and every repository.</p>
+
+<h2 id="putting-it-all-together">Putting it all together</h2>
+<p>Now that I have all the bits and pieces I have glue them together in a meaningful script than can be scheduled and here it is:</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/0309dd02703c6b5d9a73859ac2abf2d8.js"> </script>
+
+<h2 id="conclusion-and-future-improvements">Conclusion and Future Improvements</h2>
+<p>This version accomplishes the basic task of backing up an entire GitHub account but it can be improved in a few ways. Maybe I can post a follow up article including those improvements. A few ideas come to mind are:</p>
+
+<ul>
+  <li>Get Gists (private and public) as well.</li>
+  <li>Add option to exclude repos by name or by type (i.e. get only private ones or get all except repo123)</li>
+  <li>Add an option to export them to a “non-git” medium such as an S3 bucket using git bundle (which turns out to be a great tool to pack everything in a repository in a single file)</li>
+  <li>Create a Docker image that contains all the necessary software (Git, PowerShell, backup script etc) so that it can be distributed without any setup requirements.</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://channel9.msdn.com/Blogs/trevor-powershell/Automating-the-GitHub-REST-API-Using-PowerShell" target="_blank" rel="noopener noreferrer">Channel9 video on using GitHub API with PowerShell</a></li>
+  <li><a href="https://developer.github.com/v3/" target="_blank" rel="noopener noreferrer">GitHub API Documentation</a></li>
+  <li><a href="https://developer.github.com/v3/guides/traversing-with-pagination/" target="_blank" rel="noopener noreferrer">Traversing with Pagination</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/invoke-restmethod?view=powershell-5.1" target="_blank" rel="noopener noreferrer">PowerShell Invoke-RestMethod documentation</a></li>
+  <li><a href="https://github.com/pcgeek86/PSGitHub" target="_blank" rel="noopener noreferrer">PSGitHub Repository</a></li>
+  <li>​<a href="https://github.com/PowerShell/PowerShell/blob/master/docs/installation/linux.md#macos-1012" target="_blank" rel="noopener noreferrer">Installing PowerShell on Mac</a>
+</li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2017/11/20/Backing-up-MySQL-To-AWS-S3-with-Powershell/" itemprop="url">Backing Up MySQL to AWS S3 with PowerShell</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -344,83 +490,6 @@
   <li><a href="https://blog.synology.com/?p=2283" target="_blank" rel="noopener noreferrer">Synology Blog: QuickConnect, Quickly Explained</a></li>
 </ul>
 
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2017/05/20/synology-dns-server-for-dev-testing/" itemprop="url">Using Synology DNS Server for testing</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2017-05-20T05:00:00+01:00" itemprop="datePublished">May 20, 2017</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">dns, synology</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Nowadays many people use their phones as their primary web browsing device. As mobile usage is ubiquitous and increasing even more, testing the web applications on mobile platforms is becoming more important.</p>
-
-<p>Chrome has a great emulator for mobile devices but sometimes it’s best to test your application on an actual phone.</p>
-
-<p>If your application is the default application you can access via IP address you’re fine but the problem is if you have multiple domains you want to test at some point you’d need to enter the domain name in your phone’s browser.</p>
-
-<p>Today I bumped into such an issue and my solution involved one of my favourite devices in my household: Synology DS214Play</p>
-
-<h2 id="local-dns-server-on-synology">Local DNS Server on Synology</h2>
-
-<p><em>Step 01:</em> First, I installed DNS Server package by simply searching DNS and clicking install on Package Center.</p>
-
-<p><img src="/images/vpblogimg/2017/05/synology-dns-01-install.PNG" alt=""></p>
-
-<p><em>Step 02:</em> Then, I opened the DNS Server settings and created a new Master Zone. I simply entered the domain name of my site which is hosted on IIS on my development machine and the local network IP address of the Synology as the Master DNS Server.</p>
-
-<p><img src="/images/vpblogimg/2017/05/synology-dns-02-create-zone.PNG" alt=""></p>
-
-<p><em>Step 03</em>: Next, I needed to point to the actual web server. In order to do that I created an A record with the IP address of the local server a.k.a. my development machine.</p>
-
-<p><img src="/images/vpblogimg/2017/05/synology-dns-04-create-a-record.PNG" alt=""></p>
-
-<p><em>Step 04:</em> For all the domains that my DNS server didn’t know about (which is basically everything else!) I needed to forward the requests to “actual” DNS servers. In my case I use Google’s DNS servers so I entered those IPs as forwarders.</p>
-
-<p><img src="/images/vpblogimg/2017/05/synology-dns-03-forwarders.PNG" alt=""></p>
-
-<p><em>Step 05</em>: At this point the Synology DNS server is pointing to the web server and web server is hosting the website. All is left is pointing the client’s (phone or laptop) DNS setting to the local DNS server.</p>
-
-<p><img src="/images/vpblogimg/2017/05/synology-dns-05-update-dns-config.PNG" alt=""></p>
-
-<p><em>Step 06:</em> Now that it’s all setup I could access to my development machine using a locally-defined domain name from my phone:</p>
-
-<p><img src="/images/vpblogimg/2017/05/synology-dns-06-test-result.PNG" alt=""></p>
-
-<h2 id="conclusion">Conclusion</h2>
-<p>Another simple alternative to achieve this on Windows laptops is to edit hosts file under C:\Windows\System32\drivers\etc folder but when you have multiple clients in the network i.e macbooks and phones, it’s simpler just to point to the DNS server rather than editing each and every single device. And also it’s more fun this way!</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://www.synology.com/en-uk/knowledgebase/DSM/tutorial/Application/How_to_set_up_your_domain_with_Synology_DNS_Server" target="_blank" rel="noopener noreferrer">How to set up your domain with Synology DNS Server</a></li>
-  <li><a href="https://www.laurivan.com/set-up-a-local-dns-with-synology-diskstation/" target="_blank" rel="noopener noreferrer">Set Up a Local DNS with Synology DiskStation</a></li>
-</ul>
 
 		
 		

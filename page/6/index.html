@@ -109,6 +109,134 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2019/08/31/Setting-Up-a-Pi-Hole-with-a-Raspberry-Pi/" itemprop="url">Setting Up a Pi Hole with a Raspberry Pi</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-08-31T07:00:00+01:00" itemprop="datePublished">August 31, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/security">security</a></span> -->
+
+<!-- security -->
+
+
+
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">pi_hole, raspberry_pi</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p><img src="/images/vpblogimg/2019/08/pi-hole-logo.png" alt=""></p>
+
+<p>For some time I’d been wanting to set up my own Pi Hole in my network.</p>
+
+<p>In <a href="https://volkanpaksoy.com/archive/2019/08/10/Implementing-a-Self-Hosted-Docker-Registry-on-Raspberry-Pi/">this</a> previous post I implemented a Docker registry on Raspberry Pi. I was planning to install it using Docker on that Pi but then I decided to set up a new Pi from scratch due to performance concerns. After I get the hang of it I might migrate it to Docker.</p>
+
+<h2 id="preparations-download-raspbian-image-and-prepare-micro-sd-card">Preparations: Download Raspbian image and prepare Micro SD card</h2>
+<p>As of this writing, the latest Raspbian release is Buster but in the <a href="https://docs.pi-hole.net/main/prerequesites/#supported-operating-systems" target="_blank" rel="noopener noreferrer">official supported OS list</a> the latest supported Raspbian is Stretch. So I went to <a href="https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-04-09/" target="_blank" rel="noopener noreferrer">this</a> page to download Raspbian Stretch Lite.</p>
+
+<p>I downloaded Raspbian Buster Lite as I don’t need desktop and other extra software for this project.I followed the official guide from raspberrypi.org to burn the image. It’s basically just a few commands:</p>
+
+<p>I inserted the card and run the following to identify the card:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil list
+</code></pre></div></div>
+
+<p>Then</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo dd bs=1m if=path_of_your_image.img of=/dev/rdiskn conv=sync
+</code></pre></div></div>
+
+<p>where n is the number of disk which I found from the first step.</p>
+
+<p>If you get “resource is busy” error, then run the following</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil unmountDisk /dev/diskn
+</code></pre></div></div>
+
+<h2 id="carry-out-necessary-configuration-updates">Carry Out Necessary Configuration Updates</h2>
+<p>It’s a good practice to change the default passwords so I ran</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>passwd
+</code></pre></div></div>
+
+<p>and updated the password.</p>
+
+<p>Also for remote installations I enabled SSH:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable ssh
+sudo systemctl start ssh
+</code></pre></div></div>
+
+<p>And I like to give a specific name to all my devices so that I can keep an eye on the machines connected to my network more easily.</p>
+
+<p>To achieve that I ran:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo hostname NEW_HOSTNAME
+</code></pre></div></div>
+
+<p>No need to set a static IP address at this point as Pi Hole setup takes care of that:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pihole-static-ip-needed.png" alt=""></p>
+
+<h2 id="install-pi-hole">Install Pi-Hole</h2>
+<p>There is an easy one-step installation:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -sSL https://install.pi-hole.net | bash
+</code></pre></div></div>
+
+<p>I changed my IP to a different static IP and rebooted the Pi.</p>
+
+<p>After that I could go to the admin page via http://{Pi Hole Static IP}/admin/ and see the dashboard:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pihole-admin-page.png" alt=""></p>
+
+<h2 id="test">Test</h2>
+<p>Now it’s time to see if it’s working at all. I have 2 MacBooks connected to the same network. I changed one of the laptop’s DNS server to point to Pi Hole and left the other one intact.</p>
+
+<p>In the laptop that’s still using the old DNS settings, I opened a Chrome window in incognito mode and visited a site and at top it shows an ad:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pihole-page-with-ads.png" alt=""></p>
+
+<p>And on the other laptop I repeated the process and I got the same page without ads this time:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pihole-page-without-ads.png" alt=""></p>
+
+<p>When I go to the admin page I can see what calls are blocked:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pi-hole-admin-page-with-results.png" alt=""></p>
+
+<p>Also a nice thing about it you can choose to Whitelist certain providers. For instance in the image below it looks like Google Analytics is blocked and I can whitelist it easily:</p>
+
+<p><img src="/images/vpblogimg/2019/08/pi-hole-admin-page-query-logs.png" alt=""></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://pi-hole.net/" target="_blank" rel="noopener noreferrer">Official Pi-Hole Website</a></li>
+  <li><a href="https://www.hanselman.com/blog/BlockingAdsBeforeTheyEnterYourHouseAtTheDNSLevelWithPiholeAndACheapRaspberryPi.aspx" target="_blank" rel="noopener noreferrer">Scott Hanselman: Blocking ads before they enter your house at the DNS level with pi-hole and a cheap Raspberry Pi</a></li>
+  <li><a href="https://blog.codinghorror.com/an-exercise-program-for-the-fat-web/" target="_blank" rel="noopener noreferrer">Jeff Atwood: An Exercise Program for the Fat Web</a></li>
+  <li><a href="https://twit.tv/shows/know-how/episodes/355" target="_blank" rel="noopener noreferrer">TWiT Know How Episode 355: Raspberry Pi-Hole!</a></li>
+  <li><a href="https://hub.docker.com/r/pihole/pihole/" target="_blank" rel="noopener noreferrer">Docker Pi-hole DockerHub repository</a></li>
+  <li><a href="https://discourse.pi-hole.net/" target="_blank" rel="noopener noreferrer">Pi-Hole Forum</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2019/08/21/Exploring-AWS-DeepLens/" itemprop="url">Exploring AWS DeepLens</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -354,303 +482,6 @@
 <ul>
   <li><a href="https://www.pluralsight.com/courses/implementing-self-hosted-docker-registry" target="_blank" rel="noopener noreferrer">Pluralsight course: Implementing a Self-hosted Docker Registry</a></li>
   <li><a href="https://hub.docker.com/_/registry" target="_blank" rel="noopener noreferrer">Docker registry repo</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2019/07/05/ElasticSearch-Workout/" itemprop="url">Elasticsearch Workout</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2019-07-05T05:00:00+01:00" itemprop="datePublished">July  5, 2019</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">csharp, elasticsearch, docker, nest</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p><img src="/images/vpblogimg/2019/07/logo-elastic-elasticsearch-lt.svg" alt=""></p>
-
-<p>I’ve been playing around with Elasticsearch on several occasions. This post is to organize those thoughts and experiences and show an easy way to setup ElasticSearch and start playing around with it.</p>
-
-<h2 id="setup">Setup</h2>
-<p>Easiest way to setup Elasticsearch locally is using Docker. As of this writing the latest version of Elasticsearch is 7.2.0 and I’ll be using that in this example:</p>
-
-<p>If you don’t already have the image, simply pull from Docker hub:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull docker.elastic.co/elasticsearch/elasticsearch:7.2.0
-</code></pre></div></div>
-
-<p>For development environment suggested command to run a container is</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.2.0
-</code></pre></div></div>
-
-<p>which keeps it very simple and straightforward but in my workout I’d like to insert a whole bunch of data and run some queries on it and I don’t want to re-generate my data over and over again. So I decided to persist my data on host.</p>
-
-<h3 id="persisting-elasticsearch-data">Persisting Elasticsearch Data</h3>
-<p>Instead of running containers one by one in the command line a better approach is to create a docker-compose.yml file file and use Docker compose to start services. I used the sample YAML file provided in official Elastic <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html" target="_blank" rel="noopener noreferrer">documentation</a></p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '2.2'
-services:
-  es01:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
-    container_name: es01
-    environment:
-      - node.name=es01
-      - discovery.seed_hosts=es02
-      - cluster.initial_master_nodes=es01,es02
-      - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - esdata01:/usr/share/elasticsearch/data
-    ports:
-      - 9200:9200
-    networks:
-      - esnet
-  es02:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
-    container_name: es02
-    environment:
-      - node.name=es02
-      - discovery.seed_hosts=es01
-      - cluster.initial_master_nodes=es01,es02
-      - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - esdata02:/usr/share/elasticsearch/data
-    networks:
-      - esnet
-
-volumes:
-  esdata01:
-    driver: local
-  esdata02:
-    driver: local
-
-networks:
-  esnet:
-</code></pre></div></div>
-
-<p>This example creates an Elasticsearch cluster with 2 nodes and uses named volumes to persist data so next time when we bring this cluster up again we should be able to continue where we left off data-wise.</p>
-
-<h2 id="sample-application">Sample Application</h2>
-<p>In <a href="https://volkanpaksoy.com/archive/2019/06/27/Generating-Test-Data-with-Bogus/">my previous blog post</a> I developed a simple test data generator to generate fake bank statement data with a library called Bogus. In this project, I will use that generator to generate lots and lots of test data, insert them into Elasticsearch and have fun with it!</p>
-
-<p>When you start a C# project and start looking for a library to interact with Elasticsearch, it’s a bit confusing to find out there are actually two of them: Elasticsearch.net and NEST. The gist of it is NEST is a high-level library that uses Elasticsearch.net under the hood. It also exposes low-level client so that it actually enhances Elasticsearch.net and allows using strongly typed DSL queries. In the sample application I used NEST.</p>
-
-<h3 id="creating-elasticsearch-client">Creating Elasticsearch client</h3>
-<p>Creating a client with some basic settings is straightforward:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">connectionSettings</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ConnectionSettings</span><span class="p">(</span><span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="s">"http://localhost:9200"</span><span class="p">)))</span>
-<span class="p">{</span>
-    <span class="kt">var</span> <span class="n">settings</span> <span class="p">=</span> <span class="n">connectionSettings</span>
-        <span class="p">.</span><span class="nf">DefaultIndex</span><span class="p">(</span><span class="s">"bankstatementindex"</span><span class="p">)</span>
-        <span class="p">.</span><span class="nf">ThrowExceptions</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
-	<span class="n">IElasticClient</span> <span class="n">elasticClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ElasticClient</span><span class="p">(</span><span class="n">settings</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="indexing-data">Indexing data</h3>
-<p>To index a single document **IndexDocument<t>** method can be called. However, using this method to loop through a large number of documents is not recommended.</t></p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">elasticClient</span><span class="p">.</span><span class="n">IndexDocument</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;(</span><span class="n">testData</span><span class="p">.</span><span class="nf">First</span><span class="p">());</span>
-</code></pre></div></div>
-
-<p>For multiple documents, <strong>IndexMany</strong> method should be called. If the data size too large then using <strong>BulkAll</strong> method and <strong>BulkAllObservable</strong> helper is recommended.</p>
-
-<p>To see the difference I created a test to index 5,000 documents with a looping over the array and using BulkAll after that. Looping over the collection took around 26 seconds whereas bulk index took only 1.2 seconds as shown in the screenshot.</p>
-
-<p><img src="/images/vpblogimg/2019/07/indexdocument-vs-bulkall.png" alt=""></p>
-
-<p>Also it displays “Done” 5 times because I set the size to 1,000 and I requested 5,000 documents to be indexed so it automatically divided the load into 5 and made 5 calls:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">bulkAll</span> <span class="p">=</span> <span class="n">elasticClient</span><span class="p">.</span><span class="nf">BulkAll</span><span class="p">(</span><span class="n">testData</span><span class="p">,</span> <span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span>
-                <span class="p">.</span><span class="nf">BackOffRetries</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
-                <span class="p">.</span><span class="nf">BackOffTime</span><span class="p">(</span><span class="s">"30s"</span><span class="p">)</span>
-                <span class="p">.</span><span class="nf">RefreshOnCompleted</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
-                <span class="p">.</span><span class="nf">MaxDegreeOfParallelism</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
-                <span class="p">.</span><span class="nf">Size</span><span class="p">(</span><span class="m">1000</span><span class="p">));</span>
-
-<span class="n">bulkAll</span><span class="p">.</span><span class="nf">Wait</span><span class="p">(</span><span class="n">TimeSpan</span><span class="p">.</span><span class="nf">FromSeconds</span><span class="p">(</span><span class="m">60</span><span class="p">),</span>
-    <span class="n">onNext</span><span class="p">:</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="n">Console</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="s">"Done"</span><span class="p">);</span> <span class="p">}</span>
-<span class="p">);</span>
-</code></pre></div></div>
-
-<p>Same result can also be achieved by subscribing to BulkAll observer:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">waitHandle</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CountdownEvent</span><span class="p">(</span><span class="m">1</span><span class="p">);</span>
-
-<span class="n">bulkAll</span><span class="p">.</span><span class="nf">Subscribe</span><span class="p">(</span><span class="k">new</span> <span class="nf">BulkAllObserver</span><span class="p">(</span>
-    <span class="n">onNext</span><span class="p">:</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="n">Console</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="s">"."</span><span class="p">);</span> <span class="p">},</span>
-    <span class="n">onError</span><span class="p">:</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="k">throw</span> <span class="n">e</span><span class="p">;</span> <span class="p">},</span>
-    <span class="n">onCompleted</span><span class="p">:</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="n">waitHandle</span><span class="p">.</span><span class="nf">Signal</span><span class="p">()</span>
-<span class="p">));</span>
-
-<span class="n">waitHandle</span><span class="p">.</span><span class="nf">Wait</span><span class="p">();</span>
-</code></pre></div></div>
-
-<h3 id="showing-progress">Showing progress</h3>
-<p>In the sample code below I showed displaying progress using onNext action delegate:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var testData = dataGen.Generate(statementConfig.StartDate, statementConfig.EndDate, statementConfig.OpeningBalance, statementConfig.DebitTransactionRatio, statementConfig.TransactionDateInterval, statementConfig.NumberOfStatementLines);
-var cancellationToken = new CancellationToken();
-var batchSize = 250;
-var bulkAll = elasticClient.BulkAll(testData, x =&gt; x
-    .BackOffRetries(2)
-    .BackOffTime("30s")
-    .RefreshOnCompleted(true)
-    .MaxDegreeOfParallelism(4)
-    .Size(batchSize), cancellationToken);
-var totalIndexed = 0;
-var stopWatch = new Stopwatch();
-stopWatch.Start();
-bulkAll.Wait(TimeSpan.FromSeconds(60),
-    onNext: (b) =&gt;
-    {
-        totalIndexed += batchSize;
-        Console.WriteLine($"Total indexed documents: {totalIndexed}");
-    }
-);
-</code></pre></div></div>
-
-<p>and the output looked like this:</p>
-
-<p><img src="/images/vpblogimg/2019/07/bulkall-parallel-threads.png" alt=""></p>
-
-<p>Even though the numbers seem a bit wonky I think it’s a good example to illustrate the multi-threaded nature of BulkAll. Because I set the maximum degree of paralleism to 4 and first 1,000 were inserted in a mixed order suggesting that they were running in parallel.</p>
-
-<h3 id="cancellation-with-bulk-operations">Cancellation with bulk operations</h3>
-<p>BulkAll observer can also be cancelled for longer processes if necessary. The code excerpt below shows the relevant pieces to cancellation</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">cancellationTokenSource</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CancellationTokenSource</span><span class="p">();</span>
-<span class="kt">var</span> <span class="n">cancellationToken</span> <span class="p">=</span> <span class="n">cancellationTokenSource</span><span class="p">.</span><span class="n">Token</span><span class="p">;</span>
-<span class="kt">var</span> <span class="n">batchSize</span> <span class="p">=</span> <span class="m">250</span><span class="p">;</span>
-<span class="kt">var</span> <span class="n">bulkAll</span> <span class="p">=</span> <span class="n">elasticClient</span><span class="p">.</span><span class="nf">BulkAll</span><span class="p">(</span><span class="n">testData</span><span class="p">,</span> <span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span>
-    <span class="p">.</span><span class="nf">BackOffRetries</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
-    <span class="p">.</span><span class="nf">BackOffTime</span><span class="p">(</span><span class="s">"30s"</span><span class="p">)</span>
-    <span class="p">.</span><span class="nf">RefreshOnCompleted</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
-    <span class="p">.</span><span class="nf">MaxDegreeOfParallelism</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
-    <span class="p">.</span><span class="nf">Size</span><span class="p">(</span><span class="n">batchSize</span><span class="p">),</span> <span class="n">cancellationToken</span><span class="p">);</span>
-<span class="kt">var</span> <span class="n">totalIndexed</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
-<span class="kt">var</span> <span class="n">stopWatch</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Stopwatch</span><span class="p">();</span>
-<span class="n">stopWatch</span><span class="p">.</span><span class="nf">Start</span><span class="p">();</span>
-<span class="n">Task</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="nf">StartNew</span><span class="p">(()</span> <span class="p">=&gt;</span>
-    <span class="p">{</span>
-        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Started monitor thread"</span><span class="p">);</span>
-        <span class="kt">var</span> <span class="n">cancelled</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(!</span><span class="n">cancelled</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">stopWatch</span><span class="p">.</span><span class="n">Elapsed</span> <span class="p">&gt;=</span> <span class="n">TimeSpan</span><span class="p">.</span><span class="nf">FromSeconds</span><span class="p">(</span><span class="m">60</span><span class="p">))</span>
-            <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">cancellationToken</span><span class="p">.</span><span class="n">CanBeCanceled</span><span class="p">)</span>
-                <span class="p">{</span>
-                    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Cancelling. Elapsed time: </span><span class="p">{</span><span class="n">stopWatch</span><span class="p">.</span><span class="n">Elapsed</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(</span><span class="s">"mm\\:ss\\.ff"</span><span class="p">)}</span><span class="s">"</span><span class="p">);</span>
-                    <span class="n">cancellationTokenSource</span><span class="p">.</span><span class="nf">Cancel</span><span class="p">();</span>
-                    <span class="n">cancelled</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-
-            <span class="n">Thread</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="m">100</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">);</span>
-
-<span class="k">try</span>
-<span class="p">{</span>
-    <span class="n">bulkAll</span><span class="p">.</span><span class="nf">Wait</span><span class="p">(</span><span class="n">TimeSpan</span><span class="p">.</span><span class="nf">FromSeconds</span><span class="p">(</span><span class="m">60</span><span class="p">),</span>
-        <span class="n">onNext</span><span class="p">:</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">=&gt;</span>
-        <span class="p">{</span>
-            <span class="n">totalIndexed</span> <span class="p">+=</span> <span class="n">batchSize</span><span class="p">;</span>
-            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Total indexed documents: </span><span class="p">{</span><span class="n">totalIndexed</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">);</span>
-<span class="p">}</span>
-<span class="k">catch</span> <span class="p">(</span><span class="n">OperationCanceledException</span> <span class="n">e</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Taking longer than allowed. Cancelled."</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="querying-data">Querying Data</h3>
-<p>Querying data can be done by calling Search method of ElasticsearchClient. Here’s a few examples below. There are more in the sample accompanying source code:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Get the first 100 documents</span>
-<span class="kt">var</span> <span class="n">searchResponse</span> <span class="p">=</span> <span class="n">elasticClient</span><span class="p">.</span><span class="n">Search</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;(</span><span class="n">s</span> <span class="p">=&gt;</span> <span class="n">s</span>
-    <span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="n">q</span> <span class="p">=&gt;</span> <span class="n">q</span>
-        <span class="p">.</span><span class="nf">MatchAll</span><span class="p">()</span>
-    <span class="p">)</span>
-    <span class="p">.</span><span class="nf">Size</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
-<span class="p">);</span>
-</code></pre></div></div>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Get transactions with date between 01/01/2018 and 10/01/2018</span>
-<span class="kt">var</span> <span class="n">searchResponse</span> <span class="p">=</span> <span class="n">elasticClient</span><span class="p">.</span><span class="n">Search</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;(</span><span class="n">s</span> <span class="p">=&gt;</span> <span class="n">s</span>
-    <span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="n">q</span> <span class="p">=&gt;</span> <span class="n">q</span>
-        <span class="p">.</span><span class="nf">DateRange</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span>
-            <span class="p">.</span><span class="nf">Field</span><span class="p">(</span><span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">TransactionDate</span><span class="p">)</span>
-            <span class="p">.</span><span class="nf">GreaterThanOrEquals</span><span class="p">(</span><span class="k">new</span> <span class="nf">DateTime</span><span class="p">(</span><span class="m">2018</span><span class="p">,</span> <span class="m">01</span><span class="p">,</span> <span class="m">01</span><span class="p">))</span>
-            <span class="p">.</span><span class="nf">LessThanOrEquals</span><span class="p">(</span><span class="k">new</span> <span class="nf">DateTime</span><span class="p">(</span><span class="m">2018</span><span class="p">,</span> <span class="m">01</span><span class="p">,</span> <span class="m">10</span><span class="p">))</span>
-        <span class="p">)</span>
-    <span class="p">)</span>
-    <span class="p">.</span><span class="nf">Size</span><span class="p">(</span><span class="m">10000</span><span class="p">)</span>
-<span class="p">);</span>
-</code></pre></div></div>
-
-<h3 id="deleting-data">Deleting data</h3>
-<p>For my tests I had to delete all frequently and it can be achieved by running the query below:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">elasticClient</span><span class="p">.</span><span class="n">DeleteByQuery</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;(</span><span class="n">del</span> <span class="p">=&gt;</span> <span class="n">del</span>
-    <span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="n">q</span> <span class="p">=&gt;</span> <span class="n">q</span><span class="p">.</span><span class="nf">QueryString</span><span class="p">(</span><span class="n">qs</span> <span class="p">=&gt;</span> <span class="n">qs</span><span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="s">"*"</span><span class="p">)))</span>
-<span class="p">);</span>
-</code></pre></div></div>
-
-<h2 id="source-code">Source Code</h2>
-<p></p>
-<div class="github-widget" data-repo="volkanpaksoy/lab"></div>
-
-<p>Sample application can be found under blog/ElasticsearchWorkout folder in the repository.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/ElasticsearchWorkout" target="_blank" rel="noopener noreferrer">Sample source code</a></li>
-  <li><a href="https://www.elastic.co/guide/en/elasticsearch/client/net-api/current/nest-getting-started.html" target="_blank" rel="noopener noreferrer">NEST Getting Started</a></li>
-  <li><a href="https://volkanpaksoy.com/archive/2019/06/27/Generating-Test-Data-with-Bogus/">Blog post: Generating Test Data with Bogus</a></li>
-  <li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.2/index.html" target="_blank" rel="noopener noreferrer">Elasticsearch Reference</a></li>
-  <li><a href="https://www.elastic.co/guide/en/elasticsearch/client/net-api/7.x/index.html" target="_blank" rel="noopener noreferrer">Elasticsearch.Net and NEST: the .NET clients 7.x</a></li>
-  <li><a href="https://www.elastic.co/blog/a-practical-introduction-to-elasticsearch" target="_blank" rel="noopener noreferrer">A Practical Introduction to Elasticsearch</a></li>
-  <li><a href="https://rimdev.io/bulk-import-documents-into-elasticsearch-using-nest/" target="_blank" rel="noopener noreferrer">Bulk Import Documents Into Elasticsearch Using NEST</a></li>
 </ul>
 
 		

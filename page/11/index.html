@@ -109,6 +109,88 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2019/01/21/Exploring-AWS-Config/" itemprop="url">Exploring AWS Config</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-01-21T06:00:00+00:00" itemprop="datePublished">January 21, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awssecurity">aws</a></span> -->
+
+<!-- aws, security -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">aws_config, audit</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>In my previos <a href="https://volkanpaksoy.com/archive/2019/01/18/AWS-Security-Best-Practices-Use-IAM-instead-of-root/">blog post</a> I talked about creating an IAM admin user and using that instead of root user all the time. Applying such best practices is a good idea which also begs the question: How can I enforce these rules?</p>
+
+<h2 id="aws-config">AWS Config</h2>
+
+<p><img src="/images/vpblogimg/common/aws/aws-config.png" alt=""></p>
+
+<p>The official description of the service is: <em>“AWS Config is a service that enables you to assess, audit, and evaluate the configurations of your AWS resources”</em></p>
+
+<p>What this means is you select some pre-defined rules or implement your custom rules and AWS config constantly runs checks against your resources and notify you if you have non-compliant resources.</p>
+
+<p>Since currently I’m interested in hardening IAM users in the next example I’m going to use an IAM check</p>
+
+<h2 id="use-case-enforcing-mfa">Use case: Enforcing MFA</h2>
+
+<p>As of this writing there are 80 managed config rules. To enforce MFA, I simply searched MFA in the “Add rule” anf got 5 matches of which I selected only 3:</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-config-00-mfa-rules.png" alt=""></p>
+
+<p>After I accepted the default settings it was able to identify my IAM user without MFA:</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-config-01-rules.png" alt=""></p>
+
+<p>And it comes with a nice little dashboard that shows all your non-compliant resources:</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-config-02-dashboard.png" alt=""></p>
+
+<p>It also supports notifications via SNS. It creates a topic and all you have to do is subscribe to that via an email address and after confirming your address you can start receiving emails.</p>
+
+<p>I was only expecting to get emails about non-compliant resources but it’s bit noisy as it sends emails with subjects “Configuration History Delivery Completed” or “Configuration Snapshot Delivery Started” which didn’t mean much to me.</p>
+
+<h2 id="pricing">Pricing</h2>
+<p>I think the price is exteremely high. The details can be found on their <a href="https://aws.amazon.com/config/pricing/" target="_blank" rel="noopener noreferrer">pricing page</a> but in a nutshell a single rule costs $2/month. So for the above example I paid $6 which is a lot of money in terms of resources used.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>I like the idea of having an auditing system with notifications but for this price I don’t think I will use it.</p>
+
+<p>I will keep on exploring though as I’m keen on implementing my custom rules with AWS config and also implementing them without AWS config and see if this service adds any benefit over having scheduled Lambda functions.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://aws.amazon.com/config/" target="_blank" rel="noopener noreferrer">AWS Config</a></li>
+  <li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#enable-mfa-for-privileged-users" target="_blank" rel="noopener noreferrer">AWS IAM Best Practices: Enable MFA for Privileged Users</a></li>
+  <li><a href="https://aws.amazon.com/config/pricing/" target="_blank" rel="noopener noreferrer">AWS Config Pricing</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2019/01/18/AWS-Security-Best-Practices-Use-IAM-instead-of-root/" itemprop="url">AWS Security Best Practices: Use IAM user instead of root account</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -327,65 +409,6 @@
   <li><a href="https://aws.amazon.com/cloudformation/aws-cloudformation-templates/" target="_blank" rel="noopener noreferrer">AWS CloudFormation Templates</a></li>
   <li><a href="https://aws.amazon.com/blogs/devops/construct-your-own-launch-stack-url/" target="_blank" rel="noopener noreferrer">Construct Your Own Launch Stack URL</a></li>
   <li><a href="https://aws.amazon.com/cloudformation/resources/" target="_blank" rel="noopener noreferrer">AWS CloudFormation Resources</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2018/12/19/Aurora-Serverless/" itemprop="url">AWS Aurora Serverless</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2018-12-19T09:00:00+00:00" itemprop="datePublished">December 19, 2018</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
-
-<!-- aws -->
-
-
-
-
-    <a href="/category/aws">aws</a>
-    
-</span>
-	<span class="tags">aurora, rds, serverless, database</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>A few months ago AWS <a href="https://aws.amazon.com/blogs/aws/aurora-serverless-ga/" target="_blank" rel="noopener noreferrer">announced</a> a serverless model for their Aurora databases. Compared to traditional DB approach this is brand new.</p>
-
-<p>I’ve been trying it out for a pilot application and it works well in general. You pay for what you use just like any other serverless resource.</p>
-
-<p>The only problem I’ve been having is DB startup time after pause. Meaning after 5 minutes the resources are released and the first request that comes after that suffers a performance penalty. My application was getting an error when this happened and it was showing an error screen. Obviously from a user standpoint it’s not a great experience.</p>
-
-<p>So to remedy this issue I’ve updated the DB connection timeout</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Connection Timeout=120
-</code></pre></div></div>
-
-<p>By default it’s 15 seconds which is not enough for the new server to respond. But after increasing the timeout at least I could prevent the application from failing. Of course this doesn’t speed up the response time of the DB server.</p>
-
-<p>They recently <a href="https://aws.amazon.com/about-aws/whats-new/2018/11/amazon-aurora-serverless-now-available-in-additional-regions/" target="_blank" rel="noopener noreferrer">announced</a> additional regions that support serverless Aurora.</p>
-
-<p>For cost-cutting reasons this can be a great option. Especially if your system is idle for extended periods of time you don’t need to pay anything. Also it scales up so you don’t have to worry about the database bottlenecks under heavy traffic.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.how-it-works.html" target="_blank" rel="noopener noreferrer">How Aurora Serverless Works</a></li>
-  <li><a href="https://medium.com/searce/amazon-aurora-serverless-features-limitations-glitches-d07f0374a2ab" target="_blank" rel="noopener noreferrer">Amazon Aurora Serverless — Features, Limitations, Glitches</a></li>
-  <li><a href="https://forums.aws.amazon.com/thread.jspa?threadID=288043" target="_blank" rel="noopener noreferrer">aurora serverless startup time after pause</a></li>
-  <li><a href="https://aws.amazon.com/blogs/aws/aurora-serverless-ga/" target="_blank" rel="noopener noreferrer">Aurora Serverless MySQL Generally Available</a></li>
 </ul>
 
 		

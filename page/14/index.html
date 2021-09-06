@@ -109,6 +109,442 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2018/07/08/AWS-certification-notes-cloud-practitioner/" itemprop="url">AWS Certification Notes: AWS Certified Cloud Practitioner</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2018-07-08T06:00:00+01:00" itemprop="datePublished">July  8, 2018</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">certification, certified_cloud_practitioner</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p><img src="/images/vpblogimg/2018/07/aws-cloud-practitioner-00-Intro.png" alt=""></p>
+
+<p>As I decided to get full AWS certification I started preparing for the exams. I wanted to start with the Cloud Practitioner just to get my self accustomed with the exam procedure in general. Here’s my notes:</p>
+
+<h2 id="exam-objectives">Exam Objectives</h2>
+
+<p>According to Amazon’s official exam description page, this exam validates the following aspects:</p>
+
+<ul>
+  <li>Define what the AWS Cloud is and the basic global infrastructure</li>
+  <li>Describe basic AWS Cloud architectural principles</li>
+  <li>Describe the AWS Cloud value proposition</li>
+  <li>Describe key services on the AWS platform and their common use cases (for example, compute and analytics)</li>
+  <li>Describe basic security and compliance aspects of the AWS platform and the shared security model</li>
+  <li>Define the billing, account management, and pricing models</li>
+  <li>Identify sources of documentation or technical assistance (for example, whitepapers or support tickets)</li>
+  <li>Describe basic/core characteristics of deploying and operating in the AWS Cloud</li>
+</ul>
+
+<h2 id="main-subject-areas">Main Subject Areas</h2>
+
+<ol>
+  <li>Billing and pricing (12%)</li>
+  <li>Cloud concepts (28%)</li>
+  <li>Technology (36%)</li>
+  <li>Security (24%)</li>
+</ol>
+
+<h2 id="preparation-notes">Preparation Notes</h2>
+
+<h3 id="awstraining-online-training-notes">aws.training Online Training Notes</h3>
+
+<h4 id="cloud-computing">Cloud Computing</h4>
+
+<ul>
+  <li>On-demand delivery of IT resources. Can scale up and down based on needs.</li>
+  <li>Fosters agility (number one reason why customers switch to cloud computing): Speed (global reach), experimentation (operations as code, templated environments with CloudFormation) and culture of innovation (experiment quickly with low cost)</li>
+  <li>Region vs Availability Zone (AZ): Region is a physical location in the world which contains multiple AZs. AZs contain one or more discrete data centers with independent resources and housed in different facilities.</li>
+  <li>Using Auto Scaling and ELB, scale up and down and only pay for what you use.</li>
+  <li>Ability to deploy systems in multiple regions (lower latency)</li>
+  <li>Ability to choose the region where data is stored</li>
+  <li>AWS is responsible for data center security</li>
+  <li>Security policy can be formalized (as code)</li>
+  <li>Ability to recover from failures</li>
+</ul>
+
+<h4 id="core-services">Core Services</h4>
+<ul>
+  <li>Global Infrastructure:
+    <ul>
+      <li>Regions: Have multiple AZs</li>
+      <li>Availability Zones: Have one or more data centres. They all have different power supplier companies.</li>
+      <li>Edge Locations: Used by CloudFront.</li>
+    </ul>
+  </li>
+  <li>Amazon Virtual Private Cloud (VPC)
+    <ul>
+      <li>Uses same concepts as on-premise networking</li>
+      <li>VPC can span across multiple AZs</li>
+      <li>Supports multiple subnets (each of which can be deployed in a different AZ)</li>
+      <li>Can create public-facing subnets and private-facing subnets within the same VPC</li>
+      <li>Each account can create multiple VPCs</li>
+      <li>Using fewer VPCs is recommended to avoid complexity</li>
+      <li>
+        <p>Can assign Internet Gateways to specific subnets to allow public access</p>
+
+        <p><img src="/images/vpblogimg/2018/07/aws-cloud-practitioner-01-VPC.png" alt=""></p>
+      </li>
+    </ul>
+  </li>
+  <li>Security Groups
+    <ul>
+      <li>Act like a built-in firewall</li>
+      <li>Best practice: Allow what’s required only and block everything else</li>
+    </ul>
+  </li>
+  <li>Compute Services
+    <ul>
+      <li>Amazon Lightsail: Managed Virtual Private Servers service
+        <ul>
+          <li>Fixed price.</li>
+          <li>Includes a static IP, DNS management and storage</li>
+          <li>Fixed configuration</li>
+          <li>Uses t2 class EC2 instances under the hood</li>
+        </ul>
+      </li>
+      <li>AWS Elastic Compute Cloud (EC2)
+        <ul>
+          <li>Difference betwwen EC2-Classic and EC2-VPC
+            <ul>
+              <li>EC2-Classic: Your instances run in a single, flat network that you share with other customers.</li>
+              <li>EC2-VPC: Your instances run in a virtual private cloud (VPC) that’s logically isolated to your AWS account.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>AWS Lambda
+        <ul>
+          <li>No servers to manage</li>
+          <li>Pay as you go: Only pay for the time your code runs</li>
+          <li>Continuous scaling</li>
+          <li>Supports subsecond metering. Charged for every 100 milliseconds of execution time</li>
+          <li>Some limitations apply: <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html" target="_blank" rel="noopener noreferrer">AWS Lambda Limits</a>
+</li>
+        </ul>
+      </li>
+      <li>AWS Elastic Beanstalk
+        <ul>
+          <li>Platform as a service</li>
+          <li>Allows quick deployments of applications</li>
+          <li>Allows HTTPS on load balancers</li>
+          <li>Supports various platforms (node.js, python etc)</li>
+          <li>Provisions the resources required (EC2, ELB etc) automatically</li>
+        </ul>
+      </li>
+      <li>Application Load Balancer
+        <ul>
+          <li>2nd type of load balancer offered by ELB</li>
+        </ul>
+
+        <p><img src="/images/vpblogimg/2018/07/aws-cloud-practitioner-02-Application-Load-Balancer.png" alt=""></p>
+
+        <ul>
+          <li>Comes with new features</li>
+        </ul>
+
+        <p><img src="/images/vpblogimg/2018/07/aws-cloud-practitioner-03-ALB-New-features.png" alt=""></p>
+
+        <ul>
+          <li>Supports routing to containers</li>
+          <li>Key terms:
+            <ul>
+              <li>Listeners: A process that checks for connection requests using the configuration (protocol, port)</li>
+              <li>Target: Destination for traffic</li>
+              <li>Target Group: Each target group routes requests to one or more registered targets</li>
+            </ul>
+          </li>
+          <li>Target checks can be performed per target group basis</li>
+          <li>Integrates with ECS and supports dynamic ports utilized by scheduled containers</li>
+          <li>Need to create at least 2 AZs when creating an Application Load Balancer</li>
+          <li>Ability to route to different target groups based on port or path</li>
+        </ul>
+      </li>
+      <li>Elastic Load Balancer
+        <ul>
+          <li>Supports sticky sessions</li>
+          <li>Supports multiple AZs and cross-zone balancing</li>
+          <li>For HTTP/HTTPS it uses “Least Outstanding” method to route the request. For TCP, it uses “Round robin”. The least outstanding routing algorithm is defined as “A ‘least outstanding requests routing algorithm’ is an algorithm that choses which instance receives the next request by selecting the instance that, at that moment, has the lowest number of outstanding (pending, unfinished) requests.”</li>
+        </ul>
+      </li>
+      <li>Auto Scaling
+        <ul>
+          <li>Adding more instances: Scaling out, terminating instanes: Scaling in</li>
+          <li>Launch configuration answers “What” (AMI, Instance type, Security Groups, Roles). Creating an LC is similar to creating a new EC2 instance.</li>
+          <li>Auto Scaling Group answers “Where” (VPC and subnet(s), load balancer, minimum and maximum instances, desired capacity)</li>
+          <li>Auto Scaling Policy answeres “When” (Scheduled/on-demand/scale out or in policy)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Amazon EBS
+    <ul>
+      <li>Allows point-in-time snapshots and creation of a new volume from a snapshot</li>
+      <li>Supports encrypted volumes free of charge</li>
+      <li>EBS volume must be created in the same AZ as the EC2 instance that will use it</li>
+    </ul>
+  </li>
+  <li>Amazon S3
+    <ul>
+      <li>Objects are stored redundantly across multiple facilities withing the same region</li>
+      <li>The bucket names must be globally unique.</li>
+      <li>Can configure cross-region replication for backup and disaster recovery</li>
+      <li>Amazon S3 Transfer Acceleration enables fast, easy, and secure transfers of files over long distances between your client and an S3 bucket</li>
+    </ul>
+  </li>
+  <li>Amazon Glacier
+    <ul>
+      <li>Vaults have access and lock policies attached to them</li>
+      <li>Each AWS account can create up to 1000 vaults</li>
+      <li>Can create an S3 lifecycle policy to move to Glacier then delete after a period of time
+        <ul>
+          <li>Supports up to 40TB max item size (S3 supports 5TB)</li>
+          <li>It costs more per retrieval</li>
+          <li>Vault Lock allows you to easily deploy and enforce compliance controls for individual Amazon Glacier vaults with a vault lock policy. You can specify controls such as “write once read many” (WORM) in a vault lock policy and lock the policy from future edits. Once locked, the policy can no longer be changed</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Amazon RDS
+    <ul>
+      <li>Can create a standby copy in a different AZ within the same VPC</li>
+      <li>Can create multiple read replicas (in different regions as well)</li>
+    </ul>
+  </li>
+  <li>Amazon DynamoDB
+    <ul>
+      <li>Always uses SSD for storage</li>
+      <li>Supports auto-scaling. Increases/decreases the throughput based on load</li>
+      <li>Tables are partitioned by primary key</li>
+      <li>Two query methods: Query and Scan</li>
+      <li>Query uses the primary key to find items. Scan can use any attribute.</li>
+      <li>Scan is slower than Query as it needs to look at all items</li>
+    </ul>
+  </li>
+  <li>Amazon Redshift
+    <ul>
+      <li>Managed data warehouse</li>
+      <li>Supports standard SQL</li>
+      <li>Supports ODBC/JDBC connectors</li>
+    </ul>
+  </li>
+  <li>Amazon Aurora
+    <ul>
+      <li>Managed MySQL-clone (compatible with MySQL)</li>
+      <li>After a crash it doesn’t need to redo log files. It performs it on every read operation which reduces the restart time</li>
+    </ul>
+  </li>
+  <li>AWS Trusted Advisor
+    <ul>
+      <li>Checks all the resources used and gives advice based on best practices</li>
+      <li>5 categories:
+        <ul>
+          <li>Cost optimisation</li>
+          <li>Performance</li>
+          <li>Security</li>
+          <li>Fault tolerance</li>
+          <li>Service limits</li>
+        </ul>
+      </li>
+      <li>Upgrading support plan enables all Trusted Advisor recommendations, free plan doesn’t include all</li>
+      <li>Has an API and can be used to automate optimisations</li>
+      <li>Can use it with CloudWatch alarms</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="security">Security</h4>
+<ul>
+  <li>The AWS Shared Responsibility Model
+    <ul>
+      <li>AWS handles infrastructure security</li>
+      <li>AWS provides 3rd party audit reports</li>
+      <li>AWS’s responsibilities include: OS and database patching, firewall configuration and disaster recovery</li>
+      <li>Customer is responsible for putting logical access controls in place and protect account credentials</li>
+      <li>Customers are responsible to secure everything they put in the cloud</li>
+    </ul>
+  </li>
+  <li>AWS Service Catalog
+    <ul>
+      <li>Allows to centrally manage common IT services that are approved for use on AWS</li>
+    </ul>
+  </li>
+  <li>AWS IAM
+    <ul>
+      <li>Controls access to AWS resources</li>
+      <li>Handles Authentication (who can access resources) and authorization (how they can use resources)</li>
+      <li>Users can have programmatic access and/or console access.</li>
+      <li>Best practices
+        <ul>
+          <li>Delete root account keys. Instead use IAM accounts</li>
+          <li>Use MFA</li>
+          <li>Use groups</li>
+          <li>Use roles</li>
+          <li>Rotate credentials</li>
+          <li>Remove unnecessary users</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>AWS Security Compliance Programs
+    <ul>
+      <li>Risk Management: Follow the following standards:
+        <ul>
+          <li>COBIT</li>
+          <li>AICPA</li>
+          <li>NIST</li>
+        </ul>
+      </li>
+      <li>Constantly scans service endpoints for vulnerabilities</li>
+      <li>Compliance programs are listed <a href="https://aws.amazon.com/compliance/programs/" target="_blank" rel="noopener noreferrer">here</a>
+</li>
+    </ul>
+  </li>
+  <li>AWS Security Resources
+    <ul>
+      <li>AWS Trusted Advisor: Helps to follow best practices</li>
+      <li>AWS Account Teams: First point of contact</li>
+      <li>AWS Enterprise Support: 15-minute response time, 24x7 availability</li>
+      <li>AWS Partner Network</li>
+      <li>AWS Advisories and Bulletins</li>
+      <li>AWS Auditor Learning Path</li>
+      <li>AWS Compliance Solutions Guide: <a href="https://aws.amazon.com/compliance/solutions-guide/" target="_blank" rel="noopener noreferrer">https://aws.amazon.com/compliance/solutions-guide/</a>
+</li>
+      <li>AWS Security Blog: <a href="https://aws.amazon.com/blogs/security/" target="_blank" rel="noopener noreferrer">https://aws.amazon.com/blogs/security/</a>
+</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="architecting">Architecting</h4>
+<ul>
+  <li>Well-architected framework: <a href="https://aws.amazon.com/architecture/well-architected/" target="_blank" rel="noopener noreferrer">https://aws.amazon.com/architecture/well-architected/</a>
+</li>
+  <li>Fiver pillars of the framework
+    <ul>
+      <li>Operational excellence</li>
+      <li>Security</li>
+      <li>Reliability</li>
+      <li>Performance efficency</li>
+      <li>Cost optimization</li>
+    </ul>
+  </li>
+  <li>Fault Tolerance
+    <ul>
+      <li>Remain operational even if components fail</li>
+      <li>Built-in redundancy of an application’s components</li>
+    </ul>
+  </li>
+  <li>High-Availability
+    <ul>
+      <li>A concept for the whole system</li>
+      <li>“Always” functioning and accessible</li>
+      <li>Without human intervention</li>
+      <li>HA Service Tools
+        <ul>
+          <li>Elastic Load Balancer</li>
+          <li>Elastic IP Addresses</li>
+          <li>Amazon Route 53</li>
+          <li>Auto Scaling</li>
+          <li>Amazon CloudWatch</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="pricing-and-support">Pricing and Support</h4>
+<ul>
+  <li>Core concepts in billing
+    <ul>
+      <li>Pay as you go: No up front expenses</li>
+      <li>Pay less when you reserve: Reserved instances cost less</li>
+      <li>Pay even less per unit by using more: Tiered pricing for services such as S3, EC2 etc. Data transfer in is always free of charge.</li>
+      <li>Pay even less as AWS grows</li>
+    </ul>
+  </li>
+  <li>Amazon RDS Costs
+    <ul>
+      <li>Clock hours of server time</li>
+      <li>Database characteristics</li>
+      <li>Database purchase type</li>
+      <li>Number of DB instances</li>
+      <li>Provisional storage
+        <ul>
+          <li>No charge for backup storage of up to 100% of database storage for active databases. After terminated, the backups are charged</li>
+        </ul>
+      </li>
+      <li>Additional storage</li>
+      <li>Requests</li>
+      <li>Deployment type</li>
+      <li>Data transfer</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="general-notes">General Notes</h2>
+
+<h3 id="exam-centre">Exam Centre</h3>
+<p>The exam centre was very small and there was some sort of music studio next door so there was constant noise. OVerall it was a bit disappointing to take the exam in a desolated business centre and in a small room but it’s the same exam regardless so I was able to focus on the questions after I got used to the noise.</p>
+
+<h3 id="exam-process">Exam Process</h3>
+<ul>
+  <li>My exam was scheduled at 3:00. I arrived early and the proctor allowed me to sit at 2:00 as there were empty places in the exam room. It was a nice surprise because I definitely didn’t want to wait for another hour in that heat</li>
+  <li>At one point, the screen froze. I had to call the proctor. He restarted the application. Fortunately it just resumed where it left off.</li>
+  <li>CCP is the easiest AWS exam but even so there were some challenging questions. Mostly non-technical questions were hard for me (like questions related to support plans). I don’t think I’ll everr see those questions in other exams.</li>
+</ul>
+
+<h2 id="exam-result">Exam Result</h2>
+<p>… and the result is : Pass</p>
+
+<p><img src="/images/vpblogimg/2018/07/aws-cloud-practitioner-05-badge.png" alt=""></p>
+
+<p>Amazon has an interesting scoring system apparently. Right after you submit the exam, the screen displays Pass or Fail but not the actual score. You receive that in a separate email. They don’t even announce what the passing score is as they reserve the right to change when they see fit. It’s also based on other candidates’ results too so almost like a curve. Anyway, it was quite a relief to see the pass result on the screen. I’m still curiously waiting for the actual score though.</p>
+
+<p>My next exam will be AWS Certified Solutions Associate. I’ll post my exam notes after that exam as well.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="2018-07-07-AWS-certification-notes-cloud-practitioner">AWS Certification blog post</a></li>
+  <li><a href="https://aws.amazon.com/certification/certified-cloud-practitioner/" target="_blank" rel="noopener noreferrer">AWS Certified Cloud Practitioner exam page</a></li>
+  <li><a href="https://aws.amazon.com/training/course-descriptions/cloud-practitioner-essentials/" target="_blank" rel="noopener noreferrer">AWS Cloud Practitioner Essentials: Free Online Training</a></li>
+  <li><a href="https://www.whizlabs.com/blog/aws-certified-cloud-practitioner-certification-preparation/" target="_blank" rel="noopener noreferrer">How to Prepare for AWS Certified Cloud Practitioner Certification?</a></li>
+  <li><a href="https://docs.aws.amazon.com/aws-technical-content/latest/aws-overview/global-infrastructure.html" target="_blank" rel="noopener noreferrer">AWS Docs: Global Infrastructure</a></li>
+  <li><a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Internet_Gateway.html" target="_blank" rel="noopener noreferrer">AWS Docs: Internet Gateways</a></li>
+  <li><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-vpc.html#differences-ec2-classic-vpc" target="_blank" rel="noopener noreferrer">AWS Docs: Differences Between EC2-Classic and EC2-VPC
+</a></li>
+  <li><a href="https://aws.amazon.com/architecture/well-architected/" target="_blank" rel="noopener noreferrer">AWS Well-Architected</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2018/06/26/Automated-Email-Processing-with-AWS-SES-and-Lambda/" itemprop="url">Automated Email Processing with AWS SES and Lambda</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -490,220 +926,6 @@ dotnet lambda deploy-function send_cv
   <li><a href="https://hackernoon.com/3-reasons-why-you-should-get-aws-certified-this-year-7e44dbc51519" target="_blank" rel="noopener noreferrer">Hackernoon article: 3 Reasons Why You Should Get AWS Certified This Year</a></li>
 </ul>
 
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2018/05/16/Using-Custom-Domains-with-AWS-API-Gateway/" itemprop="url">Using Custom Domains with AWS API Gateway</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2018-05-16T07:00:00+01:00" itemprop="datePublished">May 16, 2018</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
-
-<!-- dev, aws -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    , 
-
-    <a href="/category/aws">aws</a>
-    
-</span>
-	<span class="tags">api_gateway</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>API Gateway is Amazon’s managed API service. Serverless architecture is growing more on me everyday. I think leveraging infinite auto-scaling and only paying for what you use makes perfect sense. But to have an API that will be customer-facing first thing that needs to be setup is a custom domain which might be a bit involved when SSL certificates come in to play. In this post I’d like to create an API from scratch and use a custom domain name assigned to it.</p>
-
-<h2 id="step-1-create-an-api">Step 1: Create an API</h2>
-<p>Creating an API is straightforward: Just assign a meaningful and description. However, to me it was a bit confusing when it came to choosing the endpoint type.</p>
-
-<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-01-create-api.png" alt=""></p>
-
-<p>The two options provided are: <em>Regional</em> and <em>Edge optimized</em>.</p>
-
-<ul>
-  <li>
-    <p>Edge-optimized API endpoint: The API is deployed to the specified region and a CloudFront distribution is created. API requests are routed to the nearest CloudFront Point of Presence (POP).</p>
-  </li>
-  <li>
-    <p>Regional API endpoint: This type was added in November 2017. The main goal is to prevent a roundtrip for in-region requests. API requests are targeted directly to the region-specific API Gateway without going through any CloudFront distribution.</p>
-  </li>
-</ul>
-
-<p>Custom domain names are supported for both endpoint types.</p>
-
-<p>In this example, I’ll use <strong>Regional</strong> endpoint type. For further reading, here’s <a href="http://blog.ryangreen.ca/2017/11/03/api-gateway-regional-vs-edge-optimized-endpoints/" target="_blank" rel="noopener noreferrer">a nice blog post about endpoint types</a>.</p>
-
-<h2 id="step-2-create-a-resource-and-method">Step 2: Create a resource and method</h2>
-<p>For demonstration purposes I created a resource called customer and a GET method that is which calls a mock endpoint.</p>
-
-<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-02-create-resource-and-method.png" alt=""></p>
-
-<h2 id="step-3-deploy-the-api">Step 3: Deploy the API</h2>
-<p>From the Actions menu in Resources tab, I selected Deploy API.</p>
-
-<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-03-deploy.png" alt=""></p>
-
-<p>Deployment requires a stage. Since this is the first deployment, I had to create a new stage called test. A new stage can be created while deploying. After the deployment test stage looks like this:</p>
-
-<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-04-stage.png" alt=""></p>
-
-<p>At this point API Gateway assigned a non-user-friendly URL already:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://81dkdt6q81.execute-api.eu-west-2.amazonaws.com/test
-</code></pre></div></div>
-
-<p>This is the root domain of the API. So I was able to call the endpoint like this:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://81dkdt6q81.execute-api.eu-west-2.amazonaws.com/test/albums
-</code></pre></div></div>
-
-<p>My goal was to get it working with my own domain such as:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://hmdb.myvirtualhome.net/albums
-</code></pre></div></div>
-
-<h2 id="step-4-generate-the-certificate-in-acm">Step 4: Generate the certificate in ACM</h2>
-<p>I’m using Route53 for all my domains and using ACM (AWS Certificate Manager) for generating SSL/TLS certificates. Before creating the custom domain name I needed my certificate available.</p>
-
-<p>The wizard is quite simple: I just added the subdomain for the API and selected DNS validation.</p>
-
-<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-05-acm-add-domain-name.png" alt=""></p>
-
-<p>After the review comes the validation process. Since I’m using Route 53 and ACM plays well with it, it simply provided a nice big button that said Create record in Route 53.</p>
-
-<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-06-acm-validation.png" alt=""></p>
-
-<p>After clicking and confirming I got this confirmation message:</p>
-
-<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-07-acm-confirmation.png" alt=""></p>
-
-<p>After waiting for about 3 minutes, the cerficate was issued already:</p>
-
-<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-08-acm-done.png" alt=""></p>
-
-<h2 id="step-5-create-custom-domain-name-in-api-gateway">Step 5: Create Custom Domain Name in API Gateway</h2>
-
-<p>Now that the certificate was ready I had to go back to API Gateway to create the custom domain name and associate it with the newly created cert.</p>
-
-<p>First, I clicked on Custom Domain Names on left menu and filled out the details. Make sure that your subdomain matches the one the certificate was generated for.</p>
-
-<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-09-create-custom-domain.png" alt=""></p>
-
-<p>I assigned /test path to the test stage I had created earlier. I will use root path for the production stage when I deploy the final version.</p>
-
-<p>After creating the custom domain, take note of Target Domain Name generated by AWS.</p>
-
-<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-10-target-domain-name.png" alt=""></p>
-
-<h2 id="step-6-create-a-record-in-route-53">Step 6: Create A Record in Route 53</h2>
-
-<p>I had to also point DNS to the domain generated by API Gateway.</p>
-
-<p>Since I was using a regional endpoint I had to map the custom domain name to the target domain name mentioned in the previous step.</p>
-
-<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-11-add-a-record-to-route-53-error.png" alt=""></p>
-
-<p>Now the problem was when I tried to do it via AWS Management Console, it failed as explained in this <a href="https://stackoverflow.com/questions/47827670/understanding-aws-api-gateway-custom-domain-names" target="_blank" rel="noopener noreferrer">StackOverflow answer</a>.</p>
-
-<p>So I had to do it via CLI as below:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws route53 change-resource-record-sets --hosted-zone-id {ZONE_ID_OF_MY_DOMAIN} --change-batch file://changedns.json
-</code></pre></div></div>
-
-<p>whereas the contents of changedns.json were</p>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"Changes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CREATE"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"ResourceRecordSet"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"api.hmdb.myvirtualhome.net"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"A"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"AliasTarget"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-          </span><span class="s2">"DNSName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"d-xyz.execute-api.eu-west-2.amazonaws.com"</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"HostedZoneId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ZJ5UAJN8Y3Z2Q"</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"EvaluateTargetHealth"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-      </span><span class="p">}</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div></div>
-
-<p>In the JSON above, DNSName is the Target Domain Name created by AWS is Step 5. The HostedZoneId (ZJ5UAJN8Y3Z2Q), on the other hand, is the zone ID of API Gateway which is listed <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#apigateway_region" target="_blank" rel="noopener noreferrer">here</a>.</p>
-
-<h3 id="update">UPDATE</h3>
-<p>If you are having issues running the command above that might mean you don’t have a default profile setup which has permissions to change DNS settings. To fix that:</p>
-
-<h4 id="1-create-a-new-user-with-no-permissions">1. Create a new user with no permissions</h4>
-
-<p>Go to IAM console and create a new user. Skip all the steps and download the credentials as .csv in the last step.</p>
-
-<h4 id="2-assign-required-permissions">2. Assign required permissions</h4>
-<p>Create a new policy using the JSON template below and attach it to the new user</p>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VisualEditor0"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"route53:ChangeResourceRecordSets"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:route53:::hostedzone/{ZONE ID OF YOUR DOMAIN}"</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div></div>
-
-<h4 id="3-create-a-new-profile-for-the-user">3. Create a new profile for the user</h4>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws configure --profile temp-route53-profile
-</code></pre></div></div>
-
-<p>and set the Access/Secret keys along with the region of your hosted zone.</p>
-
-<p>Then you run the first CLI command with providing profile name:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws route53 change-resource-record-sets --hosted-zone-id {ZONE_ID_OF_MY_DOMAIN} --change-batch file://changedns.json --profile temp-route53-profile
-</code></pre></div></div>
-
-<p>An important point here is to get your hosted zone ID from Route53. In the API Gateway, it shows a hosted zone ID which is actually AWS API Gateway zone ID. We use that zone ID in our DNS configuration (which is in changedns.json file in this example) but when we provide the hosted zone ID on the command line we provide our domain ID which can be found in Route53.</p>
-
-<h2 id="step-7-test">Step 7: Test</h2>
-<p>So after creating the alias for my API I visited the URL on a browser and I was able to get the green padlock indicating that it loaded the correct SSL certificate.</p>
-
-<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-12-success.png" alt=""></p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-basic-concept.html" target="_blank" rel="noopener noreferrer">Amazon API Gateway Concepts</a></li>
-  <li><a href="https://aws.amazon.com/about-aws/whats-new/2017/11/amazon-api-gateway-supports-regional-api-endpoints/" target="_blank" rel="noopener noreferrer">Amazon API Gateway Supports Regional API Endpoints</a></li>
-  <li><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html" target="_blank" rel="noopener noreferrer">Set up Custom Domain Name for an API in API Gateway</a></li>
-  <li><a href="https://stackoverflow.com/questions/47827670/understanding-aws-api-gateway-custom-domain-names" target="_blank" rel="noopener noreferrer">StackOverflow answer: Understanding AWS API Gateway Custom Domain Names
-</a></li>
-  <li><a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#apigateway_region" target="_blank" rel="noopener noreferrer">AWS Regions and Endpoints</a></li>
-  <li><a href="http://blog.ryangreen.ca/2017/11/03/api-gateway-regional-vs-edge-optimized-endpoints/" target="_blank" rel="noopener noreferrer">API Gateway Regional vs. Edge-Optimized Endpoints</a></li>
-  <li><a href="https://docs.aws.amazon.com/powershell/latest/userguide/pstools-getting-set-up-linux-mac.html" target="_blank" rel="noopener noreferrer">Setting up the AWS Tools for PowerShell Core on Linux or macOS X</a></li>
-  <li><a href="https://docs.aws.amazon.com/powershell/latest/reference/" target="_blank" rel="noopener noreferrer">AWS Tools for PowerShell Cmdlet Reference</a></li>
-  <li><a href="https://docs.aws.amazon.com/apigateway/api-reference/" target="_blank" rel="noopener noreferrer">Amazon API Gateway REST API</a></li>
-</ul>
 
 		
 		

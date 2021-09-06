@@ -109,6 +109,106 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/01/04/adventures-in-fsharp-part-3/" itemprop="url">Adventures in F# - Part 3</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-01-04T18:00:00+00:00" itemprop="datePublished">January  4, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">fsharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>It’s hard to accustomed to F# notation after getting used to OO languages like C#. Today I’ll work on the advanced section of the <a href="http://TryFSharp.org" target="_blank" rel="noopener noreferrer">TryFSharp.org</a> site. As I go forward the concepts are taking longer and becoming harder to grasp!</p>
+
+<h3 id="notes">Notes</h3>
+<ul>
+  <li>
+<strong>Currying</strong> is an interesting concept. It means you don’t have to provide all of the arguments when calling a function. for example</li>
+</ul>
+
+<p>An addition function can be defined as</p>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">add</span> <span class="n">x</span> <span class="n">y</span> <span class="p">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+</code></pre></div></div>
+
+<p>and another function using this definition can be defined as</p>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">addFive</span> <span class="p">=</span> <span class="n">add</span> <span class="mi">5</span>
+</code></pre></div></div>
+
+<p>In this case addFive returns another function which is waiting for the rest if the arguments. For example the following code snippet prints 17</p>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">add</span> <span class="n">x</span> <span class="n">y</span> <span class="p">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+<span class="k">let</span> <span class="n">addFive</span> <span class="p">=</span> <span class="n">add</span> <span class="mi">5</span>
+<span class="n">printfn</span> <span class="s2">"%d"</span> <span class="p">(</span><span class="n">addFive</span> <span class="mi">12</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Operators can be overloaded but it should be used with care as it may make the code obfuscated in some cases</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="nc">Point</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="kt">float</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span><span class="kt">float</span><span class="p">)</span> <span class="p">=</span>
+  <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">X</span> <span class="p">=</span> <span class="n">x</span>
+  <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">Y</span> <span class="p">=</span> <span class="n">y</span>
+
+  <span class="k">static</span> <span class="k">member</span> <span class="o">(+)</span> <span class="p">(</span><span class="n">p1</span><span class="p">:</span><span class="nc">Point</span><span class="p">,</span> <span class="n">p2</span><span class="p">:</span><span class="nc">Point</span><span class="p">)</span> <span class="p">=</span> 
+      <span class="k">new</span> <span class="nc">Point</span><span class="p">(</span><span class="n">p1</span><span class="p">.</span><span class="nc">X</span> <span class="o">+</span> <span class="n">p2</span><span class="p">.</span><span class="nc">X</span><span class="p">,</span> <span class="n">p1</span><span class="p">.</span><span class="nc">Y</span><span class="o">+</span><span class="n">p2</span><span class="p">.</span><span class="nc">Y</span><span class="p">)</span>
+
+<span class="k">let</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span> <span class="p">=</span> <span class="k">new</span> <span class="nc">Point</span><span class="p">(</span><span class="mi">0</span><span class="o">.,</span> <span class="mi">1</span><span class="o">.),</span> <span class="k">new</span> <span class="nc">Point</span><span class="p">(</span><span class="mi">1</span><span class="o">.,</span><span class="mi">1</span><span class="o">.)</span>
+<span class="n">p1</span> <span class="o">+</span> <span class="n">p2</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+<strong>Active Patterns</strong> allow to wrap arbitrary values in a union-like data structure for easy pattern matching.</li>
+</ul>
+
+<p>For example:</p>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="o">(|</span><span class="nc">Even</span><span class="p">|</span><span class="nc">Odd</span><span class="o">|)</span> <span class="n">n</span> <span class="p">=</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="p">=</span> <span class="mi">0</span> <span class="k">then</span>
+        <span class="nc">Even</span>
+    <span class="k">else</span>
+        <span class="nc">Odd</span>
+</code></pre></div></div>
+
+<p>In this case <em>Even</em> and <em>Odd</em> are union constructors, so our active pattern either returns an instance of Even or an instance of Odd.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>Today I completed the first 2 sections of Advanced section in TryFSharp.org, only 2 more to go. Even though I’m planning to finish all the material in the site it feels like the advanced topics are not covered in depth. The examples provided are too complex for an absolute beginner. I found the <a href="http://en.wikibooks.org/wiki/F_Sharp_Programming" target="_blank" rel="noopener noreferrer">F# Programming Wiki</a> as a better resource for these topics and I’m now going over both these resources.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://en.wikibooks.org/wiki/F_Sharp_Programming" target="_blank" rel="noopener noreferrer">F# Programming Wiki</a></li>
+  <li><a href="http://en.wikibooks.org/wiki/F_Sharp_Programming/Higher_Order_Functions#How_Currying_Works" target="_blank" rel="noopener noreferrer">How Currying Works</a></li>
+  <li><a href="http://en.wikibooks.org/wiki/F_Sharp_Programming/Active_Patterns" target="_blank" rel="noopener noreferrer">Active Patterns</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/01/04/jekyll-drafts/" itemprop="url">Jekyll drafts</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -255,177 +355,6 @@
 <h2 id="resources">Resources</h2>
 <ul>
   <li><a href="http://TryFSharp.org" target="_blank" rel="noopener noreferrer">TryFSharp.org</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/01/02/enter-fsharp/" itemprop="url">Enter F#</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-01-02T22:30:00+00:00" itemprop="datePublished">January  2, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">fsharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I’m not a big fan of New Year’s resolutions. I was meaning to start learning F# and since it’s the new year’s 2nd day it might a good time to finally give it a shot!</p>
-
-<h3 id="where-to-start">Where to start</h3>
-<p>It’s always hard to find the best resource when you are starting. Some time ago I heard about a Microsoft Research project called TryFSharp.org. It’s a tutorial website geared towards the absolute beginners. It comes with a REPL editor so no extra tools are needed to start.</p>
-
-<p>From now on I’m planning to spend 2 pomodoros (around 1 hour) every day to learn F#. After my first 2 pomodoros I completed the first 3 sections and below are my notes for today’s training.</p>
-
-<h3 id="lecture-notes">Lecture Notes</h3>
-
-<ul>
-  <li>
-<strong>let</strong> keyword to bind names to values. These bindings are <em>immutable</em>. If you try to assign a value to a same name twice you get the following error:</li>
-</ul>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">duplicated</span> <span class="p">=</span> <span class="s2">"original value"</span>
-<span class="k">let</span> <span class="n">duplicated</span> <span class="p">=</span> <span class="s2">"new value"</span>
-</code></pre></div></div>
-
-<p>causes the following error:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>stdin(8,5): error FS0037: Duplicate definition of value 'duplicated'
-</code></pre></div></div>
-
-<ul>
-  <li>Mutable variables can be created by explicitly specifiying <strong>mutable</strong> keyword but it should be used cautiously.</li>
-  <li>F# is a statically typed language like C#</li>
-  <li>
-<strong>printfn</strong> can be used to display messages. Strings can be formatted by using special characters such %d for int, %s for string such as</li>
-</ul>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">printfn</span> <span class="s2">"The answer is %d"</span> <span class="mi">42</span>
-</code></pre></div></div>
-
-<ul>
-  <li>let can also be used bind a name to a function. The following code</li>
-</ul>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">square</span> <span class="n">x</span> <span class="p">=</span>
-    <span class="n">x</span> <span class="p">*</span> <span class="n">x</span>
-
-<span class="n">square</span> <span class="mi">4</span>
-</code></pre></div></div>
-
-<p>produces this result in the output window:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; let square x =
-      x * x
-  
-  square 4
-
-val square : x:int -&gt; int
-val it : int = 16
-
-&gt; 
-</code></pre></div></div>
-
-<ul>
-  <li>F# is whitespace-sensitive. In the function above the body of the function was denoted by indenting it 4 spaces and return values is the last line of the function.</li>
-  <li>In times when F# cannot determine the type on itw own, it can specified explicitly bu using type annotations. For example:</li>
-</ul>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">toLeetSpeak</span> <span class="p">(</span><span class="n">phrase</span><span class="p">:</span><span class="kt">string</span><span class="p">)</span> <span class="p">=</span>
-    <span class="n">phrase</span><span class="p">.</span><span class="nc">Replace</span><span class="p">(</span><span class="k">'</span><span class="n">t'</span><span class="p">,</span> <span class="k">'</span><span class="mi">7</span><span class="k">'</span><span class="o">).</span><span class="nc">Replace</span><span class="p">(</span><span class="k">'</span><span class="n">o'</span><span class="p">,</span> <span class="k">'</span><span class="mi">0</span><span class="k">'</span><span class="p">)</span>
-
-<span class="n">toLeetSpeak</span> <span class="s2">"root"</span>
-</code></pre></div></div>
-
-<p>In the example above it needs to be specified that phrase if of type string before String.Replace method can be called.</p>
-
-<ul>
-  <li>Functions can be defined inside other functions:</li>
-</ul>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">quadruple</span> <span class="n">x</span> <span class="p">=</span>    
-    <span class="k">let</span> <span class="n">double</span> <span class="n">x</span> <span class="p">=</span>
-        <span class="n">x</span> <span class="p">*</span> <span class="mi">2</span>
-
-    <span class="n">double</span><span class="p">(</span><span class="n">double</span><span class="p">(</span><span class="n">x</span><span class="o">))</span>
-</code></pre></div></div>
-
-<ul>
-  <li>A function can be used as an argument to another function to create what’s called a <strong>higher order function</strong>.</li>
-  <li>Inline functions can be created such as</li>
-</ul>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">square</span> <span class="p">=</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="p">*</span> <span class="n">x</span><span class="p">)</span>
-</code></pre></div></div>
-
-<p>Theres are called <strong>lambda functions</strong> or <strong>lambdas</strong>.</p>
-
-<ul>
-  <li>Lists can be created by semi-colon separated single values or a range values with .. in between such as</li>
-</ul>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">evens</span> <span class="p">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">;</span> <span class="mi">4</span><span class="p">;</span> <span class="mi">6</span><span class="p">;</span> <span class="mi">8</span><span class="p">]</span>
-<span class="k">let</span> <span class="n">firstHundred</span> <span class="p">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="mi">100</span><span class="p">]</span>
-</code></pre></div></div>
-
-<ul>
-  <li>Higher-order functions can be combined with other functions such as</li>
-</ul>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">firstHundred</span> <span class="p">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="mi">100</span><span class="p">]</span>
-<span class="nn">List</span><span class="p">.</span><span class="n">map</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="p">*</span> <span class="mi">2</span><span class="p">)</span> 
-    <span class="p">(</span><span class="nn">List</span><span class="p">.</span><span class="n">filter</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="p">=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">firstHundred</span><span class="p">)</span>
-</code></pre></div></div>
-
-<p>which produces the following output</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>val it : int list =
-  [0; 4; 8; 12; 16; 20; 24; 28; 32; 36; 40; 44; 48; 52; 56; 60; 64; 68; 72; 76;
-   80; 84; 88; 92; 96; 100; 104; 108; 112; 116; 120; 124; 128; 132; 136; 140;
-   144; 148; 152; 156; 160; 164; 168; 172; 176; 180; 184; 188; 192; 196; 200]
-</code></pre></div></div>
-
-<p>It first filters the odd numbers out of <em>firstHundred</em> list and send the result to map function to double all the values.</p>
-
-<ul>
-  <li>Forward-pipe operator can be used to make the code easier to read when functions are chained:</li>
-</ul>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="mi">100</span><span class="p">]</span>
-<span class="p">|&gt;</span> <span class="nn">List</span><span class="p">.</span><span class="n">filter</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="p">=</span> <span class="mi">0</span><span class="p">)</span>
-<span class="p">|&gt;</span> <span class="nn">List</span><span class="p">.</span><span class="n">map</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="p">*</span> <span class="mi">2</span><span class="p">)</span>
-<span class="p">|&gt;</span> <span class="nn">List</span><span class="p">.</span><span class="n">sum</span>
-</code></pre></div></div>
-
-<ul>
-  <li>Array indexing is zero-based.</li>
-</ul>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://TryFSharp.org" target="_blank" rel="noopener noreferrer">TryFSharp.org website</a></li>
-  <li><a href="http://fsharpshow.com/" target="_blank" rel="noopener noreferrer">The F# Show Podcast</a></li>
 </ul>
 
 		

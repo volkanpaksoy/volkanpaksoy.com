@@ -109,6 +109,72 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2012/12/11/wiretap-your-other-machine/" itemprop="url">Wiretap your network</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2012-12-11T22:06:49+00:00" itemprop="datePublished">December 11, 2012</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/security">security</a></span> -->
+
+<!-- security -->
+
+
+
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">network, wireshark</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>When I saw <a href="http://greatscottgadgets.com/throwingstar/" target="_blank" rel="noopener noreferrer">this</a> gadget, I knew I had to have it. Didn’t exactly know what to use it for but it looked and sounded cool. So I ordered one along with a pro version. Unfortunately only the pro version arrived as the other one was out of stock. It would be more fun to build it myself but just seeing it in action is fun too. Of course it’s not as cool as a throwing star but functionality is exactly the same.</p>
+
+<p><img src="/images/vpblogimg/2012/12/LanTapThrowingStar.jpeg" alt="LAN Tap Throwing Star"></p>
+
+<p>The idea is instead of directly connecting your computer to a switch, you connect the machine to this gizmo and connect the port across to the switch. So essentially getting between the target machine and its final destination for network traffic. The other 2 ports are for monitoring. One of them is for received packets and the other is for the transmitted. Connect a monitoring device to one of these ports and it’s done. The rest is firing WireShark in the monitoring machine and watching the traffic of the other machine.
+A few cool things about it:</p>
+
+<ul>
+  <li>It doesn’t require any power source</li>
+  <li>It’s unobtrusive and undetectable</li>
+</ul>
+
+<p>If you want to learn more, here is a nice video about it from Hak5:</p>
+<div class="wlWriterEditableSmartContent" id="scid:5737277B-5D6D-4f48-ABFC-DD9C333F4C5D:5fb53083-b180-45b6-a203-39da0c129b26" style="float: none; margin: 0px; display: inline; padding: 0px;">
+<div id="77bdc09b-bdad-479d-8c1d-17473a9a5b5a" style="margin: 0px; padding: 0px; display: inline;">
+<div><a href="http://www.youtube.com/watch?v=3zUsJm3bwGY" target="_blank" rel="noopener noreferrer"><img class="aligncenter" style="border-style: none;" alt="" src="assets/0.jpg" width="448" height="252"></a></div>
+</div>
+<div style="clear: both; font-size: .8em;">Hak5–Throwing Star LAN Tap</div>
+</div>
+
+<p>I learned that it is commonly used for Intrusion Detection Systems (IDS) so it would be nice to one handy if I can start using one finally. The limitation is of course it only can be used to monitor one target device only. To listen to whole network I’ll need a switch with port mirroring or SPAN support.
+But for now let’s make sure this device is working properly first. The problem with the pro version is that it doesn’t have any indicators of which ports are for monitoring. So I randomly selected one, connected it between my desktop and the router, connected the laptop to one of the remaining ports. To test it I’m simply pinging google.com. With this confiugration I got nothing, Let’s change the ports and give in another try.. and voila! I filter the packets by my desktop’s IP and ICMP protocol so it’s easy to observe the sniffed packets.</p>
+
+<p><img src="/images/vpblogimg/2012/12/Captued_Ping_Request.png" alt="Captued_Ping_Request"></p>
+
+<p>But as you can in the above screenshot there’s a problem: This is only one-way traffic. Let’s use the other monitoring port to see what’s going to change. Another ping to Google and this is what we get:</p>
+
+<p><img src="/images/vpblogimg/2012/12/Captued_Ping_Reply.png" alt="Captued_Ping_Reply"></p>
+
+<p>Now we receive only ping reply packets.As Darren Kitchen mentioned in the Hak5 video we can overcome this problem by using a USB Ethernet adapter with multiple ports. I don’t have one of those so I’ll just take his word for it.
+Verdict: Only monitoring one machine in one direction makes it a bit useless for me. I was planning to use something to see everything in both directions but overall it was a valuable  experience. After all, before I heard about LAN tapping in a TWIET episode (<a href="http://twit.tv/twiet" target="_blank" rel="noopener noreferrer">http://twit.tv/twiet</a>) I didn’t even know such thing existed. Hearing about it in a podcast is nice but nothing beats hands-on experience.</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2012/12/07/easy-way-to-monitor-windows-services/" itemprop="url">Easy way to monitor Windows Services</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -237,77 +303,6 @@ $smtpClient.Send($email)
 <p>The rest is exactly the same as the regular process. You can manage the remote virtual machine as if it resides in your local environment.</p>
 
 <p><img src="/images/vpblogimg/2012/11/SharedVM03.png" alt="VMWare"></p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2012/11/19/aws-tips/" itemprop="url">Amazon Web Services (AWS) Tips</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2012-11-19T12:11:20+00:00" itemprop="datePublished">November 19, 2012</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
-
-<!-- aws -->
-
-
-
-
-    <a href="/category/aws">aws</a>
-    
-</span>
-	<span class="tags">tips</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>AWS must be short for awesome! I love using it. It makes managing virtual machines so much easier yet provides full power to the user through its API. Thanks to vision of Jeff Bezos, every function you see on the management console can be accessed via API as well. Back in 2002 Jeff Bezos mandated that all teams will expose their data and functionality through service interfaces. This approach make complete sense. It makes separation of layers much more easier, makes the code testable. That’s why I’m currently big on <em>ServiceStack</em> and <em>WebAPI</em> but that’s a discussion for another post. In this post I’d like to share some of the tips &amp; tricks that I picked during my involvement with AWS. Of course, as many IT related things, this is an ongoing process and I may post sequel to this one in the future. Currently my tips are as follows:</p>
-
-<p><strong>TIP 01: Always create production servers with termination protection on</strong>
-If there is one thing I don’t like about AWS is that in the management console there is no way of separating the production and test/staging machines. So first use a clear naming convention to distinguish them but sometimes that’s not enough. In the heat of the moment you can attempt to stop or terminate a production instance. If you don’t have termination protection enabled this attempt would become a tragedy but if you have it on simply nothing happens and you get to keep your job. If you forgot to turn it on while creating an instance you can always change it by right-clicking on the instance and selecting Change Termination Protection.</p>
-
-<p><img src="/images/vpblogimg/2012/11/AWS_Termination_Protection.png" alt="AWS Termination Protection"></p>
-
-<p><strong>TIP 02: You can change instance type in a few minutes</strong>
-One of my favourite features is that you can stop the instance and change it’s type. This way you can upgrade or downgrade a machine within minutes. So don’t worry if you are not sure what instance size you would need for a specific job. Just ballpark it, observe and upgrade/downgrade at an idle time.</p>
-
-<p><strong>TIP 03: Use auto-scaling</strong>
-This feature is not available via management console but it’s possible with API. You can write your application but it’s even easier by using command line developer tools. Basically you create a scaling policy for scaling up and one for scaling down. You define the alarm conditions and when these conditions are met the policy you specify is executed. This way if your web servers are under heavy load, for example, you can automatically launch another machine. They all have to be under the same load balancer of course. You can find more about auto-scaling here: <a href="http://aws.amazon.com/autoscaling/" target="_blank" rel="noopener noreferrer">http://aws.amazon.com/autoscaling/</a></p>
-
-<p><strong>TIP 04: Use Multi-AZ (Availability Zone) deployment</strong>
-Regions have several availability zones in them. Although you cannot create cross-datacentre systems, you can create instances using different AZs. So  if one data centre goes down other instances can still be responsive. It’s the simple principle of not putting all the eggs in the same basket.</p>
-
-<p><strong>TIP 05: Customize management console</strong>
-AWS management console comes with a cool feature: It enables you to pin your favourite services on top of the page for easy access. There are a bunch of them but most likely you’ll need EC2 and S3 available at all times. At least I do. You can pin them by simply dragging the service name and dropping it onto the top bar. After pinning them on top, they are always one click away.</p>
-
-<p><img src="/images/vpblogimg/2012/11/AWS_Customize_Menu.png" alt="AWS Customize Menu"></p>
-
-<p><strong>TIP 06: Change disk size while creating the image</strong>
-This is especially handy for Windows instances as they demand more space than Linux ones. The default size for a Windows Server is 35GB. It’s actually quite enough for a standard Windows installation but I guess Amazon is reserving some of the space for some reason because when you launch the machine you only get around 3GB free disk space which to me sounds terrifying. If a log file gets out of hand a little bit it can bring down the whole machine. So it’s best to get some free space upfront. At least for the peace of mind if nothing else.</p>
-
-<p><img src="/images/vpblogimg/2012/11/AWS_Change_Disk_Size_01.png" alt="AWS Change Disk Size"></p>
-
-<p><img src="/images/vpblogimg/2012/11/AWS_Change_Disk_Size_02.png" alt="AWS Change Disk Size"></p>
-
-<p><strong>TIP 07: Don’t forget to delete manually attached EBS volumes</strong>
-When you terminate an instance make sure you delete all the attached EBS volumes that are not set to auto-delete. The default volume that comes with the instance has Delete on termination option checked in the wizard so they are automatically cleaned up. But if you create a volume manually and attach it to an instance there is no option to set this flag. So you have to delete them manually. AWS is kind enough to warn you to delete them when deleting the instance. If you don’t take care of them immediately and you have auto-scaling you may end up with terminating lots of instances that leaves unused disks that you keep paying for.</p>
-
-<p><img src="/images/vpblogimg/2012/11/AWS_Delete_Instance.png" alt="AWS Delete Instance"></p>
-
-<p><strong>TIP 08: Reserve as early as you can</strong>
-This is another budget tip. If you are certain about the size of an instance then buy a reserved instance for that type. Reserved instance is not a technical concept. When you buy one you start paying less by the hour for an instance of that type. For a comparison to see how much you can save check out here: <a href="http://aws.amazon.com/pricing/ec2/" target="_blank" rel="noopener noreferrer">http://aws.amazon.com/pricing/ec2/</a></p>
-
 
 		
 		

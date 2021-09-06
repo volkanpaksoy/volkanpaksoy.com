@@ -109,6 +109,63 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/10/09/aws-lambda-official-scheduling-support/" itemprop="url">AWS Lambda Official Scheduling Support</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-10-09T15:00:00+01:00" itemprop="datePublished">October  9, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">lambda</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Just two days ago I was jumping through a lot of hoops (maintain state on S3, subscribe to public SNS topics) just to schedule a Lambda function, as explained <a href="https://volkanpaksoy.com/archive/2015/10/07/mail-automation-with-aws-lambda-and-sns/">here</a>. If I knew all these problems were to be solved in a day, I would just wait! In re-Invent 2015 event AWS announced scheduled event support for Lambda functions.</p>
+
+<p><img src="/images/vpblogimg/2015/10/aws-lambda-scheduled-event.png" alt=""></p>
+
+<p>After tweaking around a little bit with the sample I set my schedule like this which will run first day of every month at 10:00:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cron(0 10 1 * ? *)
+</code></pre></div></div>
+
+<p>That’s all there is to it for a monthly schedule. Reliable and no need for my state management workarounds. So the final code becomes as simple as sending an email when invoked:</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/51d914294557c637eb85d98c9ecda287.js"> </script>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://aws.amazon.com/blogs/aws/aws-lambda-update-python-vpc-increased-function-duration-scheduling-and-more/" target="_blank" rel="noopener noreferrer">AWS Lambda Update – Python, VPC, Increased Function Duration, Scheduling, and More</a></li>
+  <li><a href="http://docs.aws.amazon.com/lambda/latest/dg/getting-started-scheduled-events.html" target="_blank" rel="noopener noreferrer">Documentation on scheduling</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/10/07/mail-automation-with-aws-lambda-and-sns/" itemprop="url">Mail automation with AWS Lambda and SNS</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -330,174 +387,6 @@ npm install nodemailer-smtp-transport
   <li><a href="https://www.syncfusion.com/products/wpf" target="_blank" rel="noopener noreferrer">SyncFusion Essential Studio for WPF</a></li>
 </ul>
 
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/09/18/from-json-to-neo4j/" itemprop="url">From JSON to Neo4J</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-09-18T16:30:00+01:00" itemprop="datePublished">September 18, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">csharp, neo4j, cypher, json</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I have a simple JSON file that contained a bunch of users with their followers which looked like this:</p>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"user-id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user_2"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"URL"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"following"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-      </span><span class="s2">"user_10"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"user_6"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"user_1"</span><span class="w">
-    </span><span class="p">],</span><span class="w">
-    </span><span class="s2">"followers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-      </span><span class="s2">"user_10"</span><span class="w">
-    </span><span class="p">]</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span></code></pre></div></div>
-
-<p>It felt like a good exercise would be to import that data into a graph database as it wasn’t something I had done before.</p>
-
-<p>As my go-to language is C# and I had some experience with Cypher before, my initial instinct was to develop a tool to generate Cypher statements from the JSON.</p>
-
-<p>First I create the nodes:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="k">void</span> <span class="nf">GenerateNodesCypher</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">string</span> <span class="n">filename</span> <span class="p">=</span> <span class="s">@"..\..\output\nodes.cql"</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">output</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringBuilder</span><span class="p">();</span>
-
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">user</span> <span class="k">in</span> <span class="n">_userList</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">string</span> <span class="n">s</span> <span class="p">=</span> <span class="s">$"CREATE (</span><span class="p">{</span><span class="n">user</span><span class="p">.</span><span class="n">username</span><span class="p">}</span><span class="s">:User </span><span class="p">{{</span> <span class="n">userid</span><span class="p">:</span> <span class="p">{</span><span class="n">user</span><span class="p">.</span><span class="n">userid</span><span class="p">}</span> <span class="p">,</span> <span class="n">username</span><span class="p">:</span> <span class="err">'</span><span class="p">{</span><span class="n">user</span><span class="p">.</span><span class="n">username</span><span class="p">}</span><span class="err">'</span><span class="p">,</span> <span class="n">avatar</span><span class="p">:</span> <span class="err">'</span><span class="p">{</span><span class="n">user</span><span class="p">.</span><span class="n">avatar</span><span class="p">}</span><span class="err">'</span>  <span class="p">}}</span><span class="s"> ); "</span><span class="p">;</span>
-        <span class="n">output</span><span class="p">.</span><span class="nf">AppendLine</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="n">File</span><span class="p">.</span><span class="nf">WriteAllText</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">output</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>and then the relationships:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="k">void</span> <span class="nf">GenerateRelationshipsCypher</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">string</span> <span class="n">filename</span> <span class="p">=</span> <span class="s">@"..\..\output\relationships.cql"</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">output</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringBuilder</span><span class="p">();</span>
-    <span class="kt">int</span> <span class="n">n</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">user</span> <span class="k">in</span> <span class="n">_userList</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">following</span> <span class="k">in</span> <span class="n">user</span><span class="p">.</span><span class="n">following</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="kt">string</span> <span class="n">s</span> <span class="p">=</span> <span class="s">$"MATCH (a), (b) WHERE a.username = '</span><span class="p">{</span><span class="n">user</span><span class="p">.</span><span class="n">username</span><span class="p">}</span><span class="s">' AND b.username = '</span><span class="p">{</span><span class="n">following</span><span class="p">}</span><span class="s">' CREATE (a)-[:FOLLOWING]-&gt;(b); "</span><span class="p">;</span>
-            <span class="n">output</span><span class="p">.</span><span class="nf">AppendLine</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
-            <span class="n">n</span><span class="p">++;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="n">File</span><span class="p">.</span><span class="nf">WriteAllText</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">output</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>So I ended up with two cql files that looked like this</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE (user_1:User { userid: 1 , username: 'user_1', avatar: 'URL' }); 
-CREATE (user_2:User { userid: 2 , username: 'user_2', avatar: 'URL' }); 
-CREATE (user_3:User { userid: 3 , username: 'user_3', avatar: 'URL' }); 
-</code></pre></div></div>
-
-<p>and</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (a), (b) WHERE a.username = 'user_1' AND b.username = 'user_26' CREATE (a)-[:FOLLOWING]-&gt;(b); 
-MATCH (a), (b) WHERE a.username = 'user_1' AND b.username = 'user_53' CREATE (a)-[:FOLLOWING]-&gt;(b); 
-MATCH (a), (b) WHERE a.username = 'user_2' AND b.username = 'user_6' CREATE (a)-[:FOLLOWING]-&gt;(b); 
-</code></pre></div></div>
-
-<p>and I used neo4j-shell to execute the files and import the data. But it was no bed of roses. I’ll list the problems I faced along the way and how I got around them so that this experience might be helpful for other people as well:</p>
-
-<h2 id="issues-along-the-way-and-lessons-learned">Issues along the way and lessons learned</h2>
-
-<h3 id="running-multiple-statements-on-neo4j-browser">Running multiple statements on Neo4J browser</h3>
-<p>First I tried to run the create statements using the Neo4J browser which turned out to be problematic because it cannot run multiple statements that end with semi-colons. So I removed the semi-colons but then it started giving me this error</p>
-
-<blockquote>
-  <p>WITH is required between CREATE and MATCH</p>
-</blockquote>
-
-<p>I found a workaround for that on <a href="http://stackoverflow.com/questions/21778435/multiple-unrelated-queries-in-neo4j-cypher" target="_blank" rel="noopener noreferrer">SO</a>. So the following works:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (a), (b) WHERE a.username = 'user_1' AND b.username = 'user_14' CREATE (a)-[:FOLLOWING]-&gt;(b); 
-WITH 1 as dummy
-MATCH (a), (b) WHERE a.username = 'user_1' AND b.username = 'user_22' CREATE (a)-[:FOLLOWING]-&gt;(b); 
-</code></pre></div></div>
-
-<p>Now the problem was, if the data was a bit dirty, for instance if user_14 didn’t exist, it stopped executing the rest and no other relationships were created). I had a few nodes like that so this method didn’t work for me after all.</p>
-
-<h3 id="starting-the-shell-was-not-as-easy-as-id-imagined">Starting the shell was not as easy as I’d imagined</h3>
-<p>I installed Neo4J using the default settings and to start the shell just navigated to that directory and ran the batch file. Got an error instead of my shell:</p>
-
-<blockquote>
-  <p>C:\Program Files\Neo4j Community\bin&gt;Neo4jShell.bat</p>
-</blockquote>
-
-<blockquote>
-  <p>The system cannot find the path specified.</p>
-</blockquote>
-
-<blockquote>
-  <p>Error: Could not find or load main class org.neo4j.shell.StartClient</p>
-</blockquote>
-
-<p>Apparently the way to run the shell is using the Neo4J server application and clicking <em>Options</em> -&gt; <em>Command Prompt</em></p>
-
-<p><img src="/images/vpblogimg/2015/09/from-json-to-neo4j-command-prompt.png" alt="Neo4J command prompt"></p>
-
-<p>This launches the Neo4J Command Prompt then the rest is easy:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>neo4jshell -file nodes.cql
-
-neo4jshell -file relationships.cql
-</code></pre></div></div>
-
-<h3 id="exiting-with-unterminated-multi-line-input">“Exiting with unterminated multi-line input”</h3>
-<p>Final issue was the statements in a sql file must be terminated with a semi-colon in order for the shell to execute them. Otherwise it gives the above warning and quits</p>
-
-<p>So after all this hassle my data is in the Neo4J database ready to be queried to death!:</p>
-
-<p><img src="/images/vpblogimg/2015/09/from-json-to-neo4j-final-database.png" alt=""></p>
-
-<p>Next I’ll investigate converting the data into CSV and achieve the same results by using LOAD CSV command and look into visualization of this data.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://stackoverflow.com/questions/21778435/multiple-unrelated-queries-in-neo4j-cypher" target="_blank" rel="noopener noreferrer">Workaround for running multiple statements on Neo4J browser</a></li>
-  <li><a href="http://neo4j.com/docs/stable/query-load-csv.html" target="_blank" rel="noopener noreferrer">Neo4J documentation for LOAD CSV</a></li>
-</ul>
 
 		
 		

@@ -109,6 +109,264 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/03/07/portable-online-library-with-calibre-and-raspberry-pi/" itemprop="url">Portable Online Library with Calibre and Raspberry Pi</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-03-07T00:30:00+00:00" itemprop="datePublished">March  7, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awsdevhobby">aws</a></span> -->
+
+<!-- aws, dev, hobby -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">gadget, raspberry_pi, route53</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Everything is *-as-a-service nowadays and books are no exception. I have a <a href="https://www.safaribooksonline.com/" target="_blank" rel="noopener noreferrer">Safari Books Online</a> subscription which I enjoy a lot. It is extremely convenient to have thousands of books at your fingertips. But… DIY still rules! There are times you may still want to have your own collection and it doesn’t just have to be an e-book collection. And on top of all it’s purely fun and educational.</p>
+
+<h2 id="ingredients">Ingredients</h2>
+<p>Basically all you need is an up-and-running Raspberry Pi. If you have one, you can skip this section. These are just the components I used in my implementation:</p>
+
+<ul>
+  <li><a href="http://uk.rs-online.com/web/p/processor-microcontroller-development-kits/8326274/" target="_blank" rel="noopener noreferrer">Raspberry Pi 2</a></li>
+  <li><a href="http://uk.rs-online.com/web/p/plug-in-power-supply/8226373/" target="_blank" rel="noopener noreferrer">Raspberry Pi Power Supply</a></li>
+  <li><a href="http://www.amazon.co.uk/gp/product/B00J29D62Y" target="_blank" rel="noopener noreferrer">Samsung 32GB microSD card</a></li>
+  <li><a href="http://www.amazon.co.uk/Edimax-EW-7811UN-150Mbps-Wireless-Adapter/dp/B003MTTJOY/" target="_blank" rel="noopener noreferrer">Edimax EW-7811UN 150Mbps Wireless Nano USB Adapter </a></li>
+  <li>Keyboard</li>
+  <li>Display</li>
+</ul>
+
+<p>Keyboard and display are needed for the initial setup. Once it’s connected to network you can do everything over SSH.</p>
+
+<h2 id="calibre-my-old-friend">Calibre, my old friend!</h2>
+<p>I’ve been a fan of Calibre for many years now. With Calibre you can manage any document collection you want. I love its user interface which allows me to easily tag and categorize my collections. Also it can convert between a wide range of formats. And when I plug in my Kindle it automatically recognizes the device and I can right-click on a book and send to device very easily. Check out <a href="http://calibre-ebook.com/about" target="_blank" rel="noopener noreferrer">this</a> page for a full list of features.</p>
+
+<p>My favorite feature is that it can act as a server. I mainly use Stanza on my iPad and connect to my Calibre server to download comic books over WiFi. The downside of running it locally on my computer is that the machines needs to be on and I have to enable the content server on Calibre manually before connecting from iPad.</p>
+
+<h2 id="here-comes-the-project">Here comes the project</h2>
+<p>Instead, what I’d like to have is</p>
+
+<ul>
+  <li>
+    <p><strong>An online server available all the time:</strong> Raspberry pi is very power-efficient little monster so I can keep it running</p>
+  </li>
+  <li>
+    <p><strong>Isolated from my main machine:</strong> For security reasons I don’t want to open a port on my desktop computer</p>
+  </li>
+  <li>
+    <p><strong>Accessible both from inside and outside:</strong> Of course I could just launch a cheap AWS instance and use it as the content server but</p>
+
+    <ul>
+      <li>It’s not as fun!</li>
+      <li>If I need to move around GBs of data local network rocks!</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Also, as I said it’s mostly for fun so I don’t have to justify it completely to myself :-)</p>
+
+<h2 id="roll-up-your-sleeves">Roll up your sleeves!</h2>
+
+<h3 id="step-0-setup-raspberry-pi">Step 0: Setup Raspberry Pi</h3>
+<p>If you haven’t done it already you can easily set it up by following the <a href="http://www.raspberrypi.org/help/quick-start-guide/" target="_blank" rel="noopener noreferrer">Quick Start Guide on raspberrypi.org</a></p>
+
+<h3 id="step-1-install-calibre-on-raspberry-pi">Step 1: Install Calibre on Raspberry Pi</h3>
+<p>This one was a bit harder than I expected. The official site says <em>“Please do not use your distribution provided calibre package, as those are often buggy/outdated. Instead use the Binary install described below.”</em></p>
+
+<p>and the suggested command is</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo -v &amp;&amp; wget -nv -O- https://raw.githubusercontent.com/kovidgoyal/calibre/master/setup/linux-installer.py | sudo python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
+</code></pre></div></div>
+
+<p>Alas, after running the command I got the following error:</p>
+
+<p><img src="/images/vpblogimg/2015/03/calibre-on-raspberry-pi-01.png" alt="Calibre installation error"></p>
+
+<p>I asked in the Calibre forums about the error and I was advised to build it from source code. Because the compiled version is for Intel processors and it doesn’t work on an ARM processor which Raspberry Pi has. The instructions for building it from source is on the same <a href="http://calibre-ebook.com/download_linux" target="_blank" rel="noopener noreferrer">page</a> but I haven’t tried it myself.</p>
+
+<p>As a fallback method I simply used apt-get to install it:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get update &amp;&amp; sudo apt-get install calibre
+</code></pre></div></div>
+
+<p>It worked fine but the version is 0.8.51 (latest release at the time of this writing is 2.20.0 so you can see it’s a little bit outdated!). Content server has been implemented long time ago so for all intents and purposes it’s good enough for this project.</p>
+
+<h3 id="step-2-run-it-as-server">Step 2: Run it as server</h3>
+<p>Now that we have Calibre installed we can run the content server from command line:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>calibre-server --with-library=/home/pi/calibre/myLibrary --daemonize
+</code></pre></div></div>
+
+<p>This will run the process in the background (because of the <em>–daemonize</em> flag) but id the Pi restarts it will not run automatically. To fix that I added the command to crontab by first entering the following command</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>crontab -e
+</code></pre></div></div>
+
+<p>and adding the following line after the comments</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@reboot calibre-server --with-library=/home/pi/calibre/myLibrary --daemonize
+</code></pre></div></div>
+
+<p>so that the same command is run after every reboot.</p>
+
+<p><img src="/images/vpblogimg/2015/03/calibre-on-raspberry-pi-02.png" alt="Crontab on Raspberry Pi"></p>
+
+<p>Now let’s test if we’re online. By default, Calibre starts serving on port 8080 with no authentication required. So just find the IP address of the Raspberry Pi and try to connect it over HTTP from your machine such as <em>http://{Local IP}:8080</em></p>
+
+<p><img src="/images/vpblogimg/2015/03/calibre-on-raspberry-pi-03.png" alt=""></p>
+
+<p>and voila!</p>
+
+<p>Now we can add some books and start using it from any machine on the network.</p>
+
+<h3 id="step-3-add-some-books">Step 3: Add some books</h3>
+<p>First I uploaded some files to a different folder using <a href="http://winscp.net/eng/download.php" target="_blank" rel="noopener noreferrer">WinSCP</a>. If you are not on Windows I’m sure you can find a similar tool to transfer files to Raspberry Pi.</p>
+
+<p>We can add books by using <em>calibredb</em> command like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>calibredb add Raspberry_Pi_Education_Manual.pdf --with-library=/home/pi/calibre/myLibrary
+</code></pre></div></div>
+
+<p>Please note if you try to use calibre instead of <em>calibredb</em> you’d get the following error:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>calibre: cannot connect to X server 
+</code></pre></div></div>
+
+<p>Because we are using the GUI we cannot use <em>calibre</em> directly, instead we add it using <em>calibredb</em>.</p>
+
+<p><img src="/images/vpblogimg/2015/03/calibre-on-raspberry-pi-04.png" alt=""></p>
+
+<p>Calibre always copies the files to its own library so once the books are added you can delete the original ones.</p>
+
+<p>After the files are added refresh the page and you should get something like this:</p>
+
+<p><img src="/images/vpblogimg/2015/03/calibre-on-raspberry-pi-05.png" alt=""></p>
+
+<p>At this point we can download the books on any machine on the local network.</p>
+
+<h3 id="step-4-connect-from-clients">Step 4: Connect from clients</h3>
+
+<ul>
+  <li><strong>Kindle</strong></li>
+</ul>
+
+<p>Kindle has an experimental browser (I currently have a Paperwhite, I don’t know about the newer versions). So to download books, I simply go to Settings -&gt; Experimental Browser and enter the URL of my content server (<em>http://{Local IP}:8080</em>):</p>
+
+<p><img src="/images/vpblogimg/2015/03/calibre-on-raspberry-pi-06.png" alt=""></p>
+
+<p>And after you download the file you can go to home and enjoy the book on your Kindle.</p>
+
+<p><img src="/images/vpblogimg/2015/03/calibre-on-raspberry-pi-07.png" alt=""></p>
+
+<p>Please note that Kindle cannot download PDFs. When I tried to download Raspberry Pi manual I got the following error</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Only files with the extension .AZW, .PRC, .MOBI or .TXT can be downloaded to your Kindle.
+</code></pre></div></div>
+
+<p>So make sure you upload the the right file formats.</p>
+
+<ul>
+  <li><strong>iPad / Stanza</strong></li>
+</ul>
+
+<p>This is my favorite app on iPad. It’s not even on AppStore anymore but I still use it to download books from Calibre.</p>
+
+<p>All I had to do was click Get Books and it found the OPDS server on the network automatically so I could browse and download books right away.</p>
+
+<p><img src="/images/vpblogimg/2015/03/calibre-on-raspberry-pi-08.png" alt="Stanza"></p>
+
+<ul>
+  <li><strong>iPad / Web</strong></li>
+</ul>
+
+<p>Alternatively you can just browse to server and open it with any eBook reader app available on your iPad.</p>
+
+<p><img src="/images/vpblogimg/2015/03/calibre-on-raspberry-pi-09.png" alt="Calibre UI on iPad"></p>
+
+<h3 id="optional-step-5-setup-port-forwarding">[Optional] Step 5: Setup Port Forwarding</h3>
+<p>For internal usage we are done! If you want to access your library over the Internet you have to define port forwarding rule. The way to do it is completely dependant on your router so you have to fiddle with your router’s administration interface.</p>
+
+<p>Basically you map an external port to an internal IP and port.</p>
+
+<p><img src="/images/vpblogimg/2015/03/calibre-on-raspberry-pi-10.png" alt=""></p>
+
+<p>For example I mapped port 7373 to local 192.168.175:8080 so whenever I connect to my home network’s external IP on port 7373 I get my Calibre user interface.</p>
+
+<p>I recommend running the server with <em>–username</em> and <em>–password</em> flags so that only authenticated users can browse your library.</p>
+
+<h3 id="optional-step-6-setup-dynamic-dns">[Optional] Step 6: Setup Dynamic DNS</h3>
+<p>If you have a static IP you don’t need this step at all but generally personal broadbands don’t come with static IPs. My solution for this was using AWS Route 53 and updating the DNS using AWS Python SDK (Boto).</p>
+
+<p>First I had to install pip to be able to install boto</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install python3-pip
+</code></pre></div></div>
+
+<p>Then boto itself</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pip install boto
+</code></pre></div></div>
+
+<p>I created an IAM user that only has access to a single domain which I use for this kind of stuff on Route 53 and added its credentials to the AWS credentials file as explained in the nice and brief tutorial <a href="http://boto.readthedocs.org/en/latest/route53_tut.html" target="_blank" rel="noopener noreferrer">here</a></p>
+
+<p>The script calls AWS’s external IP checker and stores it in <em>currentIP</em>. Then gets the hosted zone and loops through all the record sets. When it finds the subdomain I’m going to use for Calibre (‘calibre.volki.info.’) it updates the IP address with the <em>currentIP</em> and commits the changes. Thanks to AWS that’s all it takes to create a Dynamic DNS application.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">boto.route53</span>
+<span class="kn">import</span> <span class="nn">urllib2</span>
+<span class="n">currentIP</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://checkip.amazonaws.com/"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">boto</span><span class="o">.</span><span class="n">connect_route53</span><span class="p">()</span>
+<span class="n">zone</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_zone</span><span class="p">(</span><span class="s">"volki.info."</span><span class="p">)</span>
+<span class="n">change_set</span> <span class="o">=</span> <span class="n">boto</span><span class="o">.</span><span class="n">route53</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">ResourceRecordSets</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s">'{HOSTED_ZONE_ID}'</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">rrset</span> <span class="ow">in</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_all_rrsets</span><span class="p">(</span><span class="n">zone</span><span class="o">.</span><span class="nb">id</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">rrset</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">'calibre.volki.info.'</span><span class="p">:</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">change_set</span><span class="o">.</span><span class="n">add_change</span><span class="p">(</span><span class="s">"UPSERT"</span><span class="p">,</span> <span class="n">rrset</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">rrset</span><span class="o">.</span><span class="nb">type</span><span class="p">,</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+        <span class="n">rrset</span><span class="o">.</span><span class="n">resource_records</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">currentIP</span>
+        <span class="n">u</span><span class="o">.</span><span class="n">add_value</span><span class="p">(</span><span class="n">rrset</span><span class="o">.</span><span class="n">resource_records</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">change_set</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Of course this script needs to be added to crontab and should be run every 5-10 minutes. If the external IP changes there might be some disturbance to the service but it should just take a few minutes before it’s resolved.</p>
+
+<p>With this script now we can access our library over the Internet and we don’t have to worry about changes in the IP address.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.raspberrypi.org/help/quick-start-guide/" target="_blank" rel="noopener noreferrer">Raspberry Pi Quick Start Guide</a></li>
+  <li><a href="http://calibre-ebook.com/download_linux" target="_blank" rel="noopener noreferrer">Calibre Linux Installation</a></li>
+  <li><a href="http://calibre-ebook.com/about" target="_blank" rel="noopener noreferrer">Calibre Feature List</a></li>
+  <li><a href="http://aws.amazon.com/sdk-for-python/" target="_blank" rel="noopener noreferrer">AWS SDK for Python (Boto)</a></li>
+  <li><a href="http://boto.readthedocs.org/en/latest/route53_tut.html" target="_blank" rel="noopener noreferrer">An Introduction to boto’s Route53 interface</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/03/03/inside-the-graph-cypher/" itemprop="url">Inside the Graph: Cypher</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -447,144 +705,6 @@ RETURN m.title AS name
   <li><a href="http://aws.amazon.com/rds/aurora/" target="_blank" rel="noopener noreferrer">AWS Aurora</a></li>
 </ul>
 
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/02/25/beware-the-pineapple-an-overview-of-wifi-pineapple-mark-v/" itemprop="url">Beware the Pineapple: An overview of WiFi Pineapple Mark V</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-02-25T14:30:00+00:00" itemprop="datePublished">February 25, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/security">security</a></span> -->
-
-<!-- security -->
-
-
-
-
-    <a href="/category/security">security</a>
-    
-</span>
-	<span class="tags">gadget, wifi_pineapple</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Wifi Pineapple has been around for quite some time now. Almost two years ago I posted a short review <a href="https://volkanpaksoy.com/archive/2013/04/22/wifi-pineapple/">here</a> but with the latest version (Mark V) it’s got badder than ever and they keep adding more features so it’s a nice time to catch up.</p>
-
-<h3 id="what-is-it">What is it?</h3>
-<p>Basically Wifi Pineapple is a WiFi honeypot that allows users to carry out man-in-the-middle attacks. Connected clients’ traffic go through the attacker which makes the attacker capable of pulling a number of tricks.</p>
-
-<p>Mark IV was based on <a href="http://www.amazon.co.uk/ALFA-Network-AP121U-Wireless-Repeater/dp/B00RKPD6MM" target="_blank" rel="noopener noreferrer">Alfa AP121U</a>. Instead of buying a pineapple you could just buy an AP121U and create your own DIY pineapple by installing the firmware. Mark V, on the other hand, is a whole new animal.</p>
-
-<p><img src="/images/vpblogimg/2015/02/wifi-pineapple-features.png" alt="Wifi Pineapple Mark V"></p>
-
-<p>Equipped with 2 radios it can work in client mode meaning it can piggyback on a nearby WiFi network and bridge the victim’s connections (In Mark IV the only way to provide internet access was 3G which is also still supported).</p>
-
-<h3 id="how-does-it-work">How does it work?</h3>
-
-<p>At the heart of the pineapple lies an attack method called Karma. It works by exploiting trusting devices to probe requests and responses. Our wireless devices, by default, constantly try to connect to the last networks they were on. To accomplish this they actively scan their neighbourhood by sending out probe requests. (A probe request is a special frame sent by a client station requesting information from either a specific access point, specified by SSID, or all access points in the area, specified with the broadcast SSID.)</p>
-
-<p>Normally, access points (AP) that don’t broadcast the requested SSID just ignore the probe request. The <em>correct</em> AP responds with a probe response and the client initiates association with the AP again. That’s how we connect to our home or work network as soon as we arrive. That is convenient and user-friendly but the malicious devices running Karma attack can break this “honor-code” based system. The pineapple responds to whatever AP the device is asking for therefore deceiving it into believing they are home.</p>
-
-<h3 id="whats-the-risk">What’s the risk</h3>
-
-<p>Obviously these honeypots are set up for a reason: To get your traffic. Once you start sending your data through the attacker’s system you are opening yourself to all sorts of attacks. One of the most important ones is called sslstrip. (These “attacks” are called <em>infusions</em> in Pineapple parlance and they can be downloaded and installed in seconds to enhance its capabilities which makes the pineapple an even more powerful weapon)</p>
-
-<p>sslstrip redirects your HTTPS traffic to HTTP equivalent (i.e. You land on http://www.google.com even though you requested https://www.google.com). So when you login to your favorite social network you essentially hand over your credentials to the attacker in plain text.</p>
-
-<p>You can find a full list of available infusions <a href="https://www.wifipineapple.com/?infusions" target="_blank" rel="noopener noreferrer">here</a> which can give you an idea what types of attacks are possible.</p>
-
-<h3 id="whats-new">What’s New</h3>
-
-<p>As of Version 2 of the Pineapple firmware a new feature is introduced: <em>PineAP</em>. They define it as “the next-gen rogue AP”.</p>
-
-<p>As Karma attack became more popular vendors started to increase security a little bit. Instead of sending out all the SSIDs that the device has connected in the past, the device simply sends a probe request that says “Broadcast” and the APs respond with a beacon with their information and what SSID(s) they are broadcasting. Then the client can decide which one to connect to. This method mitigates the regular Karma attack. To mitigate this mitigation (!) Pineapple team came up with PineAP.</p>
-
-<p>PineAP has several modules:</p>
-
-<ul>
-  <li>
-    <p><strong>Beacon Response</strong>      <br>
-Similar to probe responses this module sends beacons. For example if the client is looking for “Home Sweet Home” network, Karma sends a probe response with this SSID and at Beacon Response module sends a beacon with the same SSID making the pineapple look more legitimate.</p>
-  </li>
-  <li>
-    <p><strong>Dogma</strong>
-This module sends out beacon frames of SSIDs selected by the attacker (defined in the PineAP SSID Pool). It also allows targeted attacks so you can set the target MAC address.</p>
-  </li>
-  <li>
-    <p><strong>Auto Harvester</strong>
-Since SSID names are more likely to be kept as a secret it helps to collect this information. Harvester collects leaking SSIDs from the potential clients. They are added to the SSID pool to be used by Dogma.</p>
-  </li>
-</ul>
-
-<h3 id="further-improvements-and-new-features">Further Improvements and new features</h3>
-
-<ul>
-  <li><strong>Setup screen</strong></li>
-</ul>
-
-<p>A neat feature is, as an extra security step, when you first setup and connect to your pineapple you have to enter a random LED pattern.</p>
-
-<p><img src="/images/vpblogimg/2015/02/wifi-pineapple-led-pattern.png" alt="LED Pattern"></p>
-
-<p>As a fan of multi-factor authentication of all sorts I loved the idea of using the physical hardware to improve security.</p>
-
-<ul>
-  <li><strong>Management network</strong></li>
-</ul>
-
-<p>New Pineapple can setup a secure Wifi AP just for the owner so that you don’t have to connect via Ethernet. You can use your phone to check who is connected to the network and manage the pineapple completely by using the responsive UI.</p>
-
-<ul>
-  <li><strong>Recon mode</strong></li>
-</ul>
-
-<p>This is another neat feature that allows to scan all AP and clients around. You can even carry out a deauth attack by just clicking on a client.</p>
-
-<h3 id="mitigations">Mitigations</h3>
-
-<ul>
-  <li>
-    <p><strong>Never connect to open networks, NEVER!</strong>: If you are in the habit of using open wifi networks one day you might come across one of those pineapples in your coffee shop and hand over your data unknowingly to a guy sitting in the table next to you! Even without this risk you should never use networks that you have no control over but this kind of risk makes it even more important.</p>
-  </li>
-  <li>
-    <p><strong>Verify SSL</strong>: SSL/TLS is still the most important security measure we have when connecting to websites. Always ensure that you are connected to the right website by checking the certificate. An attacker may not be able to break SSL certificate but they can simply bypass it completely by tools like sslstrip. It’s especially important in mobile devices since they tend to hide the address bar to make more room for the content so generally you never know the exact URL you are sending your requests to.</p>
-  </li>
-  <li>
-    <p><strong>VPN</strong>: If you are using VPN your traffic is encrypted and sent through a secure channel. In this case, even if an attacker is able to get your traffic they will not be able to make any sense of it.</p>
-  </li>
-  <li>
-    <p><strong>HSTS</strong>: This mechanism allows web servers to declare that web browsers (or other complying user agents) should only interact with it using secure HTTPS connections and never via the insecure HTTP protocol. It helps to mitigate the risks of tools like sslstrip. Downside is it’s not currently adopted by all browsers at the moment.</p>
-  </li>
-</ul>
-
-<h3 id="conclusion">Conclusion</h3>
-<p>Wireless networks provide great convenience to us but comes with risks and vulnerabilities (as all conveniences in IT). The hardware is getting smaller and more powerful everyday so the tools like Wifi Pineapple are getting more threatening. It’s important to keep an eye on what kind of risks are out there and learn how to avoid those risks.</p>
-
-<h2 id="resources">Resources</h2>
-
-<ul>
-  <li><a href="https://www.wifipineapple.com/" target="_blank" rel="noopener noreferrer">Official website</a></li>
-  <li><a href="http://hak5.org/category/episodes/pineapple-university" target="_blank" rel="noopener noreferrer">Hak5 Pineapple University</a></li>
-  <li><a href="https://www.youtube.com/watch?v=40Igim3upL0" target="_blank" rel="noopener noreferrer">YouTube Video: WiFi Pineapple 2.0.2 Firmware - PineAP</a></li>
-  <li><a href="https://scotthelme.co.uk/wifi-pineapple-karma-sslstrip/" target="_blank" rel="noopener noreferrer">Using Karma and SSLStrip to MitM Secure Connections</a></li>
-  <li><a href="http://hak5.org/episodes/haktip-23" target="_blank" rel="noopener noreferrer">Haktip 23 – WiFi 101: Probe Requests and Responses</a></li>
-  <li><a href="http://www.thoughtcrime.org/software/sslstrip/" target="_blank" rel="noopener noreferrer">BlackHat Presentation on SSL Stripping</a></li>
-  <li><a href="http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security" target="_blank" rel="noopener noreferrer">Wikipedia article on HSTS</a></li>
-</ul>
 
 		
 		

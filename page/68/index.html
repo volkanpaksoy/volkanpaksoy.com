@@ -109,6 +109,79 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2012/10/17/load-it-up-with-jmeter-part-1-basics/" itemprop="url">Load it up with JMeter (Part 1 – Basics)</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2012-10-17T14:15:43+01:00" itemprop="datePublished">October 17, 2012</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">jmeter</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>One of the key goals when developing a web application is to make it scalable. Meaning that it should handle lots of traffic without hindering the performance. But most of the time we only care about performance when it becomes a problem and generally it’s then too late to make radical design changes. Therefore, an upfront automated load testing is very helpful to gauge your application’s performance and being aware of its limits. One popular tool used for load testing is JMeter.</p>
+
+<h2 id="jmeter-basics">JMeter Basics</h2>
+<ul>
+  <li>Thread Group: Each thread acts like a single user. All elements must be under a thread group.</li>
+  <li>Listener: Allows access to the information gathered by JMeter. Some listener examples are Aggregate Report, Graph Report and Summary Report</li>
+  <li>Logical Controller: They allow you to add construct to control the flow of your tests such as If, While, ForEach</li>
+  <li>Sampler: They tell jMeter to send requests to server and wait for a response.</li>
+</ul>
+
+<p>When you launch JMeter there are 2 items on the left menu: Test Plan and Workbench. Test Plan is the real deal. That is the actual sequence of events that are fired. Workbench is where you can store test elements.</p>
+
+<p>Creating a load test plan can be accomplished in 2 simple steps:</p>
+
+<ol>
+  <li>
+    <p>Create a thread group: Everything runs under a thread group. Think of each thread as a user.</p>
+
+    <p><img src="/images/vpblogimg/2012/10/jMeter0101.png" alt="JMeter"></p>
+  </li>
+  <li>
+    <p>Insert an HTTP request: Set the host name and page you want to call.</p>
+
+    <p><img src="/images/vpblogimg/2012/10/jMeter0102.png" alt="JMeter"></p>
+  </li>
+</ol>
+
+<p>That’s it! If all you need is to create some heavy load you can create a few different HTTP requests and start bombarding your server right away.</p>
+
+<p>A trivia about the JMeter is that it is mentioned in the book titled “We Are Anonymous”. Apparently it can also be used as a DDoS tool!</p>
+
+<p><a href="http://www.amazon.com/We-Are-Anonymous-LulzSec-Insurgency/dp/0316213543/" target="_blank" rel="noopener noreferrer"><img src="/images/vpblogimg/2012/10/AnonymousBookCover.jpg" alt="Anonymous"></a></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://jmeter.apache.org/usermanual" target="_blank" rel="noopener noreferrer">Official user manual</a></li>
+  <li><a href="http://www.amazon.com/Apache-JMeter-practical-performance-measurement/dp/1847192955" target="_blank" rel="noopener noreferrer">Apache JMeter</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2012/10/11/online-networking-course-from-stanford/" itemprop="url">Online networking course from Stanford</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -387,76 +460,6 @@ mv CARootCert.crt /etc/ssl/certs/&lt;br /&gt;
 
 <h4 id="step-14-enjoy">STEP 14: Enjoy!</h4>
 <p>That’s it! You installed a Wordpress application, imported your old posts, secured your blog with FTPS and HTTPS access. Time to celebrate!</p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2012/08/24/online-education-boom/" itemprop="url">Online Education Boom</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2012-08-24T13:47:32+01:00" itemprop="datePublished">August 24, 2012</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
-
-<!-- misc -->
-
-
-
-
-    <a href="/category/misc">misc</a>
-    
-</span>
-	<span class="tags">online_course, education</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Recently there is an explosion in the online courses for higher education. It’s a great chance for people looking for comprehensive academic classes. I started with a bunch of these classes but time proved that I should have selected wisely. Because they are not fluffy little tutorials. You really have to take the time to watch the videos, take the exams and hand in the assignments. So here are the ones that I find useful mixed with some of the older resources I used for similar purposes.</p>
-
-<p><a href="http://udacity.com" target="_blank" rel="noopener noreferrer"><img src="/images/vpblogimg/2012/08/UdacityLogo.png" alt="Udacity"></a></p>
-
-<p>Udacity is one of my favourites. It’s very forgiving about the deadlines. It uses Youtube extensively. You can even take the quizes and answer questions right on the video and submit your results. It has very nice courses including Applied Cryptography and Artificial Intelligence.</p>
-
-<p><a href="http://coursera.org" target="_blank" rel="noopener noreferrer"><img src="/images/vpblogimg/2012/08/coursera-logo.jpg" alt="Coursera"></a></p>
-
-<p>Coursera has a ton of Stanford classes like Cryptography, Machine Learning and Computer Networks. I had started Machine Learning course when it was in sort of a beta phase and was running on ml-class.org. Princeton university offers nice computer science classes as well under this site.</p>
-
-<p><a href="https://www.edx.org/course-list/mitx/allsubjects/allcourses" target="_blank" rel="noopener noreferrer"><img src="/images/vpblogimg/2012/08/MITX.png" alt="MitX"></a></p>
-
-<p>I don’t know if this was a beta site but it offers only one class by MIT: Circuits and Electronics. More about MIT courses below…</p>
-
-<p><a href="https://www.edx.org" target="_blank" rel="noopener noreferrer"><img src="/images/vpblogimg/2012/08/edx-logo-header.png" alt="EdX"></a></p>
-
-<p>edX has a small but quality selection of courses from MIT, Harvard and Berkeley. Software as a Service and Artificial Intelligence courses from Berkeley look delicious.</p>
-
-<p><a href="http://www.academicearth.org" target="_blank" rel="noopener noreferrer"><img src="/images/vpblogimg/2012/08/academic_earth.gif" alt="Academic Earth"></a></p>
-
-<p>I personally haven’t tried this site but heard from a friend. From the looks of it I think they have mostly old material. They have some video courses from Stanford which I had seen a few years ago from iTunesU. Still it may worth keeping an eye on.</p>
-
-<p><a href="http://www.open.edu/itunes/" target="_blank" rel="noopener noreferrer"><img src="/images/vpblogimg/2012/08/iTunesU_Thumb.png" alt="iTunesU"></a></p>
-
-<p>iTunesU was a gold mine in my eyes when I first discovered it. Watching course from Stanford while commuting was a great way making good use of time. Now the more interactive courses overshadowed it but it’s not dead yet. Far from it. Apple released an iTunesU app which allows to download your favourite courses very easily.</p>
-
-<p><a href="http://www.khanacademy.org" target="_blank" rel="noopener noreferrer"><img src="http://www.khanacademy.org/images/khan-logo-vertical-transparent.png" alt="Khan Academy"></a></p>
-
-<p>Frankly I’m not a big fan it. Compared to the rest it has rather simple and entry-level tutorials. But still shoulders an important mission and helps a lot of people get some valuable resources so I thought it’s worth mentioning.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://www.ted.com/talks/lang/en/" target="_blank" rel="noopener noreferrer">Daphne Koller’s TED talk about online education</a></li>
-</ul>
-
 
 		
 		

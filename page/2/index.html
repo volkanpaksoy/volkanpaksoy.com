@@ -109,6 +109,128 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2019/12/05/Using-Audio-in-Docker-Container/" itemprop="url">Using Audio in Docker Container</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-12-05T06:00:00+00:00" itemprop="datePublished">December  5, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dockerdev">docker</a></span> -->
+
+<!-- docker, dev -->
+
+
+
+
+    <a href="/category/docker">docker</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">audio</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>In this post I’m going to show an example of playing audio in a Docker container.</p>
+
+<h2 id="test-environment-setup">Test Environment Setup</h2>
+<p>I’m going to use dotnet core 3.1 runtime image:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull mcr.microsoft.com/dotnet/core/runtime:3.1
+</code></pre></div></div>
+
+<p>Here’s my Dockerfile:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM mcr.microsoft.com/dotnet/core/runtime:3.1
+
+RUN apt-get update -y
+
+RUN apt-get install mpg123 -y
+RUN apt-get install wget -y
+
+COPY ./play-audio.sh .
+RUN chmod +x ./play-audio.sh
+
+ENTRYPOINT ["/play-audio.sh"]
+</code></pre></div></div>
+
+<p>and the script (play-audio.sh) that plays the audio looks like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="nv">url</span><span class="o">=</span><span class="nv">$1</span>
+<span class="nv">filename</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">url</span><span class="p">##*/</span><span class="k">}</span><span class="s2">"</span>
+
+<span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="nt">-f</span> <span class="nv">$filename</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"File doesn't exist. Downloading."</span>
+    wget <span class="nv">$url</span>
+<span class="k">fi</span>
+
+<span class="c"># check if the audio player program exists. helpful to test the script individually on macOS</span>
+<span class="k">if </span><span class="nb">hash </span>mpg123 2&gt;/dev/null<span class="p">;</span> <span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"Playing file using mpg123"</span>
+    mpg123 <span class="nv">$filename</span>
+<span class="k">elif </span><span class="nb">hash </span>afplay 2&gt;/dev/null<span class="p">;</span> <span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"Playing file using afplay"</span>
+    afplay <span class="nv">$filename</span>
+<span class="k">else 
+    </span><span class="nb">echo</span> <span class="s2">"No player could be found."</span>    
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>I built the image with the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build -t audio-test .
+</code></pre></div></div>
+
+<h2 id="testing-the-audio">Testing the audio</h2>
+<p>Initially I rana container like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run audio-test https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3
+</code></pre></div></div>
+
+<p>After running the container like this I got the error shown below:</p>
+
+<p><img src="/images/vpblogimg/2019/12/audio-in-docker/error-while-running-audio.png" alt=""></p>
+
+<h2 id="solution">Solution</h2>
+<p>The trick is ro run with the following parameter:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>--device /dev/snd
+</code></pre></div></div>
+
+<p>So the full Docker run command looks like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run --rm --device /dev/snd audio-test https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3
+</code></pre></div></div>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>This was a long-winded setup for a very short solution but I enjoyed practicing with Bash scripting and Docker.</p>
+
+<p>Unfortunately this solution works on Raspberry Pi only and not on Mac. Every resource I found points to installing Pulse Audio Server on macOS and Pulse Audio client in the Docker image. I haven’t tried it yet as it was beyond the scope of my requirements but I might need to implement it later in which case I will post about it.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://stackoverflow.com/questions/41083436/how-to-play-sound-in-a-docker-container" target="_blank" rel="noopener noreferrer">How to play sound in a docker container</a></li>
+  <li><a href="https://stackoverflow.com/questions/40136606/how-to-expose-audio-from-docker-container-to-a-mac" target="_blank" rel="noopener noreferrer">How to expose audio from Docker container to a Mac?</a></li>
+  <li><a href="https://devops.datenkollektiv.de/running-a-docker-soundbox-on-mac.html" target="_blank" rel="noopener noreferrer">Running a Docker Soundbox on Mac</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2019/11/06/Continuous-Integration-with-CodeBuild/" itemprop="url">Continuous Integration with CodeBuild</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -579,77 +701,6 @@ phases:
   <li><a href="https://www.youtube.com/watch?v=184S7ki6fJA" target="_blank" rel="noopener noreferrer">Develop a Web App Using Amazon ECS and AWS Cloud Development Kit (CDK) - AWS Online Tech Talks (YouTube Video)</a></li>
   <li><a href="https://docs.aws.amazon.com/en_pv/cdk/latest/guide/getting_started.html" target="_blank" rel="noopener noreferrer">AWS Documentation: Getting Started With the AWS CDK</a></li>
   <li><a href="https://docs.aws.amazon.com/cdk/api/latest/docs/aws-construct-library.html" target="_blank" rel="noopener noreferrer">AWS CDK Construct Library</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2019/10/26/Building-Robots-with-Lego-Mindstorms-EV3/" itemprop="url">Building Robots with Lego Mindstorms EV3</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2019-10-26T05:00:00+01:00" itemprop="datePublished">October 26, 2019</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
-
-<!-- hobby -->
-
-
-
-
-    <a href="/category/hobby">hobby</a>
-    
-</span>
-	<span class="tags">lego, mindstorms, ev3</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>In <a href="https://volkanpaksoy.com/archive/2019/10/24/Playing-with-Lego-Mindstorms/">this</a> I made an introduction to building robots with Lego Mindstorms. In this post I will not develop my own robot but will build one of Lego’s creations: Track3r</p>
-
-<p><img src="/images/vpblogimg/2019/10/lego-2/lego-track3r.jpg" alt="Lego Track3r"></p>
-
-<h2 id="building">Building</h2>
-<p><a href="https://github.com/volkanpaksoy/lego/blob/master/docs/Lego-Track3r-Instructions.pdf" target="_blank" rel="noopener noreferrer">Instructions</a> are quite simple and I was able to build in a few hours.</p>
-
-<p><img src="/images/vpblogimg/2019/10/lego-2/lab-in-use.jpeg" alt="Lab in use"></p>
-
-<h2 id="connecting">Connecting</h2>
-<p>I tested it with IR remote control and it works but I think the easiest and best way to control the robot is the iOS app.</p>
-
-<p>To control the robot via app, first you need to have Bluetooth enabled both on your phone and EV3 brick:</p>
-
-<p><img src="/images/vpblogimg/2019/10/lego-2/turn-on-bluetooth-onev3.jpeg" alt=""></p>
-
-<p>After you install the app, connect it to the brick:</p>
-
-<p><img src="/images/vpblogimg/2019/10/lego-2/bluetooth-connection-instructions.jpg" alt=""></p>
-
-<p>Once connected, selected the robot you want to control (Track3r in this case):</p>
-
-<p><img src="/images/vpblogimg/2019/10/lego-2/app-control-panel.jpg" alt=""></p>
-
-<p>and the rest is just taking it to a test drive:</p>
-
-<p><img src="/images/vpblogimg/2019/10/lego-2/lego-track3r-complete.jpg" alt=""></p>
-
-<h2 id="conclusion">Conclusion</h2>
-<p>One problem I had was I ran out of batteries very quickly. EV3 brick take 6 AA batteries and I use rechargable batteries. After playing around with the robot for about half an hour I ran out of batteries. Unfortunately the design of the robot doesn’t take replacing batteries into account. It seems it would be a bit painful to remove the brick only to replace the batteries and put it back in. Well, there are other models I wanted to build anyway at least I have now more experience with building and controlling the pre-designed robots. I think the most fun is programming the brick so I will explore more of that in the future.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://github.com/volkanpaksoy/lego/blob/master/docs/Lego-Track3r-Instructions.pdf" target="_blank" rel="noopener noreferrer">Lego Track3r Instructions</a></li>
-  <li><a href="https://github.com/volkanpaksoy/lego/blob/master/docs/Lego-Mindstorms-EV3-User-Guide.pdf" target="_blank" rel="noopener noreferrer">EV3 User Guide</a></li>
 </ul>
 
 		

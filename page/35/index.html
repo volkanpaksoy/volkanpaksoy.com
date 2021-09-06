@@ -109,6 +109,177 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/01/02/enter-fsharp/" itemprop="url">Enter F#</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-01-02T22:30:00+00:00" itemprop="datePublished">January  2, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">fsharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I’m not a big fan of New Year’s resolutions. I was meaning to start learning F# and since it’s the new year’s 2nd day it might a good time to finally give it a shot!</p>
+
+<h3 id="where-to-start">Where to start</h3>
+<p>It’s always hard to find the best resource when you are starting. Some time ago I heard about a Microsoft Research project called TryFSharp.org. It’s a tutorial website geared towards the absolute beginners. It comes with a REPL editor so no extra tools are needed to start.</p>
+
+<p>From now on I’m planning to spend 2 pomodoros (around 1 hour) every day to learn F#. After my first 2 pomodoros I completed the first 3 sections and below are my notes for today’s training.</p>
+
+<h3 id="lecture-notes">Lecture Notes</h3>
+
+<ul>
+  <li>
+<strong>let</strong> keyword to bind names to values. These bindings are <em>immutable</em>. If you try to assign a value to a same name twice you get the following error:</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">duplicated</span> <span class="p">=</span> <span class="s2">"original value"</span>
+<span class="k">let</span> <span class="n">duplicated</span> <span class="p">=</span> <span class="s2">"new value"</span>
+</code></pre></div></div>
+
+<p>causes the following error:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>stdin(8,5): error FS0037: Duplicate definition of value 'duplicated'
+</code></pre></div></div>
+
+<ul>
+  <li>Mutable variables can be created by explicitly specifiying <strong>mutable</strong> keyword but it should be used cautiously.</li>
+  <li>F# is a statically typed language like C#</li>
+  <li>
+<strong>printfn</strong> can be used to display messages. Strings can be formatted by using special characters such %d for int, %s for string such as</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">printfn</span> <span class="s2">"The answer is %d"</span> <span class="mi">42</span>
+</code></pre></div></div>
+
+<ul>
+  <li>let can also be used bind a name to a function. The following code</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">square</span> <span class="n">x</span> <span class="p">=</span>
+    <span class="n">x</span> <span class="p">*</span> <span class="n">x</span>
+
+<span class="n">square</span> <span class="mi">4</span>
+</code></pre></div></div>
+
+<p>produces this result in the output window:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; let square x =
+      x * x
+  
+  square 4
+
+val square : x:int -&gt; int
+val it : int = 16
+
+&gt; 
+</code></pre></div></div>
+
+<ul>
+  <li>F# is whitespace-sensitive. In the function above the body of the function was denoted by indenting it 4 spaces and return values is the last line of the function.</li>
+  <li>In times when F# cannot determine the type on itw own, it can specified explicitly bu using type annotations. For example:</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">toLeetSpeak</span> <span class="p">(</span><span class="n">phrase</span><span class="p">:</span><span class="kt">string</span><span class="p">)</span> <span class="p">=</span>
+    <span class="n">phrase</span><span class="p">.</span><span class="nc">Replace</span><span class="p">(</span><span class="k">'</span><span class="n">t'</span><span class="p">,</span> <span class="k">'</span><span class="mi">7</span><span class="k">'</span><span class="o">).</span><span class="nc">Replace</span><span class="p">(</span><span class="k">'</span><span class="n">o'</span><span class="p">,</span> <span class="k">'</span><span class="mi">0</span><span class="k">'</span><span class="p">)</span>
+
+<span class="n">toLeetSpeak</span> <span class="s2">"root"</span>
+</code></pre></div></div>
+
+<p>In the example above it needs to be specified that phrase if of type string before String.Replace method can be called.</p>
+
+<ul>
+  <li>Functions can be defined inside other functions:</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">quadruple</span> <span class="n">x</span> <span class="p">=</span>    
+    <span class="k">let</span> <span class="n">double</span> <span class="n">x</span> <span class="p">=</span>
+        <span class="n">x</span> <span class="p">*</span> <span class="mi">2</span>
+
+    <span class="n">double</span><span class="p">(</span><span class="n">double</span><span class="p">(</span><span class="n">x</span><span class="o">))</span>
+</code></pre></div></div>
+
+<ul>
+  <li>A function can be used as an argument to another function to create what’s called a <strong>higher order function</strong>.</li>
+  <li>Inline functions can be created such as</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">square</span> <span class="p">=</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="p">*</span> <span class="n">x</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Theres are called <strong>lambda functions</strong> or <strong>lambdas</strong>.</p>
+
+<ul>
+  <li>Lists can be created by semi-colon separated single values or a range values with .. in between such as</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">evens</span> <span class="p">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">;</span> <span class="mi">4</span><span class="p">;</span> <span class="mi">6</span><span class="p">;</span> <span class="mi">8</span><span class="p">]</span>
+<span class="k">let</span> <span class="n">firstHundred</span> <span class="p">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="mi">100</span><span class="p">]</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Higher-order functions can be combined with other functions such as</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">firstHundred</span> <span class="p">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="mi">100</span><span class="p">]</span>
+<span class="nn">List</span><span class="p">.</span><span class="n">map</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="p">*</span> <span class="mi">2</span><span class="p">)</span> 
+    <span class="p">(</span><span class="nn">List</span><span class="p">.</span><span class="n">filter</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="p">=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">firstHundred</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>which produces the following output</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>val it : int list =
+  [0; 4; 8; 12; 16; 20; 24; 28; 32; 36; 40; 44; 48; 52; 56; 60; 64; 68; 72; 76;
+   80; 84; 88; 92; 96; 100; 104; 108; 112; 116; 120; 124; 128; 132; 136; 140;
+   144; 148; 152; 156; 160; 164; 168; 172; 176; 180; 184; 188; 192; 196; 200]
+</code></pre></div></div>
+
+<p>It first filters the odd numbers out of <em>firstHundred</em> list and send the result to map function to double all the values.</p>
+
+<ul>
+  <li>Forward-pipe operator can be used to make the code easier to read when functions are chained:</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="mi">100</span><span class="p">]</span>
+<span class="p">|&gt;</span> <span class="nn">List</span><span class="p">.</span><span class="n">filter</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="p">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">|&gt;</span> <span class="nn">List</span><span class="p">.</span><span class="n">map</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="p">*</span> <span class="mi">2</span><span class="p">)</span>
+<span class="p">|&gt;</span> <span class="nn">List</span><span class="p">.</span><span class="n">sum</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Array indexing is zero-based.</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://TryFSharp.org" target="_blank" rel="noopener noreferrer">TryFSharp.org website</a></li>
+  <li><a href="http://fsharpshow.com/" target="_blank" rel="noopener noreferrer">The F# Show Podcast</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/12/15/simple-ids-with-nmap/" itemprop="url">Simple IDS with Nmap</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -465,138 +636,6 @@ Anyway, I will leave it as is for now.</p>
   <li><a href="https://www.youtube.com/watch?v=Hk-21p2m8YY" target="_blank" rel="noopener noreferrer">DEFCON 16: Nmap: Scanning the Internet by Fyodor</a></li>
 </ul>
 
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/12/12/homebrew-security-camera-with-raspberry-pi/" itemprop="url">Homebrew Security Camera with Raspberry Pi</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-12-12T12:45:00+00:00" itemprop="datePublished">December 12, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/securityawsdev">security</a></span> -->
-
-<!-- security, aws, dev -->
-
-
-
-
-    <a href="/category/security">security</a>
-    , 
-
-    <a href="/category/aws">aws</a>
-    , 
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">raspberry_pi, gadget, powershell, s3</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I know there are very cheap security cameras that you can setup in a few minutes. They may provide security but they cannot provide the satisfaction you get after a DIY project! So let’s dig in just for the fun of it.</p>
-
-<h3 id="ingredients">Ingredients</h3>
-
-<table>
-  <thead>
-    <tr>
-      <th>Component</th>
-      <th>Price</th>
-      <th>Where to buy?</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Raspberry Pi Starter Kit</td>
-      <td>£36</td>
-      <td><a href="http://www.amazon.co.uk/Raspberry-Pi-Motherboard-Starter-Kit/dp/B00LU2FDG8/" target="_blank" rel="noopener noreferrer">Amazon</a></td>
-    </tr>
-    <tr>
-      <td>Camera module</td>
-      <td>£17</td>
-      <td><a href="http://www.amazon.co.uk/gp/product/B00E1GGE40" target="_blank" rel="noopener noreferrer">Amazon</a></td>
-    </tr>
-    <tr>
-      <td>Protective case for the camera module</td>
-      <td>£4</td>
-      <td><a href="http://www.amazon.co.uk/gp/product/B00IJZOT5A" target="_blank" rel="noopener noreferrer">Amazon</a></td>
-    </tr>
-    <tr>
-      <td>Wireless adaptor</td>
-      <td>£6</td>
-      <td><a href="http://www.amazon.co.uk/gp/product/B003MTTJOY" target="_blank" rel="noopener noreferrer">Amazon</a></td>
-    </tr>
-  </tbody>
-</table>
-
-<p>Once all put together this is what you are going to end up with:</p>
-
-<p><img src="/images/vpblogimg/2014/12/raspberry-pi-security-camera-1.png" alt="Raspberry Pi Security Camera"></p>
-
-<h3 id="bring-it-to-life">Bring it to life</h3>
-<ol>
-  <li>Download a standard distro for Raspberry Pi. I used <a href="http://www.raspberrypi.org/downloads/" target="_blank" rel="noopener noreferrer">Rasbian</a>.</li>
-  <li>Write the image to the SD card. I use <a href="http://sourceforge.net/projects/win32diskimager/" target="_blank" rel="noopener noreferrer">Win32 Disk Imager</a> on Windows.</li>
-</ol>
-
-<h3 id="main-course-motion">Main course: Motion</h3>
-<p>There is a great tutorial <a href="http://www.instructables.com/id/Raspberry-Pi-as-low-cost-HD-surveillance-camera/" target="_blank" rel="noopener noreferrer">here</a> for converting your Pi into a security camera  which I mostly followed. Basically you enable WiFi, install Motion software and tweak the configuration a bit (image size, framerate etc) and it’s (hopefully) good to go.</p>
-
-<p>The video didn’t work for me unfortunately. It was recording something but only the first frame was visible so it wasn’t any better than a still image. So I decided to ignore videos completely.</p>
-
-<p>Instead of using a network share I decided to upload footage to AWS S3 directly using <a href="http://s3tools.org/s3cmd" target="_blank" rel="noopener noreferrer">Amazon S3 Tools</a>. Also don’t forget to clear old footage. Otherwise you can run out of space very quickly. I added a few cron jobs to carry out these tasks for me:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* * * * * s3cmd sync /var/surv/*.jpg s3://{BUCKET NAME}/
-* */2 * * * sudo rm /var/surv/*.avi
-* */6 * * *  find /var/surv/* -mtime +1 -exec rm {} \;
-</code></pre></div></div>
-
-<p>It syncs the local folder with S3 bucket, deletes all local video files and files older than a day. I delete the video files more frequently as they take up a lot of space.</p>
-
-<h3 id="monitoring-and-notifications">Monitoring and Notifications</h3>
-<p>No system is complete without proper monitoring and notifications. It’s especially important for systems like this that’s supposed to run quietly in the background.</p>
-
-<p>Unfortunately in my case it stopped working a few times which made monitoring even more important. I don’t know what’s causing the issue. Maybe it’s because I’m using an older version of Raspberry Pi and it’s not capable of handling all the motion software and S3 uploads etc.</p>
-
-<p>To keep an eye on it, I decided to create a small PowerShell script to check S3 for incoming files and send me a notification if it seems to have stopped uploading.</p>
-
-<h3 id="powershell-as-the-glue">PowerShell as the glue</h3>
-<p>Built on .NET framework PowerShell is a very powerful (no pun intended) tool to write quick and dirty solutions. So first here’s the Send-Mail function:</p>
-
-<noscript><pre>400: Invalid request</pre></noscript>
-<script src="https://gist.github.com/672433f21d0748c1a399a1bd574e1687.js"> </script>
-
-<p>I created a separate function for it as it’s a general-purpose feature which can be used in many places. To make it even more generic you can take out the from and to email addresses and add them as parameters to the function.</p>
-
-<p>And here’s the actual notification logic:</p>
-
-<noscript><pre>400: Invalid request</pre></noscript>
-<script src="https://gist.github.com/c711c19e19799b1ba4193d79d364dc76.js"> </script>
-
-<p>It finds the latest image by sorting them by LastModified field and compares this date with the current date. If it’s been more than 1 day it sends an email. Depending on how often you expect images to be uploaded you can change the alert condition.</p>
-
-<p>To use these scripts you’ll AWS accounts with S3 and SES privileges. Also you have to change the path of the send-mail.ps1 in the line it’s included.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://www.instructables.com/id/Raspberry-Pi-as-low-cost-HD-surveillance-camera/" target="_blank" rel="noopener noreferrer">Tutorial on Instructables.com</a></li>
-  <li><a href="http://www.fl3m.com/2012/08/sending-email-through-amazon-ses-with.html" target="_blank" rel="noopener noreferrer">PowerShell script to send email</a></li>
-  <li><a href="http://www.raspberrypi.org/downloads/" target="_blank" rel="noopener noreferrer">Raspberry Pi downloads</a></li>
-  <li><a href="http://s3tools.org/s3cmd" target="_blank" rel="noopener noreferrer">Amazon S3 Tools</a></li>
-</ul>
 
 		
 		

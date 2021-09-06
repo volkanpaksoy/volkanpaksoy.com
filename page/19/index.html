@@ -109,6 +109,208 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2016/03/18/dynamic-dns-with-aws-route-53-part-2-angular-client/" itemprop="url">Dynamic DNS with AWS Route 53 - Part 2: AngularJS Client</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2016-03-18T13:00:00+00:00" itemprop="datePublished">March 18, 2016</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awsdev">aws</a></span> -->
+
+<!-- aws, dev -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">route53, angularjs</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I’ve been using my own dynamic DNS application (which I named <a href="https://dyndns53.com" target="_blank" rel="noopener noreferrer">DynDns53</a> and blogged about it <a href="https://volkanpaksoy.com/archive/2015/08/12/dynamic-dns-with-aws-route53/">here</a>). So far it had a WPF application and I was happy with it but I thought if I could develop a web-based application I wouldn’t have to install anything (which is what I’m shooting for these days) and achieve the same results.</p>
+
+<p>So I built a JavaScript client with AngularJS framework. The idea is exactly the same, the only difference is it’s all happening inside the browser.</p>
+
+<p><img src="/images/vpblogimg/2016/03/dyndns53-angularjs-client-overview.png" alt="DynDns53 web client"></p>
+
+<h2 id="ingredients">Ingredients</h2>
+<p>To have a dynamic DNS client you need to have the following</p>
+
+<ol>
+  <li>A way to get your external IP address</li>
+  <li>A way to update your DNS record</li>
+  <li>An application that performs Step 1 &amp; 2 perpetually</li>
+</ol>
+
+<h2 id="step-1-getting-the-ip-address">Step 1: Getting the IP Address</h2>
+<p>I have done and blogged about this several times now. (Feels like I’m repeating myself a bit, I guess I have to find something original to work with. But first I have to finish this project and have closure!)</p>
+
+<p>Since it’s a simple GET request it sounds easy but I quickly hit the <a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing" target="_blank" rel="noopener noreferrer">CORS</a> wall when I tried the following bit:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">'ExternalIP'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$http</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">$http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'http://checkip.amazonaws.com'</span><span class="p">,</span> <span class="p">{</span> <span class="na">cache</span><span class="p">:</span> <span class="kc">false</span> <span class="p">});</span>
+<span class="p">});</span> 
+</code></pre></div></div>
+
+<p>In my WPF client I can call whatever service I want whenever I want but when running inside the browser things are a bit different. So I decided to take a detour and create my own service that allowed cross-origin resource sharing.</p>
+
+<h2 id="aws-lambda--api-gateway">AWS Lambda &amp; API Gateway</h2>
+
+<p>First I thought I could do it even without Lambda function by using the HTTP proxy integration. I could return what the external site returns:</p>
+
+<p><img src="/images/vpblogimg/2016/03/dyndns53-external-ip-http-proxy.png" alt=""></p>
+
+<p>Unfortunately this didn’t work because it was returning the IP of the AWS machine that’s actually running the API gateway. So I had to get the client’s IP from the request and send it back in my own Lambda function.</p>
+
+<p><img src="/images/vpblogimg/2016/03/dyndns53-external-ip-api.png" alt=""></p>
+
+<p>Turns out in order to get HTTP headers you need to fiddle with some <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html" target="_blank" rel="noopener noreferrer">template mapping</a> and assign the client’s IP address to a variable:</p>
+
+<p><img src="/images/vpblogimg/2016/03/dyndns53-external-ip-template-mapping.png" alt=""></p>
+
+<p>This can be later referred to in the Lambda function through <em>event</em> parameter:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">exports</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">context</span><span class="p">.</span><span class="nx">succeed</span><span class="p">({</span>
+        <span class="s2">"ip"</span><span class="p">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">ip</span>
+    <span class="p">})</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>And now that we have our own service we can allow CORS and be able call it from our client inside the browser:</p>
+
+<p><img src="/images/vpblogimg/2016/03/dyndns53-external-ip-enable-cors.png" alt=""></p>
+
+<h2 id="step-2-updating-dns">Step 2: Updating DNS</h2>
+<p>This bit is very similar to WPF version. Instead of using the AWS .NET SDK I just used the JavaScript SDK. AWS has a great <a href="https://sdk.amazonaws.com/builder/js/" target="_blank" rel="noopener noreferrer">SDK builder</a> which lets you to select the pieces you need:</p>
+
+<p><img src="/images/vpblogimg/2016/03/dyndns53-update-dns-sdk-builder.png" alt=""></p>
+
+<p>It also shows if the service supports CORS. It’s a relief that Route53 does so we can keep going.</p>
+
+<p>The whole source code is on <a href="https://github.com/volkanpaksoy/dyndns53" target="_blank" rel="noopener noreferrer">GitHub</a> but here’s the gist of it: Loop through all the subdomains, get all the resource records in the zone, find the matching record and update it with the new IP:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">$scope</span><span class="p">.</span><span class="nx">updateAllDomains</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">angular</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">$rootScope</span><span class="p">.</span><span class="nx">domainList</span><span class="p">.</span><span class="nx">domains</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$scope</span><span class="p">.</span><span class="nx">updateDomainInfo</span><span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">.</span><span class="nx">zoneId</span><span class="p">);</span>
+      <span class="p">});</span>
+  <span class="p">}</span> 
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">$scope</span><span class="p">.</span><span class="nx">updateDomainInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">domainName</span><span class="p">,</span> <span class="nx">zoneId</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="s1">'accessKeyId'</span><span class="p">:</span> <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">accessKey</span><span class="p">,</span>
+      <span class="s1">'secretAccessKey'</span><span class="p">:</span> <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">secretKey</span>
+    <span class="p">};</span>
+    <span class="kd">var</span> <span class="nx">route53</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AWS</span><span class="p">.</span><span class="nx">Route53</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+    
+    <span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">HostedZoneId</span><span class="p">:</span> <span class="nx">zoneId</span>
+    <span class="p">};</span>
+
+    <span class="nx">route53</span><span class="p">.</span><span class="nx">listResourceRecordSets</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> 
+          <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$emit</span><span class="p">(</span><span class="s1">'rootScope:log'</span><span class="p">,</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="nx">angular</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">ResourceRecordSets</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
+              <span class="k">if</span> <span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">Name</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="nx">domainName</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">externalIPAddress</span> <span class="o">=</span> <span class="s2">""</span><span class="p">;</span>
+                <span class="nx">ExternalIP</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">){</span>
+                     <span class="nx">externalIPAddress</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">ip</span><span class="p">;</span>
+                     <span class="nx">$scope</span><span class="p">.</span><span class="nx">changeIP</span><span class="p">(</span><span class="nx">domainName</span><span class="p">,</span> <span class="nx">zoneId</span><span class="p">,</span> <span class="nx">externalIPAddress</span><span class="p">)</span>
+                 <span class="p">});</span>
+              <span class="p">}</span>
+          <span class="p">});</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">$scope</span><span class="p">.</span><span class="nx">changeIP</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">domainName</span><span class="p">,</span> <span class="nx">zoneId</span><span class="p">,</span> <span class="nx">newIPAddress</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="s1">'accessKeyId'</span><span class="p">:</span> <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">accessKey</span><span class="p">,</span>
+      <span class="s1">'secretAccessKey'</span><span class="p">:</span> <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">secretKey</span>
+    <span class="p">};</span>
+
+    <span class="kd">var</span> <span class="nx">route53</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AWS</span><span class="p">.</span><span class="nx">Route53</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">ChangeBatch</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">Changes</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="na">Action</span><span class="p">:</span> <span class="s1">'UPSERT'</span><span class="p">,</span>
+            <span class="na">ResourceRecordSet</span><span class="p">:</span> <span class="p">{</span>
+              <span class="na">Name</span><span class="p">:</span> <span class="nx">domainName</span><span class="p">,</span>
+              <span class="na">Type</span><span class="p">:</span> <span class="s1">'A'</span><span class="p">,</span>
+              <span class="na">TTL</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span>
+              <span class="na">ResourceRecords</span><span class="p">:</span> <span class="p">[</span> <span class="p">{</span>
+                  <span class="na">Value</span><span class="p">:</span> <span class="nx">newIPAddress</span>
+                <span class="p">}</span>
+              <span class="p">]</span>
+            <span class="p">}</span>
+          <span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">},</span>
+      <span class="na">HostedZoneId</span><span class="p">:</span> <span class="nx">zoneId</span>
+    <span class="p">};</span>
+
+    <span class="nx">route53</span><span class="p">.</span><span class="nx">changeResourceRecordSets</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> 
+        <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$emit</span><span class="p">(</span><span class="s1">'rootScope:log'</span><span class="p">,</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span> 
+      <span class="p">}</span>
+      <span class="k">else</span> <span class="p">{</span> 
+        <span class="kd">var</span> <span class="nx">logMessage</span> <span class="o">=</span> <span class="s2">"Updated domain: "</span> <span class="o">+</span> <span class="nx">domainName</span> <span class="o">+</span> <span class="s2">" ZoneID: "</span> <span class="o">+</span> <span class="nx">zoneId</span> <span class="o">+</span> <span class="s2">" with IP Address: "</span> <span class="o">+</span> <span class="nx">externalIPAddress</span><span class="p">;</span>
+        <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$emit</span><span class="p">(</span><span class="s1">'rootScope:log'</span><span class="p">,</span> <span class="nx">logMessage</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+
+<p>The only part that trippped me up was that I wasn’t setting the TTL in the changeResourceRecordSets parameters and I was getting an error but found a <a href="http://stackoverflow.com/questions/31559137/getting-invalidinput-error-on-changeresourcerecordsets" target="_blank" rel="noopener noreferrer">StackOverflow question</a> that helped to get past the issue.</p>
+
+<h2 id="step-3-a-tool-to-bind-them">Step 3: A tool to bind them</h2>
+<p>Now the fun part: An AngularJS client to call these services. I guess the UI is straight-forward. Basically it just requires the user to enter AWS IAM keys and domains to update.</p>
+
+<p>I didn’t want to deal with the hassle of sending the keys to a remote server and host them securely. Instead I thought it would be simpler just to use browser’s local storage with HTML5. This way the keys never leave the browser.</p>
+
+<p>It also only updates the IP address if it has changed so saves unnecessary API calls.</p>
+
+<p>Also it’s possible to view what’s going on in the event log area.</p>
+
+<p><img src="/images/vpblogimg/2015/08/dyndns53-angularjs-client-settings-and-event-log.png" alt=""></p>
+
+<p>I guess I can have my closure now and move on!</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/dyndns53" target="_blank" rel="noopener noreferrer">DynDns53 Source code</a></li>
+  <li><a href="http://stackoverflow.com/questions/31559137/getting-invalidinput-error-on-changeresourcerecordsets" target="_blank" rel="noopener noreferrer">StackOverflow question regarding TTL</a></li>
+  <li><a href="https://sdk.amazonaws.com/builder/js/" target="_blank" rel="noopener noreferrer">AWS JavaScript SDK Builder</a></li>
+  <li><a href="http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Route53.html" target="_blank" rel="noopener noreferrer">AWS Route53 SDK Documentation</a></li>
+  <li><a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html" target="_blank" rel="noopener noreferrer">API Gateway Mapping Template Reference</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2015/08/12/dynamic-dns-with-aws-route53/">DynDns53 introduction blog post</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing" target="_blank" rel="noopener noreferrer">CORS Wikipedia article</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2016/03/02/free-ssl-certs-with-aws-certificate-manager/" itemprop="url">Free SSL certificates with AWS Certificate Manager</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -379,170 +581,6 @@ free so no complaints here!)</p>
   <li><a href="http://matthewschrager.com/2013/02/19/restsharp-post-body/" target="_blank" rel="noopener noreferrer">RestSharp POST Body Problems</a></li>
   <li><a href="https://www.fitbit.com/uk/setup/aria" target="_blank" rel="noopener noreferrer">Setup application</a></li>
 </ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2016/01/18/playing-with-microsoft-band/" itemprop="url">Playing with Microsoft Band</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2016-01-18T19:00:00+00:00" itemprop="datePublished">January 18, 2016</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">csharp, gadget, microsoft_band</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I bought this about 6 months ago and in this post I’ll talk about my experiences so far. They released version 2 of it in last November so I thought I should write about it before it gets terribly outdated!</p>
-
-<p><img src="/images/vpblogimg/2016/01/ms-band-unboxing.jpg" alt=""></p>
-
-<h2 id="choosing-the-correct-size">Choosing the correct size</h2>
-
-<p>It comes in 3 sizes: Small, Medium and Large and finding the correct size is the first challenge. They seem to have improved the <a href="http://go.microsoft.com/fwlink/?LinkID=627157" target="_blank" rel="noopener noreferrer">sizing guide</a> for version 2. In the original one they didn’t mention the appropriate size for wrist’s circumference.</p>
-
-<p>To have the same effect I followed someone’s advice on a forum regarding the circumferences. Downloaded a <a href="http://printable-ruler.net/" target="_blank" rel="noopener noreferrer">printable ruler</a> to measure mine. It was at the border of medium and laarge and I decided to go with medium but even at the largest setting it’s not comfortable and irritates my skin. Most of the time I have to wear it on top of a <a href="http://www.boots.com/en/Elastoplast-Knee-&amp;-Elbow-Fabric-10-Plasters_1486423/" target="_blank" rel="noopener noreferrer">large plaster</a></p>
-
-<h2 id="wearing-notes">Wearing notes</h2>
-
-<p>I hope they fixed it in v2 but the first generation Band is quite bulky and uncomfortable. To be honest most of the time I just kept wearing it because I had spent £170 and didn’t come to terms with making a terrible investment. I wear it when I’m walking but as soon as I arrive at home or work I take it off because it’s almost impossible to type something with it.</p>
-
-<h2 id="band-in-action">Band in action</h2>
-
-<p>For solely getting fitness data purposes you can use it without pairing with your phone but pairing is helpful as you can read your texts on it, see emails and answer calls.</p>
-
-<p>I also installed the Microsoft Health app and started using Microsoft Health dashboard:</p>
-
-<p><img src="/images/vpblogimg/2016/01/ms-band-ms-health-dashboard.png" alt=""></p>
-
-<h2 id="troubleshooting">Troubleshooting</h2>
-
-<p>As soon as I started using it I noticed a discrepancy with the step count on the Microsoft Health dashboard. Turns out by default it was using phone’s motion tracker as well so it was doubling my steps. After I turned it off started getting the exact same results as on Band.</p>
-
-<p><img src="/images/vpblogimg/2016/01/ms-band-turn-off-motion-tracking.png" alt="Turn off motion tracking to get accurate results"></p>
-
-<h2 id="developing-with-band-and-cloud-api">Developing with Band and Cloud API</h2>
-
-<p>Recording data about something helps tremendously to make it manageable. That’s why I like using these health &amp; fitness gadgets. But of course it doesn’t mean much if you don’t make sense of that data.</p>
-
-<p>In my sample application I used Microsoft Health Cloud API to get the Band’s data. In order this to work Band needs to sync with Microsoft Health app on my phone and the app syncs with my MS account.</p>
-
-<p>The API has a great guide <a href="http://developer.microsofthealth.com/Content/docs/MS%20Health%20API%20Getting%20Started.pdf" target="_blank" rel="noopener noreferrer">here</a> that can be downloaded as a PDF. It outlines all the necessary steps very clearly and in detail.</p>
-
-<p>Long story short, firstly you need to go to <a href="https://account.live.com/developers/applications" target="_blank" rel="noopener noreferrer">Microsoft Account Developer Center</a> and register an application. This will give you a client ID and client secret that will be used for OAuth 2.0 authentication.</p>
-
-<p>API uses OAuth 2.0 authentication. After the token has been acquired, using the actual API is quite simple, in my example app I used /Summaries endpoint to get the daily step counts.</p>
-
-<h2 id="implementation">Implementation</h2>
-
-<p>The sample application is a simple WPF desktop application. Upon launch it checks if the user has an access token stored, if not then it shows the OAuth window and the user need to login to their account.</p>
-
-<p><img src="/images/vpblogimg/2016/01/ms-band-oauth-window.png" alt=""></p>
-
-<p>To let the user login to their Microsoft account I added a web browser control to a window and navigated to authorization page:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">string</span> <span class="n">authUri</span> <span class="p">=</span> <span class="s">$"</span><span class="p">{</span><span class="n">baseUrl</span><span class="p">}</span><span class="s">/oauth20_authorize.srf?client_id=</span><span class="p">{</span><span class="n">Settings</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="n">ClientID</span><span class="p">}</span><span class="s">&amp;scope=</span><span class="p">{</span><span class="n">_scope</span><span class="p">}</span><span class="s">&amp;response_type=code&amp;redirect_uri=</span><span class="p">{</span><span class="n">_redirectUri</span><span class="p">}</span><span class="s">"</span><span class="p">;</span>
-<span class="n">webBrowser</span><span class="p">.</span><span class="nf">Navigate</span><span class="p">(</span><span class="n">authUri</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p>Once the authorization is complete, the web browser is redirected to with a query parameter <strong>code</strong>. This is not the actual token we need. Now, we need to go to another URL (oauth20_token.srf) with this code and client secret as parameters and redeem the actual access token:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="k">void</span> <span class="nf">webBrowser_Navigated</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">System</span><span class="p">.</span><span class="n">Windows</span><span class="p">.</span><span class="n">Navigation</span><span class="p">.</span><span class="n">NavigationEventArgs</span> <span class="n">e</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">Uri</span><span class="p">.</span><span class="n">Query</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="s">"code="</span><span class="p">)</span> <span class="p">&amp;&amp;</span> <span class="n">e</span><span class="p">.</span><span class="n">Uri</span><span class="p">.</span><span class="n">Query</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="s">"lc="</span><span class="p">))</span>
-    <span class="p">{</span>
-        <span class="kt">string</span> <span class="n">code</span> <span class="p">=</span> <span class="n">e</span><span class="p">.</span><span class="n">Uri</span><span class="p">.</span><span class="n">Query</span><span class="p">.</span><span class="nf">Substring</span><span class="p">(</span><span class="m">1</span><span class="p">).</span><span class="nf">Split</span><span class="p">(</span><span class="sc">'&amp;'</span><span class="p">)[</span><span class="m">0</span><span class="p">].</span><span class="nf">Split</span><span class="p">(</span><span class="sc">'='</span><span class="p">)[</span><span class="m">1</span><span class="p">];</span>
-
-        <span class="kt">string</span> <span class="n">authUriRedeem</span> <span class="p">=</span> <span class="s">$"/oauth20_token.srf?client_id=</span><span class="p">{</span><span class="n">Settings</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="n">ClientID</span><span class="p">}</span><span class="s">&amp;redirect_uri=</span><span class="p">{</span><span class="n">_redirectUri</span><span class="p">}</span><span class="s">&amp;client_secret=</span><span class="p">{</span><span class="n">Settings</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="n">ClientSecret</span><span class="p">}</span><span class="s">&amp;code=</span><span class="p">{</span><span class="n">code</span><span class="p">}</span><span class="s">&amp;grant_type=authorization_code"</span><span class="p">;</span>
-
-        <span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="n">baseUrl</span><span class="p">);</span>
-        <span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestRequest</span><span class="p">(</span><span class="n">authUriRedeem</span><span class="p">,</span> <span class="n">Method</span><span class="p">.</span><span class="n">GET</span><span class="p">);</span>
-        <span class="kt">var</span> <span class="n">response</span> <span class="p">=</span> <span class="p">(</span><span class="n">RestResponse</span><span class="p">)</span><span class="n">client</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
-        <span class="kt">var</span> <span class="n">content</span> <span class="p">=</span> <span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">;</span>
-
-        <span class="c1">// Parse content and get auth code</span>
-        <span class="n">Settings</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="n">AccessToken</span> <span class="p">=</span> <span class="n">JObject</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="n">content</span><span class="p">)[</span><span class="s">"access_token"</span><span class="p">].</span><span class="n">Value</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;();</span>
-        <span class="n">Settings</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="nf">Save</span><span class="p">();</span>
-
-        <span class="nf">Close</span><span class="p">();</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>After we get the authorization out of the way we can actually call the API and get some results. It’s a simple GET call (https://api.microsofthealth.net/v1/me/Summaries/daily) and the response JSON is pretty straightforward. The only thing to keep in mind is to add the access token to Authorization header:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">request</span><span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span> <span class="s">$"bearer </span><span class="p">{</span><span class="n">Settings</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="n">AccessToken</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p>Here’s a sample output for a daily summary:</p>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-	</span><span class="s2">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"67491ecc-c408-47b6-a3ad-041edb410524"</span><span class="p">,</span><span class="w">
-	</span><span class="s2">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-01-18T00:00:00.000+00:00"</span><span class="p">,</span><span class="w">
-	</span><span class="s2">"endTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-01-19T00:00:00.000+00:00"</span><span class="p">,</span><span class="w">
-	</span><span class="s2">"parentDay"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2016-01-18T00:00:00.000+00:00"</span><span class="p">,</span><span class="w">
-	</span><span class="s2">"isTransitDay"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-	</span><span class="s2">"period"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Daily"</span><span class="p">,</span><span class="w">
-	</span><span class="s2">"duration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"P1D"</span><span class="p">,</span><span class="w">
-	</span><span class="s2">"stepsTaken"</span><span class="p">:</span><span class="w"> </span><span class="mi">2784</span><span class="p">,</span><span class="w">
-	</span><span class="s2">"caloriesBurnedSummary"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-		</span><span class="s2">"period"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Daily"</span><span class="p">,</span><span class="w">
-		</span><span class="s2">"totalCalories"</span><span class="p">:</span><span class="w"> </span><span class="mi">1119</span><span class="w">
-	</span><span class="p">},</span><span class="w">
-	</span><span class="s2">"heartRateSummary"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-		</span><span class="s2">"period"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Daily"</span><span class="p">,</span><span class="w">
-		</span><span class="s2">"averageHeartRate"</span><span class="p">:</span><span class="w"> </span><span class="mi">77</span><span class="p">,</span><span class="w">
-		</span><span class="s2">"peakHeartRate"</span><span class="p">:</span><span class="w"> </span><span class="mi">88</span><span class="p">,</span><span class="w">
-		</span><span class="s2">"lowestHeartRate"</span><span class="p">:</span><span class="w"> </span><span class="mi">68</span><span class="w">
-	</span><span class="p">},</span><span class="w">
-	</span><span class="s2">"distanceSummary"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-		</span><span class="s2">"period"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Daily"</span><span class="p">,</span><span class="w">
-		</span><span class="s2">"totalDistance"</span><span class="p">:</span><span class="w"> </span><span class="mi">232468</span><span class="p">,</span><span class="w">
-		</span><span class="s2">"totalDistanceOnFoot"</span><span class="p">:</span><span class="w"> </span><span class="mi">232468</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div></div>
-
-<p>Since we now have the data, we can visualize it:</p>
-
-<p><img src="/images/vpblogimg/2016/01/ms-band-step-chart.png" alt=""></p>
-
-<p>If you want to play with the sample code don’t forget to register an app and update the settings with your client ID and secret</p>
-
-<h2 id="next">Next</h2>
-
-<p>I guess the most fun would be to develop something that actually runs on the device. My next goal with my Band is to develop a custom tile using its SDK. I hope I can finish it while a first-gen device is still fairly relevant.</p>
-
-<h2 id="resources">Resources</h2>
-
-<ul>
-  <li><a href="https://github.com/volkanpaksoy/microsoft-band-workout" target="_blank" rel="noopener noreferrer">Sample project source code</a></li>
-  <li><a href="http://go.microsoft.com/fwlink/?LinkID=627157" target="_blank" rel="noopener noreferrer">MS Band Sizing Guide</a></li>
-  <li><a href="http://printable-ruler.net/" target="_blank" rel="noopener noreferrer">Online Ruler</a></li>
-  <li><a href="http://developer.microsofthealth.com/Content/docs/MS%20Health%20API%20Getting%20Started.pdf" target="_blank" rel="noopener noreferrer">MS Health API Getting Started guide</a></li>
-  <li><a href="https://developer.microsoftband.com/cloudAPI/Explorer" target="_blank" rel="noopener noreferrer">Microsoft Health Cloud API reference</a></li>
-</ul>
-
 
 		
 		

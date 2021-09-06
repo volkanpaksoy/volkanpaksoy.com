@@ -1,0 +1,230 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Using Raspberry Pi as Plex Server - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2021/09/06/Using-Raspberry-Pi-as-Plex-Server/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+  
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-35583486-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+<br>
+<br>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+<!-- AdUnit01 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Using Raspberry Pi as Plex Server</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2021-09-06T07:00:00+01:00" itemprop="datePublished">September  6, 2021</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- hobby -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">raspberry_pi, plex, media_server</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p><img src="/images/vpblogimg/2021/09/plex-server/01-required-hardware-01.jpg" alt=""></p>
+
+<p>Raspberry Pis these days are powerful computers that can run a lot of tasks at home with very efficient electricity usage. In this post I’m going to show how to use a Raspberry Pi 4 8GB as a Plex server and serve your own media files in your own network.</p>
+
+<h2 id="hardware">Hardware</h2>
+<ul>
+  <li>Raspberry Pi 4 (8 GB)</li>
+  <li>Argon ONE case (M.2 adapter)</li>
+  <li>M.2 SATA SSD (1TB)</li>
+  <li>Standard pi power supply</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/09/plex-server/02-required-hardware-02.jpg" alt=""></p>
+
+<h2 id="getting-started">Getting Started</h2>
+<p>In this project I used an <a href="https://www.argon40.com/argon-one-m-2-case-for-raspberry-pi-4.html" target="_blank" rel="noopener noreferrer">Argon ONE M.2 Case for Raspberry Pi 4</a> as it allowed me to use an SSD drive with the Pi which is a lot faster than a microSD card.</p>
+
+<p>Argon ONE comes with a comprehensive used guide and take about 10 minutes to put everything together so it’s not too different than using a regular Pi case. The added benefits are:</p>
+
+<ul>
+  <li>You get to use a M.2 SATA SSD (Be mindful about the SATA here. It doesn’t work with NVMe SSDs even though it fits. So make sure to buy a M.2 SATA SSD)</li>
+  <li>You get 2 full-sized HDMI ports instead of the micro ones that come with a Pi 4</li>
+</ul>
+
+<p>The final build looks like this with a 5-bay YottaMaster enclosure attached to it:</p>
+
+<p><img src="/images/vpblogimg/2021/09/plex-server/03-final-build-with-external-sata-enclosure.jpg" alt=""></p>
+
+<h2 id="software-installation">Software Installation</h2>
+<p>The easiest installation way I could find is downloading the Plex Media Server for Linux package from <a href="https://www.plex.tv/media-server-downloads/#plex-media-server" target="_blank" rel="noopener noreferrer">Plex Downloads Page</a></p>
+
+<p>First choose Linux from the OS list</p>
+
+<p><img src="/images/vpblogimg/2021/09/plex-server/04-plex-download-01.png" alt=""></p>
+
+<p>and click Choose Distribution</p>
+
+<p><img src="/images/vpblogimg/2021/09/plex-server/05-plex-download-02.png" alt=""></p>
+
+<p>Once you’ve downloaded the installation package right click and select <em>Package install</em></p>
+
+<p>After the installation open http://localhost:32400/web and you’re ready to go!</p>
+
+<h2 id="plex-account">Plex Account</h2>
+<p>I already had an account so I just logged in with my credentials. This automatically adds the new server to your account so you can see the libraries in other server instances in your account as well.</p>
+
+<h2 id="file-share">File Share</h2>
+<p>Because I attached a 5-bay hard drive enclosure to the Pi, I wanted to use it for a general file server as well. This also helps if your media files are located somewhere else on the network and you want to copy them over the network if you’re not able to attach the source drive directly to the Plex Server Pi.</p>
+
+<p>To create the file server I followed this guide to install Samba on my Pi: <a href="https://magpi.raspberrypi.org/articles/samba-file-server" target="_blank" rel="noopener noreferrer">Samba: Set up a Raspberry Pi as a File Server for your local network</a></p>
+
+<h2 id="troubleshoot-file-permission-issue">Troubleshoot File Permission Issue</h2>
+<p>One issue I had when I tried to add some test folders was that Plex wasn’t able to list the folders in a selected drive. I found the solution here: <a href="https://unix.stackexchange.com/questions/559299/plex-media-server-cannot-see-sub-folders-permissions-issue" target="_blank" rel="noopener noreferrer">Plex Media Server cannot see sub folders.. Permissions issue?</a></p>
+
+<p>Basically added the permissions to the folders in the path as shown in the accepted answer:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo chmod a+rX /mnt
+sudo chmod a+rX /mnt/sda
+sudo chmod a+rX /mnt/sda/will
+</code></pre></div></div>
+
+<h2 id="client">Client</h2>
+<p>I’m not going to go into much detail on the client side as there are a vast number of ways to consume content from a Plex Server. In my case, I’m using a Kodi on another Raspberry Pi and as soon as I added the new Plex Server to my Plex account I was able to view the content on my client Kodi Pi.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>Overall it was quite straightforward as the server package came ready to install. The only issue I had was to figure out the folder permission issue and after that’s been resolved I was able to enjoy a brand new Plex Server instance in my own network. Hope this helps if you’re after similar results.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.argon40.com/argon-one-m-2-case-for-raspberry-pi-4.html" target="_blank" rel="noopener noreferrer">Argon ONE M.2 Case for Raspberry Pi 4</a></li>
+  <li><a href="https://www.plex.tv/media-server-downloads/#plex-media-server" target="_blank" rel="noopener noreferrer">Plex Downloads Page</a></li>
+  <li><a href="https://magpi.raspberrypi.org/articles/samba-file-server" target="_blank" rel="noopener noreferrer">Samba: Set up a Raspberry Pi as a File Server for your local network</a></li>
+  <li><a href="https://unix.stackexchange.com/questions/559299/plex-media-server-cannot-see-sub-folders-permissions-issue" target="_blank" rel="noopener noreferrer">Plex Media Server cannot see sub folders.. Permissions issue?</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2021/08/31/Using-Dymo-LabelWriter-450-with-a-Raspberry-Pi/" title="Previous Post: 
+Using Dymo LabelWriter 450 with a Raspberry Pi">« Using Dymo LabelWriter 450 with a Raspberry Pi</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2021 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

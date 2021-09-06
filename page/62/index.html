@@ -109,6 +109,163 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2013/02/25/growl/" itemprop="url">Growl</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-02-25T16:42:49+00:00" itemprop="datePublished">February 25, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">growl, raspberry_pi</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I was going to write myself a desktop notification user control. I was planning it to be a simple window popping up when an event occurred. Before investing time and effort into this, I decided to look around to find a similar project and build on it. Unfortunately I couldn’t find something to my liking but discovered <a href="http://www.growlforwindows.com/" target="_blank" rel="noopener noreferrer">Growl</a>. It has all feature you might expect from desktop notification tool. One additional feature that pleasingly surprised me is that you can send notifications to another machine over the network. This sounds good to me as I’m working on running my applications on Raspberry Pi using Mono lately. So the idea is to run the program on my Pi and receive the notifications on my desktop where I spend most of my time. Another benefit of Growl is that it is open-source which can be found here: <a href="https://code.google.com/p/growl-for-windows/" target="_blank" rel="noopener noreferrer">https://code.google.com/p/growl-for-windows/</a></p>
+
+<p>I don’t like my programs to be dependent on some external software that needs to be installed on the client machine but I thought this could be optional because desktop notifications can be one channel for communications and others can be added if necessary. So it is not a dependency but rather it enhancement in functionality. Also a pitfall in software development is the anti-pattern described as <a href="http://en.wikipedia.org/wiki/Not_Invented_Here#In_computing" target="_blank" rel="noopener noreferrer">Not Invented Here</a>. One simply cannot develop every piece of software needed to build complex systems. It’s not feasible. Of course when I write code on my own, my main goal is to learn something new but still I like to get results and produce working software. So best practices for commercial software still apply. Having convinced myself to use Growl for messaging I started looking for ways integrate it with my application. It comes with .NET SDK which is quite easy to use.</p>
+
+<p>There are two assemblies need to be referred to:</p>
+
+<ul>
+  <li>Growl.CoreLibrary.dll</li>
+  <li>Growl.Connector.dll</li>
+</ul>
+
+<p>The interesting bits are in Growl.Connector library. First you need to create an instance of <em>GrowlConnector</em>class. You can specify the remote hostname and password to send the notifications over the network which is what I wanted to do.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">this</span><span class="p">.</span><span class="n">growl</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GrowlConnector</span><span class="p">(</span><span class="s">"password"</span><span class="p">,</span> <span class="s">"192.168.1.64"</span><span class="p">,</span> <span class="n">GrowlConnector</span><span class="p">.</span><span class="n">TCP_PORT</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Next, you have to register the application. If it is not registered, Growl will discard notifications coming from this source</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">this</span><span class="p">.</span><span class="n">application</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Growl</span><span class="p">.</span><span class="n">Connector</span><span class="p">.</span><span class="nf">Application</span><span class="p">(</span><span class="s">"Test notifier from ROHAN"</span><span class="p">);</span>
+<span class="k">this</span><span class="p">.</span><span class="n">notificationType</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">NotificationType</span><span class="p">(</span><span class="n">sampleNotificationType</span><span class="p">,</span> <span class="s">"Sample Notification"</span><span class="p">);</span>
+<span class="k">this</span><span class="p">.</span><span class="n">growl</span><span class="p">.</span><span class="nf">Register</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">application</span><span class="p">,</span> <span class="k">new</span> <span class="n">NotificationType</span><span class="p">[]</span> <span class="p">{</span> <span class="n">notificationType</span> <span class="p">});</span>
+</code></pre></div></div>
+
+<p>Final step is to enable notifications over the network. By default it only accepts messages from the local machine.</p>
+
+<p><img src="/images/vpblogimg/2013/02/Growl_Security_Settings.png" alt="Growl Security Settings"></p>
+
+<p>After the setup is completed we can send a test notification by this piece of simple code:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">string</span> <span class="n">text</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"DateTime: {0}"</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(</span><span class="s">"dd/MM/yyyy HH:mm"</span><span class="p">));</span>
+<span class="n">Notification</span> <span class="n">notification</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Notification</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">application</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="n">notificationType</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">.</span><span class="n">Ticks</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(),</span> <span class="s">"Mmessage from ROHAN"</span><span class="p">,</span> <span class="n">text</span><span class="p">);</span>
+<span class="k">this</span><span class="p">.</span><span class="n">growl</span><span class="p">.</span><span class="nf">Notify</span><span class="p">(</span><span class="n">notification</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>And the result is:</p>
+
+<p><img src="/images/vpblogimg/2013/02/GrowlMessage.png" alt="Growl Message"></p>
+
+<p>So far so good. With only a few lines of code we managed to send a desktop notification over the network. We could specify a callback method to handle responses from the Growl host. We could also specify the encryption algorithm to enhance security.
+Now the last thing to test for me is to see it running on Raspberry Pi. To do that I created a sample console application that looks like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Growl.Connector</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">MonoWorkout</span>
+<span class="p">{</span>
+	<span class="k">class</span> <span class="nc">MainClass</span>
+	<span class="p">{</span>
+		<span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">GrowlConnector</span> <span class="n">growl</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">GrowlConnector</span><span class="p">(</span><span class="s">"password"</span><span class="p">,</span> <span class="s">"192.168.1.64"</span><span class="p">,</span> <span class="n">GrowlConnector</span><span class="p">.</span><span class="n">TCP_PORT</span><span class="p">);</span>
+			<span class="n">growl</span><span class="p">.</span><span class="n">EncryptionAlgorithm</span> <span class="p">=</span> <span class="n">Cryptography</span><span class="p">.</span><span class="n">SymmetricAlgorithmType</span><span class="p">.</span><span class="n">PlainText</span><span class="p">;</span>
+			<span class="n">Growl</span><span class="p">.</span><span class="n">Connector</span><span class="p">.</span><span class="n">Application</span> <span class="n">application</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Application</span><span class="p">(</span><span class="s">"Test notifier from Raspberry Pi"</span><span class="p">);</span>
+			<span class="n">NotificationType</span> <span class="n">notificationType</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">NotificationType</span><span class="p">(</span><span class="s">"SAMPLE_NOTIFICATION"</span><span class="p">,</span> <span class="s">"Sample Notification"</span><span class="p">);</span>
+			<span class="n">growl</span><span class="p">.</span><span class="nf">Register</span><span class="p">(</span><span class="n">application</span><span class="p">,</span> <span class="k">new</span> <span class="n">NotificationType</span><span class="p">[]</span> <span class="p">{</span> <span class="n">notificationType</span> <span class="p">});</span>
+
+			<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Type message to generate notification"</span><span class="p">);</span>
+
+			<span class="kt">string</span> <span class="n">message</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
+			<span class="k">while</span> <span class="p">((</span><span class="n">message</span> <span class="p">=</span> <span class="n">Console</span><span class="p">.</span><span class="nf">ReadLine</span><span class="p">())</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">message</span> <span class="p">==</span> <span class="s">"q"</span><span class="p">)</span>
+				<span class="p">{</span>
+					<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Quitting program"</span><span class="p">);</span>
+					<span class="k">break</span><span class="p">;</span>
+				<span class="p">}</span>
+
+				<span class="kt">string</span> <span class="n">text</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"DateTime: {0} \t Message: {1}"</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(</span><span class="s">"dd/MM/yyyy HH:mm"</span><span class="p">),</span> <span class="n">message</span><span class="p">);</span>
+				<span class="n">Notification</span> <span class="n">notification</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Notification</span><span class="p">(</span><span class="n">application</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">notificationType</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">.</span><span class="n">Ticks</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(),</span> <span class="s">"Message from Raspberry Pi"</span><span class="p">,</span> <span class="n">text</span><span class="p">);</span>
+				<span class="n">growl</span><span class="p">.</span><span class="nf">Notify</span><span class="p">(</span><span class="n">notification</span><span class="p">);</span>
+				<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Notification sent"</span><span class="p">);</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>I ran the application but did not receive the results. I immediately ran WireShark and could see the packages coming to my desktop machine so it is not a network or firewall issue. After Googling a little bit I’ve found that there is Mono branch in the source code. I downloaded it and replaced the binaries with their Mono counterparts. Tested it again but to no avail.</p>
+
+<p><img src="/images/vpblogimg/2013/02/Growl_Message_Capture.png" alt="Growl_Message_Capture"></p>
+
+<p>When I sent the message I can clearly see it in wireshark but I don’t know why Growl is rejecting them. I ran the same application in both a Windows 7 instance and Raspberry Pi and captured the message packets. Outcome is interesting:</p>
+
+<p>Here’s the message sent from Windows:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GNTP/1.0 NOTIFY NONE MD5:C5FB01D47A56832A17B3F941BC6F327F.3ECBA79D164DA5F8
+Application-Name: Test notifier from Raspberry Pi
+Notification-Name: SAMPLE_NOTIFICATION
+Notification-ID: 634982701932496447
+Notification-Title: Message from Raspberry Pi
+Notification-Text: DateTime: 07/03/2013 16:23 	 Message: TEST_ROHAN
+Notification-Sticky: No
+Notification-Priority: 0
+Notification-Coalescing-ID: 
+Origin-Machine-Name: ROHAN
+Origin-Software-Name: GrowlConnector
+Origin-Software-Version: 2.0.0.0
+Origin-Platform-Name: Microsoft Windows NT 6.1.7601 Service Pack 1
+Origin-Platform-Version: 6.1.7601.65536
+&lt;/pre&gt;
+And this is the one coming from Raspberry Pi:
+&lt;pre name="code" class="c-sharp:nocontrols"&gt;
+0'_`E{@P@ZTg&lt;
+	DGNTP/1.0 NOTIFY NONE MD5:45DF50ED8E166AE3AF39F0FEFFC36F5D.6EC74DE6BCD67A71
+Application-Name: Test notifier from Raspberry Pi
+Notification-Name: SAMPLE_NOTIFICATION
+Notification-ID: 634982703645630380
+Notification-Title: Message from Raspberry Pi
+Notification-Text: DateTime: 07/03/2013 16:26 	 Message: TEST_RASPBERRYPI
+Notification-Sticky: No
+Notification-Priority: 0
+Notification-Coalescing-ID: 
+Origin-Machine-Name: raspberrypi
+Origin-Software-Name: GrowlConnector
+Origin-Software-Version: 2.0.0.0
+Origin-Platform-Name: Unix 3.1.9.0
+Origin-Platform-Version: 3.1.9.0
+</code></pre></div></div>
+
+<p>There is a 16 byte block at the beginning and I believe because of that Growl cannot parse the message therefore end up discarding it.</p>
+
+<p>At this point, I’ll shelf this problem and look for alternative solutions. I hate leaving a problem unsolved like this but it is not a crucial feature so I’d rather not invest too much time into it. So for now my official opinion is, despite the Mono branch in the SVN, I don’t think Growl supports Mono.</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2013/01/31/running-mono-on-raspberry-pi/" itemprop="url">Running Mono on Raspberry Pi</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -246,92 +403,6 @@ Of course, this is just the beginning. I’ll see how compatible and reliable Mo
 <p>By explicitly specifying which TestNamespace we are referring to we resolve the conflict. One thing to keep in mind is that we have to define it inside the namespace. If we used it outside the DifferentNamespace.TestNamespace, then inside the namespace TestNamespace would still mean “DifferentNamespace.TestNamespace”</p>
 
 <p>Before this incident, I never had to use the global keyword. Probably the best way to avoid this is by naming conventions but sometimes you may not be able to change the namespace name. You can break lots of things if there are dependant parties on that code. So every now and then this tip may come in handy, just like it did to me in this instance.</p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2013/01/14/code-snippet-for-methods/" itemprop="url">Code snippet for methods</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2013-01-14T17:48:32+00:00" itemprop="datePublished">January 14, 2013</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">productivity, csharp, visual_studio</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Some code snippets are extremely helpful like <em>prop</em> for properties and <em>ctor</em> for constructors. But writing a method is always taking relatively long time as there is no snippet for methods. For good reason I guess as there are all different shapes and colours of methods but I think a snippet can save some time for simple methods. So I decided to create my own snippets. Here’s how to do it in 3 simple steps:</p>
-
-<p><strong>STEP 01:</strong> Download the snippet designer from here: <a title="http://snippetdesigner.codeplex.com" href="http://snippetdesigner.codeplex.com" target="_blank" rel="noopener noreferrer">http://snippetdesigner.codeplex.com</a>
-Install and restart visual studio. From File –&gt; New menu select Code Snippet file type.</p>
-
-<p><strong>STEP 02:</strong> Save the output of the snippet designer under code snippets folder
-%USERPROFILE%\Documents\Visual Studio 2012\Code Snippets\Visual C#\My Code Snippets
-which looks like this</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="p">&lt;?</span><span class="n">xml</span> <span class="n">version</span><span class="p">=</span><span class="s">"1.0"</span> <span class="n">encoding</span><span class="p">=</span><span class="s">"utf-8"</span><span class="p">?&gt;</span>
-<span class="p">&lt;</span><span class="n">CodeSnippets</span> <span class="n">xmlns</span><span class="p">=</span><span class="s">"http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet"</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="n">CodeSnippet</span> <span class="n">Format</span><span class="p">=</span><span class="s">"1.0.0"</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="n">Header</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="n">SnippetTypes</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="n">SnippetType</span><span class="p">&gt;</span><span class="n">Expansion</span><span class="p">&lt;/</span><span class="n">SnippetType</span><span class="p">&gt;</span>
-      <span class="p">&lt;/</span><span class="n">SnippetTypes</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="n">Title</span><span class="p">&gt;</span><span class="n">MethodVoid</span><span class="p">&lt;/</span><span class="n">Title</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="n">Author</span><span class="p">&gt;</span><span class="n">dummy</span><span class="p">&lt;/</span><span class="n">Author</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="n">Description</span><span class="p">&gt;</span>
-      <span class="p">&lt;/</span><span class="n">Description</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="n">HelpUrl</span><span class="p">&gt;</span>
-      <span class="p">&lt;/</span><span class="n">HelpUrl</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="n">Shortcut</span><span class="p">&gt;</span><span class="n">method_void</span><span class="p">&lt;/</span><span class="n">Shortcut</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="n">Header</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="n">Snippet</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="n">Declarations</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="n">Literal</span> <span class="n">Editable</span><span class="p">=</span><span class="s">"false"</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="n">ID</span><span class="p">&gt;</span><span class="n">Method1</span><span class="p">&lt;/</span><span class="n">ID</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="n">ToolTip</span><span class="p">&gt;&lt;/</span><span class="n">ToolTip</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="n">Default</span><span class="p">&gt;</span>
-          <span class="p">&lt;/</span><span class="n">Default</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="n">Function</span><span class="p">&gt;</span>
-          <span class="p">&lt;/</span><span class="n">Function</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="n">Literal</span><span class="p">&gt;</span>
-      <span class="p">&lt;/</span><span class="n">Declarations</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="n">Code</span> <span class="n">Language</span><span class="p">=</span><span class="s">"csharp"</span><span class="p">&gt;&lt;![</span><span class="n">CDATA</span><span class="p">[</span><span class="k">public</span> <span class="k">void</span> <span class="nf">MyMetHod</span><span class="p">()</span>
-    <span class="p">{</span>
-    <span class="p">}]</span><span class="k">]&gt;</span><span class="p">&lt;/</span><span class="n">Code</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="n">Snippet</span><span class="p">&gt;</span>
-  <span class="p">&lt;/</span><span class="n">CodeSnippet</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="n">CodeSnippets</span><span class="p">&gt;</span>
-
-</code></pre></div></div>
-
-<p><strong>STEP 03:</strong> Restart Visual Studio for the changes to take effect.
-I created a few snippets for simple methods returning primitive types. Depending on your needs you can choose the optimum number of snippets. I especially like using the test method snippet which looks like this:</p>
-
-<p><img src="/images/vpblogimg/2013/01/TestMethodSnippet.png" alt="TestMethodSnippet"></p>
-
-<p>Another great feature about this tool is you can export a selected text block as a snippet. All you have to do is right-click and select Export as Snippet, make the final touches in the editor and save.</p>
 
 		
 		

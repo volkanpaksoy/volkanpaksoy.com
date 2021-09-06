@@ -109,6 +109,220 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2018/05/16/Using-Custom-Domains-with-AWS-API-Gateway/" itemprop="url">Using Custom Domains with AWS API Gateway</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2018-05-16T07:00:00+01:00" itemprop="datePublished">May 16, 2018</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">api_gateway</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>API Gateway is Amazon’s managed API service. Serverless architecture is growing more on me everyday. I think leveraging infinite auto-scaling and only paying for what you use makes perfect sense. But to have an API that will be customer-facing first thing that needs to be setup is a custom domain which might be a bit involved when SSL certificates come in to play. In this post I’d like to create an API from scratch and use a custom domain name assigned to it.</p>
+
+<h2 id="step-1-create-an-api">Step 1: Create an API</h2>
+<p>Creating an API is straightforward: Just assign a meaningful and description. However, to me it was a bit confusing when it came to choosing the endpoint type.</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-01-create-api.png" alt=""></p>
+
+<p>The two options provided are: <em>Regional</em> and <em>Edge optimized</em>.</p>
+
+<ul>
+  <li>
+    <p>Edge-optimized API endpoint: The API is deployed to the specified region and a CloudFront distribution is created. API requests are routed to the nearest CloudFront Point of Presence (POP).</p>
+  </li>
+  <li>
+    <p>Regional API endpoint: This type was added in November 2017. The main goal is to prevent a roundtrip for in-region requests. API requests are targeted directly to the region-specific API Gateway without going through any CloudFront distribution.</p>
+  </li>
+</ul>
+
+<p>Custom domain names are supported for both endpoint types.</p>
+
+<p>In this example, I’ll use <strong>Regional</strong> endpoint type. For further reading, here’s <a href="http://blog.ryangreen.ca/2017/11/03/api-gateway-regional-vs-edge-optimized-endpoints/" target="_blank" rel="noopener noreferrer">a nice blog post about endpoint types</a>.</p>
+
+<h2 id="step-2-create-a-resource-and-method">Step 2: Create a resource and method</h2>
+<p>For demonstration purposes I created a resource called customer and a GET method that is which calls a mock endpoint.</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-02-create-resource-and-method.png" alt=""></p>
+
+<h2 id="step-3-deploy-the-api">Step 3: Deploy the API</h2>
+<p>From the Actions menu in Resources tab, I selected Deploy API.</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-03-deploy.png" alt=""></p>
+
+<p>Deployment requires a stage. Since this is the first deployment, I had to create a new stage called test. A new stage can be created while deploying. After the deployment test stage looks like this:</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-04-stage.png" alt=""></p>
+
+<p>At this point API Gateway assigned a non-user-friendly URL already:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://81dkdt6q81.execute-api.eu-west-2.amazonaws.com/test
+</code></pre></div></div>
+
+<p>This is the root domain of the API. So I was able to call the endpoint like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://81dkdt6q81.execute-api.eu-west-2.amazonaws.com/test/albums
+</code></pre></div></div>
+
+<p>My goal was to get it working with my own domain such as:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://hmdb.myvirtualhome.net/albums
+</code></pre></div></div>
+
+<h2 id="step-4-generate-the-certificate-in-acm">Step 4: Generate the certificate in ACM</h2>
+<p>I’m using Route53 for all my domains and using ACM (AWS Certificate Manager) for generating SSL/TLS certificates. Before creating the custom domain name I needed my certificate available.</p>
+
+<p>The wizard is quite simple: I just added the subdomain for the API and selected DNS validation.</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-05-acm-add-domain-name.png" alt=""></p>
+
+<p>After the review comes the validation process. Since I’m using Route 53 and ACM plays well with it, it simply provided a nice big button that said Create record in Route 53.</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-06-acm-validation.png" alt=""></p>
+
+<p>After clicking and confirming I got this confirmation message:</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-07-acm-confirmation.png" alt=""></p>
+
+<p>After waiting for about 3 minutes, the cerficate was issued already:</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-08-acm-done.png" alt=""></p>
+
+<h2 id="step-5-create-custom-domain-name-in-api-gateway">Step 5: Create Custom Domain Name in API Gateway</h2>
+
+<p>Now that the certificate was ready I had to go back to API Gateway to create the custom domain name and associate it with the newly created cert.</p>
+
+<p>First, I clicked on Custom Domain Names on left menu and filled out the details. Make sure that your subdomain matches the one the certificate was generated for.</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-09-create-custom-domain.png" alt=""></p>
+
+<p>I assigned /test path to the test stage I had created earlier. I will use root path for the production stage when I deploy the final version.</p>
+
+<p>After creating the custom domain, take note of Target Domain Name generated by AWS.</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-10-target-domain-name.png" alt=""></p>
+
+<h2 id="step-6-create-a-record-in-route-53">Step 6: Create A Record in Route 53</h2>
+
+<p>I had to also point DNS to the domain generated by API Gateway.</p>
+
+<p>Since I was using a regional endpoint I had to map the custom domain name to the target domain name mentioned in the previous step.</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-11-add-a-record-to-route-53-error.png" alt=""></p>
+
+<p>Now the problem was when I tried to do it via AWS Management Console, it failed as explained in this <a href="https://stackoverflow.com/questions/47827670/understanding-aws-api-gateway-custom-domain-names" target="_blank" rel="noopener noreferrer">StackOverflow answer</a>.</p>
+
+<p>So I had to do it via CLI as below:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws route53 change-resource-record-sets --hosted-zone-id {ZONE_ID_OF_MY_DOMAIN} --change-batch file://changedns.json
+</code></pre></div></div>
+
+<p>whereas the contents of changedns.json were</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"Changes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CREATE"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"ResourceRecordSet"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"api.hmdb.myvirtualhome.net"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"A"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"AliasTarget"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"DNSName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"d-xyz.execute-api.eu-west-2.amazonaws.com"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"HostedZoneId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ZJ5UAJN8Y3Z2Q"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"EvaluateTargetHealth"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>In the JSON above, DNSName is the Target Domain Name created by AWS is Step 5. The HostedZoneId (ZJ5UAJN8Y3Z2Q), on the other hand, is the zone ID of API Gateway which is listed <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#apigateway_region" target="_blank" rel="noopener noreferrer">here</a>.</p>
+
+<h3 id="update">UPDATE</h3>
+<p>If you are having issues running the command above that might mean you don’t have a default profile setup which has permissions to change DNS settings. To fix that:</p>
+
+<h4 id="1-create-a-new-user-with-no-permissions">1. Create a new user with no permissions</h4>
+
+<p>Go to IAM console and create a new user. Skip all the steps and download the credentials as .csv in the last step.</p>
+
+<h4 id="2-assign-required-permissions">2. Assign required permissions</h4>
+<p>Create a new policy using the JSON template below and attach it to the new user</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VisualEditor0"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"route53:ChangeResourceRecordSets"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:route53:::hostedzone/{ZONE ID OF YOUR DOMAIN}"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h4 id="3-create-a-new-profile-for-the-user">3. Create a new profile for the user</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws configure --profile temp-route53-profile
+</code></pre></div></div>
+
+<p>and set the Access/Secret keys along with the region of your hosted zone.</p>
+
+<p>Then you run the first CLI command with providing profile name:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws route53 change-resource-record-sets --hosted-zone-id {ZONE_ID_OF_MY_DOMAIN} --change-batch file://changedns.json --profile temp-route53-profile
+</code></pre></div></div>
+
+<p>An important point here is to get your hosted zone ID from Route53. In the API Gateway, it shows a hosted zone ID which is actually AWS API Gateway zone ID. We use that zone ID in our DNS configuration (which is in changedns.json file in this example) but when we provide the hosted zone ID on the command line we provide our domain ID which can be found in Route53.</p>
+
+<h2 id="step-7-test">Step 7: Test</h2>
+<p>So after creating the alias for my API I visited the URL on a browser and I was able to get the green padlock indicating that it loaded the correct SSL certificate.</p>
+
+<p><img src="/images/vpblogimg/2018/05/api-gateway-custom-domain-12-success.png" alt=""></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-basic-concept.html" target="_blank" rel="noopener noreferrer">Amazon API Gateway Concepts</a></li>
+  <li><a href="https://aws.amazon.com/about-aws/whats-new/2017/11/amazon-api-gateway-supports-regional-api-endpoints/" target="_blank" rel="noopener noreferrer">Amazon API Gateway Supports Regional API Endpoints</a></li>
+  <li><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html" target="_blank" rel="noopener noreferrer">Set up Custom Domain Name for an API in API Gateway</a></li>
+  <li><a href="https://stackoverflow.com/questions/47827670/understanding-aws-api-gateway-custom-domain-names" target="_blank" rel="noopener noreferrer">StackOverflow answer: Understanding AWS API Gateway Custom Domain Names
+</a></li>
+  <li><a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#apigateway_region" target="_blank" rel="noopener noreferrer">AWS Regions and Endpoints</a></li>
+  <li><a href="http://blog.ryangreen.ca/2017/11/03/api-gateway-regional-vs-edge-optimized-endpoints/" target="_blank" rel="noopener noreferrer">API Gateway Regional vs. Edge-Optimized Endpoints</a></li>
+  <li><a href="https://docs.aws.amazon.com/powershell/latest/userguide/pstools-getting-set-up-linux-mac.html" target="_blank" rel="noopener noreferrer">Setting up the AWS Tools for PowerShell Core on Linux or macOS X</a></li>
+  <li><a href="https://docs.aws.amazon.com/powershell/latest/reference/" target="_blank" rel="noopener noreferrer">AWS Tools for PowerShell Cmdlet Reference</a></li>
+  <li><a href="https://docs.aws.amazon.com/apigateway/api-reference/" target="_blank" rel="noopener noreferrer">Amazon API Gateway REST API</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2018/03/14/Updated-DynDns53-with-DotNet-Core-Docker-and-Angular5/" itemprop="url">Updated DynDns53 with .NET Core, Docker and Angular 5</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -599,152 +813,6 @@ also in political events and the censorship with which he had to live in Germany
   <li><a href="https://cloud.google.com/sdk/downloads" target="_blank" rel="noopener noreferrer">GClud SDK</a></li>
   <li><a href="https://stackoverflow.com/questions/38806490/what-does-gs-protocol-mean" target="_blank" rel="noopener noreferrer">StackOverflow: What does GS Protocol Mean</a></li>
   <li><a href="https://slowgerman.com/" target="_blank" rel="noopener noreferrer">Slow German podcast</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2017/11/30/Backing-up-GitHub-Account-with-PowerShell/" itemprop="url">Backing up GitHub Account with PowerShell</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2017-11-30T06:00:00+00:00" itemprop="datePublished">November 30, 2017</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/devops">devops</a></span> -->
-
-<!-- devops -->
-
-
-
-
-    <a href="/category/devops">devops</a>
-    
-</span>
-	<span class="tags">git, powershell</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Having lots of projects and assets stored on GitHub I thought it might be a good idea to create periodical backups of my entire GitHub account (all repositories, both public and private). The beauty of it is since Git is open source, this way I can migrate my account to anywhere and even host it on my own server on AWS.</p>
-
-<h2 id="challenges">Challenges</h2>
-<p>With the above goal in mind, I started to outline what’s necessary to achieve this task:</p>
-
-<ol>
-  <li>Automate calling GitHub API to get all repos including private ones. (Of course one should be aware of <a href="https://developer.github.com/v3/#rate-limiting" target="_blank" rel="noopener noreferrer">GitHub API rate limits</a> which is currently 5000 requests per hour. If you use up all your allowance with your scripts you may not be able to use it yourself. Good thing is they are returning how many calls are left before you exceed your quota in <em>x-ratelimit-remaining</em> HTTP header in their responses.)</li>
-  <li>Pull all the latest versions for all branches. Overwrite local versions in cases of conflict.</li>
-  <li>Find a way to easily transfer a git repository (A compressed single file version rather than individual files) if transferring to another medium is required (such as an S3 bucket)</li>
-</ol>
-
-<p>With these challenges ahead, I first started looking into getting the repos from GitHub:</p>
-
-<h2 id="consuming-github-api-via-powershell">Consuming GitHub API via PowerShell</h2>
-<p>First, I shopped around for existing libraries for this task (such as <a href="https://github.com/PowerShell/PowerShellForGitHub" target="_blank" rel="noopener noreferrer">PowerShellForGitHub</a> by Microsoft but it didn’t work for me. Basically I couldn’t even manage the samples on their Wiki. It kept giving cmdlet not found error so I gave up.)</p>
-
-<p>Found a nice <a href="https://channel9.msdn.com/Blogs/trevor-powershell/Automating-the-GitHub-REST-API-Using-PowerShell" target="_blank" rel="noopener noreferrer">video on Channel 9</a> about consuming REST APIs via PowerShell which uses GitHub API as a case study. It was perfect for me as my goal was to use GitHub API anyway. And since this is a generic approach to consume APIs it can come handy in the future as well. It’s quite easy using basic authentication.</p>
-
-<h3 id="authorization">Authorization</h3>
-<p>First step, is to create a <a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer">Personal Access Token</a> with repo scope. (Make sure to copy the value before you close the page, there is no way to retrieve it afterwards.)</p>
-
-<p>After the access token has been obtained, I had to generate authorization header as shown in the Channel 9 video:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$token = '&lt;YOUR GITHUB ACCOUNT NAME&gt;:&lt;PERSONAL ACCESS TOKEN&gt;'
-$base64Token = [System.Convert]::ToBase64String([char[]]$token)
-$headers = @{
-    Authorization = 'Basic {0}' -f $base64Token
-};
-
-$response = Invoke-RestMethod -Headers $headers -Uri https://api.github.com/user/repos
-</code></pre></div></div>
-
-<p>This way I was able to get the repositories including the private ones but by default it returns 30 records on a page so I had to traverse over the pages .</p>
-
-<h3 id="handling-pagination">Handling pagination</h3>
-<p>GitHub sends the next and the last page URLs in link header:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;https://api.github.com/user/repos?page=2&gt;; rel="next", &lt;https://api.github.com/user/repos?page=3&gt;; rel="last"
-</code></pre></div></div>
-
-<p>The challenge here is that 	looks like Invoke-RestMethod response doesn’t allow to access headers which is a huge bummer as there are useful info in the headers as shown in the screenshot:</p>
-
-<p><img src="/images/vpblogimg/2017/11/github-api-response-headers.png" alt="GitHub response headers in Postman"></p>
-
-<p>At this point, I wanted to use <a href="https://github.com/pcgeek86/PSGitHub" target="_blank" rel="noopener noreferrer">PSGitHub</a> mentioned in the video but as of this writing it doesn’t support getting all repositories. In fact in a note it says “<em>We need to figure out how to handle data pagination</em>” which made me think we are on the same page here (no pun intended!)</p>
-
-<p>GitHub supports a page size parameter (e.g. per_page=50) but the documentation says the maximum value is 100. Although it is tempting to use that one as that would bring all my repos and leave some room for the future ones as well I wanted to go with a more permanent solution. So I decided to request more pages as longs as there are objects returning like this</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$page = 1
-
-Do
-{
-    $response = Invoke-RestMethod -Headers $headers -Uri "https://api.github.com/user/repos?page=$page"
-    
-    foreach ($obj in $response)
-    {
-        Write-Host ($obj.id)
-    }
-    
-    $page = $page + 1
-}
-While ($response.Count -gt 0)
-</code></pre></div></div>
-
-<p>Now in the foreach loop of course  I have to do something with the repo information instead of just printing the id.</p>
-
-<h3 id="cloning--pulling-repositories">Cloning / pulling repositories</h3>
-<p>At this point I was able to get all my repositories. GitHub API only handles account information so now I needed to able to run actual git commands to get my code.</p>
-
-<p>First I had installed PowerShell on Mac which is quite simple as specified in the documentation:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew tap caskroom/cask
-brew cask install powershell
-</code></pre></div></div>
-
-<p>With Git already installed on my machine, all is left was using Git commands to clone or update repo on PowerShell terminal such as:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git fetch --all
-git reset --hard origin/master
-</code></pre></div></div>
-
-<p>Since this is just going to be a backup copy I don’t want to deal with merge conflicts and just overwriting everything local.</p>
-
-<p>Another approach could be deleting the old repo and cloning it from scratch but I think this would be a bit wasteful to do it everytime for each and every repository.</p>
-
-<h2 id="putting-it-all-together">Putting it all together</h2>
-<p>Now that I have all the bits and pieces I have glue them together in a meaningful script than can be scheduled and here it is:</p>
-
-<noscript><pre>400: Invalid request</pre></noscript>
-<script src="https://gist.github.com/0309dd02703c6b5d9a73859ac2abf2d8.js"> </script>
-
-<h2 id="conclusion-and-future-improvements">Conclusion and Future Improvements</h2>
-<p>This version accomplishes the basic task of backing up an entire GitHub account but it can be improved in a few ways. Maybe I can post a follow up article including those improvements. A few ideas come to mind are:</p>
-
-<ul>
-  <li>Get Gists (private and public) as well.</li>
-  <li>Add option to exclude repos by name or by type (i.e. get only private ones or get all except repo123)</li>
-  <li>Add an option to export them to a “non-git” medium such as an S3 bucket using git bundle (which turns out to be a great tool to pack everything in a repository in a single file)</li>
-  <li>Create a Docker image that contains all the necessary software (Git, PowerShell, backup script etc) so that it can be distributed without any setup requirements.</li>
-</ul>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://channel9.msdn.com/Blogs/trevor-powershell/Automating-the-GitHub-REST-API-Using-PowerShell" target="_blank" rel="noopener noreferrer">Channel9 video on using GitHub API with PowerShell</a></li>
-  <li><a href="https://developer.github.com/v3/" target="_blank" rel="noopener noreferrer">GitHub API Documentation</a></li>
-  <li><a href="https://developer.github.com/v3/guides/traversing-with-pagination/" target="_blank" rel="noopener noreferrer">Traversing with Pagination</a></li>
-  <li><a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/invoke-restmethod?view=powershell-5.1" target="_blank" rel="noopener noreferrer">PowerShell Invoke-RestMethod documentation</a></li>
-  <li><a href="https://github.com/pcgeek86/PSGitHub" target="_blank" rel="noopener noreferrer">PSGitHub Repository</a></li>
-  <li>​<a href="https://github.com/PowerShell/PowerShell/blob/master/docs/installation/linux.md#macos-1012" target="_blank" rel="noopener noreferrer">Installing PowerShell on Mac</a>
-</li>
 </ul>
 
 		

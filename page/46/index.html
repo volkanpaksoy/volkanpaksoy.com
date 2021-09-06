@@ -109,6 +109,62 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2014/07/20/using-multiple-git-accounts-ssh-keys/" itemprop="url">Using multiple git accounts with SSH keys</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-07-20T12:32:32+01:00" itemprop="datePublished">July 20, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">git</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>If you have multiple accounts for git providers (i.e multiple accounts on Github and/or Bitbucket) then you’d need to update your SSH configuration to be able to access all your repositories seamlessly. Of course you can use HTTPS but then you’d have to enter username and password every time.</p>
+
+<p>If you don’t specify which key to use for each account SSH agent will try the default key if there is one (id_rsa) and will most likely fail if you didn’t grant access to that key in your git provider settings.</p>
+
+<p><img src="/images/vpblogimg/2014/07/ssh-access-denied.png" alt="SSH Access Denied"></p>
+
+<p>To resolve the issue you need to create a config file under .ssh folder that looks like this:</p>
+
+<p><img src="/images/vpblogimg/2014/07/ssh-config.png" alt="SSH Config"></p>
+
+<p>If you are just using one account per provider you don’t need to create multiple keys, you can just use id_rsa for both accounts. But if you have multiple accounts for a provider you’d need a key for each account. In the example configuration above I used a new key for BitBucket anyway. After creating the config file and adding the keys to your accounts you can start cloning repositories from various sources.</p>
+
+<p>Final step to accomplish this is to use the hostname you set in the config file when cloning the repository. For example when you copy the SSL clone URL it looks something like this: git@github.com:{account name}/{repository name}.git. So let’s say it’s a repository from the corporate account in my sample config file then I’d have to modify the URL as follows: git@github-corporate:{account name}/{repository name}.git so that the correct host name and RSA file can be used.</p>
+
+<p><img src="/images/vpblogimg/2014/07/ssh-success.png" alt="SSH Success"></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://help.github.com/articles/generating-ssh-keys" target="_blank" rel="noopener noreferrer">Generating SSH keys</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/05/24/programming-lego-mindstorms-ev3-net-api/" itemprop="url">Programming Lego Mindstorms EV3 with .NET API</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -231,61 +287,6 @@
   <li><a href="http://en.wikipedia.org/wiki/DBSCAN" target="_blank" rel="noopener noreferrer">Wikipedia article</a></li>
   <li><a href="https://github.com/volkanpaksoy/VP.MachineLearning.DBSCAN" target="_blank" rel="noopener noreferrer">Source code</a></li>
 </ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/05/11/grid-clustering-clique-algorithm/" itemprop="url">Grid Clustering with CLIQUE Algorithm</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-05-11T12:34:48+01:00" itemprop="datePublished">May 11, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">java, machine_learning</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>CLIQUE (CLustering In QUEst) algorithm is a grid-based clustering algorithm that partitions each dimension of the dataset as a grid.</p>
-
-<h3 id="clique-implementation">CLIQUE Implementation</h3>
-<p>The algorithm starts by assigning each data point to the closest grid in the matrix.</p>
-
-<p><img src="/images/vpblogimg/2014/05/CLIQUE-01.png" alt="CLIQUE 1"></p>
-
-<p>After loading the data it looks something like this:</p>
-
-<p><img src="/images/vpblogimg/2014/05/CLIQUE-02.png" alt="CLIQUE 2"></p>
-
-<p>In order for a grid cell to be considered as “dense” it has to have data points more than or equal to the threshold. In this sample the threshold was provided as 2. So after the adjacent dense cells are joined together we get 3 clusters:</p>
-
-<p><img src="/images/vpblogimg/2014/05/CLIQUE-03.png" alt="CLIQUE 3"></p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://github.com/volkanpaksoy/VP.MachineLearning.GridClustering" target="_blank" rel="noopener noreferrer">Source code</a></li>
-</ul>
-
 
 		
 		

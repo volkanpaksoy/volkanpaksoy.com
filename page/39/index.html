@@ -109,6 +109,54 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/expression-bodied-methods/" itemprop="url">C# 6.0 New Features - Expression-Bodied Methods</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-08T11:00:00+00:00" itemprop="datePublished">December  8, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>It’s a shorthand for writing methods. The body now can be written just like a Lambda expression as shown in Log2 method below:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="kt">string</span> <span class="nf">Log</span><span class="p">(</span><span class="kt">string</span> <span class="n">timestamp</span><span class="p">,</span> <span class="kt">string</span> <span class="n">application</span><span class="p">,</span> <span class="kt">string</span> <span class="n">error</span><span class="p">,</span> <span class="kt">string</span> <span class="n">status</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"[Timestamp: \{timestamp}], Application: [\{application}], Error: [\{error}], Status [\{status}]"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="kt">string</span> <span class="nf">Log2</span><span class="p">(</span><span class="kt">string</span> <span class="n">timestamp</span><span class="p">,</span> <span class="kt">string</span> <span class="n">application</span><span class="p">,</span> <span class="kt">string</span> <span class="n">error</span><span class="p">,</span> <span class="kt">string</span> <span class="n">status</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"[Timestamp: \{timestamp}], Application: [\{application}], Error: [\{error}], Status [\{status}]"</span><span class="p">);</span>
+
+</code></pre></div></div>
+
+<p>It may come in handy for helper methods. The only benefit I can see is getting rid of opening and closing curly braces which generally don’t bother me much. But I know lots of people trying to avoid curly braces as much as possible. I’m sure this feature will be popular among them.</p>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/12/07/using-statements-for-static-classess/" itemprop="url">C# 6.0 New Features - Using statements for static classes</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -235,75 +283,6 @@
 <p><img src="/images/vpblogimg/2014/12/auto-property-set-error.png" alt="Auto-property set error"></p>
 
 <p>It’s a small improvement providing an alternative way to write the same code in less lines.</p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/12/06/csharp-6-new-features/" itemprop="url">C# 6.0 New Features</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-12-06T11:00:00+00:00" itemprop="datePublished">December  6, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="a-new-microsoft">A new Microsoft</h3>
-<p>These are exciting times to work with Microsoft technologies as the company seems to be changing their approach drastically. They are open-sourcing a ton of projects including the .NET Framework itself. Maybe the best of it all is the next version of ASP.NET will be cross-platform. There are already some proof of concept projects that run a  ASP.NET vNext application on a Raspberry Pi. I like the direction they are taking so I think it’s a good time to catch up with these new instalments of my favorite IDE and programming language.</p>
-
-<p><img src="/images/vpblogimg/2014/12/DotNET_Logo.jpg" alt=""></p>
-
-<h3 id="new-features-in-a-nutshell">New features in a nutshell</h3>
-<p>Looking at the new features it feels like they are all about improving productivity and reducing the clutter with shorthands and less code overall. (It’s also confirmed by Mads Torgersen in his video on Channel 9)</p>
-
-<p>If you check out the resources at the end of the this post you’ll notice that there is quite a flux in the features mentioned in various sources. I’ll use Channel 9 video as my primary source. It features a PM in the language team and it’s the most recent source so sounds like the most credible among all.</p>
-
-<p>Here’s the list of new features:</p>
-
-<ol>
-  <li>Auto-Properties with Initializers</li>
-  <li>Using statements for static classes</li>
-  <li>String interpolation</li>
-  <li>Expression-bodied methods</li>
-  <li>Index initializers</li>
-  <li>Null-conditional operators</li>
-  <li>nameof operator</li>
-  <li>Exception-handling improvements</li>
-</ol>
-
-<p>I was planning to go over all of these features in this post but with sample code and outputs it quickly became quite lengthy so I decided to create a separate post for each of them. Watch this space for the posts about each feature.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://www.wintellectnow.com/course/detail/what-s-new-in-c-6-visual-basic-dotnet-14-and-visual-studio-14" target="_blank" rel="noopener noreferrer">Wintellect course</a></li>
-  <li><a href="http://dotnetrocks.com/default.aspx?showNum=1029" target="_blank" rel="noopener noreferrer">.NET Rocks Podcast</a></li>
-  <li><a href="http://msdn.microsoft.com/en-us/magazine/dn802602.aspx" target="_blank" rel="noopener noreferrer">MSDN Magazine Article: The New and Improved C# 6.0</a></li>
-  <li><a href="http://msdn.microsoft.com/en-us/magazine/dn683793.aspx" target="_blank" rel="noopener noreferrer">MSDN Magazine article: A C# 6.0 Language Preview</a></li>
-  <li><a href="http://channel9.msdn.com/Events/Visual-Studio/Connect-event-2014/116" target="_blank" rel="noopener noreferrer">Channel 9 Video</a></li>
-</ul>
-
 
 		
 		

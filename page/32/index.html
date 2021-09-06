@@ -109,6 +109,178 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/01/13/adventures-in-fsharp-rock-paper-scissors-lizard-spock/" itemprop="url">Adventures in F# - Rock Paper Scissors Lizard Spock</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-01-13T19:00:00+00:00" itemprop="datePublished">January 13, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">fsharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I can learn by doing so after I’ve started learning F# I had to develop some application to practice. The one I came up with is a simple game: Rock Paper Scissors Lizard Spock. First version only gets a bunch of moves from the player, generates random moves for the computer and displays the outcome as shown below:</p>
+
+<p><img src="/images/vpblogimg/2015/01/RPSLS-output.png" alt="Rock Paper Scissors Lizard Spock sample output"></p>
+
+<h3 id="implementation">Implementation</h3>
+<p>First, it gets a list of moves from the user. It should be a space-separated list of moves: R (Rock), P (Paper), S (Scissors), L (Lizard) and M (M for Mr. Spock as S was taken!)</p>
+
+<p>Then it converts the characters to corresponding moves and generates equal number of moves for the computer.</p>
+
+<p>Next it compares both lists of moves. It uses overloaded “-“ operator of the discriminated union. If the difference is 1 it means first player won, if it’s 2 then the second move won. 0 means draw.</p>
+
+<p>Finally it displays the output of each round the score after that.</p>
+
+<h3 id="source-code">Source code</h3>
+<p>Program has two files only and basic game implementation is as follows:</p>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">module</span> <span class="nc">Game</span>
+
+<span class="k">type</span> <span class="nc">Move</span> <span class="p">=</span> 
+    <span class="p">|</span> <span class="nc">Rock</span>
+    <span class="p">|</span> <span class="nc">Paper</span>
+    <span class="p">|</span> <span class="nc">Scissors</span>
+    <span class="p">|</span> <span class="nc">Lizard</span>
+    <span class="p">|</span> <span class="nc">Spock</span>
+
+    <span class="k">static</span> <span class="k">member</span> <span class="o">(-)</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="p">=</span>
+        <span class="k">match</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="k">with</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span> <span class="p">-&gt;</span> <span class="mi">1</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span> <span class="p">-&gt;</span> <span class="mi">1</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span> <span class="p">-&gt;</span> <span class="mi">2</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span> <span class="p">-&gt;</span> <span class="mi">2</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span> <span class="p">-&gt;</span> <span class="mi">1</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span> <span class="p">-&gt;</span> <span class="mi">2</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span> <span class="p">-&gt;</span> <span class="mi">2</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span> <span class="p">-&gt;</span> <span class="mi">1</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span> <span class="p">-&gt;</span> <span class="mi">1</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span> <span class="p">-&gt;</span> <span class="mi">2</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span> <span class="p">-&gt;</span> <span class="mi">2</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span> <span class="p">-&gt;</span> <span class="mi">1</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span> <span class="p">-&gt;</span> <span class="mi">2</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span> <span class="p">-&gt;</span> <span class="mi">1</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span> <span class="p">-&gt;</span> <span class="mi">1</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span> <span class="p">-&gt;</span> <span class="mi">2</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span> <span class="p">-&gt;</span> <span class="mi">2</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span> <span class="p">-&gt;</span> <span class="mi">2</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span> <span class="p">-&gt;</span> <span class="mi">1</span>
+        <span class="p">|</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span> <span class="p">-&gt;</span> <span class="mi">1</span>
+        <span class="p">|</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">when</span> <span class="p">(</span><span class="n">x</span> <span class="p">=</span> <span class="n">y</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="mi">0</span>
+
+<span class="k">let</span> <span class="nc">GetRandomMove</span> <span class="n">n</span> <span class="p">=</span> 
+    <span class="k">let</span> <span class="n">rnd</span> <span class="p">=</span> <span class="nn">System</span><span class="p">.</span><span class="nc">Random</span><span class="bp">()</span><span class="p">;</span>
+    <span class="k">let</span> <span class="n">output</span> <span class="p">=</span> <span class="p">[</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">1</span> <span class="p">..</span> <span class="n">n</span> <span class="p">-&gt;</span> 
+        <span class="k">let</span> <span class="n">index</span> <span class="p">=</span> <span class="n">rnd</span><span class="p">.</span><span class="nc">Next</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="k">match</span> <span class="n">index</span> <span class="k">with</span>
+        <span class="p">|</span> <span class="mi">0</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span>
+        <span class="p">|</span> <span class="mi">1</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span>
+        <span class="p">|</span> <span class="mi">2</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span>
+        <span class="p">|</span> <span class="mi">3</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span>
+        <span class="p">|</span> <span class="mi">4</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span>
+    <span class="p">]</span>
+    <span class="n">output</span>
+
+<span class="k">let</span> <span class="nc">GetRoundOutputText</span> <span class="n">moves</span> <span class="p">=</span>
+    <span class="k">match</span> <span class="n">moves</span> <span class="k">with</span>
+    <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">)</span> <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Scissors cuts Paper"</span>
+    <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">)</span> <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Paper covers Rock"</span>
+    <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">)</span> <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Rock crushes Lizard"</span>
+    <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">)</span> <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Lizard poisons Spock"</span>
+    <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">)</span> <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Spock smashes Scissors"</span>
+    <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">)</span> <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Scissors decapitates Lizard"</span>
+    <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">)</span> <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Lizard eats Paper"</span>
+    <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">)</span> <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Paper disproves Spock"</span>
+    <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">)</span> <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Spock vaporizes Rock"</span>
+    <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">)</span> <span class="p">|</span> <span class="p">(</span><span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span><span class="p">,</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Rock crushes scissors"</span>
+    <span class="p">|</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">when</span> <span class="p">(</span><span class="n">x</span> <span class="p">=</span> <span class="n">y</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="s2">"Draw"</span>
+    <span class="p">|</span> <span class="o">(_,</span> <span class="o">_)</span> <span class="p">-&gt;</span> <span class="s2">"Unknown move pair"</span>
+    
+<span class="k">let</span> <span class="nc">GetMovesFromInput</span> <span class="p">(</span><span class="n">input</span> <span class="p">:</span> <span class="kt">string</span><span class="p">)</span> <span class="p">=</span>
+    <span class="k">let</span> <span class="n">inputList</span> <span class="p">=</span> <span class="nn">Array</span><span class="p">.</span><span class="n">toList</span> <span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="nc">Trim</span><span class="bp">()</span><span class="p">.</span><span class="nc">Split</span> <span class="p">[|</span><span class="k">'</span> <span class="k">'</span><span class="o">|])</span>
+    <span class="k">let</span> <span class="n">moves</span> <span class="p">=</span> <span class="nn">List</span><span class="p">.</span><span class="n">map</span> <span class="p">(</span><span class="k">fun</span> <span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="kt">string</span><span class="p">)</span> <span class="p">-&gt;</span> 
+        <span class="k">match</span> <span class="n">x</span><span class="p">.</span><span class="nc">ToUpper</span><span class="bp">()</span> <span class="k">with</span>
+        <span class="p">|</span> <span class="s2">"R"</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Rock</span>
+        <span class="p">|</span> <span class="s2">"P"</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Paper</span>
+        <span class="p">|</span> <span class="s2">"S"</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Scissors</span>
+        <span class="p">|</span> <span class="s2">"L"</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Lizard</span>
+        <span class="p">|</span> <span class="s2">"M"</span> <span class="p">-&gt;</span> <span class="nn">Move</span><span class="p">.</span><span class="nc">Spock</span> <span class="p">)</span> <span class="n">inputList</span>
+    <span class="n">moves</span>
+</code></pre></div></div>
+
+<p>And the entry point of the program that gets user input and displays the results is :</p>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">open</span> <span class="nc">Game</span>
+<span class="k">open</span> <span class="nc">System</span>
+
+<span class="p">[&lt;</span><span class="nc">EntryPoint</span><span class="p">&gt;]</span>
+<span class="k">let</span> <span class="n">main</span> <span class="n">argv</span> <span class="p">=</span> 
+
+    <span class="k">let</span> <span class="k">mutable</span> <span class="n">playerScore</span> <span class="p">=</span> <span class="mi">0</span>
+    <span class="k">let</span> <span class="k">mutable</span> <span class="n">computerScore</span> <span class="p">=</span> <span class="mi">0</span>
+
+    <span class="k">let</span> <span class="n">playerMoves</span> <span class="p">=</span> <span class="nc">GetMovesFromInput</span> <span class="p">(</span><span class="nn">Console</span><span class="p">.</span><span class="nc">ReadLine</span><span class="bp">()</span><span class="p">)</span>
+    <span class="k">let</span> <span class="n">n</span> <span class="p">=</span> <span class="n">playerMoves</span><span class="p">.</span><span class="nc">Length</span>
+    <span class="n">printfn</span> <span class="s2">"You played: "</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span> <span class="p">..</span> <span class="n">n</span> <span class="p">-</span> <span class="mi">1</span> <span class="k">do</span>
+        <span class="n">printfn</span> <span class="s2">"%A"</span> <span class="p">(</span><span class="n">playerMoves</span><span class="p">.</span><span class="nc">Item</span><span class="p">(</span><span class="n">i</span><span class="o">))</span>
+
+    <span class="n">printfn</span> <span class="s2">""</span>
+    <span class="n">printfn</span> <span class="s2">"Generating computer moves"</span>
+    <span class="k">let</span> <span class="n">computerMoves</span> <span class="p">=</span> <span class="nc">GetRandomMove</span> <span class="n">n</span>
+    <span class="n">printfn</span> <span class="s2">"Computer played: "</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span> <span class="p">..</span> <span class="n">n</span> <span class="p">-</span> <span class="mi">1</span> <span class="k">do</span>
+        <span class="n">printfn</span> <span class="s2">"%A"</span> <span class="p">(</span><span class="n">computerMoves</span><span class="p">.</span><span class="nc">Item</span><span class="p">(</span><span class="n">i</span><span class="o">))</span>
+
+    <span class="n">printfn</span> <span class="s2">""</span>
+    <span class="n">printfn</span> <span class="s2">"Results:"</span>    
+
+    <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span> <span class="p">..</span> <span class="n">n</span> <span class="p">-</span> <span class="mi">1</span> <span class="k">do</span>
+        <span class="n">printfn</span>  <span class="s2">"%s"</span> <span class="p">(</span><span class="nc">GetRoundOutputText</span> <span class="p">(</span><span class="n">playerMoves</span><span class="p">.</span><span class="nc">Item</span><span class="p">(</span><span class="n">i</span><span class="o">),</span> <span class="n">computerMoves</span><span class="p">.</span><span class="nc">Item</span><span class="p">(</span><span class="n">i</span><span class="o">)))</span>
+        <span class="k">let</span> <span class="n">diff</span> <span class="p">=</span> <span class="p">(</span><span class="kt">int</span><span class="o">)(</span><span class="n">playerMoves</span><span class="p">.</span><span class="nc">Item</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="p">-</span> <span class="n">computerMoves</span><span class="p">.</span><span class="nc">Item</span><span class="p">(</span><span class="n">i</span><span class="o">))</span>
+        <span class="k">if</span> <span class="n">diff</span> <span class="p">=</span> <span class="mi">1</span> <span class="k">then</span> <span class="n">playerScore</span> <span class="p">&lt;-</span> <span class="n">playerScore</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">diff</span> <span class="p">=</span> <span class="mi">2</span> <span class="k">then</span> <span class="n">computerScore</span> <span class="p">&lt;-</span> <span class="n">computerScore</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">printfn</span> <span class="s2">"Player: %d </span><span class="se">\t</span><span class="s2"> Computer: %d"</span> <span class="n">playerScore</span> <span class="n">computerScore</span>
+
+    <span class="k">let</span> <span class="n">s</span> <span class="p">=</span> <span class="nn">Console</span><span class="p">.</span><span class="nc">ReadLine</span><span class="bp">()</span>
+    <span class="n">printfn</span> <span class="s2">"%s"</span> <span class="n">s</span>
+    
+    <span class="mi">0</span> 
+</code></pre></div></div>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>This is just the initial version (v0.1). I will keep improving it but for the time being I’m satisfied that I have a fully-working program developed in F# that uses the basics like discriminated unions, operator overloading and pattern matching. More to come soon…</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.samkass.com/theories/RPSSL.html" target="_blank" rel="noopener noreferrer">Rock Paper Scissors Lizard Spock game rules</a></li>
+  <li><a href="https://github.com/volkanpaksoy/rock-paper-scissors-lizard-spock" target="_blank" rel="noopener noreferrer">Source code - GitHub repository</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/01/08/adventures-in-fsharp-monogame/" itemprop="url">Adventures in F# - MonoGame, F# and Santa!</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -471,73 +643,6 @@ omit such a declaration.</p>
   <li><a href="http://msdn.microsoft.com/en-gb/library/dd233221.aspx" target="_blank" rel="noopener noreferrer">Modules in F#</a></li>
 </ul>
 
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/01/06/surface-pro-3-review/" itemprop="url">Surface Pro 3 Review</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-01-06T20:30:00+00:00" itemprop="datePublished">January  6, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
-
-<!-- misc -->
-
-
-
-
-    <a href="/category/misc">misc</a>
-    
-</span>
-	<span class="tags">gadget, review, surface_pro_3</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>To be brutally honest I didn’t need this device when I bought it. I had started considering of buying one and, as usually I do, just ended up buying it just because it’s a shiny little toy that got my attention!</p>
-
-<p>Since I forked over £1350 quids I had to justify it to myself to be able to sleep at nights. And my justification is that now that I have a fully mobile device I can work outside home quite often. In coffee shops, pubs and even in parks come spring. I think changing venues every now and then is a good idea to increase productivity and motivation. The main benefit of this device is that it’s running the exact OS my desktop is running meaning that I can use the exact same development environment on the go. I already had a 17” laptop which, in theory, allowed me to do that but it was a 5kg unwieldy beast with only 3-hour battery life so in practice it’s doomed to stay at home or office.</p>
-
-<p><img src="/images/vpblogimg/2015/01/laptop-vs-tablet.jpg" alt="Laptop vs. tablet"></p>
-
-<h3 id="first-impressions">First impressions</h3>
-<p>Another driving factor behind my decision was since it’s also a tablet I could use it as a comic book reader and it’s indeed a great reader. Compared to my good ol’ iPad 2 it provides a much better experience.</p>
-
-<p>Performance-wise it’s working great so far. The model I got has an Intel Core i7 CPU with 8GB RAM and 256GB SSD which is close to my desktop. The desktop has 32GB RAM but it runs a lot of virtual machines so 8GB with no-VMs sucking a ton of memory is good enough for a decent development machine.</p>
-
-<h3 id="tips-pros-and-cons">Tips, Pros and cons</h3>
-<ul>
-  <li>Tip: Toggle function keys: Fn button + Caps Lock. Fn keys are used much more frequently than searching or changing screen brightness.</li>
-  <li>Pro: Lovely and crisp 12” screen with 2160 x 1440 resolution. Great for reading comic books.</li>
-  <li>Pro: Good performance for development</li>
-  <li>Pro: Type-cover feels sturdy with strong magnets</li>
-  <li>Con: Appears connected to network while it’s not after waking up from sleep (I guess it’s a Windows flaw rather than Surface)</li>
-  <li>Con: Only 1 USB port is generally not good enough especially when it’s generally occupied by the mouse</li>
-  <li>Con: The type-cover keyboard feels a bit flimsy at times. But still it’s good enough to write code and blogposts.</li>
-  <li>Con: Gets hot sometimes</li>
-</ul>
-
-<h3 id="conclusion">Conclusion</h3>
-<p>All in all, I’m glad I bought this device. Once I manage to forget the price tag I’m sure I’ll enjoy it even more! The 12” screen is great for comic books and it becomes a full-blown development machine with the type-cover attached. People criticize the battery life but I think it’s adequate for a work laptop (at least compared to my Asus my laptop it lasts forever.</p>
-
-<p>I’m writing this post in a coffee shop and I guess I’ll be around town more often and still be able to write code while travelling around :-)</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://www.microsoft.com/surface/en-gb/products/surface-pro-3" target="_blank" rel="noopener noreferrer">Surface Pro 3 specs</a></li>
-</ul>
 
 		
 		

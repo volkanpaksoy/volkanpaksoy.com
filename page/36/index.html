@@ -109,6 +109,138 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/12/homebrew-security-camera-with-raspberry-pi/" itemprop="url">Homebrew Security Camera with Raspberry Pi</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-12T12:45:00+00:00" itemprop="datePublished">December 12, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/securityawsdev">security</a></span> -->
+
+<!-- security, aws, dev -->
+
+
+
+
+    <a href="/category/security">security</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">raspberry_pi, gadget, powershell, s3</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I know there are very cheap security cameras that you can setup in a few minutes. They may provide security but they cannot provide the satisfaction you get after a DIY project! So let’s dig in just for the fun of it.</p>
+
+<h3 id="ingredients">Ingredients</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Price</th>
+      <th>Where to buy?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Raspberry Pi Starter Kit</td>
+      <td>£36</td>
+      <td><a href="http://www.amazon.co.uk/Raspberry-Pi-Motherboard-Starter-Kit/dp/B00LU2FDG8/" target="_blank" rel="noopener noreferrer">Amazon</a></td>
+    </tr>
+    <tr>
+      <td>Camera module</td>
+      <td>£17</td>
+      <td><a href="http://www.amazon.co.uk/gp/product/B00E1GGE40" target="_blank" rel="noopener noreferrer">Amazon</a></td>
+    </tr>
+    <tr>
+      <td>Protective case for the camera module</td>
+      <td>£4</td>
+      <td><a href="http://www.amazon.co.uk/gp/product/B00IJZOT5A" target="_blank" rel="noopener noreferrer">Amazon</a></td>
+    </tr>
+    <tr>
+      <td>Wireless adaptor</td>
+      <td>£6</td>
+      <td><a href="http://www.amazon.co.uk/gp/product/B003MTTJOY" target="_blank" rel="noopener noreferrer">Amazon</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Once all put together this is what you are going to end up with:</p>
+
+<p><img src="/images/vpblogimg/2014/12/raspberry-pi-security-camera-1.png" alt="Raspberry Pi Security Camera"></p>
+
+<h3 id="bring-it-to-life">Bring it to life</h3>
+<ol>
+  <li>Download a standard distro for Raspberry Pi. I used <a href="http://www.raspberrypi.org/downloads/" target="_blank" rel="noopener noreferrer">Rasbian</a>.</li>
+  <li>Write the image to the SD card. I use <a href="http://sourceforge.net/projects/win32diskimager/" target="_blank" rel="noopener noreferrer">Win32 Disk Imager</a> on Windows.</li>
+</ol>
+
+<h3 id="main-course-motion">Main course: Motion</h3>
+<p>There is a great tutorial <a href="http://www.instructables.com/id/Raspberry-Pi-as-low-cost-HD-surveillance-camera/" target="_blank" rel="noopener noreferrer">here</a> for converting your Pi into a security camera  which I mostly followed. Basically you enable WiFi, install Motion software and tweak the configuration a bit (image size, framerate etc) and it’s (hopefully) good to go.</p>
+
+<p>The video didn’t work for me unfortunately. It was recording something but only the first frame was visible so it wasn’t any better than a still image. So I decided to ignore videos completely.</p>
+
+<p>Instead of using a network share I decided to upload footage to AWS S3 directly using <a href="http://s3tools.org/s3cmd" target="_blank" rel="noopener noreferrer">Amazon S3 Tools</a>. Also don’t forget to clear old footage. Otherwise you can run out of space very quickly. I added a few cron jobs to carry out these tasks for me:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* * * * * s3cmd sync /var/surv/*.jpg s3://{BUCKET NAME}/
+* */2 * * * sudo rm /var/surv/*.avi
+* */6 * * *  find /var/surv/* -mtime +1 -exec rm {} \;
+</code></pre></div></div>
+
+<p>It syncs the local folder with S3 bucket, deletes all local video files and files older than a day. I delete the video files more frequently as they take up a lot of space.</p>
+
+<h3 id="monitoring-and-notifications">Monitoring and Notifications</h3>
+<p>No system is complete without proper monitoring and notifications. It’s especially important for systems like this that’s supposed to run quietly in the background.</p>
+
+<p>Unfortunately in my case it stopped working a few times which made monitoring even more important. I don’t know what’s causing the issue. Maybe it’s because I’m using an older version of Raspberry Pi and it’s not capable of handling all the motion software and S3 uploads etc.</p>
+
+<p>To keep an eye on it, I decided to create a small PowerShell script to check S3 for incoming files and send me a notification if it seems to have stopped uploading.</p>
+
+<h3 id="powershell-as-the-glue">PowerShell as the glue</h3>
+<p>Built on .NET framework PowerShell is a very powerful (no pun intended) tool to write quick and dirty solutions. So first here’s the Send-Mail function:</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/672433f21d0748c1a399a1bd574e1687.js"> </script>
+
+<p>I created a separate function for it as it’s a general-purpose feature which can be used in many places. To make it even more generic you can take out the from and to email addresses and add them as parameters to the function.</p>
+
+<p>And here’s the actual notification logic:</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/c711c19e19799b1ba4193d79d364dc76.js"> </script>
+
+<p>It finds the latest image by sorting them by LastModified field and compares this date with the current date. If it’s been more than 1 day it sends an email. Depending on how often you expect images to be uploaded you can change the alert condition.</p>
+
+<p>To use these scripts you’ll AWS accounts with S3 and SES privileges. Also you have to change the path of the send-mail.ps1 in the line it’s included.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.instructables.com/id/Raspberry-Pi-as-low-cost-HD-surveillance-camera/" target="_blank" rel="noopener noreferrer">Tutorial on Instructables.com</a></li>
+  <li><a href="http://www.fl3m.com/2012/08/sending-email-through-amazon-ses-with.html" target="_blank" rel="noopener noreferrer">PowerShell script to send email</a></li>
+  <li><a href="http://www.raspberrypi.org/downloads/" target="_blank" rel="noopener noreferrer">Raspberry Pi downloads</a></li>
+  <li><a href="http://s3tools.org/s3cmd" target="_blank" rel="noopener noreferrer">Amazon S3 Tools</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/12/12/update-aws-security-groups-with-powershell/" itemprop="url">Update AWS Security Groups with PowerShell</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -366,67 +498,6 @@ its default configuration SHOULD contain an obfuscated identifier as described i
   <li><a href="http://check-ip.herokuapp.com/" target="_blank" rel="noopener noreferrer">Application on Heroku</a></li>
   <li><a href="http://tools.ietf.org/html/rfc7239#section-5.2" target="_blank" rel="noopener noreferrer">RFC for Forwarded For header</a></li>
   <li><a href="http://en.wikipedia.org/wiki/X-Forwarded-For" target="_blank" rel="noopener noreferrer">WikiPedia Article for X-Forwarded-For</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/csharp-6-new-features-conclusion/" itemprop="url">C# 6.0 New Features - Conclusion</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-12-08T14:00:00+00:00" itemprop="datePublished">December  8, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="conclusion-and-list-of-posts">Conclusion and List of Posts</h3>
-<p>General consensus is that the new features are just small increments to improve productivity. They will help to clean up existing code. Less code is helpful to focus on the actual business logic instead of the clutter caused by the language.</p>
-
-<p>For easy navigation I listed the links for all the previous posts:</p>
-
-<h3 id="table-of-contents">Table of contents</h3>
-<ol>
-  <li><a href="/archive/2014/12/06/csharp-6-new-features/">C# 6.0 New Features - Introduction</a></li>
-  <li><a href="/archive/2014/12/07/auto-properties-with-initializers/">Auto-Properties with Initializers</a></li>
-  <li><a href="/archive/2014/12/07/using-statements-for-static-classess/">Using statements for static classes</a></li>
-  <li><a href="/archive/2014/12/08/expression-bodied-methods/">Expression-bodied methods</a></li>
-  <li><a href="/archive/2014/12/08/string-interpolation/">String interpolation</a></li>
-  <li><a href="/archive/2014/12/08/index-initializers/">Index initializers</a></li>
-  <li><a href="/archive/2014/12/08/null-conditional-operators/">Null-conditional operators</a></li>
-  <li><a href="/archive/2014/12/08/nameof-operator/">nameof operator</a></li>
-  <li><a href="/archive/2014/12/08/exception-handling-improvements/">Exception-handling improvements</a></li>
-</ol>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://www.wintellectnow.com/course/detail/what-s-new-in-c-6-visual-basic-dotnet-14-and-visual-studio-14" target="_blank" rel="noopener noreferrer">Wintellect course</a></li>
-  <li><a href="http://dotnetrocks.com/default.aspx?showNum=1029" target="_blank" rel="noopener noreferrer">.NET Rocks Podcast</a></li>
-  <li><a href="http://msdn.microsoft.com/en-us/magazine/dn802602.aspx" target="_blank" rel="noopener noreferrer">MSDN Magazine Article: The New and Improved C# 6.0</a></li>
-  <li><a href="http://msdn.microsoft.com/en-us/magazine/dn683793.aspx" target="_blank" rel="noopener noreferrer">MSDN Magazine article: A C# 6.0 Language Preview</a></li>
-  <li><a href="http://channel9.msdn.com/Events/Visual-Studio/Connect-event-2014/116" target="_blank" rel="noopener noreferrer">Channel 9 Video</a></li>
 </ul>
 
 		

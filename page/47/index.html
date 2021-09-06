@@ -109,6 +109,61 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2014/05/11/grid-clustering-clique-algorithm/" itemprop="url">Grid Clustering with CLIQUE Algorithm</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-05-11T12:34:48+01:00" itemprop="datePublished">May 11, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">java, machine_learning</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>CLIQUE (CLustering In QUEst) algorithm is a grid-based clustering algorithm that partitions each dimension of the dataset as a grid.</p>
+
+<h3 id="clique-implementation">CLIQUE Implementation</h3>
+<p>The algorithm starts by assigning each data point to the closest grid in the matrix.</p>
+
+<p><img src="/images/vpblogimg/2014/05/CLIQUE-01.png" alt="CLIQUE 1"></p>
+
+<p>After loading the data it looks something like this:</p>
+
+<p><img src="/images/vpblogimg/2014/05/CLIQUE-02.png" alt="CLIQUE 2"></p>
+
+<p>In order for a grid cell to be considered as “dense” it has to have data points more than or equal to the threshold. In this sample the threshold was provided as 2. So after the adjacent dense cells are joined together we get 3 clusters:</p>
+
+<p><img src="/images/vpblogimg/2014/05/CLIQUE-03.png" alt="CLIQUE 3"></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/VP.MachineLearning.GridClustering" target="_blank" rel="noopener noreferrer">Source code</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/04/18/rough-set-implementation/" itemprop="url">Rough set implementation</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -222,58 +277,6 @@
 <ul>
   <li><a href="http://en.wikipedia.org/wiki/Genetic_algorithm" target="_blank" rel="noopener noreferrer">Wikipedia article</a></li>
   <li><a href="https://github.com/volkanpaksoy/VP.MachineLearning.GeneticAlgorithm" target="_blank" rel="noopener noreferrer">Source code for the implementation</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/03/22/agnes-implementation/" itemprop="url">AGNES Implementation</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-03-22T16:49:44+00:00" itemprop="datePublished">March 22, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">java, machine_learning</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Another data mining algorithm: AGNES (Agglomerative Nesting)</p>
-
-<h3 id="agnes-algorithm">AGNES Algorithm</h3>
-<p>AGNES takes a different approach than k-means which was the subject of my previous <a href="https://volkanpaksoy.com/archive/2014/03/22/k-means-implementation/">post</a>. Initially it considers all data points as a separate cluster.</p>
-
-<p><img src="/images/vpblogimg/2014/03/AGNES-01.png" alt="AGNES 1"></p>
-
-<p>Then finds the minimum distance between clusters and merges the closest clusters:</p>
-
-<p><img src="/images/vpblogimg/2014/03/AGNES-02.png" alt="AGNES 2"></p>
-
-<p>The resulting cluster is added to the all cluster list the merged clusters are removed as they are no longer valid.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://github.com/volkanpaksoy/VP.DataMining.AGNES" target="_blank" rel="noopener noreferrer">Source code</a></li>
 </ul>
 
 		

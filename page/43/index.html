@@ -109,6 +109,44 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2014/11/16/tip-day-automatic-object-deletion-aws-s3/" itemprop="url">Tip of the Day: Automatic object deletion in AWS S3</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-11-16T11:16:14+00:00" itemprop="datePublished">November 16, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
+
+<!-- aws -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">tip_of_the_day, s3</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>In some cases you may want objects in a bucket be deleted automatically, for example for log files or surveillance footage you may want to keep only latest n days. You can run scripts to delete them manually but it can also be done by setting the expiration date on the bucket.</p>
+
+<p><img src="/images/vpblogimg/2014/11/AWS_S3_Lifecycle%5B1%5D.png" alt="AWS S3 Object Lifecycle"></p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/11/16/tip-day-wildcard-ssl-subdomain-limitation/" itemprop="url">Tip of the Day: Wildcard SSL subdomain limitation</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -207,66 +245,6 @@
   <li><a href="http://msdn.microsoft.com/en-us/library/system.globalization.textinfo.totitlecase(v=vs.110).aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/system.globalization.textinfo.totitlecase(v=vs.110).aspx</a></li>
 </ul>
 
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/11/16/tip-day-activate-multi-factor-authentication-mfa-aws/" itemprop="url">Tip of the Day: Activate multi-factor authentication (MFA) on AWS</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-11-16T00:17:19+00:00" itemprop="datePublished">November 16, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/awssecurity">aws</a></span> -->
-
-<!-- aws, security -->
-
-
-
-
-    <a href="/category/aws">aws</a>
-    , 
-
-    <a href="/category/security">security</a>
-    
-</span>
-	<span class="tags">tip_of_the_day, iam</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>AWS is a very critical service for businesses and enabling a 2nd factor authentication would be very helpful to increase security.</p>
-
-<p><strong>Step 0:</strong> Install Google Authenticator or a similar OTP generator tool on your mobile device.</p>
-
-<p><strong>Step 1:</strong> Logon to your account and select Security Credentials from the menu on the upper right corner. Then click on Activate MFA button.
-<img src="/images/vpblogimg/2014/11/Amazon_Web_Services-MFA-Mult-Factor_Authentication_01.png" alt="AWS MFA Step 1"></p>
-
-<p>Here you have two options. You can choose to use a hardware device if you choose to purchase one from Amazon. At the time of this writing the price on Amazon was $12.99 so it’s also an affordable option. I decided to use Google Authenticator because it was already installed and active on my phone and I didn’t want to manage another piece of hardware.</p>
-
-<p><strong>Step 2:</strong> It will display a QR code which you can scan using Google Authenticator. Once the scan is completed you will need to enter 2 consecutive numbers the device generates. Once the device is synchronized it will be ready to use. You can verify it by checking its status:</p>
-
-<p><img src="/images/vpblogimg/2014/11/Amazon_Web_Services-MFA-Mult-Factor_Authentication_02.png" alt="AWS MFA Step 2"></p>
-
-<p><strong>Step 3:</strong> Log out and log back in to see the results. After the password screen you should see an additional screen asking for the authentication code.</p>
-
-<p><img src="/images/vpblogimg/2014/11/Amazon_Web_Services-MFA-Mult-Factor_Authentication_03.png" alt="AWS MFA Step 3"></p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://en.wikipedia.org/wiki/Time-based_One-time_Password_Algorithm" target="_blank" rel="noopener noreferrer">Wikipedia article on TOTP</a></li>
-  <li><a href="http://en.wikipedia.org/wiki/Google_Authenticator" target="_blank" rel="noopener noreferrer">Wikipedia article on Google Authenticator</a></li>
-</ul>
 
 		
 		

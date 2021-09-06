@@ -109,6 +109,144 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/02/25/beware-the-pineapple-an-overview-of-wifi-pineapple-mark-v/" itemprop="url">Beware the Pineapple: An overview of WiFi Pineapple Mark V</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-02-25T14:30:00+00:00" itemprop="datePublished">February 25, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/security">security</a></span> -->
+
+<!-- security -->
+
+
+
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">gadget, wifi_pineapple</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Wifi Pineapple has been around for quite some time now. Almost two years ago I posted a short review <a href="https://volkanpaksoy.com/archive/2013/04/22/wifi-pineapple/">here</a> but with the latest version (Mark V) it’s got badder than ever and they keep adding more features so it’s a nice time to catch up.</p>
+
+<h3 id="what-is-it">What is it?</h3>
+<p>Basically Wifi Pineapple is a WiFi honeypot that allows users to carry out man-in-the-middle attacks. Connected clients’ traffic go through the attacker which makes the attacker capable of pulling a number of tricks.</p>
+
+<p>Mark IV was based on <a href="http://www.amazon.co.uk/ALFA-Network-AP121U-Wireless-Repeater/dp/B00RKPD6MM" target="_blank" rel="noopener noreferrer">Alfa AP121U</a>. Instead of buying a pineapple you could just buy an AP121U and create your own DIY pineapple by installing the firmware. Mark V, on the other hand, is a whole new animal.</p>
+
+<p><img src="/images/vpblogimg/2015/02/wifi-pineapple-features.png" alt="Wifi Pineapple Mark V"></p>
+
+<p>Equipped with 2 radios it can work in client mode meaning it can piggyback on a nearby WiFi network and bridge the victim’s connections (In Mark IV the only way to provide internet access was 3G which is also still supported).</p>
+
+<h3 id="how-does-it-work">How does it work?</h3>
+
+<p>At the heart of the pineapple lies an attack method called Karma. It works by exploiting trusting devices to probe requests and responses. Our wireless devices, by default, constantly try to connect to the last networks they were on. To accomplish this they actively scan their neighbourhood by sending out probe requests. (A probe request is a special frame sent by a client station requesting information from either a specific access point, specified by SSID, or all access points in the area, specified with the broadcast SSID.)</p>
+
+<p>Normally, access points (AP) that don’t broadcast the requested SSID just ignore the probe request. The <em>correct</em> AP responds with a probe response and the client initiates association with the AP again. That’s how we connect to our home or work network as soon as we arrive. That is convenient and user-friendly but the malicious devices running Karma attack can break this “honor-code” based system. The pineapple responds to whatever AP the device is asking for therefore deceiving it into believing they are home.</p>
+
+<h3 id="whats-the-risk">What’s the risk</h3>
+
+<p>Obviously these honeypots are set up for a reason: To get your traffic. Once you start sending your data through the attacker’s system you are opening yourself to all sorts of attacks. One of the most important ones is called sslstrip. (These “attacks” are called <em>infusions</em> in Pineapple parlance and they can be downloaded and installed in seconds to enhance its capabilities which makes the pineapple an even more powerful weapon)</p>
+
+<p>sslstrip redirects your HTTPS traffic to HTTP equivalent (i.e. You land on http://www.google.com even though you requested https://www.google.com). So when you login to your favorite social network you essentially hand over your credentials to the attacker in plain text.</p>
+
+<p>You can find a full list of available infusions <a href="https://www.wifipineapple.com/?infusions" target="_blank" rel="noopener noreferrer">here</a> which can give you an idea what types of attacks are possible.</p>
+
+<h3 id="whats-new">What’s New</h3>
+
+<p>As of Version 2 of the Pineapple firmware a new feature is introduced: <em>PineAP</em>. They define it as “the next-gen rogue AP”.</p>
+
+<p>As Karma attack became more popular vendors started to increase security a little bit. Instead of sending out all the SSIDs that the device has connected in the past, the device simply sends a probe request that says “Broadcast” and the APs respond with a beacon with their information and what SSID(s) they are broadcasting. Then the client can decide which one to connect to. This method mitigates the regular Karma attack. To mitigate this mitigation (!) Pineapple team came up with PineAP.</p>
+
+<p>PineAP has several modules:</p>
+
+<ul>
+  <li>
+    <p><strong>Beacon Response</strong>      <br>
+Similar to probe responses this module sends beacons. For example if the client is looking for “Home Sweet Home” network, Karma sends a probe response with this SSID and at Beacon Response module sends a beacon with the same SSID making the pineapple look more legitimate.</p>
+  </li>
+  <li>
+    <p><strong>Dogma</strong>
+This module sends out beacon frames of SSIDs selected by the attacker (defined in the PineAP SSID Pool). It also allows targeted attacks so you can set the target MAC address.</p>
+  </li>
+  <li>
+    <p><strong>Auto Harvester</strong>
+Since SSID names are more likely to be kept as a secret it helps to collect this information. Harvester collects leaking SSIDs from the potential clients. They are added to the SSID pool to be used by Dogma.</p>
+  </li>
+</ul>
+
+<h3 id="further-improvements-and-new-features">Further Improvements and new features</h3>
+
+<ul>
+  <li><strong>Setup screen</strong></li>
+</ul>
+
+<p>A neat feature is, as an extra security step, when you first setup and connect to your pineapple you have to enter a random LED pattern.</p>
+
+<p><img src="/images/vpblogimg/2015/02/wifi-pineapple-led-pattern.png" alt="LED Pattern"></p>
+
+<p>As a fan of multi-factor authentication of all sorts I loved the idea of using the physical hardware to improve security.</p>
+
+<ul>
+  <li><strong>Management network</strong></li>
+</ul>
+
+<p>New Pineapple can setup a secure Wifi AP just for the owner so that you don’t have to connect via Ethernet. You can use your phone to check who is connected to the network and manage the pineapple completely by using the responsive UI.</p>
+
+<ul>
+  <li><strong>Recon mode</strong></li>
+</ul>
+
+<p>This is another neat feature that allows to scan all AP and clients around. You can even carry out a deauth attack by just clicking on a client.</p>
+
+<h3 id="mitigations">Mitigations</h3>
+
+<ul>
+  <li>
+    <p><strong>Never connect to open networks, NEVER!</strong>: If you are in the habit of using open wifi networks one day you might come across one of those pineapples in your coffee shop and hand over your data unknowingly to a guy sitting in the table next to you! Even without this risk you should never use networks that you have no control over but this kind of risk makes it even more important.</p>
+  </li>
+  <li>
+    <p><strong>Verify SSL</strong>: SSL/TLS is still the most important security measure we have when connecting to websites. Always ensure that you are connected to the right website by checking the certificate. An attacker may not be able to break SSL certificate but they can simply bypass it completely by tools like sslstrip. It’s especially important in mobile devices since they tend to hide the address bar to make more room for the content so generally you never know the exact URL you are sending your requests to.</p>
+  </li>
+  <li>
+    <p><strong>VPN</strong>: If you are using VPN your traffic is encrypted and sent through a secure channel. In this case, even if an attacker is able to get your traffic they will not be able to make any sense of it.</p>
+  </li>
+  <li>
+    <p><strong>HSTS</strong>: This mechanism allows web servers to declare that web browsers (or other complying user agents) should only interact with it using secure HTTPS connections and never via the insecure HTTP protocol. It helps to mitigate the risks of tools like sslstrip. Downside is it’s not currently adopted by all browsers at the moment.</p>
+  </li>
+</ul>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>Wireless networks provide great convenience to us but comes with risks and vulnerabilities (as all conveniences in IT). The hardware is getting smaller and more powerful everyday so the tools like Wifi Pineapple are getting more threatening. It’s important to keep an eye on what kind of risks are out there and learn how to avoid those risks.</p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="https://www.wifipineapple.com/" target="_blank" rel="noopener noreferrer">Official website</a></li>
+  <li><a href="http://hak5.org/category/episodes/pineapple-university" target="_blank" rel="noopener noreferrer">Hak5 Pineapple University</a></li>
+  <li><a href="https://www.youtube.com/watch?v=40Igim3upL0" target="_blank" rel="noopener noreferrer">YouTube Video: WiFi Pineapple 2.0.2 Firmware - PineAP</a></li>
+  <li><a href="https://scotthelme.co.uk/wifi-pineapple-karma-sslstrip/" target="_blank" rel="noopener noreferrer">Using Karma and SSLStrip to MitM Secure Connections</a></li>
+  <li><a href="http://hak5.org/episodes/haktip-23" target="_blank" rel="noopener noreferrer">Haktip 23 – WiFi 101: Probe Requests and Responses</a></li>
+  <li><a href="http://www.thoughtcrime.org/software/sslstrip/" target="_blank" rel="noopener noreferrer">BlackHat Presentation on SSL Stripping</a></li>
+  <li><a href="http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security" target="_blank" rel="noopener noreferrer">Wikipedia article on HSTS</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/02/19/visual-tools-for-neo4j/" itemprop="url">Visual Tools for Neo4J</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -434,107 +572,6 @@ Base64-encoded value --&gt; bmVvNGo6cGFzcw==
 
 <p><strong>UPDATE:</strong> I published this post using v2.2 M03 but as <a href="https://twitter.com/mesirii" target="_blank" rel="noopener noreferrer">Michael Hunger</a> kindly pointed out there were some changes in v2.2 M04 that made my post outdated from the get-go so I updated it accordingly. If you find any inconsistencies please let me know using the comments below.</p>
 
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/02/14/graph-databases/" itemprop="url">Graph Databases</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-02-14T20:00:00+00:00" itemprop="datePublished">February 14, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">neo4j, graph_databases</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Graph databases are getting more popular every day. I played around with it in the past but never covered it extensively. My goal is now to first cover the basics of graph databases (Neo4J in particular), cover Cypher (a SQL-Like Query Language for Neo4J) and build a full-blown project using these. So this will the first post in a multi-part series.</p>
-
-<p>Neo4J is providing nice training materials. Also I’m currently enjoying active Safari Books Online and Pluralsight subscriptions so I thought it might be a good time to conduct a comprehensive research and go through all of these resources. So without further ado, here’s what I’ve gathered on Graph Databases:</p>
-
-<h3 id="why-graph-databases">Why Graph Databases</h3>
-<p>Main focus of graph databases is the relationships between objects. In a graph database, every object is represented with a <strong>node</strong> (aka a <em>vertex</em> in graph theory) and nodes are connected to each other with <strong>relationships</strong> (aka an <em>edge</em>).</p>
-
-<p>Graph databases are especially powerful tools for heavily connected data such as social networks. When you try to model a complex real-world system you end up having a lot of entities and connections among them. At this point a traditional relational model starts to be sluggish and hard to maintain and this is where graph databases come to rescue..</p>
-
-<h3 id="players">Players</h3>
-<p>Turns out there are many implementations and it’s a broader concept as they have different attributes. You can check <a href="http://en.wikipedia.org/wiki/Graph_database#Graph_database_projects" target="_blank" rel="noopener noreferrer">this Wikipedia article</a> to see what I mean. As of this writing there were 41 different systems mentioned in the article. A few of the players in the field are:</p>
-
-<ul>
-  <li>Neo4J: Most popular and one of the oldest in the field. My main focus will be on Neo4J throughout my research</li>
-  <li>FlockDB: An open-source distributed graph database developed by Twitter. It’s much simpler than Neo4J as it focuses on specific problems only.</li>
-  <li>Trinity: A research project from Microsoft. I wish it was released because probably it would come with native .NET clients and integration but looks like it’s dead already as there is activity since late 2012 on its <a href="http://research.microsoft.com/en-us/projects/trinity/" target="_blank" rel="noopener noreferrer">page</a>.</li>
-</ul>
-
-<h3 id="popular-graph-models">Popular Graph Models</h3>
-<p>There are three dominant graph models in the industry:</p>
-
-<ul>
-  <li>The property graph</li>
-  <li>Resource Description Framework (RDF) triples</li>
-  <li>Hypergraphs</li>
-</ul>
-
-<h3 id="the-property-graph-model">The Property Graph Model</h3>
-<ul>
-  <li>It contains nodes and relationships</li>
-  <li>Nodes contain properties (key-value pairs)</li>
-  <li>Relationships are named and directed, and always have a start and end node</li>
-  <li>Relationships can also contain properties</li>
-  <li>No prior modelling is needed but it helps to understand the domain. The advice is start with no schema requirements and enforce a schema as you get closer to production.</li>
-</ul>
-
-<h3 id="basic-concepts">Basic concepts</h3>
-<p>As I will be using Neo4J, I decided to focus on the basic concepts of Neo4J databases (the current version I’m using is 2.1 and 2.2M03 which is still in beta)</p>
-
-<ol>
-  <li>Nodes - Graph data records</li>
-  <li>Relationships - Connect nodes. They must have a name and a direction. Sometimes direction has semantic value  and sometimes the connection if bothways like a MARRIED_TO relationship. It doesn’t matter which way you define it both nodes are “married to” each other. But for example a “LOVES” relationship doesn’t have to be bothways so the direction matters.</li>
-  <li>Properties - Named data values</li>
-  <li>Labels - Introduced in v2.0 They are used to tag items like Book, Person etc. A node can have multiple labels.</li>
-</ol>
-
-<h3 id="conclusion">Conclusion</h3>
-<p>Graph databases are on the rise as can be seen clearly from the chart (taken froom db-engines.com):</p>
-
-<p><img src="/images/vpblogimg/2015/02/graph-dbms-popularity-feb-2015.png" alt="db-egines popularity chart"></p>
-
-<p>It feels very natural to model a database as a graph as they can handle relationships very well and in real-life there are many complex relationships in semi-structured data. So especially at the beginning starting without a schema and have your model and data mature over time makes perfect sense. So it is understandable why graph databases are gaining traction everyday.</p>
-
-<p>In the next post I will delve into Cypher - the query language of Neo4J. What good is a database if you can’t run queries on it anyway, right? :-)</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://neo4j.com/graphacademy/online-course/" target="_blank" rel="noopener noreferrer">Neo4J Official Training</a></li>
-  <li><a href="http://www.amazon.co.uk/Neo4j-Action-Aleksa-Vukotic/dp/1617290769/" target="_blank" rel="noopener noreferrer">Book: Neo4J in Action</a></li>
-  <li><a href="http://www.amazon.co.uk/Graph-Databases-Ian-Robinson/dp/1449356265/" target="_blank" rel="noopener noreferrer">Book: Graph Databases</a></li>
-  <li><a href="http://www.amazon.co.uk/Practical-Neo4j-Gregory-Jordan/dp/1484200233" target="_blank" rel="noopener noreferrer">Book: Practical Neo4J</a></li>
-  <li><a href="http://www.amazon.co.uk/Learning-Neo4j-Graph-Databases-Bruggen/dp/1849517169/" target="_blank" rel="noopener noreferrer">Book: Learning Neo4J</a></li>
-  <li><a href="http://www.pluralsight.com/courses/graph-databases-neo4j-introduction" target="_blank" rel="noopener noreferrer">Pluralsight Course: Introduction to Graph Databases and Neo4j</a></li>
-  <li><a href="http://www.lynda.com/Neo4j-tutorials/Up-Running-Neo4j/155604-2.html" target="_blank" rel="noopener noreferrer">Lynda Course: Up and Running with Neo4J</a></li>
-  <li><a href="http://en.wikipedia.org/wiki/Graph_database#Graph_database_projects" target="_blank" rel="noopener noreferrer">Wikipedia article: Graph Databases</a></li>
-</ul>
 
 		
 		

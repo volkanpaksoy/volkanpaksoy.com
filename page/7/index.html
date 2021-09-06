@@ -109,6 +109,303 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2019/07/05/ElasticSearch-Workout/" itemprop="url">Elasticsearch Workout</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-07-05T05:00:00+01:00" itemprop="datePublished">July  5, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp, elasticsearch, docker, nest</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p><img src="/images/vpblogimg/2019/07/logo-elastic-elasticsearch-lt.svg" alt=""></p>
+
+<p>I’ve been playing around with Elasticsearch on several occasions. This post is to organize those thoughts and experiences and show an easy way to setup ElasticSearch and start playing around with it.</p>
+
+<h2 id="setup">Setup</h2>
+<p>Easiest way to setup Elasticsearch locally is using Docker. As of this writing the latest version of Elasticsearch is 7.2.0 and I’ll be using that in this example:</p>
+
+<p>If you don’t already have the image, simply pull from Docker hub:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+</code></pre></div></div>
+
+<p>For development environment suggested command to run a container is</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+</code></pre></div></div>
+
+<p>which keeps it very simple and straightforward but in my workout I’d like to insert a whole bunch of data and run some queries on it and I don’t want to re-generate my data over and over again. So I decided to persist my data on host.</p>
+
+<h3 id="persisting-elasticsearch-data">Persisting Elasticsearch Data</h3>
+<p>Instead of running containers one by one in the command line a better approach is to create a docker-compose.yml file file and use Docker compose to start services. I used the sample YAML file provided in official Elastic <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html" target="_blank" rel="noopener noreferrer">documentation</a></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '2.2'
+services:
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    container_name: es01
+    environment:
+      - node.name=es01
+      - discovery.seed_hosts=es02
+      - cluster.initial_master_nodes=es01,es02
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - esnet
+  es02:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    container_name: es02
+    environment:
+      - node.name=es02
+      - discovery.seed_hosts=es01
+      - cluster.initial_master_nodes=es01,es02
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata02:/usr/share/elasticsearch/data
+    networks:
+      - esnet
+
+volumes:
+  esdata01:
+    driver: local
+  esdata02:
+    driver: local
+
+networks:
+  esnet:
+</code></pre></div></div>
+
+<p>This example creates an Elasticsearch cluster with 2 nodes and uses named volumes to persist data so next time when we bring this cluster up again we should be able to continue where we left off data-wise.</p>
+
+<h2 id="sample-application">Sample Application</h2>
+<p>In <a href="https://volkanpaksoy.com/archive/2019/06/27/Generating-Test-Data-with-Bogus/">my previous blog post</a> I developed a simple test data generator to generate fake bank statement data with a library called Bogus. In this project, I will use that generator to generate lots and lots of test data, insert them into Elasticsearch and have fun with it!</p>
+
+<p>When you start a C# project and start looking for a library to interact with Elasticsearch, it’s a bit confusing to find out there are actually two of them: Elasticsearch.net and NEST. The gist of it is NEST is a high-level library that uses Elasticsearch.net under the hood. It also exposes low-level client so that it actually enhances Elasticsearch.net and allows using strongly typed DSL queries. In the sample application I used NEST.</p>
+
+<h3 id="creating-elasticsearch-client">Creating Elasticsearch client</h3>
+<p>Creating a client with some basic settings is straightforward:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">connectionSettings</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ConnectionSettings</span><span class="p">(</span><span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="s">"http://localhost:9200"</span><span class="p">)))</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">settings</span> <span class="p">=</span> <span class="n">connectionSettings</span>
+        <span class="p">.</span><span class="nf">DefaultIndex</span><span class="p">(</span><span class="s">"bankstatementindex"</span><span class="p">)</span>
+        <span class="p">.</span><span class="nf">ThrowExceptions</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+	<span class="n">IElasticClient</span> <span class="n">elasticClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ElasticClient</span><span class="p">(</span><span class="n">settings</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="indexing-data">Indexing data</h3>
+<p>To index a single document **IndexDocument<t>** method can be called. However, using this method to loop through a large number of documents is not recommended.</t></p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">elasticClient</span><span class="p">.</span><span class="n">IndexDocument</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;(</span><span class="n">testData</span><span class="p">.</span><span class="nf">First</span><span class="p">());</span>
+</code></pre></div></div>
+
+<p>For multiple documents, <strong>IndexMany</strong> method should be called. If the data size too large then using <strong>BulkAll</strong> method and <strong>BulkAllObservable</strong> helper is recommended.</p>
+
+<p>To see the difference I created a test to index 5,000 documents with a looping over the array and using BulkAll after that. Looping over the collection took around 26 seconds whereas bulk index took only 1.2 seconds as shown in the screenshot.</p>
+
+<p><img src="/images/vpblogimg/2019/07/indexdocument-vs-bulkall.png" alt=""></p>
+
+<p>Also it displays “Done” 5 times because I set the size to 1,000 and I requested 5,000 documents to be indexed so it automatically divided the load into 5 and made 5 calls:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">bulkAll</span> <span class="p">=</span> <span class="n">elasticClient</span><span class="p">.</span><span class="nf">BulkAll</span><span class="p">(</span><span class="n">testData</span><span class="p">,</span> <span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span>
+                <span class="p">.</span><span class="nf">BackOffRetries</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+                <span class="p">.</span><span class="nf">BackOffTime</span><span class="p">(</span><span class="s">"30s"</span><span class="p">)</span>
+                <span class="p">.</span><span class="nf">RefreshOnCompleted</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
+                <span class="p">.</span><span class="nf">MaxDegreeOfParallelism</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
+                <span class="p">.</span><span class="nf">Size</span><span class="p">(</span><span class="m">1000</span><span class="p">));</span>
+
+<span class="n">bulkAll</span><span class="p">.</span><span class="nf">Wait</span><span class="p">(</span><span class="n">TimeSpan</span><span class="p">.</span><span class="nf">FromSeconds</span><span class="p">(</span><span class="m">60</span><span class="p">),</span>
+    <span class="n">onNext</span><span class="p">:</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="n">Console</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="s">"Done"</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<p>Same result can also be achieved by subscribing to BulkAll observer:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">waitHandle</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CountdownEvent</span><span class="p">(</span><span class="m">1</span><span class="p">);</span>
+
+<span class="n">bulkAll</span><span class="p">.</span><span class="nf">Subscribe</span><span class="p">(</span><span class="k">new</span> <span class="nf">BulkAllObserver</span><span class="p">(</span>
+    <span class="n">onNext</span><span class="p">:</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="n">Console</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="s">"."</span><span class="p">);</span> <span class="p">},</span>
+    <span class="n">onError</span><span class="p">:</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="k">throw</span> <span class="n">e</span><span class="p">;</span> <span class="p">},</span>
+    <span class="n">onCompleted</span><span class="p">:</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="n">waitHandle</span><span class="p">.</span><span class="nf">Signal</span><span class="p">()</span>
+<span class="p">));</span>
+
+<span class="n">waitHandle</span><span class="p">.</span><span class="nf">Wait</span><span class="p">();</span>
+</code></pre></div></div>
+
+<h3 id="showing-progress">Showing progress</h3>
+<p>In the sample code below I showed displaying progress using onNext action delegate:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var testData = dataGen.Generate(statementConfig.StartDate, statementConfig.EndDate, statementConfig.OpeningBalance, statementConfig.DebitTransactionRatio, statementConfig.TransactionDateInterval, statementConfig.NumberOfStatementLines);
+var cancellationToken = new CancellationToken();
+var batchSize = 250;
+var bulkAll = elasticClient.BulkAll(testData, x =&gt; x
+    .BackOffRetries(2)
+    .BackOffTime("30s")
+    .RefreshOnCompleted(true)
+    .MaxDegreeOfParallelism(4)
+    .Size(batchSize), cancellationToken);
+var totalIndexed = 0;
+var stopWatch = new Stopwatch();
+stopWatch.Start();
+bulkAll.Wait(TimeSpan.FromSeconds(60),
+    onNext: (b) =&gt;
+    {
+        totalIndexed += batchSize;
+        Console.WriteLine($"Total indexed documents: {totalIndexed}");
+    }
+);
+</code></pre></div></div>
+
+<p>and the output looked like this:</p>
+
+<p><img src="/images/vpblogimg/2019/07/bulkall-parallel-threads.png" alt=""></p>
+
+<p>Even though the numbers seem a bit wonky I think it’s a good example to illustrate the multi-threaded nature of BulkAll. Because I set the maximum degree of paralleism to 4 and first 1,000 were inserted in a mixed order suggesting that they were running in parallel.</p>
+
+<h3 id="cancellation-with-bulk-operations">Cancellation with bulk operations</h3>
+<p>BulkAll observer can also be cancelled for longer processes if necessary. The code excerpt below shows the relevant pieces to cancellation</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">cancellationTokenSource</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CancellationTokenSource</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">cancellationToken</span> <span class="p">=</span> <span class="n">cancellationTokenSource</span><span class="p">.</span><span class="n">Token</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">batchSize</span> <span class="p">=</span> <span class="m">250</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">bulkAll</span> <span class="p">=</span> <span class="n">elasticClient</span><span class="p">.</span><span class="nf">BulkAll</span><span class="p">(</span><span class="n">testData</span><span class="p">,</span> <span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span>
+    <span class="p">.</span><span class="nf">BackOffRetries</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">BackOffTime</span><span class="p">(</span><span class="s">"30s"</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">RefreshOnCompleted</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">MaxDegreeOfParallelism</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">Size</span><span class="p">(</span><span class="n">batchSize</span><span class="p">),</span> <span class="n">cancellationToken</span><span class="p">);</span>
+<span class="kt">var</span> <span class="n">totalIndexed</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">stopWatch</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Stopwatch</span><span class="p">();</span>
+<span class="n">stopWatch</span><span class="p">.</span><span class="nf">Start</span><span class="p">();</span>
+<span class="n">Task</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="nf">StartNew</span><span class="p">(()</span> <span class="p">=&gt;</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Started monitor thread"</span><span class="p">);</span>
+        <span class="kt">var</span> <span class="n">cancelled</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(!</span><span class="n">cancelled</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">stopWatch</span><span class="p">.</span><span class="n">Elapsed</span> <span class="p">&gt;=</span> <span class="n">TimeSpan</span><span class="p">.</span><span class="nf">FromSeconds</span><span class="p">(</span><span class="m">60</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">cancellationToken</span><span class="p">.</span><span class="n">CanBeCanceled</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Cancelling. Elapsed time: </span><span class="p">{</span><span class="n">stopWatch</span><span class="p">.</span><span class="n">Elapsed</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(</span><span class="s">"mm\\:ss\\.ff"</span><span class="p">)}</span><span class="s">"</span><span class="p">);</span>
+                    <span class="n">cancellationTokenSource</span><span class="p">.</span><span class="nf">Cancel</span><span class="p">();</span>
+                    <span class="n">cancelled</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="n">Thread</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="m">100</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">);</span>
+
+<span class="k">try</span>
+<span class="p">{</span>
+    <span class="n">bulkAll</span><span class="p">.</span><span class="nf">Wait</span><span class="p">(</span><span class="n">TimeSpan</span><span class="p">.</span><span class="nf">FromSeconds</span><span class="p">(</span><span class="m">60</span><span class="p">),</span>
+        <span class="n">onNext</span><span class="p">:</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">=&gt;</span>
+        <span class="p">{</span>
+            <span class="n">totalIndexed</span> <span class="p">+=</span> <span class="n">batchSize</span><span class="p">;</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Total indexed documents: </span><span class="p">{</span><span class="n">totalIndexed</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">);</span>
+<span class="p">}</span>
+<span class="k">catch</span> <span class="p">(</span><span class="n">OperationCanceledException</span> <span class="n">e</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Taking longer than allowed. Cancelled."</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="querying-data">Querying Data</h3>
+<p>Querying data can be done by calling Search method of ElasticsearchClient. Here’s a few examples below. There are more in the sample accompanying source code:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Get the first 100 documents</span>
+<span class="kt">var</span> <span class="n">searchResponse</span> <span class="p">=</span> <span class="n">elasticClient</span><span class="p">.</span><span class="n">Search</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;(</span><span class="n">s</span> <span class="p">=&gt;</span> <span class="n">s</span>
+    <span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="n">q</span> <span class="p">=&gt;</span> <span class="n">q</span>
+        <span class="p">.</span><span class="nf">MatchAll</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="p">.</span><span class="nf">Size</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Get transactions with date between 01/01/2018 and 10/01/2018</span>
+<span class="kt">var</span> <span class="n">searchResponse</span> <span class="p">=</span> <span class="n">elasticClient</span><span class="p">.</span><span class="n">Search</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;(</span><span class="n">s</span> <span class="p">=&gt;</span> <span class="n">s</span>
+    <span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="n">q</span> <span class="p">=&gt;</span> <span class="n">q</span>
+        <span class="p">.</span><span class="nf">DateRange</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span>
+            <span class="p">.</span><span class="nf">Field</span><span class="p">(</span><span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">TransactionDate</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">GreaterThanOrEquals</span><span class="p">(</span><span class="k">new</span> <span class="nf">DateTime</span><span class="p">(</span><span class="m">2018</span><span class="p">,</span> <span class="m">01</span><span class="p">,</span> <span class="m">01</span><span class="p">))</span>
+            <span class="p">.</span><span class="nf">LessThanOrEquals</span><span class="p">(</span><span class="k">new</span> <span class="nf">DateTime</span><span class="p">(</span><span class="m">2018</span><span class="p">,</span> <span class="m">01</span><span class="p">,</span> <span class="m">10</span><span class="p">))</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="p">.</span><span class="nf">Size</span><span class="p">(</span><span class="m">10000</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<h3 id="deleting-data">Deleting data</h3>
+<p>For my tests I had to delete all frequently and it can be achieved by running the query below:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">elasticClient</span><span class="p">.</span><span class="n">DeleteByQuery</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;(</span><span class="n">del</span> <span class="p">=&gt;</span> <span class="n">del</span>
+    <span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="n">q</span> <span class="p">=&gt;</span> <span class="n">q</span><span class="p">.</span><span class="nf">QueryString</span><span class="p">(</span><span class="n">qs</span> <span class="p">=&gt;</span> <span class="n">qs</span><span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="s">"*"</span><span class="p">)))</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="source-code">Source Code</h2>
+<p></p>
+<div class="github-widget" data-repo="volkanpaksoy/lab"></div>
+
+<p>Sample application can be found under blog/ElasticsearchWorkout folder in the repository.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/ElasticsearchWorkout" target="_blank" rel="noopener noreferrer">Sample source code</a></li>
+  <li><a href="https://www.elastic.co/guide/en/elasticsearch/client/net-api/current/nest-getting-started.html" target="_blank" rel="noopener noreferrer">NEST Getting Started</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/06/27/Generating-Test-Data-with-Bogus/">Blog post: Generating Test Data with Bogus</a></li>
+  <li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.2/index.html" target="_blank" rel="noopener noreferrer">Elasticsearch Reference</a></li>
+  <li><a href="https://www.elastic.co/guide/en/elasticsearch/client/net-api/7.x/index.html" target="_blank" rel="noopener noreferrer">Elasticsearch.Net and NEST: the .NET clients 7.x</a></li>
+  <li><a href="https://www.elastic.co/blog/a-practical-introduction-to-elasticsearch" target="_blank" rel="noopener noreferrer">A Practical Introduction to Elasticsearch</a></li>
+  <li><a href="https://rimdev.io/bulk-import-documents-into-elasticsearch-using-nest/" target="_blank" rel="noopener noreferrer">Bulk Import Documents Into Elasticsearch Using NEST</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2019/06/27/Generating-Test-Data-with-Bogus/" itemprop="url">Generating Test Data with Bogus</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -717,140 +1014,6 @@ If they need to change something on a read-only layer, they use copy-on-write op
 <ul>
   <li><a href="https://serversforhackers.com/shipping-docker" target="_blank" rel="noopener noreferrer">Online course: Shipping Docker</a></li>
   <li><a href="https://www.pluralsight.com/courses/docker-deep-dive-update" target="_blank" rel="noopener noreferrer">Online course: Docker Deep Dive</a></li>
-</ul>
-
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2019/05/22/Developing-a-Web-API-with-ASP.NET-Core/" itemprop="url">Developing a Web API with ASP.NET Core</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2019-05-22T05:00:00+01:00" itemprop="datePublished">May 22, 2019</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">asp.net, dotnet_core</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Developing projects is fun and a great way to learn new stuff. The things is everything moves so fast, you constantly need to maintain the projects as well. In that spirit, I decided to re-write my old AngularJS DomChk53.</p>
-
-<p>First, I developed an API. This way I won’t have to maintain my AWS Lambda functions. Even though nobody uses them, still opening a public API poses risks and maintenance hassle. Now everybody can run their own system locally using their own AWS accounts.</p>
-
-<h2 id="api-implementation">API Implementation</h2>
-
-<p></p>
-<div class="github-widget" data-repo="volkanpaksoy/domchk53"></div>
-
-<p>Full source code of the API can be found in DomChk53 repo under <em>aspnet-api</em> folder. There’s not much benefit in covering the code line by line but I want to talk about some of the stuff that stood out in one way or the other:</p>
-
-<h3 id="cs5001-program-does-not-contain-a-static-main-method-error">CS5001: Program does not contain a static ‘Main’ method” error</h3>
-<p>I started this API with the intention of deploying it to Docker so right after I created a new project I tested Docker deployment but it kept giving the error above. After some searching I found that the Dockerfile was in the wrong folder! I moved it one level up as suggested in <a href="https://developercommunity.visualstudio.com/content/problem/344880/dotnet-core-build-linux-returns-error-cs5001-progr.html" target="_blank" rel="noopener noreferrer">this</a> answer and it worked like a charm!</p>
-
-<h3 id="reading-config-values">Reading config values</h3>
-<p>I appreciated the ease of using configuration files. IConfiguration provider is provided out-of-the-box which handles appsettings.json config file.</p>
-
-<p>So for example I was able to inject it easily:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="nf">TldService</span><span class="p">(</span><span class="n">IConfiguration</span> <span class="n">configuration</span><span class="p">,</span> <span class="n">IFetchHtmlService</span> <span class="n">fetchHtmlService</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="n">configuration</span> <span class="p">=</span> <span class="n">configuration</span><span class="p">;</span>
-    <span class="k">this</span><span class="p">.</span><span class="n">fetchHtmlService</span> <span class="p">=</span> <span class="n">fetchHtmlService</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>and use it like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">awsDocumentationUrl</span> <span class="p">=</span> <span class="n">configuration</span><span class="p">[</span><span class="s">"AWS.DocumentationURL"</span><span class="p">];</span>
-</code></pre></div></div>
-
-<h3 id="using-dependency-injection">Using dependency injection</h3>
-<p>ASP.NET Core Web API has built-in dependency injection so when I needed to use it all I had to do was register my classes in ConfigureServices method:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// This method gets called by the runtime. Use this method to add services to the container.</span>
-<span class="k">public</span> <span class="k">void</span> <span class="nf">ConfigureServices</span><span class="p">(</span><span class="n">IServiceCollection</span> <span class="n">services</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">services</span><span class="p">.</span><span class="nf">AddMvc</span><span class="p">().</span><span class="nf">SetCompatibilityVersion</span><span class="p">(</span><span class="n">CompatibilityVersion</span><span class="p">.</span><span class="n">Version_2_1</span><span class="p">);</span>
-
-    <span class="n">services</span><span class="p">.</span><span class="n">AddTransient</span><span class="p">&lt;</span><span class="n">ITldService</span><span class="p">,</span> <span class="n">TldService</span><span class="p">&gt;();</span>
-    <span class="n">services</span><span class="p">.</span><span class="n">AddTransient</span><span class="p">&lt;</span><span class="n">IFetchHtmlService</span><span class="p">,</span> <span class="n">FetchHtmlService</span><span class="p">&gt;();</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="documentation">Documentation</h3>
-<p>Adding Swagger documentation was a breeze. I just followed the steps in the <a href="https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle" target="_blank" rel="noopener noreferrer">documentation</a> and now I have a pretty documentation. More on that in the usage section below.</p>
-
-<h2 id="aws-implementation">AWS Implementation</h2>
-<p>Even though the code will run locally in a Docker container, you still need to setup an IAM user with the appropriate permissions. So make sure the policy below is attached to the user:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
-            "Action": "route53domains:CheckDomainAvailability",
-            "Resource": "*"
-        }
-    ]
-}
-</code></pre></div></div>
-
-<h2 id="usage">Usage</h2>
-<p>Nice thing about Swagger is it can used as a full-blown API client as well. So instead of developing a dummy client I just used Swagger UI for simple domain availability enquiries. This is until I develop a better frontend on my own. For now at least it works.</p>
-
-<p>To use Swagger, simply run the Domchk53.API application and change the URL to https://localhost:{port number}/docs, port number being whatever your local web server is running on.</p>
-
-<p><img src="/images/vpblogimg/2019/05/aspnet-webapi-swagger-01.png" alt=""></p>
-
-<h3 id="curl-usage">curl usage:</h3>
-<p>Windows:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -i -X POST -H "Content-Type: application/json" -d "{\"domainList\": [\"volkan\"], \"tldList\": [\"com\", \"net\"]}" https://localhost:5001/api/domain
-</code></pre></div></div>
-
-<p>Mac:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl --insecure -X POST -H "Content-Type: application/json" -d '{"domainList": ["volkan"], "tldList": ["com", "net"]}' https://localhost:5001/api/domain
-</code></pre></div></div>
-
-<h3 id="example-test-data">Example Test data:</h3>
-<p>This is just a quick reference to be used as template:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
-  "domainList": ["domain1", "domain2"],
-  "tldList": ["com", "net"]
-}
-</code></pre></div></div>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{ "domainList": ["volkan"], "tldList": ["com", "net"] }
-</code></pre></div></div>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://developercommunity.visualstudio.com/content/problem/344880/dotnet-core-build-linux-returns-error-cs5001-progr.html" target="_blank" rel="noopener noreferrer">Solution for “CS5001: Program does not contain a static ‘Main’ method” error</a></li>
-  <li><a href="https://weblog.west-wind.com/posts/2018/Feb/18/Accessing-Configuration-in-NET-Core-Test-Projects" target="_blank" rel="noopener noreferrer">Accessing Configuration in .NET Core Test Projects</a></li>
-  <li><a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-2.1" target="_blank" rel="noopener noreferrer">Dependency injection in ASP.NET Core</a></li>
-  <li><a href="https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle" target="_blank" rel="noopener noreferrer">Get started with Swashbuckle and ASP.NET Core</a></li>
 </ul>
 
 

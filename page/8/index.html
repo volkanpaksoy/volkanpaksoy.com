@@ -109,6 +109,140 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2019/05/22/Developing-a-Web-API-with-ASP.NET-Core/" itemprop="url">Developing a Web API with ASP.NET Core</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-05-22T05:00:00+01:00" itemprop="datePublished">May 22, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">asp.net, dotnet_core</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Developing projects is fun and a great way to learn new stuff. The things is everything moves so fast, you constantly need to maintain the projects as well. In that spirit, I decided to re-write my old AngularJS DomChk53.</p>
+
+<p>First, I developed an API. This way I won’t have to maintain my AWS Lambda functions. Even though nobody uses them, still opening a public API poses risks and maintenance hassle. Now everybody can run their own system locally using their own AWS accounts.</p>
+
+<h2 id="api-implementation">API Implementation</h2>
+
+<p></p>
+<div class="github-widget" data-repo="volkanpaksoy/domchk53"></div>
+
+<p>Full source code of the API can be found in DomChk53 repo under <em>aspnet-api</em> folder. There’s not much benefit in covering the code line by line but I want to talk about some of the stuff that stood out in one way or the other:</p>
+
+<h3 id="cs5001-program-does-not-contain-a-static-main-method-error">CS5001: Program does not contain a static ‘Main’ method” error</h3>
+<p>I started this API with the intention of deploying it to Docker so right after I created a new project I tested Docker deployment but it kept giving the error above. After some searching I found that the Dockerfile was in the wrong folder! I moved it one level up as suggested in <a href="https://developercommunity.visualstudio.com/content/problem/344880/dotnet-core-build-linux-returns-error-cs5001-progr.html" target="_blank" rel="noopener noreferrer">this</a> answer and it worked like a charm!</p>
+
+<h3 id="reading-config-values">Reading config values</h3>
+<p>I appreciated the ease of using configuration files. IConfiguration provider is provided out-of-the-box which handles appsettings.json config file.</p>
+
+<p>So for example I was able to inject it easily:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="nf">TldService</span><span class="p">(</span><span class="n">IConfiguration</span> <span class="n">configuration</span><span class="p">,</span> <span class="n">IFetchHtmlService</span> <span class="n">fetchHtmlService</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="n">configuration</span> <span class="p">=</span> <span class="n">configuration</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="n">fetchHtmlService</span> <span class="p">=</span> <span class="n">fetchHtmlService</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>and use it like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">awsDocumentationUrl</span> <span class="p">=</span> <span class="n">configuration</span><span class="p">[</span><span class="s">"AWS.DocumentationURL"</span><span class="p">];</span>
+</code></pre></div></div>
+
+<h3 id="using-dependency-injection">Using dependency injection</h3>
+<p>ASP.NET Core Web API has built-in dependency injection so when I needed to use it all I had to do was register my classes in ConfigureServices method:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// This method gets called by the runtime. Use this method to add services to the container.</span>
+<span class="k">public</span> <span class="k">void</span> <span class="nf">ConfigureServices</span><span class="p">(</span><span class="n">IServiceCollection</span> <span class="n">services</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">services</span><span class="p">.</span><span class="nf">AddMvc</span><span class="p">().</span><span class="nf">SetCompatibilityVersion</span><span class="p">(</span><span class="n">CompatibilityVersion</span><span class="p">.</span><span class="n">Version_2_1</span><span class="p">);</span>
+
+    <span class="n">services</span><span class="p">.</span><span class="n">AddTransient</span><span class="p">&lt;</span><span class="n">ITldService</span><span class="p">,</span> <span class="n">TldService</span><span class="p">&gt;();</span>
+    <span class="n">services</span><span class="p">.</span><span class="n">AddTransient</span><span class="p">&lt;</span><span class="n">IFetchHtmlService</span><span class="p">,</span> <span class="n">FetchHtmlService</span><span class="p">&gt;();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="documentation">Documentation</h3>
+<p>Adding Swagger documentation was a breeze. I just followed the steps in the <a href="https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle" target="_blank" rel="noopener noreferrer">documentation</a> and now I have a pretty documentation. More on that in the usage section below.</p>
+
+<h2 id="aws-implementation">AWS Implementation</h2>
+<p>Even though the code will run locally in a Docker container, you still need to setup an IAM user with the appropriate permissions. So make sure the policy below is attached to the user:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": "route53domains:CheckDomainAvailability",
+            "Resource": "*"
+        }
+    ]
+}
+</code></pre></div></div>
+
+<h2 id="usage">Usage</h2>
+<p>Nice thing about Swagger is it can used as a full-blown API client as well. So instead of developing a dummy client I just used Swagger UI for simple domain availability enquiries. This is until I develop a better frontend on my own. For now at least it works.</p>
+
+<p>To use Swagger, simply run the Domchk53.API application and change the URL to https://localhost:{port number}/docs, port number being whatever your local web server is running on.</p>
+
+<p><img src="/images/vpblogimg/2019/05/aspnet-webapi-swagger-01.png" alt=""></p>
+
+<h3 id="curl-usage">curl usage:</h3>
+<p>Windows:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -i -X POST -H "Content-Type: application/json" -d "{\"domainList\": [\"volkan\"], \"tldList\": [\"com\", \"net\"]}" https://localhost:5001/api/domain
+</code></pre></div></div>
+
+<p>Mac:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl --insecure -X POST -H "Content-Type: application/json" -d '{"domainList": ["volkan"], "tldList": ["com", "net"]}' https://localhost:5001/api/domain
+</code></pre></div></div>
+
+<h3 id="example-test-data">Example Test data:</h3>
+<p>This is just a quick reference to be used as template:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  "domainList": ["domain1", "domain2"],
+  "tldList": ["com", "net"]
+}
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{ "domainList": ["volkan"], "tldList": ["com", "net"] }
+</code></pre></div></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://developercommunity.visualstudio.com/content/problem/344880/dotnet-core-build-linux-returns-error-cs5001-progr.html" target="_blank" rel="noopener noreferrer">Solution for “CS5001: Program does not contain a static ‘Main’ method” error</a></li>
+  <li><a href="https://weblog.west-wind.com/posts/2018/Feb/18/Accessing-Configuration-in-NET-Core-Test-Projects" target="_blank" rel="noopener noreferrer">Accessing Configuration in .NET Core Test Projects</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-2.1" target="_blank" rel="noopener noreferrer">Dependency injection in ASP.NET Core</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle" target="_blank" rel="noopener noreferrer">Get started with Swashbuckle and ASP.NET Core</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2019/04/03/Unit-Testing-in-JavaScript-Part-2-Mocking/" itemprop="url">Unit Testing in Javascript - Part 2: Mocking</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -338,126 +472,6 @@ ENTRYPOINT ["pwsh", "git-sync.ps1"]
   <li><a href="https://github.com/volkanpaksoy/git-sync" target="_blank" rel="noopener noreferrer">Source Code</a></li>
   <li><a href="https://hub.docker.com/r/volkanpaksoy/git-sync" target="_blank" rel="noopener noreferrer">Docker repository</a></li>
   <li><a href="https://help.github.com/en/articles/about-commit-email-addresses" target="_blank" rel="noopener noreferrer">About commit email addresses</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2019/03/28/Unit-Testing-in-JavaScript-Part-1-Basics/" itemprop="url">Unit Testing in Javascript - Part 1: Basics</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2019-03-28T06:00:00+00:00" itemprop="datePublished">March 28, 2019</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">javascript, tdd, unit_testing</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>There are so many names of tools and frameworks are flying around in JavaScript if you’re a beginner it’s easy to get lost.</p>
-
-<h2 id="first-things-first-identify-whats-what">First things first: Identify what’s what</h2>
-<p>Basically we need the following key components to write and run unit tests:</p>
-
-<ul>
-  <li>
-<strong>Assertions</strong>: We run a method in subject under test and compare the result with some known expected value</li>
-  <li>
-<strong>Mocking</strong>: We need to mock the external dependencies (network services, database, file system etc) so that we can reliably test subject under test and the tests can run everywhere and without requiring any credentials or permissions.</li>
-  <li>
-<strong>Test runner</strong>: Our test is some block of code. Something needs to make sense of the unit tests we wrote, execute them and show the results (fail/pass)</li>
-</ul>
-
-<h2 id="choosing-the-weapons-mocha-and-chai">Choosing the weapons: Mocha and Chai</h2>
-<p>In this example I’m going to use Mocha as my test runner and Chai as my assertion library.</p>
-
-<p>They can simply be installed via NPM:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install --save-dev chai
-</code></pre></div></div>
-
-<p>To be able use Mocha in the Integrated Terminal inside Visual Studio we have to install Mocha as a global package:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install -g mocha
-</code></pre></div></div>
-
-<p>To put these to test I created this simple Maths service that calculates the factorial of an integer.</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module.exports = class MathsService {
-    factorial(num) {
-        if (num &lt; 0) 
-            return -1;
-        else if (num == 0) 
-            return 1;
-        else {
-            return (num * this.factorial(num - 1));
-        }
-    }
-};
-</code></pre></div></div>
-
-<p>And my unit test to test this method looks like this:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const MathsService = require('../maths-service.js');
-const chai = require('chai');
-const expect = chai.expect; 
-
-describe('Factorial', function() {
-    it('factorial should return correct value', function() {
-        const mathsService = new MathsService();
-    
-        expect(mathsService.factorial(-1)).to.equal(-1);
-        expect(mathsService.factorial(0)).to.equal(1);
-        expect(mathsService.factorial(1)).to.equal(1);
-        expect(mathsService.factorial(3)).to.equal(6);
-        expect(mathsService.factorial(5)).to.equal(120);
-    });
-});
-</code></pre></div></div>
-
-<p>Chai supports 3 styles:</p>
-
-<ul>
-  <li>Should</li>
-  <li>Expect</li>
-  <li>Assert</li>
-</ul>
-
-<p>They all server the same purpose so it’s just a matter of taste at the end of the day. For this demo I used <em>expect</em> style.</p>
-
-<p>By default Mocha searches test folder. So you can run mocha without parameters if you put your tests under test folder or you can specify the folder. For example, in the screenshot below I moved the test to the root folder and entered “mocha .” and that worked fine as well.</p>
-
-<p><img src="/images/vpblogimg/2019/03/unit-testing-in-javascript-mocha-output.png" alt=""></p>
-
-<h2 id="conclusion">Conclusion</h2>
-<p>In this post I want to show the very basics of unit testing in JavaScript just enough to see a passing test. In future posts I’ll build on this and explore other frameworks and other aspects of TDD.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/UnitTestingInJavaScriptPart1" target="_blank" rel="noopener noreferrer">Source code</a></li>
-  <li><a href="https://medium.com/welldone-software/an-overview-of-javascript-testing-in-2019-264e19514d0a" target="_blank" rel="noopener noreferrer">An Overview of JavaScript Testing in 2019</a></li>
-  <li><a href="https://mochajs.org" target="_blank" rel="noopener noreferrer">Mocha JS</a></li>
-  <li><a href="https://www.chaijs.com" target="_blank" rel="noopener noreferrer">Chai JS</a></li>
 </ul>
 
 		

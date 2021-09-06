@@ -4,7 +4,7 @@
   <title><![CDATA[Playground for the mind]]></title>
   <link href="https://volkanpaksoy.com/atom.xml" rel="self"/>
   <link href="https://volkanpaksoy.com/"/>
-  <updated>2021-09-02T10:49:12+01:00</updated>
+  <updated>2021-09-06T13:11:16+01:00</updated>
   <id>https://volkanpaksoy.com/</id>
   <author>
     <name><![CDATA[Volkan Paksoy]]></name>
@@ -12,6 +12,90 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  
+  <entry>
+    <title type="html"><![CDATA[Using Raspberry Pi as Plex Server]]></title>
+    <link href="https://volkanpaksoy.com/archive/2021/09/06/Using-Raspberry-Pi-as-Plex-Server/"/>
+    <updated>2021-09-06T07:00:00+01:00</updated>
+    <id>https://volkanpaksoy.com/archive/2021/09/06/Using-Raspberry-Pi-as-Plex-Server</id>
+    <content type="html"><![CDATA[<p><img src="/images/vpblogimg/2021/09/plex-server/01-required-hardware-01.jpg" alt="" /></p>
+
+<p>Raspberry Pis these days are powerful computers that can run a lot of tasks at home with very efficient electricity usage. In this post I’m going to show how to use a Raspberry Pi 4 8GB as a Plex server and serve your own media files in your own network.</p>
+
+<h2 id="hardware">Hardware</h2>
+<ul>
+  <li>Raspberry Pi 4 (8 GB)</li>
+  <li>Argon ONE case (M.2 adapter)</li>
+  <li>M.2 SATA SSD (1TB)</li>
+  <li>Standard pi power supply</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/09/plex-server/02-required-hardware-02.jpg" alt="" /></p>
+
+<h2 id="getting-started">Getting Started</h2>
+<p>In this project I used an <a href="https://www.argon40.com/argon-one-m-2-case-for-raspberry-pi-4.html">Argon ONE M.2 Case for Raspberry Pi 4</a> as it allowed me to use an SSD drive with the Pi which is a lot faster than a microSD card.</p>
+
+<p>Argon ONE comes with a comprehensive used guide and take about 10 minutes to put everything together so it’s not too different than using a regular Pi case. The added benefits are:</p>
+
+<ul>
+  <li>You get to use a M.2 SATA SSD (Be mindful about the SATA here. It doesn’t work with NVMe SSDs even though it fits. So make sure to buy a M.2 SATA SSD)</li>
+  <li>You get 2 full-sized HDMI ports instead of the micro ones that come with a Pi 4</li>
+</ul>
+
+<p>The final build looks like this with a 5-bay YottaMaster enclosure attached to it:</p>
+
+<p><img src="/images/vpblogimg/2021/09/plex-server/03-final-build-with-external-sata-enclosure.jpg" alt="" /></p>
+
+<h2 id="software-installation">Software Installation</h2>
+<p>The easiest installation way I could find is downloading the Plex Media Server for Linux package from <a href="https://www.plex.tv/media-server-downloads/#plex-media-server">Plex Downloads Page</a></p>
+
+<p>First choose Linux from the OS list</p>
+
+<p><img src="/images/vpblogimg/2021/09/plex-server/04-plex-download-01.png" alt="" /></p>
+
+<p>and click Choose Distribution</p>
+
+<p><img src="/images/vpblogimg/2021/09/plex-server/05-plex-download-02.png" alt="" /></p>
+
+<p>Once you’ve downloaded the installation package right click and select <em>Package install</em></p>
+
+<p>After the installation open http://localhost:32400/web and you’re ready to go!</p>
+
+<h2 id="plex-account">Plex Account</h2>
+<p>I already had an account so I just logged in with my credentials. This automatically adds the new server to your account so you can see the libraries in other server instances in your account as well.</p>
+
+<h2 id="file-share">File Share</h2>
+<p>Because I attached a 5-bay hard drive enclosure to the Pi, I wanted to use it for a general file server as well. This also helps if your media files are located somewhere else on the network and you want to copy them over the network if you’re not able to attach the source drive directly to the Plex Server Pi.</p>
+
+<p>To create the file server I followed this guide to install Samba on my Pi: <a href="https://magpi.raspberrypi.org/articles/samba-file-server">Samba: Set up a Raspberry Pi as a File Server for your local network</a></p>
+
+<h2 id="troubleshoot-file-permission-issue">Troubleshoot File Permission Issue</h2>
+<p>One issue I had when I tried to add some test folders was that Plex wasn’t able to list the folders in a selected drive. I found the solution here: <a href="https://unix.stackexchange.com/questions/559299/plex-media-server-cannot-see-sub-folders-permissions-issue">Plex Media Server cannot see sub folders.. Permissions issue?</a></p>
+
+<p>Basically added the permissions to the folders in the path as shown in the accepted answer:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo chmod a+rX /mnt
+sudo chmod a+rX /mnt/sda
+sudo chmod a+rX /mnt/sda/will
+</code></pre></div></div>
+
+<h2 id="client">Client</h2>
+<p>I’m not going to go into much detail on the client side as there are a vast number of ways to consume content from a Plex Server. In my case, I’m using a Kodi on another Raspberry Pi and as soon as I added the new Plex Server to my Plex account I was able to view the content on my client Kodi Pi.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>Overall it was quite straightforward as the server package came ready to install. The only issue I had was to figure out the folder permission issue and after that’s been resolved I was able to enjoy a brand new Plex Server instance in my own network. Hope this helps if you’re after similar results.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.argon40.com/argon-one-m-2-case-for-raspberry-pi-4.html">Argon ONE M.2 Case for Raspberry Pi 4</a></li>
+  <li><a href="https://www.plex.tv/media-server-downloads/#plex-media-server">Plex Downloads Page</a></li>
+  <li><a href="https://magpi.raspberrypi.org/articles/samba-file-server">Samba: Set up a Raspberry Pi as a File Server for your local network</a></li>
+  <li><a href="https://unix.stackexchange.com/questions/559299/plex-media-server-cannot-see-sub-folders-permissions-issue">Plex Media Server cannot see sub folders.. Permissions issue?</a></li>
+</ul>
+]]></content>
+  </entry>
+  
   
   
   <entry>
@@ -2596,280 +2680,6 @@ bulkAll.Wait(TimeSpan.FromSeconds(60),
   <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/GeneratingTestDataWithBogus">Sample source code</a></li>
   <li><a href="https://bchavez.bitarmory.com/">Author Brian Chavez’s website</a></li>
 </ul>
-]]></content>
-  </entry>
-  
-  
-  
-  <entry>
-    <title type="html"><![CDATA[Docker in Depth]]></title>
-    <link href="https://volkanpaksoy.com/archive/2019/06/10/Docker-in-Depth/"/>
-    <updated>2019-06-10T07:00:00+01:00</updated>
-    <id>https://volkanpaksoy.com/archive/2019/06/10/Docker-in-Depth</id>
-    <content type="html"><![CDATA[<p>In this post I’d like to cover a wider variery of Docker commands and features. My goal is to be able to use it as a quick reference while working with Docker without duplicating the official documentation. It consists of the notes I took at various times.</p>
-
-<h2 id="docker-commands">Docker commands</h2>
-
-<ul>
-  <li><strong>docker ps</strong>: Shows the list of running containers</li>
-  <li><strong>docker ps -a</strong>: Shows all containers including the stopped ones</li>
-  <li><strong>docker images</strong>: Shows the list of local images</li>
-  <li>
-    <p><strong>docker inspect {container id}</strong>: Gets information about the container. It can be filtered by providing –format flag.</p>
-
-    <p>Example:</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    Command: docker inspect --format="{{ .Image }}" abcdabcdabcd
-	
-  Output: sha256:abcdabcdabcdabcdabcdabcd.....
-</code></pre></div>    </div>
-
-    <p>The data is in JSON format so it can be filtered by piping to <a href="https://stedolan.github.io/jq/">jq</a>.</p>
-
-    <p>Example:</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  docker inspect 7c1297c30159 | jq -r '.[0].Path'
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p><strong>docker rm {container id or name}</strong>: Deletes the container</p>
-
-    <p>run command accepts –rm parameter which deletes the container right after it finishes.</p>
-
-    <p>To delete all the containers the following command can be used:</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  docker rm $(docker ps -aq) 
-</code></pre></div>    </div>
-
-    <p>where docker ps -aq only returns the container ids.</p>
-  </li>
-  <li>
-    <p><strong>docker rmi {image id or name}</strong>: Seletes the image (provided that there are no containers created off that image)</p>
-
-    <p>To delete all images the following command can be used:</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  docker rmi $(docker images -q)
-</code></pre></div>    </div>
-
-    <p>This command is equivalent of</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  docker image rm {image name or id}
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p><strong>docker build</strong>: Creates a new image from Dockerfile</p>
-
-    <p>It is equivalent of</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  docker image build ...
-</code></pre></div>    </div>
-
-    <p>It can be used to build images straight from GitHub:</p>
-
-    <p>Example:</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  docker build https://github.com/docker/rootfs.git#container:docker
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p><strong>docker history {image name}</strong>: Shows the history of an image</p>
-  </li>
-  <li>
-    <p><strong>docker run -it {image name} bash</strong>: Runs a container in interactive mode with bash shell</p>
-
-    <p>Same as:</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  docker container run -it ...
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p><strong>docker start/stop</strong>: Starts/stops an existing container</p>
-
-    <p>If a command is specified the first time the container was run, then it uses the same command when it’s started.</p>
-
-    <p>Example:</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  docker run -it {image name} bash
-</code></pre></div>    </div>
-
-    <p>This creates a container in interactive mode</p>
-
-    <p>We can exit the container by running exit in the terminal (leaving the container running in the background) ???? (or Ctrl P+Q??). We can then stop the container:</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  docker stop {container id}
-</code></pre></div>    </div>
-
-    <p>Stop command sends a signal to the process with pid = 1 in the container to stop gracefully. Docker gives the container 10 seconds to stop before it forcefully stops it itself.</p>
-
-    <p>We can start it again with interactive flag to run bash again	
-      docker run -i {container id}</p>
-
-    <p>This runs bash automatically because that was the command we used while creating the container.</p>
-  </li>
-  <li>
-    <p><strong>docker run -p {host port}:{container port}</strong>: Forwards a host port to container</p>
-  </li>
-  <li>
-    <p><strong>docker run -v {host path}:{container path}</strong>: Maps a path on host to a path on container.</p>
-
-    <p>If the container path exists it will be overwritten by the contents of host path. In other words, the container will see the host files while accessing that path incestead of its local files.</p>
-  </li>
-  <li>
-    <p><strong>docker diff</strong>: Lists the differences between the container and the base image. Shows the added, deleted and changed files.</p>
-  </li>
-  <li>
-    <p><strong>docker commit</strong>: Creates a new image based on the container</p>
-  </li>
-  <li>
-    <p><strong>docker logs {container id}</strong>: Shows the logs of the container.</p>
-
-    <p>Docker logging mechanism listens to stdout and stderr. We can link other logs to stdout and stderr so that we can view them using docker logs {container id}</p>
-
-    <p>Example:</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  RUN ln -sf /dev/stdout /var/log/nginx/access.log &amp;&amp; ln -sf /dev/stderr /var/log/nginx/error.log
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p><strong>docker network</strong>:</p>
-
-    <p><strong>docker network create {network name}</strong>: Creates a new network</p>
-
-    <p><strong>docker network ls</strong>: Lists all networks</p>
-
-    <p><strong>docker network inspect {network name}</strong>: Gets information of a specific network</p>
-
-    <p><strong>docker run –network {network name}</strong>: Creates a container inside the specified network</p>
-
-    <p>Containers can address each other by name within the network.</p>
-  </li>
-  <li>
-    <p><strong>docker container exec</strong>: Can be used to run commands in a running container. Also can be used to connect to the container by running a shell</p>
-
-    <p>Example:</p>
-
-    <p>docker container exec {container id} sh</p>
-  </li>
-</ul>
-
-<p>It starts a new process inside the container</p>
-
-<h2 id="docker-compose">Docker Compose</h2>
-<p>A tool for defining and running multi-container Docker applications.</p>
-
-<ul>
-  <li>Instead of stand-alone containers, “services” are defined in “docker-compose.yml” file</li>
-  <li><strong>docker-compose up</strong> command will create the entire application with all the components (containers, networks, volumes etc)</li>
-  <li><strong>docker-compose config</strong>: It is used to verify a docker-compose yml file.</li>
-  <li><strong>docker-compose up -d</strong>: Starts the services in detached mode. Uses the current directory name to prepend the objects (networks, volumes, containers etc) created.</li>
-  <li><strong>docker-compose ps</strong>: Shows the full stack with names, commands, states and ports</li>
-  <li><strong>docker-compose logs -f</strong>: Shows logs of the whole stack. tails and shows the updates.</li>
-  <li><strong>docker-compose down</strong>: Stops and removes the containers and networks. Volumes are NOT deleted.</li>
-</ul>
-
-<p>Environment variables can be used in docker-compose.yml files in ${VAR_NAME} format.</p>
-
-<ul>
-  <li><strong>docker-compose -f {filename}</strong>: Used to specify non-default config files.</li>
-  <li>
-    <p>Multiple YML files can be used and can be extended using “extends:” key in the following format:</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  extends: 
-      file: original.yml
-      service: service name
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<h2 id="general-concepts">General Concepts</h2>
-
-<p><strong>Container:</strong> Isolated area of an OS with resource usage limits applied. VMs virtualize hardware resources, containers virtualize OS resources (file system, network stack etc)</p>
-
-<p><strong>Namespaces:</strong> Isolation (like hypervisors)</p>
-
-<p><strong>Control groups:</strong> Grouping objects and setting limits. In Windows they are also called Job Objects.</p>
-
-<p><strong>Daemon:</strong> Includes REST API.</p>
-
-<p><strong>containerd:</strong> Handles container operations like start, stop etc.. on Windows, Compute Services, includes runc</p>
-
-<p><strong>runtime:</strong> OCI (Linux -&gt; runc) runc creates the container than exits</p>
-
-<p>containerd cannot create containers by itself. That capability is with the OCI layer.</p>
-
-<p>Windows containers are 2 kinds:</p>
-
-<ul>
-  <li>Native containers</li>
-  <li>
-    <p>Hyper-V</p>
-  </li>
-  <li>Layering
-    <ul>
-      <li>Base Layer: At the bottom (OS Files &amp; objects)</li>
-      <li>App Code: Built on top of base layer</li>
-    </ul>
-
-    <p>Each layer is located under /var/lib/docker/aufs/diff/{layer id}</p>
-
-    <p>Layer id is different from the hash value of the layer</p>
-  </li>
-  <li>
-    <p>Images live in registries. Docker defaults to Docker Hub</p>
-  </li>
-  <li>
-    <p>Docker Trusted Registry comes with Docker Enterprise Edition</p>
-  </li>
-  <li>
-    <p>Official images can be addressed as docker.io/image name or just the image name</p>
-  </li>
-  <li>
-    <p>Naming convention: Registry / Repo / Image (Tag)</p>
-  </li>
-  <li>Registry: docker.io is default</li>
-  <li>
-    <p>Image: latest is default</p>
-  </li>
-  <li>
-    <p>Image layers are read-only. Containers have their read-write layers. Container adds a writable layer on top of the read-only layers from the image.
-If they need to change something on a read-only layer, they use copy-on-write operation and create a copy of the existing layer and apply the change on that new layer. Anytime container needs to change a file, creates a copy of the file in its own writable layer and changes it there.</p>
-  </li>
-  <li>
-    <p>Cmd vs entrypoint: runtime arguments overrides default arguments. Entrypoint runtime arguments are appended</p>
-  </li>
-  <li>Dockerfile commands
-    <ul>
-      <li>FROM is always the first instruction</li>
-      <li>Good practice to label with maintainer email address</li>
-      <li>RUN: Executes command and creates a layer</li>
-      <li>COPY: Copies files into image in a new layer</li>
-      <li>EXPOSE: Specifies which port to liste to. Doesn’t create a new layer. Adds metadata.</li>
-      <li>ENTRYPOINT: Specifies what to run when a container starts.</li>
-      <li>WORKDIR: Specifies the default directory. Doesn’t create layer.</li>
-    </ul>
-  </li>
-  <li>Multi-stage builds
-    <ul>
-      <li>Helps to remove unnecessary packages / files from the final production image.</li>
-      <li>It can get specific files from intermediary builds</li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="notes">Notes</h2>
-<ul>
-  <li>A container will run one process only</li>
-  <li>If the command is a background process, the container will stop right after it ran. It needs to be something like a shell and not like a web server.</li>
-  <li>As of v1.12 Docker runs in either single-image mode or swarm mode.</li>
-  <li>Recent Docker versions support logging drivers. They forward the logs to external systems such as dusk of, splunk etc (–log-driver and –log-opts)</li>
-</ul>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://serversforhackers.com/shipping-docker">Online course: Shipping Docker</a></li>
-  <li><a href="https://www.pluralsight.com/courses/docker-deep-dive-update">Online course: Docker Deep Dive</a></li>
-</ul>
-
 ]]></content>
   </entry>
   

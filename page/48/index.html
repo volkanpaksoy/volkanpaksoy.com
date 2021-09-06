@@ -109,6 +109,58 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2014/03/22/agnes-implementation/" itemprop="url">AGNES Implementation</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-03-22T16:49:44+00:00" itemprop="datePublished">March 22, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">java, machine_learning</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Another data mining algorithm: AGNES (Agglomerative Nesting)</p>
+
+<h3 id="agnes-algorithm">AGNES Algorithm</h3>
+<p>AGNES takes a different approach than k-means which was the subject of my previous <a href="https://volkanpaksoy.com/archive/2014/03/22/k-means-implementation/">post</a>. Initially it considers all data points as a separate cluster.</p>
+
+<p><img src="/images/vpblogimg/2014/03/AGNES-01.png" alt="AGNES 1"></p>
+
+<p>Then finds the minimum distance between clusters and merges the closest clusters:</p>
+
+<p><img src="/images/vpblogimg/2014/03/AGNES-02.png" alt="AGNES 2"></p>
+
+<p>The resulting cluster is added to the all cluster list the merged clusters are removed as they are no longer valid.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/VP.DataMining.AGNES" target="_blank" rel="noopener noreferrer">Source code</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/03/22/k-means-implementation/" itemprop="url">k-means Implementation</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -300,67 +352,6 @@
   <li><a href="http://en.wikipedia.org/wiki/Apriori_algorithm" target="_blank" rel="noopener noreferrer">Wikipedia article</a></li>
   <li><a href="https://github.com/volkanpaksoy/VP.DataMining.Apriori" target="_blank" rel="noopener noreferrer">Source code</a></li>
 </ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/03/01/gadget-review-fitbit-flex/" itemprop="url">Gadget Review: Fitbit Flex</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-03-01T19:16:03+00:00" itemprop="datePublished">March  1, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
-
-<!-- misc -->
-
-
-
-
-    <a href="/category/misc">misc</a>
-    
-</span>
-	<span class="tags">review, gadget</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p><img src="/images/vpblogimg/2014/03/fitbit-flex.png" alt="Fitbit Flex"></p>
-
-<p>I bought this about 2 months ago. I wore it every single day since then and I just loved it! It is basically a motion sensor that detects and keeps track of your daily movements. You can set your own daily goals steps you walked, distance you took or calories you burnt.</p>
-
-<p>I can keep track of distance by using my Garmin ForeRunner 10 (which I reviewed <a href="https://volkanpaksoy.com/archive/2013/07/20/run-to-the-hills-run-for-your-life/">here</a>) but this one is easier to use because it does everything in the background. Garmin takes a few minutes to start because it needs to find your GPS coordinates but that’s not the case for Flex.</p>
-
-<p>Flex lets you keep track of distance, active minutes, calories and steps.</p>
-
-<p><img src="/images/vpblogimg/2014/03/FitbitGoals.png" alt="Fitbit Goals"></p>
-
-<p>Also you can log your weight, other exercises and food intake so that you can calculate the net calories throughout a time period.</p>
-
-<p>Another great feature about it is tracking your sleep quality. You can use this data in conjunction with your daily activities.</p>
-
-<p><img src="/images/vpblogimg/2014/03/FitbitSleep.png" alt="Fitbit Sleep"></p>
-
-<p>And here is my favourite feature: Alarm! It turns out if something on your wrist start to vibrate you wake up. Instantly! Of course I keep my phone’s alarm still running as a fallback method but this one works pretty good.</p>
-
-<h3 id="conclusion">Conclusion</h3>
-<p>I bought it for £68 and as of now it is listed as £83 on Amazon. Apparently the price fluctuates a bit but I think £70 – 80 price range is good for this product. I charge once every 3 days or so. Other than that I completely forget about it while it does its job in the background. It motivates you to reach your goals and be more active in general and the silent alarm is absolutely fantastic. I’d recommend this to anyone who would like to have more exercise.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://www.fitbit.com/uk/flex" target="_blank" rel="noopener noreferrer">Official site</a></li>
-</ul>
-
 
 		
 		

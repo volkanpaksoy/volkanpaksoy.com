@@ -109,6 +109,174 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/09/18/from-json-to-neo4j/" itemprop="url">From JSON to Neo4J</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-09-18T16:30:00+01:00" itemprop="datePublished">September 18, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp, neo4j, cypher, json</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I have a simple JSON file that contained a bunch of users with their followers which looked like this:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">  </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"user-id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user_2"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"URL"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"following"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"user_10"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"user_6"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"user_1"</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="s2">"followers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"user_10"</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>It felt like a good exercise would be to import that data into a graph database as it wasn’t something I had done before.</p>
+
+<p>As my go-to language is C# and I had some experience with Cypher before, my initial instinct was to develop a tool to generate Cypher statements from the JSON.</p>
+
+<p>First I create the nodes:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="k">void</span> <span class="nf">GenerateNodesCypher</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">filename</span> <span class="p">=</span> <span class="s">@"..\..\output\nodes.cql"</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">output</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringBuilder</span><span class="p">();</span>
+
+    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">user</span> <span class="k">in</span> <span class="n">_userList</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">string</span> <span class="n">s</span> <span class="p">=</span> <span class="s">$"CREATE (</span><span class="p">{</span><span class="n">user</span><span class="p">.</span><span class="n">username</span><span class="p">}</span><span class="s">:User </span><span class="p">{{</span> <span class="n">userid</span><span class="p">:</span> <span class="p">{</span><span class="n">user</span><span class="p">.</span><span class="n">userid</span><span class="p">}</span> <span class="p">,</span> <span class="n">username</span><span class="p">:</span> <span class="err">'</span><span class="p">{</span><span class="n">user</span><span class="p">.</span><span class="n">username</span><span class="p">}</span><span class="err">'</span><span class="p">,</span> <span class="n">avatar</span><span class="p">:</span> <span class="err">'</span><span class="p">{</span><span class="n">user</span><span class="p">.</span><span class="n">avatar</span><span class="p">}</span><span class="err">'</span>  <span class="p">}}</span><span class="s"> ); "</span><span class="p">;</span>
+        <span class="n">output</span><span class="p">.</span><span class="nf">AppendLine</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">File</span><span class="p">.</span><span class="nf">WriteAllText</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">output</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>and then the relationships:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="k">void</span> <span class="nf">GenerateRelationshipsCypher</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">filename</span> <span class="p">=</span> <span class="s">@"..\..\output\relationships.cql"</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">output</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringBuilder</span><span class="p">();</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">user</span> <span class="k">in</span> <span class="n">_userList</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">following</span> <span class="k">in</span> <span class="n">user</span><span class="p">.</span><span class="n">following</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">string</span> <span class="n">s</span> <span class="p">=</span> <span class="s">$"MATCH (a), (b) WHERE a.username = '</span><span class="p">{</span><span class="n">user</span><span class="p">.</span><span class="n">username</span><span class="p">}</span><span class="s">' AND b.username = '</span><span class="p">{</span><span class="n">following</span><span class="p">}</span><span class="s">' CREATE (a)-[:FOLLOWING]-&gt;(b); "</span><span class="p">;</span>
+            <span class="n">output</span><span class="p">.</span><span class="nf">AppendLine</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+            <span class="n">n</span><span class="p">++;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">File</span><span class="p">.</span><span class="nf">WriteAllText</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">output</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>So I ended up with two cql files that looked like this</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE (user_1:User { userid: 1 , username: 'user_1', avatar: 'URL' }); 
+CREATE (user_2:User { userid: 2 , username: 'user_2', avatar: 'URL' }); 
+CREATE (user_3:User { userid: 3 , username: 'user_3', avatar: 'URL' }); 
+</code></pre></div></div>
+
+<p>and</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (a), (b) WHERE a.username = 'user_1' AND b.username = 'user_26' CREATE (a)-[:FOLLOWING]-&gt;(b); 
+MATCH (a), (b) WHERE a.username = 'user_1' AND b.username = 'user_53' CREATE (a)-[:FOLLOWING]-&gt;(b); 
+MATCH (a), (b) WHERE a.username = 'user_2' AND b.username = 'user_6' CREATE (a)-[:FOLLOWING]-&gt;(b); 
+</code></pre></div></div>
+
+<p>and I used neo4j-shell to execute the files and import the data. But it was no bed of roses. I’ll list the problems I faced along the way and how I got around them so that this experience might be helpful for other people as well:</p>
+
+<h2 id="issues-along-the-way-and-lessons-learned">Issues along the way and lessons learned</h2>
+
+<h3 id="running-multiple-statements-on-neo4j-browser">Running multiple statements on Neo4J browser</h3>
+<p>First I tried to run the create statements using the Neo4J browser which turned out to be problematic because it cannot run multiple statements that end with semi-colons. So I removed the semi-colons but then it started giving me this error</p>
+
+<blockquote>
+  <p>WITH is required between CREATE and MATCH</p>
+</blockquote>
+
+<p>I found a workaround for that on <a href="http://stackoverflow.com/questions/21778435/multiple-unrelated-queries-in-neo4j-cypher" target="_blank" rel="noopener noreferrer">SO</a>. So the following works:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (a), (b) WHERE a.username = 'user_1' AND b.username = 'user_14' CREATE (a)-[:FOLLOWING]-&gt;(b); 
+WITH 1 as dummy
+MATCH (a), (b) WHERE a.username = 'user_1' AND b.username = 'user_22' CREATE (a)-[:FOLLOWING]-&gt;(b); 
+</code></pre></div></div>
+
+<p>Now the problem was, if the data was a bit dirty, for instance if user_14 didn’t exist, it stopped executing the rest and no other relationships were created). I had a few nodes like that so this method didn’t work for me after all.</p>
+
+<h3 id="starting-the-shell-was-not-as-easy-as-id-imagined">Starting the shell was not as easy as I’d imagined</h3>
+<p>I installed Neo4J using the default settings and to start the shell just navigated to that directory and ran the batch file. Got an error instead of my shell:</p>
+
+<blockquote>
+  <p>C:\Program Files\Neo4j Community\bin&gt;Neo4jShell.bat</p>
+</blockquote>
+
+<blockquote>
+  <p>The system cannot find the path specified.</p>
+</blockquote>
+
+<blockquote>
+  <p>Error: Could not find or load main class org.neo4j.shell.StartClient</p>
+</blockquote>
+
+<p>Apparently the way to run the shell is using the Neo4J server application and clicking <em>Options</em> -&gt; <em>Command Prompt</em></p>
+
+<p><img src="/images/vpblogimg/2015/09/from-json-to-neo4j-command-prompt.png" alt="Neo4J command prompt"></p>
+
+<p>This launches the Neo4J Command Prompt then the rest is easy:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>neo4jshell -file nodes.cql
+
+neo4jshell -file relationships.cql
+</code></pre></div></div>
+
+<h3 id="exiting-with-unterminated-multi-line-input">“Exiting with unterminated multi-line input”</h3>
+<p>Final issue was the statements in a sql file must be terminated with a semi-colon in order for the shell to execute them. Otherwise it gives the above warning and quits</p>
+
+<p>So after all this hassle my data is in the Neo4J database ready to be queried to death!:</p>
+
+<p><img src="/images/vpblogimg/2015/09/from-json-to-neo4j-final-database.png" alt=""></p>
+
+<p>Next I’ll investigate converting the data into CSV and achieve the same results by using LOAD CSV command and look into visualization of this data.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://stackoverflow.com/questions/21778435/multiple-unrelated-queries-in-neo4j-cypher" target="_blank" rel="noopener noreferrer">Workaround for running multiple statements on Neo4J browser</a></li>
+  <li><a href="http://neo4j.com/docs/stable/query-load-csv.html" target="_blank" rel="noopener noreferrer">Neo4J documentation for LOAD CSV</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/09/14/innerworkings-of-tempdata-in-aspnet-mvc5/" itemprop="url">Inner-workings of TempData in ASP.NET MVC 5</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -497,147 +665,6 @@ public class ComplexMathClassTests
   <li><a href="https://msdn.microsoft.com/en-us/library/ms181725.aspx" target="_blank" rel="noopener noreferrer">Receive build notifications</a></li>
   <li><a href="https://msdn.microsoft.com/en-us/library/bb399135.aspx#software" target="_blank" rel="noopener noreferrer">MSDN: Deploy and configure build agents</a></li>
   <li><a href="https://github.com/volkanpaksoy/ci-with-tfs-workout" target="_blank" rel="noopener noreferrer">Sample project source code</a></li>
-</ul>
-
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/08/12/dynamic-dns-with-aws-route53/" itemprop="url">Dynamic DNS with AWS Route 53</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-08-12T01:30:00+01:00" itemprop="datePublished">August 12, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/awsdev">aws</a></span> -->
-
-<!-- aws, dev -->
-
-
-
-
-    <a href="/category/aws">aws</a>
-    , 
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">route53, csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>If you don’t have a static IP and you need to access your home network for some reason you may find Dynamic DNS services useful. I was using No-IP until its limitations became offputting. Since I love DIY stuff and AWS I thought I could build the exact same service on my own using Route 53.</p>
-
-<h2 id="enter-dyndns53">Enter DynDns53</h2>
-
-<p>It’s a simple application. What it does is basically:</p>
-
-<ul>
-  <li>Get current external IP</li>
-  <li>For each subdomain in the configuration, call AWS API and get domain info</li>
-  <li>Check if the recorded IP is different than the current one</li>
-  <li>If so, call AWS API to update it with the new one, if not do nothing.</li>
-</ul>
-
-<p>In a different post on <a href="https://volkanpaksoy.com/archive/2015/03/07/portable-online-library-with-calibre-and-raspberry-pi/">setting up Calibre on a Raspberry Pi</a> I developed a script that did the same thing:</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">boto.route53</span>
-<span class="kn">import</span> <span class="nn">urllib2</span>
-<span class="n">currentIP</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://checkip.amazonaws.com/"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-
-<span class="n">conn</span> <span class="o">=</span> <span class="n">boto</span><span class="o">.</span><span class="n">connect_route53</span><span class="p">()</span>
-<span class="n">zone</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_zone</span><span class="p">(</span><span class="s">"volki.info."</span><span class="p">)</span>
-<span class="n">change_set</span> <span class="o">=</span> <span class="n">boto</span><span class="o">.</span><span class="n">route53</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">ResourceRecordSets</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s">'{HOSTED_ZONE_ID}'</span><span class="p">)</span>
-
-<span class="k">for</span> <span class="n">rrset</span> <span class="ow">in</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_all_rrsets</span><span class="p">(</span><span class="n">zone</span><span class="o">.</span><span class="nb">id</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">rrset</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">'calibre.volki.info.'</span><span class="p">:</span>
-        <span class="n">u</span> <span class="o">=</span> <span class="n">change_set</span><span class="o">.</span><span class="n">add_change</span><span class="p">(</span><span class="s">"UPSERT"</span><span class="p">,</span> <span class="n">rrset</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">rrset</span><span class="o">.</span><span class="nb">type</span><span class="p">,</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
-        <span class="n">rrset</span><span class="o">.</span><span class="n">resource_records</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">currentIP</span>
-        <span class="n">u</span><span class="o">.</span><span class="n">add_value</span><span class="p">(</span><span class="n">rrset</span><span class="o">.</span><span class="n">resource_records</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="n">change_set</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
-</code></pre></div></div>
-
-<p>The difference of DynDns53 is that it can run as a background service and it has a cute logo! The C# equivalent of above code is like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">Update</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">var</span> <span class="n">config</span> <span class="p">=</span> <span class="n">_configHandler</span><span class="p">.</span><span class="nf">GetConfig</span><span class="p">();</span>
-    <span class="kt">string</span> <span class="n">currentExternalIp</span> <span class="p">=</span> <span class="n">_ipChecker</span><span class="p">.</span><span class="nf">GetExternalIp</span><span class="p">();</span>
-
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">domain</span> <span class="k">in</span> <span class="n">config</span><span class="p">.</span><span class="n">DomainList</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">string</span> <span class="n">subdomain</span> <span class="p">=</span> <span class="n">domain</span><span class="p">.</span><span class="n">DomainName</span><span class="p">;</span>
-        <span class="kt">string</span> <span class="n">zoneId</span> <span class="p">=</span> <span class="n">domain</span><span class="p">.</span><span class="n">ZoneId</span><span class="p">;</span>
-
-        <span class="kt">var</span> <span class="n">listResourceRecordSetsResponse</span> <span class="p">=</span> <span class="n">_amazonClient</span><span class="p">.</span><span class="nf">ListResourceRecordSets</span><span class="p">(</span><span class="k">new</span> <span class="nf">ListResourceRecordSetsRequest</span><span class="p">()</span> <span class="p">{</span> <span class="n">HostedZoneId</span> <span class="p">=</span> <span class="n">zoneId</span> <span class="p">});</span>
-        <span class="kt">var</span> <span class="n">resourceRecordSet</span> <span class="p">=</span> <span class="n">listResourceRecordSetsResponse</span><span class="p">.</span><span class="n">ResourceRecordSets</span><span class="p">.</span><span class="nf">First</span><span class="p">(</span><span class="n">recordset</span> <span class="p">=&gt;</span> <span class="n">recordset</span><span class="p">.</span><span class="n">Name</span> <span class="p">==</span> <span class="n">subdomain</span><span class="p">);</span>
-        <span class="kt">var</span> <span class="n">resourceRecord</span> <span class="p">=</span> <span class="n">resourceRecordSet</span><span class="p">.</span><span class="n">ResourceRecords</span><span class="p">.</span><span class="nf">First</span><span class="p">();</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="n">resourceRecord</span><span class="p">.</span><span class="n">Value</span> <span class="p">!=</span> <span class="n">currentExternalIp</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">resourceRecord</span><span class="p">.</span><span class="n">Value</span> <span class="p">=</span> <span class="n">currentExternalIp</span><span class="p">;</span>
-
-            <span class="n">_amazonClient</span><span class="p">.</span><span class="nf">ChangeResourceRecordSets</span><span class="p">(</span><span class="k">new</span> <span class="nf">ChangeResourceRecordSetsRequest</span><span class="p">()</span>
-            <span class="p">{</span>
-                <span class="n">HostedZoneId</span> <span class="p">=</span> <span class="n">zoneId</span><span class="p">,</span>
-                <span class="n">ChangeBatch</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ChangeBatch</span><span class="p">()</span>
-                <span class="p">{</span>
-                    <span class="n">Changes</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Change</span><span class="p">&gt;()</span> 
-                    <span class="p">{</span> 
-                        <span class="k">new</span> <span class="nf">Change</span><span class="p">(</span><span class="n">ChangeAction</span><span class="p">.</span><span class="n">UPSERT</span><span class="p">,</span> <span class="n">resourceRecordSet</span><span class="p">)</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
-            <span class="p">});</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>That’s it. The rest is just user interface, a Windows service and some basic uni tests.</p>
-
-<h2 id="usage">Usage</h2>
-
-<p>The project has a WPF user interface and a Windows service. Both are using the same library (DynDns53.Core) so the functionality is the same. Using the user interface is pretty straightforward.</p>
-
-<p><img src="/images/vpblogimg/2015/08/dyndns53-mainwindow.png" alt=""></p>
-
-<p>Just add your AWS keys that have access privileges to your domains. You can set it to run at system start so you don’t have to start it manually.</p>
-
-<p><img src="/images/vpblogimg/2015/08/dyndns53-settings-window.png" alt=""></p>
-
-<p>I built the Windows service using Topshelf. To install it, build the application and on an elevated command prompt just run</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DynDns53.Service.exe install
-</code></pre></div></div>
-
-<p>Similarly to uninstall:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DynDns53.Service.exe uninstall
-</code></pre></div></div>
-
-<h1 id="whats-missing">What’s missing</h1>
-
-<ul>
-  <li>Landing page: I’ll update the project details on the site generated by GitHub Pages.</li>
-  <li>Mac/Linux support: As the worlds are colliding I’d like to discover what I can do with the new .NET Core runtime. Since this is a simple project I think it’s a good place to start</li>
-</ul>
-
-<h2 id="resources">Resources</h2>
-
-<ul>
-  <li><a href="https://github.com/volkanpaksoy/dyndns53" target="_blank" rel="noopener noreferrer">DynDns53 Source Code</a></li>
-  <li><a href="http://dyndns53.com" target="_blank" rel="noopener noreferrer">Project website</a></li>
 </ul>
 
 

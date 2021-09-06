@@ -109,6 +109,205 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2019/10/20/AWS-Developer-Tools-Services-Part-3-AWS-CodeDeploy/" itemprop="url">AWS Developer Tools Services Part 3: AWS CodeDeploy</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-10-20T07:00:00+01:00" itemprop="datePublished">October 20, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awsdevops">aws</a></span> -->
+
+<!-- aws, devops -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags">codedeploy, git, aws_developer_tools_services</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<h2 id="introduction">Introduction</h2>
+<p>This post is part of my mini-series about <a href="https://aws.amazon.com/products/developer-tools/" target="_blank" rel="noopener noreferrer">AWS Developer Tools Services</a></p>
+
+<ul>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/15/AWS-Developer-Tools-Services-Part-1-AWS-CodeCommit/">Part 1: AWS CodeCommit</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/19/AWS-Developer-Tools-Services-Part-2-AWS-CodeBuild/">Part 2: AWS CodeBuild</a></li>
+  <li>Part 3: AWS CodeDeploy</li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/23/AWS-Developer-Tools-Services-Part-4-AWS-CodePipeline/">Part 4: AWS CodePipeline</a></li>
+</ul>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-icon.png" alt=""></p>
+
+<h2 id="aws-codedeploy">AWS CodeDeploy</h2>
+<p>CodeDeploy is a flexible deployment service that can integrate with a number of different services. It can deploy to EC2/On-premises instances as well as AWS Lambda and Amazon ECS. In my example I’ll use EC2 deployment on a Windows server.</p>
+
+<h2 id="agent">Agent</h2>
+<p>CodeDeploy requires an agent application installed on the target machines. This is only a requirement for EC2 though. For containers (ECS) and serverless (Lambda) deployments this is not necessary.</p>
+
+<p>As of this writing it’s officially supported by the following versions of Windows Server: 2016, 2012 R2, and 2008 R2.</p>
+
+<p>The installer for the agent program can be downloaded from <a href="https://docs.aws.amazon.com/en_pv/codedeploy/latest/userguide/codedeploy-agent-operations-install-windows.html" target="_blank" rel="noopener noreferrer">here</a></p>
+
+<p>The agent setup is a bit unintuitive in the sense that once it’s done it just disappears without any confirmation of successful installation.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-agent-service-running.png" alt=""></p>
+
+<h2 id="creating-an-application">Creating an Application</h2>
+<p>Now that we have the EC2 instance running with the CodeDeploy agent we are ready to configure CodeDeploy service.</p>
+
+<p>First we need to create our application and specify the target platform (EC2 / ECS / Lambda).</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-create-application.png" alt=""></p>
+
+<h2 id="create-a-deployment-group">Create a Deployment Group</h2>
+<p>In order to create a deployment group we need to supply a few details.</p>
+
+<h3 id="iam-role">IAM Role</h3>
+<p>We need to provide a CodeDeploy service role. So first we need go to IAM, create a role and select CodeDeploy from the AWS Services list. Then select the use case (in my case it’s the first option):</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-create-iam-service-role.png" alt=""></p>
+
+<p>This comes with a role with <strong>AWSCodeDeployRole</strong> policy attached.</p>
+
+<p>Finally we give it a name and copy the ARN and use it in CodeDeploy configuration.</p>
+
+<h3 id="deployment-type">Deployment Type</h3>
+<p>CodeDeploy supports 2 types of deployment:</p>
+
+<ul>
+  <li>In-place</li>
+  <li>Blue/green</li>
+</ul>
+
+<p>In this example I will have 1 EC2 instance and I will use In-place deployment type. But Blue/green is very important to have a new system with no downtime so I’ll cover that bit in a separate post.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-deployment-type-selection.png" alt=""></p>
+
+<h3 id="environment-configuration">Environment Configuration</h3>
+<p>The way CodeDeploy finds the target instances is via <strong>tags</strong>. You can provide multiple groups of tags. In that case, for an instance to be targeted by CodeDeploy</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-environment-configuration.png" alt=""></p>
+
+<h3 id="other-settings">Other Settings</h3>
+
+<p>There are more settings such as deployment configuration (deploy all at once, one at a time, half at a time) and configuring Load Balancer. Since I’m only covering the basics in this example I’ll not explore those features. They don’t mean much with a single EC2 instance anyway.</p>
+
+<h2 id="deploying-the-application">Deploying the Application</h2>
+<p>We have at this point defined the target of the deployment and now we need to define what to deploy.</p>
+
+<p>To tie it to the previous configuration we have done, we first select the deployment group. Then we choose the location of the deployment package: In my example I’ll use the artifacts built by CodeBuild and uploaded to Amazon S3.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-deployment-settings.png" alt=""></p>
+
+<p>After you create the deployment, it automatically starts it. Make sure there are running instances with the correct tags other wise you might see an error like this:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-no-instances-found-error.png" alt=""></p>
+
+<p>For each deployment you need to create a new deployment. The good news is that you can an existing deployment and create it very quickly that way.</p>
+
+<p>After the deployment starts on the instances you can see the progress on the screen right away:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-deployment-in-progress.png" alt=""></p>
+
+<h2 id="iam-instance-profile">IAM Instance Profile</h2>
+<p>If you are having an error like this</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>InstanceAgent::Plugins::CodeDeployPlugin::CommandPoller: Missing credentials - please check if this instance was started with an IAM instance profile
+</code></pre></div></div>
+
+<p>that is probably because you skipped creating an instance profile for your EC2 instances like I did. It is explained <a href="https://docs.aws.amazon.com/en_pv/codedeploy/latest/userguide/getting-started-create-iam-instance-profile.html#getting-started-create-iam-instance-profile-console" target="_blank" rel="noopener noreferrer">here</a>.</p>
+
+<p>Basically the CodeDeploy agent running in EC2 instance needs to communicate with CodeDeploy service and Amazon S3 to get the deployment package.</p>
+
+<p>To resolve this issue:</p>
+
+<ol>
+  <li>Create an IAM policy like this:</li>
+</ol>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"s3:Get*"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"s3:List*"</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"arn:aws:s3:::replace-with-your-s3-bucket-name/*"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"arn:aws:s3:::aws-codedeploy-us-east-1/*"</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<ol>
+  <li>Create an IAM service role for EC2. In permissions, attach the policy created in Step 1.</li>
+</ol>
+
+<p>In EC2, select the instance and attach the role:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-attach-iam-role.png" alt=""></p>
+
+<p>Make sure to restart the service after attaching the role.</p>
+
+<h2 id="appspecyml">AppSpec.yml</h2>
+<p>At this point the agent can locate the deployment package but it doesn’t know what to do with. We need to define installation steps. Just like we had to provide a buildspec.yml file to CodeBuild service, we need to provide an appspec.yml file to CodeDeploy service to define these deployment steps.</p>
+
+<p>appspec.yml file must be placed in application source code’s root folder.</p>
+
+<p>In this example, the deployment is basically just copying the new application to the destination and my appspec.yml file looks like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 0.0
+os: windows
+files:
+  - source: \
+    destination: c:\website
+</code></pre></div></div>
+
+<p>In addition to this basic configuration, it’s possible to run scripts before and after installation. So if there are dependencies or clean up tasks they can be carried out that way.</p>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>I created this sample project on a MacBook Pro and when I tested the deployment had the following error:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-appspec-version-error.png" alt=""></p>
+
+<p>The problem is the line endings. Windows expects \r\n line endings whereas on unix-baseds systems the line ending is \n. So the solution for that is to save the appsepc.yml file with UTF-8 encoding and the agent was able to read the file correctly and automatically unzips the contents of the deployment package to the target folder:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codedeploy-successful-deployment.png" alt=""></p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>In this post I used basic features of AWS CodeDeploy service to deploy my artifacts from the previous post and carry out the actual deployment. In future posts I will focus on more advanced features and other AWS code services.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://docs.aws.amazon.com/en_pv/codedeploy/latest/userguide/codedeploy-agent.html" target="_blank" rel="noopener noreferrer">Working with the CodeDeploy Agent</a></li>
+  <li><a href="https://docs.amazonaws.cn/en_us/codedeploy/latest/userguide/troubleshooting-deployments.html#troubleshooting-agent-commandpoller-error" target="_blank" rel="noopener noreferrer">Troubleshoot EC2/On-Premises Deployment Issues</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2019/10/19/AWS-Developer-Tools-Services-Part-2-AWS-CodeBuild/" itemprop="url">AWS Developer Tools Services Part 2: AWS CodeBuild</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -351,66 +550,6 @@ artifacts:
   <li><a href="https://docs.aws.amazon.com/en_pv/codecommit/latest/userguide/troubleshooting-ssh.html" target="_blank" rel="noopener noreferrer">Troubleshooting SSH Connections to AWS CodeCommit</a></li>
   <li><a href="https://aws.amazon.com/products/developer-tools/" target="_blank" rel="noopener noreferrer">AWS Developer Tools services</a></li>
 </ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2019/09/06/Git-Branching-Strategies-GitHub-Flow/" itemprop="url">Git Branching Strategies: GitHub Flow</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2019-09-06T07:00:00+01:00" itemprop="datePublished">September  6, 2019</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">git, github flow</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>In this post I woud like to talk about GitHub Flow branching strategy:</p>
-
-<h2 id="basic-approach">Basic approach</h2>
-<ul>
-  <li>Main diagram of the workflow:</li>
-</ul>
-
-<p><img src="/images/vpblogimg/2019/09/git-github-flow-01-diagram.png" alt=""></p>
-
-<ul>
-  <li>It’s a branch-based workflow mostly targeting projects where deployments are made regularly. In other words, it’s more suitable for continuos deployment environments.</li>
-  <li>There’s only one rule about branching: anything in the <strong>master</strong> branch is always deployable. Because of this, it’s extremely important that your <strong>new branch is created off of master</strong> when working on a feature or a fix.</li>
-  <li>Branch names should be descriptive</li>
-  <li>Once the changes are done, create a pull request.</li>
-  <li>Discuss the pull request and apply changes where necessary</li>
-  <li>Merge into master and deploy straight away</li>
-</ul>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://guides.github.com/introduction/flow/" target="_blank" rel="noopener noreferrer">Understanding the GitHub flow</a></li>
-  <li><a href="https://www.youtube.com/watch?v=juLIxo42A_s" target="_blank" rel="noopener noreferrer">YouTube Video: The GitHub Flow - GitHub Universe 2016</a></li>
-  <li><a href="https://www.youtube.com/watch?v=47E-jcuQz5c" target="_blank" rel="noopener noreferrer">YouTube Video: Git &amp; GitHub: GitHub Workflow (A very concise explanation in 1 minute and 13 seconds)</a></li>
-</ul>
-
 
 		
 		

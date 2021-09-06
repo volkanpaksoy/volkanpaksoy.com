@@ -109,6 +109,67 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/csharp-6-new-features-conclusion/" itemprop="url">C# 6.0 New Features - Conclusion</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-08T14:00:00+00:00" itemprop="datePublished">December  8, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<h3 id="conclusion-and-list-of-posts">Conclusion and List of Posts</h3>
+<p>General consensus is that the new features are just small increments to improve productivity. They will help to clean up existing code. Less code is helpful to focus on the actual business logic instead of the clutter caused by the language.</p>
+
+<p>For easy navigation I listed the links for all the previous posts:</p>
+
+<h3 id="table-of-contents">Table of contents</h3>
+<ol>
+  <li><a href="/archive/2014/12/06/csharp-6-new-features/">C# 6.0 New Features - Introduction</a></li>
+  <li><a href="/archive/2014/12/07/auto-properties-with-initializers/">Auto-Properties with Initializers</a></li>
+  <li><a href="/archive/2014/12/07/using-statements-for-static-classess/">Using statements for static classes</a></li>
+  <li><a href="/archive/2014/12/08/expression-bodied-methods/">Expression-bodied methods</a></li>
+  <li><a href="/archive/2014/12/08/string-interpolation/">String interpolation</a></li>
+  <li><a href="/archive/2014/12/08/index-initializers/">Index initializers</a></li>
+  <li><a href="/archive/2014/12/08/null-conditional-operators/">Null-conditional operators</a></li>
+  <li><a href="/archive/2014/12/08/nameof-operator/">nameof operator</a></li>
+  <li><a href="/archive/2014/12/08/exception-handling-improvements/">Exception-handling improvements</a></li>
+</ol>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.wintellectnow.com/course/detail/what-s-new-in-c-6-visual-basic-dotnet-14-and-visual-studio-14" target="_blank" rel="noopener noreferrer">Wintellect course</a></li>
+  <li><a href="http://dotnetrocks.com/default.aspx?showNum=1029" target="_blank" rel="noopener noreferrer">.NET Rocks Podcast</a></li>
+  <li><a href="http://msdn.microsoft.com/en-us/magazine/dn802602.aspx" target="_blank" rel="noopener noreferrer">MSDN Magazine Article: The New and Improved C# 6.0</a></li>
+  <li><a href="http://msdn.microsoft.com/en-us/magazine/dn683793.aspx" target="_blank" rel="noopener noreferrer">MSDN Magazine article: A C# 6.0 Language Preview</a></li>
+  <li><a href="http://channel9.msdn.com/Events/Visual-Studio/Connect-event-2014/116" target="_blank" rel="noopener noreferrer">Channel 9 Video</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/exception-handling-improvements/" itemprop="url">C# 6.0 New Features - Exception-Handling Improvements</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -246,89 +307,6 @@
 </code></pre></div></div>
 
 <p>The results are identical but this way when we change a parameter name all references to that object will be updated automatically.</p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/null-conditional-operators/" itemprop="url">C# 6.0 New Features - Null-Conditional Operators</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-12-08T12:00:00+00:00" itemprop="datePublished">December  8, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>This is another handy feature. Checking for null values before accessing them can quickly become cumbersome and yields a lot of boilerplate code. With this new operator checking for nulls and coalescing becomes really short and easy to read.</p>
-
-<p>For example:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">NullConditionalOperators</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">Run</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="n">Person</span> <span class="n">person</span> <span class="p">=</span> <span class="nf">GetPerson</span><span class="p">();</span>
-
-        <span class="c1">// Current C#</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">person</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">&amp;&amp;</span> <span class="n">person</span><span class="p">.</span><span class="n">Country</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">person</span><span class="p">.</span><span class="n">Country</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">else</span>
-        <span class="p">{</span>
-            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Undefined"</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">private</span> <span class="n">Person</span> <span class="nf">GetPerson</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">Person</span><span class="p">()</span> <span class="p">{</span> <span class="n">Firstname</span> <span class="p">=</span> <span class="s">"Volkan"</span><span class="p">,</span> <span class="n">Lastname</span> <span class="p">=</span> <span class="s">"Paksoy"</span> <span class="p">};</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="k">public</span> <span class="k">class</span> <span class="nc">Person</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">Firstname</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="s">"Unknown"</span><span class="p">;</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">Lastname</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="s">"Unknown"</span><span class="p">;</span>
-    <span class="k">public</span> <span class="n">Country</span> <span class="n">Country</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    
-<span class="p">}</span>
-
-<span class="k">public</span> <span class="k">class</span> <span class="nc">Country</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">IsoCode</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>In the example above if you need to print the name of the country first you need to ensure both the Person and Country objects are not null. The if block aobe can be reduced to a one-liner with 6.0:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">person</span><span class="p">?.</span><span class="n">Country</span><span class="p">?.</span><span class="n">Name</span> <span class="p">??</span> <span class="s">"Undefined"</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p>They both produce the same results. The more complex the object hierarchy becomes the more useful this feature would be.</p>
 
 		
 		

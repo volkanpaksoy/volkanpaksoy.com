@@ -109,6 +109,133 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2012/12/27/introduction-to-couchbasepart-2/" itemprop="url">Introduction to Couchbase - Part 2</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2012-12-27T10:59:41+00:00" itemprop="datePublished">December 27, 2012</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">nosql</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>In this post, I’ll talk about some technical details and terminology of Couchbase. The official documentation is very comprehensive and I highly recommend taking a look at it: <a href="http://www.couchbase.com/docs/" target="_blank" rel="noopener noreferrer">http://www.couchbase.com/docs/</a></p>
+
+<h2 id="installation">Installation</h2>
+<p>First of all I recommend you check the supported OS list <a href="http://www.couchbase.com/docs/couchbase-manual-2.0/couchbase-getting-started-prepare-platforms.html" target="_blank" rel="noopener noreferrer">here</a>. I tried to install it on Windows 8 but turns out it’s not supported yet. Then I installed it on Windows Server 2008 R2 and a Ubuntu Server 12.10. You can find Linux installation instructions <a href="http://www.couchbase.com/download" target="_blank" rel="noopener noreferrer">here</a>.</p>
+
+<p>Installation is quite easy. There are a few things that need to paid attention though.</p>
+
+<ol>
+  <li>File locations: Actually this step is very easy, just accept the default location. But Couchbase recommends storing document and index data on different disks to get the best performance,</li>
+  <li>Memory Size: First node in the cluster determines the quota and that value is inherited to the following nodes. To update it, on the management console, select Data Buckets and click on the arrow on the left of the bucket name. Then by clicking on Edit you can change this value.</li>
+  <li>Bucket Type: memcached and Couchbase bucket types are significantly different so you have to choose carefully. memcached buckets don’t support persistence nor replication. They are meant to be an in-memory caching solution.</li>
+  <li>Bucket Name: During setup you cannot change the name of the default bucket. Couchbase recommends to use it for testing purposes only. So it’s best to create your own bucket  for the actual data once the installation is over.</li>
+  <li>Flush: This is a very dangerous operation. It allows you delete all the data in a bucket. Default is disabled and I’d recommend to keep it that way.</li>
+</ol>
+
+<h2 id="basic-concepts">Basic concepts</h2>
+<ul>
+  <li>A couch database is called a <em>bucket</em>.</li>
+  <li>A <em>document</em> is a self-contained piece of data. It is a JSON object. A row in a RDBMS would be stored in a document with all the data it’s related to. (i.e: A customer record may contain a list of orders). This approach is called Single-Document approach and the document is called an <em>aggregate</em>. More about it in Modeling Documents section later in this post. A new feature that came with v2.0 is these records can be indexed and queried.</li>
+  <li>
+<em>vBucket</em> is short for “Virtual Bucket” and they work functionally equivalent to database shards in traditional relational databases. Good news is that Couchbase will automatically manage vBuckets.</li>
+  <li>
+<em>XDCR</em> stands for Cross Data Center Replication. It’s a very cool feature that can be used in a multiple of scenarios such as spreading data geographically or creating an active offsite backup.</li>
+</ul>
+
+<h2 id="modelling-documents-has-many-vs-belongs-to">Modelling Documents: <em>has-many</em> vs. <em>belongs-to</em>
+</h2>
+<p>The way we model data should depend on the structure and nature of the data. There are two approaches when modelling the data.
+has-many means storing all the child records with the parent. For example a standard Customer – Order relation could be expressed like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+    <span class="s">"id"</span> <span class="p">:</span> <span class="m">123</span><span class="p">,</span>
+    <span class="s">"name"</span><span class="p">:</span> <span class="n">Valued</span><span class="p">,</span>
+    <span class="s">"surname"</span><span class="p">:</span> <span class="s">"Customer"</span>
+    <span class="s">"orders"</span><span class="p">:</span> <span class="p">[</span> <span class="s">"order1"</span><span class="p">,</span> <span class="s">"order2"</span><span class="p">,</span> <span class="s">"order3"</span> <span class="p">]</span>
+<span class="p">}</span>
+<span class="p">{</span>
+    <span class="s">"id"</span><span class="p">:</span> <span class="s">"order1"</span><span class="p">,</span>
+    <span class="s">"orderDate"</span><span class="p">:</span> <span class="s">"2012-12-20"</span><span class="p">,</span>
+    <span class="s">"status"</span><span class="p">:</span> <span class="s">"sent"</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The Customer stores the IDs of the orders. This method can be problematic if the parent (Customer in this example) is updated frequently. As orders can be accessed via customer this will effect the overall query performance.
+belongs-to approach suggests approaching it from the other direction. If we modeled the above example with belongs-to approach we would come up with something like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+    <span class="s">"id"</span> <span class="p">:</span> <span class="m">123</span><span class="p">,</span>
+    <span class="s">"name"</span><span class="p">:</span> <span class="n">Valued</span><span class="p">,</span>
+    <span class="s">"surname"</span><span class="p">:</span> <span class="s">"Customer"</span>
+<span class="p">}</span>
+<span class="p">{</span>
+    <span class="s">"id"</span><span class="p">:</span> <span class="s">"order1"</span><span class="p">,</span>
+    <span class="s">"orderDate"</span><span class="p">:</span> <span class="s">"2012-12-20"</span><span class="p">,</span>
+    <span class="s">"status"</span><span class="p">:</span> <span class="s">"sent"</span><span class="p">,</span>
+    <span class="s">"customerId"</span><span class="p">:</span> <span class="m">123</span>
+<span class="p">}</span>
+<span class="p">{</span>
+    <span class="s">"id"</span><span class="p">:</span> <span class="s">"order2"</span><span class="p">,</span>
+    <span class="s">"orderDate"</span><span class="p">:</span> <span class="s">"2012-12-10"</span><span class="p">,</span>
+    <span class="s">"status"</span><span class="p">:</span> <span class="s">"pending"</span><span class="p">,</span>
+    <span class="s">"customerId"</span><span class="p">:</span> <span class="m">123</span>
+ <span class="p">}</span>
+</code></pre></div></div>
+
+<p>This is preferable to avoid contention. With this method we need to use indexing to be able query all orders by customerId. has-many approach performs better because a multiple-retrieve query is faster than indexing and querying.</p>
+
+<h2 id="backup-and-restore">Backup and Restore</h2>
+<p>Before diving into playing with the data it’s always a good practice to backup the original data. Couchbase provides 2 options to accomplish these tasks:</p>
+
+<ol>
+  <li>
+    <p>Good ol’ file copy
+Copy the data files stored under the default path (which is <em>“C:\Program Files\couchbase\server\var\lib\couchbase\data”</em> for Windows). The disadvantage of this method is that it can only be restored to offline nodes in an identical cluster environment. Also database is not compressed.</p>
+  </li>
+  <li>
+    <p>cbbackup / cbrestore
+These tools can be found in the bin folder.</p>
+  </li>
+</ol>
+
+<p><img src="/images/vpblogimg/2012/12/Couchbase_Backup.png" alt="Couchbase_Backup"></p>
+
+<p>I think a slight disadvantage is that you have to specify password in clear text in the command line. I was expecting just providing –p parameter would end up it asking me the password after I enter the command. Instead I got an error saying the password cannot be empty.</p>
+
+<p><img src="/images/vpblogimg/2012/12/Couchbase_Restore.png" alt="Couchbase_Restore"></p>
+
+<p>Advantages are that it allows a backup to be restored onto a different size and configuration. Also it compresses the data so it’s disk-space friendly.</p>
+
+<p>Tip: When specifying the backup path to cbrestore make sure to remove the trailing backslash from the path.
+  
+In the next instalment of this series I’ll post a sample application using the Beer sample database that is shipped with Couchbase 2.0</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2012/12/19/raspberry-pi-installation-and-setup/" itemprop="url">Raspberry Pi - Installation and Setup</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -195,72 +322,6 @@
 </ul>
 
 <p>In the next post I’ll go into more technical details.</p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2012/12/11/wiretap-your-other-machine/" itemprop="url">Wiretap your network</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2012-12-11T22:06:49+00:00" itemprop="datePublished">December 11, 2012</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/security">security</a></span> -->
-
-<!-- security -->
-
-
-
-
-    <a href="/category/security">security</a>
-    
-</span>
-	<span class="tags">network, wireshark</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>When I saw <a href="http://greatscottgadgets.com/throwingstar/" target="_blank" rel="noopener noreferrer">this</a> gadget, I knew I had to have it. Didn’t exactly know what to use it for but it looked and sounded cool. So I ordered one along with a pro version. Unfortunately only the pro version arrived as the other one was out of stock. It would be more fun to build it myself but just seeing it in action is fun too. Of course it’s not as cool as a throwing star but functionality is exactly the same.</p>
-
-<p><img src="/images/vpblogimg/2012/12/LanTapThrowingStar.jpeg" alt="LAN Tap Throwing Star"></p>
-
-<p>The idea is instead of directly connecting your computer to a switch, you connect the machine to this gizmo and connect the port across to the switch. So essentially getting between the target machine and its final destination for network traffic. The other 2 ports are for monitoring. One of them is for received packets and the other is for the transmitted. Connect a monitoring device to one of these ports and it’s done. The rest is firing WireShark in the monitoring machine and watching the traffic of the other machine.
-A few cool things about it:</p>
-
-<ul>
-  <li>It doesn’t require any power source</li>
-  <li>It’s unobtrusive and undetectable</li>
-</ul>
-
-<p>If you want to learn more, here is a nice video about it from Hak5:</p>
-<div class="wlWriterEditableSmartContent" id="scid:5737277B-5D6D-4f48-ABFC-DD9C333F4C5D:5fb53083-b180-45b6-a203-39da0c129b26" style="float: none; margin: 0px; display: inline; padding: 0px;">
-<div id="77bdc09b-bdad-479d-8c1d-17473a9a5b5a" style="margin: 0px; padding: 0px; display: inline;">
-<div><a href="http://www.youtube.com/watch?v=3zUsJm3bwGY" target="_blank" rel="noopener noreferrer"><img class="aligncenter" style="border-style: none;" alt="" src="assets/0.jpg" width="448" height="252"></a></div>
-</div>
-<div style="clear: both; font-size: .8em;">Hak5–Throwing Star LAN Tap</div>
-</div>
-
-<p>I learned that it is commonly used for Intrusion Detection Systems (IDS) so it would be nice to one handy if I can start using one finally. The limitation is of course it only can be used to monitor one target device only. To listen to whole network I’ll need a switch with port mirroring or SPAN support.
-But for now let’s make sure this device is working properly first. The problem with the pro version is that it doesn’t have any indicators of which ports are for monitoring. So I randomly selected one, connected it between my desktop and the router, connected the laptop to one of the remaining ports. To test it I’m simply pinging google.com. With this confiugration I got nothing, Let’s change the ports and give in another try.. and voila! I filter the packets by my desktop’s IP and ICMP protocol so it’s easy to observe the sniffed packets.</p>
-
-<p><img src="/images/vpblogimg/2012/12/Captued_Ping_Request.png" alt="Captued_Ping_Request"></p>
-
-<p>But as you can in the above screenshot there’s a problem: This is only one-way traffic. Let’s use the other monitoring port to see what’s going to change. Another ping to Google and this is what we get:</p>
-
-<p><img src="/images/vpblogimg/2012/12/Captued_Ping_Reply.png" alt="Captued_Ping_Reply"></p>
-
-<p>Now we receive only ping reply packets.As Darren Kitchen mentioned in the Hak5 video we can overcome this problem by using a USB Ethernet adapter with multiple ports. I don’t have one of those so I’ll just take his word for it.
-Verdict: Only monitoring one machine in one direction makes it a bit useless for me. I was planning to use something to see everything in both directions but overall it was a valuable  experience. After all, before I heard about LAN tapping in a TWIET episode (<a href="http://twit.tv/twiet" target="_blank" rel="noopener noreferrer">http://twit.tv/twiet</a>) I didn’t even know such thing existed. Hearing about it in a podcast is nice but nothing beats hands-on experience.</p>
 
 		
 		
