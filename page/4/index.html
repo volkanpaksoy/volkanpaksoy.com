@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -237,7 +248,7 @@
 <h2 id="iam-instance-profile">IAM Instance Profile</h2>
 <p>If you are having an error like this</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>InstanceAgent::Plugins::CodeDeployPlugin::CommandPoller: Missing credentials - please check if this instance was started with an IAM instance profile
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>InstanceAgent::Plugins::CodeDeployPlugin::CommandPoller: Missing credentials - please check if this instance was started with an IAM instance profile
 </code></pre></div></div>
 
 <p>that is probably because you skipped creating an instance profile for your EC2 instances like I did. It is explained <a href="https://docs.aws.amazon.com/en_pv/codedeploy/latest/userguide/getting-started-create-iam-instance-profile.html#getting-started-create-iam-instance-profile-console" target="_blank" rel="noopener noreferrer">here</a>.</p>
@@ -251,15 +262,15 @@
 </ol>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+  </span><span class="nl">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"s3:Get*"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"s3:List*"</span><span class="w">
       </span><span class="p">],</span><span class="w">
-      </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"arn:aws:s3:::replace-with-your-s3-bucket-name/*"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"arn:aws:s3:::aws-codedeploy-us-east-1/*"</span><span class="w">
       </span><span class="p">]</span><span class="w">
@@ -285,7 +296,7 @@
 
 <p>In this example, the deployment is basically just copying the new application to the destination and my appspec.yml file looks like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 0.0
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 0.0
 os: windows
 files:
   - source: \
@@ -401,7 +412,7 @@ files:
 
 <p>In my example, the folder structure is like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[Root]
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[Root]
 	[Src]
    		[Sample.UI.Web]
    		[Sample.Core]
@@ -412,7 +423,7 @@ files:
 
 <p>I’m using a dotnet core 2.2 project on Windows-based Docker image and my buildspec.yml looks like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 0.2
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 0.2
 
 phases:
   build:
@@ -531,19 +542,19 @@ artifacts:
 
 <p>It’s similar to any other Git guide with the exception that you have to add your access key to your SSH config file (~/.ssh/config):</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host git-codecommit.*.amazonaws.com
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host git-codecommit.*.amazonaws.com
   User APKAEIBAERJR2EXAMPLE
   IdentityFile ~/.ssh/codecommit_rsa
 </code></pre></div></div>
 
 <p>Then to test your connection, run:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh git-codecommit.us-east-2.amazonaws.com
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh git-codecommit.us-east-2.amazonaws.com
 </code></pre></div></div>
 
 <p>After adding the host to known hosts list you should see this message:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>You have successfully authenticated over SSH. You can use Git to interact with AWS CodeCommit. Interactive shells are not supported.Connection to git-codecommit.us-east-2.amazonaws.com closed by remote host.
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>You have successfully authenticated over SSH. You can use Git to interact with AWS CodeCommit. Interactive shells are not supported.Connection to git-codecommit.us-east-2.amazonaws.com closed by remote host.
 </code></pre></div></div>
 
 <h2 id="clone-the-repo">Clone the repo</h2>
@@ -558,7 +569,7 @@ artifacts:
 <h2 id="troubleshooting">Troubleshooting</h2>
 <p>In my experience in Windows, everything worked find on command line but when I tried to use my Git client (Git Extensions) I started having connection issues. The fix for that was to add my AWS SSH Key Id in the URL:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone ssh://Your-SSH-Key-ID@git-codecommit.us-east-2.amazonaws.com/v1/repos/MyDemoRepo my-demo-repo
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone ssh://Your-SSH-Key-ID@git-codecommit.us-east-2.amazonaws.com/v1/repos/MyDemoRepo my-demo-repo
 </code></pre></div></div>
 
 <h2 id="resources">Resources</h2>

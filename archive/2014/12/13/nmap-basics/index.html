@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -182,27 +193,27 @@
 
 <p>Both methods can be used in combinations such as:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -p http*,25,U:53 192.168.1.15
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -p http*,25,U:53 192.168.1.15
 </code></pre></div></div>
 
 <h3 id="output">Output</h3>
 <p>While a scan is running you can an updated status by hitting enter. Also you can save the output results to a file in different formats with the values below following the <strong>-o</strong> flag:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* N: Normal
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* N: Normal
 * X: XML
 * G: Grepable
 </code></pre></div></div>
 
 <p>such as</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -v 172.16.1.0/24 -oG output.gnmap
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -v 172.16.1.0/24 -oG output.gnmap
 </code></pre></div></div>
 
 <p>Also a helpful flag is <strong>-v</strong> for verbose output</p>
 
 <p>An added bonus about using output files is that you can resume a scan by using the <strong>–resume</strong> flag and specifying the output file name such as</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap --resume output.gnmap
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap --resume output.gnmap
 </code></pre></div></div>
 
 <h3 id="basic-scanning-options">Basic scanning options</h3>
@@ -226,14 +237,14 @@
 <h3 id="os-and-service-version-detection">OS and Service Version Detection</h3>
 <p>To detect version <strong>-sV</strong> flag is used. An intensity level between 0-9 can be specified. Default is 7</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	nmap -sV --version-intensity 9 172.16.1.10
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	nmap -sV --version-intensity 9 172.16.1.10
 </code></pre></div></div>
 
 <p>Versioning can be useful in some cases but also significantly increases the scan time.</p>
 
 <p>For operating system detection <strong>-O</strong> flag can be used</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	nmap -O -v 172.16.1.10
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	nmap -O -v 172.16.1.10
 </code></pre></div></div>
 
 <p><img src="/images/vpblogimg/2014/12/nmap-os-detection.png" alt="Nmap OS detection"></p>
@@ -264,7 +275,7 @@
 
 <p>By using <strong>-sC</strong> flag all scripts in the default category can be executed such as</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -sC -p www.google.com
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -sC -p www.google.com
 </code></pre></div></div>
 
 <p><img src="/images/vpblogimg/2014/12/nmap-script-output.png" alt="Nmap script output"></p>
@@ -273,7 +284,7 @@
 
 <p>For example there is a script to scan OpenSSL Heartbleed vulnerability. It can be executed as follows:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -p 443 --script ssl-heartbleed &lt;target&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -p 443 --script ssl-heartbleed &lt;target&gt;
 </code></pre></div></div>
 
 <p>On my machine this script was blocked by Norton!</p>

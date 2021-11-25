@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -157,12 +168,12 @@
 
 <p>If you don’t already have the image, simply pull from Docker hub:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull docker.elastic.co/elasticsearch/elasticsearch:7.2.0
 </code></pre></div></div>
 
 <p>For development environment suggested command to run a container is</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.2.0
 </code></pre></div></div>
 
 <p>which keeps it very simple and straightforward but in my workout I’d like to insert a whole bunch of data and run some queries on it and I don’t want to re-generate my data over and over again. So I decided to persist my data on host.</p>
@@ -170,7 +181,7 @@
 <h3 id="persisting-elasticsearch-data">Persisting Elasticsearch Data</h3>
 <p>Instead of running containers one by one in the command line a better approach is to create a docker-compose.yml file file and use Docker compose to start services. I used the sample YAML file provided in official Elastic <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html" target="_blank" rel="noopener noreferrer">documentation</a></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '2.2'
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '2.2'
 services:
   es01:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
@@ -282,7 +293,7 @@ networks:
 <h3 id="showing-progress">Showing progress</h3>
 <p>In the sample code below I showed displaying progress using onNext action delegate:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var testData = dataGen.Generate(statementConfig.StartDate, statementConfig.EndDate, statementConfig.OpeningBalance, statementConfig.DebitTransactionRatio, statementConfig.TransactionDateInterval, statementConfig.NumberOfStatementLines);
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var testData = dataGen.Generate(statementConfig.StartDate, statementConfig.EndDate, statementConfig.OpeningBalance, statementConfig.DebitTransactionRatio, statementConfig.TransactionDateInterval, statementConfig.NumberOfStatementLines);
 var cancellationToken = new CancellationToken();
 var batchSize = 250;
 var bulkAll = elasticClient.BulkAll(testData, x =&gt; x
@@ -763,7 +774,7 @@ bulkAll.Wait(TimeSpan.FromSeconds(60),
 
     <p>Example:</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code>    Command: docker inspect --format="{{ .Image }}" abcdabcdabcd
 	
   Output: sha256:abcdabcdabcdabcdabcdabcd.....
@@ -773,7 +784,7 @@ bulkAll.Wait(TimeSpan.FromSeconds(60),
 
     <p>Example:</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code>  docker inspect 7c1297c30159 | jq -r '.[0].Path'
 </code></pre></div>    </div>
   </li>
@@ -784,7 +795,7 @@ bulkAll.Wait(TimeSpan.FromSeconds(60),
 
     <p>To delete all the containers the following command can be used:</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code>  docker rm $(docker ps -aq) 
 </code></pre></div>    </div>
 
@@ -795,13 +806,13 @@ bulkAll.Wait(TimeSpan.FromSeconds(60),
 
     <p>To delete all images the following command can be used:</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code>  docker rmi $(docker images -q)
 </code></pre></div>    </div>
 
     <p>This command is equivalent of</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code>  docker image rm {image name or id}
 </code></pre></div>    </div>
   </li>
@@ -810,7 +821,7 @@ bulkAll.Wait(TimeSpan.FromSeconds(60),
 
     <p>It is equivalent of</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code>  docker image build ...
 </code></pre></div>    </div>
 
@@ -818,7 +829,7 @@ bulkAll.Wait(TimeSpan.FromSeconds(60),
 
     <p>Example:</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code>  docker build https://github.com/docker/rootfs.git#container:docker
 </code></pre></div>    </div>
   </li>
@@ -830,7 +841,7 @@ bulkAll.Wait(TimeSpan.FromSeconds(60),
 
     <p>Same as:</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code>  docker container run -it ...
 </code></pre></div>    </div>
   </li>
@@ -841,7 +852,7 @@ bulkAll.Wait(TimeSpan.FromSeconds(60),
 
     <p>Example:</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code>  docker run -it {image name} bash
 </code></pre></div>    </div>
 
@@ -849,7 +860,7 @@ bulkAll.Wait(TimeSpan.FromSeconds(60),
 
     <p>We can exit the container by running exit in the terminal (leaving the container running in the background) ???? (or Ctrl P+Q??). We can then stop the container:</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code>  docker stop {container id}
 </code></pre></div>    </div>
 
@@ -881,7 +892,7 @@ bulkAll.Wait(TimeSpan.FromSeconds(60),
 
     <p>Example:</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code>  RUN ln -sf /dev/stdout /var/log/nginx/access.log &amp;&amp; ln -sf /dev/stderr /var/log/nginx/error.log
 </code></pre></div>    </div>
   </li>
@@ -936,7 +947,7 @@ bulkAll.Wait(TimeSpan.FromSeconds(60),
   <li>
     <p>Multiple YML files can be used and can be extended using “extends:” key in the following format:</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code>  extends: 
       file: original.yml
       service: service name

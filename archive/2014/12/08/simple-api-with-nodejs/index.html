@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -154,7 +165,7 @@
 
 <p>On Windows, simply download and run installer on <a href="http://nodejs.org/download/" target="_blank" rel="noopener noreferrer">this</a> page. Alternativaly if you like Chocolatey you can run the following command in a command-prompt (you may need to run it as administrator)</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>choco install nodejs.install
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>choco install nodejs.install
 </code></pre></div></div>
 
 <h3 id="develop">Develop</h3>
@@ -162,18 +173,18 @@
 
 <p>We’re going to use express in our API so first we need to install it using Node Package Manager (NPM)</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install express 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install express 
 </code></pre></div></div>
 
 <p>Now that we have everything we need, we can write the actual code for the endpoint:</p>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">);</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">express</span><span class="dl">'</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
 
-<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">remoteAddress</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">headers</span><span class="p">[</span><span class="s1">'x-forwarded-for'</span><span class="p">]</span> <span class="o">||</span> 
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">remoteAddress</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">headers</span><span class="p">[</span><span class="dl">'</span><span class="s1">x-forwarded-for</span><span class="dl">'</span><span class="p">]</span> <span class="o">||</span> 
     				  <span class="nx">req</span><span class="p">.</span><span class="nx">connection</span><span class="p">.</span><span class="nx">remoteAddress</span><span class="p">;</span>
-    <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">({</span> <span class="s2">"ipAddress"</span><span class="p">:</span> <span class="nx">remoteAddress</span> <span class="p">});</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">({</span> <span class="dl">"</span><span class="s2">ipAddress</span><span class="dl">"</span><span class="p">:</span> <span class="nx">remoteAddress</span> <span class="p">});</span>
 <span class="p">});</span>
 
 <span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PORT</span> <span class="o">||</span> <span class="mi">80</span><span class="p">);</span>
@@ -188,7 +199,7 @@
 <h3 id="deploy">Deploy</h3>
 <p>First I installed Node on Linux box on AWS by simple running</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -sL https://deb.nodesource.com/setup | sudo bash -
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -sL https://deb.nodesource.com/setup | sudo bash -
 sudo apt-get install -y nodejs
 </code></pre></div></div>
 
@@ -203,7 +214,7 @@ sudo apt-get install -y nodejs
   <li>
     <p>Create an app on heroku by running</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code> heroku create --http-git
 </code></pre></div>    </div>
 
@@ -214,7 +225,7 @@ sudo apt-get install -y nodejs
   <li>
     <p>Now as you have the remote you can push your code to that</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code> git push heroku master
 </code></pre></div>    </div>
 
@@ -225,7 +236,7 @@ sudo apt-get install -y nodejs
 
     <p>If you don’t want to use Heroku domain and/or the application name is assigns automatically you can change them. First go to Dashboard –&gt; Personal Apps and click on the application. Then click Settings. You can rename the application there directly but it breaks your git remote. So I suggest doing it via the command line by running</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code> heroku apps:rename newname --app oldname
 </code></pre></div>    </div>
 

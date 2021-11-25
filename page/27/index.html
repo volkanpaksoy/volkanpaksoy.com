@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -229,16 +240,16 @@
 </ul>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="nl">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Stmt1418647210000"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="nl">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Stmt1418647210000"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
                 </span><span class="s2">"s3:PutObject"</span><span class="p">,</span><span class="w">
                 </span><span class="s2">"s3:PutObjectAcl"</span><span class="w">
             </span><span class="p">],</span><span class="w">
-            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
                 </span><span class="s2">"arn:aws:s3:::{BUCKET_NAME}/*"</span><span class="w">
             </span><span class="p">]</span><span class="w">
         </span><span class="p">}</span><span class="w">
@@ -270,7 +281,7 @@
 
 <p>This works fine but the problem in this case was the hyphens in some of the JSON property names which are not supported in C#. I can get around it if I use the strongly typed objects and specify the property name explicitly, such as:</p>
 
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[JsonProperty("is-published?")]</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="nf">JsonProperty</span><span class="p">(</span><span class="s">"is-published?"</span><span class="p">)]</span>
 <span class="k">public</span> <span class="kt">bool</span> <span class="n">ispublished</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 </code></pre></div></div>
 
@@ -281,7 +292,7 @@
     <p>Default output of the RSS feed passes the validation but get 3 warnings. I’m sure they can be safely ignored but just of curiosity researched a little bit to see if I could pass with flying colors. Two of the three warnings were</p>
 
     <p>line 1, column 39: Avoid Namespace Prefix: a10 [help]
-      ﻿<?xml version="1.0" encoding="utf-8"?>&lt;rss xmlns:a10=”http://www.w3.org/200 …</p>
+      ﻿&lt;?xml version=”1.0” encoding=”utf-8”?&gt;&lt;rss xmlns:a10=”http://www.w3.org/200 …</p>
 
     <p>line 12, column 5302: Missing atom:link with rel=”self” [help]
       … encompassing the Ch&lt;/description&gt;&lt;/item&gt;&lt;/channel&gt;&lt;/rss&gt;</p>
@@ -521,7 +532,7 @@ http://www.w3.org/2001/XMLSchema"</span><span class="nt">&gt;</span>
 
 <p>and</p>
 
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[XmlRoot]</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="n">XmlRoot</span><span class="p">]</span>
 <span class="k">public</span> <span class="k">class</span> <span class="nc">PlayerList</span>
 <span class="p">{</span>
     <span class="p">[</span><span class="nf">XmlElement</span><span class="p">(</span><span class="s">"Player"</span><span class="p">)]</span>
@@ -531,7 +542,7 @@ http://www.w3.org/2001/XMLSchema"</span><span class="nt">&gt;</span>
 
 <p>and we can get the list of objects by:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>string inputXmlPath1 = @".\InputXml.xml";
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>string inputXmlPath1 = @".\InputXml.xml";
 using (StreamReader reader = new StreamReader(inputXmlPath1))
 {
     XmlSerializer playerListSerializer = new XmlSerializer(typeof(PlayerList));
@@ -564,7 +575,7 @@ using (StreamReader reader = new StreamReader(inputXmlPath1))
 
 <p>This works when the class name matches the <em>XmlElement</em> name. If you need to customize your class’s name (like <em>FinalPlayer</em> in my example) you need to decorate the class with <em>XmlType</em> and supply the element name so that the serializer can do the mapping.</p>
 
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[XmlType("Player")]</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="nf">XmlType</span><span class="p">(</span><span class="s">"Player"</span><span class="p">)]</span>
 <span class="k">public</span> <span class="k">class</span> <span class="nc">FinalPlayer</span>
 <span class="p">{</span>
     <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>

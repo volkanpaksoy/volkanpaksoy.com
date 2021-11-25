@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -260,7 +271,7 @@
 <h2 id="installing-cdk">Installing CDK</h2>
 <p>AWS CDK is developed using TypeScript. It’s available via npm:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install -g aws-cdk
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install -g aws-cdk
 </code></pre></div></div>
 
 <h2 id="using-cdk">Using CDK</h2>
@@ -270,7 +281,7 @@
 
 <p>It expects 2 parameters: Language (Can be one of these: csharp, fsharp, java, javascript, python or typescript).</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk init app --language csharp
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk init app --language csharp
 </code></pre></div></div>
 
 <p>To test my first app, I followed the sample app provided and added an S3 construct to my code:</p>
@@ -288,24 +299,24 @@
 </code></pre></div></div>
 <p>Next step is to synnthesize a CloudFormation template by running</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk synth
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk synth
 </code></pre></div></div>
 
 <p>This generates a folder called cdk.out which contains a file named CdkWorkoutStack.template.json and with the following contents:</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"Resources"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"CdkBucket2FB0D10E"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AWS::S3::Bucket"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"Properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"VersioningConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-          </span><span class="s2">"Status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Enabled"</span><span class="w">
+  </span><span class="nl">"Resources"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"CdkBucket2FB0D10E"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AWS::S3::Bucket"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"Properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"VersioningConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"Status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Enabled"</span><span class="w">
         </span><span class="p">}</span><span class="w">
       </span><span class="p">},</span><span class="w">
-      </span><span class="s2">"UpdateReplacePolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Retain"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"DeletionPolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Retain"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"Metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"aws:cdk:path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CdkWorkoutStack/CdkBucket/Resource"</span><span class="w">
+      </span><span class="nl">"UpdateReplacePolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Retain"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"DeletionPolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Retain"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"Metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"aws:cdk:path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CdkWorkoutStack/CdkBucket/Resource"</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">}</span><span class="w">
@@ -314,7 +325,7 @@
 
 <p>Final step is to create the resources by running</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk deploy
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk deploy
 </code></pre></div></div>
 
 <p>This produces the following results:</p>
@@ -344,7 +355,7 @@
 
 <p>After this change in the code we can review what’s going to be updated by running the following command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk diff
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk diff
 </code></pre></div></div>
 
 <p>and it produces the following result outlining the changes between the current code and the deployed version:</p>
@@ -353,7 +364,7 @@
 
 <p>And the stack can be deleted by running the following command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk destroy
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk destroy
 </code></pre></div></div>
 
 <p>In the CDK version I’m using the default deletion policy is to retain. That’s why when I deleted the stack via CDK it didn’t delete the bucket. In order to change that behaviour I had to change the value to delete as such:</p>
@@ -381,22 +392,22 @@
 <p>This time it produces a CloudFormation template with a different policy:</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"Resources"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"CdkBucket2FB0D10E"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AWS::S3::Bucket"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"Properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"PublicAccessBlockConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-          </span><span class="s2">"BlockPublicAcls"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"BlockPublicPolicy"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="nl">"Resources"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"CdkBucket2FB0D10E"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AWS::S3::Bucket"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"Properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"PublicAccessBlockConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"BlockPublicAcls"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"BlockPublicPolicy"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
         </span><span class="p">},</span><span class="w">
-        </span><span class="s2">"VersioningConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-          </span><span class="s2">"Status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Enabled"</span><span class="w">
+        </span><span class="nl">"VersioningConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"Status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Enabled"</span><span class="w">
         </span><span class="p">}</span><span class="w">
       </span><span class="p">},</span><span class="w">
-      </span><span class="s2">"UpdateReplacePolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Delete"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"DeletionPolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Delete"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"Metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"aws:cdk:path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CdkWorkoutStack/CdkBucket/Resource"</span><span class="w">
+      </span><span class="nl">"UpdateReplacePolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Delete"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"DeletionPolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Delete"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"Metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"aws:cdk:path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CdkWorkoutStack/CdkBucket/Resource"</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">}</span><span class="w">

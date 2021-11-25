@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -151,15 +162,15 @@
 		<p>I have a simple JSON file that contained a bunch of users with their followers which looked like this:</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"user-id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user_2"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"URL"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"following"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="nl">"user-id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user_2"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"avatar"</span><span class="p">:</span><span class="w"> </span><span class="s2">"URL"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"following"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
       </span><span class="s2">"user_10"</span><span class="p">,</span><span class="w">
       </span><span class="s2">"user_6"</span><span class="p">,</span><span class="w">
       </span><span class="s2">"user_1"</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="s2">"followers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="nl">"followers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
       </span><span class="s2">"user_10"</span><span class="w">
     </span><span class="p">]</span><span class="w">
   </span><span class="p">}</span><span class="w">
@@ -209,14 +220,14 @@
 
 <p>So I ended up with two cql files that looked like this</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE (user_1:User { userid: 1 , username: 'user_1', avatar: 'URL' }); 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE (user_1:User { userid: 1 , username: 'user_1', avatar: 'URL' }); 
 CREATE (user_2:User { userid: 2 , username: 'user_2', avatar: 'URL' }); 
 CREATE (user_3:User { userid: 3 , username: 'user_3', avatar: 'URL' }); 
 </code></pre></div></div>
 
 <p>and</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (a), (b) WHERE a.username = 'user_1' AND b.username = 'user_26' CREATE (a)-[:FOLLOWING]-&gt;(b); 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (a), (b) WHERE a.username = 'user_1' AND b.username = 'user_26' CREATE (a)-[:FOLLOWING]-&gt;(b); 
 MATCH (a), (b) WHERE a.username = 'user_1' AND b.username = 'user_53' CREATE (a)-[:FOLLOWING]-&gt;(b); 
 MATCH (a), (b) WHERE a.username = 'user_2' AND b.username = 'user_6' CREATE (a)-[:FOLLOWING]-&gt;(b); 
 </code></pre></div></div>
@@ -234,7 +245,7 @@ MATCH (a), (b) WHERE a.username = 'user_2' AND b.username = 'user_6' CREATE (a)-
 
 <p>I found a workaround for that on <a href="http://stackoverflow.com/questions/21778435/multiple-unrelated-queries-in-neo4j-cypher" target="_blank" rel="noopener noreferrer">SO</a>. So the following works:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (a), (b) WHERE a.username = 'user_1' AND b.username = 'user_14' CREATE (a)-[:FOLLOWING]-&gt;(b); 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (a), (b) WHERE a.username = 'user_1' AND b.username = 'user_14' CREATE (a)-[:FOLLOWING]-&gt;(b); 
 WITH 1 as dummy
 MATCH (a), (b) WHERE a.username = 'user_1' AND b.username = 'user_22' CREATE (a)-[:FOLLOWING]-&gt;(b); 
 </code></pre></div></div>
@@ -262,7 +273,7 @@ MATCH (a), (b) WHERE a.username = 'user_1' AND b.username = 'user_22' CREATE (a)
 
 <p>This launches the Neo4J Command Prompt then the rest is easy:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>neo4jshell -file nodes.cql
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>neo4jshell -file nodes.cql
 
 neo4jshell -file relationships.cql
 </code></pre></div></div>
@@ -583,7 +594,7 @@ neo4jshell -file relationships.cql
 
 <p>MSTest tests:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[TestClass]
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[TestClass]
 public class ComplexMathClassTests
 {
     [TestMethod]
@@ -652,7 +663,7 @@ public class ComplexMathClassTests
 
 <p>Running tests on the server is very simple. For NUnit all we have to do is install the NUnitTestAdapter package:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package NUnitTestAdapter
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package NUnitTestAdapter
 </code></pre></div></div>
 
 <p>After I committed and pushed my code with the failing test I got the notification in a minute:</p>
@@ -663,7 +674,7 @@ public class ComplexMathClassTests
 
 <p>For xUnit the solution is similar, just install the xUnit runner NuGet package and checkin the code</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package xunit.runner.visualstudio
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package xunit.runner.visualstudio
 </code></pre></div></div>
 
 <p>For MSTest it works out of the box so you don’t have to install anything.</p>

@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -169,12 +180,12 @@
 <h4 id="and-lambda">…and Lambda</h4>
 <p>The function is a bit different from the previous version. In Node.js I wasn’t able to use <em>XMLHttpRequest</em> object and turns out your use the http module to make web requests so I modified the code a bit. Here’s the final version of my Lambda function:</p>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Loading function'</span><span class="p">);</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Loading function</span><span class="dl">'</span><span class="p">);</span>
 
-<span class="kd">var</span> <span class="nx">docHost</span> <span class="o">=</span> <span class="s1">'docs.aws.amazon.com'</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">docPath</span> <span class="o">=</span> <span class="s1">'/Route53/latest/DeveloperGuide/registrar-tld-list.html'</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">docHost</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">docs.aws.amazon.com</span><span class="dl">'</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">docPath</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">/Route53/latest/DeveloperGuide/registrar-tld-list.html</span><span class="dl">'</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">supportedTldPage</span> <span class="o">=</span> <span class="nx">docHost</span> <span class="o">+</span> <span class="nx">docPath</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'http'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">http</span><span class="dl">'</span><span class="p">);</span>
 
 <span class="nx">exports</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
@@ -184,18 +195,18 @@
     <span class="p">};</span>
     
     <span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">body</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
-        <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">body</span> <span class="o">=</span> <span class="dl">''</span><span class="p">;</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">data</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">body</span> <span class="o">+=</span> <span class="nx">chunk</span><span class="p">;</span>
         <span class="p">});</span>
         
-        <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'end'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">end</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
             <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span>
             <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">parseHtml</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span>
             <span class="nx">context</span><span class="p">.</span><span class="nx">succeed</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
         <span class="p">});</span>
-    <span class="p">}).</span><span class="nx">on</span><span class="p">(</span><span class="s1">'error'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Got error: "</span> <span class="o">+</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+    <span class="p">}).</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">error</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Got error: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
     <span class="p">});</span>     
 
 <span class="p">};</span>
@@ -205,7 +216,7 @@
     <span class="kd">var</span> <span class="nx">regEx</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="nx">pattern</span><span class="p">);</span>
 
     <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">{};</span>
-    <span class="nx">result</span><span class="p">.</span><span class="nx">url</span> <span class="o">=</span> <span class="s1">'http://'</span> <span class="o">+</span> <span class="nx">supportedTldPage</span><span class="p">;</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">url</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">http://</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">supportedTldPage</span><span class="p">;</span>
     <span class="nx">result</span><span class="p">.</span><span class="nx">date</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">toUTCString</span><span class="p">();</span>
     <span class="nx">result</span><span class="p">.</span><span class="nx">tldList</span> <span class="o">=</span> <span class="p">[];</span>
 
@@ -219,14 +230,14 @@
 
 <p>In order to return a value from Lambda function you have to call succeed, fail or done:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>context.succeed (Object result);
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>context.succeed (Object result);
 context.fail (Error error);
 context.done (Error error, Object result);
 </code></pre></div></div>
 
 <p>Succeed and fail are self-explanatory. done is like a combination of both. If error is non-null it treats it as failure. Even if you call fail or done with an error the HTTP response code is always 200. what changes is the message body. For example, I played around with a few possibilities to test various results:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Method call: context.succeed(result);  
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Method call: context.succeed(result);  
 Output: Full JSON results
 
 Method call: context.done(null, result);  
@@ -259,7 +270,7 @@ Output: {"errorMessage":"FAIL!!!"}
 
 <h4 id="step-01-install-owin-self-host-nuget-package">Step 01. Install OWIN Self-Host NuGet package:</h4>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package Microsoft.AspNet.WebApi.OwinSelfHost
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package Microsoft.AspNet.WebApi.OwinSelfHost
 </code></pre></div></div>
 
 <h4 id="step-02-setup-routing">Step 02. Setup routing</h4>
@@ -311,7 +322,7 @@ Output: {"errorMessage":"FAIL!!!"}
 
 <p>Final step is installation. As I used TopShelf all I had to do was running a command prompt with administrator privileges run this command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>TldProvider.Service.exe install
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>TldProvider.Service.exe install
 
 </code></pre></div></div>
 

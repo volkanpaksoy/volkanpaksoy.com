@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -175,15 +186,15 @@
 <p>The Lambda function is straightforward enough. Just calls the checkDomainAvailability API method with the supplied parameters:</p>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">exports</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">AWS</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'aws-sdk'</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">AWS</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">aws-sdk</span><span class="dl">'</span><span class="p">);</span>
 	<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
-	    <span class="na">region</span><span class="p">:</span> <span class="s2">"us-east-1"</span>
+	    <span class="na">region</span><span class="p">:</span> <span class="dl">"</span><span class="s2">us-east-1</span><span class="dl">"</span>
 	<span class="p">}</span>
 	
 	<span class="kd">var</span> <span class="nx">route53domains</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AWS</span><span class="p">.</span><span class="nx">Route53Domains</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
     
     <span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="na">DomainName</span><span class="p">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">domain</span> <span class="o">+</span> <span class="s1">'.'</span> <span class="o">+</span> <span class="nx">event</span><span class="p">.</span><span class="nx">tld</span>
+        <span class="na">DomainName</span><span class="p">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">domain</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">.</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">event</span><span class="p">.</span><span class="nx">tld</span>
     <span class="p">};</span>
 
     <span class="nx">route53domains</span><span class="p">.</span><span class="nx">checkDomainAvailability</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
@@ -195,7 +206,7 @@
                 <span class="na">Domain</span><span class="p">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">domain</span><span class="p">,</span>
                 <span class="na">Tld</span><span class="p">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">tld</span><span class="p">,</span>
                 <span class="na">CheckDate</span><span class="p">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">toISOString</span><span class="p">(),</span>
-                <span class="na">RequestResult</span><span class="p">:</span> <span class="s2">"OK"</span><span class="p">,</span>
+                <span class="na">RequestResult</span><span class="p">:</span> <span class="dl">"</span><span class="s2">OK</span><span class="dl">"</span><span class="p">,</span>
                 <span class="na">Availability</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">Availability</span>
             <span class="p">};</span>
             

@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -154,28 +165,28 @@
 <p>The <a href="https://api.tfl.gov.uk/line/mode/tube/status?detail=true" target="_blank" rel="noopener noreferrer">API endpoint</a> I will use returns the current status of tube lines, an array of the following JSON objects:</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"$type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tfl.Api.Presentation.Entities.Line, Tfl.Api.Presentation.Entities"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"central"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Central"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"modeName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tube"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-10-14T10:31:00.39"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"modified"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-10-14T10:31:00.39"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"lineStatuses"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="nl">"$type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tfl.Api.Presentation.Entities.Line, Tfl.Api.Presentation.Entities"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"central"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Central"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"modeName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tube"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-10-14T10:31:00.39"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"modified"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-10-14T10:31:00.39"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"lineStatuses"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"$type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tfl.Api.Presentation.Entities.LineStatus, Tfl.Api.Presentation.Entities"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"statusSeverity"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"statusSeverityDescription"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Good Service"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0001-01-01T00:00:00"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"validityPeriods"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+            </span><span class="nl">"$type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tfl.Api.Presentation.Entities.LineStatus, Tfl.Api.Presentation.Entities"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"statusSeverity"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"statusSeverityDescription"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Good Service"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"created"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0001-01-01T00:00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"validityPeriods"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
         </span><span class="p">}</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="s2">"routeSections"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
-    </span><span class="s2">"serviceTypes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="nl">"routeSections"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+    </span><span class="nl">"serviceTypes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"$type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Regular"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"uri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/Line/Route?ids=Central&amp;serviceTypes=Regular"</span><span class="w">
+            </span><span class="nl">"$type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tfl.Api.Presentation.Entities.LineServiceTypeInfo, Tfl.Api.Presentation.Entities"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Regular"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"uri"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/Line/Route?ids=Central&amp;serviceTypes=Regular"</span><span class="w">
         </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -185,54 +196,54 @@
 <p>TFL have standard colours for tube lines which are documented <a href="http://content.tfl.gov.uk/tfl-colour-standard.pdf" target="_blank" rel="noopener noreferrer">here</a>. So I created a small lookup json using that reference:</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bakerloo"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">58</span><span class="p">,</span><span class="w"> </span><span class="s2">"Y"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="s2">"K"</span><span class="p">:</span><span class="w"> </span><span class="mi">33</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">137</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">78</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">36</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"central"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">95</span><span class="p">,</span><span class="w"> </span><span class="s2">"Y"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">36</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">31</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"circle"</span><span class="p">,</span><span class="w">  </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="s2">"Y"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">206</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"district"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"C"</span><span class="p">:</span><span class="w">  </span><span class="mi">95</span><span class="p">,</span><span class="w"> </span><span class="s2">"Y"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="s2">"K"</span><span class="p">:</span><span class="w"> </span><span class="mi">27</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">114</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">41</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"hammersmith-city"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span><span class="w"> </span><span class="s2">"Y"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">215</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">153</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">175</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"jubilee"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"C"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s2">"K"</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">134</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">143</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">152</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"metropolitan"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"C"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s2">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="s2">"K"</span><span class="p">:</span><span class="w"> </span><span class="mi">40</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">117</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">86</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"northern"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"K"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"piccadilly"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"C"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="s2">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">88</span><span class="p">,</span><span class="w"> </span><span class="s2">"K"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">168</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"victoria"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"C"</span><span class="p">:</span><span class="w"> </span><span class="mi">85</span><span class="p">,</span><span class="w"> </span><span class="s2">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">19</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">160</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">226</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"waterloo-city"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"C"</span><span class="p">:</span><span class="w"> </span><span class="mi">47</span><span class="p">,</span><span class="w"> </span><span class="s2">"Y"</span><span class="p">:</span><span class="w"> </span><span class="mi">32</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="s2">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">118</span><span class="p">,</span><span class="w"> </span><span class="s2">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">208</span><span class="p">,</span><span class="w"> </span><span class="s2">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">189</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bakerloo"</span><span class="p">,</span><span class="w"> </span><span class="nl">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">58</span><span class="p">,</span><span class="w"> </span><span class="nl">"Y"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="nl">"K"</span><span class="p">:</span><span class="w"> </span><span class="mi">33</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nl">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nl">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">137</span><span class="p">,</span><span class="w"> </span><span class="nl">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">78</span><span class="p">,</span><span class="w"> </span><span class="nl">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">36</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"central"</span><span class="p">,</span><span class="w"> </span><span class="nl">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">95</span><span class="p">,</span><span class="w"> </span><span class="nl">"Y"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nl">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nl">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">220</span><span class="p">,</span><span class="w"> </span><span class="nl">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">36</span><span class="p">,</span><span class="w"> </span><span class="nl">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">31</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"circle"</span><span class="p">,</span><span class="w">  </span><span class="nl">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="nl">"Y"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nl">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nl">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">255</span><span class="p">,</span><span class="w"> </span><span class="nl">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">206</span><span class="p">,</span><span class="w"> </span><span class="nl">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"district"</span><span class="p">,</span><span class="w"> </span><span class="nl">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"C"</span><span class="p">:</span><span class="w">  </span><span class="mi">95</span><span class="p">,</span><span class="w"> </span><span class="nl">"Y"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="nl">"K"</span><span class="p">:</span><span class="w"> </span><span class="mi">27</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nl">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nl">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">114</span><span class="p">,</span><span class="w"> </span><span class="nl">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">41</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"hammersmith-city"</span><span class="p">,</span><span class="w"> </span><span class="nl">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span><span class="w"> </span><span class="nl">"Y"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nl">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nl">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">215</span><span class="p">,</span><span class="w"> </span><span class="nl">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">153</span><span class="p">,</span><span class="w"> </span><span class="nl">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">175</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"jubilee"</span><span class="p">,</span><span class="w"> </span><span class="nl">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"C"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nl">"K"</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nl">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nl">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">134</span><span class="p">,</span><span class="w"> </span><span class="nl">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">143</span><span class="p">,</span><span class="w"> </span><span class="nl">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">152</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"metropolitan"</span><span class="p">,</span><span class="w"> </span><span class="nl">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"C"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nl">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="nl">"K"</span><span class="p">:</span><span class="w"> </span><span class="mi">40</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nl">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nl">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">117</span><span class="p">,</span><span class="w"> </span><span class="nl">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="nl">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">86</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"northern"</span><span class="p">,</span><span class="w"> </span><span class="nl">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"K"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nl">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nl">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"piccadilly"</span><span class="p">,</span><span class="w"> </span><span class="nl">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"C"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="nl">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">88</span><span class="p">,</span><span class="w"> </span><span class="nl">"K"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nl">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nl">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="nl">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">168</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"victoria"</span><span class="p">,</span><span class="w"> </span><span class="nl">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"C"</span><span class="p">:</span><span class="w"> </span><span class="mi">85</span><span class="p">,</span><span class="w"> </span><span class="nl">"M"</span><span class="p">:</span><span class="w"> </span><span class="mi">19</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nl">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nl">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">160</span><span class="p">,</span><span class="w"> </span><span class="nl">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">226</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"waterloo-city"</span><span class="p">,</span><span class="w"> </span><span class="nl">"CMYK"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"C"</span><span class="p">:</span><span class="w"> </span><span class="mi">47</span><span class="p">,</span><span class="w"> </span><span class="nl">"Y"</span><span class="p">:</span><span class="w"> </span><span class="mi">32</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="nl">"RGB"</span><span class="p">:</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nl">"R"</span><span class="p">:</span><span class="w"> </span><span class="mi">118</span><span class="p">,</span><span class="w"> </span><span class="nl">"G"</span><span class="p">:</span><span class="w"> </span><span class="mi">208</span><span class="p">,</span><span class="w"> </span><span class="nl">"B"</span><span class="p">:</span><span class="w"> </span><span class="mi">189</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre></div></div>
 
 <p>I was hoping to map status values to colours as well (i.e. “Severe delays” to red) but there is no official guide to that. The status codes and values can be retrieved from this endpoint: <a href="https://api.tfl.gov.uk/line/meta/severity" target="_blank" rel="noopener noreferrer">https://api.tfl.gov.uk/line/meta/severity</a> which returns a collection of objects like this:</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"$type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tfl.Api.Presentation.Entities.StatusSeverity, Tfl.Api.Presentation.Entities"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"modeName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tube"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Suspended"</span><span class="w">
+    </span><span class="nl">"$type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tfl.Api.Presentation.Entities.StatusSeverity, Tfl.Api.Presentation.Entities"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"modeName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tube"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Suspended"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div></div>
 
 <p>I simplified it for my purposes (just the values for tube):</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Special Service"</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Closed"</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Suspended"</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Part Suspended"</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Planned Closure"</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Part Closure"</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Severe Delays"</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Reduced Service"</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bus Service"</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Minor Delays"</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Good Service"</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Part Closed"</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Exist Only"</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"No Step Free Access"</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Change of frequency"</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Diverted"</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Not Running"</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Issues Reported"</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"No Issues"</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">19</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Information"</span><span class="w"> </span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Service Closed"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Special Service"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Closed"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Suspended"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Part Suspended"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Planned Closure"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Part Closure"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Severe Delays"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Reduced Service"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bus Service"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Minor Delays"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Good Service"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Part Closed"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Exist Only"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"No Step Free Access"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Change of frequency"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Diverted"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Not Running"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Issues Reported"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">18</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"No Issues"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">19</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Information"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"severityLevel"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Service Closed"</span><span class="w"> </span><span class="p">},</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre></div></div>
 
@@ -578,7 +589,7 @@
 
 <p>It can handle DELETE, GET, HEAD, OPTIONS, POST, PUT and PATCH requests. It’s very easy to customize and extend as it’s module-based. In order to build our tiny web server we are going to need self-hosting package:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package Nancy.Hosting.Self
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package Nancy.Hosting.Self
 </code></pre></div></div>
 
 <p>This would automatically install Nancy as it depends on that package.</p>
@@ -621,7 +632,7 @@
 
 <p>saying:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The Nancy self host was unable to start, as no namespace reservation existed for the provided url(s).
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The Nancy self host was unable to start, as no namespace reservation existed for the provided url(s).
 
 Please either enable UrlReservations.CreateAutomatically on the HostConfiguration provided to 
 the NancyHost, or create the reservations manually with the (elevated) command(s):
@@ -635,7 +646,7 @@ netsh http add urlacl url="http://+:12345/" user="Everyone"
   <li>
     <p>In an elevated command prompt (fancy way of saying run as administrator!), run</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code> netsh http add urlacl url="http://+:12345/" user="Everyone"
 </code></pre></div>    </div>
 
@@ -647,7 +658,7 @@ netsh http add urlacl url="http://+:12345/" user="Everyone"
 
     <p>If you want to delete it later on you can use the following command</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code> netsh http delete urlacl url=http://+:12345/
 </code></pre></div>    </div>
   </li>
@@ -728,7 +739,7 @@ netsh http add urlacl url="http://+:12345/" user="Everyone"
 
 <p>And send the GET request:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET http://localhost:12345/user/666 HTTP/1.1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET http://localhost:12345/user/666 HTTP/1.1
 User-Agent: Fiddler
 Host: localhost:12345
 Content-Length: 2
@@ -736,7 +747,7 @@ Content-Length: 2
 
 <p>which would return the response:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
 Content-Type: text/html
 Server: Microsoft-HTTPAPI/2.0
 Date: Tue, 10 Nov 2015 11:40:08 GMT
@@ -748,7 +759,7 @@ All hail user #666! \m/
 <h2 id="working-with-input-data-request-body">Working with input data: Request body</h2>
 <p>Now let’s try to handle the data posted in the request body. Data posted in the body can be accessed though <strong>this.Request.Body</strong> property such as for the following request</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>POST http://localhost:12345/ HTTP/1.1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>POST http://localhost:12345/ HTTP/1.1
 User-Agent: Fiddler
 Host: localhost:12345
 Content-Length: 55
@@ -776,7 +787,7 @@ Content-Type: application/json
 </code></pre></div></div>
 <p>If the was posted from a form for example and sent in the following format in the body</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>username=volkan&amp;isAdmin=sure!
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>username=volkan&amp;isAdmin=sure!
 </code></pre></div></div>
 
 <p>then we could simply convert it to a dictionary with a little bit of LINQ:</p>
@@ -801,7 +812,7 @@ Content-Type: application/json
 
 <p>This is nice but it’s a lot of work to read the whole and manually deserialize it! Fortunately Nancy supports model binding. First we need to add the using statement as the <strong>Bind</strong> extension method lives in <em>Nancy.ModelBinding</em></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>using Nancy.ModelBinding;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>using Nancy.ModelBinding;
 </code></pre></div></div>
 
 <p>Now we can simplify the code by the help of model binding:</p>
@@ -815,7 +826,7 @@ Content-Type: application/json
 
 <p>The important thing to note is to send the data with the appropriate content type. For the form data example the request should be like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>POST http://localhost:12345/ HTTP/1.1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>POST http://localhost:12345/ HTTP/1.1
 User-Agent: Fiddler
 Host: localhost:12345
 Content-Length: 29
@@ -837,7 +848,7 @@ username=volkan&amp;isAdmin=sure!
 
 <p>which would yield this HTTP message on the wire:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
 Content-Type: text/html
 Server: Microsoft-HTTPAPI/2.0
 Date: Tue, 10 Nov 2015 15:48:12 GMT
@@ -855,7 +866,7 @@ This is a valid response
 
 <p>which would produce:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 405 Method Not Allowed
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 405 Method Not Allowed
 Content-Type: text/html
 Server: Microsoft-HTTPAPI/2.0
 Date: Tue, 10 Nov 2015 15:51:36 GMT
@@ -886,7 +897,7 @@ Content-Length: 0
 
 <p>and we would get this at the other end of the line:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 Because why not!
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 Because why not!
 Content-Type: application/json
 Server: Microsoft-HTTPAPI/2.0
 X-Custom-Header: Sup?
@@ -910,7 +921,7 @@ Content-Length: 47
 
 <p>and the result would contain the appropriate header and status code:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
 Content-Type: application/json; charset=utf-8
 Server: Microsoft-HTTPAPI/2.0
 Date: Tue, 10 Nov 2015 16:19:18 GMT
@@ -942,7 +953,7 @@ System.Security.SecurityException Failed to negotiate HTTPS connection with serv
   <li>Create a self-signed certificate: Open a Visual Studio command prompt and enter the following command:</li>
 </ol>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>makecert nancy.cer
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>makecert nancy.cer
 </code></pre></div></div>
 
 <p>You can provide more properties so that it would look with a name that makes sense. Here’s an MSD page to</p>
@@ -978,7 +989,7 @@ System.Security.SecurityException Failed to negotiate HTTPS connection with serv
   <li>Now enter the following commands. The first one is the same as before, just with HTTPS as protocol. The second command add the certificate we’ve just created.</li>
 </ol>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>netsh http add urlacl url=https://+:12345/ user="Everyone"
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>netsh http add urlacl url=https://+:12345/ user="Everyone"
 
 netsh http add sslcert ipport=0.0.0.0:1234 ccerthash=653a1c60d4daaae00b2a103f242eac965ca21bec appid={A0DEC7A4-CF28-42FD-9B85-AFFDDD4FDD0F} clientcertnegotiation=enable
 </code></pre></div></div>
@@ -995,7 +1006,7 @@ netsh http add sslcert ipport=0.0.0.0:1234 ccerthash=653a1c60d4daaae00b2a103f242
 
 <p>This request</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET https://localhost:12345 HTTP/1.1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET https://localhost:12345 HTTP/1.1
 Host: localhost:12345
 
 
@@ -1003,7 +1014,7 @@ Host: localhost:12345
 
 <p>returns this response</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
 Content-Type: text/html
 Server: Microsoft-HTTPAPI/2.0
 Date: Wed, 11 Nov 2015 10:24:58 GMT
@@ -1174,7 +1185,7 @@ Response over HTTPS! Weeee!
 
 <p>Now to complete the circle we need to export our plugins with <em>Export</em> attribute such as:</p>
 
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[Export(typeof(IIpChecker))]</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="nf">Export</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">IIpChecker</span><span class="p">))]</span>
 <span class="k">public</span> <span class="k">class</span> <span class="nc">AwsIPChecker</span> <span class="p">:</span> <span class="n">IIpChecker</span>
 <span class="p">{</span>
     <span class="k">public</span> <span class="kt">string</span> <span class="nf">GetExternalIp</span><span class="p">()</span>
@@ -1186,7 +1197,7 @@ Response over HTTPS! Weeee!
 
 <p>Alternatively we can use InheritedExport attribute on the interface to export any class that implements the IIpChecker interface.</p>
 
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[InheritedExport(typeof(IIpChecker))]</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="nf">InheritedExport</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">IIpChecker</span><span class="p">))]</span>
 <span class="k">public</span> <span class="k">interface</span> <span class="nc">IIpChecker</span>
 <span class="p">{</span>
     <span class="kt">string</span> <span class="nf">GetExternalIp</span><span class="p">();</span>
@@ -1242,10 +1253,10 @@ Response over HTTPS! Weeee!
 
 <p>And on the plugins we fill that data and export it using the <em>ExportMetadata</em> attribute:</p>
 
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[Export(typeof(IIpChecker))]</span>
-<span class="na">[ExportMetadata("DisplayName", "Custom IP Checker")]</span>
-<span class="na">[ExportMetadata("Description", "Uses homebrew service developed with Node.js and hosted on Heroku")]</span>
-<span class="na">[ExportMetadata("Version", "2.1")]</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="nf">Export</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">IIpChecker</span><span class="p">))]</span>
+<span class="p">[</span><span class="nf">ExportMetadata</span><span class="p">(</span><span class="s">"DisplayName"</span><span class="p">,</span> <span class="s">"Custom IP Checker"</span><span class="p">)]</span>
+<span class="p">[</span><span class="nf">ExportMetadata</span><span class="p">(</span><span class="s">"Description"</span><span class="p">,</span> <span class="s">"Uses homebrew service developed with Node.js and hosted on Heroku"</span><span class="p">)]</span>
+<span class="p">[</span><span class="nf">ExportMetadata</span><span class="p">(</span><span class="s">"Version"</span><span class="p">,</span> <span class="s">"2.1"</span><span class="p">)]</span>
 <span class="k">public</span> <span class="k">class</span> <span class="nc">CustomIpChecker</span> <span class="p">:</span> <span class="n">IIpChecker</span>
 <span class="p">{</span>
     <span class="c1">// ...</span>
@@ -1254,7 +1265,7 @@ Response over HTTPS! Weeee!
 
 <p>In v1, we only imported a list of objects implementing IIpChecker. So how do we accommodate this new piece of information? In order to do that we have to change the way we import the plugins and use the <em>Lazy</em> construct:</p>
 
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[ImportMany]</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="n">ImportMany</span><span class="p">]</span>
 <span class="k">public</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Lazy</span><span class="p">&lt;</span><span class="n">IIpChecker</span><span class="p">,</span> <span class="n">IPluginInfo</span><span class="p">&gt;&gt;</span> <span class="n">Plugins</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 </code></pre></div></div>
 
@@ -1317,7 +1328,7 @@ Response over HTTPS! Weeee!
 
 <p>By default recomposition is disabled so we have to specify it explicitly while importing parts:</p>
 
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[ImportMany(AllowRecomposition = true)]</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="nf">ImportMany</span><span class="p">(</span><span class="n">AllowRecomposition</span> <span class="p">=</span> <span class="k">true</span><span class="p">)]</span>
 <span class="k">public</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Lazy</span><span class="p">&lt;</span><span class="n">IIpChecker</span><span class="p">,</span> <span class="n">IPluginInfo</span><span class="p">&gt;&gt;</span> <span class="n">Plugins</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 </code></pre></div></div>
 

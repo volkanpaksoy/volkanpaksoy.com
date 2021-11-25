@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -304,7 +315,7 @@ http://www.w3.org/2001/XMLSchema"</span><span class="nt">&gt;</span>
 
 <p>and</p>
 
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[XmlRoot]</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="n">XmlRoot</span><span class="p">]</span>
 <span class="k">public</span> <span class="k">class</span> <span class="nc">PlayerList</span>
 <span class="p">{</span>
     <span class="p">[</span><span class="nf">XmlElement</span><span class="p">(</span><span class="s">"Player"</span><span class="p">)]</span>
@@ -314,7 +325,7 @@ http://www.w3.org/2001/XMLSchema"</span><span class="nt">&gt;</span>
 
 <p>and we can get the list of objects by:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>string inputXmlPath1 = @".\InputXml.xml";
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>string inputXmlPath1 = @".\InputXml.xml";
 using (StreamReader reader = new StreamReader(inputXmlPath1))
 {
     XmlSerializer playerListSerializer = new XmlSerializer(typeof(PlayerList));
@@ -347,7 +358,7 @@ using (StreamReader reader = new StreamReader(inputXmlPath1))
 
 <p>This works when the class name matches the <em>XmlElement</em> name. If you need to customize your class’s name (like <em>FinalPlayer</em> in my example) you need to decorate the class with <em>XmlType</em> and supply the element name so that the serializer can do the mapping.</p>
 
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">[XmlType("Player")]</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="nf">XmlType</span><span class="p">(</span><span class="s">"Player"</span><span class="p">)]</span>
 <span class="k">public</span> <span class="k">class</span> <span class="nc">FinalPlayer</span>
 <span class="p">{</span>
     <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>

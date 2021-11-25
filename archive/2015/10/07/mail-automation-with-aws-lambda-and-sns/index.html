@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -156,28 +167,28 @@ For the most up-to-date version of this project please visit the <a href="https:
 <h2 id="step-1-prepare-a-function-to-send-emails">Step 1: Prepare a function to send emails</h2>
 <p>Developing a simple node.js function that sends E-mails was simple. First I needed the install two modules:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install nodemailer
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install nodemailer
 npm install nodemailer-smtp-transport
 </code></pre></div></div>
 
 <p>And the function is straightforward:</p>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">transporter</span> <span class="o">=</span> <span class="nx">nodemailer</span><span class="p">.</span><span class="nx">createTransport</span><span class="p">(</span><span class="nx">smtpTransport</span><span class="p">({</span>
-    <span class="na">host</span><span class="p">:</span> <span class="s1">'email-smtp.eu-west-1.amazonaws.com'</span><span class="p">,</span>
+    <span class="na">host</span><span class="p">:</span> <span class="dl">'</span><span class="s1">email-smtp.eu-west-1.amazonaws.com</span><span class="dl">'</span><span class="p">,</span>
     <span class="na">port</span><span class="p">:</span> <span class="mi">587</span><span class="p">,</span>
     <span class="na">auth</span><span class="p">:</span> <span class="p">{</span>
-        <span class="na">user</span><span class="p">:</span> <span class="s1">'{ACCESS KEY}'</span><span class="p">,</span>
-        <span class="na">pass</span><span class="p">:</span> <span class="s1">'{SECRET KEY}'</span>
+        <span class="na">user</span><span class="p">:</span> <span class="dl">'</span><span class="s1">{ACCESS KEY}</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">pass</span><span class="p">:</span> <span class="dl">'</span><span class="s1">{SECRET KEY}</span><span class="dl">'</span>
     <span class="p">}</span>
 <span class="p">}));</span>
 
-<span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="s1">'Hi, Invoice! Thanks!'</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">Hi, Invoice! Thanks!</span><span class="dl">'</span><span class="p">;</span>
 
 <span class="kd">var</span> <span class="nx">mailOptions</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="na">from</span><span class="p">:</span> <span class="s1">'from@me.net'</span><span class="p">,</span>
-    <span class="na">to</span><span class="p">:</span> <span class="s1">'to@someone.net'</span><span class="p">,</span>
-    <span class="na">bcc</span><span class="p">:</span> <span class="s1">'me2@me.com'</span><span class="p">,</span>
-    <span class="na">subject</span><span class="p">:</span> <span class="s1">'Invoice'</span><span class="p">,</span>
+    <span class="na">from</span><span class="p">:</span> <span class="dl">'</span><span class="s1">from@me.net</span><span class="dl">'</span><span class="p">,</span>
+    <span class="na">to</span><span class="p">:</span> <span class="dl">'</span><span class="s1">to@someone.net</span><span class="dl">'</span><span class="p">,</span>
+    <span class="na">bcc</span><span class="p">:</span> <span class="dl">'</span><span class="s1">me2@me.com</span><span class="dl">'</span><span class="p">,</span>
+    <span class="na">subject</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Invoice</span><span class="dl">'</span><span class="p">,</span>
     <span class="na">text</span><span class="p">:</span> <span class="nx">text</span> 
 <span class="p">};</span>
 
@@ -185,14 +196,14 @@ npm install nodemailer-smtp-transport
       <span class="k">if</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
 		<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
       <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-		<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Message sent'</span><span class="p">);</span>
+		<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Message sent</span><span class="dl">'</span><span class="p">);</span>
       <span class="p">}</span>
   <span class="p">});</span>
 </code></pre></div></div>
 
 <p>The challenge was deployment as the script had some dependencies. If you choose Edit Inline and just paste the script you would get an error like this</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"errorMessage": "Cannot find module 'nodemailer'",
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"errorMessage": "Cannot find module 'nodemailer'",
 </code></pre></div></div>
 
 <p>But it’s very easy to deploy a full package with dependencies. Just zip everything in the folder (wihtout the folder itself) and upload the zip file. The downside of this method is you can no longer edit the code inline. So even just for fixing a trivial typo you need to re-zip and re-upload.</p>
@@ -200,7 +211,7 @@ npm install nodemailer-smtp-transport
 <h2 id="step-2-schedule-the-process">Step 2: Schedule the process</h2>
 <p>One simple method to schedule the process is to invoke the method using Powershell and schedule a task to run the script:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Invoke-LMFunction -FunctionName automatedEmails -AccessKey accessKey -SecretKey secretKey -Region eu-west-1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Invoke-LMFunction -FunctionName automatedEmails -AccessKey accessKey -SecretKey secretKey -Region eu-west-1
 </code></pre></div></div>
 
 <p>But I don’t want a dependency on any machine (local or EC2 instance). Otherwise I could write a few lines of code in C# to do the same job anyway. The idea of using Lambda is to avoid maintenance and let everything run on infrastructure that’s maintained by AWS.</p>

@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -151,28 +162,28 @@
 
 <p>Match clause allows to define patterns to search the database. It is similar to <em>SELECT</em> in the RDBMS-world.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (n) RETURN n
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (n) RETURN n
 </code></pre></div></div>
 
 <p>The query above returns all nodes in the database. In this example n is a temporary variable to store the result. The results can be filtered based on labels such as:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (n:Person) RETURN n
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (n:Person) RETURN n
 </code></pre></div></div>
 
 <p>Property-based filters can be used in both MATCH and WHERE clauses. For example the two queries below return the same results:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (n:Movie {title: "Ninja Assassin"})
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (n:Movie {title: "Ninja Assassin"})
 RETURN n
 </code></pre></div></div>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (n:Movie)
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (n:Movie)
 WHERE n.title = "Ninja Assassin"
 RETURN n
 </code></pre></div></div>
 
 <p>Instead of returning the entire node we can just select some specific properties. If a node doesn’t have the property it simply returns null.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (a:Person)
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (a:Person)
 RETURN a.name, a.born
 </code></pre></div></div>
 
@@ -180,7 +191,7 @@ RETURN a.name, a.born
 
 <p>Results can be filtered by relationships as well. For example the query below returns the movies Tom Hanks acted in</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (p {name:"Tom Hanks"})-[:ACTED_IN]-&gt;(m)
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (p {name:"Tom Hanks"})-[:ACTED_IN]-&gt;(m)
 RETURN p, m
 </code></pre></div></div>
 
@@ -188,7 +199,7 @@ RETURN p, m
 
 <p>Sometimes we might need to learn the relationship from the query. In that case we can use <em>TYPE</em> function to get the name of the relationship:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (a)-[r1]-&gt;(m)&lt;-[r2]-(a)
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (a)-[r1]-&gt;(m)&lt;-[r2]-(a)
 RETURN a.name, m.title, type(r1), type(r2)
 </code></pre></div></div>
 
@@ -200,7 +211,7 @@ RETURN a.name, m.title, type(r1), type(r2)
 
 <p><em>OPTIONAL MATCH</em>: OPTIONAL keyword fills in the missing parts in the results with nulls. For example the query below returns 1 row as null because there is no outgoing relationship from the movie <em>The Matrix</em>. If we didn’t use OPTIONAL we would have an empty resultset.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (a:Movie {title: 'The Matrix'})
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (a:Movie {title: 'The Matrix'})
 OPTIONAL MATCH (a)-[]-&gt;(d)
 RETURN d  
 </code></pre></div></div>
@@ -209,30 +220,30 @@ RETURN d
 
 <p>To add new data <em>CREATE</em> query is used. In the simplest form the following query creates (a rather useless) node:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE ()
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE ()
 </code></pre></div></div>
 
 <p>Labels and properties can be set while creating new nodes such as:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE (a:Actor {name: "Leonard Nimoy", born: 1931, died: 2015})
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE (a:Actor {name: "Leonard Nimoy", born: 1931, died: 2015})
 </code></pre></div></div>
 
 <p>Relationships are created with <em>CREATE</em> as well. For example the following query creates 2 nodes with Person label and creates a <em>MARRIED_TO</em> relationship between them:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE (NedStark:Person {firstname: "Eddard", lastname: "Stark", alias: "Ned", gender: "male"}),
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE (NedStark:Person {firstname: "Eddard", lastname: "Stark", alias: "Ned", gender: "male"}),
 	   (CatelynStark:Person {firstname: "Catelyn", lastname: "Stark", maidenName: "Tully", gender: "female"})
 CREATE (NedStark)-[:MARRIED_TO]-&gt;(CatelynStark)
 </code></pre></div></div>
 
 <p>Relationships can have properties too:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE
 	(WaymarRoyce)-[:MEMBER_OF {order:"Ranger"}]-&gt;(NightsWatch)
 </code></pre></div></div>
 
 <p>Properties can be added or updated by using SET keyword such as:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (p:Person {firstname: "Eddard"})
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (p:Person {firstname: "Eddard"})
 SET p.title = "Lord of Winterfell"
 RETURN p
 </code></pre></div></div>
@@ -241,7 +252,7 @@ RETURN p
 
 <p>An existing property can be deleted by REMOVE keyword</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (p:Person {firstname: "Eddard"})
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (p:Person {firstname: "Eddard"})
 REMOVE p.aliasList
 </code></pre></div></div>
 
@@ -249,7 +260,7 @@ REMOVE p.aliasList
 
 <p>Merge can be used to create new nodes/relationships or update them if they already exist. In the case of update, all the existing properties must match. For example the following query adds a new property to the node named <em>House Stark of Winterfell</em></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE (houseStark:House {name: "House Stark of Winterfell", words: "Winter is coming"})
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE (houseStark:House {name: "House Stark of Winterfell", words: "Winter is coming"})
 
 MERGE (houseStark {name: "House Stark of Winterfell", words: "Winter is coming"})
 SET houseStark.founded = "Age of Heroes"
@@ -257,7 +268,7 @@ SET houseStark.founded = "Age of Heroes"
 
 <p>The following one, on the other hand creates a new node with the same name (because the <em>words</em> properties don’t match):</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MERGE (houseStark:House {name: "House Stark of Winterfell", words: "Winter is coming!!!"})
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MERGE (houseStark:House {name: "House Stark of Winterfell", words: "Winter is coming!!!"})
 SET houseStark.founded = "Age of Heroes"
 RETURN houseStark
 </code></pre></div></div>
@@ -266,12 +277,12 @@ RETURN houseStark
 
 <p>Another way to prevent this is unique constraints. For example the following query will enforce uniqueness on <em>_id</em> property for nodes labelled as <em>Book</em>.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE CONSTRAINT ON (book:Book) ASSERT book._id IS UNIQUE
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE CONSTRAINT ON (book:Book) ASSERT book._id IS UNIQUE
 </code></pre></div></div>
 
 <p>Now we can run this query and create the books:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE 
 	(AGameOfThrones:Book {_id: "7abe0a1c-b9bd-4f00-b094-a82dfb32b053", title: "A Game of Thrones", orderInSeries: 1, released:"August 1996"}),
  	(AClashOfKings:Book {_id: "051dae64-dfdb-4134-bc43-f6d2b4b57d37", title: "A Clash of Kings", orderInSeries: 2, released:"November 1998"}),
  	(AStormOfSwords:Book {_id: "e9baa042-2fc8-49a6-adcc-6dd455f0ba12", title: "A Storm of Swords", orderInSeries: 3, released:"August 2000"}),
@@ -290,26 +301,26 @@ RETURN houseStark
 
 <p>To delete the constraint we use DROP keyword such as</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DROP CONSTRAINT ON (book:Book) ASSERT book._id IS UNIQUE
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DROP CONSTRAINT ON (book:Book) ASSERT book._id IS UNIQUE
 </code></pre></div></div>
 
 <h4 id="delete">DELETE</h4>
 
 <p>To delete nodes first we find them by MATCH. Instead of RETURN in the above examples we use DELETE to remove them.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (b:Book {_id: "7abe0a1c-b9bd-4f00-b094-a82dfb32b053"})
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (b:Book {_id: "7abe0a1c-b9bd-4f00-b094-a82dfb32b053"})
 DELETE b
 </code></pre></div></div>
 
 <p>The above query would only work if the node doesn’t have any relationships. To delete a node as well as its relationships we can use the following:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (b {_id: "7abe0a1c-b9bd-4f00-b094-a82dfb32b053"})-[r]-()
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (b {_id: "7abe0a1c-b9bd-4f00-b094-a82dfb32b053"})-[r]-()
 DELETE b, r
 </code></pre></div></div>
 
 <p>We can generalize the above query to clean the entire database:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (n)
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (n)
 OPTIONAL MATCH (n)-[r]-() 
 DELETE n, r
 </code></pre></div></div>
@@ -342,7 +353,7 @@ DELETE n, r
 
 <p>Another similar keyword from RDBMS is <em>UNION</em>. Similar to standard SQL, the returned columns must have the same number and names. For example the following will fail:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (p:Person)
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (p:Person)
 RETURN p.name
 UNION
 MATCH (m:Movie)
@@ -353,7 +364,7 @@ RETURN m.title
 
 <p>But with using an alias it can be fixed like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (p:Person)
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MATCH (p:Person)
 RETURN p.name AS name
 UNION
 MATCH (m:Movie)

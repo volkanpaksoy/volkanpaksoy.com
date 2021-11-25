@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -184,17 +195,17 @@
 
 <p>At this point API Gateway assigned a non-user-friendly URL already:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://81dkdt6q81.execute-api.eu-west-2.amazonaws.com/test
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://81dkdt6q81.execute-api.eu-west-2.amazonaws.com/test
 </code></pre></div></div>
 
 <p>This is the root domain of the API. So I was able to call the endpoint like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://81dkdt6q81.execute-api.eu-west-2.amazonaws.com/test/albums
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://81dkdt6q81.execute-api.eu-west-2.amazonaws.com/test/albums
 </code></pre></div></div>
 
 <p>My goal was to get it working with my own domain such as:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://hmdb.myvirtualhome.net/albums
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://hmdb.myvirtualhome.net/albums
 </code></pre></div></div>
 
 <h2 id="step-4-generate-the-certificate-in-acm">Step 4: Generate the certificate in ACM</h2>
@@ -242,22 +253,22 @@
 
 <p>So I had to do it via CLI as below:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws route53 change-resource-record-sets --hosted-zone-id {ZONE_ID_OF_MY_DOMAIN} --change-batch file://changedns.json
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws route53 change-resource-record-sets --hosted-zone-id {ZONE_ID_OF_MY_DOMAIN} --change-batch file://changedns.json
 </code></pre></div></div>
 
 <p>whereas the contents of changedns.json were</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"Changes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+  </span><span class="nl">"Changes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CREATE"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"ResourceRecordSet"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"api.hmdb.myvirtualhome.net"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"A"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"AliasTarget"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-          </span><span class="s2">"DNSName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"d-xyz.execute-api.eu-west-2.amazonaws.com"</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"HostedZoneId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ZJ5UAJN8Y3Z2Q"</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"EvaluateTargetHealth"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+      </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CREATE"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"ResourceRecordSet"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"Name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"api.hmdb.myvirtualhome.net"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"A"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"AliasTarget"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"DNSName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"d-xyz.execute-api.eu-west-2.amazonaws.com"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"HostedZoneId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ZJ5UAJN8Y3Z2Q"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"EvaluateTargetHealth"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
         </span><span class="p">}</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">}</span><span class="w">
@@ -278,13 +289,13 @@
 <p>Create a new policy using the JSON template below and attach it to the new user</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="nl">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VisualEditor0"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"route53:ChangeResourceRecordSets"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:route53:::hostedzone/{ZONE ID OF YOUR DOMAIN}"</span><span class="w">
+            </span><span class="nl">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VisualEditor0"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"route53:ChangeResourceRecordSets"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:route53:::hostedzone/{ZONE ID OF YOUR DOMAIN}"</span><span class="w">
         </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -292,14 +303,14 @@
 
 <h4 id="3-create-a-new-profile-for-the-user">3. Create a new profile for the user</h4>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws configure --profile temp-route53-profile
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws configure --profile temp-route53-profile
 </code></pre></div></div>
 
 <p>and set the Access/Secret keys along with the region of your hosted zone.</p>
 
 <p>Then you run the first CLI command with providing profile name:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws route53 change-resource-record-sets --hosted-zone-id {ZONE_ID_OF_MY_DOMAIN} --change-batch file://changedns.json --profile temp-route53-profile
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws route53 change-resource-record-sets --hosted-zone-id {ZONE_ID_OF_MY_DOMAIN} --change-batch file://changedns.json --profile temp-route53-profile
 </code></pre></div></div>
 
 <p>An important point here is to get your hosted zone ID from Route53. In the API Gateway, it shows a hosted zone ID which is actually AWS API Gateway zone ID. We use that zone ID in our DNS configuration (which is in changedns.json file in this example) but when we provide the hosted zone ID on the command line we provide our domain ID which can be found in Route53.</p>

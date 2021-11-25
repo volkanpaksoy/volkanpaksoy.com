@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -212,7 +223,7 @@
 
 <p>As stated in <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html" target="_blank" rel="noopener noreferrer">this</a> document:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>When you create a new account, AWS Organizations initially assigns password 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>When you create a new account, AWS Organizations initially assigns password 
 to the root user that is a minimum of 64 characters long. All characters 
 are randomly generated with no guarantees on the appearance of certain 
 character sets. You can't retrieve this initial password. To access the
@@ -247,7 +258,7 @@ process for password recovery.
 <h2 id="managing-accounts-programmatically">Managing Accounts Programmatically</h2>
 <p>The coolest thing about AWS Organizations is accounts can be created via command line. It’s easy as this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>JOTUNHEIM:~ volkan$ aws organizations create-account --account-name {NAME}  --email {EMAIL}
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>JOTUNHEIM:~ volkan$ aws organizations create-account --account-name {NAME}  --email {EMAIL}
 {
     "CreateAccountStatus": {
         "Id": "xyz-abcabcabcabcabcabcabcabcabcabcab",

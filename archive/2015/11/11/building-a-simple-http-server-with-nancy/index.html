@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -153,7 +164,7 @@
 
 <p>It can handle DELETE, GET, HEAD, OPTIONS, POST, PUT and PATCH requests. It’s very easy to customize and extend as it’s module-based. In order to build our tiny web server we are going to need self-hosting package:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package Nancy.Hosting.Self
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package Nancy.Hosting.Self
 </code></pre></div></div>
 
 <p>This would automatically install Nancy as it depends on that package.</p>
@@ -196,7 +207,7 @@
 
 <p>saying:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The Nancy self host was unable to start, as no namespace reservation existed for the provided url(s).
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The Nancy self host was unable to start, as no namespace reservation existed for the provided url(s).
 
 Please either enable UrlReservations.CreateAutomatically on the HostConfiguration provided to 
 the NancyHost, or create the reservations manually with the (elevated) command(s):
@@ -210,7 +221,7 @@ netsh http add urlacl url="http://+:12345/" user="Everyone"
   <li>
     <p>In an elevated command prompt (fancy way of saying run as administrator!), run</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code> netsh http add urlacl url="http://+:12345/" user="Everyone"
 </code></pre></div>    </div>
 
@@ -222,7 +233,7 @@ netsh http add urlacl url="http://+:12345/" user="Everyone"
 
     <p>If you want to delete it later on you can use the following command</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code> netsh http delete urlacl url=http://+:12345/
 </code></pre></div>    </div>
   </li>
@@ -303,7 +314,7 @@ netsh http add urlacl url="http://+:12345/" user="Everyone"
 
 <p>And send the GET request:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET http://localhost:12345/user/666 HTTP/1.1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET http://localhost:12345/user/666 HTTP/1.1
 User-Agent: Fiddler
 Host: localhost:12345
 Content-Length: 2
@@ -311,7 +322,7 @@ Content-Length: 2
 
 <p>which would return the response:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
 Content-Type: text/html
 Server: Microsoft-HTTPAPI/2.0
 Date: Tue, 10 Nov 2015 11:40:08 GMT
@@ -323,7 +334,7 @@ All hail user #666! \m/
 <h2 id="working-with-input-data-request-body">Working with input data: Request body</h2>
 <p>Now let’s try to handle the data posted in the request body. Data posted in the body can be accessed though <strong>this.Request.Body</strong> property such as for the following request</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>POST http://localhost:12345/ HTTP/1.1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>POST http://localhost:12345/ HTTP/1.1
 User-Agent: Fiddler
 Host: localhost:12345
 Content-Length: 55
@@ -351,7 +362,7 @@ Content-Type: application/json
 </code></pre></div></div>
 <p>If the was posted from a form for example and sent in the following format in the body</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>username=volkan&amp;isAdmin=sure!
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>username=volkan&amp;isAdmin=sure!
 </code></pre></div></div>
 
 <p>then we could simply convert it to a dictionary with a little bit of LINQ:</p>
@@ -376,7 +387,7 @@ Content-Type: application/json
 
 <p>This is nice but it’s a lot of work to read the whole and manually deserialize it! Fortunately Nancy supports model binding. First we need to add the using statement as the <strong>Bind</strong> extension method lives in <em>Nancy.ModelBinding</em></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>using Nancy.ModelBinding;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>using Nancy.ModelBinding;
 </code></pre></div></div>
 
 <p>Now we can simplify the code by the help of model binding:</p>
@@ -390,7 +401,7 @@ Content-Type: application/json
 
 <p>The important thing to note is to send the data with the appropriate content type. For the form data example the request should be like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>POST http://localhost:12345/ HTTP/1.1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>POST http://localhost:12345/ HTTP/1.1
 User-Agent: Fiddler
 Host: localhost:12345
 Content-Length: 29
@@ -412,7 +423,7 @@ username=volkan&amp;isAdmin=sure!
 
 <p>which would yield this HTTP message on the wire:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
 Content-Type: text/html
 Server: Microsoft-HTTPAPI/2.0
 Date: Tue, 10 Nov 2015 15:48:12 GMT
@@ -430,7 +441,7 @@ This is a valid response
 
 <p>which would produce:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 405 Method Not Allowed
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 405 Method Not Allowed
 Content-Type: text/html
 Server: Microsoft-HTTPAPI/2.0
 Date: Tue, 10 Nov 2015 15:51:36 GMT
@@ -461,7 +472,7 @@ Content-Length: 0
 
 <p>and we would get this at the other end of the line:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 Because why not!
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 Because why not!
 Content-Type: application/json
 Server: Microsoft-HTTPAPI/2.0
 X-Custom-Header: Sup?
@@ -485,7 +496,7 @@ Content-Length: 47
 
 <p>and the result would contain the appropriate header and status code:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
 Content-Type: application/json; charset=utf-8
 Server: Microsoft-HTTPAPI/2.0
 Date: Tue, 10 Nov 2015 16:19:18 GMT
@@ -517,7 +528,7 @@ System.Security.SecurityException Failed to negotiate HTTPS connection with serv
   <li>Create a self-signed certificate: Open a Visual Studio command prompt and enter the following command:</li>
 </ol>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>makecert nancy.cer
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>makecert nancy.cer
 </code></pre></div></div>
 
 <p>You can provide more properties so that it would look with a name that makes sense. Here’s an MSD page to</p>
@@ -553,7 +564,7 @@ System.Security.SecurityException Failed to negotiate HTTPS connection with serv
   <li>Now enter the following commands. The first one is the same as before, just with HTTPS as protocol. The second command add the certificate we’ve just created.</li>
 </ol>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>netsh http add urlacl url=https://+:12345/ user="Everyone"
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>netsh http add urlacl url=https://+:12345/ user="Everyone"
 
 netsh http add sslcert ipport=0.0.0.0:1234 ccerthash=653a1c60d4daaae00b2a103f242eac965ca21bec appid={A0DEC7A4-CF28-42FD-9B85-AFFDDD4FDD0F} clientcertnegotiation=enable
 </code></pre></div></div>
@@ -570,7 +581,7 @@ netsh http add sslcert ipport=0.0.0.0:1234 ccerthash=653a1c60d4daaae00b2a103f242
 
 <p>This request</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET https://localhost:12345 HTTP/1.1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET https://localhost:12345 HTTP/1.1
 Host: localhost:12345
 
 
@@ -578,7 +589,7 @@ Host: localhost:12345
 
 <p>returns this response</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
 Content-Type: text/html
 Server: Microsoft-HTTPAPI/2.0
 Date: Wed, 11 Nov 2015 10:24:58 GMT

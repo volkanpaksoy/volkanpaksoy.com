@@ -4,7 +4,7 @@
   <title><![CDATA[Playground for the mind]]></title>
   <link href="https://volkanpaksoy.com/atom.xml" rel="self"/>
   <link href="https://volkanpaksoy.com/"/>
-  <updated>2021-09-29T07:19:07+01:00</updated>
+  <updated>2021-11-25T11:41:16+00:00</updated>
   <id>https://volkanpaksoy.com/</id>
   <author>
     <name><![CDATA[Volkan Paksoy]]></name>
@@ -75,7 +75,7 @@
 
 <p>Basically added the permissions to the folders in the path as shown in the accepted answer:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo chmod a+rX /mnt
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo chmod a+rX /mnt
 sudo chmod a+rX /mnt/sda
 sudo chmod a+rX /mnt/sda/will
 </code></pre></div></div>
@@ -225,7 +225,7 @@ sudo chmod a+rX /mnt/sda/will
 <h2 id="prerequisites">Prerequisites</h2>
 <p>Since the operation involves a source account and a target account, first create 2 profiles with EC2 access. credentials files should look like this</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[source_profile]
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[source_profile]
 aws_access_key_id = xxxxxxxxx
 aws_secret_access_key = xxxxxxxxx
 
@@ -237,57 +237,57 @@ aws_secret_access_key = xxxxxxxxx
 <h2 id="step-00-configuration">Step 00: Configuration</h2>
 <p>I put all the variables in a Powershell script file which I include in the following steps. To use the scripts you need to provide the values first. Hopefully the variable names are self-explanatory:</p>
 
-<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$sourceAccountAwsProfileName</span> <span class="o">=</span> <span class="s2">""</span>
-<span class="nv">$sourceRegion</span> <span class="o">=</span> <span class="s2">""</span>
-<span class="nv">$sourceAccountId</span> <span class="o">=</span> <span class="s2">""</span>
-<span class="nv">$instanceId</span> <span class="o">=</span> <span class="s2">""</span>
-<span class="nv">$amiName</span> <span class="o">=</span> <span class="s2">""</span>
-<span class="nv">$amiDescription</span> <span class="o">=</span> <span class="s2">""</span>
-<span class="nv">$targetAccountAwsProfileName</span> <span class="o">=</span> <span class="s2">""</span>
-<span class="nv">$targetAccountId</span> <span class="o">=</span> <span class="s2">""</span>
-<span class="nv">$targetRegion</span> <span class="o">=</span> <span class="s2">""</span>
-</code></pre></div></div>
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$sourceRegion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$sourceAccountId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$instanceId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$amiName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$amiDescription</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$targetAccountAwsProfileName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$targetAccountId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$targetRegion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span></code></pre></div></div>
 
 <h2 id="step-01-create-ami">Step 01: Create AMI</h2>
 <p>First step to migrate EC2 instance is to create an AMi from the instance.</p>
 
-<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">.</span> .\<span class="s2">"00. configuration.ps1"</span>
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">.</span><span class="w"> </span><span class="o">.</span><span class="n">\</span><span class="s2">"00. configuration.ps1"</span><span class="w">
 
-<span class="c1"># Create AMI</span>
-<span class="nv">$imageId</span> <span class="o">=</span> New-EC2Image -InstanceId <span class="nv">$instanceId</span> -Name <span class="nv">$amiName</span> -Description <span class="nv">$amiDescription</span> -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
+</span><span class="c"># Create AMI</span><span class="w">
+</span><span class="nv">$imageId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">New-EC2Image</span><span class="w"> </span><span class="nt">-InstanceId</span><span class="w"> </span><span class="nv">$instanceId</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nv">$amiName</span><span class="w"> </span><span class="nt">-Description</span><span class="w"> </span><span class="nv">$amiDescription</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
 
-<span class="nb">Set-Variable</span> -Scope global -Name AMI_ID -Value <span class="nv">$imageId</span>
-<span class="nb">Write-Host</span> <span class="s2">"AMI_ID: ["</span> <span class="nv">$AMI_ID</span> <span class="s2">"]"</span>
-</code></pre></div></div>
+</span><span class="n">Set-Variable</span><span class="w"> </span><span class="nt">-Scope</span><span class="w"> </span><span class="nx">global</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">AMI_ID</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nv">$imageId</span><span class="w">
+</span><span class="n">Write-Host</span><span class="w"> </span><span class="s2">"AMI_ID: ["</span><span class="w"> </span><span class="nv">$AMI_ID</span><span class="w"> </span><span class="s2">"]"</span><span class="w">
+</span></code></pre></div></div>
 
 <p>This operation takes a few minutes. The image has to become available before we can proceed to the next step.</p>
 
 <h2 id="step-02-share-ami">Step 02: Share AMI</h2>
 <p>Now the image is ready we have to share it with the target account. The script below shares the AMI and allows new volumes created from this AMI.</p>
 
-<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">.</span> .\<span class="s2">"00. configuration.ps1"</span>
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">.</span><span class="w"> </span><span class="o">.</span><span class="n">\</span><span class="s2">"00. configuration.ps1"</span><span class="w">
 
-<span class="nv">$imageId</span> <span class="o">=</span> <span class="nb">Get-Variable </span>AMI_ID -valueOnly
-Edit-EC2ImageAttribute -ImageId <span class="nv">$imageId</span> -Attribute launchPermission -OperationType add -UserId <span class="nv">$targetAccountId</span> -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
+</span><span class="nv">$imageId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Get-Variable</span><span class="w"> </span><span class="nx">AMI_ID</span><span class="w"> </span><span class="nt">-valueOnly</span><span class="w">
+</span><span class="n">Edit-EC2ImageAttribute</span><span class="w"> </span><span class="nt">-ImageId</span><span class="w"> </span><span class="nv">$imageId</span><span class="w"> </span><span class="nt">-Attribute</span><span class="w"> </span><span class="nx">launchPermission</span><span class="w"> </span><span class="nt">-OperationType</span><span class="w"> </span><span class="nx">add</span><span class="w"> </span><span class="nt">-UserId</span><span class="w"> </span><span class="nv">$targetAccountId</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
 
-<span class="nv">$imageSnapshots</span> <span class="o">=</span> Get-EC2Snapshot -OwnerId <span class="nv">$sourceAccountId</span> -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
-                | <span class="nb">Where</span>-Object <span class="o">{</span><span class="nv">$_</span>.Description -like <span class="s2">"*</span><span class="nv">$imageId</span><span class="s2">*"</span> <span class="o">}</span>
+</span><span class="nv">$imageSnapshots</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Get-EC2Snapshot</span><span class="w"> </span><span class="nt">-OwnerId</span><span class="w"> </span><span class="nv">$sourceAccountId</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
+                </span><span class="o">|</span><span class="w"> </span><span class="n">Where-Object</span><span class="w"> </span><span class="p">{</span><span class="bp">$_</span><span class="o">.</span><span class="nf">Description</span><span class="w"> </span><span class="o">-like</span><span class="w"> </span><span class="s2">"*</span><span class="nv">$imageId</span><span class="s2">*"</span><span class="w"> </span><span class="p">}</span><span class="w">
 
-<span class="k">foreach</span> <span class="o">(</span><span class="nv">$snapshot</span> <span class="k">in</span> <span class="nv">$imageSnapshots</span><span class="o">)</span> <span class="o">{</span>
-    Edit-EC2SnapshotAttribute -SnapshotId <span class="nv">$snapshot</span>.SnapshotId -Attribute createVolumePermission -OperationType add -UserId <span class="nv">$targetAccountId</span> -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
-<span class="o">}</span>
-</code></pre></div></div>
+</span><span class="kr">foreach</span><span class="w"> </span><span class="p">(</span><span class="nv">$snapshot</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nv">$imageSnapshots</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">Edit-EC2SnapshotAttribute</span><span class="w"> </span><span class="nt">-SnapshotId</span><span class="w"> </span><span class="nv">$snapshot</span><span class="o">.</span><span class="nf">SnapshotId</span><span class="w"> </span><span class="nt">-Attribute</span><span class="w"> </span><span class="nx">createVolumePermission</span><span class="w"> </span><span class="nt">-OperationType</span><span class="w"> </span><span class="nx">add</span><span class="w"> </span><span class="nt">-UserId</span><span class="w"> </span><span class="nv">$targetAccountId</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
 
 <h2 id="step-03-copy-ami">Step 03: Copy AMI</h2>
 <p>At this point, if you go to the target account you should be able to see the image when you choose “Private images” category. Make sure to choose the same region as the source account to be able to see the image.</p>
 
 <p>We have access to this image but we want to have our own copy which we accomplish with the script below:</p>
 
-<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">.</span> .\<span class="s2">"00. configuration.ps1"</span>
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">.</span><span class="w"> </span><span class="o">.</span><span class="n">\</span><span class="s2">"00. configuration.ps1"</span><span class="w">
 
-<span class="nv">$imageId</span> <span class="o">=</span> <span class="nb">Get-Variable </span>AMI_ID -valueOnly
-<span class="nb">Copy</span>-EC2Image -SourceImageId <span class="nv">$imageId</span> -SourceRegion <span class="nv">$sourceRegion</span> -Name <span class="nv">$amiName</span> -ProfileName <span class="nv">$targetAccountAwsProfileName</span> -Region <span class="nv">$targetRegion</span>
-</code></pre></div></div>
+</span><span class="nv">$imageId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Get-Variable</span><span class="w"> </span><span class="nx">AMI_ID</span><span class="w"> </span><span class="nt">-valueOnly</span><span class="w">
+</span><span class="n">Copy-EC2Image</span><span class="w"> </span><span class="nt">-SourceImageId</span><span class="w"> </span><span class="nv">$imageId</span><span class="w"> </span><span class="nt">-SourceRegion</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nv">$amiName</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$targetAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$targetRegion</span><span class="w">
+</span></code></pre></div></div>
 
 <p>In my experience the whole copying process took about 5 minutes.</p>
 
@@ -297,25 +297,25 @@ Edit-EC2ImageAttribute -ImageId <span class="nv">$imageId</span> -Attribute laun
 
 <p>Final step is to clean up after ourselves. Since this AMI was created to migrate to the new account only I assume we won’t need it anymore in the source account. The following script deregisters the AMI and deletes all the associated snapshots.</p>
 
-<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">.</span> .\<span class="s2">"00. configuration.ps1"</span>
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">.</span><span class="w"> </span><span class="o">.</span><span class="n">\</span><span class="s2">"00. configuration.ps1"</span><span class="w">
 
-<span class="c1"># Create image script writes the AMI ID to a variable. If it doesn't exist get the image id from AWS Management Console</span>
-<span class="nv">$imageId</span> <span class="o">=</span> <span class="nb">Get-Variable </span>AMI_ID -valueOnly
+</span><span class="c"># Create image script writes the AMI ID to a variable. If it doesn't exist get the image id from AWS Management Console</span><span class="w">
+</span><span class="nv">$imageId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Get-Variable</span><span class="w"> </span><span class="nx">AMI_ID</span><span class="w"> </span><span class="nt">-valueOnly</span><span class="w">
 
-<span class="nb">Write-Host</span> <span class="s2">"Unregistering image: ["</span> <span class="nv">$imageId</span> <span class="s2">"]"</span>
-Unregister-EC2Image -ImageId <span class="nv">$imageId</span> -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
+</span><span class="n">Write-Host</span><span class="w"> </span><span class="s2">"Unregistering image: ["</span><span class="w"> </span><span class="nv">$imageId</span><span class="w"> </span><span class="s2">"]"</span><span class="w">
+</span><span class="n">Unregister-EC2Image</span><span class="w"> </span><span class="nt">-ImageId</span><span class="w"> </span><span class="nv">$imageId</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
 
-<span class="nv">$imageSnapshots</span> <span class="o">=</span> Get-EC2Snapshot -OwnerId <span class="nv">$sourceAccountId</span> -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
-                | <span class="nb">Where</span>-Object <span class="o">{</span><span class="nv">$_</span>.Description -like <span class="s2">"*</span><span class="nv">$imageId</span><span class="s2">*"</span> <span class="o">}</span>
+</span><span class="nv">$imageSnapshots</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Get-EC2Snapshot</span><span class="w"> </span><span class="nt">-OwnerId</span><span class="w"> </span><span class="nv">$sourceAccountId</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
+                </span><span class="o">|</span><span class="w"> </span><span class="n">Where-Object</span><span class="w"> </span><span class="p">{</span><span class="bp">$_</span><span class="o">.</span><span class="nf">Description</span><span class="w"> </span><span class="o">-like</span><span class="w"> </span><span class="s2">"*</span><span class="nv">$imageId</span><span class="s2">*"</span><span class="w"> </span><span class="p">}</span><span class="w">
 
-<span class="k">foreach</span> <span class="o">(</span><span class="nv">$snapshot</span> <span class="k">in</span> <span class="nv">$imageSnapshots</span><span class="o">)</span> <span class="o">{</span>
-    <span class="nb">Write-Host</span> <span class="s2">"Removing snapshot: ["</span> <span class="nv">$snapshot</span>.SnapshotId <span class="s2">"]"</span>
-    Remove-EC2Snapshot -SnapshotId <span class="nv">$snapshot</span>.SnapshotId -Force -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
-<span class="o">}</span>
+</span><span class="kr">foreach</span><span class="w"> </span><span class="p">(</span><span class="nv">$snapshot</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nv">$imageSnapshots</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">Write-Host</span><span class="w"> </span><span class="s2">"Removing snapshot: ["</span><span class="w"> </span><span class="nv">$snapshot</span><span class="o">.</span><span class="nf">SnapshotId</span><span class="w"> </span><span class="s2">"]"</span><span class="w">
+    </span><span class="n">Remove-EC2Snapshot</span><span class="w"> </span><span class="nt">-SnapshotId</span><span class="w"> </span><span class="nv">$snapshot</span><span class="o">.</span><span class="nf">SnapshotId</span><span class="w"> </span><span class="nt">-Force</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
+</span><span class="p">}</span><span class="w">
 
-<span class="c1"># Delete variable</span>
-<span class="nb">Remove-Variable </span>AMI_ID -Scope global
-</code></pre></div></div>
+</span><span class="c"># Delete variable</span><span class="w">
+</span><span class="n">Remove-Variable</span><span class="w"> </span><span class="nx">AMI_ID</span><span class="w"> </span><span class="nt">-Scope</span><span class="w"> </span><span class="nx">global</span><span class="w">
+</span></code></pre></div></div>
 
 <h2 id="resources">Resources</h2>
 <ul>
@@ -338,12 +338,12 @@ Unregister-EC2Image -ImageId <span class="nv">$imageId</span> -ProfileName <span
 <h2 id="test-environment-setup">Test Environment Setup</h2>
 <p>I’m going to use dotnet core 3.1 runtime image:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull mcr.microsoft.com/dotnet/core/runtime:3.1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull mcr.microsoft.com/dotnet/core/runtime:3.1
 </code></pre></div></div>
 
 <p>Here’s my Dockerfile:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM mcr.microsoft.com/dotnet/core/runtime:3.1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM mcr.microsoft.com/dotnet/core/runtime:3.1
 
 RUN apt-get update -y
 
@@ -358,37 +358,37 @@ ENTRYPOINT ["/play-audio.sh"]
 
 <p>and the script (play-audio.sh) that plays the audio looks like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#!/bin/bash
 
-<span class="nv">url</span><span class="o">=</span><span class="nv">$1</span>
-<span class="nv">filename</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">url</span><span class="p">##*/</span><span class="k">}</span><span class="s2">"</span>
+url=$1
+filename="${url##*/}"
 
-<span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="nt">-f</span> <span class="nv">$filename</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
-    </span><span class="nb">echo</span> <span class="s2">"File doesn't exist. Downloading."</span>
-    wget <span class="nv">$url</span>
-<span class="k">fi</span>
+if [ ! -f $filename ]; then
+    echo "File doesn't exist. Downloading."
+    wget $url
+fi
 
-<span class="c"># check if the audio player program exists. helpful to test the script individually on macOS</span>
-<span class="k">if </span><span class="nb">hash </span>mpg123 2&gt;/dev/null<span class="p">;</span> <span class="k">then
-    </span><span class="nb">echo</span> <span class="s2">"Playing file using mpg123"</span>
-    mpg123 <span class="nv">$filename</span>
-<span class="k">elif </span><span class="nb">hash </span>afplay 2&gt;/dev/null<span class="p">;</span> <span class="k">then
-    </span><span class="nb">echo</span> <span class="s2">"Playing file using afplay"</span>
-    afplay <span class="nv">$filename</span>
-<span class="k">else 
-    </span><span class="nb">echo</span> <span class="s2">"No player could be found."</span>    
-<span class="k">fi</span>
+# check if the audio player program exists. helpful to test the script individually on macOS
+if hash mpg123 2&gt;/dev/null; then
+    echo "Playing file using mpg123"
+    mpg123 $filename
+elif hash afplay 2&gt;/dev/null; then
+    echo "Playing file using afplay"
+    afplay $filename
+else 
+    echo "No player could be found."    
+fi
 </code></pre></div></div>
 
 <p>I built the image with the following command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build -t audio-test .
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build -t audio-test .
 </code></pre></div></div>
 
 <h2 id="testing-the-audio">Testing the audio</h2>
 <p>Initially I rana container like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run audio-test https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run audio-test https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3
 </code></pre></div></div>
 
 <p>After running the container like this I got the error shown below:</p>
@@ -398,12 +398,12 @@ ENTRYPOINT ["/play-audio.sh"]
 <h2 id="solution">Solution</h2>
 <p>The trick is ro run with the following parameter:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>--device /dev/snd
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>--device /dev/snd
 </code></pre></div></div>
 
 <p>So the full Docker run command looks like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run --rm --device /dev/snd audio-test https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run --rm --device /dev/snd audio-test https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3
 </code></pre></div></div>
 
 <h2 id="conclusion">Conclusion</h2>
@@ -476,7 +476,7 @@ ENTRYPOINT ["/play-audio.sh"]
 <h2 id="running-the-tests">Running the tests</h2>
 <p>The core responsibility of CI pipeline is to run the unit tests. CodeBuild is a generic service and it doesn’t come with any tools to run unit tests as it’s application and environment dependent. The way we configure is by using buildspec.yml file. In this example I’m running a dotnet core project and making sure the unit tests are run first is as easy as this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 0.2
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 0.2
 
 phases:
   install:
@@ -504,12 +504,12 @@ phases:
 
 <p>As a side note, the failed ones were failing due to this error</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>YAML_FILE_ERROR: This build image requires selecting at least one runtime version.
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>YAML_FILE_ERROR: This build image requires selecting at least one runtime version.
 </code></pre></div></div>
 
 <p>The solution was to specify the runtime in the buildspec.yml file explicitly by adding this bit:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>install:
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>install:
   runtime-versions:
       dotnet: 2.2
 </code></pre></div></div>
@@ -529,7 +529,7 @@ phases:
 
 <p>Then in the GitHub repository, edit the readme.md file and add the following:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>![Build status](badge URL copied from AWS console)
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>![Build status](badge URL copied from AWS console)
 </code></pre></div></div>
 
 <p>Now if you go to the GitHub repository page and refresh you can see the latest status of the build (of master branch):</p>
@@ -686,7 +686,7 @@ phases:
 <h2 id="installing-cdk">Installing CDK</h2>
 <p>AWS CDK is developed using TypeScript. It’s available via npm:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install -g aws-cdk
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install -g aws-cdk
 </code></pre></div></div>
 
 <h2 id="using-cdk">Using CDK</h2>
@@ -696,7 +696,7 @@ phases:
 
 <p>It expects 2 parameters: Language (Can be one of these: csharp, fsharp, java, javascript, python or typescript).</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk init app --language csharp
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk init app --language csharp
 </code></pre></div></div>
 
 <p>To test my first app, I followed the sample app provided and added an S3 construct to my code:</p>
@@ -714,24 +714,24 @@ phases:
 </code></pre></div></div>
 <p>Next step is to synnthesize a CloudFormation template by running</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk synth
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk synth
 </code></pre></div></div>
 
 <p>This generates a folder called cdk.out which contains a file named CdkWorkoutStack.template.json and with the following contents:</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"Resources"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"CdkBucket2FB0D10E"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AWS::S3::Bucket"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"Properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"VersioningConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-          </span><span class="s2">"Status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Enabled"</span><span class="w">
+  </span><span class="nl">"Resources"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"CdkBucket2FB0D10E"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AWS::S3::Bucket"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"Properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"VersioningConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"Status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Enabled"</span><span class="w">
         </span><span class="p">}</span><span class="w">
       </span><span class="p">},</span><span class="w">
-      </span><span class="s2">"UpdateReplacePolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Retain"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"DeletionPolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Retain"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"Metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"aws:cdk:path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CdkWorkoutStack/CdkBucket/Resource"</span><span class="w">
+      </span><span class="nl">"UpdateReplacePolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Retain"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"DeletionPolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Retain"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"Metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"aws:cdk:path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CdkWorkoutStack/CdkBucket/Resource"</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">}</span><span class="w">
@@ -740,7 +740,7 @@ phases:
 
 <p>Final step is to create the resources by running</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk deploy
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk deploy
 </code></pre></div></div>
 
 <p>This produces the following results:</p>
@@ -770,7 +770,7 @@ phases:
 
 <p>After this change in the code we can review what’s going to be updated by running the following command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk diff
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk diff
 </code></pre></div></div>
 
 <p>and it produces the following result outlining the changes between the current code and the deployed version:</p>
@@ -779,7 +779,7 @@ phases:
 
 <p>And the stack can be deleted by running the following command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk destroy
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk destroy
 </code></pre></div></div>
 
 <p>In the CDK version I’m using the default deletion policy is to retain. That’s why when I deleted the stack via CDK it didn’t delete the bucket. In order to change that behaviour I had to change the value to delete as such:</p>
@@ -807,22 +807,22 @@ phases:
 <p>This time it produces a CloudFormation template with a different policy:</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"Resources"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"CdkBucket2FB0D10E"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AWS::S3::Bucket"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"Properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"PublicAccessBlockConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-          </span><span class="s2">"BlockPublicAcls"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-          </span><span class="s2">"BlockPublicPolicy"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="nl">"Resources"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"CdkBucket2FB0D10E"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AWS::S3::Bucket"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"Properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"PublicAccessBlockConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"BlockPublicAcls"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"BlockPublicPolicy"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
         </span><span class="p">},</span><span class="w">
-        </span><span class="s2">"VersioningConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-          </span><span class="s2">"Status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Enabled"</span><span class="w">
+        </span><span class="nl">"VersioningConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"Status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Enabled"</span><span class="w">
         </span><span class="p">}</span><span class="w">
       </span><span class="p">},</span><span class="w">
-      </span><span class="s2">"UpdateReplacePolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Delete"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"DeletionPolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Delete"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"Metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"aws:cdk:path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CdkWorkoutStack/CdkBucket/Resource"</span><span class="w">
+      </span><span class="nl">"UpdateReplacePolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Delete"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"DeletionPolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Delete"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"Metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"aws:cdk:path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CdkWorkoutStack/CdkBucket/Resource"</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">}</span><span class="w">
@@ -1029,7 +1029,7 @@ phases:
 <h2 id="troubleshooting-the-pipeline">Troubleshooting the pipeline</h2>
 <p>Even though my CodeBuild and CodeDeploy projects succeeded, running the CodePipeline at this point fails. The reason for this error is CodePipeline creates its own S3 bucket and CodeDeploy agent needs access to that bucket as well to be able to download the deployment artifacts. So I had to modify my policy as such:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
   "Version": "2012-10-17",
   "Statement": [
     {
@@ -1156,7 +1156,7 @@ phases:
 <h2 id="iam-instance-profile">IAM Instance Profile</h2>
 <p>If you are having an error like this</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>InstanceAgent::Plugins::CodeDeployPlugin::CommandPoller: Missing credentials - please check if this instance was started with an IAM instance profile
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>InstanceAgent::Plugins::CodeDeployPlugin::CommandPoller: Missing credentials - please check if this instance was started with an IAM instance profile
 </code></pre></div></div>
 
 <p>that is probably because you skipped creating an instance profile for your EC2 instances like I did. It is explained <a href="https://docs.aws.amazon.com/en_pv/codedeploy/latest/userguide/getting-started-create-iam-instance-profile.html#getting-started-create-iam-instance-profile-console">here</a>.</p>
@@ -1170,15 +1170,15 @@ phases:
 </ol>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+  </span><span class="nl">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
-      </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
-      </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"s3:Get*"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"s3:List*"</span><span class="w">
       </span><span class="p">],</span><span class="w">
-      </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"arn:aws:s3:::replace-with-your-s3-bucket-name/*"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"arn:aws:s3:::aws-codedeploy-us-east-1/*"</span><span class="w">
       </span><span class="p">]</span><span class="w">
@@ -1204,7 +1204,7 @@ phases:
 
 <p>In this example, the deployment is basically just copying the new application to the destination and my appspec.yml file looks like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 0.0
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 0.0
 os: windows
 files:
   - source: \
@@ -1292,7 +1292,7 @@ files:
 
 <p>In my example, the folder structure is like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[Root]
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[Root]
 	[Src]
    		[Sample.UI.Web]
    		[Sample.Core]
@@ -1303,7 +1303,7 @@ files:
 
 <p>I’m using a dotnet core 2.2 project on Windows-based Docker image and my buildspec.yml looks like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 0.2
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 0.2
 
 phases:
   build:
@@ -1394,19 +1394,19 @@ artifacts:
 
 <p>It’s similar to any other Git guide with the exception that you have to add your access key to your SSH config file (~/.ssh/config):</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host git-codecommit.*.amazonaws.com
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host git-codecommit.*.amazonaws.com
   User APKAEIBAERJR2EXAMPLE
   IdentityFile ~/.ssh/codecommit_rsa
 </code></pre></div></div>
 
 <p>Then to test your connection, run:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh git-codecommit.us-east-2.amazonaws.com
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh git-codecommit.us-east-2.amazonaws.com
 </code></pre></div></div>
 
 <p>After adding the host to known hosts list you should see this message:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>You have successfully authenticated over SSH. You can use Git to interact with AWS CodeCommit. Interactive shells are not supported.Connection to git-codecommit.us-east-2.amazonaws.com closed by remote host.
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>You have successfully authenticated over SSH. You can use Git to interact with AWS CodeCommit. Interactive shells are not supported.Connection to git-codecommit.us-east-2.amazonaws.com closed by remote host.
 </code></pre></div></div>
 
 <h2 id="clone-the-repo">Clone the repo</h2>
@@ -1421,7 +1421,7 @@ artifacts:
 <h2 id="troubleshooting">Troubleshooting</h2>
 <p>In my experience in Windows, everything worked find on command line but when I tried to use my Git client (Git Extensions) I started having connection issues. The fix for that was to add my AWS SSH Key Id in the URL:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone ssh://Your-SSH-Key-ID@git-codecommit.us-east-2.amazonaws.com/v1/repos/MyDemoRepo my-demo-repo
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone ssh://Your-SSH-Key-ID@git-codecommit.us-east-2.amazonaws.com/v1/repos/MyDemoRepo my-demo-repo
 </code></pre></div></div>
 
 <h2 id="resources">Resources</h2>
@@ -1586,7 +1586,7 @@ artifacts:
 
 <p>We can choose to push to the origin directly too. If we switch to detail view in Sourcetree output we can see a nice summary of actions that took place:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Summary of actions:
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Summary of actions:
 - Release branch 'release/1.0' has been merged into 'master'
 - The release was tagged '1.0'
 - Release tag '1.0' has been back-merged into 'develop'
@@ -1610,7 +1610,7 @@ artifacts:
 
 <p>And the summary of actions looks like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Summary of actions:
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Summary of actions:
 - Hotfix branch 'hotfix/1.0-hotfix-1' has been merged into 'master'
 - The hotfix was tagged '1.0-hotfix-1'
 - Hotfix tag '1.0-hotfix-1' has been back-merged into 'develop'
@@ -1646,7 +1646,7 @@ artifacts:
 
 <p>Now that we know customers feature have been approved we can select that and finish that feature:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Summary of actions:
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Summary of actions:
 - The feature branch 'feature/customers' was merged into 'develop'
 - Feature branch 'feature/customers' has been locally deleted; it has been remotely deleted from 'origin'
 - You are now on branch 'develop'
@@ -1659,12 +1659,12 @@ artifacts:
 <h2 id="command-line">Command Line</h2>
 <p>All the Git Flow commands explained above are also supported by command line but to be able to use them you have to install it:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew install git-flow
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew install git-flow
 </code></pre></div></div>
 
 <p>Then you can start using it as</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git flow &lt;subcommand&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git flow &lt;subcommand&gt;
 </code></pre></div></div>
 
 <p><img src="/images/vpblogimg/2019/09/git-gitflow-14-command-line.png" alt="" /></p>
@@ -1712,32 +1712,32 @@ artifacts:
 
 <p>Insert the card and run the following to identify the card:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil list
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil list
 </code></pre></div></div>
 
 <p>Then</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo dd bs=1m if=path_of_your_image.img of=/dev/rdiskn conv=sync
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo dd bs=1m if=path_of_your_image.img of=/dev/rdiskn conv=sync
 </code></pre></div></div>
 
 <p>where n is the number of disk which I found from the first step.</p>
 
 <p>If you get “resource is busy” error, then run the following</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil unmountDisk /dev/diskn
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil unmountDisk /dev/diskn
 </code></pre></div></div>
 
 <h3 id="step-02-carry-out-necessary-configuration-updates">Step 02: Carry Out Necessary Configuration Updates</h3>
 <p>It’s a good practice to change the default passwords so I ran</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>passwd
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>passwd
 </code></pre></div></div>
 
 <p>and updated the password.</p>
 
 <p>Also for remote installations I enabled SSH:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable ssh
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable ssh
 sudo systemctl start ssh
 </code></pre></div></div>
 
@@ -1745,12 +1745,12 @@ sudo systemctl start ssh
 
 <p>To achieve that I ran:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo hostname NEW_HOSTNAME
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo hostname NEW_HOSTNAME
 </code></pre></div></div>
 
 <p>I used raspi-config to connect to WiFi network</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo raspi-config
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo raspi-config
 </code></pre></div></div>
 
 <p>and enter the details and rebooted to connect to the network.</p>
@@ -1762,7 +1762,7 @@ sudo systemctl start ssh
 
 <p>Installation is as simple as this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install mpg123 -y
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install mpg123 -y
 </code></pre></div></div>
 
 <h3 id="step-04-develop-the-script">Step 04: Develop the script</h3>
@@ -1772,39 +1772,39 @@ sudo systemctl start ssh
 <span class="kn">import</span> <span class="nn">random</span>
 
 <span class="n">path</span> <span class="o">=</span><span class="s">'/path/to/mp3/folder'</span> 
-<span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-<span class="n">index</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">))</span>
+<span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="n">index</span> <span class="o">=</span> <span class="n">random</span><span class="p">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">))</span>
 
-<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">f</span><span class="s">'/usr/bin/mpg123 {files[index]}'</span><span class="p">)</span>
+<span class="n">os</span><span class="p">.</span><span class="n">system</span><span class="p">(</span><span class="sa">f</span><span class="s">'/usr/bin/mpg123 </span><span class="si">{</span><span class="n">files</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
 </code></pre></div></div>
 
 <h3 id="step-05-copy-music-and-script-to-raspberry-pi">Step 05: Copy music and script to Raspberry Pi</h3>
 <p>Save the script above in a USB drive along with the MP3 files. To copy the files from USB drive to Pi microSD card, I inserted my USB and ran the following:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo fdisk -l
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo fdisk -l
 sudo mkdir /media/usb
 sudo mount /dev/sda1 /media/usb
 </code></pre></div></div>
 
 <p>Then</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir /home/pi/music
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir /home/pi/music
 cp /media/usb/*.mp3 /home/pi/music
 </code></pre></div></div>
 
 <p>and copy the script to home folder</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cp /media/usb/alarm-pi.py /home/pi
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cp /media/usb/alarm-pi.py /home/pi
 </code></pre></div></div>
 
 <h3 id="step-06-schedule-the-script">Step 06: Schedule the script</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>crontab -e
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>crontab -e
 </code></pre></div></div>
 
 <p>Then add to run at a certain time. The example below runs at 7:30am everyday:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>30 7 * * * /usr/bin/python3 /home/pi/alarm-pi.py
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>30 7 * * * /usr/bin/python3 /home/pi/alarm-pi.py
 </code></pre></div></div>
 
 <p>If you want to run the script multiple times you can another one (like another one after 10 minutes as a snooze-prevention mechanism!)</p>
@@ -1848,32 +1848,32 @@ cp /media/usb/*.mp3 /home/pi/music
 
 <p>I inserted the card and run the following to identify the card:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil list
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil list
 </code></pre></div></div>
 
 <p>Then</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo dd bs=1m if=path_of_your_image.img of=/dev/rdiskn conv=sync
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo dd bs=1m if=path_of_your_image.img of=/dev/rdiskn conv=sync
 </code></pre></div></div>
 
 <p>where n is the number of disk which I found from the first step.</p>
 
 <p>If you get “resource is busy” error, then run the following</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil unmountDisk /dev/diskn
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil unmountDisk /dev/diskn
 </code></pre></div></div>
 
 <h2 id="carry-out-necessary-configuration-updates">Carry Out Necessary Configuration Updates</h2>
 <p>It’s a good practice to change the default passwords so I ran</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>passwd
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>passwd
 </code></pre></div></div>
 
 <p>and updated the password.</p>
 
 <p>Also for remote installations I enabled SSH:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable ssh
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable ssh
 sudo systemctl start ssh
 </code></pre></div></div>
 
@@ -1881,7 +1881,7 @@ sudo systemctl start ssh
 
 <p>To achieve that I ran:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo hostname NEW_HOSTNAME
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo hostname NEW_HOSTNAME
 </code></pre></div></div>
 
 <p>No need to set a static IP address at this point as Pi Hole setup takes care of that:</p>
@@ -1891,7 +1891,7 @@ sudo systemctl start ssh
 <h2 id="install-pi-hole">Install Pi-Hole</h2>
 <p>There is an easy one-step installation:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -sSL https://install.pi-hole.net | bash
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -sSL https://install.pi-hole.net | bash
 </code></pre></div></div>
 
 <p>I changed my IP to a different static IP and rebooted the Pi.</p>
@@ -2050,12 +2050,12 @@ sudo systemctl start ssh
 <h2 id="creating-self-hosted-registry">Creating Self-Hosted Registry</h2>
 <p>It sounds like it requires installing a server application but the nice thing about Docker is, even it is a Docker registry it can run in a container itself. So first off we pull the registry repo for Docker Hub:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull registry
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull registry
 </code></pre></div></div>
 
 <p>Now let’s create a container that will act as our registry:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d -p 5000:5000 --restart always --name registry registry
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d -p 5000:5000 --restart always --name registry registry
 </code></pre></div></div>
 
 <p><img src="/images/vpblogimg/2019/08/self-hosted-docker-repo-list-before.png" alt="" /></p>
@@ -2064,12 +2064,12 @@ sudo systemctl start ssh
 
 <p>Now to test how we can push and pull images let’s download Docker’s hello-world image from Docker Hub:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull hello-world
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull hello-world
 </code></pre></div></div>
 
 <p>Now to push this inot our own registry running in Raspbeery Pi all we have to do is tag it with the server URL such as:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker tag hello-world HOBBITON.local:5000/hello-world
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker tag hello-world HOBBITON.local:5000/hello-world
 </code></pre></div></div>
 
 <p>At this point if we take look at the images on our local machine we can see the hello-world image is duplicated.</p>
@@ -2078,7 +2078,7 @@ sudo systemctl start ssh
 
 <p>Now let’s push it to Pi:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker push HOBBITON.local:5000/hello-world
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker push HOBBITON.local:5000/hello-world
 </code></pre></div></div>
 
 <p>This doesn’t work because of the following reason:</p>
@@ -2087,7 +2087,7 @@ sudo systemctl start ssh
 
 <p>This is because the reigstry is considered to be insecure and by default it’s rejected by the client. We can confirm it’s deemed to be insecure if we check the server by running the following command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker info
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker info
 </code></pre></div></div>
 
 <p>At the bottom of the bottom we can see the localhost registry is insecure:</p>
@@ -2104,17 +2104,17 @@ sudo systemctl start ssh
 
 <p>If you’re pulling from a client without a user interface, another Raspberry Pi for example, try the following:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo nano  /etc/docker/daemon.json
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo nano  /etc/docker/daemon.json
 </code></pre></div></div>
 
 <p>and add the following (with the correct registry name):</p>
 
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w"> </span><span class="s2">"insecure-registries"</span><span class="p">:[</span><span class="s2">"myregistry.example.com:5000"</span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w"> </span><span class="nl">"insecure-registries"</span><span class="p">:[</span><span class="s2">"myregistry.example.com:5000"</span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w">
 </span></code></pre></div></div>
 
 <p>and restart Docker:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo service docker restart
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo service docker restart
 </code></pre></div></div>
 
 <p>Now if we check the repository list on the registry again we can see the hello-world image hosted on our Pi:</p>
@@ -2153,12 +2153,12 @@ sudo systemctl start ssh
 
 <p>If you don’t already have the image, simply pull from Docker hub:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull docker.elastic.co/elasticsearch/elasticsearch:7.2.0
 </code></pre></div></div>
 
 <p>For development environment suggested command to run a container is</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.2.0
 </code></pre></div></div>
 
 <p>which keeps it very simple and straightforward but in my workout I’d like to insert a whole bunch of data and run some queries on it and I don’t want to re-generate my data over and over again. So I decided to persist my data on host.</p>
@@ -2166,7 +2166,7 @@ sudo systemctl start ssh
 <h3 id="persisting-elasticsearch-data">Persisting Elasticsearch Data</h3>
 <p>Instead of running containers one by one in the command line a better approach is to create a docker-compose.yml file file and use Docker compose to start services. I used the sample YAML file provided in official Elastic <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html">documentation</a></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '2.2'
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '2.2'
 services:
   es01:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
@@ -2278,7 +2278,7 @@ networks:
 <h3 id="showing-progress">Showing progress</h3>
 <p>In the sample code below I showed displaying progress using onNext action delegate:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var testData = dataGen.Generate(statementConfig.StartDate, statementConfig.EndDate, statementConfig.OpeningBalance, statementConfig.DebitTransactionRatio, statementConfig.TransactionDateInterval, statementConfig.NumberOfStatementLines);
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var testData = dataGen.Generate(statementConfig.StartDate, statementConfig.EndDate, statementConfig.OpeningBalance, statementConfig.DebitTransactionRatio, statementConfig.TransactionDateInterval, statementConfig.NumberOfStatementLines);
 var cancellationToken = new CancellationToken();
 var batchSize = 250;
 var bulkAll = elasticClient.BulkAll(testData, x =&gt; x

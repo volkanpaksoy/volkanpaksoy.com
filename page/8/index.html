@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -198,7 +209,7 @@
 <h2 id="aws-implementation">AWS Implementation</h2>
 <p>Even though the code will run locally in a Docker container, you still need to setup an IAM user with the appropriate permissions. So make sure the policy below is attached to the user:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
     "Version": "2012-10-17",
     "Statement": [
         {
@@ -220,23 +231,23 @@
 
 <h3 id="curl-usage">curl usage:</h3>
 <p>Windows:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -i -X POST -H "Content-Type: application/json" -d "{\"domainList\": [\"volkan\"], \"tldList\": [\"com\", \"net\"]}" https://localhost:5001/api/domain
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -i -X POST -H "Content-Type: application/json" -d "{\"domainList\": [\"volkan\"], \"tldList\": [\"com\", \"net\"]}" https://localhost:5001/api/domain
 </code></pre></div></div>
 
 <p>Mac:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl --insecure -X POST -H "Content-Type: application/json" -d '{"domainList": ["volkan"], "tldList": ["com", "net"]}' https://localhost:5001/api/domain
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl --insecure -X POST -H "Content-Type: application/json" -d '{"domainList": ["volkan"], "tldList": ["com", "net"]}' https://localhost:5001/api/domain
 </code></pre></div></div>
 
 <h3 id="example-test-data">Example Test data:</h3>
 <p>This is just a quick reference to be used as template:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
   "domainList": ["domain1", "domain2"],
   "tldList": ["com", "net"]
 }
 </code></pre></div></div>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{ "domainList": ["volkan"], "tldList": ["com", "net"] }
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{ "domainList": ["volkan"], "tldList": ["com", "net"] }
 </code></pre></div></div>
 
 <h2 id="resources">Resources</h2>
@@ -290,7 +301,7 @@
 
 <p>It looks something like this</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export class TldService {
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export class TldService {
 
   constructor(private fetchHtmlService: FetchHtmlService) { }
 
@@ -320,7 +331,7 @@
 
 <p>This service depends on FetchHtmlService which does the getting HTML part. Nice thing about injecting this dependency is that we can replace it with a fake one while testing. This way we can test it without even having to implement the dependency.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import { TestBed } from '@angular/core/testing';
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import { TestBed } from '@angular/core/testing';
 import { TldService } from './tld.service';
 import { FetchHtmlService } from './fetch-html.service';
 
@@ -395,34 +406,34 @@ describe('TldService', () =&gt; {
 
 <p>The script itself it very simple. It first pulls the latest and pushes the local changes:</p>
 
-<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">Function </span>Sync-Git <span class="o">{</span>
-    git fetch --all
-    git pull
-    git add <span class="nb">.</span>
-    git commit -m <span class="s1">'git-sync'</span>
-    git push
-<span class="o">}</span>
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">Function</span><span class="w"> </span><span class="nf">Sync-Git</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">git</span><span class="w"> </span><span class="nx">fetch</span><span class="w"> </span><span class="nt">--all</span><span class="w">
+    </span><span class="n">git</span><span class="w"> </span><span class="nx">pull</span><span class="w">
+    </span><span class="n">git</span><span class="w"> </span><span class="nx">add</span><span class="w"> </span><span class="o">.</span><span class="w">
+    </span><span class="n">git</span><span class="w"> </span><span class="nx">commit</span><span class="w"> </span><span class="nt">-m</span><span class="w"> </span><span class="s1">'git-sync'</span><span class="w">
+    </span><span class="n">git</span><span class="w"> </span><span class="nx">push</span><span class="w">
+</span><span class="p">}</span><span class="w">
 
-<span class="nv">$rootFolder</span> <span class="o">=</span> <span class="s1">'/rootFolder'</span>
+</span><span class="nv">$rootFolder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'/rootFolder'</span><span class="w">
 
-<span class="nb">Write-Host</span> <span class="s2">"Changing directory to root folder: </span><span class="nv">$rootFolder</span><span class="s2">"</span>
-<span class="nb">Set-Location</span> <span class="nv">$rootFolder</span>
-<span class="nb">Get-Location</span> | <span class="nb">Write-Host
+</span><span class="n">Write-Host</span><span class="w"> </span><span class="s2">"Changing directory to root folder: </span><span class="nv">$rootFolder</span><span class="s2">"</span><span class="w">
+</span><span class="n">Set-Location</span><span class="w"> </span><span class="nv">$rootFolder</span><span class="w">
+</span><span class="n">Get-Location</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Write-Host</span><span class="w">
 
-Get-ChildItem</span> -Directory | <span class="k">ForEach</span>-Object <span class="o">{</span> 
-    <span class="nb">Set-Location</span> -Path <span class="nv">$_</span> 
-    <span class="nb">Write-Host</span> <span class="nv">$_</span>
-    Sync-Git
-    <span class="nb">Set-Location</span> <span class="nv">$rootFolder</span>
-<span class="o">}</span>
+</span><span class="n">Get-ChildItem</span><span class="w"> </span><span class="nt">-Directory</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">ForEach-Object</span><span class="w"> </span><span class="p">{</span><span class="w"> 
+    </span><span class="n">Set-Location</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="bp">$_</span><span class="w"> 
+    </span><span class="n">Write-Host</span><span class="w"> </span><span class="bp">$_</span><span class="w">
+    </span><span class="n">Sync-Git</span><span class="w">
+    </span><span class="nx">Set-Location</span><span class="w"> </span><span class="nv">$rootFolder</span><span class="w">
+</span><span class="p">}</span><span class="w">
 
-<span class="nb">Write-Host</span> <span class="s2">"Done"</span>
+</span><span class="n">Write-Host</span><span class="w"> </span><span class="s2">"Done"</span><span class="w">
 
-</code></pre></div></div>
+</span></code></pre></div></div>
 
 <p>Dockerfile is based Microsoft’s Powershell image and it only needs to install Git on it:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM mcr.microsoft.com/powershell
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM mcr.microsoft.com/powershell
 
 RUN apt-get update &amp;&amp; apt-get install -y git
 RUN git config --global user.email "you@example.com"
@@ -440,17 +451,17 @@ ENTRYPOINT ["pwsh", "git-sync.ps1"]
 
 <p>Build it at the root folder:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build . -t {image name}
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build . -t {image name}
 </code></pre></div></div>
 
 <p>And run it as:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run --rm -d -v /host/path/to/root/git/folder:/rootFolder -v ~/.ssh:/root/.ssh:ro {image name}
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run --rm -d -v /host/path/to/root/git/folder:/rootFolder -v ~/.ssh:/root/.ssh:ro {image name}
 </code></pre></div></div>
 
 <p>Or pull my image from Docker Hub:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull volkanpaksoy/git-sync
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull volkanpaksoy/git-sync
 </code></pre></div></div>
 
 <h2 id="issues">Issues</h2>
@@ -458,7 +469,7 @@ ENTRYPOINT ["pwsh", "git-sync.ps1"]
 <h3 id="fatal-unable-to-auto-detect-email-address">fatal: unable to auto-detect email address</h3>
 <p>GitHub didn’t allow me to push my changes without an email address so I had to add the command below to Dockerfile:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config --global user.email "you@example.com"
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config --global user.email "you@example.com"
 </code></pre></div></div>
 
 <p>It doesn’t look good maybe but I don’t care too much about email addresses in commits anyway so I’m fine with it.</p>
@@ -466,13 +477,13 @@ ENTRYPOINT ["pwsh", "git-sync.ps1"]
 <h3 id="warning-unprotected-private-key-file-error">“WARNING: UNPROTECTED PRIVATE KEY FILE!” error</h3>
 <p>This might also be an issue in which case the solution is simple (assuming the name of the private key file is id_rsa):</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chmod 600 ~/.ssh/id_rsa 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chmod 600 ~/.ssh/id_rsa 
 </code></pre></div></div>
 
 <h3 id="bad-configuration-option">Bad configuration option</h3>
 <p>Make sure to have the following options in the config file in your .ssh directory:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host *
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host *
   StrictHostKeyChecking no
   AddKeysToAgent yes
   IgnoreUnknown UseKeychain

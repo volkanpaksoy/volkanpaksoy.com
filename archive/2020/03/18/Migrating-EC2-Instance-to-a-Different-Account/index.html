@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -148,7 +159,7 @@
 <h2 id="prerequisites">Prerequisites</h2>
 <p>Since the operation involves a source account and a target account, first create 2 profiles with EC2 access. credentials files should look like this</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[source_profile]
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[source_profile]
 aws_access_key_id = xxxxxxxxx
 aws_secret_access_key = xxxxxxxxx
 
@@ -160,57 +171,57 @@ aws_secret_access_key = xxxxxxxxx
 <h2 id="step-00-configuration">Step 00: Configuration</h2>
 <p>I put all the variables in a Powershell script file which I include in the following steps. To use the scripts you need to provide the values first. Hopefully the variable names are self-explanatory:</p>
 
-<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$sourceAccountAwsProfileName</span> <span class="o">=</span> <span class="s2">""</span>
-<span class="nv">$sourceRegion</span> <span class="o">=</span> <span class="s2">""</span>
-<span class="nv">$sourceAccountId</span> <span class="o">=</span> <span class="s2">""</span>
-<span class="nv">$instanceId</span> <span class="o">=</span> <span class="s2">""</span>
-<span class="nv">$amiName</span> <span class="o">=</span> <span class="s2">""</span>
-<span class="nv">$amiDescription</span> <span class="o">=</span> <span class="s2">""</span>
-<span class="nv">$targetAccountAwsProfileName</span> <span class="o">=</span> <span class="s2">""</span>
-<span class="nv">$targetAccountId</span> <span class="o">=</span> <span class="s2">""</span>
-<span class="nv">$targetRegion</span> <span class="o">=</span> <span class="s2">""</span>
-</code></pre></div></div>
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$sourceRegion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$sourceAccountId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$instanceId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$amiName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$amiDescription</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$targetAccountAwsProfileName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$targetAccountId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$targetRegion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span></code></pre></div></div>
 
 <h2 id="step-01-create-ami">Step 01: Create AMI</h2>
 <p>First step to migrate EC2 instance is to create an AMi from the instance.</p>
 
-<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">.</span> .\<span class="s2">"00. configuration.ps1"</span>
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">.</span><span class="w"> </span><span class="o">.</span><span class="n">\</span><span class="s2">"00. configuration.ps1"</span><span class="w">
 
-<span class="c1"># Create AMI</span>
-<span class="nv">$imageId</span> <span class="o">=</span> New-EC2Image -InstanceId <span class="nv">$instanceId</span> -Name <span class="nv">$amiName</span> -Description <span class="nv">$amiDescription</span> -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
+</span><span class="c"># Create AMI</span><span class="w">
+</span><span class="nv">$imageId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">New-EC2Image</span><span class="w"> </span><span class="nt">-InstanceId</span><span class="w"> </span><span class="nv">$instanceId</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nv">$amiName</span><span class="w"> </span><span class="nt">-Description</span><span class="w"> </span><span class="nv">$amiDescription</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
 
-<span class="nb">Set-Variable</span> -Scope global -Name AMI_ID -Value <span class="nv">$imageId</span>
-<span class="nb">Write-Host</span> <span class="s2">"AMI_ID: ["</span> <span class="nv">$AMI_ID</span> <span class="s2">"]"</span>
-</code></pre></div></div>
+</span><span class="n">Set-Variable</span><span class="w"> </span><span class="nt">-Scope</span><span class="w"> </span><span class="nx">global</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">AMI_ID</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nv">$imageId</span><span class="w">
+</span><span class="n">Write-Host</span><span class="w"> </span><span class="s2">"AMI_ID: ["</span><span class="w"> </span><span class="nv">$AMI_ID</span><span class="w"> </span><span class="s2">"]"</span><span class="w">
+</span></code></pre></div></div>
 
 <p>This operation takes a few minutes. The image has to become available before we can proceed to the next step.</p>
 
 <h2 id="step-02-share-ami">Step 02: Share AMI</h2>
 <p>Now the image is ready we have to share it with the target account. The script below shares the AMI and allows new volumes created from this AMI.</p>
 
-<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">.</span> .\<span class="s2">"00. configuration.ps1"</span>
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">.</span><span class="w"> </span><span class="o">.</span><span class="n">\</span><span class="s2">"00. configuration.ps1"</span><span class="w">
 
-<span class="nv">$imageId</span> <span class="o">=</span> <span class="nb">Get-Variable </span>AMI_ID -valueOnly
-Edit-EC2ImageAttribute -ImageId <span class="nv">$imageId</span> -Attribute launchPermission -OperationType add -UserId <span class="nv">$targetAccountId</span> -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
+</span><span class="nv">$imageId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Get-Variable</span><span class="w"> </span><span class="nx">AMI_ID</span><span class="w"> </span><span class="nt">-valueOnly</span><span class="w">
+</span><span class="n">Edit-EC2ImageAttribute</span><span class="w"> </span><span class="nt">-ImageId</span><span class="w"> </span><span class="nv">$imageId</span><span class="w"> </span><span class="nt">-Attribute</span><span class="w"> </span><span class="nx">launchPermission</span><span class="w"> </span><span class="nt">-OperationType</span><span class="w"> </span><span class="nx">add</span><span class="w"> </span><span class="nt">-UserId</span><span class="w"> </span><span class="nv">$targetAccountId</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
 
-<span class="nv">$imageSnapshots</span> <span class="o">=</span> Get-EC2Snapshot -OwnerId <span class="nv">$sourceAccountId</span> -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
-                | <span class="nb">Where</span>-Object <span class="o">{</span><span class="nv">$_</span>.Description -like <span class="s2">"*</span><span class="nv">$imageId</span><span class="s2">*"</span> <span class="o">}</span>
+</span><span class="nv">$imageSnapshots</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Get-EC2Snapshot</span><span class="w"> </span><span class="nt">-OwnerId</span><span class="w"> </span><span class="nv">$sourceAccountId</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
+                </span><span class="o">|</span><span class="w"> </span><span class="n">Where-Object</span><span class="w"> </span><span class="p">{</span><span class="bp">$_</span><span class="o">.</span><span class="nf">Description</span><span class="w"> </span><span class="o">-like</span><span class="w"> </span><span class="s2">"*</span><span class="nv">$imageId</span><span class="s2">*"</span><span class="w"> </span><span class="p">}</span><span class="w">
 
-<span class="k">foreach</span> <span class="o">(</span><span class="nv">$snapshot</span> <span class="k">in</span> <span class="nv">$imageSnapshots</span><span class="o">)</span> <span class="o">{</span>
-    Edit-EC2SnapshotAttribute -SnapshotId <span class="nv">$snapshot</span>.SnapshotId -Attribute createVolumePermission -OperationType add -UserId <span class="nv">$targetAccountId</span> -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
-<span class="o">}</span>
-</code></pre></div></div>
+</span><span class="kr">foreach</span><span class="w"> </span><span class="p">(</span><span class="nv">$snapshot</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nv">$imageSnapshots</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">Edit-EC2SnapshotAttribute</span><span class="w"> </span><span class="nt">-SnapshotId</span><span class="w"> </span><span class="nv">$snapshot</span><span class="o">.</span><span class="nf">SnapshotId</span><span class="w"> </span><span class="nt">-Attribute</span><span class="w"> </span><span class="nx">createVolumePermission</span><span class="w"> </span><span class="nt">-OperationType</span><span class="w"> </span><span class="nx">add</span><span class="w"> </span><span class="nt">-UserId</span><span class="w"> </span><span class="nv">$targetAccountId</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
 
 <h2 id="step-03-copy-ami">Step 03: Copy AMI</h2>
 <p>At this point, if you go to the target account you should be able to see the image when you choose “Private images” category. Make sure to choose the same region as the source account to be able to see the image.</p>
 
 <p>We have access to this image but we want to have our own copy which we accomplish with the script below:</p>
 
-<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">.</span> .\<span class="s2">"00. configuration.ps1"</span>
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">.</span><span class="w"> </span><span class="o">.</span><span class="n">\</span><span class="s2">"00. configuration.ps1"</span><span class="w">
 
-<span class="nv">$imageId</span> <span class="o">=</span> <span class="nb">Get-Variable </span>AMI_ID -valueOnly
-<span class="nb">Copy</span>-EC2Image -SourceImageId <span class="nv">$imageId</span> -SourceRegion <span class="nv">$sourceRegion</span> -Name <span class="nv">$amiName</span> -ProfileName <span class="nv">$targetAccountAwsProfileName</span> -Region <span class="nv">$targetRegion</span>
-</code></pre></div></div>
+</span><span class="nv">$imageId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Get-Variable</span><span class="w"> </span><span class="nx">AMI_ID</span><span class="w"> </span><span class="nt">-valueOnly</span><span class="w">
+</span><span class="n">Copy-EC2Image</span><span class="w"> </span><span class="nt">-SourceImageId</span><span class="w"> </span><span class="nv">$imageId</span><span class="w"> </span><span class="nt">-SourceRegion</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nv">$amiName</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$targetAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$targetRegion</span><span class="w">
+</span></code></pre></div></div>
 
 <p>In my experience the whole copying process took about 5 minutes.</p>
 
@@ -220,25 +231,25 @@ Edit-EC2ImageAttribute -ImageId <span class="nv">$imageId</span> -Attribute laun
 
 <p>Final step is to clean up after ourselves. Since this AMI was created to migrate to the new account only I assume we won’t need it anymore in the source account. The following script deregisters the AMI and deletes all the associated snapshots.</p>
 
-<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">.</span> .\<span class="s2">"00. configuration.ps1"</span>
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">.</span><span class="w"> </span><span class="o">.</span><span class="n">\</span><span class="s2">"00. configuration.ps1"</span><span class="w">
 
-<span class="c1"># Create image script writes the AMI ID to a variable. If it doesn't exist get the image id from AWS Management Console</span>
-<span class="nv">$imageId</span> <span class="o">=</span> <span class="nb">Get-Variable </span>AMI_ID -valueOnly
+</span><span class="c"># Create image script writes the AMI ID to a variable. If it doesn't exist get the image id from AWS Management Console</span><span class="w">
+</span><span class="nv">$imageId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Get-Variable</span><span class="w"> </span><span class="nx">AMI_ID</span><span class="w"> </span><span class="nt">-valueOnly</span><span class="w">
 
-<span class="nb">Write-Host</span> <span class="s2">"Unregistering image: ["</span> <span class="nv">$imageId</span> <span class="s2">"]"</span>
-Unregister-EC2Image -ImageId <span class="nv">$imageId</span> -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
+</span><span class="n">Write-Host</span><span class="w"> </span><span class="s2">"Unregistering image: ["</span><span class="w"> </span><span class="nv">$imageId</span><span class="w"> </span><span class="s2">"]"</span><span class="w">
+</span><span class="n">Unregister-EC2Image</span><span class="w"> </span><span class="nt">-ImageId</span><span class="w"> </span><span class="nv">$imageId</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
 
-<span class="nv">$imageSnapshots</span> <span class="o">=</span> Get-EC2Snapshot -OwnerId <span class="nv">$sourceAccountId</span> -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
-                | <span class="nb">Where</span>-Object <span class="o">{</span><span class="nv">$_</span>.Description -like <span class="s2">"*</span><span class="nv">$imageId</span><span class="s2">*"</span> <span class="o">}</span>
+</span><span class="nv">$imageSnapshots</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Get-EC2Snapshot</span><span class="w"> </span><span class="nt">-OwnerId</span><span class="w"> </span><span class="nv">$sourceAccountId</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
+                </span><span class="o">|</span><span class="w"> </span><span class="n">Where-Object</span><span class="w"> </span><span class="p">{</span><span class="bp">$_</span><span class="o">.</span><span class="nf">Description</span><span class="w"> </span><span class="o">-like</span><span class="w"> </span><span class="s2">"*</span><span class="nv">$imageId</span><span class="s2">*"</span><span class="w"> </span><span class="p">}</span><span class="w">
 
-<span class="k">foreach</span> <span class="o">(</span><span class="nv">$snapshot</span> <span class="k">in</span> <span class="nv">$imageSnapshots</span><span class="o">)</span> <span class="o">{</span>
-    <span class="nb">Write-Host</span> <span class="s2">"Removing snapshot: ["</span> <span class="nv">$snapshot</span>.SnapshotId <span class="s2">"]"</span>
-    Remove-EC2Snapshot -SnapshotId <span class="nv">$snapshot</span>.SnapshotId -Force -ProfileName <span class="nv">$sourceAccountAwsProfileName</span> -Region <span class="nv">$sourceRegion</span>
-<span class="o">}</span>
+</span><span class="kr">foreach</span><span class="w"> </span><span class="p">(</span><span class="nv">$snapshot</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nv">$imageSnapshots</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">Write-Host</span><span class="w"> </span><span class="s2">"Removing snapshot: ["</span><span class="w"> </span><span class="nv">$snapshot</span><span class="o">.</span><span class="nf">SnapshotId</span><span class="w"> </span><span class="s2">"]"</span><span class="w">
+    </span><span class="n">Remove-EC2Snapshot</span><span class="w"> </span><span class="nt">-SnapshotId</span><span class="w"> </span><span class="nv">$snapshot</span><span class="o">.</span><span class="nf">SnapshotId</span><span class="w"> </span><span class="nt">-Force</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
+</span><span class="p">}</span><span class="w">
 
-<span class="c1"># Delete variable</span>
-<span class="nb">Remove-Variable </span>AMI_ID -Scope global
-</code></pre></div></div>
+</span><span class="c"># Delete variable</span><span class="w">
+</span><span class="n">Remove-Variable</span><span class="w"> </span><span class="nx">AMI_ID</span><span class="w"> </span><span class="nt">-Scope</span><span class="w"> </span><span class="nx">global</span><span class="w">
+</span></code></pre></div></div>
 
 <h2 id="resources">Resources</h2>
 <ul>

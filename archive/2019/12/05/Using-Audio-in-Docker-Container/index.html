@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -151,12 +162,12 @@
 <h2 id="test-environment-setup">Test Environment Setup</h2>
 <p>I’m going to use dotnet core 3.1 runtime image:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull mcr.microsoft.com/dotnet/core/runtime:3.1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull mcr.microsoft.com/dotnet/core/runtime:3.1
 </code></pre></div></div>
 
 <p>Here’s my Dockerfile:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM mcr.microsoft.com/dotnet/core/runtime:3.1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM mcr.microsoft.com/dotnet/core/runtime:3.1
 
 RUN apt-get update -y
 
@@ -171,37 +182,37 @@ ENTRYPOINT ["/play-audio.sh"]
 
 <p>and the script (play-audio.sh) that plays the audio looks like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#!/bin/bash
 
-<span class="nv">url</span><span class="o">=</span><span class="nv">$1</span>
-<span class="nv">filename</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">url</span><span class="p">##*/</span><span class="k">}</span><span class="s2">"</span>
+url=$1
+filename="${url##*/}"
 
-<span class="k">if</span> <span class="o">[</span> <span class="o">!</span> <span class="nt">-f</span> <span class="nv">$filename</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
-    </span><span class="nb">echo</span> <span class="s2">"File doesn't exist. Downloading."</span>
-    wget <span class="nv">$url</span>
-<span class="k">fi</span>
+if [ ! -f $filename ]; then
+    echo "File doesn't exist. Downloading."
+    wget $url
+fi
 
-<span class="c"># check if the audio player program exists. helpful to test the script individually on macOS</span>
-<span class="k">if </span><span class="nb">hash </span>mpg123 2&gt;/dev/null<span class="p">;</span> <span class="k">then
-    </span><span class="nb">echo</span> <span class="s2">"Playing file using mpg123"</span>
-    mpg123 <span class="nv">$filename</span>
-<span class="k">elif </span><span class="nb">hash </span>afplay 2&gt;/dev/null<span class="p">;</span> <span class="k">then
-    </span><span class="nb">echo</span> <span class="s2">"Playing file using afplay"</span>
-    afplay <span class="nv">$filename</span>
-<span class="k">else 
-    </span><span class="nb">echo</span> <span class="s2">"No player could be found."</span>    
-<span class="k">fi</span>
+# check if the audio player program exists. helpful to test the script individually on macOS
+if hash mpg123 2&gt;/dev/null; then
+    echo "Playing file using mpg123"
+    mpg123 $filename
+elif hash afplay 2&gt;/dev/null; then
+    echo "Playing file using afplay"
+    afplay $filename
+else 
+    echo "No player could be found."    
+fi
 </code></pre></div></div>
 
 <p>I built the image with the following command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build -t audio-test .
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build -t audio-test .
 </code></pre></div></div>
 
 <h2 id="testing-the-audio">Testing the audio</h2>
 <p>Initially I rana container like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run audio-test https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run audio-test https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3
 </code></pre></div></div>
 
 <p>After running the container like this I got the error shown below:</p>
@@ -211,12 +222,12 @@ ENTRYPOINT ["/play-audio.sh"]
 <h2 id="solution">Solution</h2>
 <p>The trick is ro run with the following parameter:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>--device /dev/snd
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>--device /dev/snd
 </code></pre></div></div>
 
 <p>So the full Docker run command looks like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run --rm --device /dev/snd audio-test https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run --rm --device /dev/snd audio-test https://file-examples.com/wp-content/uploads/2017/11/file_example_MP3_5MG.mp3
 </code></pre></div></div>
 
 <h2 id="conclusion">Conclusion</h2>

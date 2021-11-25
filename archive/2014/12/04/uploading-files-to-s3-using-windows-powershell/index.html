@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -151,12 +162,12 @@
 <h3 id="v2-vs-v4">v2 vs. v4</h3>
 <p>The problem is AWS module is not loaded and you have to do it yourself with this command</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import-module "C:\Program Files (x86)\AWS Tools\PowerShell\AWSPowerShell\AWSPowerShell.psd1"
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import-module "C:\Program Files (x86)\AWS Tools\PowerShell\AWSPowerShell\AWSPowerShell.psd1"
 </code></pre></div></div>
 
 <p>After this command you can use AWS commandlets but when you close and open another shell it will be completely oblivious and will deny knowing what you’re talking about! To automate this process you need to add it to your profile. AWS documentation tells you to edit your profile straight away but the profile did not exist in my case. So first check if the profile exists:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Test-Path $profile
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Test-Path $profile
 </code></pre></div></div>
 <p>If you get “False” like I did then you need to create a new profile first.</p>
 
@@ -164,12 +175,12 @@
 
 <p>To create the profile run the following command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>New-Item -path $profile -type file –force
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>New-Item -path $profile -type file –force
 </code></pre></div></div>
 
 <p>then you can edit the profile by simply running</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>notepad $profile
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>notepad $profile
 </code></pre></div></div>
 
 <p>Add the import-module command above and save the file. From now on every time you run PowerShell it will be ready to run AWS commandlets.</p>
@@ -177,12 +188,12 @@
 <h3 id="time-to-upload">Time to upload</h3>
 <p>Now that we got over with troubleshooting we can finally upload our files. The commandlet we need is called Write-S3Object. The parameters it requires are the target bucket name, source file, target path, and the credentials.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Write-S3Object -BucketName my-bucket -File file.txt -Key subfolder/remote-file.txt -CannedACLName Private -AccessKey accesskey -SecretKey secretKey
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Write-S3Object -BucketName my-bucket -File file.txt -Key subfolder/remote-file.txt -CannedACLName Private -AccessKey accesskey -SecretKey secretKey
 </code></pre></div></div>
 
 <p>Most likely you would like to upload a bunch of files under a folder. In order to accomplish that you can create a simple PowerShell script like this one:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$results = Get-ChildItem .\path\to\files -Recurse -Include "*.pdf" 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$results = Get-ChildItem .\path\to\files -Recurse -Include "*.pdf" 
 foreach ($path in $results) {
 	Write-Host $path
 	$filename = [System.IO.Path]::GetFileName($path)

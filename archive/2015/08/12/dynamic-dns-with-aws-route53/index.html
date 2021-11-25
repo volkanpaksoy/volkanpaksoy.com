@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -163,18 +174,18 @@
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">boto.route53</span>
 <span class="kn">import</span> <span class="nn">urllib2</span>
-<span class="n">currentIP</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://checkip.amazonaws.com/"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">currentIP</span> <span class="o">=</span> <span class="n">urllib2</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://checkip.amazonaws.com/"</span><span class="p">).</span><span class="n">read</span><span class="p">()</span>
 
-<span class="n">conn</span> <span class="o">=</span> <span class="n">boto</span><span class="o">.</span><span class="n">connect_route53</span><span class="p">()</span>
-<span class="n">zone</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_zone</span><span class="p">(</span><span class="s">"volki.info."</span><span class="p">)</span>
-<span class="n">change_set</span> <span class="o">=</span> <span class="n">boto</span><span class="o">.</span><span class="n">route53</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">ResourceRecordSets</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s">'{HOSTED_ZONE_ID}'</span><span class="p">)</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">boto</span><span class="p">.</span><span class="n">connect_route53</span><span class="p">()</span>
+<span class="n">zone</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="n">get_zone</span><span class="p">(</span><span class="s">"volki.info."</span><span class="p">)</span>
+<span class="n">change_set</span> <span class="o">=</span> <span class="n">boto</span><span class="p">.</span><span class="n">route53</span><span class="p">.</span><span class="n">record</span><span class="p">.</span><span class="n">ResourceRecordSets</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s">'{HOSTED_ZONE_ID}'</span><span class="p">)</span>
 
-<span class="k">for</span> <span class="n">rrset</span> <span class="ow">in</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_all_rrsets</span><span class="p">(</span><span class="n">zone</span><span class="o">.</span><span class="nb">id</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">rrset</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">'calibre.volki.info.'</span><span class="p">:</span>
-        <span class="n">u</span> <span class="o">=</span> <span class="n">change_set</span><span class="o">.</span><span class="n">add_change</span><span class="p">(</span><span class="s">"UPSERT"</span><span class="p">,</span> <span class="n">rrset</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">rrset</span><span class="o">.</span><span class="nb">type</span><span class="p">,</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
-        <span class="n">rrset</span><span class="o">.</span><span class="n">resource_records</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">currentIP</span>
-        <span class="n">u</span><span class="o">.</span><span class="n">add_value</span><span class="p">(</span><span class="n">rrset</span><span class="o">.</span><span class="n">resource_records</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="n">change_set</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">rrset</span> <span class="ow">in</span> <span class="n">conn</span><span class="p">.</span><span class="n">get_all_rrsets</span><span class="p">(</span><span class="n">zone</span><span class="p">.</span><span class="nb">id</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">rrset</span><span class="p">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">'calibre.volki.info.'</span><span class="p">:</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">change_set</span><span class="p">.</span><span class="n">add_change</span><span class="p">(</span><span class="s">"UPSERT"</span><span class="p">,</span> <span class="n">rrset</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">rrset</span><span class="p">.</span><span class="nb">type</span><span class="p">,</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+        <span class="n">rrset</span><span class="p">.</span><span class="n">resource_records</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">currentIP</span>
+        <span class="n">u</span><span class="p">.</span><span class="n">add_value</span><span class="p">(</span><span class="n">rrset</span><span class="p">.</span><span class="n">resource_records</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">change_set</span><span class="p">.</span><span class="n">commit</span><span class="p">()</span>
 </code></pre></div></div>
 
 <p>The difference of DynDns53 is that it can run as a background service and it has a cute logo! The C# equivalent of above code is like this:</p>
@@ -227,12 +238,12 @@
 
 <p>I built the Windows service using Topshelf. To install it, build the application and on an elevated command prompt just run</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DynDns53.Service.exe install
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DynDns53.Service.exe install
 </code></pre></div></div>
 
 <p>Similarly to uninstall:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DynDns53.Service.exe uninstall
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DynDns53.Service.exe uninstall
 </code></pre></div></div>
 
 <h1 id="whats-missing">What’s missing</h1>

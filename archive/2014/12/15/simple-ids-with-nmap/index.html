@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -177,40 +188,40 @@
 
 <p>I covered Nmap basics <a href="https://volkanpaksoy.com/archive/2014/12/13/nmap-basics/">here</a>. In this project all I need is host discovery so I’m not interested in the services, machine names, operating systems etc. I’ll just run this command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo nmap -sn 172.16.1.0/24 -oX output.xml
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo nmap -sn 172.16.1.0/24 -oX output.xml
 </code></pre></div></div>
 
 <p>Also I need my old friend s3cmd so I ran this</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install s3cmd
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install s3cmd
 </code></pre></div></div>
 
 <p>Then</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>s3cmd --configure
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>s3cmd --configure
 </code></pre></div></div>
 
 <p>and entered the credentials for the new IAM user I created who has access only to a single S3 bucket.</p>
 
 <p>So to put it together in a shell script I created the simple script below.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#!/bin/bash
 
-<span class="nb">echo</span> <span class="s2">"Running Nmap"</span>
-<span class="nb">sudo </span>nmap <span class="nt">-sn</span> 172.16.1.0/24 <span class="nt">-oX</span> /home/pi/output.xml
+echo "Running Nmap"
+sudo nmap -sn 172.16.1.0/24 -oX /home/pi/output.xml
 
-<span class="nv">timestamp</span><span class="o">=</span><span class="k">$(</span>date +%Y%m%d_%H%M%S<span class="k">)</span>
-<span class="nv">s3FileName</span><span class="o">=</span>nmap_output_<span class="nv">$timestamp</span>.xml
+timestamp=$(date +%Y%m%d_%H%M%S)
+s3FileName=nmap_output_$timestamp.xml
 
-<span class="nb">echo</span> <span class="s2">"Uploading the output to S3"</span>
-<span class="nb">sudo </span>s3cmd put /home/pi/output.xml s3://<span class="o">{</span>BUCKET<span class="o">}</span>/<span class="nv">$s3FileName</span>
+echo "Uploading the output to S3"
+sudo s3cmd put /home/pi/output.xml s3://{BUCKET}/$s3FileName
 
-<span class="nb">sudo </span>rm /home/pi/output.xml
+sudo rm /home/pi/output.xml
 </code></pre></div></div>
 
 <p>Also to make the script executable so I ran this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo chmod 755 my_script
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo chmod 755 my_script
 </code></pre></div></div>
 
 <h3 id="analyze-and-alert">Analyze and alert</h3>

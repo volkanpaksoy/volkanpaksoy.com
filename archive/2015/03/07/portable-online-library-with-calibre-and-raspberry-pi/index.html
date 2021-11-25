@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -202,7 +213,7 @@
 
 <p>and the suggested command is</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo -v &amp;&amp; wget -nv -O- https://raw.githubusercontent.com/kovidgoyal/calibre/master/setup/linux-installer.py | sudo python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo -v &amp;&amp; wget -nv -O- https://raw.githubusercontent.com/kovidgoyal/calibre/master/setup/linux-installer.py | sudo python -c "import sys; main=lambda:sys.stderr.write('Download failed\n'); exec(sys.stdin.read()); main()"
 </code></pre></div></div>
 
 <p>Alas, after running the command I got the following error:</p>
@@ -213,7 +224,7 @@
 
 <p>As a fallback method I simply used apt-get to install it:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get update &amp;&amp; sudo apt-get install calibre
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get update &amp;&amp; sudo apt-get install calibre
 </code></pre></div></div>
 
 <p>It worked fine but the version is 0.8.51 (latest release at the time of this writing is 2.20.0 so you can see it’s a little bit outdated!). Content server has been implemented long time ago so for all intents and purposes it’s good enough for this project.</p>
@@ -221,17 +232,17 @@
 <h3 id="step-2-run-it-as-server">Step 2: Run it as server</h3>
 <p>Now that we have Calibre installed we can run the content server from command line:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>calibre-server --with-library=/home/pi/calibre/myLibrary --daemonize
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>calibre-server --with-library=/home/pi/calibre/myLibrary --daemonize
 </code></pre></div></div>
 
 <p>This will run the process in the background (because of the <em>–daemonize</em> flag) but id the Pi restarts it will not run automatically. To fix that I added the command to crontab by first entering the following command</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>crontab -e
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>crontab -e
 </code></pre></div></div>
 
 <p>and adding the following line after the comments</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@reboot calibre-server --with-library=/home/pi/calibre/myLibrary --daemonize
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@reboot calibre-server --with-library=/home/pi/calibre/myLibrary --daemonize
 </code></pre></div></div>
 
 <p>so that the same command is run after every reboot.</p>
@@ -251,12 +262,12 @@
 
 <p>We can add books by using <em>calibredb</em> command like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>calibredb add Raspberry_Pi_Education_Manual.pdf --with-library=/home/pi/calibre/myLibrary
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>calibredb add Raspberry_Pi_Education_Manual.pdf --with-library=/home/pi/calibre/myLibrary
 </code></pre></div></div>
 
 <p>Please note if you try to use calibre instead of <em>calibredb</em> you’d get the following error:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>calibre: cannot connect to X server 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>calibre: cannot connect to X server 
 </code></pre></div></div>
 
 <p>Because we are using the GUI we cannot use <em>calibre</em> directly, instead we add it using <em>calibredb</em>.</p>
@@ -287,7 +298,7 @@
 
 <p>Please note that Kindle cannot download PDFs. When I tried to download Raspberry Pi manual I got the following error</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Only files with the extension .AZW, .PRC, .MOBI or .TXT can be downloaded to your Kindle.
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Only files with the extension .AZW, .PRC, .MOBI or .TXT can be downloaded to your Kindle.
 </code></pre></div></div>
 
 <p>So make sure you upload the the right file formats.</p>
@@ -326,12 +337,12 @@
 
 <p>First I had to install pip to be able to install boto</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install python3-pip
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install python3-pip
 </code></pre></div></div>
 
 <p>Then boto itself</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pip install boto
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pip install boto
 </code></pre></div></div>
 
 <p>I created an IAM user that only has access to a single domain which I use for this kind of stuff on Route 53 and added its credentials to the AWS credentials file as explained in the nice and brief tutorial <a href="http://boto.readthedocs.org/en/latest/route53_tut.html" target="_blank" rel="noopener noreferrer">here</a></p>
@@ -340,18 +351,18 @@
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">boto.route53</span>
 <span class="kn">import</span> <span class="nn">urllib2</span>
-<span class="n">currentIP</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://checkip.amazonaws.com/"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">currentIP</span> <span class="o">=</span> <span class="n">urllib2</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://checkip.amazonaws.com/"</span><span class="p">).</span><span class="n">read</span><span class="p">()</span>
 
-<span class="n">conn</span> <span class="o">=</span> <span class="n">boto</span><span class="o">.</span><span class="n">connect_route53</span><span class="p">()</span>
-<span class="n">zone</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_zone</span><span class="p">(</span><span class="s">"volki.info."</span><span class="p">)</span>
-<span class="n">change_set</span> <span class="o">=</span> <span class="n">boto</span><span class="o">.</span><span class="n">route53</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">ResourceRecordSets</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s">'{HOSTED_ZONE_ID}'</span><span class="p">)</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">boto</span><span class="p">.</span><span class="n">connect_route53</span><span class="p">()</span>
+<span class="n">zone</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="n">get_zone</span><span class="p">(</span><span class="s">"volki.info."</span><span class="p">)</span>
+<span class="n">change_set</span> <span class="o">=</span> <span class="n">boto</span><span class="p">.</span><span class="n">route53</span><span class="p">.</span><span class="n">record</span><span class="p">.</span><span class="n">ResourceRecordSets</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s">'{HOSTED_ZONE_ID}'</span><span class="p">)</span>
 
-<span class="k">for</span> <span class="n">rrset</span> <span class="ow">in</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_all_rrsets</span><span class="p">(</span><span class="n">zone</span><span class="o">.</span><span class="nb">id</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">rrset</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">'calibre.volki.info.'</span><span class="p">:</span>
-        <span class="n">u</span> <span class="o">=</span> <span class="n">change_set</span><span class="o">.</span><span class="n">add_change</span><span class="p">(</span><span class="s">"UPSERT"</span><span class="p">,</span> <span class="n">rrset</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">rrset</span><span class="o">.</span><span class="nb">type</span><span class="p">,</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
-        <span class="n">rrset</span><span class="o">.</span><span class="n">resource_records</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">currentIP</span>
-        <span class="n">u</span><span class="o">.</span><span class="n">add_value</span><span class="p">(</span><span class="n">rrset</span><span class="o">.</span><span class="n">resource_records</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="n">change_set</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">rrset</span> <span class="ow">in</span> <span class="n">conn</span><span class="p">.</span><span class="n">get_all_rrsets</span><span class="p">(</span><span class="n">zone</span><span class="p">.</span><span class="nb">id</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">rrset</span><span class="p">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">'calibre.volki.info.'</span><span class="p">:</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">change_set</span><span class="p">.</span><span class="n">add_change</span><span class="p">(</span><span class="s">"UPSERT"</span><span class="p">,</span> <span class="n">rrset</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">rrset</span><span class="p">.</span><span class="nb">type</span><span class="p">,</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+        <span class="n">rrset</span><span class="p">.</span><span class="n">resource_records</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">currentIP</span>
+        <span class="n">u</span><span class="p">.</span><span class="n">add_value</span><span class="p">(</span><span class="n">rrset</span><span class="p">.</span><span class="n">resource_records</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">change_set</span><span class="p">.</span><span class="n">commit</span><span class="p">()</span>
 </code></pre></div></div>
 
 <p>Of course this script needs to be added to crontab and should be run every 5-10 minutes. If the external IP changes there might be some disturbance to the service but it should just take a few minutes before it’s resolved.</p>

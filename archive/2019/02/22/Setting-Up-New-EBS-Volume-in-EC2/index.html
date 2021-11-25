@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -156,7 +167,7 @@
 <h2 id="connecting-to-instance">Connecting to instance</h2>
 <p>Now we have to connect to the instance to format the new volume. To achieve that we must have access to the private we generated while we created the instance. So to SSH into the machine we run this command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh -i {/Path/To/Key/file_name.pem} ec2-user@{public DNS name of the instance}
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh -i {/Path/To/Key/file_name.pem} ec2-user@{public DNS name of the instance}
 </code></pre></div></div>
 
 <h2 id="format-the-volume">Format the volume</h2>
@@ -167,29 +178,29 @@
 <h2 id="install-and-configure-docker">Install and configure Docker</h2>
 <p>Installing Docker is as simple as running this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo yum update -y
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo yum update -y
 sudo yum install -y docker
 </code></pre></div></div>
 
 <p>To be able to use Docker without sudoing everything ad ec2-user to docker group:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo usermod -aG docker ec2-user
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo usermod -aG docker ec2-user
 </code></pre></div></div>
 
 <p>We need to make sure that Docker daemon starts on reboot too. To achieve this run this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable docker
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable docker
 </code></pre></div></div>
 
 <h2 id="copy-files-to-the-instance">Copy files to the instance</h2>
 <p>To copy some files to the new instance I used SCP command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo scp -i {/Path/To/Key/file_name.pem} -r {/Path/To/Local/Folder/} ec2-user@{public DNS name of the instance}:/Remote/Folder
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo scp -i {/Path/To/Key/file_name.pem} -r {/Path/To/Local/Folder/} ec2-user@{public DNS name of the instance}:/Remote/Folder
 </code></pre></div></div>
 
 <p>The issue was ec2-user didn’t initially have access to write on the remote folder. In that case you can run  the following command to have access:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>setfacl -m u:ec2-user:rwx /Remote/Folder
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>setfacl -m u:ec2-user:rwx /Remote/Folder
 </code></pre></div></div>
 
 <h2 id="resources">Resources</h2>

@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -263,7 +274,7 @@
   <li>Forces the user to change their password first time they log in (by attaching IAMUserChangePassword policy to the user)</li>
 </ul>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Resources:
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Resources:
   AdministratorsGroup:
     Type: AWS::IAM::Group
     Properties:
@@ -371,7 +382,7 @@
 
 <p><strong>Step 1:</strong> Save the following snippet to a local file such as <em>cloudformation.sample.yaml</em>:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Resources:
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Resources:
   Ec2Instance:
     Type: AWS::EC2::Instance
     Properties:
@@ -412,7 +423,7 @@
 
 <p><strong>Step 2:</strong> Use the following naming convention and replace the values:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://console.aws.amazon.com/cloudformation/home?region=region#/stacks/new?stackName=stack_name&amp;templateURL=template_location
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://console.aws.amazon.com/cloudformation/home?region=region#/stacks/new?stackName=stack_name&amp;templateURL=template_location
 </code></pre></div></div>
 
 <p><a href="https://console.aws.amazon.com/cloudformation/home?region=eu-west-2#/stacks/new?stackName=FirstStackForEC2&amp;templateURL=https://s3.eu-west-2.amazonaws.com/blog-cloudformation-templates/2019-01-15-Infrastructure-as-code-with-AWS-CloudFormation-cloudformation.sample.yaml" target="_blank" rel="noopener noreferrer"><img src="/images/vpblogimg/2019/01/aws-cloudformation-launch-stack.svg" alt=""></a></p>

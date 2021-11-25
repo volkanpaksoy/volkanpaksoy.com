@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -146,25 +157,25 @@
 <p>Evernote has been recently hacked. Dropbox has been hacked many times. Who knows what’s going in the other services we are using. So I decided to phase out my cloud service providers and create my own cloud.
 There are bunch of ways of running this tool. For instance, you can just download a VM image with everything installed. I decided to start from scratch and perform a manual installation on a new Ubuntu server. It’s very easy. First we need to install dependencies:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt-get install apache2 php5 php5-gd php-xml-parser php5-intl
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt-get install apache2 php5 php5-gd php-xml-parser php5-intl
 apt-get install php5-sqlite php5-mysql smbclient curl libcurl3 php5-curl
 </code></pre></div></div>
 
 <p>Then extract the downladed compressed file:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tar -xjf path/to/downloaded/owncloud-x.x.x.tar.bz2
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tar -xjf path/to/downloaded/owncloud-x.x.x.tar.bz2
 cp -r owncloud /path/to/your/webserver
 </code></pre></div></div>
 
 <p>Set the directory permissions:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chown -R www-data:www-data /path/to/your/owncloud/
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chown -R www-data:www-data /path/to/your/owncloud/
 </code></pre></div></div>
 
 <p>Enable .htaccess by settings AllowOverride to “All” in /var/www directory in Apache config which is in /etc/apache2/sites-enabled/000-default on Ubuntu
 Finally run mod_rewrite:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>a2enmod rewrite
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>a2enmod rewrite
 a2enmod headers
 </code></pre></div></div>
 

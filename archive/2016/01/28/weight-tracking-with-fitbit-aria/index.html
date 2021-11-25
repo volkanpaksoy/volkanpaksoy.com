@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -143,7 +154,7 @@
 	
 </div>
 	<div class="entry-content" itemprop="articleBody">
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"What gets measured, gets managed." - Peter Drucker
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"What gets measured, gets managed." - Peter Drucker
 </code></pre></div></div>
 
 <p>It’s important to have goals, especially <a href="https://en.wikipedia.org/wiki/SMART_criteria" target="_blank" rel="noopener noreferrer">SMART</a> goals. The “M” in S.M.A.R.T. stands for <em>Measurable</em>. Having enough data about a process helps tremendously to improve that process. To this effect, I started to collect exercise data from my Microsoft band which I blogged about <a href="https://volkanpaksoy.com/archive/2016/01/18/playing-with-microsoft-band/">here</a>.</p>
@@ -180,19 +191,19 @@
 
 <p>The endpoint that returns weight data accepts a few various formats depending on your needs. As I wanted a range instead of a single day I used the following format:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://api.fitbit.com/1/user/{user ID}/body/log/weight/date/{startDate}/{endDate}.json
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://api.fitbit.com/1/user/{user ID}/body/log/weight/date/{startDate}/{endDate}.json
 </code></pre></div></div>
 
 <p>This call returns an array of the following JSON objects:</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-	</span><span class="s2">"bmi"</span><span class="p">:</span><span class="w"> </span><span class="err">xx.xx</span><span class="p">,</span><span class="w">
-	</span><span class="s2">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"yyyy-mm-dd"</span><span class="p">,</span><span class="w">
-	</span><span class="s2">"fat"</span><span class="p">:</span><span class="w"> </span><span class="err">xx.xxxxxxxxxxxxxxx</span><span class="p">,</span><span class="w">
-	</span><span class="s2">"logId"</span><span class="p">:</span><span class="w"> </span><span class="err">xxxxxxxxxxxxx</span><span class="p">,</span><span class="w">
-	</span><span class="s2">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Aria"</span><span class="p">,</span><span class="w">
-	</span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"hh:mm:ss"</span><span class="p">,</span><span class="w">
-	</span><span class="s2">"weight"</span><span class="p">:</span><span class="w"> </span><span class="err">xx.xx</span><span class="w">
+	</span><span class="nl">"bmi"</span><span class="p">:</span><span class="w"> </span><span class="err">xx.xx</span><span class="p">,</span><span class="w">
+	</span><span class="nl">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"yyyy-mm-dd"</span><span class="p">,</span><span class="w">
+	</span><span class="nl">"fat"</span><span class="p">:</span><span class="w"> </span><span class="err">xx.xxxxxxxxxxxxxxx</span><span class="p">,</span><span class="w">
+	</span><span class="nl">"logId"</span><span class="p">:</span><span class="w"> </span><span class="err">xxxxxxxxxxxxx</span><span class="p">,</span><span class="w">
+	</span><span class="nl">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Aria"</span><span class="p">,</span><span class="w">
+	</span><span class="nl">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"hh:mm:ss"</span><span class="p">,</span><span class="w">
+	</span><span class="nl">"weight"</span><span class="p">:</span><span class="w"> </span><span class="err">xx.xx</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div></div>
 

@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -171,7 +182,7 @@
 
 <p>After the access token has been obtained, I had to generate authorization header as shown in the Channel 9 video:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$token = '&lt;YOUR GITHUB ACCOUNT NAME&gt;:&lt;PERSONAL ACCESS TOKEN&gt;'
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$token = '&lt;YOUR GITHUB ACCOUNT NAME&gt;:&lt;PERSONAL ACCESS TOKEN&gt;'
 $base64Token = [System.Convert]::ToBase64String([char[]]$token)
 $headers = @{
     Authorization = 'Basic {0}' -f $base64Token
@@ -185,7 +196,7 @@ $response = Invoke-RestMethod -Headers $headers -Uri https://api.github.com/user
 <h3 id="handling-pagination">Handling pagination</h3>
 <p>GitHub sends the next and the last page URLs in link header:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;https://api.github.com/user/repos?page=2&gt;; rel="next", &lt;https://api.github.com/user/repos?page=3&gt;; rel="last"
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;https://api.github.com/user/repos?page=2&gt;; rel="next", &lt;https://api.github.com/user/repos?page=3&gt;; rel="last"
 </code></pre></div></div>
 
 <p>The challenge here is that 	looks like Invoke-RestMethod response doesn’t allow to access headers which is a huge bummer as there are useful info in the headers as shown in the screenshot:</p>
@@ -196,7 +207,7 @@ $response = Invoke-RestMethod -Headers $headers -Uri https://api.github.com/user
 
 <p>GitHub supports a page size parameter (e.g. per_page=50) but the documentation says the maximum value is 100. Although it is tempting to use that one as that would bring all my repos and leave some room for the future ones as well I wanted to go with a more permanent solution. So I decided to request more pages as longs as there are objects returning like this</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$page = 1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$page = 1
 
 Do
 {
@@ -219,13 +230,13 @@ While ($response.Count -gt 0)
 
 <p>First I had installed PowerShell on Mac which is quite simple as specified in the documentation:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew tap caskroom/cask
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew tap caskroom/cask
 brew cask install powershell
 </code></pre></div></div>
 
 <p>With Git already installed on my machine, all is left was using Git commands to clone or update repo on PowerShell terminal such as:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git fetch --all
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git fetch --all
 git reset --hard origin/master
 </code></pre></div></div>
 
@@ -308,21 +319,21 @@ git reset --hard origin/master
 </ol>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="nl">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
                 </span><span class="s2">"s3:ListBucket"</span><span class="w">
             </span><span class="p">],</span><span class="w">
-            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
                 </span><span class="s2">"arn:aws:s3:::xxxxxxx"</span><span class="w">
             </span><span class="p">]</span><span class="w">
         </span><span class="p">},</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s3:PutObject"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"s3:PutObject"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
                 </span><span class="s2">"arn:aws:s3:::xxxxxxx/*"</span><span class="w">
             </span><span class="p">]</span><span class="w">
         </span><span class="p">}</span><span class="w">
@@ -343,7 +354,7 @@ git reset --hard origin/master
 
 <p>Make sure you don’t make the mistake I made which was creating an IAM user with a policy that can send emails. In the SMTP settings page there’s a note right below the button:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Your SMTP user name and password are not the same as your AWS access key ID and secret access key. Do not attempt to use your AWS credentials to authenticate yourself against the SMTP endpoint.
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Your SMTP user name and password are not the same as your AWS access key ID and secret access key. Do not attempt to use your AWS credentials to authenticate yourself against the SMTP endpoint.
 </code></pre></div></div>
 
 <p>When you click the button it creates an IAM user basically for the secret key is 44 bytes whereas the IAM user I created had a secret key of 40 characters. Anyway, bottom line is in order to be able to send emails via SES create the user as described above and all should be fine.</p>

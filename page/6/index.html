@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -161,32 +172,32 @@
 
 <p>I inserted the card and run the following to identify the card:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil list
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil list
 </code></pre></div></div>
 
 <p>Then</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo dd bs=1m if=path_of_your_image.img of=/dev/rdiskn conv=sync
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo dd bs=1m if=path_of_your_image.img of=/dev/rdiskn conv=sync
 </code></pre></div></div>
 
 <p>where n is the number of disk which I found from the first step.</p>
 
 <p>If you get “resource is busy” error, then run the following</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil unmountDisk /dev/diskn
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil unmountDisk /dev/diskn
 </code></pre></div></div>
 
 <h2 id="carry-out-necessary-configuration-updates">Carry Out Necessary Configuration Updates</h2>
 <p>It’s a good practice to change the default passwords so I ran</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>passwd
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>passwd
 </code></pre></div></div>
 
 <p>and updated the password.</p>
 
 <p>Also for remote installations I enabled SSH:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable ssh
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable ssh
 sudo systemctl start ssh
 </code></pre></div></div>
 
@@ -194,7 +205,7 @@ sudo systemctl start ssh
 
 <p>To achieve that I ran:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo hostname NEW_HOSTNAME
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo hostname NEW_HOSTNAME
 </code></pre></div></div>
 
 <p>No need to set a static IP address at this point as Pi Hole setup takes care of that:</p>
@@ -204,7 +215,7 @@ sudo systemctl start ssh
 <h2 id="install-pi-hole">Install Pi-Hole</h2>
 <p>There is an easy one-step installation:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -sSL https://install.pi-hole.net | bash
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -sSL https://install.pi-hole.net | bash
 </code></pre></div></div>
 
 <p>I changed my IP to a different static IP and rebooted the Pi.</p>
@@ -416,12 +427,12 @@ sudo systemctl start ssh
 <h2 id="creating-self-hosted-registry">Creating Self-Hosted Registry</h2>
 <p>It sounds like it requires installing a server application but the nice thing about Docker is, even it is a Docker registry it can run in a container itself. So first off we pull the registry repo for Docker Hub:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull registry
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull registry
 </code></pre></div></div>
 
 <p>Now let’s create a container that will act as our registry:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d -p 5000:5000 --restart always --name registry registry
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d -p 5000:5000 --restart always --name registry registry
 </code></pre></div></div>
 
 <p><img src="/images/vpblogimg/2019/08/self-hosted-docker-repo-list-before.png" alt=""></p>
@@ -430,12 +441,12 @@ sudo systemctl start ssh
 
 <p>Now to test how we can push and pull images let’s download Docker’s hello-world image from Docker Hub:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull hello-world
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull hello-world
 </code></pre></div></div>
 
 <p>Now to push this inot our own registry running in Raspbeery Pi all we have to do is tag it with the server URL such as:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker tag hello-world HOBBITON.local:5000/hello-world
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker tag hello-world HOBBITON.local:5000/hello-world
 </code></pre></div></div>
 
 <p>At this point if we take look at the images on our local machine we can see the hello-world image is duplicated.</p>
@@ -444,7 +455,7 @@ sudo systemctl start ssh
 
 <p>Now let’s push it to Pi:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker push HOBBITON.local:5000/hello-world
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker push HOBBITON.local:5000/hello-world
 </code></pre></div></div>
 
 <p>This doesn’t work because of the following reason:</p>
@@ -453,7 +464,7 @@ sudo systemctl start ssh
 
 <p>This is because the reigstry is considered to be insecure and by default it’s rejected by the client. We can confirm it’s deemed to be insecure if we check the server by running the following command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker info
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker info
 </code></pre></div></div>
 
 <p>At the bottom of the bottom we can see the localhost registry is insecure:</p>
@@ -470,17 +481,17 @@ sudo systemctl start ssh
 
 <p>If you’re pulling from a client without a user interface, another Raspberry Pi for example, try the following:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo nano  /etc/docker/daemon.json
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo nano  /etc/docker/daemon.json
 </code></pre></div></div>
 
 <p>and add the following (with the correct registry name):</p>
 
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w"> </span><span class="s2">"insecure-registries"</span><span class="p">:[</span><span class="s2">"myregistry.example.com:5000"</span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w"> </span><span class="nl">"insecure-registries"</span><span class="p">:[</span><span class="s2">"myregistry.example.com:5000"</span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w">
 </span></code></pre></div></div>
 
 <p>and restart Docker:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo service docker restart
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo service docker restart
 </code></pre></div></div>
 
 <p>Now if we check the repository list on the registry again we can see the hello-world image hosted on our Pi:</p>

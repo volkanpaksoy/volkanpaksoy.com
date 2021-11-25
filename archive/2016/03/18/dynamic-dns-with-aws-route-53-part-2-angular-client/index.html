@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -166,8 +177,8 @@
 
 <p>Since it’s a simple GET request it sounds easy but I quickly hit the <a href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing" target="_blank" rel="noopener noreferrer">CORS</a> wall when I tried the following bit:</p>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">'ExternalIP'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$http</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="nx">$http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s1">'http://checkip.amazonaws.com'</span><span class="p">,</span> <span class="p">{</span> <span class="na">cache</span><span class="p">:</span> <span class="kc">false</span> <span class="p">});</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="dl">'</span><span class="s1">ExternalIP</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">$http</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">$http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">http://checkip.amazonaws.com</span><span class="dl">'</span><span class="p">,</span> <span class="p">{</span> <span class="na">cache</span><span class="p">:</span> <span class="kc">false</span> <span class="p">});</span>
 <span class="p">});</span> 
 </code></pre></div></div>
 
@@ -191,7 +202,7 @@
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">exports</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">context</span><span class="p">.</span><span class="nx">succeed</span><span class="p">({</span>
-        <span class="s2">"ip"</span><span class="p">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">ip</span>
+        <span class="dl">"</span><span class="s2">ip</span><span class="dl">"</span><span class="p">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">ip</span>
     <span class="p">})</span>
 <span class="p">}</span>
 </code></pre></div></div>
@@ -218,8 +229,8 @@
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">$scope</span><span class="p">.</span><span class="nx">updateDomainInfo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">domainName</span><span class="p">,</span> <span class="nx">zoneId</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="s1">'accessKeyId'</span><span class="p">:</span> <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">accessKey</span><span class="p">,</span>
-      <span class="s1">'secretAccessKey'</span><span class="p">:</span> <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">secretKey</span>
+      <span class="dl">'</span><span class="s1">accessKeyId</span><span class="dl">'</span><span class="p">:</span> <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">accessKey</span><span class="p">,</span>
+      <span class="dl">'</span><span class="s1">secretAccessKey</span><span class="dl">'</span><span class="p">:</span> <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">secretKey</span>
     <span class="p">};</span>
     <span class="kd">var</span> <span class="nx">route53</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AWS</span><span class="p">.</span><span class="nx">Route53</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
     
@@ -229,12 +240,12 @@
 
     <span class="nx">route53</span><span class="p">.</span><span class="nx">listResourceRecordSets</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> 
-          <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$emit</span><span class="p">(</span><span class="s1">'rootScope:log'</span><span class="p">,</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+          <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$emit</span><span class="p">(</span><span class="dl">'</span><span class="s1">rootScope:log</span><span class="dl">'</span><span class="p">,</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
           <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
           <span class="nx">angular</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">ResourceRecordSets</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
               <span class="k">if</span> <span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">Name</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="nx">domainName</span><span class="p">)</span> <span class="p">{</span>
-                <span class="kd">var</span> <span class="nx">externalIPAddress</span> <span class="o">=</span> <span class="s2">""</span><span class="p">;</span>
+                <span class="kd">var</span> <span class="nx">externalIPAddress</span> <span class="o">=</span> <span class="dl">""</span><span class="p">;</span>
                 <span class="nx">ExternalIP</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">){</span>
                      <span class="nx">externalIPAddress</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">ip</span><span class="p">;</span>
                      <span class="nx">$scope</span><span class="p">.</span><span class="nx">changeIP</span><span class="p">(</span><span class="nx">domainName</span><span class="p">,</span> <span class="nx">zoneId</span><span class="p">,</span> <span class="nx">externalIPAddress</span><span class="p">)</span>
@@ -248,8 +259,8 @@
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nx">$scope</span><span class="p">.</span><span class="nx">changeIP</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">domainName</span><span class="p">,</span> <span class="nx">zoneId</span><span class="p">,</span> <span class="nx">newIPAddress</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="s1">'accessKeyId'</span><span class="p">:</span> <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">accessKey</span><span class="p">,</span>
-      <span class="s1">'secretAccessKey'</span><span class="p">:</span> <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">secretKey</span>
+      <span class="dl">'</span><span class="s1">accessKeyId</span><span class="dl">'</span><span class="p">:</span> <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">accessKey</span><span class="p">,</span>
+      <span class="dl">'</span><span class="s1">secretAccessKey</span><span class="dl">'</span><span class="p">:</span> <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">secretKey</span>
     <span class="p">};</span>
 
     <span class="kd">var</span> <span class="nx">route53</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AWS</span><span class="p">.</span><span class="nx">Route53</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
@@ -257,10 +268,10 @@
       <span class="na">ChangeBatch</span><span class="p">:</span> <span class="p">{</span>
         <span class="na">Changes</span><span class="p">:</span> <span class="p">[</span>
           <span class="p">{</span>
-            <span class="na">Action</span><span class="p">:</span> <span class="s1">'UPSERT'</span><span class="p">,</span>
+            <span class="na">Action</span><span class="p">:</span> <span class="dl">'</span><span class="s1">UPSERT</span><span class="dl">'</span><span class="p">,</span>
             <span class="na">ResourceRecordSet</span><span class="p">:</span> <span class="p">{</span>
               <span class="na">Name</span><span class="p">:</span> <span class="nx">domainName</span><span class="p">,</span>
-              <span class="na">Type</span><span class="p">:</span> <span class="s1">'A'</span><span class="p">,</span>
+              <span class="na">Type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">A</span><span class="dl">'</span><span class="p">,</span>
               <span class="na">TTL</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span>
               <span class="na">ResourceRecords</span><span class="p">:</span> <span class="p">[</span> <span class="p">{</span>
                   <span class="na">Value</span><span class="p">:</span> <span class="nx">newIPAddress</span>
@@ -275,11 +286,11 @@
 
     <span class="nx">route53</span><span class="p">.</span><span class="nx">changeResourceRecordSets</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span> 
-        <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$emit</span><span class="p">(</span><span class="s1">'rootScope:log'</span><span class="p">,</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span> 
+        <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$emit</span><span class="p">(</span><span class="dl">'</span><span class="s1">rootScope:log</span><span class="dl">'</span><span class="p">,</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span> 
       <span class="p">}</span>
       <span class="k">else</span> <span class="p">{</span> 
-        <span class="kd">var</span> <span class="nx">logMessage</span> <span class="o">=</span> <span class="s2">"Updated domain: "</span> <span class="o">+</span> <span class="nx">domainName</span> <span class="o">+</span> <span class="s2">" ZoneID: "</span> <span class="o">+</span> <span class="nx">zoneId</span> <span class="o">+</span> <span class="s2">" with IP Address: "</span> <span class="o">+</span> <span class="nx">externalIPAddress</span><span class="p">;</span>
-        <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$emit</span><span class="p">(</span><span class="s1">'rootScope:log'</span><span class="p">,</span> <span class="nx">logMessage</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">logMessage</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Updated domain: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">domainName</span> <span class="o">+</span> <span class="dl">"</span><span class="s2"> ZoneID: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">zoneId</span> <span class="o">+</span> <span class="dl">"</span><span class="s2"> with IP Address: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">externalIPAddress</span><span class="p">;</span>
+        <span class="nx">$rootScope</span><span class="p">.</span><span class="nx">$emit</span><span class="p">(</span><span class="dl">'</span><span class="s1">rootScope:log</span><span class="dl">'</span><span class="p">,</span> <span class="nx">logMessage</span><span class="p">);</span>
       <span class="p">}</span>
     <span class="p">});</span>
   <span class="p">}</span>

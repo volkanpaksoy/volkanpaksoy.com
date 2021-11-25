@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -189,7 +200,7 @@
 
 <p>The regular expression pattern retrieves all anchors in this format. Only the ones that contain a dot in the value are retrieved to eliminate irrelevant links. To extract the actual TLD from this matching string I used parenthesis to create a group. By default the whole matched string is the first group. Additional groups can be created by parenthesis so that we can only get the values we are interested in. For example the group values for a match look like this</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>m.Groups[0].Value: "&lt;a class=\"xref\" href=\"registrar-tld-list.html#academy\"&gt;.academy&lt;/a&gt;"
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>m.Groups[0].Value: "&lt;a class=\"xref\" href=\"registrar-tld-list.html#academy\"&gt;.academy&lt;/a&gt;"
 m.Groups[1].Value: "academy"
 </code></pre></div></div>
 
@@ -204,24 +215,24 @@ m.Groups[1].Value: "academy"
 
 <p>Apparently you cannot get external resources willy nilly using jQuery! It took some time but I found a neat workaround <a href="http://james.padolsey.com/javascript/cross-domain-requests-with-jquery/" target="_blank" rel="noopener noreferrer">here</a> It’s essentially a jQuery plugin sending the request to query.yahooapis.com instead of the URL we request. Apparently Yahoo API returns the results to a callback method we provide. I hadn’t heard about <a href="https://developer.yahoo.com/yql/" target="_blank" rel="noopener noreferrer">YQL</a> before. The pitch on their site is:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"The YQL (Yahoo! Query Language) platform enables you to query, filter, and combine data across the web through a single interface." 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"The YQL (Yahoo! Query Language) platform enables you to query, filter, and combine data across the web through a single interface." 
 </code></pre></div></div>
 
 <p>so a bit explains why they allow Cross-domain queries.</p>
 
 <p>In the test page I added the plugin script</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;script-- src="jquery.xdomainajax.js"&gt;&lt;/script&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;script-- src="jquery.xdomainajax.js"&gt;&lt;/script&gt;
 </code></pre></div></div>
 
 <p>Then the main function using jQuery worked just fine:</p>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">supportedTldPage</span> <span class="o">=</span> <span class="s2">"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html"</span><span class="p">;</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">supportedTldPage</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html</span><span class="dl">"</span><span class="p">;</span>
 
 <span class="kd">function</span> <span class="nx">getTldList</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
         <span class="na">url</span><span class="p">:</span> <span class="nx">supportedTldPage</span><span class="p">,</span>
-        <span class="na">type</span><span class="p">:</span> <span class="s1">'GET'</span><span class="p">,</span>
+        <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">GET</span><span class="dl">'</span><span class="p">,</span>
         <span class="na">success</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
             <span class="kd">var</span> <span class="nx">pageHtml</span> <span class="o">=</span> <span class="nx">res</span><span class="p">.</span><span class="nx">responseText</span><span class="p">;</span>
             <span class="kd">var</span> <span class="nx">jsonResult</span> <span class="o">=</span> <span class="nx">parseHtml</span><span class="p">(</span><span class="nx">pageHtml</span><span class="p">);</span>
@@ -235,7 +246,7 @@ m.Groups[1].Value: "academy"
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">getTldList</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
-    <span class="nx">request</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">"GET"</span><span class="p">,</span> <span class="nx">supportedTldPage</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+    <span class="nx">request</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="dl">"</span><span class="s2">GET</span><span class="dl">"</span><span class="p">,</span> <span class="nx">supportedTldPage</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
     <span class="nx">request</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">!=</span> <span class="mi">4</span> <span class="o">||</span> <span class="nx">request</span><span class="p">.</span><span class="nx">status</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
 
@@ -249,7 +260,7 @@ m.Groups[1].Value: "academy"
 
 <p>This version doesn’t work by default because of the same CORS restrictions. But apparently there’s an <a href="https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en" target="_blank" rel="noopener noreferrer">extension</a> for that. I installed it and it worked like a charm. Wondering what was happening behind the scenes I captured the request with Fiddler and it looked like this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host: docs.aws.amazon.com
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host: docs.aws.amazon.com
 Connection: keep-alive
 Cache-Control: max-age=0
 User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36
@@ -288,9 +299,9 @@ If-Modified-Since: Fri, 17 Jul 2015 23:17:38 GMT
 <p>So finally the result in JSON format is:</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tue, 29 Jul 2015 20:26:02 GMT"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"tldList"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+  </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tue, 29 Jul 2015 20:26:02 GMT"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"tldList"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="s2">"academy"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"agency"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"bargains"</span><span class="p">,</span><span class="w">

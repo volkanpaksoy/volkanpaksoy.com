@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -156,7 +167,7 @@
 
 <p>To be able to follow the instructions I downloaded and installed the GCloud SDK. On Mac it’s quite easy:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl https://sdk.cloud.google.com | bash
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl https://sdk.cloud.google.com | bash
 exec -l $SHELL
 gcloud init
 </code></pre></div></div>
@@ -186,17 +197,17 @@ gcloud init
 <p>So the http version of the test file is “https://storage.googleapis.com/cloud-samples-tests/speech/brooklyn.flac”. I was able to verify the file actually exists but when I replaced it with the original value I got this error:</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"error"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Request contains an invalid argument."</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"INVALID_ARGUMENT"</span><span class="w">
+    </span><span class="nl">"error"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">400</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Request contains an invalid argument."</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"INVALID_ARGUMENT"</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div></div>
 
 <p>This also answered my second question. According to the documentation it only supports Google Cloud Storage currently:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>uri contains a URI pointing to the audio content. 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>uri contains a URI pointing to the audio content. 
 Currently, this field must contain a Google Cloud Storage URI 
 (of format gs://bucket-name path_to_audio_file). 
 </code></pre></div></div>
@@ -207,7 +218,7 @@ Currently, this field must contain a Google Cloud Storage URI
 
 <p>If the authorization token expires, you can generate a new one by using the following commands:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export GOOGLE_APPLICATION_CREDENTIALS="/Path/To/Credentials/Json/File"
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export GOOGLE_APPLICATION_CREDENTIALS="/Path/To/Credentials/Json/File"
 
 gcloud auth application-default print-access-token
 </code></pre></div></div>
@@ -238,7 +249,7 @@ gcloud auth application-default print-access-token
 
 <p>The important bit here is is that by default VLC converts to stereo audio with 2 channels but Google doesn’t support it which is explained in <a href="https://cloud.google.com/speech/reference/rest/v1beta1/RecognitionConfig#audioencoding" target="_blank" rel="noopener noreferrer">this</a> documentation:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>All encodings support only 1 channel (mono) audio
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>All encodings support only 1 channel (mono) audio
 </code></pre></div></div>
 
 <p>So make sure to customize it and enter 1 as channel count:</p>
@@ -267,7 +278,7 @@ gcloud auth application-default print-access-token
 <h3 id="step-04-compare-the-results">Step 04: Compare the results:</h3>
 <p>Now the following is the actual lyrics of the song:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Du
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Du
 du hast
 du hast mich
 du hast mich gefragt
@@ -286,7 +297,7 @@ Nein
 
 <p>and this is what I got back from Google:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>du hast 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>du hast 
 du hast recht 
 du hast 
 du hast mich 
@@ -309,7 +320,7 @@ du hast mich blockiert
 
 <p>First 4 paragraphs of the actual transcript of the podcast is as follows (The full transcript can be found <a href="https://slowgerman.com/folgen/sg153kurz.pdf" target="_blank" rel="noopener noreferrer">here</a>:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Denk ich an Deutschland in der Nacht, dann bin ich um den Schlaf gebracht.“ Habt Ihr diesen Satz schon einmal gehört? Er wird immer dann zitiert, wenn es Probleme in Deutschland gibt. Der Satz stammt von Heinrich Heine. Er war einer der wichtigsten deutschen Dichter. Aber keine Angst: Auch wenn er am 13. Dezember 1797 geboren wurde, sind seine Texte sehr aktuell und relativ leicht zu lesen. Ihr werdet ihn mögen!
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Denk ich an Deutschland in der Nacht, dann bin ich um den Schlaf gebracht.“ Habt Ihr diesen Satz schon einmal gehört? Er wird immer dann zitiert, wenn es Probleme in Deutschland gibt. Der Satz stammt von Heinrich Heine. Er war einer der wichtigsten deutschen Dichter. Aber keine Angst: Auch wenn er am 13. Dezember 1797 geboren wurde, sind seine Texte sehr aktuell und relativ leicht zu lesen. Ihr werdet ihn mögen!
 
 Harry Heine wuchs in einem jüdischen Haushalt auf. Er war 13 Jahre alt, als Napoleon in Düsseldorf einzog. Schon als Schüler begann er, Gedichte zu schreiben. Beruflich sollte er eigentlich im Bankgeschäft arbeiten, aber dafür hatte er kein Talent. Also versuchte er es erst mit einem eigenen Geschäft für Stoffe, das aber bald pleite war. Dann begann er zu studieren. Er probierte es mit Jura und mit Geschichte, besuchte verschiedene Vorlesungen.
 
@@ -320,7 +331,7 @@ Wenn Ihr Heines Werke lest werdet Ihr merken, dass sie etwas Besonderes sind. Si
 
 <p>And this is the result I got from Google (Trimmed to match the above):</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>denk ich an Deutschland in der Nacht dann bin ich um den Schlaf gebracht habt ihr diesen Satz schon einmal gehört er wird immer dann zitiert wenn es Probleme in Deutschland gibt der Satz stammt von Heinrich Heine er war einer der wichtigsten deutschen Dichter aber keine Angst auch wenn er am 13. Dezember 1797 geboren wurde sind seine Texte sehr aktuell und relativ leicht zu lesen ihr werdet ihn mögen Harry Heine wuchs in einem jüdischen Haushalt auf er war 13 Jahre alt als Nappo
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>denk ich an Deutschland in der Nacht dann bin ich um den Schlaf gebracht habt ihr diesen Satz schon einmal gehört er wird immer dann zitiert wenn es Probleme in Deutschland gibt der Satz stammt von Heinrich Heine er war einer der wichtigsten deutschen Dichter aber keine Angst auch wenn er am 13. Dezember 1797 geboren wurde sind seine Texte sehr aktuell und relativ leicht zu lesen ihr werdet ihn mögen Harry Heine wuchs in einem jüdischen Haushalt auf er war 13 Jahre alt als Nappo
 
 hier in Düsseldorf einen Zoo schon als Schüler begann er Gedichte zu schreiben beruflich sollte er eigentlich im Bankgeschäft arbeiten aber dafür hatte er kein Talent also versuchte er es erst mit einem eigenen Geschäft für Stoffe das aber bald pleite war dann begann er zu studieren er probierte es mit Jura und mit Geschichte besuchte verschiedene Vorlesungen mit 25 Jahren veröffentlichte er erste Gedichte es war eine aufregende Zeit für ihn er wechselte die Städte und die Universitäten er beendete sein Jurastudium und wurde Promo
 
@@ -332,7 +343,7 @@ auch an politischen Ereignissen und die Zensur mit der er in Deutschland leben m
 
 <h4 id="translation-of-the-original-transcript">Translation of the original transcript:</h4>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>When I think of Germany at night, I'm about to go to sleep. "Have you ever heard that phrase before? He is always quoted when there are problems in Germany. The sentence is by Heinrich Heine. He was one of the most important German poets. But do not worry: even if he was born on December 13, 1797, his lyrics are very up to date and relatively easy to read. You will like him!
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>When I think of Germany at night, I'm about to go to sleep. "Have you ever heard that phrase before? He is always quoted when there are problems in Germany. The sentence is by Heinrich Heine. He was one of the most important German poets. But do not worry: even if he was born on December 13, 1797, his lyrics are very up to date and relatively easy to read. You will like him!
 
 Harry Heine grew up in a Jewish household. He was 13 years old when Napoleon moved in Dusseldorf. Even as a student, he began writing poetry. Professionally, he was supposed to work in banking, but he had no talent for that. So he first tried his own business for fabrics, which was soon broke. Then he began to study. He tried law and history, attended various lectures.
 
@@ -343,7 +354,7 @@ When you read Heine's works, you will find that they are special. They are often
 
 <h4 id="translation-of-googles-results">Translation of Google’s results:</h4>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>I think of Germany in the night then I'm about to sleep Did you ever hear this sentence He is always quoted when there are problems in Germany The sentence comes from Heinrich Heine He was one of the most important German poets but do not be afraid he was born on December 13, 1797 his lyrics are very up to date and relatively easy to read you will like him Harry Heine grew up in a Jewish household he was 13 years old as Nappo
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>I think of Germany in the night then I'm about to sleep Did you ever hear this sentence He is always quoted when there are problems in Germany The sentence comes from Heinrich Heine He was one of the most important German poets but do not be afraid he was born on December 13, 1797 his lyrics are very up to date and relatively easy to read you will like him Harry Heine grew up in a Jewish household he was 13 years old as Nappo
 
 Here in Dusseldorf a zoo as a student he began to write poetry professionally he should actually work in the banking business but for that he had no talent so he first tried his own business for fabrics but soon broke and then began to study he tried it with Jura and with history attended various lectures at age 25 he published his first poems it was an exciting time for him he changed the cities and the universities he finished his law studies and became promo
 

@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -147,7 +158,7 @@
 
 <p>It was a fairly easy migration but migrating the actual content proved to be trickier. There are lots of resources on using Jekyll’s importers. I found <a href="http://hadihariri.com/2013/12/24/migrating-from-wordpress-to-jekyll/" target="_blank" rel="noopener noreferrer">this one</a> useful. Just export everything to an XML and run the converter to get the posts in markdown. The problem is the <em>YAML Front Matter</em> it generates is a bit messy:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
 layout: post
 title: Blind Password Masking
 date: 2011-06-14 03:46:18.000000000 +00:00
@@ -175,13 +186,13 @@ author:
   <li>Main issue was with Disqus. It’s not like people are racing to submit comments to my ramblings but still I’d like to have Disqus enabled on all my posts. Apparently to enable comments you need to specify it in the front matter like this:</li>
 </ul>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>comments: true
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>comments: true
 </code></pre></div></div>
 
 <h3 id="manual-vs-programmatical">Manual vs. programmatical</h3>
 <p>First I resisted the temptation to write a small application to convert the layouts but manual conversion soon proved to be very time consuming even with 100+ posts. So I developed the simple console application below. It scans the folder you specify (filters *.markdown files) and reads the existing layout and converts it to the format I wanted:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
 layout: post
 title: @TITLE
 date: @DATE

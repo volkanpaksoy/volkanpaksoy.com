@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -160,14 +171,14 @@
 
 <p>By default it comes disabled so set the value as shown below:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"IsEnabled": true
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"IsEnabled": true
 </code></pre></div></div>
 
 <p><strong>Step 3: Add the custom metric for disk usage</strong></p>
 
 <p>Add the custom metric to monitor disk space:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
     "Id": "PerformanceCounterDisk",
     "FullName": "AWS.EC2.Windows.CloudWatch.PerformanceCounterComponent.PerformanceCounterInputComponent,AWS.EC2.Windows.CloudWatch",
     "Parameters": {
@@ -186,7 +197,7 @@
 
 <p>After defining the metric we need to add it to the flows so that it can be sent to CloudWatch. To achieve this update the flows section as shown below:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"Flows": {
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"Flows": {
     "Flows": 
     [
         "(ApplicationEventLog,SystemEventLog),CloudWatchLogs",
@@ -207,7 +218,7 @@
 
 <p>Either by using Windows Services Manager or running the following command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Restart-Service AmazonSSMAgent
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Restart-Service AmazonSSMAgent
 </code></pre></div></div>
 
 <p>Once this is all done wait a few minutes and check CloudWatch metrics. Under All -&gt; Windows/Default you should be able to see new metric under InstanceId group (as that’s what we are using to group the logs). And when you click the metric you should be able to see a nice time-based graph of free disk space on the server:</p>

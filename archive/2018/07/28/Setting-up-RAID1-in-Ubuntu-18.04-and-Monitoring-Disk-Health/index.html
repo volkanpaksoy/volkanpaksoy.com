@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -184,7 +195,7 @@
 
 <p>My mdadm.conf file looked like this when this was happening:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ARRAY /dev/md0 level=raid1 num-devices=2 metadata=1.2 name=asgard:0 UUID={device id}
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ARRAY /dev/md0 level=raid1 num-devices=2 metadata=1.2 name=asgard:0 UUID={device id}
    devices=/dev/sda1,/dev/sdb1
 </code></pre></div></div>
 
@@ -192,14 +203,14 @@
 
 <p>The solution was simply removing the name parameter from the file!. After that, when I rebooted and entered the following commands I was able to see a healthy RAID:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat /proc/mdstat
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat /proc/mdstat
 </code></pre></div></div>
 
 <p><img src="/images/vpblogimg/2018/07/linux-raid1-03-mdadm-stat.png" alt=""></p>
 
 <p>and</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mdadm -D /dev/md0
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mdadm -D /dev/md0
 </code></pre></div></div>
 
 <p><img src="/images/vpblogimg/2018/07/linux-raid1-04-mdadm-status.png" alt=""></p>
@@ -209,7 +220,7 @@
 
 <p>To achieve that goal, I edited this file /etc/smartd.conf and added this line:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DEVICESCAN -o on -H -l error -l selftest -t -m my.email@address.com -M test
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DEVICESCAN -o on -H -l error -l selftest -t -m my.email@address.com -M test
 </code></pre></div></div>
 
 <h3 id="set-up-sending-emails-from-server">Set up sending emails from server</h3>
@@ -221,7 +232,7 @@
 
 <p>To bring up this screen again I entered the following command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dpkg-reconfigure postfix
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dpkg-reconfigure postfix
 </code></pre></div></div>
 
 <p>I followed the wizard, entered my email domain. Then followed this documentation from AWS: <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/postfix.html" target="_blank" rel="noopener noreferrer">Integrating Amazon SES with Postfix</a></p>
@@ -232,7 +243,7 @@
 
 <p>As the instructions say, I updated /etc/postfix/main.cf with the values below:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>myhostname = localhost
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>myhostname = localhost
 mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
 </code></pre></div></div>
 
@@ -242,7 +253,7 @@ mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
 
 <p>Then I restarted the service to test</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>service smartmontools restart
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>service smartmontools restart
 </code></pre></div></div>
 
 <p>and received the notification. Actually received 3 emails for some reason.</p>
@@ -263,7 +274,7 @@ mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
 
 <p>In fact, turns out by default it’s sending the notifications. As my server was set up to send emails now, by just entering the following command to send out a test email I was able to receive it</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mdadm --monitor --scan --test -1
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mdadm --monitor --scan --test -1
 </code></pre></div></div>
 
 <p>The problem is it’s now using root@mydomain.com all the time now. I wasn’t able to change it. But as long as that mailbox exists at least I can receive notifications.</p>

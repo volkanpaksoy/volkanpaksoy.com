@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -169,7 +180,7 @@
 
 <p>With DotNetCore it’s quite easy to create a NuGet package. Just navigate to project folder (where .csproj file is located) and run this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet pack -c Release
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet pack -c Release
 </code></pre></div></div>
 
 <p>The default configuration it uses is Debug so make sure you’re using the correct build and a matching pack command. You should be able to see a screen similar to this</p>
@@ -178,7 +189,7 @@
 
 <p>Then push it to Nuget</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet nuget push ./bin/Release/DynDns53.CoreLib.1.0.0.nupkg -k {NUGET.ORG API_KEY} -s https://api.nuget.org/v3/index.json
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet nuget push ./bin/Release/DynDns53.CoreLib.1.0.0.nupkg -k {NUGET.ORG API_KEY} -s https://api.nuget.org/v3/index.json
 </code></pre></div></div>
 
 <p><img src="/images/vpblogimg/2018/03/dyndns53-nuget-package-push-result.png" alt=""></p>
@@ -219,7 +230,7 @@
 <h3 id="prerequisites">Prerequisites</h3>
 <p>First, you’d need an IAM user who has access to Route53. You can use the policy template below to give the minimum possible permissions:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
     "Version": "2012-10-17",
     "Statement": [
         {
@@ -239,7 +250,7 @@
 <h3 id="usage">Usage</h3>
 <p>Basic usage is very straightforward. Once compiled you can supply the IAM Access and Secret Keys and the domains to update with their Route53 Zone IDs as shown below:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet DynDns53.Client.DotNetCore.dll --AccessKey {ACCESS KEY} --SecretKey {SECRET KEY} --Domains ZoneId1:Domain1 ZoneId2:Domain2 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet DynDns53.Client.DotNetCore.dll --AccessKey {ACCESS KEY} --SecretKey {SECRET KEY} --Domains ZoneId1:Domain1 ZoneId2:Domain2 
 </code></pre></div></div>
 
 <h3 id="notes-1">Notes</h3>
@@ -253,12 +264,12 @@
 <h3 id="usage-1">Usage</h3>
 <p>You can get the image from Docker hub with the following command:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull volkanpaksoy/dyndns53
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull volkanpaksoy/dyndns53
 </code></pre></div></div>
 
 <p>and running it is very similar to running the .NET Core Client as that’s what’s running inside the container anyway:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d volkanpaksoy/dyndns53 --AccessKey {ACCESS KEY} --SecretKey {SECRET KEY} --Domains ZoneId1:Domain1 ZoneId2:Domain2 --Interval 300
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d volkanpaksoy/dyndns53 --AccessKey {ACCESS KEY} --SecretKey {SECRET KEY} --Domains ZoneId1:Domain1 ZoneId2:Domain2 --Interval 300
 </code></pre></div></div>
 
 <p>The command above would run the container in daemon mode so that it can keep on updating the DNS every 5 minutes (300 seconds)</p>
@@ -274,7 +285,7 @@
   <li>
     <p>After adding Docker support the default build configuration becomes docker-compose. But it doesn’t work straight away as it throws an exception saying</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code>  ERROR: for dyndns53.client.dotnetcore  Cannot start service 	dyndns53.client.dotnetcore: Mounts denied: 
   The path /usr/local/share/dotnet/sdk/NuGetFallbackFolder
   is not shared from OS X and is not known to Docker.
@@ -304,7 +315,7 @@
   <li>
     <p>After I added AWS SDK package I started getting a nasty error:</p>
 
-    <div class="highlighter-rouge">
+    <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code>  ERROR in node_modules/aws-sdk/lib/http_response.d.ts(1,25): error TS2307: Cannot find module 'stream'.
 </code></pre></div>    </div>
 
@@ -317,7 +328,7 @@
       <li>
         <p>Create you own API to return the IP address: In the previous version, I created an API with AWS API Gateway which uses a very simple Lambda function to return caller’s IP address</p>
 
-        <div class="highlighter-rouge">
+        <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code> exports.handler = function(event, context) {
    	 context.succeed({
          "ip": event.ip

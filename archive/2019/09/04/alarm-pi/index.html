@@ -31,7 +31,9 @@
 	<script src="/js/slash.js" async></script>
 	<script src="/js/GithubRepoWidget.min.js" async></script>
 
-  <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- <script data-ad-client="ca-pub-0414743900624675" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script> -->
 
   
 	<script type="text/javascript">
@@ -108,12 +110,21 @@
 </ul>
 <br>
 <br>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675" crossorigin="anonymous"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0414743900624675"
+     crossorigin="anonymous"></script> -->
 <!-- AdUnit01 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0414743900624675" data-ad-slot="9604018233" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<!-- <ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-0414743900624675"
+     data-ad-slot="9604018233"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+</script> -->
 </nav></header>				
 			</div>
 		</div>
@@ -167,32 +178,32 @@
 
 <p>Insert the card and run the following to identify the card:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil list
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil list
 </code></pre></div></div>
 
 <p>Then</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo dd bs=1m if=path_of_your_image.img of=/dev/rdiskn conv=sync
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo dd bs=1m if=path_of_your_image.img of=/dev/rdiskn conv=sync
 </code></pre></div></div>
 
 <p>where n is the number of disk which I found from the first step.</p>
 
 <p>If you get “resource is busy” error, then run the following</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil unmountDisk /dev/diskn
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil unmountDisk /dev/diskn
 </code></pre></div></div>
 
 <h3 id="step-02-carry-out-necessary-configuration-updates">Step 02: Carry Out Necessary Configuration Updates</h3>
 <p>It’s a good practice to change the default passwords so I ran</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>passwd
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>passwd
 </code></pre></div></div>
 
 <p>and updated the password.</p>
 
 <p>Also for remote installations I enabled SSH:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable ssh
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable ssh
 sudo systemctl start ssh
 </code></pre></div></div>
 
@@ -200,12 +211,12 @@ sudo systemctl start ssh
 
 <p>To achieve that I ran:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo hostname NEW_HOSTNAME
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo hostname NEW_HOSTNAME
 </code></pre></div></div>
 
 <p>I used raspi-config to connect to WiFi network</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo raspi-config
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo raspi-config
 </code></pre></div></div>
 
 <p>and enter the details and rebooted to connect to the network.</p>
@@ -217,7 +228,7 @@ sudo systemctl start ssh
 
 <p>Installation is as simple as this:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install mpg123 -y
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install mpg123 -y
 </code></pre></div></div>
 
 <h3 id="step-04-develop-the-script">Step 04: Develop the script</h3>
@@ -227,39 +238,39 @@ sudo systemctl start ssh
 <span class="kn">import</span> <span class="nn">random</span>
 
 <span class="n">path</span> <span class="o">=</span><span class="s">'/path/to/mp3/folder'</span> 
-<span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-<span class="n">index</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">))</span>
+<span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="n">index</span> <span class="o">=</span> <span class="n">random</span><span class="p">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">))</span>
 
-<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="n">f</span><span class="s">'/usr/bin/mpg123 {files[index]}'</span><span class="p">)</span>
+<span class="n">os</span><span class="p">.</span><span class="n">system</span><span class="p">(</span><span class="sa">f</span><span class="s">'/usr/bin/mpg123 </span><span class="si">{</span><span class="n">files</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
 </code></pre></div></div>
 
 <h3 id="step-05-copy-music-and-script-to-raspberry-pi">Step 05: Copy music and script to Raspberry Pi</h3>
 <p>Save the script above in a USB drive along with the MP3 files. To copy the files from USB drive to Pi microSD card, I inserted my USB and ran the following:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo fdisk -l
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo fdisk -l
 sudo mkdir /media/usb
 sudo mount /dev/sda1 /media/usb
 </code></pre></div></div>
 
 <p>Then</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir /home/pi/music
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir /home/pi/music
 cp /media/usb/*.mp3 /home/pi/music
 </code></pre></div></div>
 
 <p>and copy the script to home folder</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cp /media/usb/alarm-pi.py /home/pi
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cp /media/usb/alarm-pi.py /home/pi
 </code></pre></div></div>
 
 <h3 id="step-06-schedule-the-script">Step 06: Schedule the script</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>crontab -e
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>crontab -e
 </code></pre></div></div>
 
 <p>Then add to run at a certain time. The example below runs at 7:30am everyday:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>30 7 * * * /usr/bin/python3 /home/pi/alarm-pi.py
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>30 7 * * * /usr/bin/python3 /home/pi/alarm-pi.py
 </code></pre></div></div>
 
 <p>If you want to run the script multiple times you can another one (like another one after 10 minutes as a snooze-prevention mechanism!)</p>
