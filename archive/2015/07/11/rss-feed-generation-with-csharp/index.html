@@ -153,6 +153,13 @@
 <h2 id="implementation">Implementation</h2>
 <p>I developed a console application in C# that can be scheduled to generate the feed and upload it to AWS S3. Source code is <a href="https://github.com/volkanpaksoy/rss-feed-generator" target="_blank" rel="noopener noreferrer">here</a></p>
 
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></p>
+
 <p>Apparently .NET Framework has a System.ServiceModel.Syndication namespace since version 3.5 that contains all the tools need to consume and create an RSS feed with a few lines of code. The core part of the application is the part that generates the actual feed:</p>
 
 <div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="n">SyndicationFeed</span> <span class="nf">GetFeed</span><span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Article</span><span class="p">&gt;</span> <span class="n">articles</span><span class="p">)</span>
@@ -303,6 +310,13 @@
 <p>I liked the fact I only had to make changes in one place so the factory could return a customized formatter instead of the default one and the rest of the application didn’t care at all. But unfortunately the fix required the publish URL or the feed. I got around it by adding to FeedSettings in the config but now the S3 settings and Feed settings need to be changed at the same time.</p>
 
 <p>My idea was to make it like a pipeline so that the feed generator didn’t have to care how and where it’s published but this fix contradicted with that approach a little bit. Unfortunately it doesn’t look possible to use variables in the config files so that I could generate Feed.Url using the other settings.</p>
+
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></p>
 
 <ul>
   <li>The 3rd warning was encoding-related. If don’t explicitly specify the API uses ISO-8859-1 charset. I tried playing around a with a few headers to get the response  in UTF-8 but the solution came from a friend: Accept-Charset header. So adding the header fixed that issue as well:</li>

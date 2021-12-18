@@ -185,10 +185,19 @@
 
     <p><img src="/images/vpblogimg/2013/07/QueryOutput04.png" alt="Query Output"></p>
   </li>
-  <li>
-    <p>NTILE
+</ol>
+
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></p>
+
+<ol>
+  <li>NTILE
  Works like rank but it takes an integer parameter (n) and partitions the results to n-pieces. For example, the query below with NTILE returns 40 rows. As n is 4 in this example, the first 10 rows got rank 1 and 11 – 20 got rank 2 and so forth.
- Example:</p>
+ Example:
     <div class="language-plaintext highlighter-rouge">
 <div class="highlight"><pre class="highlight"><code> SELECT o.TerritoryID, YEAR(OrderDate) AS SaleYear, SUM(SubTotal) AS Total,
  NTILE(4) OVER(ORDER BY SUM(SubTotal) DESC) AS Rank

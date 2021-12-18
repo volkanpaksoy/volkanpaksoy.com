@@ -154,6 +154,13 @@
 
 <p>I don’t like my programs to be dependent on some external software that needs to be installed on the client machine but I thought this could be optional because desktop notifications can be one channel for communications and others can be added if necessary. So it is not a dependency but rather it enhancement in functionality. Also a pitfall in software development is the anti-pattern described as <a href="http://en.wikipedia.org/wiki/Not_Invented_Here#In_computing" target="_blank" rel="noopener noreferrer">Not Invented Here</a>. One simply cannot develop every piece of software needed to build complex systems. It’s not feasible. Of course when I write code on my own, my main goal is to learn something new but still I like to get results and produce working software. So best practices for commercial software still apply. Having convinced myself to use Growl for messaging I started looking for ways integrate it with my application. It comes with .NET SDK which is quite easy to use.</p>
 
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></p>
+
 <p>There are two assemblies need to be referred to:</p>
 
 <ul>
@@ -329,6 +336,13 @@ I quickly downloaded the soft-float image and tried to boot it up again. This ti
 
 <p>Having no idea what’s going on, consulted Google again and found out other people had the same problem. The proposed solution was to replace start.elf with the one from the hard-float image. I tried running it with the replaced elf file but got the same result. I’ve been doing all these experiments on my new Raspberry Pi which is 512MB. Having failed where others seemed to succeed, I put the blame on the hardware I’m using and decided to try the same image with the old Pi. The result was promising: I could boot the Pi with the soft-float version finally. I installed the Mono runtime and MonoDevelop again but looks like MonoDevelop is above Pi’s paygrade! It was excruciatingly slow that I decided to create the sample project on my desktop PC and carry it over with a USB flash drive. Mounted the flash drive using the following commands (replace tosh with directory name you want and make sure you’re mounting the correct device.)</p>
 
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></p>
+
 <div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sudo</span> <span class="n">mkdir</span> <span class="p">/</span><span class="n">media</span><span class="p">/</span><span class="n">tosh</span>
 <span class="n">sudo</span> <span class="n">mount</span> <span class="p">-</span><span class="n">t</span> <span class="n">vfat</span> <span class="p">-</span><span class="n">o</span> <span class="n">uid</span><span class="p">=</span><span class="n">pi</span><span class="p">,</span><span class="n">gid</span><span class="p">=</span><span class="n">pi</span> <span class="p">/</span><span class="n">dev</span><span class="p">/</span><span class="n">sda1</span> <span class="p">/</span><span class="n">media</span><span class="p">/</span><span class="n">tosh</span><span class="p">/</span>
 </code></pre></div></div>
@@ -402,6 +416,13 @@ Of course, this is just the beginning. I’ll see how compatible and reliable Mo
 </code></pre></div></div>
 
 <p>This code doesn’t compile because compiler thinks “TestNamespace.Test” is actually “DifferentNamespace.TestNamespace.Test”.</p>
+
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></p>
 
 <p>Adding a using directive doesn’t help either. As it has the same namespace as the subnamespace of the calling class it always resolves to calling class’s namespace. The solution is using “global” namespace.</p>
 

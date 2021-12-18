@@ -152,6 +152,13 @@
 	<div class="entry-content" itemprop="articleBody">
 		<p>AWS must be short for awesome! I love using it. It makes managing virtual machines so much easier yet provides full power to the user through its API. Thanks to vision of Jeff Bezos, every function you see on the management console can be accessed via API as well. Back in 2002 Jeff Bezos mandated that all teams will expose their data and functionality through service interfaces. This approach make complete sense. It makes separation of layers much more easier, makes the code testable. That’s why I’m currently big on <em>ServiceStack</em> and <em>WebAPI</em> but that’s a discussion for another post. In this post I’d like to share some of the tips &amp; tricks that I picked during my involvement with AWS. Of course, as many IT related things, this is an ongoing process and I may post sequel to this one in the future. Currently my tips are as follows:</p>
 
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></p>
+
 <p><strong>TIP 01: Always create production servers with termination protection on</strong>
 If there is one thing I don’t like about AWS is that in the management console there is no way of separating the production and test/staging machines. So first use a clear naming convention to distinguish them but sometimes that’s not enough. In the heat of the moment you can attempt to stop or terminate a production instance. If you don’t have termination protection enabled this attempt would become a tragedy but if you have it on simply nothing happens and you get to keep your job. If you forgot to turn it on while creating an instance you can always change it by right-clicking on the instance and selecting Change Termination Protection.</p>
 
@@ -177,6 +184,13 @@ This is especially handy for Windows instances as they demand more space than Li
 <p><img src="/images/vpblogimg/2012/11/AWS_Change_Disk_Size_01.png" alt="AWS Change Disk Size"></p>
 
 <p><img src="/images/vpblogimg/2012/11/AWS_Change_Disk_Size_02.png" alt="AWS Change Disk Size"></p>
+
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></p>
 
 <p><strong>TIP 07: Don’t forget to delete manually attached EBS volumes</strong>
 When you terminate an instance make sure you delete all the attached EBS volumes that are not set to auto-delete. The default volume that comes with the instance has Delete on termination option checked in the wizard so they are automatically cleaned up. But if you create a volume manually and attach it to an instance there is no option to set this flag. So you have to delete them manually. AWS is kind enough to warn you to delete them when deleting the instance. If you don’t take care of them immediately and you have auto-scaling you may end up with terminating lots of instances that leaves unused disks that you keep paying for.</p>
@@ -236,6 +250,13 @@ before they become an issue.</p>
 
 <p>The wording is the opposite of Visual Studio’s (treat errors as warnings instead of the other way around) so we have to set this to false.
 After reloading the project, you won’t be able to successfully build your project without fixing all the StyleCop rule violations (which is a good thing!)</p>
+
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></p>
 
 <p><strong>02. Integrate StyleCop to MSBuild</strong>
 Naturally if the process is not automatic it won’t work. If, as a developer, it’s left to me to right-click on the project and run StyleCop manually I’d forget it after a few times. The easiest way to integrate it with MSBuild is adding StyleCop.MSBuild NuGet package to your project. Alternatively if you have installed full StyleCop application you have StyleCop.Targets file under your installation directory. By adding that file to the project you can achieve MSBuild integration.</p>
@@ -311,6 +332,13 @@ It’s still not perfect but compared to other methods I think it’s a neat way
 
 <p><strong>STEP 01:</strong> Delete the My Blog Posts folder in the destination machine.
 The local folder is created automatically under <em>%UserProfile%\Documents\My Weblog Posts.</em> Delete this folder. Make sure LiveWriter is closed before deleting it.</p>
+
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></p>
 
 <p><strong>STEP 02:</strong> Create a directory junction
 A directory junction is a mapping to another folder. In Windows 7 you can use mklink command to create directory junctions (as well as symbolic and hard links)</p>

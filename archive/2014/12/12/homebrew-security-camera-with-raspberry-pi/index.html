@@ -200,6 +200,13 @@
 <h3 id="main-course-motion">Main course: Motion</h3>
 <p>There is a great tutorial <a href="http://www.instructables.com/id/Raspberry-Pi-as-low-cost-HD-surveillance-camera/" target="_blank" rel="noopener noreferrer">here</a> for converting your Pi into a security camera  which I mostly followed. Basically you enable WiFi, install Motion software and tweak the configuration a bit (image size, framerate etc) and it’s (hopefully) good to go.</p>
 
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></p>
+
 <p>The video didn’t work for me unfortunately. It was recording something but only the first frame was visible so it wasn’t any better than a still image. So I decided to ignore videos completely.</p>
 
 <p>Instead of using a network share I decided to upload footage to AWS S3 directly using <a href="http://s3tools.org/s3cmd" target="_blank" rel="noopener noreferrer">Amazon S3 Tools</a>. Also don’t forget to clear old footage. Otherwise you can run out of space very quickly. I added a few cron jobs to carry out these tasks for me:</p>

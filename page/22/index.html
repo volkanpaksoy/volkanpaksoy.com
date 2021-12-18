@@ -192,6 +192,13 @@
 <div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">configFactory</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">DynamoDBConfigurationFactory</span><span class="p">();</span>
 </code></pre></div></div>
 
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></p>
+
 <p>With this change alone we are essentially replacing a whole family of related classes.</p>
 
 <h3 id="on-the-factory-floor">On the factory floor</h3>
@@ -381,6 +388,13 @@
 
 <p>ArticleFeedGenerator does all the work except creating a conccrete implementation of SyndicationFeedFormatter. It delegates it to the derived class who provide the implementation for CreateFeedFormatter abstract method.</p>
 
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></p>
+
 <p>And here comes the concrete implementations (which correspond to <em>ConcreteCreator</em>)</p>
 
 <div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">AtomFeedGenerator</span> <span class="p">:</span> <span class="n">ArticleFeedGenerator</span>
@@ -522,6 +536,13 @@
 <p>Some services return their data in JSON format, some have extra text in it. But encapsulating the algorithms in their own classes this way, the clint code doesn’t have to worry about parsing these various return values. It’s handled in each class. If one service changes it’s output and breaks the implementation I can recover just by changing the code instantiates the class.</p>
 
 <p>The concrete implementations of the interface are below. They implement the IIpCheckStrategy and are responsible for getting the data and return parsed IP address as string.</p>
+
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></p>
 
 <p>AWS IP Checker:</p>
 
