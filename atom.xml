@@ -4,7 +4,7 @@
   <title><![CDATA[Playground for the mind]]></title>
   <link href="https://volkanpaksoy.com/atom.xml" rel="self"/>
   <link href="https://volkanpaksoy.com/"/>
-  <updated>2021-12-18T06:48:54+00:00</updated>
+  <updated>2021-12-18T06:56:07+00:00</updated>
   <id>https://volkanpaksoy.com/</id>
   <author>
     <name><![CDATA[Volkan Paksoy]]></name>
@@ -391,6 +391,13 @@ fi
 
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build -t audio-test .
 </code></pre></div></div>
+
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></p>
 
 <h2 id="testing-the-audio">Testing the audio</h2>
 <p>Initially I rana container like this:</p>
@@ -2054,6 +2061,13 @@ sudo systemctl start ssh
 
 <p>There are great Docker registries such as Docker Hub and Amazon ECR. I wouldn’t recommend usign a self-hosted registry for production. But if the price or privacy is a concern it can certainly be an option.</p>
 
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></p>
+
 <h2 id="creating-self-hosted-registry">Creating Self-Hosted Registry</h2>
 <p>It sounds like it requires installing a server application but the nice thing about Docker is, even it is a Docker registry it can run in a container itself. So first off we pull the registry repo for Docker Hub:</p>
 
@@ -2458,6 +2472,13 @@ bulkAll.Wait(TimeSpan.FromSeconds(60),
   <li>The number of lines in a statement should be random.</li>
 </ul>
 
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></p>
+
 <h2 id="rule-implementations">Rule implementations</h2>
 <p>Some rules stated above are very straightforward and easy to implement. These are some samples of what Bogus is capable of. For the full documentation check out the GitHub repository.</p>
 
@@ -2590,6 +2611,13 @@ bulkAll.Wait(TimeSpan.FromSeconds(60),
     <span class="n">x</span><span class="p">.</span><span class="n">Balance</span> <span class="p">=</span> <span class="n">balance</span><span class="p">;</span>
 <span class="p">});</span>
 </code></pre></div></div>
+
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+
+<p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></p>
 
 <p>A caveat with this approach is that I cannot use <strong>StrictMode</strong> anymore as it complains about those 3 fields having null values. It specifically mentions that in the exception. If you use Rules you’re on your own to ensure that all fields are populated properly.</p>
 
