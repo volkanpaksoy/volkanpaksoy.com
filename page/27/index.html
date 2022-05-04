@@ -331,14 +331,6 @@
 
 <p>My idea was to make it like a pipeline so that the feed generator didn’t have to care how and where it’s published but this fix contradicted with that approach a little bit. Unfortunately it doesn’t look possible to use variables in the config files so that I could generate Feed.Url using the other settings.</p>
 
-<div id="ezoic-pub-ad-placeholder-101">
-  <script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-  <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
-  <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
-</div>
-
 <ul>
   <li>The 3rd warning was encoding-related. If don’t explicitly specify the API uses ISO-8859-1 charset. I tried playing around a with a few headers to get the response  in UTF-8 but the solution came from a friend: Accept-Charset header. So adding the header fixed that issue as well:</li>
 </ul>
@@ -665,14 +657,6 @@ www.w3.org/2001/XMLSchema"</span><span class="nt">&gt;</span>
 <h2 id="04-change-output-encoding">04. Change output encoding</h2>
 
 <p>When you serialize with the default options and with the XML declaration the encoding is UTF-16. Oddly enough there is no option to specify the output encoding. In order to achieve that and sometimes you may need to change it. For example a 3rd party was expecting UTF-8 in my case so the default value didn’t cut it for me.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-  <script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-  <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
-  <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
-</div>
 
 <p>So using the same Player class from the last example the following code produces an output with UTF-16</p>
 

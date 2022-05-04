@@ -645,14 +645,6 @@ bulkAll.Wait(TimeSpan.FromSeconds(60),
 <span class="p">});</span>
 </code></pre></div></div>
 
-<div id="ezoic-pub-ad-placeholder-101">
-  <script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-  <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
-  <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
-</div>
-
 <p>A caveat with this approach is that I cannot use <strong>StrictMode</strong> anymore as it complains about those 3 fields having null values. It specifically mentions that in the exception. If you use Rules you’re on your own to ensure that all fields are populated properly.</p>
 
 <p>Another drawback of setting multiple rules at once is that it can easily make the code harder to read. Fortunately for me, the author of the library <a href="https://bchavez.bitarmory.com/" target="_blank" rel="noopener noreferrer">Brian Chavez</a> kindly reviewed the code and suggested some refactorings one of which proved it was still possible to use <strong>RuleFor</strong> method and strict mode. I’ve updated the final source code with these refactorings. So with individual rules the implementation looks like this:</p>
@@ -1068,14 +1060,6 @@ If they need to change something on a read-only layer, they use copy-on-write op
     </ul>
   </li>
 </ul>
-
-<div id="ezoic-pub-ad-placeholder-101">
-  <script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-  <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
-  <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
-</div>
 
 <h2 id="notes">Notes</h2>
 <ul>

@@ -433,14 +433,6 @@ www.w3.org/2001/XMLSchema"</span><span class="nt">&gt;</span>
 
 <p>When you serialize with the default options and with the XML declaration the encoding is UTF-16. Oddly enough there is no option to specify the output encoding. In order to achieve that and sometimes you may need to change it. For example a 3rd party was expecting UTF-8 in my case so the default value didn’t cut it for me.</p>
 
-<div id="ezoic-pub-ad-placeholder-101">
-  <script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-  <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
-  <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
-</div>
-
 <p>So using the same Player class from the last example the following code produces an output with UTF-16</p>
 
 <div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Player</span> <span class="n">player</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Player</span><span class="p">()</span> <span class="p">{</span> <span class="n">Id</span> <span class="p">=</span> <span class="m">102</span><span class="p">,</span> <span class="n">FirstName</span> <span class="p">=</span> <span class="s">"Danny"</span><span class="p">,</span> <span class="n">LastName</span> <span class="p">=</span> <span class="s">"TopScorer"</span><span class="p">,</span> <span class="n">AverageGoalsPerGame</span> <span class="p">=</span> <span class="m">3.5</span><span class="p">,</span> <span class="n">TotalGoalsScored</span> <span class="p">=</span> <span class="m">150</span> <span class="p">};</span>

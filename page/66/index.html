@@ -200,14 +200,6 @@ This is especially handy for Windows instances as they demand more space than Li
 
 <p><img src="/images/vpblogimg/2012/11/AWS_Change_Disk_Size_02.png" alt="AWS Change Disk Size"></p>
 
-<div id="ezoic-pub-ad-placeholder-101">
-  <script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-  <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
-  <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
-</div>
-
 <p><strong>TIP 07: Don’t forget to delete manually attached EBS volumes</strong>
 When you terminate an instance make sure you delete all the attached EBS volumes that are not set to auto-delete. The default volume that comes with the instance has Delete on termination option checked in the wizard so they are automatically cleaned up. But if you create a volume manually and attach it to an instance there is no option to set this flag. So you have to delete them manually. AWS is kind enough to warn you to delete them when deleting the instance. If you don’t take care of them immediately and you have auto-scaling you may end up with terminating lots of instances that leaves unused disks that you keep paying for.</p>
 
