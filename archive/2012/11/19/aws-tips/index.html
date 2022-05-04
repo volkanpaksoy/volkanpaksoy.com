@@ -121,12 +121,15 @@
 <br>
 <br>
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- vp.com - default -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="6750480330" data-ad-format="auto" data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+<div id="ezoic-pub-ad-placeholder-102">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+  <!-- vp.com - default -->
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="6750480330" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+
 </nav></header>				
 			</div>
 		</div>
@@ -158,12 +161,13 @@
 	<div class="entry-content" itemprop="articleBody">
 <p>AWS must be short for awesome! I love using it. It makes managing virtual machines so much easier yet provides full power to the user through its API. Thanks to vision of Jeff Bezos, every function you see on the management console can be accessed via API as well. Back in 2002 Jeff Bezos mandated that all teams will expose their data and functionality through service interfaces. This approach make complete sense. It makes separation of layers much more easier, makes the code testable. That’s why I’m currently big on <em>ServiceStack</em> and <em>WebAPI</em> but that’s a discussion for another post. In this post I’d like to share some of the tips &amp; tricks that I picked during my involvement with AWS. Of course, as many IT related things, this is an ongoing process and I may post sequel to this one in the future. Currently my tips are as follows:</p>
 
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-
-<p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script></p>
+<div id="ezoic-pub-ad-placeholder-101">
+  <script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+  <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
+  <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
 
 <p><strong>TIP 01: Always create production servers with termination protection on</strong>
 If there is one thing I don’t like about AWS is that in the management console there is no way of separating the production and test/staging machines. So first use a clear naming convention to distinguish them but sometimes that’s not enough. In the heat of the moment you can attempt to stop or terminate a production instance. If you don’t have termination protection enabled this attempt would become a tragedy but if you have it on simply nothing happens and you get to keep your job. If you forgot to turn it on while creating an instance you can always change it by right-clicking on the instance and selecting Change Termination Protection.</p>
@@ -191,12 +195,13 @@ This is especially handy for Windows instances as they demand more space than Li
 
 <p><img src="/images/vpblogimg/2012/11/AWS_Change_Disk_Size_02.png" alt="AWS Change Disk Size"></p>
 
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-
-<p><ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script></p>
+<div id="ezoic-pub-ad-placeholder-101">
+  <script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+  <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5266062674794996" data-ad-slot="9650311114"></ins>
+  <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
 
 <p><strong>TIP 07: Don’t forget to delete manually attached EBS volumes</strong>
 When you terminate an instance make sure you delete all the attached EBS volumes that are not set to auto-delete. The default volume that comes with the instance has Delete on termination option checked in the wizard so they are automatically cleaned up. But if you create a volume manually and attach it to an instance there is no option to set this flag. So you have to delete them manually. AWS is kind enough to warn you to delete them when deleting the instance. If you don’t take care of them immediately and you have auto-scaling you may end up with terminating lots of instances that leaves unused disks that you keep paying for.</p>

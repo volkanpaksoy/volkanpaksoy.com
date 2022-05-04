@@ -393,7 +393,6 @@ google.com, pub-1929615694373103, RESELLER, f08c47fec0942fa0
 google.com, pub-1966721192709606, DIRECT, f08c47fec0942fa0
 google.com, pub-1968276357835282, RESELLER, f08c47fec0942fa0
 google.com, pub-2011734697823029, DIRECT, f08c47fec0942fa0
-google.com, pub-2011734697823029, RESELLER, f08c47fec0942fa0
 google.com, pub-2024690810381654, RESELLER, f08c47fec0942fa0
 google.com, pub-2128757167812663, RESELLER, f08c47fec0942fa0
 google.com, pub-2285546921446373, RESELLER, f08c47fec0942fa0
@@ -567,9 +566,7 @@ lijit.com, 257429, RESELLER, fafdf38b16bf6b2b
 lijit.com, 257429-eb, DIRECT, fafdf38b16bf6b2b
 lijit.com, 260380, RESELLER, fafdf38b16bf6b2b
 lijit.com, 268479, DIRECT, fafdf38b16bf6b2b
-lijit.com, 268479, RESELLER, fafdf38b16bf6b2b
 lijit.com, 268479-eb, DIRECT, fafdf38b16bf6b2b
-lijit.com, 268479-eb, RESELLER, fafdf38b16bf6b2b
 lijit.com, 268876, DIRECT, fafdf38b16bf6b2b
 lijit.com, 270524, RESELLER, fafdf38b16bf6b2b
 lijit.com, 273644, RESELLER, fafdf38b16bf6b2b
@@ -594,7 +591,6 @@ lijit.com, 376385-eb, RESELLER, fafdf38b16bf6b2b
 lijit.com, 57813, RESELLER, fafdf38b16bf6b2b
 lijit.com, 62110, RESELLER, fafdf38b16bf6b2b
 lijit.com, 62299, DIRECT, fafdf38b16bf6b2b
-lijit.com, 62299, RESELLER, fafdf38b16bf6b2b
 lijit.com, 62299-eb, DIRECT, fafdf38b16bf6b2b
 limpid.tv, 920305, DIRECT
 lkqd.com, 267, RESELLER, 59c49fa9598a0117
@@ -871,7 +867,6 @@ rhythmone.com, 1295892552, DIRECT, a670c89d4a324e47
 rhythmone.com, 1346664749, DIRECT, a670c89d4a324e47
 rhythmone.com, 1352466146, RESELLER, a670c89d4a324e47
 rhythmone.com, 144927031, DIRECT, a670c89d4a324e47
-rhythmone.com, 144927031, RESELLER, a670c89d4a324e47
 rhythmone.com, 1561643954, RESELLER, a670c89d4a324e47
 rhythmone.com, 1654642120, RESELLER, a670c89d4a324e47
 rhythmone.com, 1767353092, RESELLER, a670c89d4a324e47
@@ -1101,7 +1096,6 @@ spotx.tv, 181067, RESELLER, 7842df1d2fe2db34
 spotx.tv, 202100, RESELLER, 7842df1d2fe2db34
 spotx.tv, 211156, RESELLER, 7842df1d2fe2db34
 spotx.tv, 212457, RESELLER
-spotx.tv, 212457, RESELLER, 7842df1d2fe2db34
 spotx.tv, 218443, RESELLER, 7842df1d2fe2db34
 spotx.tv, 230037, RESELLER, 7842df1d2fe2db34
 spotx.tv, 238936, RESELLER, 7842df1d2fe2db34
