@@ -4,7 +4,7 @@
   <title><![CDATA[Playground for the mind]]></title>
   <link href="https://volkanpaksoy.com/atom.xml" rel="self"/>
   <link href="https://volkanpaksoy.com/"/>
-  <updated>2022-05-04T07:59:56+01:00</updated>
+  <updated>2022-05-04T08:10:45+01:00</updated>
   <id>https://volkanpaksoy.com/</id>
   <author>
     <name><![CDATA[Volkan Paksoy]]></name>
@@ -1014,9 +1014,7 @@ phases:
 
 <p><img src="/images/vpblogimg/2019/10/lego-1/lego-mindstorms-first-program.png" alt="" /></p>
 
-<p>And the result is simple but good enough for the time being:</p>
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/3RE---CIvbI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+<p>And the result is simple but good enough for the time being.</p>
 
 <h2 id="resources">Resources</h2>
 <ul>
