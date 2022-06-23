@@ -4,7 +4,7 @@
   <title><![CDATA[Playground for the mind]]></title>
   <link href="https://volkanpaksoy.com/atom.xml" rel="self"/>
   <link href="https://volkanpaksoy.com/"/>
-  <updated>2022-06-23T10:05:38+01:00</updated>
+  <updated>2022-06-23T10:13:57+01:00</updated>
   <id>https://volkanpaksoy.com/</id>
   <author>
     <name><![CDATA[Volkan Paksoy]]></name>
@@ -16,9 +16,9 @@
   
   <entry>
     <title type="html"><![CDATA[Powershell Gotcha: Contains Operator]]></title>
-    <link href="https://volkanpaksoy.com/archive/2022/06/23/Powershell-Contains-vs-Match/"/>
+    <link href="https://volkanpaksoy.com/archive/2022/06/23/Powershell-Gotcha-Contains-Operator/"/>
     <updated>2022-06-23T07:00:00+01:00</updated>
-    <id>https://volkanpaksoy.com/archive/2022/06/23/Powershell-Contains-vs-Match</id>
+    <id>https://volkanpaksoy.com/archive/2022/06/23/Powershell-Gotcha-Contains-Operator</id>
     <content type="html"><![CDATA[<p>I was working on a WordPress project recently. The project is to set up a WordPress blog using Amazon Lightsail service. I ended up blogging it <a href="How to host a WordPress website on AWS using Amazon Lightsail">here</a>, but I want to talk about something else in this post.</p>
 
 <h2 id="use-case-filter-results-using--contains-operator">Use Case: Filter results using -Contains operator</h2>
