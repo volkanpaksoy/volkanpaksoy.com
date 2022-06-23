@@ -146,6 +146,102 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2014/11/25/yield-keyword-in-csharp/" itemprop="url">yield keyword in C#</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-11-25T17:30:27+00:00" itemprop="datePublished">November 25, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p><em>yield</em> keyword has been added to C# long time ago but I never made a habit of using it. Basically what it does is create an iterator and allows you to return an IEnumerable one item at a time.</p>
+
+<p>For example in the example below (from MSDN) <em>Power</em> returns a single int. But the return type of the method is IEnumerable<int>. This is because of the _yield_ usage. Every time it's called it returns the next value it calculates.</int></p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">PowersOf2</span>
+<span class="p">{</span>
+    <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// Display powers of 2 up to the exponent of 8: </span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="k">in</span> <span class="nf">Power</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="m">8</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="s">"{0} "</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">static</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="nf">Power</span><span class="p">(</span><span class="kt">int</span> <span class="n">number</span><span class="p">,</span> <span class="kt">int</span> <span class="n">exponent</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">result</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">exponent</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
+        <span class="p">{</span>
+            <span class="n">result</span> <span class="p">=</span> <span class="n">result</span> <span class="p">*</span> <span class="n">number</span><span class="p">;</span>
+            <span class="k">yield</span> <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Output: 2 4 8 16 32 64 128 256</span>
+<span class="p">}</span> 
+</code></pre></div></div>
+
+<p>I developed a small Fibonacci calculator using yield.</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/0a50b39d654634ad4e95771b34c0690f.js"> </script>
+
+<p>Notice the first two occurences:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">yield</span> <span class="k">return</span> <span class="n">f0</span><span class="p">;</span>
+<span class="k">yield</span> <span class="k">return</span> <span class="n">f1</span><span class="p">;</span>
+</code></pre></div></div>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>When it’s first called it returns f0 (0) and on second call it omits that return and returns f1 (1) and on subsequent calls it loops until the desired numbers and returns the series up until that point.</p>
+
+<p>And the output looks like this:</p>
+
+<p><img src="/images/vpblogimg/2014/11/Fibonacci-output.png" alt="Fibonacci console output"></p>
+
+<h2 id="resources">Resources</h2>
+<hr>
+<ul>
+  <li>[MSDN Reference] (http://msdn.microsoft.com/en-us/library/9k7k7cf0.aspx)</li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/11/20/welcome-markdown/" itemprop="url">Welcome, Markdown!</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -339,63 +435,6 @@
   <li><a href="http://www.makeuseof.com/tag/add-podcast-feeds-xbmc-media-center" target="_blank" rel="noopener noreferrer">Adding RSS feeds manually</a></li>
   <li><a href="http://sourceforge.net/projects/win32diskimager/" target="_blank" rel="noopener noreferrer">Win32 Disk Imager</a></li>
 </ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/11/16/take-control-content/" itemprop="url">Take control of your content</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-11-16T11:35:57+00:00" itemprop="datePublished">November 16, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
-
-<!-- misc -->
-
-
-
-
-    <a href="/category/misc">misc</a>
-    
-</span>
-	<span class="tags"></span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>One of the sites I like is Coderwall. It’s a nice place to check out quick tips from different developers. Also it has a voting system which you feel a bit validated when people find your tips helpful. I have 6 “protips” in their site and some of them had a few upvotes. I was motivated to post more tips which are especially too short for a blog post.</p>
-
-<h2 id="your-upvotes-are-no-good-here">Your upvotes are no good here!</h2>
-<p>A few backs I logged in to check if I had any new upvotes. To my surprise, not only I didn’t get anything new, all my previous hard-earned upvotes were deleted as well! I contacted their support and 2 weeks later they said they could have been deleted because of spam concerns. If a tip is online for about a year and it was viewed by hundreds of people and got 3-4 upvotes in the process I think it’s safe to think that there’s not a scam going on here. Even if you think something is fishy you should give them benefit of the doubt just because the numbers are very small and very plausible. Luckily, I have better things to do than scam Coderwall and a few measly upvotes have no meaning at all.</p>
-
-<h2 id="time-to-pack-and-leave">Time to pack and leave</h2>
-<p>A week later I decided to publish all my posts n my blog. I went to my account to list my tips but the link wasn’t working. So I couldn’t even get the tips I had created. At least they provide a way to search by username. That’s how I could find my own tips. That was the straw that broke the camel’s back! So the lesson learned here is that always take control of your own content. Publish it on your own site/blog or whatever platform you control then propagate your content elsewhere if you choose to do so.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h2 id="goodbye-coderwall">Goodbye, Coderwall!</h2>
-<p>I know this idea sounds very natural and obvious to some people. I think I should have thought of it before this incident but at least I recovered my content without any loss and learned a valuable lesson. I may still post to Coderwall but after deleting my votes and treating me like a scammer I’ve lost interest to their site. Looking at the quality of their support I don’t think they will be around for a long time anyway!</p>
-
-<p>From now on I will post suck quick tips on this blog under “Tip of the Day” category.</p>
-
 
 		
 		

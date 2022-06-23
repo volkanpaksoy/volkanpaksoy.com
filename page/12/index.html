@@ -146,6 +146,146 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2019/01/15/Infrastructure-as-code-with-AWS-CloudFormation/" itemprop="url">Infrastructure as Code with AWS CloudFormation</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-01-15T06:00:00+00:00" itemprop="datePublished">January 15, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awsdevops">aws</a></span> -->
+
+<!-- aws, devops -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags">cloudformation</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>If you have a habit creating your AWS resources manually, things can get very messy very quickly. At some point you realize that you have no idea if a resource is still in use and just to be safe you leave it alone.</p>
+
+<p>I found myself in this situation and decided to take advantage Infrastructure as Code paradigm using AWS CloudFormation. To start simple I decided to migrate my <a href="https://volkanpaksoy.com/archive/2018/06/26/Automated-Email-Processing-with-AWS-SES-and-Lambda/">automated CV response application</a> to a CloudFormation stack. Going forward this is a much efficient way to write blog posts too. Instead of writing step by step instructions I can simply post the CloudFormation stack in JSON or YAML.</p>
+
+<h2 id="infrastructure-of-code-in-a-nutshell">Infrastructure of Code in a nutshell</h2>
+
+<p><img src="/images/vpblogimg/2019/01/aws-cloudformation-logo.png" alt=""></p>
+
+<p>Basically this approach allows you to define, manage and provision all the resources that define your system.</p>
+
+<p><strong>Advantages:</strong></p>
+
+<ul>
+  <li>Changes can be source-controlled</li>
+  <li>Entire provisioning process can be automated</li>
+  <li>entire infrastructure can be easily recreated in a different account.</li>
+  <li>Resources can easily be identified. Tags can be used to identify which stack the resources belong to.</li>
+  <li>Resources can easily be clean up. Deleting a stack will delete all the resource it created.</li>
+</ul>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h2 id="basic-terminology">Basic Terminology</h2>
+<ul>
+  <li>
+<strong>Stack:</strong> All the resources used to create an infrastructure.</li>
+  <li>
+<strong>StackSet:</strong> A StackSet is a container for AWS CloudFormation stacks that lets you provision stacks across AWS accounts and regions by using a single AWS CloudFormation template.</li>
+  <li>
+<strong>Design template:</strong> This is the file YAML or JSON format that defines all the resources that will be created AWS</li>
+</ul>
+
+<h2 id="where-to-start">Where to start…</h2>
+<p>Even though you get familiar with the concepts finding where tostart can be intimidating sometimes. When it comes to CloudFormation, there are a lot of sample templates that you can start and build upon.</p>
+
+<p>So here’s an easy way to get started:</p>
+
+<p><strong>Step 1:</strong> Save the following snippet to a local file such as <em>cloudformation.sample.yaml</em>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Resources:
+  Ec2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: ami-0aff88ed576e63e90
+</code></pre></div></div>
+
+<p>In the example above I’m using a stock AWS Linux AMI in London region.</p>
+
+<p><strong>Step 2:</strong> Go to Stack and click <em>Create Stack</em> (Make sure you’re in EU London region otherwise AWS won’t be able to find the AMI specified in our template)</p>
+
+<p><strong>Step 3:</strong> In specify template section, select <em>Upload a template file</em></p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-cloudformation-part-1-create-stack-1.png" alt=""></p>
+
+<p><strong>Step 4:</strong> Clock <em>Choose file</em> to locate your file and upload your template.</p>
+
+<p><strong>Step 5:</strong> Click next and specify a stack name something like FirstStackForEC2 and click Next</p>
+
+<p><strong>Step 6:</strong> Click Next on Configure Stack Options view and in the final review step of the wizard click <em>Create Stack</em>.</p>
+
+<p>At this point you can observe the progress of your stack being created.</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-cloudformation-part-1-create-stack-2.png" alt=""></p>
+
+<p>Now if you go to EC2 service in the same region you should be able to see the new instance:</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-cloudformation-part-1-create-stack-3.png" alt=""></p>
+
+<p>If you delete the stack, it will in turn delete everything it created which is the EC2 instance in this example.</p>
+
+<h2 id="launch-stack-urls">Launch Stack URLs</h2>
+<p>I always like the launch stack buttons that I see every now and then. I think there’s something magical about clicking a button and watching an entire infrastructure being created right before your eyes!</p>
+
+<p>Basically clicking the Launch Stack URL opens the wizard we just used with the fields populated with the values in the template.</p>
+
+<p><strong>Step 1:</strong> Upload the template to S3 and make it publicly accessible.</p>
+
+<p><strong>Step 2:</strong> Use the following naming convention and replace the values:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://console.aws.amazon.com/cloudformation/home?region=region#/stacks/new?stackName=stack_name&amp;templateURL=template_location
+</code></pre></div></div>
+
+<p><a href="https://console.aws.amazon.com/cloudformation/home?region=eu-west-2#/stacks/new?stackName=FirstStackForEC2&amp;templateURL=https://s3.eu-west-2.amazonaws.com/blog-cloudformation-templates/2019-01-15-Infrastructure-as-code-with-AWS-CloudFormation-cloudformation.sample.yaml" target="_blank" rel="noopener noreferrer"><img src="/images/vpblogimg/2019/01/aws-cloudformation-launch-stack.svg" alt=""></a></p>
+
+<p>In this example I uploaded the Launch Stack button image to my GitHub repository so that I can link to it.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://aws.amazon.com/cloudformation/" target="_blank" rel="noopener noreferrer">AWS Official Product Page</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2018/06/26/Automated-Email-Processing-with-AWS-SES-and-Lambda/">Related blog post: Automated Email Processing with AWS SES and Lambda</a></li>
+  <li><a href="https://aws.amazon.com/cloudformation/aws-cloudformation-templates/" target="_blank" rel="noopener noreferrer">AWS CloudFormation Templates</a></li>
+  <li><a href="https://aws.amazon.com/blogs/devops/construct-your-own-launch-stack-url/" target="_blank" rel="noopener noreferrer">Construct Your Own Launch Stack URL</a></li>
+  <li><a href="https://aws.amazon.com/cloudformation/resources/" target="_blank" rel="noopener noreferrer">AWS CloudFormation Resources</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2018/12/19/Aurora-Serverless/" itemprop="url">AWS Aurora Serverless</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -337,184 +477,6 @@
   <li><a href="https://stackoverflow.com/questions/37441225/how-to-monitor-free-disk-space-at-aws-ec2-with-cloud-watch-in-windows" target="_blank" rel="noopener noreferrer">StackOverflow question: How to monitor free disk space at AWS EC2 with Cloud Watch in windows
 </a></li>
   <li><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartWindows2016.html" target="_blank" rel="noopener noreferrer">Quick Start: Enable Your Amazon EC2 Instances Running Windows Server 2016 to Send Logs to CloudWatch Logs Using the CloudWatch Logs Agent</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2018/09/04/AWS-Organisations/" itemprop="url">Managing Accounts with AWS Organizations</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2018-09-04T05:00:00+01:00" itemprop="datePublished">September  4, 2018</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/awssecurity">aws</a></span> -->
-
-<!-- aws, security -->
-
-
-
-
-    <a href="/category/aws">aws</a>
-    , 
-
-    <a href="/category/security">security</a>
-    
-</span>
-	<span class="tags">organizations, iam</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p><img src="/images/vpblogimg/2018/09/aws-organizations-01-logo.png" alt=""></p>
-
-<p>I have never been a huge fan of AWS Management Console. Some reasons for that being:</p>
-
-<ul>
-  <li>Inconsistencies: In some services you can search by anything (such as tag value in EC2 dashboard) whereas in others you have to put in the exact start of the object (such as CloudWatch)</li>
-  <li>Regional separation: Some might like it but I find it confusing and error-prone. If you need to work in multiple regions you have to constantly change the region from the dropdown menu. If you accidentally create a resource in another region you wouldn’t see it’s still running until you accidentally switch back to that region again. But S3 seems to be an exception to this as you can select the region while creating the bucket and you can see all in the same list (speaking of inconsistencies…)</li>
-  <li>Flat resource structure: Every resource is mixed together in an account. If you have multiple projects or teams in your company, you would see all the resources they created among yours. Also there is no environment concept. Your test and production resources live side by side.</li>
-</ul>
-
-<p>This post is about AWS Organizations which addresses the 3rd point in the list above.</p>
-
-<h2 id="what-is-aws-organizations">What is AWS Organizations?</h2>
-<p>It is a way to centrally manage multiple accounts inside an organization by creating a hierarchy between accounts.</p>
-
-<p>Benefits of having an account structure</p>
-
-<ul>
-  <li>No need to label everything with project/team/environment name</li>
-  <li>Production and non-production resources don’t live side by side</li>
-  <li>Better access controls: No need to grant access on resource level. It can be done much easily on account-level</li>
-</ul>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<p>Also from a cost point of view it has the following benefits (taken from <a href="https://docs.aws.amazon.com/aws-technical-content/latest/cost-optimization-laying-the-foundation/aws-account-structure.html" target="_blank" rel="noopener noreferrer">AWS Account Structure Considerations</a>)</p>
-
-<ul>
-  <li>Grouping resources that require different payment instruments</li>
-  <li>Providing groups with different levels of administrative control over AWS resources</li>
-  <li>Better controlling Reserved Instances for specific workloads</li>
-  <li>Identifying untaggable costs such as data transfer</li>
-  <li>Using accounts associated with different business units or functional teams</li>
-</ul>
-
-<h2 id="key-concepts">Key Concepts</h2>
-<p><strong>Account</strong>: Your regular AWS account. The first account you create is called a <em>Master Account</em>, the rest are <em>Member Accounts</em>.</p>
-
-<p><strong>Organization</strong>: A group of related accounts. The account creating the organization becomes the master account.</p>
-
-<p><img src="/images/vpblogimg/2018/09/aws-organizations-02-default-organization.png" alt=""></p>
-
-<p>The star next to the account indicates it is the master account.</p>
-
-<p><strong>Organizational Unit</strong>: You can use organizational units (OUs) to group accounts together to administer as a single unit. This can be any logical grouping such as team, project, environment etc.</p>
-
-<p><img src="/images/vpblogimg/2018/09/aws-organizations-03-create-organizational-unit.png" alt=""></p>
-
-<p><strong>Service Control Policies (SCPs)</strong>: Enables you to restrict, at the account level of granularity, what services and actions the users, groups, and roles in those accounts can do</p>
-
-<h2 id="managing-projects-and-environments">Managing Projects and Environments</h2>
-<p>First I was tempted to separate projects as well but I’d end up with too many accounts so abandoned that idea and adopted an environment-based organizational structure. I ended up having these AWS accounts in my organization:</p>
-
-<ul>
-  <li>Dev</li>
-  <li>Integration</li>
-  <li>UAT (User Acceptance Test)</li>
-  <li>Sandbox</li>
-  <li>Production</li>
-</ul>
-
-<p>Then I created an organizational unit named Stages and moved all these accounts under that OU. This is just one way of structuring projects. Based on organizational needs it can be customized. In my case I decided to keep all shared services (logging, auditing, source code) in the master account.</p>
-
-<h2 id="logging-into-accounts">Logging into accounts</h2>
-<p>This baffled me at first. Initially I created a test account which I wanted to delete later on. But I wasn’t able to do that until I completed the sign up steps which in turn I wasn’t able to because I didn’t have the credentials to log in!</p>
-
-<p>As stated in <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html" target="_blank" rel="noopener noreferrer">this</a> document:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>When you create a new account, AWS Organizations initially assigns password 
-to the root user that is a minimum of 64 characters long. All characters 
-are randomly generated with no guarantees on the appearance of certain 
-character sets. You can't retrieve this initial password. To access the
-account as the root user for the first time, you must go through the
-process for password recovery.
-</code></pre></div></div>
-
-<p>So when you follow the sign-in link it redirects you to IAM login page. I needed to switch to root account login and recover my password by using the Forgot My Password link. On that note: Don’t use fake email addresses as you will need the confirmation email to recover your password.</p>
-
-<h2 id="removing-account-issues">Removing account issues</h2>
-<p>This one was tricky. In order to leave an organization first you need to enter a payment method and select a support plan. This way the account becomes eligible to be a standalone account. Only after that, you can Leave organization. But not right away!</p>
-
-<p>After I entered all the data and completed the setup steps, I clicked Leave organization and I got this error:</p>
-
-<p><img src="/images/vpblogimg/2018/09/aws-organizations-04-leave-org-wait-period.png" alt=""></p>
-
-<p>I waited almost a full day after getting this error but to no avail. I kept getting the same error: <em>“This operation requires a wait period. Try again later.”</em></p>
-
-<p>I had a chat with a support engineer and created a case for this. Nothing helped at first but after a few days I tried again and it worked! So either the waiting period was very long or they fixed something in my account unbenownst to me.</p>
-
-<h2 id="deleting-the-account-without-removing">Deleting the account without removing</h2>
-<p>Another issue I had was deleting an account before removing from the organization. I was assuming that if the account was closed permanently it would be removed from the organization as well. This was not the case. It remains listed as Suspended</p>
-
-<p><img src="/images/vpblogimg/2018/09/aws-organizations-05-suspended-account.png" alt=""></p>
-
-<p>Unfortunately, once this happens there is no way of resolving it using the tools at our disposal. The only solution is to contact AWS support, reactivated the suspended account, leave the organization and close it again!</p>
-
-<p>But you have to do it from the suspended account, not from the master account. Since technically you’re requesting support for another account, they won’t do it (as they told in their response). Good news is that we still have access to support even though the account is suspended. Si I went to <a href="https://aws.amazon.com/contact-us/" target="_blank" rel="noopener noreferrer">support page</a> and created a support request to reinstate my account (so that I could close it again shortly after!)</p>
-
-<p>Another option might be just to wait. I haven’t tried it myself bu in the account closure email it states “After 90 days, you will not be able to reopen your account, and any remaining content in your closed account will be deleted.” So I’m guessing it will be gone completely if I could just for 90 days.</p>
-
-<h2 id="managing-accounts-programmatically">Managing Accounts Programmatically</h2>
-<p>The coolest thing about AWS Organizations is accounts can be created via command line. It’s easy as this:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>JOTUNHEIM:~ volkan$ aws organizations create-account --account-name {NAME}  --email {EMAIL}
-{
-    "CreateAccountStatus": {
-        "Id": "xyz-abcabcabcabcabcabcabcabcabcabcab",
-        "AccountName": "{NAME}",
-        "State": "IN_PROGRESS",
-        "RequestedTimestamp": 1532494396.633
-    }
-}
-</code></pre></div></div>
-
-<h2 id="notes">Notes</h2>
-<ul>
-  <li>Free tier is shared among all accounts in the organization: “If your company creates your AWS account through AWS Organizations, free tier eligibility for all member accounts begins on the day the organization is created.”</li>
-</ul>
-
-<h2 id="conclusion">Conclusion</h2>
-<p>This post is meant to be an introduction to AWS Organizations rather than a complete guide. I will post similar ones as I use this as basis of my infrastructure and build on this.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://www.youtube.com/watch?v=pfetMIlo_2s" target="_blank" rel="noopener noreferrer">YouTube video: AWS Organizations - Account management at enterprise scale</a></li>
-  <li><a href="https://aws.amazon.com/blogs/security/announcing-aws-organizations-centrally-manage-multiple-aws-accounts/" target="_blank" rel="noopener noreferrer">AWS blog post: Announcing AWS Organizations</a></li>
-  <li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_ous.html" target="_blank" rel="noopener noreferrer">Managing Organisational Units</a></li>
-  <li><a href="https://docs.aws.amazon.com/organizations/latest/APIReference/API_LeaveOrganization.html" target="_blank" rel="noopener noreferrer">LeaveOrganization</a></li>
-  <li><a href="https://www.youtube.com/watch?v=ZKpkF17d0Oo" target="_blank" rel="noopener noreferrer">AWS re:Invent 2017: How Capital One Applies AWS Organizations Best Practices to Mana (SID321)</a></li>
-  <li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_getting-started_concepts.html" target="_blank" rel="noopener noreferrer">AWS Organizations Terminology and Concepts</a></li>
-  <li><a href="https://docs.aws.amazon.com/aws-technical-content/latest/cost-optimization-laying-the-foundation/aws-account-structure.html" target="_blank" rel="noopener noreferrer">AWS Account Structure Considerations</a></li>
-  <li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scp.html" target="_blank" rel="noopener noreferrer">Service Control Policies</a></li>
 </ul>
 
 		

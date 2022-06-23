@@ -146,6 +146,266 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2012/10/06/on-cloud-nine/" itemprop="url">On cloud nine!</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2012-10-06T19:00:17+01:00" itemprop="datePublished">October  6, 2012</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
+
+<!-- misc -->
+
+
+
+
+    <a href="/category/misc">misc</a>
+    
+</span>
+	<span class="tags">site_news</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I’ve been postponing this for a long time but finally I did it: I started using AWS (Amazon Web Services). My blog doesn’t get too much traffic so actually I don’t need the scalability which is EC2’s strongest point but I wanted to play with the cloud so decided to move my blog first. It’s quite easy to do so and I’ll explain how to migrate your existing blog to cloud within minutes:</p>
+
+<h4 id="step-01-backup-your-existing-blog">STEP 01: Backup your existing blog</h4>
+<blockquote>
+  <p>mysqldump -u root –p {database name} &gt; blog_backup.sql</p>
+</blockquote>
+
+<p>Download your wordpress installation folder and the backup you just created from your existing server. I Used WinSCP to get my files. It can be downloaded <a href="http://winscp.net/eng/download.php" target="_blank" rel="noopener noreferrer">here</a>.</p>
+
+<h4 id="step-02-create-aws-ec2-instance">STEP 02: Create AWS EC2 instance</h4>
+<p>Fun part starts now. Login to your AWS account and go to EC2 console. Click Launch Instance and follow the wizard. For my blog, I selected a Micro instance but it depends on your needs. I selected a 64-bit Amazon Linux AMI for the instance.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h4 id="step-03-assign-an-ip-to-your-serverspan">STEP 03: Assign an IP to your server*&lt;/span&gt;</h4>
+<p>Our machine has just started running but to update our domain’s DNS records we need an IP. On the left menu, click the Elastic IPs link and allocate a new IP address. The IPs assigned to EC2 instances are free.</p>
+
+<p><img src="/images/vpblogimg/2012/10/blog_aws_01.png" alt="AWS"></p>
+
+<p>Right click on the IP and select Associate and choose your instance. After this step we have a running machine with a public IP.</p>
+
+<h4 id="step-04-ssh-into-the-machine">STEP 04: SSH into the machine</h4>
+<p>By default SSH is enabled you must have created a keypair to access your machine during the Step 2. I use putty to as my SSH client which can be downloaded from <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html" target="_blank" rel="noopener noreferrer">here</a>. It’s best to switch to root during the installations. So type:</p>
+<blockquote>
+  <p>sudo su</p>
+</blockquote>
+
+<h4 id="step-05-install-required-programs">STEP 05: Install required programs</h4>
+<p>First install Apache:</p>
+<blockquote>
+  <p>yum install httpd</p>
+</blockquote>
+
+<p>Then PHP:</p>
+<blockquote>
+  <p>yum install php php-mysql</p>
+</blockquote>
+
+<p>Then MySQL:</p>
+<blockquote>
+  <p>yum install mysql-server</p>
+</blockquote>
+
+<p>If you use SSL like me you also need to install SSL module for Apache:</p>
+<blockquote>
+  <p>yum install mod_ssl</p>
+</blockquote>
+
+<p>Start Apache and MySQL</p>
+<blockquote>
+  <p>service httpd start</p>
+</blockquote>
+
+<blockquote>
+  <p>service mysqld start</p>
+</blockquote>
+
+<h4 id="step-06-customize-mysql-and-import-your-blog">STEP 06: Customize MySQL and import your blog</h4>
+<ol>
+  <li>Run the following command to set root password and harden the default installation
+    <blockquote>
+      <p>mysql_secure_installation</p>
+    </blockquote>
+  </li>
+  <li>Login to MySQL
+    <blockquote>
+      <p>mysql -u root –p</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Create your database, user and grant access to that user</p>
+
+    <blockquote>
+      <p>create database {database name};</p>
+    </blockquote>
+
+    <blockquote>
+      <p>create user ‘{user name}’@’localhost’ identified by ‘{password}’;</p>
+    </blockquote>
+
+    <blockquote>
+      <p>grant all privileges on {database name}.* to ‘{user name}’@’localhost’ with grant option;</p>
+    </blockquote>
+  </li>
+  <li>Switch to database and import data
+    <blockquote>
+      <p>use {database name}’;</p>
+    </blockquote>
+
+    <blockquote>
+      <p>source {path/to/mysqldump file you uploaded}</p>
+    </blockquote>
+  </li>
+</ol>
+
+<h4 id="step-07-copy-blog-files">STEP 07: Copy blog files</h4>
+<p>Copy the Wordpress files you uploaded under /var/www/html/{directory name}</p>
+
+<h4 id="step-08-configure-apache">STEP 08: Configure Apache</h4>
+<p>Enter the command to edit configration file:</p>
+<blockquote>
+  <p>vi /etc/httpd/conf/httpd.conf</p>
+</blockquote>
+
+<p>Go down to the end of the file and create a new virtual host by this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NameVirtualHost *:80
+&lt;VirtualHost *:80&gt;
+	ServerAdmin webmaster@localhost
+	DocumentRoot /var/www/html/{directory name}
+	ServerName {Your domain name}
+	ServerAlias www.{Your domain name}
+&lt;/VirtualHost&gt;
+</code></pre></div></div>
+
+<p>And restart the Apache service:</p>
+<blockquote>
+  <p>service httpd restart</p>
+</blockquote>
+
+<h4 id="step-09-enable-access-to-ftp-http-and-https">STEP 09: Enable access to FTP, HTTP and HTTPS</h4>
+<p>One last step before testing your blog is opening port 21 (for installing themes, plugins etc.) 80 (for viewing!), and 443 (if you’re going to use SSL) on the AWS EC2 console. For this, click on the Security Groups on the left menu. Add the ports and press Add Rule and then Apply Rule Changes.</p>
+
+<h4 id="step-10-install-ftp-server">STEP 10: Install FTP server</h4>
+<ol>
+  <li>Enter the following command and install the FTP server:
+    <blockquote>
+      <p>yum install vsftpd</p>
+    </blockquote>
+  </li>
+  <li>Create a certificate to be used with FTPS connections:
+    <blockquote>
+      <p>openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout /etc/vsftpd/vsftpd.pem -out /etc/vsftpd/vsftpd.pem</p>
+    </blockquote>
+  </li>
+  <li>Edit the configuration file:
+    <blockquote>
+      <p>vi /etc/vsftpd/vsftpd.conf</p>
+    </blockquote>
+
+    <p>Disable anonymous access and add these lines to the end of the file. Then save the file and exit:</p>
+
+    <div class="language-plaintext highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> ssl_enable=YES
+ allow_anon_ssl=NO
+ force_local_data_ssl=NO
+ force_local_logins_ssl=NO
+ ssl_tlsv1=YES
+ ssl_sslv2=NO
+ ssl_sslv3=NO
+ rsa_cert_file=/etc/vsftpd/vsftpd.pem
+</code></pre></div>    </div>
+  </li>
+  <li>Start the service
+    <blockquote>
+      <p>service vsftpd start</p>
+    </blockquote>
+  </li>
+  <li>
+    <p>Create a user for FTP access and set the password</p>
+
+    <p>useradd {user name}
+ passwd {user name}</p>
+  </li>
+</ol>
+
+<h4 id="step-11-optional">STEP 11 (Optional):</h4>
+<p>If you don’t want to enter the FTP credentials every time, you can<br>
+set them in the wp-config.php file:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> define('FTP_BASE', '/var/www/html/{folder name}/');
+ define('FTP_CONTENT_DIR', '/var/www/html/{folder name}/wp-content/');
+ define('FTP_PLUGIN_DIR ', '/var/www/html/{folder name}/wp-content/plugins/');
+ define('FTP_USER', '{user name}');
+ define('FTP_PASS', '{password});
+ define('FTP_HOST', {hostname]');
+ define('FTP_SSL', true);
+</code></pre></div></div>
+
+<h4 id="step-12-optional-install-ssl-certificate-for-the-blog">STEP 12 (Optional): Install SSL certificate for the blog</h4>
+<p>This step is optional, but using SSL is strongly recommended when connecting to your blog as administrator</p>
+
+<p>Upload your private key and certificate files to your server and 
+copy them under SSL folder:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir /etc/ssl/private&lt;br /&gt;
+mv filename.key /etc/ssl/private/&lt;br /&gt;
+mv filename.crt /etc/ssl/certs/&lt;br /&gt;
+mv CARootCert.crt /etc/ssl/certs/&lt;br /&gt;
+</code></pre></div></div>
+
+<p>Modify Apache configuration file for SSL:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NameVirtualHost *:443
+&lt;VirtualHost *:443&gt;
+ DocumentRoot /var/www/html/{folder name}
+ ServerName {domain name}
+ ServerAlias www.{domain name}
+ SSLEngine on
+ SSLProtocol all –SSLv2
+ SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW
+ SSLCertificateFile /etc/ssl/certs/filename.crt
+ SSLCertificateKeyFile /etc/ssl/private/filename.key
+ SSLCACertificateFile /etc/ssl/certs/CARootCert.crt
+&lt;/VirtualHost&gt;
+</code></pre></div></div>
+
+<h4 id="step-13-optional">STEP 13 (Optional):</h4>
+<p>If you get an “Unable to locate Themes directory” error add the following snippet to wp-config.php.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if(is_admin()) {
+ add_filter('filesystem_method', create_function('$a', 'return &amp;quot;direct&amp;quot;;' ));
+ define( 'FS_CHMOD_DIR', 0751 );
+ }
+</code></pre></div></div>
+
+<h4 id="step-14-enjoy">STEP 14: Enjoy!</h4>
+<p>That’s it! You installed a Wordpress application, imported your old posts, secured your blog with FTPS and HTTPS access. Time to celebrate!</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2012/08/24/online-education-boom/" itemprop="url">Online Education Boom</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -270,65 +530,6 @@
 <p>The most tricky part is enforcing the client machines in the domain to download the updates from your server. That goal is achieved by Group Policy Management. TechNet has a nice article describing the necessary actions: <a href="http://technet.microsoft.com/en-us/library/cc708574(WS.10).aspx" target="_blank" rel="noopener noreferrer">http://technet.microsoft.com/en-us/library/cc708574(WS.10).aspx</a></p>
 
 <p>Normally, its target is not home users obviously. But after I’ve seen the benefits of it, I strongly recommend it to anyone running his own domain.</p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2011/10/19/lightning-fast-development-with-lightswitch/" itemprop="url">Lightning-fast development with Lightswitch</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2011-10-19T02:34:47+01:00" itemprop="datePublished">October 19, 2011</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags"></span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I was planning to play around with Visual Studio Lightswitch for a while. Finally, I could spare some time. For me the best way of learning is by doing so before I started playing I had to imagine a project first.</p>
-
-<p>To find an appropriate project of course we have analyse what Lightswitch is and is it good for: In a nutshell, Visual Studio Lightswitch is a fast and easy way to develop data-driven Line-of-Business (LOB) applications. As a developer, I am generally not very fond of such tools because they impose many limitations whereas while writing code we have unlimited freedom. But I also hate wasting time with boiler-plate code. Creating add/edit/search screens for some entities is such a trivial and boring task. Such forms should always be  generated by a tool to sustain consistency. Otherwise, especially in large applications and organizations. By the way, this reminded me the one of the worst forms I have ever seen in a Microsoft application. It’s the reporting form in Team Foundation Server 2010 as shown below. Even the tabs in the same form are inconsistent. But, I digress! Let’s move on.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<p><img src="/images/vpblogimg/2011/10/TFS_Reporting.png" alt="TFS Reporting"></p>
-
-<p>For a long time I was looking for an nice open-source software to manage my movie collection. I tried a few but couldn’t exactly find what I wanted. So while trying to find a project idea I decided to create a simple movie manager application. It’s mainly data entry and search so it sounded an ideal project type for Lightswitch.</p>
-
-<p>The result was amazing! Not that I created a complex and fully-functioning application but within minutes I had a simple database and two forms to enter movie and director information and a movie search form.</p>
-
-<p><img src="/images/vpblogimg/2011/10/MovieEntry.png" alt="Movie Entry"></p>
-
-<p><img src="/images/vpblogimg/2011/10/SearchMovie.png" alt="Search Entry"></p>
-
-<p>The screens are customizable but the even the default templates create very satisfying results. They cover all the basic needs for data entry, validation and search. So having a such tool in my arsenal and always preferring to develop my own software instead of using someone else’s I decided to develop my movie and TV show management program with Lightswitch. Thinking this is only version 1.0, I think there’s great potential in it for there are so many applications to develop but not enough time.</p>
 
 		
 		

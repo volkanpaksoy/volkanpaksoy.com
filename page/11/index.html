@@ -146,6 +146,94 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2019/01/22/Auditing-AWS-events-with-CloudTrail/" itemprop="url">Auditing AWS events with CloudTrail</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-01-22T06:00:00+00:00" itemprop="datePublished">January 22, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awssecurity">aws</a></span> -->
+
+<!-- aws, security -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">cloudtrail, audit</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Another important service under Management &amp; Governance category is CloudTrail.</p>
+
+<p><img src="/images/vpblogimg/common/aws/aws-cloudtrail.png" alt=""></p>
+
+<p>A nice thing about this service is that it’s already enabled by default with a limited capacity. You can view all AWS API calls made in your account within the last 90 days. This is completely free and enabled out of the box.</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-cloudtrail-01-free.png" alt=""></p>
+
+<p>To get more out of CloudTrail we need to create <em>trails</em></p>
+
+<h2 id="inside-trails">Inside Trails</h2>
+
+<p>A couple of options about trails:</p>
+
+<ul>
+  <li>It can apply to all regions</li>
+  <li>It can apply to all accounts in an organization</li>
+  <li>It can record all management events</li>
+  <li>It can record data events from S3 and Lambda functions</li>
+</ul>
+
+<p>Just be mindful about the possible extra charges when you log every event for all organization accounts:</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-cloudtrail-02-org-charges.png" alt=""></p>
+
+<h2 id="testing-the-logs">Testing the logs</h2>
+<p>I created a trail that logs all events for all organization accounts. I created an IAM user in another account in the organization. In the event history of the local account events look like this:</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-cloudtrail-03-local-events.png" alt=""></p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>These events now can be tracked from master account as well. In the S3 bucket these events are organized by account id and date and they are stored in JSON format:</p>
+
+<p><img src="/images/vpblogimg/2019/01/aws-cloudtrail-04-viewing-logs.png" alt=""></p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>Having a central storage of all events in across all regions and accounts is a great tool to have. Having the raw data is a good start but making sense of that data is even more important. I’ll keep on exploring CloudTrail and getting more out of it to harden my accounts.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://aws.amazon.com/cloudtrail/" target="_blank" rel="noopener noreferrer">AWS Official CloudTrail page</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2019/01/21/Exploring-AWS-Config/" itemprop="url">Exploring AWS Config</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -333,146 +421,6 @@
   <li><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html" target="_blank" rel="noopener noreferrer">The AWS Account Root User</a></li>
   <li><a href="https://alestic.com/2014/09/aws-root-password/" target="_blank" rel="noopener noreferrer">Throw Away The Password To Your AWS Account</a></li>
   <li><a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-user.html" target="_blank" rel="noopener noreferrer">CloudFormation Template Reference for IAM User</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2019/01/15/Infrastructure-as-code-with-AWS-CloudFormation/" itemprop="url">Infrastructure as Code with AWS CloudFormation</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2019-01-15T06:00:00+00:00" itemprop="datePublished">January 15, 2019</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/awsdevops">aws</a></span> -->
-
-<!-- aws, devops -->
-
-
-
-
-    <a href="/category/aws">aws</a>
-    , 
-
-    <a href="/category/devops">devops</a>
-    
-</span>
-	<span class="tags">cloudformation</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>If you have a habit creating your AWS resources manually, things can get very messy very quickly. At some point you realize that you have no idea if a resource is still in use and just to be safe you leave it alone.</p>
-
-<p>I found myself in this situation and decided to take advantage Infrastructure as Code paradigm using AWS CloudFormation. To start simple I decided to migrate my <a href="https://volkanpaksoy.com/archive/2018/06/26/Automated-Email-Processing-with-AWS-SES-and-Lambda/">automated CV response application</a> to a CloudFormation stack. Going forward this is a much efficient way to write blog posts too. Instead of writing step by step instructions I can simply post the CloudFormation stack in JSON or YAML.</p>
-
-<h2 id="infrastructure-of-code-in-a-nutshell">Infrastructure of Code in a nutshell</h2>
-
-<p><img src="/images/vpblogimg/2019/01/aws-cloudformation-logo.png" alt=""></p>
-
-<p>Basically this approach allows you to define, manage and provision all the resources that define your system.</p>
-
-<p><strong>Advantages:</strong></p>
-
-<ul>
-  <li>Changes can be source-controlled</li>
-  <li>Entire provisioning process can be automated</li>
-  <li>entire infrastructure can be easily recreated in a different account.</li>
-  <li>Resources can easily be identified. Tags can be used to identify which stack the resources belong to.</li>
-  <li>Resources can easily be clean up. Deleting a stack will delete all the resource it created.</li>
-</ul>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h2 id="basic-terminology">Basic Terminology</h2>
-<ul>
-  <li>
-<strong>Stack:</strong> All the resources used to create an infrastructure.</li>
-  <li>
-<strong>StackSet:</strong> A StackSet is a container for AWS CloudFormation stacks that lets you provision stacks across AWS accounts and regions by using a single AWS CloudFormation template.</li>
-  <li>
-<strong>Design template:</strong> This is the file YAML or JSON format that defines all the resources that will be created AWS</li>
-</ul>
-
-<h2 id="where-to-start">Where to start…</h2>
-<p>Even though you get familiar with the concepts finding where tostart can be intimidating sometimes. When it comes to CloudFormation, there are a lot of sample templates that you can start and build upon.</p>
-
-<p>So here’s an easy way to get started:</p>
-
-<p><strong>Step 1:</strong> Save the following snippet to a local file such as <em>cloudformation.sample.yaml</em>:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Resources:
-  Ec2Instance:
-    Type: AWS::EC2::Instance
-    Properties:
-      InstanceType: t2.micro
-      ImageId: ami-0aff88ed576e63e90
-</code></pre></div></div>
-
-<p>In the example above I’m using a stock AWS Linux AMI in London region.</p>
-
-<p><strong>Step 2:</strong> Go to Stack and click <em>Create Stack</em> (Make sure you’re in EU London region otherwise AWS won’t be able to find the AMI specified in our template)</p>
-
-<p><strong>Step 3:</strong> In specify template section, select <em>Upload a template file</em></p>
-
-<p><img src="/images/vpblogimg/2019/01/aws-cloudformation-part-1-create-stack-1.png" alt=""></p>
-
-<p><strong>Step 4:</strong> Clock <em>Choose file</em> to locate your file and upload your template.</p>
-
-<p><strong>Step 5:</strong> Click next and specify a stack name something like FirstStackForEC2 and click Next</p>
-
-<p><strong>Step 6:</strong> Click Next on Configure Stack Options view and in the final review step of the wizard click <em>Create Stack</em>.</p>
-
-<p>At this point you can observe the progress of your stack being created.</p>
-
-<p><img src="/images/vpblogimg/2019/01/aws-cloudformation-part-1-create-stack-2.png" alt=""></p>
-
-<p>Now if you go to EC2 service in the same region you should be able to see the new instance:</p>
-
-<p><img src="/images/vpblogimg/2019/01/aws-cloudformation-part-1-create-stack-3.png" alt=""></p>
-
-<p>If you delete the stack, it will in turn delete everything it created which is the EC2 instance in this example.</p>
-
-<h2 id="launch-stack-urls">Launch Stack URLs</h2>
-<p>I always like the launch stack buttons that I see every now and then. I think there’s something magical about clicking a button and watching an entire infrastructure being created right before your eyes!</p>
-
-<p>Basically clicking the Launch Stack URL opens the wizard we just used with the fields populated with the values in the template.</p>
-
-<p><strong>Step 1:</strong> Upload the template to S3 and make it publicly accessible.</p>
-
-<p><strong>Step 2:</strong> Use the following naming convention and replace the values:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://console.aws.amazon.com/cloudformation/home?region=region#/stacks/new?stackName=stack_name&amp;templateURL=template_location
-</code></pre></div></div>
-
-<p><a href="https://console.aws.amazon.com/cloudformation/home?region=eu-west-2#/stacks/new?stackName=FirstStackForEC2&amp;templateURL=https://s3.eu-west-2.amazonaws.com/blog-cloudformation-templates/2019-01-15-Infrastructure-as-code-with-AWS-CloudFormation-cloudformation.sample.yaml" target="_blank" rel="noopener noreferrer"><img src="/images/vpblogimg/2019/01/aws-cloudformation-launch-stack.svg" alt=""></a></p>
-
-<p>In this example I uploaded the Launch Stack button image to my GitHub repository so that I can link to it.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://aws.amazon.com/cloudformation/" target="_blank" rel="noopener noreferrer">AWS Official Product Page</a></li>
-  <li><a href="https://volkanpaksoy.com/archive/2018/06/26/Automated-Email-Processing-with-AWS-SES-and-Lambda/">Related blog post: Automated Email Processing with AWS SES and Lambda</a></li>
-  <li><a href="https://aws.amazon.com/cloudformation/aws-cloudformation-templates/" target="_blank" rel="noopener noreferrer">AWS CloudFormation Templates</a></li>
-  <li><a href="https://aws.amazon.com/blogs/devops/construct-your-own-launch-stack-url/" target="_blank" rel="noopener noreferrer">Construct Your Own Launch Stack URL</a></li>
-  <li><a href="https://aws.amazon.com/cloudformation/resources/" target="_blank" rel="noopener noreferrer">AWS CloudFormation Resources</a></li>
 </ul>
 
 		

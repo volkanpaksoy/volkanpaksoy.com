@@ -146,6 +146,98 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2013/01/19/namespace-collision/" itemprop="url">Namespace collision</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-01-19T16:47:12+00:00" itemprop="datePublished">January 19, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Today I came across an interesting namespace collision. I’m writing a library to wrap a 3rd party API. So without getting into specifics I’ll try to illustrate the situation on a sample piece of code. Let’s say we have a class called <em>Test</em> in <em>TestNamespace</em> namespace.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">namespace</span> <span class="nn">TestNamespace</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">Test</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">StaticMethod</span><span class="p">()</span>
+        <span class="p">{</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>and the calling class is something like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">namespace</span> <span class="nn">DifferentNamespace.TestNamespace</span>
+<span class="p">{</span>
+    <span class="k">class</span> <span class="nc">Program</span>
+    <span class="p">{</span>
+        <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">TestNamespace</span><span class="p">.</span><span class="n">Test</span><span class="p">.</span><span class="nf">StaticMethod</span><span class="p">();</span>
+        <span class="p">}</span>
+     <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This code doesn’t compile because compiler thinks “TestNamespace.Test” is actually “DifferentNamespace.TestNamespace.Test”.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>Adding a using directive doesn’t help either. As it has the same namespace as the subnamespace of the calling class it always resolves to calling class’s namespace. The solution is using “global” namespace.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">namespace</span> <span class="nn">DifferentNamespace.TestNamespace</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="nn">TestNamespace</span> <span class="p">=</span> <span class="k">global</span><span class="p">::</span><span class="n">TestNamespace</span><span class="p">;</span>
+
+    <span class="k">class</span> <span class="nc">Program</span>
+    <span class="p">{</span>
+        <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">TestNamespace</span><span class="p">.</span><span class="n">Test</span><span class="p">.</span><span class="nf">StaticMethod</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>By explicitly specifying which TestNamespace we are referring to we resolve the conflict. One thing to keep in mind is that we have to define it inside the namespace. If we used it outside the DifferentNamespace.TestNamespace, then inside the namespace TestNamespace would still mean “DifferentNamespace.TestNamespace”</p>
+
+<p>Before this incident, I never had to use the global keyword. Probably the best way to avoid this is by naming conventions but sometimes you may not be able to change the namespace name. You can break lots of things if there are dependant parties on that code. So every now and then this tip may come in handy, just like it did to me in this instance.</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2013/01/14/code-snippet-for-methods/" itemprop="url">Code snippet for methods</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -345,114 +437,6 @@ I created a few snippets for simple methods returning primitive types. Depending
   <li><a href="http://www.youtube.com/watch?v=-5uXqZlC9GU#t=15m33s" target="_blank" rel="noopener noreferrer">KnowHow episode about Arduino and cable making</a></li>
   <li><a href="http://www.lanshack.com/cat5e-tutorial.aspx" target="_blank" rel="noopener noreferrer">A detailed and in-depth page</a></li>
 </ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2013/01/05/introduction-to-couchbase-part-3/" itemprop="url">Introduction to Couchbase – Part 3</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2013-01-05T12:16:39+00:00" itemprop="datePublished">January  5, 2013</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">nosql</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>In this post we are diving into coding and developing a small application using the beer sample database that ships with Couchbase 2.0.</p>
-
-<h2 id="environment-setup">Environment Setup</h2>
-<p>To develop a .NET application with a Couchbase backend, we need the Couchbase .NET SDK. The current version as of this writing can be downloaded from <a href="http://packages.couchbase.com/clients/net/1.2/Couchbase-Net-Client-1.2.1.zip" target="_blank" rel="noopener noreferrer">here</a>. But the best way to get it using Nuget. Using the SDK is fairly simple. It comes with a main class called *CouchbaseClient. *All operations are performed using this class.</p>
-
-<h2 id="connecting-to-server">Connecting to server</h2>
-<p>The first step is connecting to the server and the easiest way to do is using the configuration file.</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">&lt;</span><span class="n">configuration</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="n">configsections</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="n">section</span> <span class="n">name</span><span class="p">=</span><span class="s">"couchbase"</span> <span class="n">type</span><span class="p">=</span><span class="s">"Couchbase.Configuration.CouchbaseClientSection, Couchbase"</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="n">configsections</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="n">couchbase</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="n">servers</span> <span class="n">bucket</span><span class="p">=</span><span class="s">"beer-sample"</span> <span class="n">bucketpassword</span><span class="p">=</span><span class="s">""</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="k">add</span> <span class="n">uri</span><span class="p">=</span><span class="s">"http://192.168.1.111:8091/pools/"</span> <span class="p">/&gt;</span>
-
-            <span class="p">&lt;</span><span class="k">add</span> <span class="n">uri</span><span class="p">=</span><span class="s">"http://192.168.1.112:8091/pools/"</span> <span class="p">/&gt;</span>
-
-        <span class="p">&lt;/</span><span class="n">servers</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="n">couchbase</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="n">configuration</span><span class="p">&gt;</span>
-</code></pre></div></div>
-
-<p>As you can see from the configuration section, if you have multiple nodes in the cluster just add their URIs to the servers list. Once IPs and the bucket and the password are specified we are done. We don’t need to explicitly connect to the database, we can just create a new client instance and start calling methods</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="p">(</span><span class="n">CouchbaseClient</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CouchbaseClient</span><span class="p">())</span>
-<span class="p">{</span>
-    <span class="c1">// DB operations go here</span>
-
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h2 id="basic-operations">Basic Operations</h2>
-<p>OK so far so good. We are connected to the server without a hassle. As there is already data in the server let’s get some sample data from the database.
-As the database is a key/value store we can add any type of data we want to. We can create our JSON objects in a string and insert/update data with it. But most likely we want to use our domain objects instead of manipulating raw JSON. There are 2 things to consider here. Once we tackle those issues the rest is quite easy:</p>
-
-<ol>
-  <li>Mark your objects as <em>Serializable</em>: This is required to persist any object. Once you make the class serializable you can run CRUD operations on it.</li>
-  <li>The default serializer is binary serializer. That means when you store an object using by calling Store method you will get something like this when you try to view the object:</li>
-</ol>
-
-<p><img src="/images/vpblogimg/2013/01/Beer_Binary.png" alt="Beer Binary"></p>
-
-<p>This is not too helpful. We cannot read and index. So we’d rather store it in JSON format. Luckily StoreJson method comes to rescue. The following code produces the result below which is exactly what we wanted. To map the key’s in JSON object to the properties in our class we use JsonProperty attribute in the Newtonsoft.Json library which is used the SDK itself.</p>
-
-<p><img src="/images/vpblogimg/2013/01/Beer_JSON_Code.png" alt="Beer JSON Code"></p>
-
-<p><img src="/images/vpblogimg/2013/01/Beer_JSON_Output.png" alt="Beer JSON Output"></p>
-
-<p>Store and StoreJson methods accept an argument of type StoreMode. The values of StoreMode are Add, Set and Replace. <em>Add</em> is used to create a new record (INSERT), Replace is used to update an existing record (UPDATE). Set adds the record if it doesn’t exist and updates it if it exists (MERGE – but simpler).
-To delete an object we call the Remove method with the objects key as argument.
-So basically we perform CRUD operations with Get/GetJson, Store/StoreJson and Remove methods.</p>
-
-<h2 id="querying-database-with-views">Querying database with views</h2>
-<p>Views in Couchbase 2.0 are functions written in JavaScript that use a technique called Map/Reduce. Map/Reduce is a complex topic that I have not fully covered yet but basically it’s a method for processing large data sets in a distributed environment. It is developed by Google. It involves 2 functions called map and reduce. The map function filters entries for certain information and can extract information. The result of a map function is an ordered list of key/value pairs called an <em>index</em>. The results of map functions are stored in disk by the Couchbase server. Reduce function is optional and can be used to perform sum, aggregate or similar calculations on the output of map function.
-Views can be grouped in <em>design document</em>s which can be associated with a bucket. I consider them as namespaces. Couchbase Server offers two kinds of views: Development and Production. As creating a view means creating an index. it may incur some overhead on the performance of the system. So development views are handy to fully test before publishing to production environment. Also production views cannot be edited via admin console which forces the developer to develop and test the view in development environment first.
-So to demonstrate what they look like let’s examine the view that returns all the breweries.</p>
-
-<p><img src="/images/vpblogimg/2013/01/Beer_View_MapFunc.png" alt="Beer_View_MapFunc"></p>
-
-<p>We have 2 types of objects in the database (beer and brewery). This function only emits the objects that are of type brewery.</p>
-
-<h2 id="demo">Demo</h2>
-<p>So all this theory means nothing if we don’t put it into good use. You can get source code of the sample application (I call it Beer Explorer) from my Github account. Also if you want to see what it looks like before diving into the code I host a live version here: <a href="http://beerexplorer.me" target="_blank" rel="noopener noreferrer">http://beerexplorer.me</a>. Feel free to play with it.</p>
 
 		
 		

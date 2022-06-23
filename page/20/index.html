@@ -146,6 +146,171 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2016/01/28/weight-tracking-with-fitbit-aria/" itemprop="url">Weight Tracking with Fitbit Aria</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2016-01-28T08:00:00+00:00" itemprop="datePublished">January 28, 2016</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp, gadget, fitbit, aria</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"What gets measured, gets managed." - Peter Drucker
+</code></pre></div></div>
+
+<p>It’s important to have goals, especially <a href="https://en.wikipedia.org/wiki/SMART_criteria" target="_blank" rel="noopener noreferrer">SMART</a> goals. The “M” in S.M.A.R.T. stands for <em>Measurable</em>. Having enough data about a process helps tremendously to improve that process. To this effect, I started to collect exercise data from my Microsoft band which I blogged about <a href="https://volkanpaksoy.com/archive/2016/01/18/playing-with-microsoft-band/">here</a>.</p>
+
+<p>Weight tracking is also crucial for me. I used to record my weight manually on a piece of paper but, for the obvious reasons, I abandoned it quickly and decided to give Fitbit Aria a shot.</p>
+
+<p><img src="/images/vpblogimg/2016/01/fitbit-aria-main.png" alt=""></p>
+
+<h2 id="fitbit-aria-wi-fi-smart-scale">Fitbit Aria Wi-Fi Smart Scale</h2>
+
+<p>Aria is basically a scale that can connect to your Wi-Fi network and send your weight results to Fitbit automatically which can then be viewed via Fitbit web application.</p>
+
+<p><img src="/images/vpblogimg/2016/01/fitbit-aria-dashboard.png" alt=""></p>
+
+<h2 id="setup">Setup</h2>
+
+<p>Since it doesn’t have a keyboard or any other way to interact directly setup is carried out by running a program on your computer</p>
+
+<p><img src="/images/vpblogimg/2016/01/fitbit-aria-setup-page.png" alt=""></p>
+
+<p>It’s mostly just following the steps on the setup tool. You basically let it connect to your Wi-Fi network so that it can synchronize with Fitbit servers.</p>
+
+<p><img src="/images/vpblogimg/2016/01/fitbit-aria-setup-application.png" alt=""></p>
+
+<p>Putting the scale into setup mode proved to be tricky in the past though. Also it was not easy to change Wi-Fi so I had to reset the go back to factory settings and ran the setup tool again.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h2 id="getting-the-data-via-api">Getting the data via API</h2>
+
+<p>Here comes the fun part! Similar to my <a href="https://github.com/volkanpaksoy/microsoft-band-workout" target="_blank" rel="noopener noreferrer">MS Band workout demo</a>, I developed a WPF program to get my data from Fitbit’s API. Ultimately the goal is to combine all these data in one application and make sense of it.</p>
+
+<p>Like MS Health API, FitBit uses OAuth 2.0 authorization and  requires a registered application.</p>
+
+<p><img src="/images/vpblogimg/2016/01/fitbit-aria-registered-application.png" alt=""></p>
+
+<p>The endpoint that returns weight data accepts a few various formats depending on your needs. As I wanted a range instead of a single day I used the following format:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://api.fitbit.com/1/user/{user ID}/body/log/weight/date/{startDate}/{endDate}.json
+</code></pre></div></div>
+
+<p>This call returns an array of the following JSON objects:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+	</span><span class="nl">"bmi"</span><span class="p">:</span><span class="w"> </span><span class="err">xx.xx</span><span class="p">,</span><span class="w">
+	</span><span class="nl">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"yyyy-mm-dd"</span><span class="p">,</span><span class="w">
+	</span><span class="nl">"fat"</span><span class="p">:</span><span class="w"> </span><span class="err">xx.xxxxxxxxxxxxxxx</span><span class="p">,</span><span class="w">
+	</span><span class="nl">"logId"</span><span class="p">:</span><span class="w"> </span><span class="err">xxxxxxxxxxxxx</span><span class="p">,</span><span class="w">
+	</span><span class="nl">"source"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Aria"</span><span class="p">,</span><span class="w">
+	</span><span class="nl">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"hh:mm:ss"</span><span class="p">,</span><span class="w">
+	</span><span class="nl">"weight"</span><span class="p">:</span><span class="w"> </span><span class="err">xx.xx</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="sample-application">Sample application</h2>
+
+<p>The bulk of the application is very similar to MS Band sample: It first opens an authorization window and once the client consents for the app to be granted some privileges it uses the access token to retrieve the actual data.</p>
+
+<p>There are a few minor differences though:</p>
+
+<ul>
+  <li>Unlike MS Health API it requires Authorization header in the authorization code request calls which is basically Base64 encoded client ID and client secret</li>
+</ul>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">string</span> <span class="n">base64String</span> <span class="p">=</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToBase64String</span><span class="p">(</span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="nf">GetBytes</span><span class="p">(</span><span class="s">$"</span><span class="p">{</span><span class="n">Settings</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="n">ClientID</span><span class="p">}</span><span class="s">:</span><span class="p">{</span><span class="n">Settings</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="n">ClientSecret</span><span class="p">}</span><span class="s">"</span><span class="p">));</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span> <span class="s">$"Basic </span><span class="p">{</span><span class="n">base64String</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>It requires a POST request to redeem URL. Apparently RestSharp has a weird behaviour. You’d think a method called AddBody could be used to send the request body, right? Not quite! It doesn’t transmit the header so I kept getting a missing field error. So instead I used AddParameter:</li>
+</ul>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">string</span> <span class="n">requestBody</span> <span class="p">=</span> <span class="s">$"client_id=</span><span class="p">{</span><span class="n">Settings</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="n">ClientID</span><span class="p">}</span><span class="s">&amp;grant_type=authorization_code&amp;redirect_uri=</span><span class="p">{</span><span class="n">_redirectUri</span><span class="p">}</span><span class="s">&amp;code=</span><span class="p">{</span><span class="n">code</span><span class="p">}</span><span class="s">"</span><span class="p">;</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">AddParameter</span><span class="p">(</span><span class="s">"application/x-www-form-urlencoded"</span><span class="p">,</span> <span class="n">requestBody</span><span class="p">,</span> <span class="n">ParameterType</span><span class="p">.</span><span class="n">RequestBody</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>I found a lot of SO questions and a hillarious <a href="http://matthewschrager.com/2013/02/19/restsharp-post-body/" target="_blank" rel="noopener noreferrer">blog post</a> addressing the issue. It’s good to know I wasn’t alone in this!</p>
+
+<p>The rest is very straightforward. Make the request, parse JSON and assign the list to the chart:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">GetWeightData</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">endDate</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Today</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(</span><span class="s">"yyyy-MM-dd"</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">startDate</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Today</span><span class="p">.</span><span class="nf">AddDays</span><span class="p">(-</span><span class="m">30</span><span class="p">).</span><span class="nf">ToString</span><span class="p">(</span><span class="s">"yyyy-MM-dd"</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">url</span> <span class="p">=</span> <span class="s">$"https://api.fitbit.com/1/user/XXXXXX/body/log/weight/date/</span><span class="p">{</span><span class="n">startDate</span><span class="p">}</span><span class="s">/</span><span class="p">{</span><span class="n">endDate</span><span class="p">}</span><span class="s">.json"</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">response</span> <span class="p">=</span> <span class="nf">SendRequest</span><span class="p">(</span><span class="n">url</span><span class="p">);</span>
+
+    <span class="nf">ParseWeightData</span><span class="p">(</span><span class="n">response</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">void</span> <span class="nf">ParseWeightData</span><span class="p">(</span><span class="kt">string</span> <span class="n">rawContent</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">weightJsonArray</span> <span class="p">=</span> <span class="n">JObject</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="n">rawContent</span><span class="p">)[</span><span class="s">"weight"</span><span class="p">].</span><span class="nf">ToArray</span><span class="p">();</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">weightJson</span> <span class="k">in</span> <span class="n">weightJsonArray</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">weight</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FitbitWeightResult</span><span class="p">();</span>
+        <span class="n">weight</span><span class="p">.</span><span class="n">Weight</span> <span class="p">=</span> <span class="n">weightJson</span><span class="p">[</span><span class="s">"weight"</span><span class="p">]?.</span><span class="n">Value</span><span class="p">&lt;</span><span class="kt">decimal</span><span class="p">&gt;()</span> <span class="p">??</span> <span class="m">0</span><span class="p">;</span>
+        <span class="n">weight</span><span class="p">.</span><span class="n">Date</span> <span class="p">=</span> <span class="n">weightJson</span><span class="p">[</span><span class="s">"date"</span><span class="p">].</span><span class="n">Value</span><span class="p">&lt;</span><span class="n">DateTime</span><span class="p">&gt;();</span>
+        <span class="n">WeightResultList</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">weight</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>And the output is:</p>
+
+<p><img src="/images/vpblogimg/2016/01/fitbit-aria-weight-chart.png" alt=""></p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>So far I managed to collect walking data from MS Band, weight data from Fitbit Aria. In this demo I limited the scope with weight data only but Fitbit API can be used to track sleep, exercise and nutrition.</p>
+
+<p>I currently use My Fitness Pal to log what I eat. They too have an API but even though I requested twice they haven’t given me a key yet! Good news is Fitbit has a key and I can get my MFP logs through Fitbit API. I also log my sleep on Fitbit manually so next step is to combine all these in one application to have a nice overview.</p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/fitbit-aria-workout" target="_blank" rel="noopener noreferrer">Source code for demo application </a></li>
+  <li><a href="https://en.wikipedia.org/wiki/SMART_criteria" target="_blank" rel="noopener noreferrer">Wikipedia: SMART criteria</a></li>
+  <li><a href="https://dev.fitbit.com/docs/" target="_blank" rel="noopener noreferrer">Fitbit API Reference</a></li>
+  <li><a href="http://matthewschrager.com/2013/02/19/restsharp-post-body/" target="_blank" rel="noopener noreferrer">RestSharp POST Body Problems</a></li>
+  <li><a href="https://www.fitbit.com/uk/setup/aria" target="_blank" rel="noopener noreferrer">Setup application</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2016/01/18/playing-with-microsoft-band/" itemprop="url">Playing with Microsoft Band</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -385,88 +550,6 @@
   <li><a href="http://docs.aws.amazon.com/AmazonS3/latest/UG/FolderOperations.html" target="_blank" rel="noopener noreferrer">AWS Documentation: Working with Folders</a></li>
   <li><a href="https://aws.amazon.com/ec2/faqs/#Reserved_Instances" target="_blank" rel="noopener noreferrer">Reserved Instances FAQ</a></li>
   <li><a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-instance-addressing.html" target="_blank" rel="noopener noreferrer">Amazon EC2 Instance IP Addressing</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/11/19/diy-pdf-viewer/" itemprop="url">A DIY PDF Reader</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-11-19T12:00:00+00:00" itemprop="datePublished">November 19, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">csharp, wpf, syncfusion, pdf</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Every few months I have to clean up my desktop computer as dust gets stuck in the CPU fan and it gets hot and slow and loud and annoying! A few days ago I snapped and decided to phase out the desktop and made my laptop as main machine. Even though I love making a fresh start on a new computer it comes with re-installing a bunch of stuff.</p>
-
-<p>One missing thing that made itself obvious at the very start was a PDF reader. So far I’ve always been disappointed with PDF viewers. They are too bloated with unnecessary features and they always try to install a browser toolbar or an anti-virus trial.</p>
-
-<h2 id="my-diy-pdf-reader">My DIY PDF Reader</h2>
-<p>I started looking into my options to build my own PDF viewer and fortunately didn’t have to look too much. SyncFusion is offering a <a href="https://www.syncfusion.com/downloads/communitylicense" target="_blank" rel="noopener noreferrer">free license</a> to their products for indie developers and small startups. I used their great wizard control in a past project (<a href="https://github.com/volkanpaksoy/image2pdf" target="_blank" rel="noopener noreferrer">Image2PDF</a>) so I first checked if they had something for me. Turns out they have exactly everything I needed wrapped in an easy to use control. Their WPF suite comes with a <a href="https://www.syncfusion.com/products/wpf/pdf-viewer" target="_blank" rel="noopener noreferrer">PdfViewerControl</a>. It supports standard navigation and zooming functions which is pretty much what I need from a PDF viewer. So all I had to do was a start a new WPF project, drag &amp; drop PdfViewerControl and run!</p>
-
-<p>The whole XAML code looks like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">&lt;</span><span class="n">Window</span>
-        <span class="n">xmlns</span><span class="p">=</span><span class="s">"http://schemas.microsoft.com/winfx/2006/xaml/presentation"</span>
-        <span class="n">xmlns</span><span class="p">:</span><span class="n">x</span><span class="p">=</span><span class="s">"http://schemas.microsoft.com/winfx/2006/xaml"</span>
-        <span class="n">xmlns</span><span class="p">:</span><span class="n">d</span><span class="p">=</span><span class="s">"http://schemas.microsoft.com/expression/blend/2008"</span>
-        <span class="n">xmlns</span><span class="p">:</span><span class="n">mc</span><span class="p">=</span><span class="s">"http://schemas.openxmlformats.org/markup-compatibility/2006"</span>
-        <span class="n">xmlns</span><span class="p">:</span><span class="n">local</span><span class="p">=</span><span class="s">"clr-namespace:PdfViewer"</span>
-        <span class="n">xmlns</span><span class="p">:</span><span class="n">PdfViewer</span><span class="p">=</span><span class="s">"clr-namespace:Syncfusion.Windows.PdfViewer;assembly=Syncfusion.PdfViewer.WPF"</span> <span class="n">x</span><span class="p">:</span><span class="n">Class</span><span class="p">=</span><span class="s">"PdfViewer.MainWindow"</span>
-        <span class="n">mc</span><span class="p">:</span><span class="n">Ignorable</span><span class="p">=</span><span class="s">"d"</span>
-        <span class="n">Title</span><span class="p">=</span><span class="s">"Easy PDF Viewer"</span> 
-        <span class="n">WindowState</span><span class="p">=</span><span class="s">"Maximized"</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="n">Grid</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="n">PdfViewer</span><span class="p">:</span><span class="n">PdfViewerControl</span>  <span class="n">HorizontalAlignment</span><span class="p">=</span><span class="s">"Stretch"</span> <span class="n">VerticalAlignment</span><span class="p">=</span><span class="s">"Stretch"</span><span class="p">/&gt;</span>
-    <span class="p">&lt;/</span><span class="n">Grid</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="n">Window</span><span class="p">&gt;</span>
-</code></pre></div></div>
-
-<p>And for my 5 minutes, this is the application I got:</p>
-
-<p><img src="/images/vpblogimg/2015/11/diy-pdf-viewer-output.png" alt=""></p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h2 id="conclusion">Conclusion</h2>
-<p>If I need more features in the future I think I’ll just build on this. I always have the open source PDF library iTextSharp which I like quite a lot and now have SyncFusion PDF components and libraries in my arsenal, I have no intention to deal with adware-ridden, bloated applications with lots of security flaws.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://github.com/volkanpaksoy/diy-pdf-viewer" target="_blank" rel="noopener noreferrer">DIY PDF Viewer Source Code</a></li>
-  <li><a href="https://www.syncfusion.com/products/wpf/pdf-viewer" target="_blank" rel="noopener noreferrer">SyncFusion PDF Viewer product page</a></li>
-  <li><a href="https://www.syncfusion.com/downloads/communitylicense" target="_blank" rel="noopener noreferrer">SyncFusion Community License</a></li>
 </ul>
 
 		

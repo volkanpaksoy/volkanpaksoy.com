@@ -146,6 +146,103 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2013/07/25/improved-web-security-with-hsts/" itemprop="url">Improved Web Security with HSTS</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-07-25T20:25:13+01:00" itemprop="datePublished">July 25, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/security">security</a></span> -->
+
+<!-- security -->
+
+
+
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">hsts, network</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>HSTS (HTTP Strict Transport Security) is a security policy where a web server instructs the client that the website they are calling can be used with HTTPS only. By using tools like Wi-Fi PineApple and sslstrip a man-in-the-middle attack can be carried out easily. The attacker can redirect the victim to HTTP version of the site they are connecting to and after the login info is submitted in clear-text and captured the victim is redirected back to HTTPS. By using HSTS the client browser always makes the calls over HTTPS hence reducing the risk of MitM attack. It’s not bullet-proof but still an improvement over not using it.</p>
+
+<h3 id="implementation">Implementation</h3>
+<p>HSTS is basically a response header. In an ASP.NET application it can be added in the web.config file as below:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="p">&lt;</span><span class="n">system</span><span class="p">.</span><span class="n">webserver</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="n">httpprotocol</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="n">customheaders</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="k">add</span> <span class="n">name</span><span class="p">=</span><span class="s">"Strict-Transport-Security"</span> <span class="k">value</span><span class="p">=</span><span class="s">"max-age=31536000"</span> <span class="p">/&gt;</span>
+      <span class="p">&lt;/</span><span class="n">customheaders</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="n">httpprotocol</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="n">system</span><span class="p">.</span><span class="n">webserver</span><span class="p">&gt;</span>
+</code></pre></div></div>
+
+<p>And when you visit this site over HTTPS response looks like:</p>
+
+<p><img src="/images/vpblogimg/2013/07/HSTS_02.png" alt="HSTS"></p>
+
+<p>This header tells the browser to use only HTTPS from now on for 1 year. Also, the response header can be added in the BeginRequest event handler:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">protected</span> <span class="k">void</span> <span class="nf">Application_BeginRequest</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">protected</span> <span class="k">void</span> <span class="nf">Application_BeginRequest</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="k">switch</span> <span class="p">(</span><span class="n">Request</span><span class="p">.</span><span class="n">Url</span><span class="p">.</span><span class="n">Scheme</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="k">case</span> <span class="s">"https"</span><span class="p">:</span>
+				<span class="n">Response</span><span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"Strict-Transport-Security"</span><span class="p">,</span> <span class="s">"max-age=31536000"</span><span class="p">);</span>
+				<span class="k">break</span><span class="p">;</span>
+			<span class="k">case</span> <span class="s">"http"</span><span class="p">:</span>
+				<span class="kt">var</span> <span class="n">path</span> <span class="p">=</span> <span class="s">"https://"</span> <span class="p">+</span> <span class="n">Request</span><span class="p">.</span><span class="n">Url</span><span class="p">.</span><span class="n">Host</span> <span class="p">+</span> <span class="n">Request</span><span class="p">.</span><span class="n">Url</span><span class="p">.</span><span class="n">PathAndQuery</span><span class="p">;</span>
+				<span class="n">Response</span><span class="p">.</span><span class="n">Status</span> <span class="p">=</span> <span class="s">"301 Moved Permanently"</span><span class="p">;</span>
+				<span class="n">Response</span><span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"Location"</span><span class="p">,</span> <span class="n">path</span><span class="p">);</span>
+				<span class="k">break</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>HSTS header only works with HTTPS. So you can not observe it HTTP responses. That’s why redirecting to HTTPS is required. Because if the client uses HTTP all the time and if there is nothing forcing the user to use HTTPS, even if you have HSTS turned on, the client will never receive those responses. So at this point even if an attacker is redirecting the user to HTTP, the browser will always make the requests over HTTPS.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h3 id="shortcomings">Shortcomings</h3>
+<ul>
+  <li>Not all browsers support it. It works with Chrome and Firefox but not with IE and Safari</li>
+  <li>Cannot protect for the first call: If the user is making a call to a site for the first time and there is an attacker in between it wouldn’t work. At least it would start working after the attacker is finished with the attack and redirected the user back to HTTPS.</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://tools.ietf.org/html/rfc6797" target="_blank" rel="noopener noreferrer">http://tools.ietf.org/html/rfc6797</a></li>
+  <li><a href="http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security" target="_blank" rel="noopener noreferrer">http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2013/07/24/electronics-tool-update/" itemprop="url">Electronics Tool Update</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -267,75 +364,6 @@ After the sign up you download their SDK. So far I managed to install the driver
 
 <h4 id="final-words">Final words</h4>
 <p>I’m not so sure if this gizmo will take off but as long as it’s an interface for the OS, not some custom apps, I don’t see much use for it. Keeping hands in the air for long tasks is tiring. I think it only might make some games more fun but that’s a very small market.</p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2013/07/22/customizing-phone-with-nfc-task-launcher/" itemprop="url">Customizing phone with NFC Task Launcher</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2013-07-22T13:04:53+01:00" itemprop="datePublished">July 22, 2013</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
-
-<!-- hobby -->
-
-
-
-
-    <a href="/category/hobby">hobby</a>
-    
-</span>
-	<span class="tags">mobile, nfc</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>If you have an Android phone that supports NFC, you can save and change some settings very easily based on your location. All you need is some blank NFC tags like shown below, which are very cheap and a free app called NFC Task Launcher.</p>
-
-<p><img src="/images/vpblogimg/2013/07/NFCTags_01.jpg" alt="NFC Tags"></p>
-
-<h3 id="nfc-for-the-uninitiated">NFC for the uninitiated</h3>
-<p>NFC stands for Near Field Communication. It’s a set of standards build on RFID that allows wireless communication between devices in a close proximity. It is commonly used in contactless payment systems.</p>
-
-<h3 id="manage-tasks-with-the-task-launcher">Manage tasks with the task launcher</h3>
-<p>It’s a very intuitive and easy to use app. First, you select an action group (like WiFi On/Off, BlueTooth On/Off).</p>
-
-<p><img src="/images/vpblogimg/2013/07/NFC_Task_Launcher.png" alt="NFC Task Launcher"></p>
-
-<p>Then you configure the action (like Enable/Disable) and finally you touch to your tag to associate the task with it.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h3 id="secure-your-phone-outside-the-house">Secure your phone outside the house</h3>
-<p>After playing around with tools like WiFi PineApple I’m now even more afraid of wireless networks than ever. Thinking about it, I don’t connect to open networks on purpose and if my phone connects to one of them that means something fishy is going on. So why should I have WiFi when I’m not using my own? But of course turning it on and off every time I enter/leave the house is cumbersome. My solution is: doing it with NFC. Although it’s not completely automated, I just touch my phone to the red tag I stuck to my door when I leave the house and the WiFi is turned off. When I enter the house, I touch on the green one it is turned back on. Simple as that!</p>
-
-<p><img src="/images/vpblogimg/2013/07/NFC_TaskLauncher.png" alt="NFC Task Launcher"></p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://en.wikipedia.org/wiki/Near_field_communication" target="_blank" rel="noopener noreferrer">Introduction to NFC</a></li>
-  <li><a href="https://play.google.com/store/apps/details?id=com.jwsoft.nfcactionlauncher&amp;hl=en" target="_blank" rel="noopener noreferrer">NFC Task Launcher on Google Play</a></li>
-  <li><a href="http://rapidnfc.com/nfc_task_launcher" target="_blank" rel="noopener noreferrer">RapidNFC tutorial</a></li>
-</ul>
 
 		
 		

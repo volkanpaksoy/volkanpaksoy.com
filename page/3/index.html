@@ -146,6 +146,322 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2019/10/26/Infrastructure-as-Code-with-AWS-CloudFormation-and-Cloud-Development-Kit/" itemprop="url">Infrastructure as Code with AWS CloudFormation and Cloud Development Kit (CDK)</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-10-26T13:00:00+01:00" itemprop="datePublished">October 26, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devopsaws">devops</a></span> -->
+
+<!-- devops, aws -->
+
+
+
+
+    <a href="/category/devops">devops</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">cloudformation, cdk</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<h2 id="introduction">Introduction</h2>
+<p>Using AWS is great as it simplifies and improves infrastructure provisioning and maintenance quite a lot. As you depend more and more on AWS you quickly realize that managing everything through AWS Management Console is not an ideal way.</p>
+
+<p>Earlier this year, I published this <a href="https://volkanpaksoy.com/archive/2019/01/15/Infrastructure-as-code-with-AWS-CloudFormation/">post</a> about AWS CloudFormation. This post will also discuss using CloudFormation but by taking it a higher level by using AWS Cloud Development Kit (CDK).</p>
+
+<h2 id="levels-of-infrastructure">Levels of infrastructure</h2>
+<p>I liked the way the several approaches of infrastructure management is illustrated as levels here: <a href="https://www.youtube.com/watch?v=184S7ki6fJA" target="_blank" rel="noopener noreferrer">Develop a Web App Using Amazon ECS and AWS Cloud Development Kit (CDK) - AWS Online Tech Talks (YouTube Video)</a></p>
+
+<p>In a nutshell, those levels are:</p>
+
+<h3 id="level-0-by-hand">Level 0: By hand</h3>
+<p>This approach is simply using AWS Management Console user interface to manage the infrastructure.</p>
+
+<p><strong>Pros:</strong></p>
+
+<ul>
+  <li>Simple and easy</li>
+  <li>Helps to get results faster for exploratory projects</li>
+</ul>
+
+<p><strong>Cons:</strong></p>
+
+<ul>
+  <li>Hard to reproduce</li>
+  <li>Possible inconsistencies based on people’s preferences</li>
+  <li>Error-prone</li>
+  <li>Slow for complex systems</li>
+</ul>
+
+<h3 id="level-1-imperative-infrastructure-as-code">Level 1: Imperative Infrastructure as Code</h3>
+<p>In this approach you write your own scripts using AWS SDK and manage the resources programmatically.</p>
+
+<p><strong>Pros:</strong></p>
+
+<ul>
+  <li>Repeatable and reusable</li>
+  <li>Can be source-controlled</li>
+</ul>
+
+<p><strong>Cons:</strong></p>
+
+<ul>
+  <li>Lots of boilerplate code</li>
+  <li>It needs to address all edge cases</li>
+</ul>
+
+<h3 id="level-2-declarative-infrastructure-as-code">Level 2: Declarative Infrastructure as Code</h3>
+<p>Describe the infrastructure as a script (in JSON or YAML) and use an resource provisioning engine such as AWS CloudFormation or HashiCorp Terraform which in turn use AWS SDK to manage the infrastructure.</p>
+
+<p><strong>Pros:</strong></p>
+
+<ul>
+  <li>No boilerplate</li>
+  <li>Creating and updating resources is handled automatically</li>
+</ul>
+
+<p><strong>Cons:</strong></p>
+
+<ul>
+  <li>Templates can become verbose</li>
+  <li>Implementing logic is limited to some built-in helper functions</li>
+</ul>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h3 id="level-3-aws-cloud-development-kit">Level 3: AWS Cloud Development Kit</h3>
+<p>In this approach software is developed using AWS CDK which generates the input for AWS CloudFormation.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws_cdk/aws-cdk-overview.jpg" alt=""></p>
+
+<p>The application can be developed in a number of languages. At the time of this writing the following languages are supported: TypeScript, JavaScript, Python, Java, C#.</p>
+
+<p><strong>Pros:</strong></p>
+
+<ul>
+  <li>Handles creation of underlying resources. For example, when creating a VPC it also automatically generates YAML for all other networking resources (routing tables, NAT gateways etc) that are required by VPC.</li>
+  <li>Helps with local workflow</li>
+  <li>CDK constructs are reusable. Can be developed by AWS or third parties and can be installed separately.</li>
+  <li>Ability to use familiar programming languages</li>
+</ul>
+
+<p><strong>Cons:</strong></p>
+
+<ul>
+  <li>Extra installation</li>
+</ul>
+
+<h2 id="basic-concepts">Basic Concepts</h2>
+<ul>
+  <li>
+<strong>Construct:</strong> Basic building block for an AWS CDK app. Represents a “cloud component” and encapsulates everything AWS CloudFormation needs to create the component. They can be developed or downloaded from <a href="https://docs.aws.amazon.com/cdk/api/latest/docs/aws-construct-library.html" target="_blank" rel="noopener noreferrer">AWS Construct Library</a>
+</li>
+  <li>
+<strong>Stack:</strong> Constructs need to be created within the scope of a Stack. This corresponds to a CloudFormation template.</li>
+  <li>
+<strong>App:</strong> Stacks are created in the scope of an App. An App can contain multiple stacks.</li>
+</ul>
+
+<h2 id="cdk-basics">CDK Basics</h2>
+<ul>
+  <li>In order to create an application that uses CDK we need to install the CDK</li>
+  <li>The application can have one of the 3 supported templates:
+    <ul>
+      <li>app: General purpose application. This is the default template</li>
+      <li>lib: Used to develop a CDK construct</li>
+      <li>sample-app: Creates an application already populated with a sample CDK application.</li>
+    </ul>
+  </li>
+  <li>The following diagram illustrates the app lifecycle:</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2019/10/aws_cdk/aws-cdk-app-lifecycle.png" alt=""></p>
+
+<h2 id="installing-cdk">Installing CDK</h2>
+<p>AWS CDK is developed using TypeScript. It’s available via npm:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install -g aws-cdk
+</code></pre></div></div>
+
+<h2 id="using-cdk">Using CDK</h2>
+<p>In my example, I will use C#. A new project can be created by using <strong>cdk init</strong> command:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws_cdk/aws-cdk-init.png" alt=""></p>
+
+<p>It expects 2 parameters: Language (Can be one of these: csharp, fsharp, java, javascript, python or typescript).</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk init app --language csharp
+</code></pre></div></div>
+
+<p>To test my first app, I followed the sample app provided and added an S3 construct to my code:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">CdkWorkoutStack</span> <span class="p">:</span> <span class="n">Stack</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nf">CdkWorkoutStack</span><span class="p">(</span><span class="n">Construct</span> <span class="n">parent</span><span class="p">,</span> <span class="kt">string</span> <span class="n">id</span><span class="p">,</span> <span class="n">IStackProps</span> <span class="n">props</span><span class="p">)</span> <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Bucket</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s">"CdkBucket"</span><span class="p">,</span> <span class="k">new</span> <span class="n">BucketProps</span>
+        <span class="p">{</span>
+            <span class="n">Versioned</span> <span class="p">=</span> <span class="k">true</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>Next step is to synnthesize a CloudFormation template by running</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk synth
+</code></pre></div></div>
+
+<p>This generates a folder called cdk.out which contains a file named CdkWorkoutStack.template.json and with the following contents:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"Resources"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"CdkBucket2FB0D10E"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AWS::S3::Bucket"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"Properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"VersioningConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"Status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Enabled"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"UpdateReplacePolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Retain"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"DeletionPolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Retain"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"Metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"aws:cdk:path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CdkWorkoutStack/CdkBucket/Resource"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">  
+</span></code></pre></div></div>
+
+<p>Final step is to create the resources by running</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk deploy
+</code></pre></div></div>
+
+<p>This produces the following results:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws_cdk/aws-cdk-deployment-results.png" alt=""></p>
+
+<p>And not surprisingly a CloudFormation stack with the bucket is created in AWS.</p>
+
+<p>In the next version I’m going to change some properties of the bucket such as:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">CdkWorkoutStack</span> <span class="p">:</span> <span class="n">Stack</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nf">CdkWorkoutStack</span><span class="p">(</span><span class="n">Construct</span> <span class="n">parent</span><span class="p">,</span> <span class="kt">string</span> <span class="n">id</span><span class="p">,</span> <span class="n">IStackProps</span> <span class="n">props</span><span class="p">)</span> <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Bucket</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s">"CdkBucket"</span><span class="p">,</span> <span class="k">new</span> <span class="n">BucketProps</span>
+        <span class="p">{</span>
+            <span class="n">Versioned</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+            <span class="n">BlockPublicAccess</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">BlockPublicAccess</span><span class="p">(</span><span class="k">new</span> <span class="nf">BlockPublicAccessOptions</span><span class="p">()</span>
+            <span class="p">{</span>
+                <span class="n">BlockPublicAcls</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+                <span class="n">BlockPublicPolicy</span> <span class="p">=</span> <span class="k">true</span>
+            <span class="p">})</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>After this change in the code we can review what’s going to be updated by running the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk diff
+</code></pre></div></div>
+
+<p>and it produces the following result outlining the changes between the current code and the deployed version:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws_cdk/aws-cdk-diff-results.png" alt=""></p>
+
+<p>And the stack can be deleted by running the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk destroy
+</code></pre></div></div>
+
+<p>In the CDK version I’m using the default deletion policy is to retain. That’s why when I deleted the stack via CDK it didn’t delete the bucket. In order to change that behaviour I had to change the value to delete as such:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">CdkWorkoutStack</span> <span class="p">:</span> <span class="n">Stack</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nf">CdkWorkoutStack</span><span class="p">(</span><span class="n">Construct</span> <span class="n">parent</span><span class="p">,</span> <span class="kt">string</span> <span class="n">id</span><span class="p">,</span> <span class="n">IStackProps</span> <span class="n">props</span><span class="p">)</span> <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">bucket</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Bucket</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s">"CdkBucket"</span><span class="p">,</span> <span class="k">new</span> <span class="n">BucketProps</span>
+        <span class="p">{</span>
+            <span class="n">Versioned</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+            <span class="n">BlockPublicAccess</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">BlockPublicAccess</span><span class="p">(</span><span class="k">new</span> <span class="nf">BlockPublicAccessOptions</span><span class="p">()</span>
+            <span class="p">{</span>
+                <span class="n">BlockPublicAcls</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+                <span class="n">BlockPublicPolicy</span> <span class="p">=</span> <span class="k">true</span>
+            <span class="p">})</span>
+        <span class="p">});</span>
+
+        <span class="kt">var</span> <span class="n">resource</span> <span class="p">=</span> <span class="n">bucket</span><span class="p">.</span><span class="n">Node</span><span class="p">.</span><span class="nf">FindChild</span><span class="p">(</span><span class="s">"Resource"</span><span class="p">)</span> <span class="k">as</span> <span class="n">Amazon</span><span class="p">.</span><span class="n">CDK</span><span class="p">.</span><span class="n">CfnResource</span><span class="p">;</span>
+        <span class="n">resource</span><span class="p">.</span><span class="nf">ApplyRemovalPolicy</span><span class="p">(</span><span class="n">RemovalPolicy</span><span class="p">.</span><span class="n">DESTROY</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This time it produces a CloudFormation template with a different policy:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"Resources"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"CdkBucket2FB0D10E"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AWS::S3::Bucket"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"Properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"PublicAccessBlockConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"BlockPublicAcls"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"BlockPublicPolicy"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"VersioningConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"Status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Enabled"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"UpdateReplacePolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Delete"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"DeletionPolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Delete"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"Metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"aws:cdk:path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CdkWorkoutStack/CdkBucket/Resource"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This time after destroy command it did delete the bucket as well.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>I think infrastructure as code is definitely the way to manage cloud resources and CDK provides a great way to simplify the process. It’s at early stages for the time being as the NuGet packages are in devpreview mode but it’s good enough to rely on and start developing with CDK.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.youtube.com/watch?v=Lh-kVC2r2AU" target="_blank" rel="noopener noreferrer">AWS re:Invent 2018: Infrastructure Is Code with the AWS Cloud Development Kit (DEV372) (YouTube Video)</a></li>
+  <li><a href="https://www.youtube.com/watch?v=184S7ki6fJA" target="_blank" rel="noopener noreferrer">Develop a Web App Using Amazon ECS and AWS Cloud Development Kit (CDK) - AWS Online Tech Talks (YouTube Video)</a></li>
+  <li><a href="https://docs.aws.amazon.com/en_pv/cdk/latest/guide/getting_started.html" target="_blank" rel="noopener noreferrer">AWS Documentation: Getting Started With the AWS CDK</a></li>
+  <li><a href="https://docs.aws.amazon.com/cdk/api/latest/docs/aws-construct-library.html" target="_blank" rel="noopener noreferrer">AWS CDK Construct Library</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2019/10/26/Building-Robots-with-Lego-Mindstorms-EV3/" itemprop="url">Building Robots with Lego Mindstorms EV3</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -323,141 +639,6 @@
   <li><a href="http://robotsquare.com/2012/02/18/understanding-nxt-versions/" target="_blank" rel="noopener noreferrer">Tutorial: Understanding the difference between NXT set versions</a></li>
   <li><a href="https://volkanpaksoy.com/archive/2014/05/24/programming-lego-mindstorms-ev3-net-api">Old blog post: Programming EV3 with .NET</a></li>
   <li><a href="https://www.ev3dev.org/" target="_blank" rel="noopener noreferrer">ev3dev</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2019/10/23/AWS-Developer-Tools-Services-Part-4-AWS-CodePipeline/" itemprop="url">AWS Developer Tools Services Part 4: AWS CodePipeline</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2019-10-23T04:00:00+01:00" itemprop="datePublished">October 23, 2019</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/devopsaws">devops</a></span> -->
-
-<!-- devops, aws -->
-
-
-
-
-    <a href="/category/devops">devops</a>
-    , 
-
-    <a href="/category/aws">aws</a>
-    
-</span>
-	<span class="tags">codepipeline, git, aws_developer_tools_services</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<h2 id="introduction">Introduction</h2>
-<p>This post is part of my mini-series about <a href="https://aws.amazon.com/products/developer-tools/" target="_blank" rel="noopener noreferrer">AWS Developer Tools Services</a></p>
-
-<ul>
-  <li><a href="https://volkanpaksoy.com/archive/2019/10/15/AWS-Developer-Tools-Services-Part-1-AWS-CodeCommit/">Part 1: AWS CodeCommit</a></li>
-  <li><a href="https://volkanpaksoy.com/archive/2019/10/19/AWS-Developer-Tools-Services-Part-2-AWS-CodeBuild/">Part 2: AWS CodeBuild</a></li>
-  <li><a href="https://volkanpaksoy.com/archive/2019/10/20/AWS-Developer-Tools-Services-Part-3-AWS-CodeDeploy/">Part 3: AWS CodeDeploy</a></li>
-  <li>Part 4: AWS CodePipeline</li>
-</ul>
-
-<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-icon.png" alt=""></p>
-
-<h2 id="aws-codepipeline">AWS CodePipeline</h2>
-<p>In the previous posts I was able to create a Git repository in CodeCommit, create a build and upload the artifacts to an S3 bucket using CodeBuild and deploy the artifacts to an EC2 instance. In this post I will use CodePipeline service to tie these steps together.</p>
-
-<p>AWS CodePipeline is more like an umbrella service that it combines the the source, build and deploy steps together with some added benefits:</p>
-
-<ul>
-  <li>Ability to retry deployment: In CodeDeploy, if the deployment fails you have to create a new deployment manually but with Pipeline we have the option to retry the deployment which clones the failed deployment and runs the new one automatically.</li>
-  <li>Trigger build upon code changes: You can start builds manually or on schedule by creating triggers but you can not trigger a build when you push your code to the repository. CodePipeline handles this automatically.</li>
-</ul>
-
-<h2 id="create-a-pipeline">Create a pipeline</h2>
-
-<h3 id="step-1-give-it-a-name">Step 1: Give it a name</h3>
-<p>First step is to simply give the pipeline a name. CodePipeline can automatically create an IAM role with the required permissions. Required permissions are not really clear at this point as we haven’t connected any of the services yet. That’s why it’s very useful to keep the “Allow AWS CodePipeline to create a service role so it can be used with this new pipeline” checkbox ticked.</p>
-
-<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-create-pipeline.png" alt=""></p>
-
-<h4 id="step-2-add-source">Step 2: Add source</h4>
-<p>Next, we choose the source provider. In this example, I will use CodeCommit. It also support Amazon ECR, Amazon S3 and GitHub.</p>
-
-<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-add-source.png" alt=""></p>
-
-<p>At this stage, by using CloudWatch events we can automatically start the build. This option os provided because CodeCommit is an AWS service. If you choose GitHub as your provider you’ll see GitHub webhooks which do the same job.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h4 id="step-3-add-build">Step 3: Add build</h4>
-<p>By default two build services are supported: CodeBuild and Jenkins. It’s easier to connect to CodeBuild as you just have to select your build project from the dropdown list:</p>
-
-<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-add-build.png" alt=""></p>
-
-<p>You can also choose to skip this stage. If you are copying static assets from an S3 bucket for instance you wouldn’t need to build anything and would choose to skip this stage.</p>
-
-<h4 id="step-4-add-deployment">Step 4: Add deployment</h4>
-<p>At deployment stage, we have quite a few options:</p>
-
-<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-add-deployment-1.png" alt=""></p>
-
-<p>As stated before, I will use the CodeDeploy deployment I created before:</p>
-
-<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-add-deployment-2.png" alt=""></p>
-
-<p>Finally we review and create the pipeline.</p>
-
-<h2 id="troubleshooting-the-pipeline">Troubleshooting the pipeline</h2>
-<p>Even though my CodeBuild and CodeDeploy projects succeeded, running the CodePipeline at this point fails. The reason for this error is CodePipeline creates its own S3 bucket and CodeDeploy agent needs access to that bucket as well to be able to download the deployment artifacts. So I had to modify my policy as such:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:Get*",
-        "s3:List*"
-      ],
-      "Resource": [
-        "arn:aws:s3:::replace-with-your-s3-bucket-name/*",
-        "arn:aws:s3:::aws-codedeploy-us-east-1/*",
-        "arn:aws:s3:::codepipeline-us-east-1-XXXXXXXXXXX/*"
-      ]
-    }
-  ]
-}
-</code></pre></div></div>
-
-<h2 id="see-it-in-action">See it in action</h2>
-<p>After fixing the policy I retried the deployment (which creates a new deployment, doesn’t actually retry the failed one)</p>
-
-<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-results.png" alt=""></p>
-
-<h2 id="conclusion">Conclusion</h2>
-<p>In this mini-series, I investigated creating a full pipeline using AWS developer services. In future posts I will delve deeper into these services and start using other complementary services as well.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://aws.amazon.com/codepipeline" target="_blank" rel="noopener noreferrer">AWS CodePipeline</a></li>
 </ul>
 
 		

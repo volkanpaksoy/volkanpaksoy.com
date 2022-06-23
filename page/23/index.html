@@ -146,6 +146,186 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/10/12/design-patterns-strategy/" itemprop="url">Design Patterns: Strategy</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-10-12T15:00:00+01:00" itemprop="datePublished">October 12, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/designdev">design</a></span> -->
+
+<!-- design, dev -->
+
+
+
+
+    <a href="/category/design">design</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">design_patterns, csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Often times we need to change some algorithm with another without changing the client code that’s consuming it. In this post I want to show a use case I came across and utilised Strategy pattern.</p>
+
+<h3 id="what-is-it">What is it?</h3>
+<p>Here’s the official definition of the pattern from GoF book:</p>
+
+<blockquote>
+  <p>Define a family of algorithms, encapsulate each one, and make them interchangeable. Strategy lets the algorithm vary independently from clients that use it.</p>
+</blockquote>
+
+<h3 id="use-case-get-external-ip-address">Use case: Get external IP address</h3>
+<p>In an application I was working on I needed to get the external IP address of the computer the application is running on. There are various ways to achieve that. This looked like a good opprtunity to use the Strategy pattern as I wanted to be able switch between the different methods easily.</p>
+
+<h3 id="implementation">Implementation</h3>
+<p>The interface is quite simple:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">interface</span> <span class="nc">IIpCheckStrategy</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="nf">GetExternalIp</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Some services return their data in JSON format, some have extra text in it. But encapsulating the algorithms in their own classes this way, the clint code doesn’t have to worry about parsing these various return values. It’s handled in each class. If one service changes it’s output and breaks the implementation I can recover just by changing the code instantiates the class.</p>
+
+<p>The concrete implementations of the interface are below. They implement the IIpCheckStrategy and are responsible for getting the data and return parsed IP address as string.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>AWS IP Checker:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">AwsIPCheckStrategy</span> <span class="p">:</span> <span class="n">IIpCheckStrategy</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="nf">GetExternalIp</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpClient</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">client</span><span class="p">.</span><span class="n">BaseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="s">"http://checkip.amazonaws.com/"</span><span class="p">);</span>
+            <span class="kt">string</span> <span class="n">result</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">GetStringAsync</span><span class="p">(</span><span class="s">""</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">result</span><span class="p">.</span><span class="nf">TrimEnd</span><span class="p">(</span><span class="sc">'\n'</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>DynDns IP Checker:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">DynDnsIPCheckStrategy</span> <span class="p">:</span> <span class="n">IIpCheckStrategy</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="nf">GetExternalIp</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpClient</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">client</span><span class="p">.</span><span class="n">BaseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="s">"http://checkip.dyndns.org/"</span><span class="p">);</span>
+            <span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">GetAsync</span><span class="p">(</span><span class="s">""</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">HelperMethods</span><span class="p">.</span><span class="nf">ExtractIPAddress</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="nf">ReadAsStringAsync</span><span class="p">().</span><span class="n">Result</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Custom IP Checker:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">CustomIpCheckStrategy</span> <span class="p">:</span> <span class="n">IIpCheckStrategy</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="nf">GetExternalIp</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpClient</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="n">client</span><span class="p">.</span><span class="n">BaseAddress</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="s">"http://check-ip.herokuapp.com/"</span><span class="p">);</span>
+            <span class="n">client</span><span class="p">.</span><span class="n">DefaultRequestHeaders</span><span class="p">.</span><span class="n">Accept</span><span class="p">.</span><span class="nf">Clear</span><span class="p">();</span>
+            <span class="n">client</span><span class="p">.</span><span class="n">DefaultRequestHeaders</span><span class="p">.</span><span class="n">Accept</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="nf">MediaTypeWithQualityHeaderValue</span><span class="p">(</span><span class="s">"application/json"</span><span class="p">));</span>
+
+            <span class="n">HttpResponseMessage</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">GetAsync</span><span class="p">(</span><span class="s">""</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+            <span class="kt">string</span> <span class="n">json</span> <span class="p">=</span> <span class="n">response</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="nf">ReadAsStringAsync</span><span class="p">().</span><span class="n">Result</span><span class="p">;</span>
+            <span class="kt">dynamic</span> <span class="n">ip</span> <span class="p">=</span> <span class="n">Newtonsoft</span><span class="p">.</span><span class="n">Json</span><span class="p">.</span><span class="n">JsonConvert</span><span class="p">.</span><span class="nf">DeserializeObject</span><span class="p">(</span><span class="n">json</span><span class="p">);</span>
+            <span class="kt">string</span> <span class="n">result</span> <span class="p">=</span> <span class="n">ip</span><span class="p">.</span><span class="n">ipAddress</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="choosing-the-algorithm">Choosing the algorithm</h3>
+<p>The consumer of the algorithm can pick any class that implements IIpCheckStrategy and switch between them. For example:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">StrategyClient1</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Execute</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">IIpCheckStrategy</span> <span class="n">ipChecker</span><span class="p">;</span>
+
+        <span class="n">ipChecker</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">DynDnsIPCheckStrategy</span><span class="p">();</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">ipChecker</span><span class="p">.</span><span class="nf">GetExternalIp</span><span class="p">());</span>
+
+        <span class="n">ipChecker</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AwsIPCheckStrategy</span><span class="p">();</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">ipChecker</span><span class="p">.</span><span class="nf">GetExternalIp</span><span class="p">());</span>
+
+        <span class="n">ipChecker</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CustomIpCheckStrategy</span><span class="p">();</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">ipChecker</span><span class="p">.</span><span class="nf">GetExternalIp</span><span class="p">());</span>
+
+        <span class="n">Console</span><span class="p">.</span><span class="nf">ReadKey</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Also the class name to be used can be stored in the configuration in some cases so that it can be changed at runtime without recompiling the application. For instance:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">StrategyClient2</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Execute</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">string</span> <span class="n">ipcheckerTypeName</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"IPChecker"</span><span class="p">];</span>
+
+        <span class="n">IIpCheckStrategy</span> <span class="n">ipchecker</span> <span class="p">=</span> <span class="n">Assembly</span><span class="p">.</span><span class="nf">GetExecutingAssembly</span><span class="p">().</span><span class="nf">CreateInstance</span><span class="p">(</span><span class="n">ipcheckerTypeName</span><span class="p">)</span> <span class="k">as</span> <span class="n">IIpCheckStrategy</span><span class="p">;</span>
+
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">ipchecker</span><span class="p">.</span><span class="nf">GetExternalIp</span><span class="p">());</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>and the appSettings in the configuration would look like this:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;appSettings&gt;</span>
+	<span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"IPChecker"</span> <span class="na">value=</span><span class="s">"Strategy.AwsIPCheckStrategy"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/appSettings&gt;</span>
+</code></pre></div></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/design-pattern-workout" target="_blank" rel="noopener noreferrer">Sample source code</a></li>
+  <li><a href="http://www.amazon.co.uk/Head-First-Design-Patterns-Freeman/dp/0596007124" target="_blank" rel="noopener noreferrer">Head First Design Patterns</a></li>
+  <li><a href="http://www.amazon.co.uk/Design-patterns-elements-reusable-object-oriented/dp/0201633612" target="_blank" rel="noopener noreferrer">GoF Book: Design Patterns : Elements of Reusable Object-Oriented Software</a></li>
+  <li><a href="http://www.pluralsight.com/courses/csharp-design-strategies" target="_blank" rel="noopener noreferrer">Pluralsight course: C# Design Strategies</a></li>
+  <li><a href="http://www.dofactory.com/net/strategy-design-pattern" target="_blank" rel="noopener noreferrer">DoFactory Strategy Design Pattern</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/10/09/aws-lambda-official-scheduling-support/" itemprop="url">AWS Lambda Official Scheduling Support</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -371,86 +551,6 @@ npm install nodemailer-smtp-transport
   <li><a href="https://aws.amazon.com/about-aws/whats-new/2015/08/trigger-aws-lambda-functions-using-amazon-simple-workflow/" target="_blank" rel="noopener noreferrer">Trigger AWS Lambda Functions Using Amazon Simple Workflow</a></li>
   <li><a href="http://docs.aws.amazon.com/amazonswf/latest/awsflowguide/lambda-task.html" target="_blank" rel="noopener noreferrer">Implementing AWS Lambda Tasks</a></li>
 </ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/10/01/creating-pdfs-from-images-with-csharp-and-wpf/" itemprop="url">Creating PDFs from Images with C# and WPF</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-10-01T00:00:00+01:00" itemprop="datePublished">October  1, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">csharp, wpf</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I like scanning all my documents and keep a digital version as well as the dead-tree version just in case. But storing the documents as individual image files is too messy. There are various solutions to merge image files into a single PDF but I don’t want to upload my sensitive documents to unknown parties so I rolled my own: <a href="https://github.com/volkanpaksoy/image2pdf" target="_blank" rel="noopener noreferrer">Image2PDF</a></p>
-
-<h2 id="implementation">Implementation</h2>
-<p>I decided to go with a WPF application rathen than a web-based solution because it would be unnecessary to upload a bunch of image files to cloud and download the PDF back. It’s a lot of network traffic for something that can be handled locally much faster.</p>
-
-<p>Image2PDF a simple WPF application developed in C#. I’ve used <a href="http://sourceforge.net/projects/itextsharp" target="_blank" rel="noopener noreferrer">iTextSharp</a> library to create the PDFs. It’s a great open-source library with lots of capabilities.</p>
-
-<p>I’ve also started using <a href="https://www.syncfusion.com/products/wpf" target="_blank" rel="noopener noreferrer">SyncFusion WPF control library</a> recently. The entire control suite is free of charge (which is always a great price!). It has a Wizard control which I decided to go with. I think using a wizard and is cleaner UI instead of dumping every control on one window.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h2 id="usage">Usage</h2>
-<p>As you might expect you provide the list of input images, re-order them if needed, choose the path for the output folder and go!</p>
-
-<p>Step 1: Select input</p>
-
-<p><img src="/images/vpblogimg/2015/09/image2pdf-page1.png" alt="Page 1: Specify input image files"></p>
-
-<p>Step 2: Select output</p>
-
-<p><img src="/images/vpblogimg/2015/09/image2pdf-page2.png" alt="Page 2: Specify output PDF path"></p>
-
-<p>Step 3: Go!</p>
-
-<p><img src="/images/vpblogimg/2015/09/image2pdf-page3.png" alt="Page 3: Run!"></p>
-
-<p>Simples!</p>
-
-<h2 id="conclusion">Conclusion</h2>
-<p>In the future I’m planning to add various PDF operarions and enhance the functionality but since shipping is a feature I’ll limit the scope for now. After all, this was the main feature I needed anyway.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://github.com/volkanpaksoy/image2pdf" target="_blank" rel="noopener noreferrer">Source code</a></li>
-  <li><a href="http://sourceforge.net/projects/itextsharp/" target="_blank" rel="noopener noreferrer">iTextSharp project page</a></li>
-  <li><a href="https://www.syncfusion.com/products/wpf" target="_blank" rel="noopener noreferrer">SyncFusion Essential Studio for WPF</a></li>
-</ul>
-
 
 		
 		

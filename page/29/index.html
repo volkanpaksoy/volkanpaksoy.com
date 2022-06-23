@@ -146,6 +146,93 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/02/27/new-aws-features-and-improvements/" itemprop="url">New AWS features and improvements</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-02-27T15:00:00+00:00" itemprop="datePublished">February 27, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
+
+<!-- aws -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">news</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>AWS team is certainly keeping themselves very busy. If you turn your head away for a while you end up falling behind the new features. In this post I’ll cover some of the fairly new features and improvements I’ve recently discovered and found useful and interesting.</p>
+
+<h3 id="reserved-instance-pricing-model-improvements">Reserved Instance pricing model improvements</h3>
+<p>In the new simplified model they introduced 3 options: <em>No upfront</em>, <em>partial upfront</em> and <em>full upfront</em>. No upfront is a great feature as you don’t need to pay big amounts and just start paying less. Reserved instances are generally great for servers that run 24/7. For example currently if you launch a t2.micro Linux instance in EU-Ireland region you pay $0.014/hour. If you switch to No Upfront option the hourly rate falls to $0.010. (This is assuming the server will run continuously. You pay $7.30/month regardless of the instance’s state.)</p>
+
+<p><img src="/images/vpblogimg/2015/02/aws-reserved-instance-pricing.png" alt="AWS Reserved Instance Pricing"></p>
+
+<h3 id="auto-recovery">Auto recovery</h3>
+<p>This is a very cool feature that helps a great deal with system. maintenance. It’s not available in all regions yet (just N. Virginia as of this writing) but I’m guessing it will be rolled out to other regions soon. Now with this feature we can create an alarm for <em>StatusCheckFailed_System</em> metric and select <em>“Recover this instance”</em> as an action</p>
+
+<p><img src="/images/vpblogimg/2015/02/aws-instance-recovery.png" alt="AWS Instance Recovery"></p>
+
+<p>So when a machine is unresponsive it can be restarted automatically. Considering how many issues a simple restart can solve I think it’s a great feature :-)</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h3 id="resource-groups">Resource Groups</h3>
+<p>I’ve always found AWS Management Console a very dangerous place as all machines (dev, test prod) are all pooled and listed in the same place. In a careless moment you can easily terminate a production machine instead of a temporary test machine (that’s why I always turn on termination protection).</p>
+
+<p>Resource groups, as the name implies, are meant to group related items. Although it’s primary goal is not to solve the problem I mentioned above (maybe it’s just me who sees it as a problem) but that’s I initially will use it for.</p>
+
+<p><img src="/images/vpblogimg/2015/02/aws-resource-groups-overview.png" alt="AWS Resource Groups Overview"></p>
+
+<p>Using resource groups is dead simple: Just add a tag to your resources (I added one called “type”) and create a resource group and use that tag as a filter. So now instead of listing the entire EC2 instancess I can just click on Dev group and play around with my development servers without even seeing the production machines.</p>
+
+<p><img src="/images/vpblogimg/2015/02/aws-resource-groups-group-details.png" alt="AWS Resource Group Details"></p>
+
+<h3 id="lambda">Lambda</h3>
+<p>AWS Lambda is a compute service that allows you to execute your code without launching an EC2 instance. It’s in preview mode at the moment. It’s not meant to run full-blown applications and you have no control over the actual machines running the code. It’s great for simple even-handlers such as triggering a function when an image is uploaded etc. Currently I’m working on an application that’s going to use this service so more on that later.</p>
+
+<h3 id="aurora">Aurora</h3>
+<p>I haven’t tried this one myself yet and currently it’s in preview stage. The premise is it’s fully-compatible with MySQL and costs 1/10th of a regular MySQL instance. It’s not quite clear whether it’s a fork of MySQL like MariaDB or just an independent RDBMS but either way being able to use it directly as a MySQL replacement sounds good. As an AWS fan I’m sure performance-wise it would be everything they said it would so no doubts there. I signed up for the preview and waiting for approval. When I get to try it out I will post my impressions as a separate blog post.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>There is a big competition going on between the cloud computing platforms these days. Prices are constantly going down and new features are being added so it’s quite a lot of fun to follow the news in this market. I’ll try to keep an eye on new AWS features more closely from now on.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://aws.amazon.com/blogs/aws/simplified-reserved-instances/" target="_blank" rel="noopener noreferrer">Announcement for the new reserved instance pricing model</a></li>
+  <li><a href="http://aws.amazon.com/ec2/purchasing-options/reserved-instances/" target="_blank" rel="noopener noreferrer">Reserved instance pricing</a></li>
+  <li><a href="http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/resource-groups.html" target="_blank" rel="noopener noreferrer">Documentation: Working with Resource Groups</a></li>
+  <li><a href="http://aws.amazon.com/lambda/" target="_blank" rel="noopener noreferrer">AWS Lambda</a></li>
+  <li><a href="http://aws.amazon.com/rds/aurora/" target="_blank" rel="noopener noreferrer">AWS Aurora</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/02/25/beware-the-pineapple-an-overview-of-wifi-pineapple-mark-v/" itemprop="url">Beware the Pineapple: An overview of WiFi Pineapple Mark V</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -471,171 +558,6 @@ Since SSID names are more likely to be kept as a secret it helps to collect this
   <li><a href="https://gist.github.com/volkanpaksoy/8cd4fcda784b27b47e6e183edc36682b" target="_blank" rel="noopener noreferrer">Cypher query for Simpsons sample</a></li>
   <li><a href="http://www.amazon.co.uk/Learning-Neo4j-Graph-Databases-Bruggen/dp/1849517169" target="_blank" rel="noopener noreferrer">Book: Learning Neo4J</a></li>
 </ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/02/16/neo4j-browser-tips-and-tricks/" itemprop="url">Neo4J Browser Tips &amp; Tricks</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-02-16T18:00:00+00:00" itemprop="datePublished">February 16, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">neo4j, graph_databases</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I’m currently in search of a good tool to manage my graph database data. As they say a picture is worth a thousand words so visualization is very important to understand the nature of the data and make some sense of it. If nothing, it’s simply more fun!</p>
-
-<p>Covering a user interface may seem unnecessary since they are generally pretty straightforward and Neo4J browser is no exception but after using it for some time I discovered some neat features that are not immediately obvious in this post so I’ll go over them. I will be using the beta version (v2.2 M04) so if you are using an older version you can compare the upcoming features with your current version.</p>
-
-<p>You gotta know your tools to get the maximum benefit out of them so let’s dig in!</p>
-
-<h3 id="accessing-the-data">Accessing the Data</h3>
-<p>A major change in this version is that the authentication is being turned on by default.</p>
-
-<p><img src="/images/vpblogimg/2015/02/neo4j-browser-authentication.png" alt="Neo4J Authentication"></p>
-
-<p>So if you install it on somewhere that’s accessible from the Internet you can have a layer of protection.</p>
-
-<p>If you close that login window by accident you can run the following command to bring it back:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:server connect
-</code></pre></div></div>
-
-<p>Similarly, if you want to terminate the connection you can run</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:server disconnect
-</code></pre></div></div>
-
-<p>Until v2.2 M03 you got an authorization token back after the connection is established but since v2.2 M04 you don’t get a token. This is because authorization header is calculated by base64-encoding username:password pair.</p>
-
-<p><img src="/images/vpblogimg/2015/02/neo4j-authorization-03.png" alt="Welcome message"></p>
-
-<p>If you need to connect using other tools you need to send authorization header with every request. This is Base64-encoded value of username/password pair separated with colon.</p>
-
-<p>So in my case I changed the password to <em>pass</em> (I know it’s a horrible password, this is a just test installation :-))</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<p>So my authorization header value becomes:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Username:Password --&gt; neo4j:pass
-Base64-encoded value --&gt; bmVvNGo6cGFzcw==
-</code></pre></div></div>
-
-<p>And with the correct authorization header I can get an HTTP 200 for the GET request for all the labels:</p>
-
-<p><img src="/images/vpblogimg/2015/02/neo4j-authorization-04.png" alt="Results for all labels"></p>
-
-<h3 id="helpful-commands-and-shortcuts">Helpful commands and shortcuts</h3>
-
-<ul>
-  <li><strong>First things first: Help!</strong></li>
-</ul>
-
-<p>To discover all the commands and links to references you can simply run the help command:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:help
-</code></pre></div></div>
-
-<p><img src="/images/vpblogimg/2015/02/neo4j-browser-help-command-output.png" alt="Help output"></p>
-
-<ul>
-  <li><strong>Clean your mess with Clear</strong></li>
-</ul>
-
-<p>Browser runs each query in a separate window and after using it a while you can have a long history of old queries. You can get rid of them easily once and for all by this command:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:clear
-</code></pre></div></div>
-
-<ul>
-  <li><strong>Use Escape to switch to full-screen query view</strong></li>
-</ul>
-
-<p>You can use Escape key to toggle to a full-screen query window. Just press Esc key and you’ll hide the previous query windows.</p>
-
-<p><img src="/images/vpblogimg/2015/02/neo4j-browser-full-screen-query-window.png" alt="Toggle full screen"></p>
-
-<p>This is especially handy if you are dealing with long Cypher queries and can use some space. You can toggle back to old view (query and output windows below) by pressing <em>Esc</em> key again. Alternatively it will toggle back if you just run the query.</p>
-
-<ul>
-  <li><strong>Use Shift+Enter for multi-line mode</strong></li>
-</ul>
-
-<p>Normally <em>Enter</em> key runs the queries but most of the time you’d need to work with queries spanning multi-lines. To accomplish that you can simply use Shift+Enter to start a new line and switch to multi-line mode. Once you switch to multi-line mode, the line numbers will appear and <em>Enter</em> will no longer run your query but will start a new line. To run queries in multi-line mode you can use <strong><em>Ctrl+Enter</em></strong> key combination.</p>
-
-<ul>
-  <li><strong>Name your saved queries in favorites</strong></li>
-</ul>
-
-<p>There are some queries you run quite often. For example in my development environment I tend to delete everything and start from scratch. So I saved my query to the favorites by clicking the star button in the query window. Nice thing about it is if you add a comment at the beginning of your query the browser is smart enough to use it as the name of your query so you don’t have to guess which one is which when you have a lot of saved queries.</p>
-
-<p><img src="/images/vpblogimg/2015/02/neo4j-browser-favorites.png" alt="Named favorite"></p>
-
-<ul>
-  <li><strong>Play around with the look &amp; feel</strong></li>
-</ul>
-
-<p>With the latest version you can mess around with the stylesheet that is used to visualize the results. In the favorites tab there is a section called “Styling / Graph Style Sheet”. You can see the styles used by clicking the Graph Style Sheet button. It’s not editable on the editor but you can export it to a .grass file by clicking on the Export to File icon.</p>
-
-<p><img src="/images/vpblogimg/2015/02/neo4j-browser-style-00.png" alt="Graph Style Sheet"></p>
-
-<p>After you make your changes you can import it back by dropping it to the narrow band at the bottom of the dialog window.</p>
-
-<p><img src="/images/vpblogimg/2015/02/neo4j-browser-stylesheet.png" alt="Import style sheet"></p>
-
-<p>You can still get the original styles back by clicking on the icon next to export (that looks like a fire extinguisher!) so feel free to mess with it.</p>
-
-<ul>
-  <li><strong>Use Ctrl+Up/Down arrow to navigate through old queries</strong></li>
-</ul>
-
-<p>You can browse through your query history using Ctrl+Up/Down arrow. I find this shortcut especially helpful when you quickly need to go back to the previous query.</p>
-
-<ul>
-  <li><strong>Click on a query to get it back</strong></li>
-</ul>
-
-<p>Once you run a query, the query itself and its output is encapsulated in a separate window so you can browse through old queries. If you need to run a query again you can simply click on the query. As you can see in the image below, a dashed line appears under the query when you hover over it to indicate it’s a link. When you click the query it populates the query window so you don’t need to copy/paste it.</p>
-
-<p><img src="/images/vpblogimg/2015/02/neo4j-browser-link-to-query.png" alt="Link to query"></p>
-
-<h3 id="conclusion">Conclusion</h3>
-
-<p>Currently the browser doesn’t allow editing data visually but for running Cypher queries it’s a great tool. If you have any tips and tricks to suggest or corrections to make, please leave a comment below.</p>
-
-<p><strong>UPDATE:</strong> I published this post using v2.2 M03 but as <a href="https://twitter.com/mesirii" target="_blank" rel="noopener noreferrer">Michael Hunger</a> kindly pointed out there were some changes in v2.2 M04 that made my post outdated from the get-go so I updated it accordingly. If you find any inconsistencies please let me know using the comments below.</p>
-
 
 		
 		

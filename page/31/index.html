@@ -146,6 +146,103 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/02/05/adventures-in-fsharp/" itemprop="url">Adventures in F# - Miscellaneous Notes</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-02-05T18:00:00+00:00" itemprop="datePublished">February  5, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">fsharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I finished the Pluralsight course finally. I’m still studying F# 2 pomodoros a day but lately lost he motivation to publish the notes. In this post I’ll tidy up the notes. In order to maintain my cadence I think I had better develop more stuff instead of covering theoretical subjects.</p>
+
+<h3 id="more-notes">More Notes</h3>
+
+<ul>
+  <li>Upcasting / Downcasting
+To upcast <strong>:&gt;</strong> operator is used. Alternatively the keyword <strong>upcast</strong> can be used to achieve the same results. It performs a static cast and the cast is determined at runtime.</li>
+</ul>
+
+<p>Downcasting is performed by the <strong>:?&gt;</strong> operator or <strong>downcast</strong> keyword.</p>
+
+<ul>
+  <li>Abstract classes
+Abstract classes are decorated with **[<abstractclass>]**. To mark members **abstract** keyword is used:</abstractclass>
+</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">abstract</span> <span class="nc">Area</span> <span class="p">:</span> <span class="kt">float</span> <span class="k">with</span> <span class="n">get</span>
+<span class="k">abstract</span> <span class="nc">Perimeter</span> <span class="p">:</span> <span class="kt">float</span>  <span class="k">with</span> <span class="n">get</span>
+<span class="k">abstract</span> <span class="nc">Name</span> <span class="p">:</span> <span class="kt">string</span> <span class="k">with</span> <span class="n">get</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+<strong>obj</strong> is shortcut for <strong>System.Object</strong>
+</li>
+  <li>
+<strong>do bindings</strong> perform actions when the object is constructed. do bindings are usually put after let bindings so that code in the do binding can execute with a fully initialized object.</li>
+  <li>
+<strong>unit</strong> is equivalent of void</li>
+  <li>tabs are not allowed as they can indicate an unknown number of space characters and as spaces and indents matter</li>
+  <li>
+<strong>‘a</strong> means generic. By default a function <strong>f</strong> is infered as <strong>‘a -&gt; bool</strong> meaning it takes a general parameter and returns boolean</li>
+</ul>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<ul>
+  <li>Providing an incomplete list of functions result in a new function (currying)</li>
+  <li>Getting values from tuples: <strong>fst</strong> gets the first value, <strong>snd</strong> gets the second value</li>
+  <li>You can attach elements to a list by using the <strong>:: (cons)</strong> operator</li>
+  <li>
+<strong>@</strong> operator Concatenates two lists.</li>
+  <li>Exceptions can be thrown using <strong>raise</strong> function. <strong>Reraise</strong> function rethrows an exception</li>
+  <li>BigInt (C# and VB) don’t have support for arbitrarily long integers</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.amazon.co.uk/Programming-F-3-0-Chris-Smith/dp/1449320295/" target="_blank" rel="noopener noreferrer">Book: Programming F# 3.0</a></li>
+  <li><a href="http://www.pluralsight.com/courses/fsintro" target="_blank" rel="noopener noreferrer">Pluralsight course: Introduction to F#</a></li>
+  <li><a href="https://msdn.microsoft.com/en-us/library/dd233220.aspx" target="_blank" rel="noopener noreferrer">MSDN Article: Casting and Conversions</a></li>
+  <li><a href="https://msdn.microsoft.com/en-us/library/dd483471.aspx" target="_blank" rel="noopener noreferrer">MSDN Article: Abstract Classes</a></li>
+  <li><a href="https://msdn.microsoft.com/en-us/library/dd483473.aspx" target="_blank" rel="noopener noreferrer">MSDN Article: do Bindings in Classes</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/01/24/adventures-in-fsharp-enums-and-constructors/" itemprop="url">Adventures in F# - Enums and constructors</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -396,130 +493,6 @@ if result &gt;= 3 then computer wins
   <li><a href="http://msdn.microsoft.com/en-us/library/dd233223.aspx" target="_blank" rel="noopener noreferrer">MSDN Article: Exception Handling</a></li>
   <li><a href="http://xunit.github.io/docs/running-tests-in-vs.html" target="_blank" rel="noopener noreferrer">Installing test runner on Visual Studio</a></li>
   <li><a href="https://github.com/volkanpaksoy/rock-paper-scissors-lizard-spock" target="_blank" rel="noopener noreferrer">Source Code</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/01/21/dotnet-gadgeteer-part-1/" itemprop="url">.NET Gadgeteer (Part 1 of n)</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-01-21T02:00:00+00:00" itemprop="datePublished">January 21, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/hobbydev">hobby</a></span> -->
-
-<!-- hobby, dev -->
-
-
-
-
-    <a href="/category/hobby">hobby</a>
-    , 
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">gadget, dotnet_gadgeteer</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>My problem is I have a ton of gadgets and keep getting more before building meaningful projects with the previous ones. So I decided to be a good boy and create at least one full project with the existing ones before I move on to new shiny toys. First target is my .NET Gadgeteer hardware kit set that’s been lying around for a quite some time. For the sake of completeness here are the previous posts about Gadgeteer so far:</p>
-
-<ul>
-  <li><a href="https://volkanpaksoy.com/archive/2013/07/26/cleaning-up-net-gadgeteer-work-environment/">Cleaning up .NET Gadgeteer work environment</a></li>
-  <li><a href="https://volkanpaksoy.com/archive/2013/06/27/playing-with-net-gadgeteer/">Playing with .NET Gadgeteer</a></li>
-</ul>
-
-<p>My main goal now is to discover the capabilities of the kit I have and try to come up with a fun project. So as I have no clue at the moment I will play around with each component I have and create sample projects for each them. By the end I hope I’ll get a nice idea.</p>
-
-<h3 id="what-is-it-anyway">What is it anyway?</h3>
-<p>The official definiton is: “Microsoft .NET Gadgeteer is an open-source toolkit for building small electronic devices using the .NET Micro Framework” I think it’s a great kit for children because it makes development a lot easier than say Arduino.</p>
-
-<p>All sockets are labelled and all you have to do is connect the mathcing sockets in the module and mainboard:</p>
-
-<p><img src="/images/vpblogimg/common/Gadgeteer/Gadgeteer_Cerberus_Mainboard.jpg" alt="Cerberus Mainboard"></p>
-
-<p><img src="/images/vpblogimg/common/Gadgeteer/Gadgeteer_Socket_Letter.jpg" alt="Gadgeteer Socket Letters"></p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<p>Also if you are a .NET developer there is absolutely no learning curve. You just build your application just like you’ve been building all along.</p>
-
-<h3 id="setting-up-the-development-environment">Setting up the development environment!</h3>
-<p>Well, there is no learning curve but still you need to make some preparations. First thing you need to do is install the .NET Micro Framework. Then the next step I took is install the Gadgeteer project templates for Visual Studio 2013. All of these can be found at the downloads section at <a href="https://www.ghielectronics.com/support/netmf" target="_blank" rel="noopener noreferrer">GHI Electronics website</a>.</p>
-
-<p>Once you install the Gadgeteer package you should be able to create new Gadgeteer projects when you select <em>File</em> -&gt; <em>New Project</em> in Visual Studio:</p>
-
-<p><img src="/images/vpblogimg/common/Gadgeteer/gadgeteer-add-new-project.png" alt="Visual Studio Add Gadgeteer Project"></p>
-
-<p>Next step is to select the mainboard you’re going to use in the project:</p>
-
-<p><img src="/images/vpblogimg/common/Gadgeteer/gadgeteer-board-selection.png" alt="Gadgeteer Mainboard Selection"></p>
-
-<h3 id="first-rule-of-gadget-development-fork-over-the-money">First rule of gadget development: Fork over the money!</h3>
-<p>Once you install the required software you will of course need the actually hardware to run your applications on. The bulk of modules I currently have came from the starter kit I initially bought:</p>
-
-<p><img src="/images/vpblogimg/common/Gadgeteer/Gadgeteer_FEZ_Spider_Starter_Kit.jpg" alt="FEZ Spider Starter Kit"></p>
-
-<p>Then I added a few more components but there are so many more that can be purchased. Since it’s an open hardware platform any vendor can build their own modules. But looks like, even though it’s open-source, a company called <a href="https://www.ghielectronics.com/" target="_blank" rel="noopener noreferrer">GHI Electronics</a> are taking the lead in this market.</p>
-
-<h3 id="lets-get-down-to-business">Let’s get down to business!</h3>
-<p>I will explain each module in depth in the upcoming posts but for the purposes of testing the development environment I’ll just build a sample project consisting of Spider mainboard and 3 LEDs.</p>
-
-<p>First component I’m going to play around is multi color LED. I happen to have 3 of them and added all of them to my design. Once you drag and drop the modules you want to use in your project you can simply right-click on an empty point on the canvas and select <em>Connect All Modules</em>. It automatically connects using the appropriate slots for each module. So you can instantly get something like this:</p>
-
-<p><img src="/images/vpblogimg/common/Gadgeteer/gadgeteer-sample-design.png" alt="Sample design"></p>
-
-<p>And the source code I’m going to use to test it is as follows:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">partial</span> <span class="k">class</span> <span class="nc">Program</span>
-<span class="p">{</span>
-	<span class="k">void</span> <span class="nf">ProgramStarted</span><span class="p">()</span>
-	<span class="p">{</span>
-		<span class="n">multicolorLED</span><span class="p">.</span><span class="nf">TurnOff</span><span class="p">();</span>
-		<span class="n">multicolorLED2</span><span class="p">.</span><span class="nf">TurnOff</span><span class="p">();</span>
-		<span class="n">multicolorLED3</span><span class="p">.</span><span class="nf">TurnOff</span><span class="p">();</span>
-
-		<span class="n">multicolorLED</span><span class="p">.</span><span class="nf">TurnBlue</span><span class="p">();</span>
-		<span class="n">multicolorLED2</span><span class="p">.</span><span class="nf">TurnGreen</span><span class="p">();</span>
-		<span class="n">multicolorLED3</span><span class="p">.</span><span class="nf">TurnRed</span><span class="p">();</span>
-	<span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Once you get such a visual design it’s very easy to build the actual hardware by referring to this:</p>
-
-<p><img src="/images/vpblogimg/common/Gadgeteer/Gadgeteer-Sample-Hardware.jpg" alt="Sample hardware"></p>
-
-<p>By the way, I’m using <a href="http://www.amazon.co.uk/Tamiya-70172-Universal-Plate-210x160mm/dp/B005PQJ5O6" target="_blank" rel="noopener noreferrer">Tamiya universal plate</a> to keep modules nice and tidy otherwise they hang around uncontrollably. So it is quite handy.</p>
-
-<h3 id="conclusion">Conclusion</h3>
-<p>I’ll leave it here. I’m hoping this post should have enough information for anyone who wants to start developing projects with .NET Gadgeteer hardware kit. In the next post I’ll go over each component and discover their capabilities. If you already have a Gadgeteer kit your mileage may vary as I can only cover the devices I own. I’d appreciate if you submit any project ideas. I can acquire the modules needed and add to my projects.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://www.netmf.com/gadgeteer/" target="_blank" rel="noopener noreferrer">Official Gadgeteer site</a></li>
-  <li><a href="https://www.ghielectronics.com/support/netmf" target="_blank" rel="noopener noreferrer">GHI Downloads</a></li>
-  <li><a href="http://www.amazon.co.uk/Tamiya-70172-Universal-Plate-210x160mm/dp/B005PQJ5O6" target="_blank" rel="noopener noreferrer">Tamiya universal plate</a></li>
 </ul>
 
 		

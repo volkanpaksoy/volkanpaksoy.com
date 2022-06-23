@@ -146,6 +146,170 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2013/07/06/study-notes-for-70-461-querying-microsoft-sql-server-2012/" itemprop="url">Study Notes for 70-461: Querying Microsoft SQL Server 2012 – Part 1</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-07-06T11:22:13+01:00" itemprop="datePublished">July  6, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">certification, sql_server</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>As I mentioned before I like certification because it gives me a chance to cover all topics related to a subject no matter how trivial. During my preparations for this exam I learned some useful stuff. I believe they can be very useful in real-life scenarios. A compiled a list of items that I learned while studying for this exam:</p>
+
+<h3 id="01-common-table-expressions">01. Common Table Expressions</h3>
+<p>Not a new feature in SQL 2012 actually. I have used it a few times but I didn’t know its name back then. A Common Table Expression (CTE) is basically a temporary result set that you can use in the scope statement. For example</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>WITH DepartmentCTE (Name, GroupName)
+AS
+(
+    SELECT Name, GroupName
+    FROM HumanResources.Department
+    WHERE GroupName = 'Executive General and Administration'
+)
+
+SELECT NationalIDNumber
+FROM DepartmentCTE cte
+INNER JOIN HumanResources.Employee e ON cte.Name = e.JobTitle
+</code></pre></div></div>
+
+<p>This is not a very good example because a simple join could be used instead. But for the demonstration purposes it should be enough to layout the syntax and usage.</p>
+
+<p>Source: <a href="http://msdn.microsoft.com/en-us/library/ms190766(v=sql.105).aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/ms190766(v=sql.105).aspx</a></p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h3 id="02-pivot--unpivot">02. Pivot / Unpivot</h3>
+<p>I had one question about Pivot and that was just the definition of it so it was easy. Basically, pivot converts row values to columns. For example, take this query:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT o.TerritoryID, YEAR(OrderDate) AS SaleYear, SUM(SubTotal) AS Total
+FROM Sales.SalesOrderHeader o
+WHERE o.TerritoryID = 1
+GROUP BY o.TerritoryID, YEAR(OrderDate)
+ORDER BY SaleYear ASC, o.TerritoryID ASC
+</code></pre></div></div>
+
+<p>which yields this output:</p>
+
+<p><img src="/images/vpblogimg/2013/07/QueryOutput01.png" alt="Query Output"></p>
+
+<p>Say we want to get all years as columns and the totals as the values in the row. Using pivots we can rewrite the query as follows:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT 'Total Sales' AS TotalSales, [2005], [2006], [2007], [2008]
+FROM
+(
+    SELECT o.TerritoryID, YEAR(OrderDate) AS SaleYear, SubTotal
+    FROM Sales.SalesOrderHeader o
+    WHERE o.TerritoryID = 1
+) AS SourceTable
+PIVOT
+(
+    SUM(SubTotal)
+    FOR SaleYear IN ([2005], [2006], [2007], [2008])
+) AS PivotTable;
+</code></pre></div></div>
+
+<p>and we get this resultset:</p>
+
+<p><img src="/images/vpblogimg/2013/07/QueryOutput02.png" alt="Query Output"></p>
+
+<p>Source: <a href="http://msdn.microsoft.com/en-us/library/ms177410(v=sql.105).aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/ms177410(v=sql.105).aspx</a></p>
+
+<h3 id="03-for-xml">03. FOR XML</h3>
+<p>I think XML lost a lot of ground after the rise of JSON over the last few years but still it is used very commonly. I never used FOR XML in a real-life project but I was aware the Microsoft cares about it and not surprisingly I got 4 questions. It’s is very simple and intuitive actually. The keywords you need to know are: RAW, AUTO, EXPLICIT, PATH and ELEMENTS</p>
+
+<p><em>Raw:</em> Returns a single <row> element for row.</row></p>
+
+<p>Query:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT TOP 1 *
+FROM HumanResources.Department
+FOR XML RAW
+</code></pre></div></div>
+
+<p>Output:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;row DepartmentID="1" Name="Engineering" GroupName="Research and Development" ModifiedDate="2002-06-01T00:00:00"/&gt;
+</code></pre></div></div>
+<p><em>Auto:</em> Generates the name of the elements from the query</p>
+
+<p>Query:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT TOP 1 *
+FROM HumanResources.Department
+FOR XML AUTO
+</code></pre></div></div>
+
+<p>Output:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;HumanResources.Department DepartmentID="1" Name="Engineering" GroupName="Research and Development" ModifiedDate="2002-06-01T00:00:00"&gt;
+</code></pre></div></div>
+<p><em>Elements:</em> Returns the values in elements rather than attributes.</p>
+
+<p>Query:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT TOP 1 *
+FROM HumanResources.Department
+FOR XML AUTO, ELEMENTS
+</code></pre></div></div>
+
+<p>Output:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;HumanResources.Department&gt;
+&lt;DepartmentID&gt;1&lt;/DepartmentID&gt;
+&lt;Name&gt;Engineering&lt;/Name&gt;
+&lt;GroupName&gt;Research and Development&lt;/GroupName&gt;
+&lt;ModifiedDate&gt;2002-06-01T00:00:00&lt;/ModifiedDate&gt;
+&lt;/HumanResources.Department&gt;
+</code></pre></div></div>
+
+<p><em>Path:</em> Gives more control over the path of the nodes</p>
+
+<p>Query:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT TOP 1 *
+FROM HumanResources.Department
+FOR XML PATH('Department'), ROOT('HumanResources')
+</code></pre></div></div>
+
+<p>Output:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;HumanResources&gt;
+&lt;Department&gt;
+&lt;DepartmentID&gt;1&lt;/DepartmentID&gt;
+&lt;Name&gt;Engineering&lt;/Name&gt;
+&lt;GroupName&gt;Research and Development&lt;/GroupName&gt;
+&lt;ModifiedDate&gt;2002-06-01T00:00:00&lt;/ModifiedDate&gt;
+&lt;/Department&gt;
+&lt;/HumanResources&gt;
+</code></pre></div></div>
+
+<p>Source: <a href="http://msdn.microsoft.com/en-us/library/ms178107.aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/ms178107.aspx</a></p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2013/07/05/on-microsoft-exam-70-461-querying-microsoft-sql-server-2012/" itemprop="url">On Microsoft Exam 70-461: Querying Microsoft SQL Server 2012</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -264,89 +428,6 @@
 <p><img src="/images/vpblogimg/2013/06/Electronics101_01.jpg" alt="Electronics"></p>
 
 <p>I think I’ll need various components to build something significant. The kit I have looks very limited. But before I invest more money into this I think I’ll keep playing with more high-level products like Gadgeteer, Netduino and Arduino. If I can incorporate breadboard and lower-level components into systems using those that would a bonus but without such powerful controllers I don’t think I’ll get satisfying results with circuits built on a solderless breadboard.</p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2013/06/28/playing-with-net-gadgeteer/" itemprop="url">Playing with .NET Gadgeteer</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2013-06-28T00:09:40+01:00" itemprop="datePublished">June 28, 2013</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/hobbydev">hobby</a></span> -->
-
-<!-- hobby, dev -->
-
-
-
-
-    <a href="/category/hobby">hobby</a>
-    , 
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">dotnet_gadgeteer</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I like gadgets and electronics. Programming against hardware and interact with the real world makes it much more fun I think. I bought a .NET Gadgeteer kit set some time ago but hadn’t much time to spend on it. Now it’s time to break that cycle and actually do something with it.</p>
-
-<h3 id="setting-up-dev-environment">Setting up dev environment</h3>
-<p>As this will be more experimenting than actual development I decided to use my spare laptop for this task. I installed the latest version of .NET Micro Framework which can be found in the official site. My kit is GHI Electronics’ FEZ Spider Starter Kit which can be ordered from here: <a href="https://www.ghielectronics.com/catalog/product/297" target="_blank" rel="noopener noreferrer">https://www.ghielectronics.com/catalog/product/297</a>. I also needed to install device drivers and Spider mainboard SDK which all could be found on GHI’s website.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h3 id="updating-the-firmware">Updating the Firmware</h3>
-<p>Since I bought the device .NET Micro Framework release v4.2 and I wanted to work with the latest version. Turns out it’s a quite complicated process! I tried a bunch of tools but finally managed to upgrade my framework by using FEZSpiderMainboardUpdater.exe application which can be found under the legacy apps from GHI.</p>
-
-<p><img src="/images/vpblogimg/2013/06/SpiderUpdater.png" alt="Spider updater"></p>
-
-<h3 id="down-to-coding">Down to coding</h3>
-<p>After installing every bit it was time to develop my first program to explore its capabilities. For this I used the excellent “Getting started with the FEZ Spider Kit”. You can find the link below in Resources section.
-What you do is basically designing your gadget using the designer that’s installed in the Visual Studio and comes with the Gadgeteer project. Then you connect the actual hardware components in the same way. After this you run it just like a regular project. It first compiles and deploys the project to the device then runs it. You can even debug your source code even though it’s running on the mainboard.</p>
-
-<p><img src="/images/vpblogimg/2013/06/Mainboard_diagram.png" alt="Mainboard Diagram"></p>
-
-<p>After I completed the gadget described in the guide, I got a rather strange and annoying error called “MMP error”. After Googling it a little bit I found the link for the workaround: <a href="http://netmf.codeplex.com/workitem/221" target="_blank" rel="noopener noreferrer">http://netmf.codeplex.com/workitem/221</a>. After copying the config file the problem was resolved. The source code for the sample project is just a few lines which can be seen below:</p>
-
-<p><img src="/images/vpblogimg/2013/06/SourceCode.png" alt="Gadgeteer source code"></p>
-
-<p>The application is quite simple: You press the button and the camera takes a picture and displays on the screen. You can see a sample screenshot below:</p>
-
-<p><img src="/images/vpblogimg/2013/06/Gadgeteer_Sample_Output.jpg" alt="Gadgeteer sample Output"></p>
-
-<p>So far so good. I now have the environment ready and I have to check all the components and find out what they are capable of and hopefully come up with a cool project idea to make all this worthwhile.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://gadgeteer.codeplex.com" target="_blank" rel="noopener noreferrer">Gadgeter Downloads</a></li>
-  <li><a href="http://research.microsoft.com/en-us/projects/gadgeteer/" target="_blank" rel="noopener noreferrer">MS Research home page</a></li>
-  <li><a href="http://www.netmf.com/gadgeteer" target="_blank" rel="noopener noreferrer">Gadgetter site in .NET Micro Framework website</a></li>
-  <li><a href="https://www.ghielectronics.com/technologies/.net-gadgeteer" target="_blank" rel="noopener noreferrer">GHI Electronics Gadgeteer site</a></li>
-  <li><a href="http://www.ghielectronics.com/downloads/Gadgeteer/Mainboard/Spider/FEZSpider%20Starter%20Kit%20Guide.pdf" target="_blank" rel="noopener noreferrer">Getting started with the FEZ Spider Kit</a></li>
-  <li><a href="http://www.netmf.com" target="_blank" rel="noopener noreferrer">Official .NET Micro Framework</a></li>
-  <li><a href="http://www.youtube.com/watch?v=pYXYjBUyBC0" target="_blank" rel="noopener noreferrer">O’Reilly Getting Started with .NET Gadgeteer webcast</a></li>
-</ul>
 
 		
 		

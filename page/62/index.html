@@ -146,6 +146,120 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2013/03/01/discover-your-brain/" itemprop="url">Discover your brain</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-03-01T23:52:56+00:00" itemprop="datePublished">March  1, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devhobby">dev</a></span> -->
+
+<!-- dev, hobby -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">neurosky, mindwave</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>To me a technology that enables you to collect data about your brain activity sounds fascinating. It always felt like Sci-Fi and unreachable. So when I heard about the affordable MindWave I immediately ordered it.</p>
+
+<p><img src="/images/vpblogimg/2013/01/MindWaveMobile.jpg" alt="MindWave Mobile"></p>
+
+<p>This gizmo is manufactured by a company called <a href="http://www.neurosky.com" target="_blank" rel="noopener noreferrer">NeuroSky</a> focusing on brainwave technologies. I bought the MindWave mobile version as it has support to mobile devices which increases the possibilities of creating something cool. The best thing about it is that it comes with an SDK and you can develop your own applications on the platform. To get more info about the SDK visit <a href="http://developer.neurosky.com" target="_blank" rel="noopener noreferrer">http://developer.neurosky.com</a> They even have an app store that you can sell your applications. But the developer program costs $1500 so I don’t think I will sign up for that quite a while.</p>
+
+<h3 id="how-does-it-work">How does it work</h3>
+<p>The gadget communicates via Bluetooth. It supports lots of platforms and comes with an API ported to different languages. I prefered .NET and it worked without any problems. The real power of the device comes from the ThinkGear chipset. The API lets the developer to get results from the ThinkGear chipset. When you install the software bundled with the device, it installs ThinkGear connector and a bunch of games. First thing to do is pair the headset with your PC or iOS/Android device. Frankly, I didn’t quite like the applications that come with it. But it is not that important. After all I bought this thing to write my own programs against it.</p>
+
+<p><img src="/images/vpblogimg/2013/01/NeuroSky.png" alt="NeuroSky"></p>
+
+<p>The tutorial application, on the other hand, is very useful for testing the device and connection status.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h3 id="developing-with-mindwave">Developing with MindWave</h3>
+<p>The starting point is definitely here: <a href="http://developer.neurosky.com/" target="_blank" rel="noopener noreferrer">http://developer.neurosky.com/</a></p>
+
+<p>The site steers the user very well so that you can select your goals and start developing right away. Actually the API is quite easy to use. After you connect you start receiving values from the sensor. In .NET wrapper the values are encapsulated in a class called ThinkGearState, which looks like this (I got this from its metadata):</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">ThinkGearState</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">float</span> <span class="n">Alpha1</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">float</span> <span class="n">Alpha2</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">float</span> <span class="n">Attention</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">float</span> <span class="n">Battery</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">float</span> <span class="n">Beta1</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">float</span> <span class="n">Beta2</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">float</span> <span class="n">BlinkStrength</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">float</span> <span class="n">Delta</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">bool</span> <span class="n">Error</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">float</span> <span class="n">Gamma1</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">float</span> <span class="n">Gamma2</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">float</span> <span class="n">Meditation</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">PacketsRead</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">float</span> <span class="n">PoorSignal</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">float</span> <span class="n">Raw</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">float</span> <span class="n">Theta</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">Version</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">ThinkGearState</span><span class="p">();</span>
+
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">string</span> <span class="nf">ToString</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The key fields for me are Attention and Meditation. BlinkStrength is also interesting. If you blink intentionally and strongly, the value wanders around 150 – 200. For normal blinks that we do quite often, it is around 50 – 60. So it is easy to differentiate if someone blinks. I wondered if this could be used as a communication method for Hector Salamanca in Breaking Bad. Instead of ringing a bell he could just blink. Admittedly it wouldn’t provide any extra functionality but it would look much cooler.</p>
+
+<p><a href="http://www.amctv.com/shows/breaking-bad/cast/hector-salamanca" target="_blank" rel="noopener noreferrer"><img src="/images/vpblogimg/2013/03/Breaking+Bad+-+Hector+Salamanca.jpg" alt="Breaking Bad Hector Salamanca"></a></p>
+
+<p>I don’t know how the Attention and Meditation values are calculated. The device also returns values for the various brain waves such as alpha, beta, theta, gamma and delta. I had no clue what these meant so here’s what I’ve learned from <a href="http://www.doctorhugo.org/brainwaves/brainwaves.html" target="_blank" rel="noopener noreferrer">here</a> and <a href="http://www.omharmonics.com/blog/gamma-brain-waves/" target="_blank" rel="noopener noreferrer">here</a>.</p>
+
+<ul>
+  <li>Alpha: Increases in the state of physical and mental relaxation</li>
+  <li>Beta: Increases when we are consciously alert, or we feel agitated, tense, afraid</li>
+  <li>Theta: Shows the state of reduced consciousness</li>
+  <li>Delta: Increases when there is unconsciousness, deep sleep or catalepsy</li>
+  <li>Gamma: These waves are associated with peak concentration and extremely high levels of cognitive functioning</li>
+</ul>
+
+<p>I don’t know why Alpha, Beta and Gamma waves return 2 values whereas Delta and Theta have only 1. As my knowledge on this subject is almost zero, I’ll just concentrate on the already-calculated Attention and Meditation values. I’ll try to develop a project using this gizmo and post it when it’ is ready. I think it is a very cool thing to have the ability to measure brain waves and write programs using those values. I guess the only problem for me is that I already constantly wear a wireless headset so it’s a bit hard to have them both on my head!</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://developer.neurosky.com" target="_blank" rel="noopener noreferrer">Neurosky developer site</a></li>
+  <li><a href="http://www.doctorhugo.org/brainwaves/brainwaves.html" target="_blank" rel="noopener noreferrer">Info on brainwaves</a></li>
+  <li><a href="http://www.omharmonics.com/blog/gamma-brain-waves/" target="_blank" rel="noopener noreferrer">Gamma brain waves</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2013/02/25/growl/" itemprop="url">Growl</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -375,98 +489,6 @@ I quickly downloaded the soft-float image and tried to boot it up again. This ti
 
 <p>The screen glares but at the bottom of the screen you can see the glowing (by all means) phrase: Hello World!
 Of course, this is just the beginning. I’ll see how compatible and reliable Mono framework is after I deploy more complex applications on Raspberry Pi.</p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2013/01/19/namespace-collision/" itemprop="url">Namespace collision</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2013-01-19T16:47:12+00:00" itemprop="datePublished">January 19, 2013</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Today I came across an interesting namespace collision. I’m writing a library to wrap a 3rd party API. So without getting into specifics I’ll try to illustrate the situation on a sample piece of code. Let’s say we have a class called <em>Test</em> in <em>TestNamespace</em> namespace.</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">namespace</span> <span class="nn">TestNamespace</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="k">class</span> <span class="nc">Test</span>
-    <span class="p">{</span>
-        <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">StaticMethod</span><span class="p">()</span>
-        <span class="p">{</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>and the calling class is something like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">namespace</span> <span class="nn">DifferentNamespace.TestNamespace</span>
-<span class="p">{</span>
-    <span class="k">class</span> <span class="nc">Program</span>
-    <span class="p">{</span>
-        <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">TestNamespace</span><span class="p">.</span><span class="n">Test</span><span class="p">.</span><span class="nf">StaticMethod</span><span class="p">();</span>
-        <span class="p">}</span>
-     <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>This code doesn’t compile because compiler thinks “TestNamespace.Test” is actually “DifferentNamespace.TestNamespace.Test”.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<p>Adding a using directive doesn’t help either. As it has the same namespace as the subnamespace of the calling class it always resolves to calling class’s namespace. The solution is using “global” namespace.</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">namespace</span> <span class="nn">DifferentNamespace.TestNamespace</span>
-<span class="p">{</span>
-    <span class="k">using</span> <span class="nn">TestNamespace</span> <span class="p">=</span> <span class="k">global</span><span class="p">::</span><span class="n">TestNamespace</span><span class="p">;</span>
-
-    <span class="k">class</span> <span class="nc">Program</span>
-    <span class="p">{</span>
-        <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">TestNamespace</span><span class="p">.</span><span class="n">Test</span><span class="p">.</span><span class="nf">StaticMethod</span><span class="p">();</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>By explicitly specifying which TestNamespace we are referring to we resolve the conflict. One thing to keep in mind is that we have to define it inside the namespace. If we used it outside the DifferentNamespace.TestNamespace, then inside the namespace TestNamespace would still mean “DifferentNamespace.TestNamespace”</p>
-
-<p>Before this incident, I never had to use the global keyword. Probably the best way to avoid this is by naming conventions but sometimes you may not be able to change the namespace name. You can break lots of things if there are dependant parties on that code. So every now and then this tip may come in handy, just like it did to me in this instance.</p>
 
 		
 		

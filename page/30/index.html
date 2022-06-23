@@ -146,6 +146,171 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/02/16/neo4j-browser-tips-and-tricks/" itemprop="url">Neo4J Browser Tips &amp; Tricks</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-02-16T18:00:00+00:00" itemprop="datePublished">February 16, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">neo4j, graph_databases</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I’m currently in search of a good tool to manage my graph database data. As they say a picture is worth a thousand words so visualization is very important to understand the nature of the data and make some sense of it. If nothing, it’s simply more fun!</p>
+
+<p>Covering a user interface may seem unnecessary since they are generally pretty straightforward and Neo4J browser is no exception but after using it for some time I discovered some neat features that are not immediately obvious in this post so I’ll go over them. I will be using the beta version (v2.2 M04) so if you are using an older version you can compare the upcoming features with your current version.</p>
+
+<p>You gotta know your tools to get the maximum benefit out of them so let’s dig in!</p>
+
+<h3 id="accessing-the-data">Accessing the Data</h3>
+<p>A major change in this version is that the authentication is being turned on by default.</p>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-browser-authentication.png" alt="Neo4J Authentication"></p>
+
+<p>So if you install it on somewhere that’s accessible from the Internet you can have a layer of protection.</p>
+
+<p>If you close that login window by accident you can run the following command to bring it back:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:server connect
+</code></pre></div></div>
+
+<p>Similarly, if you want to terminate the connection you can run</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:server disconnect
+</code></pre></div></div>
+
+<p>Until v2.2 M03 you got an authorization token back after the connection is established but since v2.2 M04 you don’t get a token. This is because authorization header is calculated by base64-encoding username:password pair.</p>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-authorization-03.png" alt="Welcome message"></p>
+
+<p>If you need to connect using other tools you need to send authorization header with every request. This is Base64-encoded value of username/password pair separated with colon.</p>
+
+<p>So in my case I changed the password to <em>pass</em> (I know it’s a horrible password, this is a just test installation :-))</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>So my authorization header value becomes:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Username:Password --&gt; neo4j:pass
+Base64-encoded value --&gt; bmVvNGo6cGFzcw==
+</code></pre></div></div>
+
+<p>And with the correct authorization header I can get an HTTP 200 for the GET request for all the labels:</p>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-authorization-04.png" alt="Results for all labels"></p>
+
+<h3 id="helpful-commands-and-shortcuts">Helpful commands and shortcuts</h3>
+
+<ul>
+  <li><strong>First things first: Help!</strong></li>
+</ul>
+
+<p>To discover all the commands and links to references you can simply run the help command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:help
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-browser-help-command-output.png" alt="Help output"></p>
+
+<ul>
+  <li><strong>Clean your mess with Clear</strong></li>
+</ul>
+
+<p>Browser runs each query in a separate window and after using it a while you can have a long history of old queries. You can get rid of them easily once and for all by this command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:clear
+</code></pre></div></div>
+
+<ul>
+  <li><strong>Use Escape to switch to full-screen query view</strong></li>
+</ul>
+
+<p>You can use Escape key to toggle to a full-screen query window. Just press Esc key and you’ll hide the previous query windows.</p>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-browser-full-screen-query-window.png" alt="Toggle full screen"></p>
+
+<p>This is especially handy if you are dealing with long Cypher queries and can use some space. You can toggle back to old view (query and output windows below) by pressing <em>Esc</em> key again. Alternatively it will toggle back if you just run the query.</p>
+
+<ul>
+  <li><strong>Use Shift+Enter for multi-line mode</strong></li>
+</ul>
+
+<p>Normally <em>Enter</em> key runs the queries but most of the time you’d need to work with queries spanning multi-lines. To accomplish that you can simply use Shift+Enter to start a new line and switch to multi-line mode. Once you switch to multi-line mode, the line numbers will appear and <em>Enter</em> will no longer run your query but will start a new line. To run queries in multi-line mode you can use <strong><em>Ctrl+Enter</em></strong> key combination.</p>
+
+<ul>
+  <li><strong>Name your saved queries in favorites</strong></li>
+</ul>
+
+<p>There are some queries you run quite often. For example in my development environment I tend to delete everything and start from scratch. So I saved my query to the favorites by clicking the star button in the query window. Nice thing about it is if you add a comment at the beginning of your query the browser is smart enough to use it as the name of your query so you don’t have to guess which one is which when you have a lot of saved queries.</p>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-browser-favorites.png" alt="Named favorite"></p>
+
+<ul>
+  <li><strong>Play around with the look &amp; feel</strong></li>
+</ul>
+
+<p>With the latest version you can mess around with the stylesheet that is used to visualize the results. In the favorites tab there is a section called “Styling / Graph Style Sheet”. You can see the styles used by clicking the Graph Style Sheet button. It’s not editable on the editor but you can export it to a .grass file by clicking on the Export to File icon.</p>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-browser-style-00.png" alt="Graph Style Sheet"></p>
+
+<p>After you make your changes you can import it back by dropping it to the narrow band at the bottom of the dialog window.</p>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-browser-stylesheet.png" alt="Import style sheet"></p>
+
+<p>You can still get the original styles back by clicking on the icon next to export (that looks like a fire extinguisher!) so feel free to mess with it.</p>
+
+<ul>
+  <li><strong>Use Ctrl+Up/Down arrow to navigate through old queries</strong></li>
+</ul>
+
+<p>You can browse through your query history using Ctrl+Up/Down arrow. I find this shortcut especially helpful when you quickly need to go back to the previous query.</p>
+
+<ul>
+  <li><strong>Click on a query to get it back</strong></li>
+</ul>
+
+<p>Once you run a query, the query itself and its output is encapsulated in a separate window so you can browse through old queries. If you need to run a query again you can simply click on the query. As you can see in the image below, a dashed line appears under the query when you hover over it to indicate it’s a link. When you click the query it populates the query window so you don’t need to copy/paste it.</p>
+
+<p><img src="/images/vpblogimg/2015/02/neo4j-browser-link-to-query.png" alt="Link to query"></p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>Currently the browser doesn’t allow editing data visually but for running Cypher queries it’s a great tool. If you have any tips and tricks to suggest or corrections to make, please leave a comment below.</p>
+
+<p><strong>UPDATE:</strong> I published this post using v2.2 M03 but as <a href="https://twitter.com/mesirii" target="_blank" rel="noopener noreferrer">Michael Hunger</a> kindly pointed out there were some changes in v2.2 M04 that made my post outdated from the get-go so I updated it accordingly. If you find any inconsistencies please let me know using the comments below.</p>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/02/14/graph-databases/" itemprop="url">Graph Databases</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -309,103 +474,6 @@
 <ul>
   <li><a href="http://www.amazon.co.uk/gp/product/B00MQLB1N6" target="_blank" rel="noopener noreferrer">Case on Amazon</a></li>
   <li><a href="http://www.raspberrypi.org/blog/#benchmarking-raspberry-pi-2" target="_blank" rel="noopener noreferrer">Benchmarking Raspberry Pi 2</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/02/05/adventures-in-fsharp/" itemprop="url">Adventures in F# - Miscellaneous Notes</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-02-05T18:00:00+00:00" itemprop="datePublished">February  5, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">fsharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I finished the Pluralsight course finally. I’m still studying F# 2 pomodoros a day but lately lost he motivation to publish the notes. In this post I’ll tidy up the notes. In order to maintain my cadence I think I had better develop more stuff instead of covering theoretical subjects.</p>
-
-<h3 id="more-notes">More Notes</h3>
-
-<ul>
-  <li>Upcasting / Downcasting
-To upcast <strong>:&gt;</strong> operator is used. Alternatively the keyword <strong>upcast</strong> can be used to achieve the same results. It performs a static cast and the cast is determined at runtime.</li>
-</ul>
-
-<p>Downcasting is performed by the <strong>:?&gt;</strong> operator or <strong>downcast</strong> keyword.</p>
-
-<ul>
-  <li>Abstract classes
-Abstract classes are decorated with **[<abstractclass>]**. To mark members **abstract** keyword is used:</abstractclass>
-</li>
-</ul>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">abstract</span> <span class="nc">Area</span> <span class="p">:</span> <span class="kt">float</span> <span class="k">with</span> <span class="n">get</span>
-<span class="k">abstract</span> <span class="nc">Perimeter</span> <span class="p">:</span> <span class="kt">float</span>  <span class="k">with</span> <span class="n">get</span>
-<span class="k">abstract</span> <span class="nc">Name</span> <span class="p">:</span> <span class="kt">string</span> <span class="k">with</span> <span class="n">get</span>
-</code></pre></div></div>
-
-<ul>
-  <li>
-<strong>obj</strong> is shortcut for <strong>System.Object</strong>
-</li>
-  <li>
-<strong>do bindings</strong> perform actions when the object is constructed. do bindings are usually put after let bindings so that code in the do binding can execute with a fully initialized object.</li>
-  <li>
-<strong>unit</strong> is equivalent of void</li>
-  <li>tabs are not allowed as they can indicate an unknown number of space characters and as spaces and indents matter</li>
-  <li>
-<strong>‘a</strong> means generic. By default a function <strong>f</strong> is infered as <strong>‘a -&gt; bool</strong> meaning it takes a general parameter and returns boolean</li>
-</ul>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<ul>
-  <li>Providing an incomplete list of functions result in a new function (currying)</li>
-  <li>Getting values from tuples: <strong>fst</strong> gets the first value, <strong>snd</strong> gets the second value</li>
-  <li>You can attach elements to a list by using the <strong>:: (cons)</strong> operator</li>
-  <li>
-<strong>@</strong> operator Concatenates two lists.</li>
-  <li>Exceptions can be thrown using <strong>raise</strong> function. <strong>Reraise</strong> function rethrows an exception</li>
-  <li>BigInt (C# and VB) don’t have support for arbitrarily long integers</li>
-</ul>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://www.amazon.co.uk/Programming-F-3-0-Chris-Smith/dp/1449320295/" target="_blank" rel="noopener noreferrer">Book: Programming F# 3.0</a></li>
-  <li><a href="http://www.pluralsight.com/courses/fsintro" target="_blank" rel="noopener noreferrer">Pluralsight course: Introduction to F#</a></li>
-  <li><a href="https://msdn.microsoft.com/en-us/library/dd233220.aspx" target="_blank" rel="noopener noreferrer">MSDN Article: Casting and Conversions</a></li>
-  <li><a href="https://msdn.microsoft.com/en-us/library/dd483471.aspx" target="_blank" rel="noopener noreferrer">MSDN Article: Abstract Classes</a></li>
-  <li><a href="https://msdn.microsoft.com/en-us/library/dd483473.aspx" target="_blank" rel="noopener noreferrer">MSDN Article: do Bindings in Classes</a></li>
 </ul>
 
 		

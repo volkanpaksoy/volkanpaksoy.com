@@ -146,6 +146,101 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2017/04/11/Integrating-c-applications-with-slack/" itemprop="url">Integrating C# applications with Slack</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2017-04-11T05:00:00+01:00" itemprop="datePublished">April 11, 2017</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">slack, csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Slack is a great messaging platform and it can integrate very easily with C# applications.</p>
+
+<h2 id="step-01-enable-incoming-webhooks">Step 01: Enable incoming webhooks</h2>
+<p>First go to <a href="https://slack.com/services/new/incoming-webhook" target="_blank" rel="noopener noreferrer">Incoming Webhooks</a> page and turn on the webhooks if it’s not already turned on.</p>
+
+<p><img src="/images/vpblogimg/2017/04/Slack-01-Enable-Webhook-Integrations.PNG" alt=""></p>
+
+<h2 id="step-02-create-a-new-configuration">Step 02. Create a new configuration</h2>
+<p>You can select an existing channel or user to post messages to. Or you can create a new channel. (May need a refresh for the new one to appear in the list)</p>
+
+<p><img src="/images/vpblogimg/2017/04/Slack-02-Create-Webhook.PNG" alt=""></p>
+
+<h2 id="step-03-install-slackwebhooks-nuget-package">Step 03. Install Slack.Webhooks Nuget package</h2>
+
+<p>In the package manager console, run</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package Slack.Webhooks
+</code></pre></div></div>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h2 id="step-04-write-some-code">Step 04. Write some code!</h2>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">url</span> <span class="p">=</span> <span class="s">"{Webhook URL created in Step 2}"</span><span class="p">;</span>
+
+<span class="kt">var</span> <span class="n">slackClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">SlackClient</span><span class="p">(</span><span class="n">url</span><span class="p">);</span>
+
+<span class="kt">var</span> <span class="n">slackMessage</span> <span class="p">=</span> <span class="k">new</span> <span class="n">SlackMessage</span>
+<span class="p">{</span>
+    <span class="n">Channel</span> <span class="p">=</span> <span class="s">"#general"</span><span class="p">,</span>
+    <span class="n">Text</span> <span class="p">=</span> <span class="s">"New message coming in!"</span><span class="p">,</span>
+    <span class="n">IconEmoji</span> <span class="p">=</span> <span class="n">Emoji</span><span class="p">.</span><span class="n">CreditCard</span><span class="p">,</span>
+    <span class="n">Username</span> <span class="p">=</span> <span class="s">"any-name-would-do"</span>
+<span class="p">};</span>
+
+<span class="n">slackClient</span><span class="p">.</span><span class="nf">Post</span><span class="p">(</span><span class="n">slackMessage</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="done">Done</h2>
+<p>That’s it! Very easy and painless integration to get real-time desktop notifications.</p>
+
+<h2 id="some-notes">Some notes</h2>
+
+<ul>
+  <li>Even though you choose a channel while creating the webhook, in my experience you can use the same one to post to different channels. You don’t need to create a new webhook for each channel.</li>
+  <li>Username can be any text basically. It doesn’t need to correspond to a Slack account.</li>
+  <li>First time you send a message with a username, it uses the emoji you specify in the message. You can leave it null in which case it uses the default. On consequent posts, it uses the same emoji for that user even if you set a different one.</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/nerdfury/Slack.Webhooks" target="_blank" rel="noopener noreferrer">Slack.Webhooks library on GitHub</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2016/10/15/HTTP2/" itemprop="url">HTTP/2</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -672,145 +767,6 @@
   <li><a href="http://swiftlang.eu/" target="_blank" rel="noopener noreferrer">Official Swift Programming Language Book</a></li>
   <li><a href="https://www.pluralsight.com/courses/swift-in-depth" target="_blank" rel="noopener noreferrer">Pluralsight Course: Swift in Depth</a></li>
   <li><a href="https://www.udacity.com/course/learn-swift-programming-syntax--ud902" target="_blank" rel="noopener noreferrer">Udacity Course: Learn Swift Programming Syntax</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2016/03/30/checking-domain-availability-with-aws-route53-part-4/" itemprop="url">Checking domain availability with AWS Route 53 Part 4: AngularJS Client</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2016-03-30T11:00:00+01:00" itemprop="datePublished">March 30, 2016</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
-
-<!-- dev, aws -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    , 
-
-    <a href="/category/aws">aws</a>
-    
-</span>
-	<span class="tags">route53, angularjs</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Previously in this series:</p>
-
-<ul>
-  <li><a href="https://volkanpaksoy.com/archive/2015/08/04/checking-domain-availability-with-aws-route53-part-1">Part 1: Getting TLD List</a></li>
-  <li><a href="https://volkanpaksoy.com/archive/2015/08/06/checking-domain-availability-with-aws-route53-part-2">Part 2: Implementing API for TLD service</a></li>
-  <li><a href="https://volkanpaksoy.com/archive/2015/08/08/checking-domain-availability-with-aws-route53-part-3">Part 3: Consuming the APIs with Console Client</a></li>
-</ul>
-
-<p>So far I was using the console client but I thought I chould use a prettier web-based-UI and came up with this:</p>
-
-<p><a href="https://domchk53.com" target="_blank" rel="noopener noreferrer"><img src="/images/vpblogimg/2016/03/domchk53-mainview.png" alt="DomChk53 AngularJS Client"></a></p>
-
-<p>It’s using AngularJS and Bootstrap which significantly improved the development process.</p>
-
-<p>API in the backend is AWS API Gateway on a custom domain (api.domchk53.com) and using Lambda functions to do the actual work. One great thing about API Gatewayis that it’s very easy to set requests rates:</p>
-
-<p><img src="/images/vpblogimg/2016/03/domchk53-APIGatewayLimits.png" alt=""></p>
-
-<p>Currently I set it to max 5 requests per second. I chose this value because of the limitation on AWS API as stated <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html" target="_blank" rel="noopener noreferrer">here</a>:</p>
-
-<blockquote>
-  <p>All requests – Five requests per second per AWS account. If you submit more than five requests per second, Amazon Route 53 returns an HTTP 400 error (Bad request). The response header also includes a Code element with a value of Throttling and a Message element with a value of Rate exceeded.</p>
-</blockquote>
-
-<p>Of course limiting this on the client side assumes a single client so you may still get “Rate exceeded” errors even if running single query at a time. I’m planning to implement a Node server using SQS to move the queue to server side but that’s not one of my priorities right now.</p>
-
-<p>The Lambda function is straightforward enough. Just calls the checkDomainAvailability API method with the supplied parameters:</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">exports</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">AWS</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">aws-sdk</span><span class="dl">'</span><span class="p">);</span>
-	<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
-	    <span class="na">region</span><span class="p">:</span> <span class="dl">"</span><span class="s2">us-east-1</span><span class="dl">"</span>
-	<span class="p">}</span>
-	
-	<span class="kd">var</span> <span class="nx">route53domains</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AWS</span><span class="p">.</span><span class="nx">Route53Domains</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
-    
-    <span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="na">DomainName</span><span class="p">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">domain</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">.</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">event</span><span class="p">.</span><span class="nx">tld</span>
-    <span class="p">};</span>
-
-    <span class="nx">route53domains</span><span class="p">.</span><span class="nx">checkDomainAvailability</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">context</span><span class="p">.</span><span class="nx">fail</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="na">Domain</span><span class="p">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">domain</span><span class="p">,</span>
-                <span class="na">Tld</span><span class="p">:</span> <span class="nx">event</span><span class="p">.</span><span class="nx">tld</span><span class="p">,</span>
-                <span class="na">CheckDate</span><span class="p">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">toISOString</span><span class="p">(),</span>
-                <span class="na">RequestResult</span><span class="p">:</span> <span class="dl">"</span><span class="s2">OK</span><span class="dl">"</span><span class="p">,</span>
-                <span class="na">Availability</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">Availability</span>
-            <span class="p">};</span>
-            
-            <span class="nx">context</span><span class="p">.</span><span class="nx">succeed</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>  
-        <span class="p">}</span>
-    <span class="p">});</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h2 id="usage">Usage</h2>
-<p>I wanted this tool as an improvement to AWS already provides. What you can do with Management Console is search a single domain and it searches it against the popular 13 TLDs. If you need anything outside these 13 you have to pick them manually.</p>
-
-<p>In DomChk53 you can search multiple domain names at once against all supported TLDs (293 as of this writing).</p>
-
-<p><img src="/images/vpblogimg/2016/03/domchk53-multipledomainsandTLDs.png" alt=""></p>
-
-<p>Also you can group TLDs into lists so you can for example search the most common ones (com, net, co.uk etc.) and say finance related ones (money, cash, finance etc.). Depending on the domain name one group may be more relevant.</p>
-
-<p><img src="/images/vpblogimg/2016/03/domchk53-NewList.PNG" alt=""></p>
-
-<p>You can cancel a query at any time to avoid wasting precious requests if you change your mind about the domain.</p>
-
-<p><img src="/images/vpblogimg/2016/03/domchk53-CancelWaitingRequests.png" alt=""></p>
-
-<h2 id="whats-missing">What’s missing</h2>
-<p>For a while I’m planning to leave it as is but when I have it in me to revisit the project I will implement:</p>
-
-<ul>
-  <li>Server-side queueing of requests</li>
-  <li>The option to export/email the results in PDF format</li>
-</ul>
-
-<p>I’m also open to other suggestions…</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://github.com/volkanpaksoy/domchk53" target="_blank" rel="noopener noreferrer">DomChk53 Source Code</a></li>
-  <li><a href="https://domchk53.com" target="_blank" rel="noopener noreferrer">DomChk53 Live Site</a></li>
-  <li><a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html" target="_blank" rel="noopener noreferrer">Use a Custom Domain Name in API Gateway</a></li>
-  <li><a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-cors.html" target="_blank" rel="noopener noreferrer">Enable CORS for a Method in API Gateway</a></li>
-  <li><a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html" target="_blank" rel="noopener noreferrer">AWS Documentation on account limits</a></li>
 </ul>
 
 		

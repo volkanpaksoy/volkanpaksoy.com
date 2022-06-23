@@ -146,6 +146,89 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2014/04/16/genetic-algorithm-implementation/" itemprop="url">Genetic Algorithm Implementation</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-04-16T11:04:46+01:00" itemprop="datePublished">April 16, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">java, machine_learning</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Genetic algorithm sounds fascinating to me as in a way it mimics evolution. It’s quite easy to implement and understand.</p>
+
+<h3 id="genetic-algorithm">Genetic Algorithm</h3>
+<p>The algorithm has 3 stages:</p>
+
+<ul>
+  <li>Selection: Every generation is subjected to a selection process which eliminates the unfit ones.</li>
+  <li>Cross-over: This happens randomly among the selected generation and some genomes swap genes.</li>
+  <li>Mutation: Some genes are mutated randomly based on a given threshold value for mutation.</li>
+</ul>
+
+<h3 id="implementation">Implementation</h3>
+<p>The implementation starts with generating random bit sequences to represent genomes. The length of the genome and the number of genomes in a generation are specified in the configuration.</p>
+
+<p><img src="/images/vpblogimg/2014/04/Genetic-Algorithm-01.png" alt="Genetic Algorithm 1"></p>
+
+<p>First generation is calculated randomly and their fitness is calculated based on the fitness function the system uses. After the groundwork has been done we have a genome pool each with their own fitness values and selection ranges. The width of the selection range is determined by the fitness of the genome. So that the larger the range the more likely they are selected for the next generation.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p><img src="/images/vpblogimg/2014/04/Genetic-Algorithm-02.png" alt="Genetic Algorithm 2"></p>
+
+<p>In selection process, a random value is generated and the genome whose selection range includes that value is selected. Same genome can be selected more than once.</p>
+
+<p><img src="/images/vpblogimg/2014/04/Genetic-Algorithm-03.png" alt="Genetic Algorithm 3"></p>
+
+<p>After the next generation is selected and their new fitness values are calculated cross-over starts. In cross-over 2 random genomes are picked and they swap genes. The point in the genome string is specified in the configuration (3 in this example)</p>
+
+<p><img src="/images/vpblogimg/2014/04/Genetic-Algorithm-04.png" alt="Genetic Algorithm 4"></p>
+
+<p>The final phase of the algorithm is mutation. In this step a number of genomes are picked and some bits is flipped randomly.</p>
+
+<p><img src="/images/vpblogimg/2014/04/Genetic-Algorithm-05.png" alt="Genetic Algorithm 5"></p>
+
+<p>The most important thing about this algorithm is having a good fitness function that can accurately compute the fitness values for a given feature.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://en.wikipedia.org/wiki/Genetic_algorithm" target="_blank" rel="noopener noreferrer">Wikipedia article</a></li>
+  <li><a href="https://github.com/volkanpaksoy/VP.MachineLearning.GeneticAlgorithm" target="_blank" rel="noopener noreferrer">Source code for the implementation</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/03/22/agnes-implementation/" itemprop="url">AGNES Implementation</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -258,154 +341,6 @@
 <ul>
   <li><a href="http://en.wikipedia.org/wiki/K-means_clustering" target="_blank" rel="noopener noreferrer">Wikipedia article</a></li>
   <li><a href="https://github.com/volkanpaksoy/VP.DataMining.KMeans" target="_blank" rel="noopener noreferrer">Source code</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/03/15/apriori-implementation/" itemprop="url">An Apriori implementation</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-03-15T17:15:17+00:00" itemprop="datePublished">March 15, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">java, data_mining</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I was digging through some old projects and found out the Data Mining and Machine Learning projects I implemented. Instead of letting them gather dust(!) in the hard disk I decided to review and publish the source code. This will also give me a chance to revise my data mining knowledge. Let’s start with Apriori algorithm.</p>
-
-<h3 id="apriorialgorithm">Apriori Algorithm</h3>
-<p>It is an algorithm to determine to most frequent items in a given collection. The term “frequent” is defined by a given threshold or <em>“minimum support count”</em>.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h3 id="implementation">Implementation</h3>
-<p>The project is implemented in Java. It uses a Hashtable to keep count of itemsets in the database. The algorithm starts with finding the most frequent 1-item sets first. Then using the previous most frequent item list of item size k, it generates candidate item list of size k+1.</p>
-
-<p>For example, for the sample data below and a threshold 4, 1,2,3,4,5 are all frequent 1-itemsets. From this list we generate a 2-item candidate list (all 10 combinations) and check if the subsets are also frequent. For 1-itemsets they are all frequent so they all pass pruning. Then we count the occurences of these candidates. Only 7 of them are equal to or greater than the threshold. From this list we generate our 3-item candidates. Such as 1,2 and 1,4 combined to generate 1,2,4. Then we count the occurrence of 3-itemsets and prune the results by checking all of its subsets.</p>
-
-<p><img src="/images/vpblogimg/2014/03/Apriori-Checksubsets.png" alt="Apriori Check Subsets"></p>
-
-<p>The idea of pruning is if the there are some infrequent subsets inside an itemset then the larger set cannot be frequent so it is removed from the candidate list. (1,2,3 is a candidate but as 2,3 is not a frequent 2-itemset it is removed from the candidate list) This process helps improve the performance of the algorithm as it reduced the number of iterations.</p>
-
-<h3 id="output">Output</h3>
-
-<blockquote>
-  <p>1,3,4,5</p>
-</blockquote>
-
-<blockquote>
-  <p>1,2,4,5</p>
-</blockquote>
-
-<blockquote>
-  <p>1,2,4</p>
-</blockquote>
-
-<blockquote>
-  <p>1,3</p>
-</blockquote>
-
-<blockquote>
-  <p>3</p>
-</blockquote>
-
-<blockquote>
-  <p>1,5</p>
-</blockquote>
-
-<blockquote>
-  <p>1</p>
-</blockquote>
-
-<blockquote>
-  <p>3</p>
-</blockquote>
-
-<blockquote>
-  <p>1,3,5</p>
-</blockquote>
-
-<blockquote>
-  <p>4</p>
-</blockquote>
-
-<blockquote>
-  <p>1,2,4</p>
-</blockquote>
-
-<blockquote>
-  <p>2</p>
-</blockquote>
-
-<blockquote>
-  <p>1,2</p>
-</blockquote>
-
-<blockquote>
-  <p>3,4</p>
-</blockquote>
-
-<blockquote>
-  <p>3,5</p>
-</blockquote>
-
-<blockquote>
-  <p>1,3,4</p>
-</blockquote>
-
-<blockquote>
-  <p>2</p>
-</blockquote>
-
-<blockquote>
-  <p>3,5</p>
-</blockquote>
-
-<blockquote>
-  <p>1,2,3,4</p>
-</blockquote>
-
-<p><strong>Results:</strong></p>
-
-<p><img src="/images/vpblogimg/2014/03/Apriori-Result.png" alt="Apriori Results"></p>
-
-<h3 id="source-code">Source Code</h3>
-<p>I created a public repository for the source code. You can check it out <a href="https://github.com/volkanpaksoy/VP.DataMining.Apriori" target="_blank" rel="noopener noreferrer">here</a> if it tickles your fancy!</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://en.wikipedia.org/wiki/Apriori_algorithm" target="_blank" rel="noopener noreferrer">Wikipedia article</a></li>
-  <li><a href="https://github.com/volkanpaksoy/VP.DataMining.Apriori" target="_blank" rel="noopener noreferrer">Source code</a></li>
 </ul>
 
 		

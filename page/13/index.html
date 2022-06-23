@@ -146,6 +146,184 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2018/09/04/AWS-Organisations/" itemprop="url">Managing Accounts with AWS Organizations</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2018-09-04T05:00:00+01:00" itemprop="datePublished">September  4, 2018</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awssecurity">aws</a></span> -->
+
+<!-- aws, security -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">organizations, iam</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p><img src="/images/vpblogimg/2018/09/aws-organizations-01-logo.png" alt=""></p>
+
+<p>I have never been a huge fan of AWS Management Console. Some reasons for that being:</p>
+
+<ul>
+  <li>Inconsistencies: In some services you can search by anything (such as tag value in EC2 dashboard) whereas in others you have to put in the exact start of the object (such as CloudWatch)</li>
+  <li>Regional separation: Some might like it but I find it confusing and error-prone. If you need to work in multiple regions you have to constantly change the region from the dropdown menu. If you accidentally create a resource in another region you wouldn’t see it’s still running until you accidentally switch back to that region again. But S3 seems to be an exception to this as you can select the region while creating the bucket and you can see all in the same list (speaking of inconsistencies…)</li>
+  <li>Flat resource structure: Every resource is mixed together in an account. If you have multiple projects or teams in your company, you would see all the resources they created among yours. Also there is no environment concept. Your test and production resources live side by side.</li>
+</ul>
+
+<p>This post is about AWS Organizations which addresses the 3rd point in the list above.</p>
+
+<h2 id="what-is-aws-organizations">What is AWS Organizations?</h2>
+<p>It is a way to centrally manage multiple accounts inside an organization by creating a hierarchy between accounts.</p>
+
+<p>Benefits of having an account structure</p>
+
+<ul>
+  <li>No need to label everything with project/team/environment name</li>
+  <li>Production and non-production resources don’t live side by side</li>
+  <li>Better access controls: No need to grant access on resource level. It can be done much easily on account-level</li>
+</ul>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>Also from a cost point of view it has the following benefits (taken from <a href="https://docs.aws.amazon.com/aws-technical-content/latest/cost-optimization-laying-the-foundation/aws-account-structure.html" target="_blank" rel="noopener noreferrer">AWS Account Structure Considerations</a>)</p>
+
+<ul>
+  <li>Grouping resources that require different payment instruments</li>
+  <li>Providing groups with different levels of administrative control over AWS resources</li>
+  <li>Better controlling Reserved Instances for specific workloads</li>
+  <li>Identifying untaggable costs such as data transfer</li>
+  <li>Using accounts associated with different business units or functional teams</li>
+</ul>
+
+<h2 id="key-concepts">Key Concepts</h2>
+<p><strong>Account</strong>: Your regular AWS account. The first account you create is called a <em>Master Account</em>, the rest are <em>Member Accounts</em>.</p>
+
+<p><strong>Organization</strong>: A group of related accounts. The account creating the organization becomes the master account.</p>
+
+<p><img src="/images/vpblogimg/2018/09/aws-organizations-02-default-organization.png" alt=""></p>
+
+<p>The star next to the account indicates it is the master account.</p>
+
+<p><strong>Organizational Unit</strong>: You can use organizational units (OUs) to group accounts together to administer as a single unit. This can be any logical grouping such as team, project, environment etc.</p>
+
+<p><img src="/images/vpblogimg/2018/09/aws-organizations-03-create-organizational-unit.png" alt=""></p>
+
+<p><strong>Service Control Policies (SCPs)</strong>: Enables you to restrict, at the account level of granularity, what services and actions the users, groups, and roles in those accounts can do</p>
+
+<h2 id="managing-projects-and-environments">Managing Projects and Environments</h2>
+<p>First I was tempted to separate projects as well but I’d end up with too many accounts so abandoned that idea and adopted an environment-based organizational structure. I ended up having these AWS accounts in my organization:</p>
+
+<ul>
+  <li>Dev</li>
+  <li>Integration</li>
+  <li>UAT (User Acceptance Test)</li>
+  <li>Sandbox</li>
+  <li>Production</li>
+</ul>
+
+<p>Then I created an organizational unit named Stages and moved all these accounts under that OU. This is just one way of structuring projects. Based on organizational needs it can be customized. In my case I decided to keep all shared services (logging, auditing, source code) in the master account.</p>
+
+<h2 id="logging-into-accounts">Logging into accounts</h2>
+<p>This baffled me at first. Initially I created a test account which I wanted to delete later on. But I wasn’t able to do that until I completed the sign up steps which in turn I wasn’t able to because I didn’t have the credentials to log in!</p>
+
+<p>As stated in <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html" target="_blank" rel="noopener noreferrer">this</a> document:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>When you create a new account, AWS Organizations initially assigns password 
+to the root user that is a minimum of 64 characters long. All characters 
+are randomly generated with no guarantees on the appearance of certain 
+character sets. You can't retrieve this initial password. To access the
+account as the root user for the first time, you must go through the
+process for password recovery.
+</code></pre></div></div>
+
+<p>So when you follow the sign-in link it redirects you to IAM login page. I needed to switch to root account login and recover my password by using the Forgot My Password link. On that note: Don’t use fake email addresses as you will need the confirmation email to recover your password.</p>
+
+<h2 id="removing-account-issues">Removing account issues</h2>
+<p>This one was tricky. In order to leave an organization first you need to enter a payment method and select a support plan. This way the account becomes eligible to be a standalone account. Only after that, you can Leave organization. But not right away!</p>
+
+<p>After I entered all the data and completed the setup steps, I clicked Leave organization and I got this error:</p>
+
+<p><img src="/images/vpblogimg/2018/09/aws-organizations-04-leave-org-wait-period.png" alt=""></p>
+
+<p>I waited almost a full day after getting this error but to no avail. I kept getting the same error: <em>“This operation requires a wait period. Try again later.”</em></p>
+
+<p>I had a chat with a support engineer and created a case for this. Nothing helped at first but after a few days I tried again and it worked! So either the waiting period was very long or they fixed something in my account unbenownst to me.</p>
+
+<h2 id="deleting-the-account-without-removing">Deleting the account without removing</h2>
+<p>Another issue I had was deleting an account before removing from the organization. I was assuming that if the account was closed permanently it would be removed from the organization as well. This was not the case. It remains listed as Suspended</p>
+
+<p><img src="/images/vpblogimg/2018/09/aws-organizations-05-suspended-account.png" alt=""></p>
+
+<p>Unfortunately, once this happens there is no way of resolving it using the tools at our disposal. The only solution is to contact AWS support, reactivated the suspended account, leave the organization and close it again!</p>
+
+<p>But you have to do it from the suspended account, not from the master account. Since technically you’re requesting support for another account, they won’t do it (as they told in their response). Good news is that we still have access to support even though the account is suspended. Si I went to <a href="https://aws.amazon.com/contact-us/" target="_blank" rel="noopener noreferrer">support page</a> and created a support request to reinstate my account (so that I could close it again shortly after!)</p>
+
+<p>Another option might be just to wait. I haven’t tried it myself bu in the account closure email it states “After 90 days, you will not be able to reopen your account, and any remaining content in your closed account will be deleted.” So I’m guessing it will be gone completely if I could just for 90 days.</p>
+
+<h2 id="managing-accounts-programmatically">Managing Accounts Programmatically</h2>
+<p>The coolest thing about AWS Organizations is accounts can be created via command line. It’s easy as this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>JOTUNHEIM:~ volkan$ aws organizations create-account --account-name {NAME}  --email {EMAIL}
+{
+    "CreateAccountStatus": {
+        "Id": "xyz-abcabcabcabcabcabcabcabcabcabcab",
+        "AccountName": "{NAME}",
+        "State": "IN_PROGRESS",
+        "RequestedTimestamp": 1532494396.633
+    }
+}
+</code></pre></div></div>
+
+<h2 id="notes">Notes</h2>
+<ul>
+  <li>Free tier is shared among all accounts in the organization: “If your company creates your AWS account through AWS Organizations, free tier eligibility for all member accounts begins on the day the organization is created.”</li>
+</ul>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>This post is meant to be an introduction to AWS Organizations rather than a complete guide. I will post similar ones as I use this as basis of my infrastructure and build on this.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.youtube.com/watch?v=pfetMIlo_2s" target="_blank" rel="noopener noreferrer">YouTube video: AWS Organizations - Account management at enterprise scale</a></li>
+  <li><a href="https://aws.amazon.com/blogs/security/announcing-aws-organizations-centrally-manage-multiple-aws-accounts/" target="_blank" rel="noopener noreferrer">AWS blog post: Announcing AWS Organizations</a></li>
+  <li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_ous.html" target="_blank" rel="noopener noreferrer">Managing Organisational Units</a></li>
+  <li><a href="https://docs.aws.amazon.com/organizations/latest/APIReference/API_LeaveOrganization.html" target="_blank" rel="noopener noreferrer">LeaveOrganization</a></li>
+  <li><a href="https://www.youtube.com/watch?v=ZKpkF17d0Oo" target="_blank" rel="noopener noreferrer">AWS re:Invent 2017: How Capital One Applies AWS Organizations Best Practices to Mana (SID321)</a></li>
+  <li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_getting-started_concepts.html" target="_blank" rel="noopener noreferrer">AWS Organizations Terminology and Concepts</a></li>
+  <li><a href="https://docs.aws.amazon.com/aws-technical-content/latest/cost-optimization-laying-the-foundation/aws-account-structure.html" target="_blank" rel="noopener noreferrer">AWS Account Structure Considerations</a></li>
+  <li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scp.html" target="_blank" rel="noopener noreferrer">Service Control Policies</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2018/07/28/Setting-up-RAID1-in-Ubuntu-18.04-and-Monitoring-Disk-Health/" itemprop="url">Setting up RAID1 in Ubuntu 18.04 and Monitoring Disk Health</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -418,115 +596,6 @@ mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
   <li><a href="http://www.concept2.co.uk/service/software/software-development-kit" target="_blank" rel="noopener noreferrer">Concept2 SDK</a></li>
   <li><a href="http://log.concept2.com/developers/documentation/" target="_blank" rel="noopener noreferrer">Logbook API Documentation</a></li>
   <li><a href="https://raspirowing.com/" target="_blank" rel="noopener noreferrer">RasPiRowing</a></li>
-</ul>
-
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2018/07/20/Verifying-Data-Integrity-with-AWS-S3/" itemprop="url">Verifying Data Integrity with AWS S3</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2018-07-20T06:00:00+01:00" itemprop="datePublished">July 20, 2018</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
-
-<!-- dev, aws -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    , 
-
-    <a href="/category/aws">aws</a>
-    
-</span>
-	<span class="tags">s3, csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>When it comes to transferring files over network, there’s always a risk of ending up with corrupted files. To prevent this on transfers to and from S3, AWS provides us with some tools we can leverage to guarantee correctness of the files.</p>
-
-<h2 id="verifying-files-while-uploading">Verifying files while uploading</h2>
-
-<p>In order to verify the file is uploaded successfully, we need to provide AWS the MD5 hash value of our file. Once upload has been completed, AWS calculates the MD5 hash on their end and compares the both values. If they match, it means it went through successfully. So our request looks like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="n">PutObjectRequest</span>
-<span class="p">{</span>
-    <span class="n">MD5Digest</span> <span class="p">=</span> <span class="n">md5</span><span class="p">,</span>
-    <span class="n">BucketName</span> <span class="p">=</span> <span class="n">bucketName</span><span class="p">,</span>
-    <span class="n">Key</span> <span class="p">=</span>  <span class="n">key</span><span class="p">,</span>
-    <span class="n">FilePath</span> <span class="p">=</span> <span class="n">inputPath</span><span class="p">,</span>
-<span class="p">};</span>
-</code></pre></div></div>
-
-<p>where we calculate MD5 hash value like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">stream</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FileStream</span><span class="p">(</span><span class="n">fullPath</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">Open</span><span class="p">,</span> <span class="n">FileAccess</span><span class="p">.</span><span class="n">Read</span><span class="p">,</span> <span class="n">FileShare</span><span class="p">.</span><span class="n">Read</span><span class="p">))</span>
-<span class="p">{</span>
-    <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">md5</span> <span class="p">=</span> <span class="n">MD5</span><span class="p">.</span><span class="nf">Create</span><span class="p">())</span>
-    <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">hash</span> <span class="p">=</span> <span class="n">md5</span><span class="p">.</span><span class="nf">ComputeHash</span><span class="p">(</span><span class="n">stream</span><span class="p">);</span>
-        <span class="k">return</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToBase64String</span><span class="p">(</span><span class="n">hash</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>In my tests, it looks like if you don’t provide a valid MD5 hash, you get a <em>WinHttpException</em> with the inner exception message “The connection with the server was terminated abnormally”</p>
-
-<p>If you provide a valid but incorrect MD5, the exception thrown is of type <em>AmazonS3Exception</em> with the message “The Content-MD5 you specified did not match what we received”.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<p>Amazon SDK comes with 2 utility methods named <em>GenerateChecksumForContent</em> and <em>GenerateChecksumForStream</em>. At the time of this writing, GenerateChecksumForStream wasn’t available in the AWS SDK for .NET Core. So the only method worked for me to calculate the hash was the way as shown above.</p>
-
-<h2 id="verifying-files-while-downloading">Verifying files while downloading</h2>
-
-<p>When downloading we use EtagToMatch property of GetObjectRequest to have the verification:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="n">GetObjectRequest</span>
-<span class="p">{</span>
-	<span class="n">BucketName</span> <span class="p">=</span> <span class="n">bucketName</span><span class="p">,</span>
-    <span class="n">Key</span> <span class="p">=</span>  <span class="n">key</span><span class="p">,</span>
-    <span class="n">EtagToMatch</span> <span class="p">=</span> <span class="s">"\"278D8FD9F7516B4CA5D7D291DB04FB20\""</span><span class="p">.</span><span class="nf">ToLower</span><span class="p">()</span> <span class="c1">// Case-sensitive</span>
-<span class="p">};</span>
-
-<span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">_s3Client</span><span class="p">.</span><span class="nf">GetObjectAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
-<span class="p">{</span>
-    <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="nf">WriteResponseStreamToFileAsync</span><span class="p">(</span><span class="n">outputPath</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">CancellationToken</span><span class="p">.</span><span class="n">None</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>When we request the object this way and if the the MD5 hash we send doesn’t match the one on the server we get an exception with the following message: <em>“At least one of the pre-conditions you specified did not hold”</em></p>
-
-<p>Once important point to keep in mind is that AWS keeps the hashes in lowerc-ase and the comparison is case-sensitive so make sure to convert everything to lower-case before you send it out.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/VerifyingDataIntegrityWithAWSS3" target="_blank" rel="noopener noreferrer">Sample source code</a></li>
-  <li><a href="https://aws.amazon.com/premiumsupport/knowledge-center/data-integrity-s3/" target="_blank" rel="noopener noreferrer">How do I ensure data integrity of objects uploaded to or downloaded from Amazon S3?</a></li>
-  <li><a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash?view=powershell-6" target="_blank" rel="noopener noreferrer">Powershell Get-FileHash cmdlet reference</a></li>
-  <li><a href="https://docs.aws.amazon.com/cli/latest/topic/s3-faq.html" target="_blank" rel="noopener noreferrer">AWS CLI S3 FAQ</a></li>
 </ul>
 
 

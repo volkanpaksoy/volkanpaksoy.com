@@ -146,6 +146,240 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/08/06/checking-domain-availability-with-aws-route53-part-2/" itemprop="url">Checking domain availability with AWS Route 53 - Part 2</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-08-06T12:30:00+01:00" itemprop="datePublished">August  6, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">csharp, javascript, route53, lambda, amazon_api_gateway, nodejs</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<h1 id="part-2-converting-tld-provider-into-an-api">Part 2: Converting TLD Provider into an API</h1>
+
+<p>In all fairness, this part is not entirely necessary for the project. I already found a way to get the list of TLDs from Amazon documentation so I could easily integrate it with my client applications. But I recently heard about Amazon API Gateway which has been introduced a few weeks back so I thought it would be cool to access my JavaScript method via a web API hosted on AWS. After all, the point of many projects I develop is to learn new stuff! In light of that I’ll try something new with the C# version as well and use a self-hosted service so that I can use a Windows Service instead of IIS.</p>
+
+<h3 id="api-1-amazon-api-gateway">API #1: Amazon API Gateway</h3>
+<p>There are a couple of new technologies here that I haven’t used before so this was a good chance for me to play with them.</p>
+
+<p>Amazon API Gateway looks like a great service to create hosted APIs. Also it’s integrated with AWS Lambda. You can bind an endpoint directly to lambda function. There are other binding options but in this project I will use Lambda as it was also in my to-learn list.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h4 id="setup-amazon-api-gateway">Setup Amazon API Gateway</h4>
+<p>API Gateway interface is very intuitive. Within minutes I was able to create a GET method calling my Lambda function. First you create the API by clicking the “Create API” button!</p>
+
+<p>Then you add your resource by clicking “Create Resource”. By default it comes with the root resource (“/”) so you can just use that one as well to add methods.</p>
+
+<p>I created a resource called tldlist. All I needed was a GET method so I created it by “Create Method”.</p>
+
+<p><img src="/images/vpblogimg/2015/08/domchk53-api-gateway-create-method.png" alt=""></p>
+
+<p>You select the region and enter the full ARN of your Lambda function. In the UI it just says “function name” but it requires full ARN (i.e.: arn:aws:lambda:eu-west-1:1234567890:function:getTldList)</p>
+
+<h4 id="and-lambda">…and Lambda</h4>
+<p>The function is a bit different from the previous version. In Node.js I wasn’t able to use <em>XMLHttpRequest</em> object and turns out your use the http module to make web requests so I modified the code a bit. Here’s the final version of my Lambda function:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Loading function</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">docHost</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">docs.aws.amazon.com</span><span class="dl">'</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">docPath</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">/Route53/latest/DeveloperGuide/registrar-tld-list.html</span><span class="dl">'</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">supportedTldPage</span> <span class="o">=</span> <span class="nx">docHost</span> <span class="o">+</span> <span class="nx">docPath</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">http</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="na">host</span><span class="p">:</span> <span class="nx">docHost</span><span class="p">,</span>
+      <span class="na">path</span><span class="p">:</span> <span class="nx">docPath</span><span class="p">,</span>
+      <span class="na">port</span><span class="p">:</span> <span class="mi">80</span>
+    <span class="p">};</span>
+    
+    <span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">body</span> <span class="o">=</span> <span class="dl">''</span><span class="p">;</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">data</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">body</span> <span class="o">+=</span> <span class="nx">chunk</span><span class="p">;</span>
+        <span class="p">});</span>
+        
+        <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">end</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">parseHtml</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span>
+            <span class="nx">context</span><span class="p">.</span><span class="nx">succeed</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">}).</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">error</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Got error: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+    <span class="p">});</span>     
+
+<span class="p">};</span>
+
+<span class="kd">function</span> <span class="nx">parseHtml</span><span class="p">(</span><span class="nx">pageHtml</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">pattern</span> <span class="o">=</span> <span class="sr">/&lt;a class="xref" href="registrar-tld-list.html#.+</span><span class="se">?</span><span class="sr">"&gt;</span><span class="se">[</span><span class="sr">.</span><span class="se">](</span><span class="sr">.+</span><span class="se">?)</span><span class="sr">&lt;</span><span class="se">\/</span><span class="sr">a&gt;/g</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">regEx</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="nx">pattern</span><span class="p">);</span>
+
+    <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">url</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">http://</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">supportedTldPage</span><span class="p">;</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">date</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">toUTCString</span><span class="p">();</span>
+    <span class="nx">result</span><span class="p">.</span><span class="nx">tldList</span> <span class="o">=</span> <span class="p">[];</span>
+
+    <span class="k">while</span> <span class="p">((</span><span class="nx">match</span> <span class="o">=</span> <span class="nx">regEx</span><span class="p">.</span><span class="nx">exec</span><span class="p">(</span><span class="nx">pageHtml</span><span class="p">))</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">result</span><span class="p">.</span><span class="nx">tldList</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">match</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In order to return a value from Lambda function you have to call succeed, fail or done:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>context.succeed (Object result);
+context.fail (Error error);
+context.done (Error error, Object result);
+</code></pre></div></div>
+
+<p>Succeed and fail are self-explanatory. done is like a combination of both. If error is non-null it treats it as failure. Even if you call fail or done with an error the HTTP response code is always 200. what changes is the message body. For example, I played around with a few possibilities to test various results:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Method call: context.succeed(result);  
+Output: Full JSON results
+
+Method call: context.done(null, result);  
+Output: Full JSON results
+
+Method call: context.fail("FAIL!!!");  
+Output: {"errorMessage":"FAIL!!!"}
+
+Method call: context.done("FAIL!!!", results);  
+Output: {"errorMessage":"FAIL!!!"}
+</code></pre></div></div>
+
+<p>As you can see, if error parameter is not null it ignores the actual results. Also I removed the JSON.stringify call from the parseHtml method because API gateway automatically converts it to JSON.</p>
+
+<h4 id="tying-things-together">Tying things together</h4>
+<p>Deployment is also a breeze, just like creating the API, resource and the methods all it takes is a few button clicks. You click Deploy API and create an environment such as staging or prod. And that’s it! You’re good to go!</p>
+
+<p>Since this will be a public-facing API with no authentication I also added a CloudWatch alarm:</p>
+
+<p><img src="/images/vpblogimg/2015/08/domchk53-api-gateway-create-alarm.png" alt=""></p>
+
+<p>This way if some mental decides to abuse I will be aware of it. The good thing is it’s very cheap. It costs $3.5 per million API calls which is about £2.25. I don’t think it will break the bank but for serious applications authorization is a must so I will need to investigate that feature in the future anyway.</p>
+
+<p>At this point, I have a Lambda function called from the API hosted by AWS. I don’t have to worry about anything regarding the maintenance and scaling which feels great!</p>
+
+<h3 id="api-2-c--self-hosting-on-a-windows-service">API #2: C# &amp; Self-hosting on a Windows Service</h3>
+<p>Speaking of maintenance, here comes the Windows version! I don’t intend to deploy it on production but I was meaning to learn self-hosting APIs with Web API to avoid IIS and here’s chance to do so.</p>
+
+<p>Found this nice concise <a href="http://www.asp.net/web-api/overview/hosting-aspnet-web-api/use-owin-to-self-host-web-api" target="_blank" rel="noopener noreferrer">article</a> showing how to run a Web API inside a console application. I tweaked the code a little bit to suit my needs. Basically it takes 4 simple steps:</p>
+
+<h4 id="step-01-install-owin-self-host-nuget-package">Step 01. Install OWIN Self-Host NuGet package:</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package Microsoft.AspNet.WebApi.OwinSelfHost
+</code></pre></div></div>
+
+<h4 id="step-02-setup-routing">Step 02. Setup routing</h4>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">Startup</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Configuration</span><span class="p">(</span><span class="n">IAppBuilder</span> <span class="n">appBuilder</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">HttpConfiguration</span> <span class="n">config</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpConfiguration</span><span class="p">();</span>
+        <span class="n">config</span><span class="p">.</span><span class="n">Routes</span><span class="p">.</span><span class="nf">MapHttpRoute</span><span class="p">(</span>
+            <span class="n">name</span><span class="p">:</span> <span class="s">"DefaultApi"</span><span class="p">,</span>
+            <span class="n">routeTemplate</span><span class="p">:</span> <span class="s">"api/{controller}/{id}"</span><span class="p">,</span>
+            <span class="n">defaults</span><span class="p">:</span> <span class="k">new</span> <span class="p">{</span> <span class="n">id</span> <span class="p">=</span> <span class="n">RouteParameter</span><span class="p">.</span><span class="n">Optional</span> <span class="p">}</span>
+        <span class="p">);</span>
+
+        <span class="n">appBuilder</span><span class="p">.</span><span class="nf">UseWebApi</span><span class="p">(</span><span class="n">config</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="step-03-add-the-controller">Step 03. Add the controller</h4>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">TldController</span> <span class="p">:</span> <span class="n">ApiController</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="n">HttpResponseMessage</span> <span class="nf">Get</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">string</span> <span class="n">supportedTLDPage</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"AWS-URL"</span><span class="p">];</span>
+        <span class="kt">var</span> <span class="n">tldProvider</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TldListProvider</span><span class="p">();</span>
+        <span class="kt">var</span> <span class="n">tldList</span> <span class="p">=</span> <span class="n">tldProvider</span><span class="p">.</span><span class="nf">GetSupportedTldList</span><span class="p">(</span><span class="n">supportedTLDPage</span><span class="p">);</span>
+        <span class="kt">var</span> <span class="n">output</span> <span class="p">=</span> <span class="k">new</span> <span class="p">{</span>
+            <span class="n">url</span> <span class="p">=</span> <span class="n">supportedTLDPage</span><span class="p">,</span> 
+            <span class="n">date</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(),</span>
+            <span class="n">tldList</span> <span class="p">=</span> <span class="n">tldList</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">tld</span> <span class="p">=&gt;</span> <span class="n">tld</span><span class="p">.</span><span class="n">Name</span><span class="p">)</span>
+        <span class="p">};</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="nf">CreateResponse</span><span class="p">(</span><span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">OK</span><span class="p">,</span> <span class="n">output</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="step-04-start-owin-webapp">Step 04. Start OWIN WebApp</h4>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">baseAddress</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"BaseAddress"</span><span class="p">];</span>
+    <span class="n">WebApp</span><span class="p">.</span><span class="n">Start</span><span class="p">&lt;</span><span class="n">Startup</span><span class="p">&gt;(</span><span class="n">url</span><span class="p">:</span> <span class="n">baseAddress</span><span class="p">);</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Service started"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Final step is installation. As I used TopShelf all I had to do was running a command prompt with administrator privileges run this command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>TldProvider.Service.exe install
+
+</code></pre></div></div>
+
+<p>Now that my service is running in the background and accepting HTTP requests let’s take it out for a spin:</p>
+
+<p><img src="/images/vpblogimg/2015/08/domchk53-self-hosted-service-output.png" alt=""></p>
+
+<p>Brilliant!</p>
+
+<h3 id="whats-next">What’s next?</h3>
+<p>So now I have an API that returns me the supported TLD list. In the next post I’ll work on a basic client that consumes that API and AWS Route53 to get the availability results finally.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/aws-tld-provider" target="_blank" rel="noopener noreferrer">Project source code on GitHub</a></li>
+  <li><a href="https://aws.amazon.com/blogs/aws/amazon-api-gateway-build-and-run-scalable-application-backends/" target="_blank" rel="noopener noreferrer">Amazon API Gateway Announcement</a></li>
+  <li><a href="http://aws.amazon.com/api-gateway/" target="_blank" rel="noopener noreferrer">Amazon API Gateway official site</a></li>
+  <li><a href="http://docs.aws.amazon.com/lambda/latest/dg/programming-model.html" target="_blank" rel="noopener noreferrer">AWS Documentation: Lambda programming model</a></li>
+  <li><a href="http://owin.org/" target="_blank" rel="noopener noreferrer">OWIN official website</a></li>
+  <li><a href="http://www.asp.net/web-api/overview/hosting-aspnet-web-api/use-owin-to-self-host-web-api" target="_blank" rel="noopener noreferrer">Use OWIN to Self-Host ASP.NET Web API 2</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/08/05/checking-domain-availability-with-aws-route53-part-1/" itemprop="url">Checking domain availability with AWS Route 53 - Part 1</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -525,413 +759,6 @@ If-Modified-Since: Fri, 17 Jul 2015 23:17:38 GMT
   <li><a href="http://stackoverflow.com/questions/5252450/using-someone-elses-repo-as-a-git-submodule-on-github" target="_blank" rel="noopener noreferrer">SO Thread: Using other repositories as submodules</a></li>
 </ul>
 
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/07/22/disassembling-and-decompiling-dotnet-assemblies/" itemprop="url">Disassembling And Decompiling .NET Assemblies</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-07-22T22:30:00+01:00" itemprop="datePublished">July 22, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Generally we don’t need to understand how every single line of code is compiled but sometimes it helps to have a look at what’s going on under the hood. The code we write doesn’t always translate directly to IL (Intermediate Language) by the compiler (assuming optimizations come into play). It also helps what really happens when we use shorthand notations in the language. So I decided to explore the IL and see how simple constructs are compiled. Some of them are very simple and commonly known but some of them were new to me so compiled all of them in this post.</p>
-
-<h3 id="toolkit">Toolkit</h3>
-<p>I used a disassembler and decompilers to analyze the output. When we compile a .NET program, it’s converted into IL code. Using a disassembler we can view the IL. Decompiling is the process of regenerating C# code. It’s hard to read IL so getting the C# code back helps to analyse easier. I used the following tools to view the IL and C# code:</p>
-
-<ul>
-  <li>ILDASM: Main tool I used is ILDASM (IL Disassembler). It’s installed with Visual Studio so doesn’t require anything special. It’s hard to make sense of IL but generally helpful to get an idea about what’s going on.</li>
-  <li>Telerik JustDecompile: Decompiler takes an assembly and re-generates .NET code from it. It may not fully return the original source code and sometimes it optimizes stuff so it may skew the results a little bit. But it’s generally helpful when you need to see a cleaner representation</li>
-  <li>ILSpy: Same functionality as JustDecompile. I used it to compare the decompiled results.</li>
-</ul>
-
-<p>So without further ado, here’s how some language basics we use are compiled:</p>
-
-<h3 id="01-constructor">01. Constructor</h3>
-<p>When you create a new class the template in Visual Studio creates a simple blank class like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">namespace</span> <span class="nn">DecompileWorkout</span>
-<span class="p">{</span>
-    <span class="k">class</span> <span class="nc">TestClass</span>
-    <span class="p">{</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>and we can create instances of this class as usual:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">newInstance</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TestClass</span><span class="p">();</span>
-</code></pre></div></div>
-
-<p>It works even though we don’t have a constructor in our source code. The reason it works is that the compiler adds the default constructor for us. When we decompile the executable we can see it’s in there:</p>
-
-<p><img src="/images/vpblogimg/2015/07/decompile-default-ctor-01.png" alt=""></p>
-
-<p>But when we add a constructor that accepts parameters the default constructor is removed:</p>
-
-<p><img src="/images/vpblogimg/2015/07/decompile-default-ctor-02.png" alt=""></p>
-
-<p>It makes sense otherwise all classes would have parameterless constructor no matter what you do.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h3 id="02-properties">02. Properties</h3>
-<p>Properties have been supported since forever and they are extremely handy. In the olden days we used to create a field and create getter and setter methods that access that field such as:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="kt">string</span> <span class="n">_name</span><span class="p">;</span>
-<span class="k">public</span> <span class="k">void</span> <span class="nf">SetName</span><span class="p">(</span><span class="kt">string</span> <span class="n">name</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">_name</span> <span class="p">=</span> <span class="n">name</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="k">public</span> <span class="kt">string</span> <span class="nf">GetName</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="n">_name</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Now we can get the same results by</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-</code></pre></div></div>
-
-<p>What happens under the hood is the compiler generates the backing field and getter/setter methods. For example if we disassemble the class with the above we’d get something like this:</p>
-
-<p><img src="/images/vpblogimg/2015/07/decompile-property-01.png" alt=""></p>
-
-<p>Apart from the weird naming (I guess it’s to avoid naming collisions) it’s exactly the same code.</p>
-
-<p>The backing field is only generated when this shorthand form is used. If we implement the getter/setter like this</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> 
-<span class="p">{</span>
-    <span class="k">get</span>
-    <span class="p">{</span>
-        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="k">set</span>
-    <span class="p">{</span>
-        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Then the generated IL only contains the methods and not the backing field</p>
-
-<p><img src="/images/vpblogimg/2015/07/decompile-property-02.png" alt=""></p>
-
-<p>One last thing to note is that we cannot have fields on interfaces but we are allowed to have properties. It’s because when used on interfaces the compiler again generates only the getter and setter methods.</p>
-
-<h3 id="03-using-statement">03. Using statement</h3>
-<p>A handy shortcut to use when dealing with IDisposable objects is the using statement. To see what happens when we use using I came up with this simple code:</p>
-
-<p><img src="/images/vpblogimg/2015/07/decompile-using-code.png" alt=""></p>
-
-<p>After decompiling:</p>
-
-<p><img src="/images/vpblogimg/2015/07/decompile-using-output.png" alt=""></p>
-
-<p>So basically it just surrounds the code with a try-finally block and calls Dispose method of the object if it’s not null. Instead of writing this block of code it’s very handy to use the using statement. But at the end there is nothing magic about it, it’s just a shortcut to dispose objects securely.</p>
-
-<h3 id="04-var-keyword-and-anonymous-types">04. var keyword and anonymous types</h3>
-<p>var keyword is used to implicitly specify a type. The compiler infers the type from the context and generates the code accordingly. Variables defined with var keyword are still strongly typed because of this feature. Initially I resisted using it as a shortcut because it’s main purpose is not to provide the luxury not to create implicitly typed variables. It’s introduced at the same time as anonymous types which makes sense because without having such a keyword you cannot store anonymous objects. But I find myself using it more and more for implicitly specifying the types. Looking around I see that I’m not the only one so if it’s just laziness at least I’m not the only one to blame!</p>
-
-<p>So let’s check out how this simple code with one var and an anonymous type:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">UsingVarAndAnonymousTypes</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="nf">UsingVarAndAnonymousTypes</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">someType</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">SomeType</span><span class="p">();</span>
-        <span class="kt">var</span> <span class="n">someAnonymousType</span> <span class="p">=</span> <span class="k">new</span> <span class="p">{</span> <span class="n">id</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">name</span> <span class="p">=</span> <span class="s">"whatevs"</span> <span class="p">};</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Decompiling the code doesn’t show the anonymous type side of the story but we can see that var keyword is simply replaced with the class type.</p>
-
-<p><img src="/images/vpblogimg/2015/07/decompile-var-and-anoymous-type-01.png" alt=""></p>
-
-<p>To see what happens with anonymous types let’s have a look at the IL:</p>
-
-<p><img src="/images/vpblogimg/2015/07/decompile-var-and-anoymous-type-02.png" alt=""></p>
-
-<p>For the anonymous type the compiler created a class for us with a very user-friendly name: <em>&lt;&gt;f__AnonymousType0`2</em>. It also generated readonly private fields and only getters that means they are immutable and we cannot set those values once the object is initialized.</p>
-
-<h3 id="06-async-and-await">06. Async and await</h3>
-<p>Async/await helps asynchronous programming much easier for us. It’s hiding a ton of complexity and I think it makes sense to invest some time into investigating how it works to use it properly. First of all, marking a method async doesn’t make everything asynchronous automagically. If you don’t use await inside the function it will run synchronously (the compiler will generate a warning about it). When you call an async method the execution continues without blocking the main thread. If it’s not awaited it returns a Task<tresult> instead of the actual expected result. This means it's an ongoing process and it will run in the background without blocking the main flow. This is great so you can fire up a bunch of tasks you need and then wait for the results whenever you need all of them. For example:</tresult></p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">async</span> <span class="k">void</span> <span class="nf">DownloadImageAsync</span><span class="p">(</span><span class="kt">string</span> <span class="n">imageUrl</span><span class="p">,</span> <span class="kt">string</span> <span class="n">localPath</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">webClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">WebClient</span><span class="p">())</span>
-    <span class="p">{</span>
-        <span class="n">Task</span> <span class="n">task</span> <span class="p">=</span> <span class="n">webClient</span><span class="p">.</span><span class="nf">DownloadFileTaskAsync</span><span class="p">(</span><span class="n">imageUrl</span><span class="p">,</span> <span class="n">localPath</span><span class="p">);</span>
-
-        <span class="kt">var</span> <span class="n">hashCalculator</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">SynchronousHashCalculator</span><span class="p">();</span>
-
-        <span class="c1">// Do some more work while download is running</span>
-
-        <span class="k">await</span> <span class="n">task</span><span class="p">;</span>
-        <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">fs</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FileStream</span><span class="p">(</span><span class="n">localPath</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">Open</span><span class="p">,</span> <span class="n">FileAccess</span><span class="p">.</span><span class="n">Read</span><span class="p">))</span>
-        <span class="p">{</span>
-            <span class="kt">byte</span><span class="p">[]</span> <span class="n">testData</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="p">[</span><span class="k">new</span> <span class="nf">FileInfo</span><span class="p">(</span><span class="n">localPath</span><span class="p">).</span><span class="n">Length</span><span class="p">];</span>
-            <span class="kt">int</span> <span class="n">bytesRead</span> <span class="p">=</span> <span class="k">await</span> <span class="n">fs</span><span class="p">.</span><span class="nf">ReadAsync</span><span class="p">(</span><span class="n">testData</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">testData</span><span class="p">.</span><span class="n">Length</span><span class="p">);</span>
-            
-            <span class="c1">// Do something with testData</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>In this example, a file is downloaded asynchronously. The execution continues after the call has been made so we can do other unrelated work while the download is in progress. Only when we need the actual value, to open the file in this instance, we await the task. If we didn’t await we would try to access the file before it’s completely written and closed resulting in an exception.</p>
-
-<p>One confusing aspect maybe calling await on the same line as in fs.ReadAsync in the above example. It looks like it’s synchronous as we are still waiting on the same line but the difference is the main thread is not blocked. If it’s a GUI-based application for exmaple it would still be responsive.</p>
-
-<p>So let’s decompile the assembly to see how it works behind the scenes. This is one of the times I like having redundancy. Because Just Decompile failed to generate C# code for the class using async/await so I had to switch to ILSpy.</p>
-
-<p><img src="/images/vpblogimg/2015/07/decompile-async-01.png" alt=""></p>
-
-<p>It generates a struct implementing IAsyncStateMachine interface. The “meaty” part is the MoveNext method:</p>
-
-<p><img src="/images/vpblogimg/2015/07/decompile-async-02.png" alt=""></p>
-
-<p>It’s very hard to read compiler-generated code but I think this part is interesting:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">switch</span> <span class="p">(</span><span class="k">this</span><span class="p">.&lt;&gt;</span><span class="m">1</span><span class="n">__state</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="k">case</span> <span class="m">0</span><span class="p">:</span>
-	<span class="n">taskAwaiter</span> <span class="p">=</span> <span class="k">this</span><span class="p">.&lt;&gt;</span><span class="n">u__</span><span class="err">$</span><span class="n">awaiter7</span><span class="p">;</span>
-	<span class="k">this</span><span class="p">.&lt;&gt;</span><span class="n">u__</span><span class="err">$</span><span class="n">awaiter7</span> <span class="p">=</span> <span class="k">default</span><span class="p">(</span><span class="n">TaskAwaiter</span><span class="p">);</span>
-	<span class="k">this</span><span class="p">.&lt;&gt;</span><span class="m">1</span><span class="n">__state</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
-	<span class="k">break</span><span class="p">;</span>
-<span class="k">case</span> <span class="m">1</span><span class="p">:</span>
-	<span class="k">goto</span> <span class="n">IL_102</span><span class="p">;</span>
-<span class="k">default</span><span class="p">:</span>
-	<span class="k">this</span><span class="p">.&lt;</span><span class="n">task</span><span class="p">&gt;</span><span class="m">5</span><span class="n">__2</span> <span class="p">=</span> <span class="k">this</span><span class="p">.&lt;</span><span class="n">webClient</span><span class="p">&gt;</span><span class="m">5</span><span class="n">__1</span><span class="p">.</span><span class="nf">DownloadFileTaskAsync</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">imageUrl</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="n">localPath</span><span class="p">);</span>
-	<span class="k">this</span><span class="p">.&lt;</span><span class="n">hashCalculator</span><span class="p">&gt;</span><span class="m">5</span><span class="n">__3</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">SynchronousHashCalculator</span><span class="p">();</span>
-	<span class="n">taskAwaiter</span> <span class="p">=</span> <span class="k">this</span><span class="p">.&lt;</span><span class="n">task</span><span class="p">&gt;</span><span class="m">5</span><span class="n">__2</span><span class="p">.</span><span class="nf">GetAwaiter</span><span class="p">();</span>
-	<span class="k">if</span> <span class="p">(!</span><span class="n">taskAwaiter</span><span class="p">.</span><span class="n">IsCompleted</span><span class="p">)</span>
-	<span class="p">{</span>
-		<span class="k">this</span><span class="p">.&lt;&gt;</span><span class="m">1</span><span class="n">__state</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
-		<span class="k">this</span><span class="p">.&lt;&gt;</span><span class="n">u__</span><span class="err">$</span><span class="n">awaiter7</span> <span class="p">=</span> <span class="n">taskAwaiter</span><span class="p">;</span>
-		<span class="k">this</span><span class="p">.&lt;&gt;</span><span class="n">t__builder</span><span class="p">.</span><span class="n">AwaitUnsafeOnCompleted</span><span class="p">&lt;</span><span class="n">TaskAwaiter</span><span class="p">,</span> <span class="n">AsyncMethods</span><span class="p">.&lt;</span><span class="n">DownloadImageAsync</span><span class="p">&gt;</span><span class="n">d__0</span><span class="p">&gt;(</span><span class="k">ref</span> <span class="n">taskAwaiter</span><span class="p">,</span> <span class="k">ref</span> <span class="k">this</span><span class="p">);</span>
-		<span class="n">flag</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-		<span class="k">return</span><span class="p">;</span>
-	<span class="p">}</span>
-	<span class="k">break</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="n">taskAwaiter</span><span class="p">.</span><span class="nf">GetResult</span><span class="p">();</span>
-<span class="n">taskAwaiter</span> <span class="p">=</span> <span class="k">default</span><span class="p">(</span><span class="n">TaskAwaiter</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p>If the task has not been completed it sets the state to 0 which then comes back to default so it goes back and forth until taskAwaiter.IsCompleted is true.</p>
-
-<h3 id="07-new-c-60-features">07. New C# 6.0 Features</h3>
-<p>C# 6.0 has just been released a few days ago. There aren’t many groundbreaking features as the team at Microsoft stated. Mostly the new features are shothand notations to make the code easier to read and write. I decided to have a look at the decompiled code of some of the new structs</p>
-
-<h4 id="null-conditional-operators">Null-conditional operators</h4>
-<p>This is a great remedy to ease the neverending null-checks. For example in the code below</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">people</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Person</span><span class="p">&gt;();</span>
-<span class="kt">var</span> <span class="n">name</span> <span class="p">=</span> <span class="n">people</span><span class="p">.</span><span class="nf">FirstOrDefault</span><span class="p">()?.</span><span class="n">FullName</span><span class="p">;</span>
-</code></pre></div></div>
-
-<p>If the list is empty name will be null. If we didn’t have this operator it would throw an exception therefore we would have to do the null checks on our own. The decompiled code for the above block is like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">string</span> <span class="n">fullName</span><span class="p">;</span>
-    <span class="n">Program</span><span class="p">.</span><span class="n">Person</span> <span class="n">person</span> <span class="p">=</span> <span class="p">(</span><span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Program</span><span class="p">.</span><span class="n">Person</span><span class="p">&gt;()).</span><span class="n">FirstOrDefault</span><span class="p">&lt;</span><span class="n">Program</span><span class="p">.</span><span class="n">Person</span><span class="p">&gt;();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">person</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">fullName</span> <span class="p">=</span> <span class="n">person</span><span class="p">.</span><span class="n">FullName</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-        <span class="n">fullName</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>As we can see, the generated code is graciously carrying out the null check for us!</p>
-
-<h4 id="string-interpolation">String interpolation</h4>
-<p>This is one of my favourites: Now we can simply place put the parameters directly inside a string instead of placeholders. Expanding on the example above, imagine the Person class is like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Person</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">FirstName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">LastName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">FullName</span> <span class="p">=&gt;</span> <span class="s">$"</span><span class="p">{</span><span class="n">FirstName</span><span class="p">}</span><span class="s"> </span><span class="p">{</span><span class="n">LastName</span><span class="p">}</span><span class="s">"</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>The decompiled code looks familiar though:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="kt">string</span> <span class="n">FullName</span>
-<span class="p">{</span>
-    <span class="k">get</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"{0} {1}"</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="n">FirstName</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="n">LastName</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>This is exactly how I would do it if we didn’t have this new feature.</p>
-
-<h4 id="auto-property-initializers">Auto-property initializers</h4>
-
-<p>We can set the default value for a property on the declaration line now, like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="kt">string</span> <span class="n">FirstName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="s">"Volkan"</span><span class="p">;</span>
-</code></pre></div></div>
-
-<p>And the IL generated for the code is like this:</p>
-
-<p><img src="/images/vpblogimg/2015/07/decompile-csharp6-auto-property-initializer.png" alt=""></p>
-
-<p>Decompiled code varies. Just Decompile doesn’t just displays the exact same statement as above. ILSpy on the other hand is closer to the IL:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="nf">Person</span><span class="p">()</span>
-<span class="p">{</span>
-	<span class="k">this</span><span class="p">.&lt;</span><span class="n">FirstName</span><span class="p">&gt;</span><span class="n">k__BackingField</span> <span class="p">=</span> <span class="s">"Volkan"</span><span class="p">;</span>
-	<span class="k">this</span><span class="p">.&lt;</span><span class="n">BirthDate</span><span class="p">&gt;</span><span class="n">k__BackingField</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">DateTime</span><span class="p">(</span><span class="m">1966</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">6</span><span class="p">);</span>
-	<span class="k">base</span><span class="p">..</span><span class="nf">ctor</span><span class="p">();</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>So what it does is, in the constructor it sets the private backing field with this default value we assign.</p>
-
-<h4 id="expression-bodied-members">Expression bodied members</h4>
-<p>We can now provide the body of the function as an expression following the declaration like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="kt">int</span> <span class="nf">GetAge</span><span class="p">()</span> <span class="p">=&gt;</span> <span class="p">(</span><span class="kt">int</span><span class="p">)((</span><span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span> <span class="p">-</span> <span class="n">BirthDate</span><span class="p">).</span><span class="n">TotalDays</span> <span class="p">/</span> <span class="m">365</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p>The decompiled code is not very fancy:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="kt">int</span> <span class="nf">GetAge</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">TimeSpan</span> <span class="n">now</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span> <span class="p">-</span> <span class="k">this</span><span class="p">.</span><span class="n">BirthDate</span><span class="p">;</span>
-    <span class="k">return</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">now</span><span class="p">.</span><span class="n">TotalDays</span> <span class="p">/</span> <span class="m">365</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>It simply puts the expression back in the body.</p>
-
-<h4 id="index-initializers">Index initializers</h4>
-<p>It’s a shorthand for index initialization such as</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">dict</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span>
-<span class="p">{</span>
-    <span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="p">=</span> <span class="s">"string1"</span><span class="p">,</span>
-    <span class="p">[</span><span class="m">2</span><span class="p">]</span> <span class="p">=</span> <span class="s">"string2"</span><span class="p">,</span>
-    <span class="p">[</span><span class="m">3</span><span class="p">]</span> <span class="p">=</span> <span class="s">"string3"</span> 
-<span class="p">};</span>
-</code></pre></div></div>
-
-<p>And the decompiled code is no different than what it is now:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">dictionary</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;();</span>
-<span class="n">dictionary</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="p">=</span> <span class="s">"string1"</span><span class="p">;</span>
-<span class="n">dictionary</span><span class="p">[</span><span class="m">2</span><span class="p">]</span> <span class="p">=</span> <span class="s">"string2"</span><span class="p">;</span>
-<span class="n">dictionary</span><span class="p">[</span><span class="m">3</span><span class="p">]</span> <span class="p">=</span> <span class="s">"string3"</span><span class="p">;</span>
-</code></pre></div></div>
-
-<p>As I mentioned there is nothing fancy about the new features in terms of the generated IL but some of them will help save a lot of time for sure.</p>
-
-<h3 id="08-compiler-code-optimization">08. Compiler code optimization</h3>
-<p>It is interesting to see how decompilers use optimization on their own. Before I went into this I thought they would just reverse engineer whatever is in the assembly but turns out that’s not the case.</p>
-
-<p>First, let’s have a look at the C# compiler’s behaviour. In Visual Studio, Optimize code flag can be found under Project Properties -&gt; Debug menu</p>
-
-<p><img src="/images/vpblogimg/2015/07/decompile-vs-optimize-code.png" alt=""></p>
-
-<p>In order to test code optimization I created a dummy method like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">UnusedVariables</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">VeryImportantMethod</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">testClass</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TestClass</span><span class="p">(</span><span class="s">"some value"</span><span class="p">);</span>
-		<span class="n">TestClass</span> <span class="n">testClass2</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
-        <span class="kt">var</span> <span class="n">x</span> <span class="p">=</span> <span class="s">"xyz"</span><span class="p">;</span>
-        <span class="kt">var</span> <span class="n">n</span> <span class="p">=</span> <span class="m">123</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>First I compiled it by default values:</p>
-
-<p><img src="/images/vpblogimg/2015/07/decompile-not-optimized-compilation-output.png" alt=""></p>
-
-<p>Then disassembled the output:</p>
-
-<p><img src="/images/vpblogimg/2015/07/decompile-ildasm-output-not-optimized.png" alt=""></p>
-
-<p>I’m no expert in reading IL code but it’s obvious in the locals section there are 2 TestClass instances, a string and a integer.</p>
-
-<p>When I compiled it with the optimization option (/o):</p>
-
-<p><img src="/images/vpblogimg/2015/07/decompile-optimized-compilation-output.png" alt=""></p>
-
-<p>I got the following when disassembled:</p>
-
-<p><img src="/images/vpblogimg/2015/07/decompile-ildasm-output-optimized.png" alt=""></p>
-
-<p>There’s no trace of the value types (string and the int). Also the TestClass instance with null value is gone. But the TestClass instance, which is created in the heap rather than the stack, is still there even though there is nothing referencing it. It’s interesting to see that difference.</p>
-
-<p>When I decompiled both versions with ILSpy and JustDecompile unused local variables were removed all the time. Apparently they do their own optimization.</p>
-
-<p><img src="/images/vpblogimg/2015/07/decompile-justdecompile-optimization.png" alt=""></p>
-
-<h3 id="conclusion">Conclusion</h3>
-<p>It was a fun exercise to investigate and see the actual generated code. It was helpful to understand better complex constructs like async/await and also helpful to see there’s nothing to fear about the new features of C# 6.0!</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://www.amazon.com/CLR-via-4th-Developer-Reference/dp/0735667454/" target="_blank" rel="noopener noreferrer">CLR via C#, 4th Edition</a></li>
-  <li><a href="https://msdn.microsoft.com/en-us/library/bb383973.aspx" target="_blank" rel="noopener noreferrer">MSDN: var keyword</a></li>
-  <li><a href="https://msdn.microsoft.com/en-us/library/yh598w02.aspx" target="_blank" rel="noopener noreferrer">MSDN: using statement</a></li>
-  <li><a href="https://msdn.microsoft.com/en-us/library/f7dy01k1(v=vs.110).aspx" target="_blank" rel="noopener noreferrer">ILDASM</a></li>
-  <li><a href="http://www.codeproject.com/Articles/535635/Async-Await-and-the-Generated-StateMachine" target="_blank" rel="noopener noreferrer">CodeProject Article: Async Await and the Generated StateMachine</a></li>
-  <li><a href="https://msdn.microsoft.com/en-us/library/hh191443.aspx" target="_blank" rel="noopener noreferrer">MSDN: Asynchronous Programming with Async and Await </a></li>
-  <li><a href="http://tomasp.net/blog/async-compilation-internals.aspx/" target="_blank" rel="noopener noreferrer">Blog post: Async compilation internals</a></li>
-  <li><a href="http://programmers.stackexchange.com/questions/183576/asyncawait-sync" target="_blank" rel="noopener noreferrer">Stackexchange question: async+await == sync?</a></li>
-  <li><a href="http://www.mikesdotnetting.com/article/271/7-c-6-0-features-that-every-asp-net-developer-should-know-about" target="_blank" rel="noopener noreferrer">Blog post: 7 C# 6.0 Features That Every ASP.NET Developer Should Know About</a></li>
-</ul>
 
 		
 		

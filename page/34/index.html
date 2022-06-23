@@ -146,6 +146,123 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/01/05/adventures-in-fsharp-part-4/" itemprop="url">Adventures in F# - Part 4</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-01-05T11:00:00+00:00" itemprop="datePublished">January  5, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">fsharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Moving on in the TryFSharp.org site today I finished the last two sections in the Advanced part.</p>
+
+<h3 id="notes">Notes</h3>
+<ul>
+  <li>
+    <p><strong>Computational Expressions</strong> can be used to “alter the standard evaluation rule of the language and define sub-languages that model certain programming patterns”</p>
+
+    <p>The reason we can alter the semantics of the language is the F# compiler rewrites (de-sugars) computation expressions before compiling.</p>
+
+    <p>For example the code snippet below</p>
+
+    <div class="language-fsharp highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>  <span class="k">type</span> <span class="nc">Age</span> <span class="p">=</span>
+  <span class="p">|</span> <span class="nc">PossiblyAlive</span> <span class="k">of</span> <span class="kt">int</span>
+  <span class="p">|</span> <span class="nc">NotAlive</span>
+	
+  <span class="k">type</span> <span class="nc">AgeBuilder</span><span class="bp">()</span> <span class="p">=</span>
+      <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">Bind</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="p">=</span>
+          <span class="k">match</span> <span class="n">x</span> <span class="k">with</span>
+          <span class="p">|</span> <span class="nc">PossiblyAlive</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">when</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">120</span> <span class="p">-&gt;</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+          <span class="p">|</span> <span class="p">_</span> <span class="p">-&gt;</span> <span class="nc">NotAlive</span>
+      <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">Delay</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="p">=</span> <span class="n">f</span><span class="bp">()</span>
+      <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">Return</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">=</span> <span class="nc">PossiblyAlive</span> <span class="n">x</span>
+	
+  <span class="k">let</span> <span class="n">age</span> <span class="p">=</span> <span class="k">new</span> <span class="nc">AgeBuilder</span><span class="bp">()</span>
+	
+  <span class="k">let</span> <span class="n">willBeThere</span> <span class="n">a</span> <span class="n">y</span> <span class="p">=</span>
+    <span class="n">age</span> <span class="p">{</span> 
+      <span class="k">let</span><span class="o">!</span> <span class="n">current</span> <span class="p">=</span> <span class="nc">PossiblyAlive</span> <span class="n">a</span>
+      <span class="k">let</span><span class="o">!</span> <span class="n">future</span> <span class="p">=</span> <span class="nc">PossiblyAlive</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">a</span><span class="p">)</span>
+	
+      <span class="k">return</span> <span class="n">future</span>
+    <span class="p">}</span>
+  <span class="n">willBeThere</span> <span class="mi">38</span> <span class="mi">150</span>
+</code></pre></div>    </div>
+
+    <p>is de-sugared to this:</p>
+
+    <div class="language-fsharp highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code>  <span class="k">let</span> <span class="n">willBeThere2</span> <span class="n">a</span> <span class="n">y</span> <span class="p">=</span>
+    <span class="n">age</span><span class="p">.</span><span class="nc">Delay</span><span class="p">(</span><span class="k">fun</span> <span class="bp">()</span> <span class="p">-&gt;</span> 
+      <span class="n">age</span><span class="p">.</span><span class="nc">Bind</span><span class="p">(</span><span class="nc">PossiblyAlive</span> <span class="n">a</span><span class="p">,</span> <span class="k">fun</span> <span class="n">current</span> <span class="p">-&gt;</span>
+        <span class="n">age</span><span class="p">.</span><span class="nc">Bind</span><span class="p">(</span><span class="nc">PossiblyAlive</span> <span class="p">(</span><span class="n">y</span><span class="o">+</span><span class="n">a</span><span class="o">),</span> <span class="k">fun</span> <span class="n">future</span> <span class="p">-&gt;</span>
+          <span class="n">age</span><span class="p">.</span><span class="nc">Return</span><span class="p">(</span><span class="n">future</span><span class="o">))))</span>
+	
+  <span class="n">willBeThere2</span> <span class="mi">38</span> <span class="mi">80</span>
+</code></pre></div>    </div>
+
+    <p>At this point this concept seems too complicated to sink my teeth into. TryFSharp.suggests further study of the following concepts to have a better understanding of computation expressions:</p>
+
+    <ul>
+      <li>The sophisticated architecture of function calls that are generated by de-sugaring</li>
+      <li>Monads - the theory behind computational expressions</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Quotations</strong> is a language feature “that enables you to generate and work with F# code expressions programmatically. This feature lets you generate an abstract syntax tree that represents F# code. The abstract syntax tree can then be traversed and processed according to the needs of your application. For example, you can use the tree to generate F# code or generate code in some other language.”</p>
+  </li>
+</ul>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>After dabbling 4 days in TryFSharp.org I think it’s time to move on. There are 4 more sections in the site but since I can only learn by building something on my own I’ll try to come up with a small project to use the basics. Otherwise it’s likely that all this information will be forgotten. It’s already very overwhelming and I need a small achievement to motivate myself.</p>
+
+<p>So I leave TryFSharp.org at this point, for a while at least. Even though I don’t find the advanced topics well-explained it’s still a very nice resource to get started.</p>
+
+<p><img src="/images/vpblogimg/2015/01/TryFSharp-REPL.png" alt="TryFSharp.org"></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://msdn.microsoft.com/en-us/library/dd233212.aspx" target="_blank" rel="noopener noreferrer">MSDN Article - Code Quotations</a></li>
+  <li><a href="http://TryFSharp.org" target="_blank" rel="noopener noreferrer">TryFSharp.org</a></li>
+  <li><a href="http://stackoverflow.com/questions/11974624/getting-started-with-f" target="_blank" rel="noopener noreferrer">StackOverflow - Getting started with F#</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/01/04/adventures-in-fsharp-part-3/" itemprop="url">Adventures in F# - Part 3</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -301,125 +418,6 @@
 
 <p>Best of both worlds!</p>
 
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/01/03/adventures-in-fsharp-part-2/" itemprop="url">Adventures in F# - Part 2</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-01-03T16:00:00+00:00" itemprop="datePublished">January  3, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">fsharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Yesterday I started devoting 2 pomodoros a day on learning F#. I will post my findings as I go along. Currently I’m on my second day and still working <a href="http://TryFSharp.org" target="_blank" rel="noopener noreferrer">TryFSharp.org</a> tutorial website. I think these notes will come in handy in the future so I decided to post them regularly.</p>
-
-<h3 id="what-ive-learned-today">What I’ve learned today</h3>
-
-<ul>
-  <li>
-<strong>Record types</strong> can be defined by type keyword such as</li>
-</ul>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="nc">Book</span> <span class="p">=</span> 
-  <span class="p">{</span> <span class="nc">Name</span><span class="p">:</span> <span class="kt">string</span><span class="p">;</span>
-    <span class="nc">AuthorName</span><span class="p">:</span> <span class="kt">string</span><span class="p">;</span>
-    <span class="nc">Rating</span><span class="p">:</span> <span class="kt">int</span><span class="p">;</span>
-    <span class="nc">ISBN</span><span class="p">:</span> <span class="kt">string</span> <span class="p">}</span>
-</code></pre></div></div>
-
-<p>New objects of type Book can be created by let bindings</p>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">expertFSharp</span> <span class="p">=</span> 
-  <span class="p">{</span> <span class="nc">Name</span> <span class="p">=</span> <span class="s2">"Expert F#"</span><span class="p">;</span>
-    <span class="nc">AuthorName</span> <span class="p">=</span> <span class="s2">"Don Syme, Adam Granicz, Antonio Cisternino"</span><span class="p">;</span>
-    <span class="nc">Rating</span> <span class="p">=</span> <span class="mi">5</span><span class="p">;</span>
-    <span class="nc">ISBN</span> <span class="p">=</span> <span class="s2">"1590598504"</span> <span class="p">}</span>  
-</code></pre></div></div>
-
-<p>These values are immutable but new objects can be created based on the current values:</p>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">partDeux</span> <span class="p">=</span> <span class="p">{</span> <span class="n">expertFSharp</span> <span class="k">with</span> <span class="nc">Name</span> <span class="p">=</span> <span class="s2">"Expert F# 2.0"</span> <span class="p">}</span>
-</code></pre></div></div>
-
-<p>If there are similar types F# will infer the last one defined. So when there are duplicate types it may be needed to use explicit definitions. For example</p>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">expertFSharp</span> <span class="p">=</span> 
-  <span class="p">{</span> <span class="nc">Name</span> <span class="p">=</span> <span class="s2">"Expert F#"</span><span class="p">;</span>
-    <span class="nc">AuthorName</span> <span class="p">=</span> <span class="s2">"Don Syme, Adam Granicz, Antonio Cisternino"</span><span class="p">;</span>
-    <span class="nn">Book</span><span class="p">.</span><span class="nc">Rating</span> <span class="p">=</span> <span class="mi">5</span><span class="p">;</span>
-    <span class="nc">ISBN</span> <span class="p">=</span> <span class="s2">"1590598504"</span> <span class="p">}</span>  
-</code></pre></div></div>
-
-<p>In the above example Rating is referred explicitly by using the dot notation so that the correct type can be resolved.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<ul>
-  <li>
-<strong>Option types</strong> represent data that may or may not exist. There are two types: <strong>Some</strong> and <strong>None</strong>. Some is used when the data does exist and None is used when it doesn’t.</li>
-</ul>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="nc">Book</span> <span class="p">=</span>
-  <span class="p">{</span> <span class="nc">Name</span><span class="p">:</span> <span class="kt">string</span><span class="p">;</span>
-    <span class="nc">AuthorName</span><span class="p">:</span> <span class="kt">string</span><span class="p">;</span>
-    <span class="nc">Rating</span><span class="p">:</span> <span class="kt">int</span> <span class="n">option</span><span class="p">;</span>
-    <span class="nc">ISBN</span><span class="p">:</span> <span class="kt">string</span> <span class="p">}</span>
-</code></pre></div></div>
-
-<p>Now Rating value is optional can be assigned None</p>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Rating</span> <span class="p">=</span> <span class="nc">None</span><span class="p">;</span>
-</code></pre></div></div>
-
-<ul>
-  <li>
-<strong>Discriminated Unions</strong> are equivalent of enums in C# and they can be defined by listing pipe-separated values:</li>
-</ul>
-
-<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="nc">MushroomColor</span> <span class="p">=</span>
-<span class="p">|</span> <span class="nc">Red</span>
-<span class="p">|</span> <span class="nc">Green</span>
-<span class="p">|</span> <span class="nc">Purple</span>
-</code></pre></div></div>
-
-<p>Basics are covered in 4 sections in TryFSharp.org and this concludes the notes for the basics section. Next section is called Advanced F# Programming is composed of 5 sections. Tomorrow in my alloted time I’ll be looking into these sections.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://TryFSharp.org" target="_blank" rel="noopener noreferrer">TryFSharp.org</a></li>
-</ul>
 
 		
 		

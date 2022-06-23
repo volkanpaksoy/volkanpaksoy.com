@@ -1,0 +1,287 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Powershell Gotcha: Contains Operator - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2022/06/23/Powershell-Contains-vs-Match/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script>
+
+  
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y3V7V2XX9Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y3V7V2XX9Q');
+</script>
+
+<!-- <script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'G-Y3V7V2XX9Q']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script> -->
+
+
+
+  <!-- Twitter cards -->
+  <meta name="twitter:site"    content="@volkan_paksoy">
+  <meta name="twitter:creator" content="@Volkan Paksoy">
+  <meta name="twitter:title"   content="Powershell Gotcha: Contains Operator">
+
+  
+  <meta name="twitter:description" content="">
+  
+
+  
+  <meta name="twitter:card"  content="summary">
+  <meta name="twitter:image" content=""> -->
+  
+  <!-- end of Twitter cards -->
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+<br>
+<br>
+
+<!-- <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="volkanpaksoy" data-color="#005050" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#ffffff" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script> -->
+
+<a href="https://www.buymeacoffee.com/volkanpaksoy" target="_blank" rel="noopener noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;"></a>
+
+<div id="ezoic-pub-ad-placeholder-102">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Powershell Gotcha: Contains Operator</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2022-06-23T07:00:00+01:00" itemprop="datePublished">June 23, 2022</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">powershell, tip, match, contains, aws, lightsail, wordpress</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>I was working on a WordPress project recently. The project is to set up a WordPress blog using Amazon Lightsail service. I ended up blogging it <a href="How%20to%20host%20a%20WordPress%20website%20on%20AWS%20using%20Amazon%20Lightsail">here</a>, but I want to talk about something else in this post.</p>
+
+<h2 id="use-case-filter-results-using--contains-operator">Use Case: Filter results using -Contains operator</h2>
+<p>Amazon Lightsail comes with pre-packed applications, and you can create an instance by providing the blueprint id. You can search for blueprints by using the <code class="language-plaintext highlighter-rouge">Get-LSBlueprintList</code> cmdlet. It returns a list like this:</p>
+
+<p><img src="/images/vpblogimg/2022/06/powershell-contains-vs-match/01-get-lsblueprintlist-result.png" alt="Screenshot of the terminal showing the results of Get-LSBlueprintList cmdlet"></p>
+
+<p>WordPress comes in two different blueprints: Single-site vs multi-site.</p>
+
+<p>So my initial action was to filter the list based on the name containing the word “wordpress”. So I ran this script to get the results:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$applicationName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"wordpress"</span><span class="w">
+</span><span class="n">Get-LSBlueprintList</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Where-Object</span><span class="w"> </span><span class="p">{</span><span class="w"> 
+    </span><span class="p">(</span><span class="bp">$_</span><span class="o">.</span><span class="nf">IsActive</span><span class="w"> </span><span class="o">-eq</span><span class="w"> </span><span class="nv">$TRUE</span><span class="p">)</span><span class="w"> </span><span class="o">-and</span><span class="w">
+    </span><span class="p">(</span><span class="bp">$_</span><span class="o">.</span><span class="nf">Name</span><span class="w"> </span><span class="o">-contains</span><span class="w"> </span><span class="nv">$applicationName</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>To my surprise, this command returned the following result:</p>
+
+<p><img src="/images/vpblogimg/2022/06/powershell-contains-vs-match/02-get-lsblueprintlist-result-with-contains-filter.png" alt="Screenshot of the terminal showing the results of Get-LSBlueprintList cmdlet with contains filter, filtering by the word wordpress and isactive set to true"></p>
+
+<h2 id="the-problem-missing-wordpress-blueprint">The problem: Missing Wordpress blueprint</h2>
+<p>In the Amazon Lightsail dashboard, I can see the Wordpress Multisite exists:</p>
+
+<p><img src="/images/vpblogimg/2022/06/powershell-contains-vs-match/03-amazon-lightsail-instance-selection-page.png" alt="Screenshot of Amazon Lightsail dashboard instance selection page with wordpress-multisite highlighted"></p>
+
+<p>I even captured the API call the dashboard makes when creating a WordPress Multisite instance and it looks like this:</p>
+
+<p><img src="/images/vpblogimg/2022/06/powershell-contains-vs-match/04-api-call-showing-wordpress-multisite.png" alt="Screenshot of captured API call showing wordpress_multisite as blueprintid"></p>
+
+<p>So how was it possible that wordpress_multisite blueprint id existed but I couldn’t get it via <code class="language-plaintext highlighter-rouge">Get-LSBlueprintList</code>? I thought there was something wrong with the cmdlet and even created a supported ticket for AWS!. To my surprise the problem was somewhere else.</p>
+
+<h2 id="the-root-cause-contains-operator-works-in-mysterious-ways">The root cause: Contains operator works in mysterious ways!</h2>
+<p>As a C# developer, when I see “Contains”, I think of checking the existence of a substring in a string.</p>
+
+<p>For example, check out this simple example:</p>
+
+<p><img src="/images/vpblogimg/2022/06/powershell-contains-vs-match/05-contains-funciton-results-in-csharp.png" alt="Screenshot of C# application showing Contains function results"></p>
+
+<p>It’s checking whether or not the word “wordpress_multisite” contains the word “wordpress” and the answer is yes!</p>
+
+<p>Now, let’s take a look at the Powershell-equivalent:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$wordpressMultisite</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"wordpress_multisite"</span><span class="w">
+</span><span class="nv">$containsWordpress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">$wordpressMultisite</span><span class="w"> </span><span class="o">-contains</span><span class="w"> </span><span class="s2">"wordpress"</span><span class="w">
+</span><span class="nv">$containsWordpress</span><span class="w">
+</span></code></pre></div></div>
+
+<p>and here is the result:</p>
+
+<p><img src="/images/vpblogimg/2022/06/powershell-contains-vs-match/06-contains-operator-results-in-powershell.png" alt="Screenshot of Powershell script showing Contains operator results with substring"></p>
+
+<p>In this case, the answer is no!</p>
+
+<p>The reason is <code class="language-plaintext highlighter-rouge">contains</code> operator is by design meant to be used to search collections for a string. For example, the following example illustrates the intended use:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$listOfApplications</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"wordpress"</span><span class="p">,</span><span class="w"> </span><span class="s2">"lamp"</span><span class="p">,</span><span class="w"> </span><span class="s2">"nodejs"</span><span class="w">
+</span><span class="nv">$listOfApplicationsContainsWordpress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">$listOfApplications</span><span class="w"> </span><span class="o">-contains</span><span class="w"> </span><span class="s2">"wordpress"</span><span class="w">
+</span><span class="nv">$listOfApplicationsContainsWordpress</span><span class="w">
+</span></code></pre></div></div>
+
+<p>and the result is:</p>
+
+<p><img src="/images/vpblogimg/2022/06/powershell-contains-vs-match/07-contains-operator-results-in-powershell-for-list-of-strings.png" alt="Screenshot of Powershell script showing Contains operator results over a list of strings"></p>
+
+<h2 id="the-solution-match-operator">The solution: Match Operator</h2>
+<p>The solution is using the <code class="language-plaintext highlighter-rouge">match</code> operator for substrings. In my original script, all I had to do was replace <code class="language-plaintext highlighter-rouge">contains</code> with <code class="language-plaintext highlighter-rouge">match</code> and got the expected results.</p>
+
+<p>Final script:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$applicationName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"wordpress"</span><span class="w">
+</span><span class="n">Get-LSBlueprintList</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Where-Object</span><span class="w"> </span><span class="p">{</span><span class="w"> 
+    </span><span class="p">(</span><span class="bp">$_</span><span class="o">.</span><span class="nf">IsActive</span><span class="w"> </span><span class="o">-eq</span><span class="w"> </span><span class="nv">$TRUE</span><span class="p">)</span><span class="w"> </span><span class="o">-and</span><span class="w">
+    </span><span class="p">(</span><span class="bp">$_</span><span class="o">.</span><span class="nf">Name</span><span class="w"> </span><span class="o">-match</span><span class="w"> </span><span class="nv">$applicationName</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Output of the script:</p>
+
+<p><img src="/images/vpblogimg/2022/06/powershell-contains-vs-match/08-get-lsblueprintlist-showing-both-wordpress-results.png" alt="Screenshot of Powershell script showing both wordpress and wordpress_nultisite results"></p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>So there you have it: Always read the documentation!</p>
+
+<p>As Powershell is based on the .NET framework, I instinctively assumed <code class="language-plaintext highlighter-rouge">contains</code> would search a string for substrings, but it works entirely differently.</p>
+
+<p>I lost some time but learned a valuable lesson. I hope you find this post useful too, and it prevents the same thing from happening to you too.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://cloudinternals.net/aws/how-to-host-a-wordpress-website-on-aws-using-amazon-lightsail/" target="_blank" rel="noopener noreferrer">How to host a WordPress website on AWS using Amazon Lightsail</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comparison_operators?view=powershell-7.2" target="_blank" rel="noopener noreferrer">Powershell Comparison Operators</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2021/09/06/Using-Raspberry-Pi-as-Plex-Server/" title="Previous Post: 
+Using Raspberry Pi as Plex Server">« Using Raspberry Pi as Plex Server</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2022 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

@@ -146,6 +146,84 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2014/11/16/tip-day-capitalize-words-string-c/" itemprop="url">Tip of the Day: Capitalize all words in string with C#</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-11-16T11:04:26+00:00" itemprop="datePublished">November 16, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">tip_of_the_day, csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>To capitalize all words in a string you can use the function built-in the .NET framework <strong><em>ToTitleCase</em></strong> function in <strong><em>System.Globalization.TextInfo</em></strong> class</p>
+
+<p>Here is a sample (taken from MSDN link below):</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Globalization</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Example</span>
+<span class="p">{</span>
+   <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">()</span>
+   <span class="p">{</span>
+      <span class="kt">string</span><span class="p">[]</span> <span class="n">values</span> <span class="p">=</span> <span class="p">{</span> <span class="s">"a tale of two cities"</span><span class="p">,</span> <span class="s">"gROWL to the rescue"</span><span class="p">,</span>
+                          <span class="s">"inside the US government"</span><span class="p">,</span> <span class="s">"sports and MLB baseball"</span><span class="p">,</span>
+                          <span class="s">"The Return of Sherlock Holmes"</span><span class="p">,</span> <span class="s">"UNICEF and children"</span><span class="p">};</span>
+
+      <span class="n">TextInfo</span> <span class="n">ti</span> <span class="p">=</span> <span class="n">CultureInfo</span><span class="p">.</span><span class="n">CurrentCulture</span><span class="p">.</span><span class="n">TextInfo</span><span class="p">;</span>
+      <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="k">value</span> <span class="k">in</span> <span class="n">values</span><span class="p">)</span>
+         <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"{0} --&gt; {1}"</span><span class="p">,</span> <span class="k">value</span><span class="p">,</span> <span class="n">ti</span><span class="p">.</span><span class="nf">ToTitleCase</span><span class="p">(</span><span class="k">value</span><span class="p">));</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">// The example displays the following output: </span>
+<span class="c1">//    a tale of two cities --&gt; A Tale Of Two Cities </span>
+<span class="c1">//    gROWL to the rescue --&gt; Growl To The Rescue </span>
+<span class="c1">//    inside the US government --&gt; Inside The US Government </span>
+<span class="c1">//    sports and MLB baseball --&gt; Sports And MLB Baseball </span>
+<span class="c1">//    The Return of Sherlock Holmes --&gt; The Return Of Sherlock Holmes </span>
+<span class="c1">//    UNICEF and children --&gt; UNICEF And Children</span>
+</code></pre></div></div>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://msdn.microsoft.com/en-us/library/system.globalization.textinfo.totitlecase(v=vs.110).aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/system.globalization.textinfo.totitlecase(v=vs.110).aspx</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/11/16/tip-day-activate-multi-factor-authentication-mfa-aws/" itemprop="url">Tip of the Day: Activate multi-factor authentication (MFA) on AWS</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -245,52 +323,6 @@
 <ul>
   <li><a href="http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPUT.html" target="_blank" rel="noopener noreferrer">AWS API Documentation</a></li>
 </ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/11/15/tip-day-generating-insert-statements-sql-server-management-studio/" itemprop="url">Tip of the Day: Generating insert statements with SQL Server Management Studio</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-11-15T23:51:27+00:00" itemprop="datePublished">November 15, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">tip_of_the_day, sql_server, ssms</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>The feature exists but a bit buried away. To create insert statements for table(s):</p>
-
-<ol>
-  <li>Right click on the database and go to Tasks -&gt; Generate Scripts</li>
-  <li>Select the tables that you want to generate the script</li>
-  <li>In “Set scripting options” page click on the Advanced button</li>
-  <li>Under the General category, locate “Types of data to script”. It contains 3 options: Data Only, Schema and Data, and Schema Only. Default is Schema only,if you select an option with data in it you can get the data with the insert statements.</li>
-</ol>
-
-<p><img src="/images/vpblogimg/2014/11/SQLServerGeneratingInsertScript.png" alt="Generating Insert Scripts With SSMS"></p>
-
 
 		
 		

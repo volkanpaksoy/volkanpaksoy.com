@@ -146,6 +146,124 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2019/10/15/AWS-Developer-Tools-Services-Part-1-AWS-CodeCommit/" itemprop="url">AWS Developer Tools Services Part 1: AWS CodeCommit</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-10-15T07:00:00+01:00" itemprop="datePublished">October 15, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devopsaws">devops</a></span> -->
+
+<!-- devops, aws -->
+
+
+
+
+    <a href="/category/devops">devops</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">codecommit, git, aws_developer_tools_services</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<h2 id="introduction">Introduction</h2>
+<p>This post is part of my mini-series about <a href="https://aws.amazon.com/products/developer-tools/" target="_blank" rel="noopener noreferrer">AWS Developer Tools Services</a></p>
+
+<ul>
+  <li>Part 1: AWS CodeCommit</li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/19/AWS-Developer-Tools-Services-Part-2-AWS-CodeBuild/">Part 2: AWS CodeBuild</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/20/AWS-Developer-Tools-Services-Part-3-AWS-CodeDeploy/">Part 3: AWS CodeDeploy</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/23/AWS-Developer-Tools-Services-Part-4-AWS-CodePipeline/">Part 4: AWS CodePipeline</a></li>
+</ul>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codecommit-icon.png" alt=""></p>
+
+<h2 id="aws-codecommit">AWS CodeCommit</h2>
+<p>I’m looking for GitHub alternatives and thought CodeCommit would be worth a shot.</p>
+
+<h2 id="creating-a-repository">Creating a Repository</h2>
+<p>Like any other Git provider, you start with creating a repository.</p>
+
+<p>As a side-note, I always thought what was lacking in GitHub was a way of grouping repositories. You can use topics which are essentially labels</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codecommit-github-topics.png" alt=""></p>
+
+<p>I was hoping there would be a way to create folders or another way to group related repositories together but the closest thing they provide is using tags:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codecommit-create-repo.png" alt=""></p>
+
+<h2 id="connecting-to-repositories">Connecting to repositories</h2>
+<p>After creating the repository it shows all the information needed for different protocols (HTTPS / SSH) and platforms (MacOS / Windows / Linux). One thing to note is that because of the security risks, it doesn’t allow you to connect with root credentials so you have to be logged in as an IAM user with CodeCommit full access.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codecommit-connection-info.png" alt=""></p>
+
+<p>I’m writing this blog post on a Windows laptop and so followed <a href="https://docs.aws.amazon.com/en_pv/codecommit/latest/userguide/setting-up-ssh-windows.html" target="_blank" rel="noopener noreferrer">this</a> guide for generating public/private keys.</p>
+
+<p>It’s similar to any other Git guide with the exception that you have to add your access key to your SSH config file (~/.ssh/config):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host git-codecommit.*.amazonaws.com
+  User APKAEIBAERJR2EXAMPLE
+  IdentityFile ~/.ssh/codecommit_rsa
+</code></pre></div></div>
+
+<p>Then to test your connection, run:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh git-codecommit.us-east-2.amazonaws.com
+</code></pre></div></div>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>After adding the host to known hosts list you should see this message:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>You have successfully authenticated over SSH. You can use Git to interact with AWS CodeCommit. Interactive shells are not supported.Connection to git-codecommit.us-east-2.amazonaws.com closed by remote host.
+</code></pre></div></div>
+
+<h2 id="clone-the-repo">Clone the repo</h2>
+<p>On the same, click on the Clone URL dropdown and choose the protocol you’d like to use (ideally SSH):</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codecommit-clone-repo-url.png" alt=""></p>
+
+<p>and try it in your shell (Powershell in my case). You should see your repository locally:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codecommit-cloned-repo.png" alt=""></p>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>In my experience in Windows, everything worked find on command line but when I tried to use my Git client (Git Extensions) I started having connection issues. The fix for that was to add my AWS SSH Key Id in the URL:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone ssh://Your-SSH-Key-ID@git-codecommit.us-east-2.amazonaws.com/v1/repos/MyDemoRepo my-demo-repo
+</code></pre></div></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://docs.aws.amazon.com/en_pv/codecommit/latest/userguide/setting-up-ssh-windows.html" target="_blank" rel="noopener noreferrer">Setup Steps for SSH Connections to AWS CodeCommit Repositories on Windows</a></li>
+  <li><a href="https://docs.aws.amazon.com/en_pv/codecommit/latest/userguide/troubleshooting-ssh.html" target="_blank" rel="noopener noreferrer">Troubleshooting SSH Connections to AWS CodeCommit</a></li>
+  <li><a href="https://aws.amazon.com/products/developer-tools/" target="_blank" rel="noopener noreferrer">AWS Developer Tools services</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2019/09/06/Git-Branching-Strategies-GitHub-Flow/" itemprop="url">Git Branching Strategies: GitHub Flow</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -447,187 +565,6 @@
   <li><a href="https://nvie.com/posts/a-successful-git-branching-model" target="_blank" rel="noopener noreferrer">Git Flow Original Blog Post: A successful Git branching model</a></li>
   <li><a href="/assets/docs/Git-branching-model.pdf">Full branching model PDF</a></li>
   <li><a href="https://www.codingblocks.net/podcast/comparing-git-workflows/" target="_blank" rel="noopener noreferrer">Coding Blocks Podcast: Comparing Git Workflows</a></li>
-</ul>
-
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2019/09/04/alarm-pi/" itemprop="url">Alarm Pi</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2019-09-04T07:00:00+01:00" itemprop="datePublished">September  4, 2019</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
-
-<!-- hobby -->
-
-
-
-
-    <a href="/category/hobby">hobby</a>
-    
-</span>
-	<span class="tags">raspberry_pi, productivity</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<h2 id="the-problem">The Problem</h2>
-<p>Snoozing is the worst possible thing you can do to yourself! You start the day with a feeling of guilt and being late for everything from the start. To avoid this I’ve been working on improving my toolkit and techniques. I posted <a href="https://volkanpaksoy.com/archive/2019/03/09/No-More-Snoozing-Tips-Tools-and-Techniques/">this</a> as a list of my current methods and tools.</p>
-
-<p>Whilst these methods worked for me a while I’ve started having an issue with Alexa playing my playlist from Spotify: It always starts with the same song. My idea was to have a different song every morning so this bug in Spotify impeded me from achieving my goal.</p>
-
-<h2 id="the-idea">The Idea</h2>
-<p>As the saying goes: If all you have is a hammer, everything looks like a nail!</p>
-
-<p>Even though I have other means of developing tools and software, I wanted to use another Raspberry Pi to replace Alexa morning routine (it still turns on the light though).</p>
-
-<h2 id="the-execution">The Execution</h2>
-<p>So I decided to dust off my OG Raspberry Pi 1 Model B and implement my own custom solution for playing a random song every morning to help wake me up.</p>
-
-<p><img src="/images/vpblogimg/2019/09/alarm-pi-angmar.jpg" alt=""></p>
-
-<p>Here’s how I implemented it from start to finish:</p>
-
-<h3 id="step-01-download-raspbian-image-and-prepare-sdmicrosd-card">Step 01: Download Raspbian image and prepare SD/MicroSD card</h3>
-<p>I downloaded Raspbian Buster Lite as I don’t need desktop and other extra software for this project.</p>
-
-<p>I followed the official guide from raspberrypi.org to burn the image. It’s basically just a few commands:</p>
-
-<p>Insert the card and run the following to identify the card:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil list
-</code></pre></div></div>
-
-<p>Then</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo dd bs=1m if=path_of_your_image.img of=/dev/rdiskn conv=sync
-</code></pre></div></div>
-
-<p>where n is the number of disk which I found from the first step.</p>
-
-<p>If you get “resource is busy” error, then run the following</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>diskutil unmountDisk /dev/diskn
-</code></pre></div></div>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h3 id="step-02-carry-out-necessary-configuration-updates">Step 02: Carry Out Necessary Configuration Updates</h3>
-<p>It’s a good practice to change the default passwords so I ran</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>passwd
-</code></pre></div></div>
-
-<p>and updated the password.</p>
-
-<p>Also for remote installations I enabled SSH:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable ssh
-sudo systemctl start ssh
-</code></pre></div></div>
-
-<p>And I like to give a specific name to all my devices so that I can keep an eye on the machines connected to my network more easily.</p>
-
-<p>To achieve that I ran:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo hostname NEW_HOSTNAME
-</code></pre></div></div>
-
-<p>I used raspi-config to connect to WiFi network</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo raspi-config
-</code></pre></div></div>
-
-<p>and enter the details and rebooted to connect to the network.</p>
-
-<p>In this MVP implementation I don’t even need Internet connectivity (after the initial installations below) as all my MP3 files are on the device already. But in my tests I noticed that when the Pi is disconnected the system time wasn’t updating so scheduled job wasn’t being triggered. This is probably because I’m using a Pi 1. I’m guessing the newer version can work offline as well.</p>
-
-<h3 id="step-03-install-mp3-player-software">Step 03: Install MP3 Player Software</h3>
-<p>In this simple project I’m going to install mpg123 and run it via a Python script</p>
-
-<p>Installation is as simple as this:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install mpg123 -y
-</code></pre></div></div>
-
-<h3 id="step-04-develop-the-script">Step 04: Develop the script</h3>
-<p>The following script points to a folder which supposedly have all the local MP3 files, picks one randomly and starts playing.</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">random</span>
-
-<span class="n">path</span> <span class="o">=</span><span class="s">'/path/to/mp3/folder'</span> 
-<span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-<span class="n">index</span> <span class="o">=</span> <span class="n">random</span><span class="p">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">))</span>
-
-<span class="n">os</span><span class="p">.</span><span class="n">system</span><span class="p">(</span><span class="sa">f</span><span class="s">'/usr/bin/mpg123 </span><span class="si">{</span><span class="n">files</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
-</code></pre></div></div>
-
-<h3 id="step-05-copy-music-and-script-to-raspberry-pi">Step 05: Copy music and script to Raspberry Pi</h3>
-<p>Save the script above in a USB drive along with the MP3 files. To copy the files from USB drive to Pi microSD card, I inserted my USB and ran the following:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo fdisk -l
-sudo mkdir /media/usb
-sudo mount /dev/sda1 /media/usb
-</code></pre></div></div>
-
-<p>Then</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mkdir /home/pi/music
-cp /media/usb/*.mp3 /home/pi/music
-</code></pre></div></div>
-
-<p>and copy the script to home folder</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cp /media/usb/alarm-pi.py /home/pi
-</code></pre></div></div>
-
-<h3 id="step-06-schedule-the-script">Step 06: Schedule the script</h3>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>crontab -e
-</code></pre></div></div>
-
-<p>Then add to run at a certain time. The example below runs at 7:30am everyday:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>30 7 * * * /usr/bin/python3 /home/pi/alarm-pi.py
-</code></pre></div></div>
-
-<p>If you want to run the script multiple times you can another one (like another one after 10 minutes as a snooze-prevention mechanism!)</p>
-
-<h3 id="step-07-test-the-schedule">Step 07: Test the schedule</h3>
-<p>Update your schedule temporarily and set it to a few minutes later and start playing the waiting game! Once you hear a random song playing make sure to set it back to your actual alarm time.</p>
-
-<h2 id="conclusion">Conclusion</h2>
-<p>I meant to run this in a Docker container and develop the application with dotnet core but turns out playing MP3 with dotnet core in Linux is not easy. Also playing sound from inside a container has its own issues. So for those reasons I chose the easiest possible path to achieve the goal. If I find time I’ll improve this and make it more flexible but for the time being it does the job so I’ll assume MVP is done now.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://volkanpaksoy.com/archive/2019/03/09/No-More-Snoozing-Tips-Tools-and-Techniques">No more snoozing: Tips, tools and techniques</a></li>
-  <li><a href="https://www.raspberrypi.org/documentation/installation/installing-images/mac.md" target="_blank" rel="noopener noreferrer">Installing operating system images on Mac OS</a></li>
-  <li><a href="https://blog.docker.com/2019/03/happy-pi-day-docker-raspberry-pi/" target="_blank" rel="noopener noreferrer">Docker Blog: Happy Pi Day with Docker and Raspberry Pi</a></li>
-  <li><a href="https://downloads.raspberrypi.org/raspbian/images/" target="_blank" rel="noopener noreferrer">Raspbian Downloads Page</a></li>
-  <li><a href="https://downloads.raspberrypi.org/raspbian_lite/images/" target="_blank" rel="noopener noreferrer">Raspbian Lite Downloads Page</a></li>
-  <li><a href="https://electrondust.com/2017/11/25/setting-raspberry-pi-wifi-static-ip-raspbian-stretch-lite/" target="_blank" rel="noopener noreferrer">Setting up Raspberry Pi WiFi with Static IP on Raspbian Stretch Lite</a></li>
 </ul>
 
 

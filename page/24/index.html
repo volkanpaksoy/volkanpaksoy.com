@@ -146,6 +146,86 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/10/01/creating-pdfs-from-images-with-csharp-and-wpf/" itemprop="url">Creating PDFs from Images with C# and WPF</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-10-01T00:00:00+01:00" itemprop="datePublished">October  1, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp, wpf</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I like scanning all my documents and keep a digital version as well as the dead-tree version just in case. But storing the documents as individual image files is too messy. There are various solutions to merge image files into a single PDF but I don’t want to upload my sensitive documents to unknown parties so I rolled my own: <a href="https://github.com/volkanpaksoy/image2pdf" target="_blank" rel="noopener noreferrer">Image2PDF</a></p>
+
+<h2 id="implementation">Implementation</h2>
+<p>I decided to go with a WPF application rathen than a web-based solution because it would be unnecessary to upload a bunch of image files to cloud and download the PDF back. It’s a lot of network traffic for something that can be handled locally much faster.</p>
+
+<p>Image2PDF a simple WPF application developed in C#. I’ve used <a href="http://sourceforge.net/projects/itextsharp" target="_blank" rel="noopener noreferrer">iTextSharp</a> library to create the PDFs. It’s a great open-source library with lots of capabilities.</p>
+
+<p>I’ve also started using <a href="https://www.syncfusion.com/products/wpf" target="_blank" rel="noopener noreferrer">SyncFusion WPF control library</a> recently. The entire control suite is free of charge (which is always a great price!). It has a Wizard control which I decided to go with. I think using a wizard and is cleaner UI instead of dumping every control on one window.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h2 id="usage">Usage</h2>
+<p>As you might expect you provide the list of input images, re-order them if needed, choose the path for the output folder and go!</p>
+
+<p>Step 1: Select input</p>
+
+<p><img src="/images/vpblogimg/2015/09/image2pdf-page1.png" alt="Page 1: Specify input image files"></p>
+
+<p>Step 2: Select output</p>
+
+<p><img src="/images/vpblogimg/2015/09/image2pdf-page2.png" alt="Page 2: Specify output PDF path"></p>
+
+<p>Step 3: Go!</p>
+
+<p><img src="/images/vpblogimg/2015/09/image2pdf-page3.png" alt="Page 3: Run!"></p>
+
+<p>Simples!</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>In the future I’m planning to add various PDF operarions and enhance the functionality but since shipping is a feature I’ll limit the scope for now. After all, this was the main feature I needed anyway.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/image2pdf" target="_blank" rel="noopener noreferrer">Source code</a></li>
+  <li><a href="http://sourceforge.net/projects/itextsharp/" target="_blank" rel="noopener noreferrer">iTextSharp project page</a></li>
+  <li><a href="https://www.syncfusion.com/products/wpf" target="_blank" rel="noopener noreferrer">SyncFusion Essential Studio for WPF</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/09/18/from-json-to-neo4j/" itemprop="url">From JSON to Neo4J</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -463,273 +543,6 @@ neo4jshell -file relationships.cql
 
 <h3 id="conclusion">Conclusion</h3>
 <p>Often times I’ve found knowledge about the internals of a construct useful. Applications and frameworks are getting more complex each day, adding more layers and hiding the complexity from the consumers. It’s great because we can focus on the actual business logic and application we are building but when we get stuck it takes quite a while to figure out what’s going on. Having in-depth knowledge on the internals can save a lot if time.</p>
-
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/08/19/continuous-integration-with-tfs-2015-express/" itemprop="url">Continuous Integration with TFS Express 2015 from scratch</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-08-19T17:30:00+01:00" itemprop="datePublished">August 19, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">tfs, team_foundation_server, ci, continuous_integration, alm, application_lifecycle_management</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Setting up continuous integration environment with TFS is quite easy and free. In this post I’ll go over the details of setting up a CI environment. The tools I will use are:</p>
-
-<ul>
-  <li>Visual Studio 2015 Community Edition</li>
-  <li>TFS 2015 Express</li>
-  <li>AWS EC2 instance (To install TFS)</li>
-  <li>AWS SES (To send notification mails)</li>
-</ul>
-
-<h4 id="step-01-download-and-install-tfs-express-2015">Step 01: Download and install TFS Express 2015</h4>
-<p>I always prefer the offline installer so download the whole ISO just in case (it’s 891MB so it might be a good time for a coffee break!)</p>
-
-<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-download-iso.png" alt=""></p>
-
-<p>Installation is standard next-next-finish so nothing particular about it. Accepting all defaults yields a working TFS instance.</p>
-
-<h4 id="step-02-connect-to-tfs">Step 02: Connect to TFS</h4>
-<p>From the Team menu select Manage Connections. This will open Team Explorer on which we can choose the TFS instance.</p>
-
-<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-connect-to-team-project.png" alt=""></p>
-
-<p>It can connect to TFS Online or Github. For this example I will use the hosted TFS we have just installed. We first need to add it to TFS server list.</p>
-
-<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-add-tfs.png" alt=""></p>
-
-<p>If you are using EC2 like I did don’t forget to allow inbound traffic on port 8080 beforehand.</p>
-
-<p>Note that we don’t have a Team Project yet, what we have connected is the Project Collection. A collection is an additional abstraction layer used to group related projects. Using Default Collection generally works out just fine for me.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h4 id="step-03-configure-workspace">Step 03: Configure workspace</h4>
-<p>Since a local copy needs to be stored locally we have to map it to the project</p>
-
-<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-configure-workspace-1.png" alt=""></p>
-
-<p>Just pick a local empty folder. Leaving “$/” means the entire collection will be mapped to this folder.</p>
-
-<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-configure-workspace-2.png" alt=""></p>
-
-<p>Click Map &amp; Get and you will have a blank workspace.</p>
-
-<h4 id="step-04-create-team-project">Step 04: Create team project</h4>
-<p>Now we can create a team project on TFS. click on Home -&gt; Projects and My Teams then New Team Project.</p>
-
-<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-new-team-project-1.png" alt=""></p>
-
-<p>Just following the wizard selects Scrum methodology and Team Foundation Version Control as the source control system. Starting with TFS 2013, Git is also supported now.</p>
-
-<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-new-team-project-2.png" alt=""></p>
-
-<p>After several minutes later, our team project is ready.</p>
-
-<h4 id="step-05-clone-and-start-developing">Step 05: Clone and start developing</h4>
-<p>I chose Git as the version control system. If you use TFSVC the terminology you’ll see is a bit different but since the main focus of this post is establishing continuous integration it doesn’t matter much as long you as you can check-in the source code.</p>
-
-<p>So now that we have a blank canvas let’s start painting! I added a class library with a single class like the one below:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">ComplexMathClass</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="kt">int</span> <span class="nf">Add</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="n">x</span> <span class="p">+</span> <span class="n">y</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">public</span> <span class="kt">double</span> <span class="nf">Divide</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="n">x</span> <span class="p">/</span> <span class="n">y</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>and 3 unit test projects (NUnit, XUnit and MSTest).</p>
-
-<p>NUnit tests:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">ComplexMathClassTests</span>
-<span class="p">{</span>
-    <span class="p">[</span><span class="nf">TestCase</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="n">ExpectedResult</span> <span class="p">=</span> <span class="m">3</span><span class="p">)]</span>
-    <span class="p">[</span><span class="nf">TestCase</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="n">ExpectedResult</span> <span class="p">=</span> <span class="m">5</span><span class="p">)]</span>
-    <span class="p">[</span><span class="nf">TestCase</span><span class="p">(-</span><span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="n">ExpectedResult</span> <span class="p">=</span> <span class="m">0</span><span class="p">)]</span>
-    <span class="k">public</span> <span class="kt">int</span> <span class="nf">Add_TwoIntegers_ShouldCalculateCorrectly</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">cmc</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ComplexMathClass</span><span class="p">();</span>
-        <span class="k">return</span> <span class="n">cmc</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="p">[</span><span class="n">Test</span><span class="p">]</span>
-    <span class="c1">// [ExpectedException(typeof(DivideByZeroException))]</span>
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">Divide_DenominatorZero_ShouldThrowDivideByZeroException</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">cmc</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ComplexMathClass</span><span class="p">();</span>
-        <span class="kt">double</span> <span class="n">result</span> <span class="p">=</span> <span class="n">cmc</span><span class="p">.</span><span class="nf">Divide</span><span class="p">(</span><span class="m">5</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>XUnit tests:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">ComplexMathClassTests</span>
-<span class="p">{</span>
-    <span class="p">[</span><span class="n">Theory</span><span class="p">]</span>
-    <span class="p">[</span><span class="nf">InlineData</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">3</span><span class="p">)]</span>
-    <span class="p">[</span><span class="nf">InlineData</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">5</span><span class="p">)]</span>
-    <span class="p">[</span><span class="nf">InlineData</span><span class="p">(-</span><span class="m">1</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">)]</span>
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">Add_TwoIntegers_ShouldCalculateCorrectly</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="kt">int</span> <span class="n">expectedResult</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">cmc</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ComplexMathClass</span><span class="p">();</span>
-        <span class="kt">int</span> <span class="n">actualResult</span> <span class="p">=</span> <span class="n">cmc</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
-        <span class="n">Assert</span><span class="p">.</span><span class="n">Equal</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;(</span><span class="n">expectedResult</span><span class="p">,</span> <span class="n">actualResult</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="p">[</span><span class="n">Fact</span><span class="p">]</span>
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">Divide_DenominatorZero_ShouldThrowDivideByZeroException</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">cmc</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ComplexMathClass</span><span class="p">();</span>
-        <span class="n">cmc</span><span class="p">.</span><span class="nf">Divide</span><span class="p">(</span><span class="m">5</span><span class="p">,</span> <span class="m">0</span><span class="p">);</span>
-    <span class="c1">//  Assert.Throws&lt;DivideByZeroException&gt;(() =&gt; cmc.Divide(5, 0));</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>MSTest tests:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[TestClass]
-public class ComplexMathClassTests
-{
-    [TestMethod]
-    // [ExpectedException(typeof(DivideByZeroException))]
-    public void Divide_DenominatorZero_ShouldThrowDivideByZeroException()
-    {
-        var cmc = new ComplexMathClass();
-        cmc.Divide(5, 0);
-    }
-}
-</code></pre></div></div>
-
-<p>Unfortunately MSTest still doesn’t support parametrized tests which is a shame IMHO. That’s why I was never a big fan of it but added to this project for the sake of completeness.</p>
-
-<p>I commented out the lines that expect exception in all tests to fail the tests. So now the setup is complete: We have a working project with a failing test. Our goal is to get alert notifications about the failing test whenever we check in our code. Let’s proceed to the next steps to accomplish this.</p>
-
-<h4 id="step-06-building-on-the-server">Step 06: Building on the server</h4>
-<p>As of TFS 2015 they renamed the Build Configuration to XAML Build Configuration for some reason and moved it under <em>Additional Tools and Components</em> node but everything else seems to be the same.</p>
-
-<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-management-console.png" alt=""></p>
-
-<p>Default configuration installs one build controller and one agent for the Default Collection so for this project we don’t have to do add or change anything.</p>
-
-<p>Each build controller is dedicated to a team project collection. Controller performs lightweight tasks such as determining the name and reporting the status of the build. Agents are the heavy-lifters and carry out processor-intensive work of the build process. Each agent is controlled by a single controller.</p>
-
-<p>In order to build our project on the build server we need a <strong>build definition</strong> first. We can create one by selecting Build -&gt; New build Definition</p>
-
-<ul>
-  <li>One important setting is the trigger: By default the build is not triggered automatically which means soon enough it will wither and die all forgotten! To automate the process we have to select Continuous Integration option.</li>
-</ul>
-
-<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-new-build-definition-trigger.png" alt=""></p>
-
-<ul>
-  <li>In order to automatically trigger the build, the branch that is to be built must be added to monitored branches list in the Source Settings tab.</li>
-</ul>
-
-<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-build-definition-source.png" alt=""></p>
-
-<ul>
-  <li>Last required setting is failing the build when a test fails. It’s a bit buried so you have to go 3.1.1 Test Source and set “Fail build on test failure” to true.</li>
-</ul>
-
-<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-new-build-definition-process.png" alt=""></p>
-
-<h4 id="step-07-notifications">Step 07: Notifications</h4>
-<p>At this point, our build definition is triggered automatically but we don’t get any notifications if the build fails (due to a compilation error for example). TFS comes with an application called Build Notifications. It pops up an alert but it requires to be installed on the developer machine so I don’t like this solution.</p>
-
-<p>A better approach is enabling E-Mail notifications. In order to do that first we need to set up Email Alert Settings for TFS. In the Team Foundation Server Express Administration Console select Application Tier and scroll down to the “Email Alert Settings” section. enter the SMTP credentials and server info here.</p>
-
-<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-smtp-settings.png" alt=""></p>
-
-<p>You can also send a test email to verify your settings.</p>
-
-<p>Second and final stage is to enable the project-based alerts. In Visual Studio Team Explorer window select Home -&gt; Settings -&gt; Project Alerts. This will pop up a browser and redirect to alert management page. Here select “Advanced Alert Management Page”. In the advanced settings page there are a few pre-set notification conditions and the build failure is at the top of the list!</p>
-
-<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-build-fail-notification.png" alt=""></p>
-
-<p>I intentionally broke the build and checked in my code and in a minute, as expected I received the following email:</p>
-
-<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-alert-email.png" alt=""></p>
-
-<p>With that we have automated the notifications. We already set the build to fail upon test failure in the previous step. Final step is to run the tests on the build server to complete the circuit.</p>
-
-<h4 id="step-08-run-tests-on-build-server">Step 08: Run tests on build server</h4>
-
-<p>Running tests on the server is very simple. For NUnit all we have to do is install the NUnitTestAdapter package:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package NUnitTestAdapter
-</code></pre></div></div>
-
-<p>After I committed and pushed my code with the failing test I got the notification in a minute:</p>
-
-<p><img src="/images/vpblogimg/2015/08/ci-with-tfs-nunit-test-alert.png" alt=""></p>
-
-<p>Uncommented the ExpectedException line and the build succeeded.</p>
-
-<p>For xUnit the solution is similar, just install the xUnit runner NuGet package and checkin the code</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package xunit.runner.visualstudio
-</code></pre></div></div>
-
-<p>For MSTest it works out of the box so you don’t have to install anything.</p>
-
-<p>In the previous version of TFS I had to install Visual Studio on the build server as advised in this <a href="https://msdn.microsoft.com/en-us/library/bb399135.aspx#software" target="_blank" rel="noopener noreferrer">MSDN article</a>. Seems like in TFS 2015 you don’t have to do that. The only benefit of using MSTest (as far as I can see at least) is that it’s baked in so you don’t have to install extra packages. You create a Unit Test project and all your tests are immediately visible in the test explorer and automatically run on the server.</p>
-
-<h3 id="wrapping-up">Wrapping up</h3>
-<p>Continuous Integration is a crucial part of the development process. Team Foundation Server is a powerful tool with lots of features. In this post I tried to cover basics from installation to setting up a basic CI environment. I’ll try to cover more features in the future but my first priority will be new AWS services CodeDeploy, CodeCommit and CodePipeline. As I’m trying to migrate everything to AWS having all projects hosted and managed on AWS would make more sense in my case.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://www.visualstudio.com/downloads/download-visual-studio-vs" target="_blank" rel="noopener noreferrer">TFS Download</a></li>
-  <li><a href="http://blogs.msdn.com/b/mvpawardprogram/archive/2013/11/13/git-for-tfs-2013.aspx" target="_blank" rel="noopener noreferrer">Git for TFS Announcement</a></li>
-  <li><a href="https://www.visualstudio.com/en-us/news/tfs2015-vs.aspx" target="_blank" rel="noopener noreferrer">Team Foundation Server 2015 RTM Release Notes</a></li>
-  <li><a href="http://blogs.msdn.com/b/tfssetup/archive/2015/08/12/team-foundation-server-2015-rtm-installation-steps.aspx" target="_blank" rel="noopener noreferrer">Team Foundation Server 2015 RTM–Installation Steps</a></li>
-  <li><a href="https://msdn.microsoft.com/en-us/library/ms181725.aspx" target="_blank" rel="noopener noreferrer">Receive build notifications</a></li>
-  <li><a href="https://msdn.microsoft.com/en-us/library/bb399135.aspx#software" target="_blank" rel="noopener noreferrer">MSDN: Deploy and configure build agents</a></li>
-  <li><a href="https://github.com/volkanpaksoy/ci-with-tfs-workout" target="_blank" rel="noopener noreferrer">Sample project source code</a></li>
-</ul>
 
 
 		

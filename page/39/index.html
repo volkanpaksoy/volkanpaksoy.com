@@ -146,6 +146,68 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/string-interpolation/" itemprop="url">C# 6.0 New Features - String Interpolation</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-08T11:00:00+00:00" itemprop="datePublished">December  8, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>One of favorite features is the new string formatting using <em>String Interpolation</em>. In the past I encountered a lot of errors while formatting strings especially when preparing log messages. You may need lots of small pieces of data that so after a few iterations you may forget to add new parameters.</p>
+
+<p>For example in the imaginary Log method below only 3 parameters are supplied whereas the string expects 4. It compiles successfully because the string is generated at run-time and it doesn’t check the number curly braces against the number of parameters supplied.</p>
+
+<p><img src="/images/vpblogimg/2014/12/argument-count-mismatch.png" alt="Argument count mismatch error"></p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>Using the new feature such errors can be avoided as we can put the values directly in their places in the string:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">StringInterpolation</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="nf">Log</span><span class="p">(</span><span class="kt">string</span> <span class="n">timestamp</span><span class="p">,</span> <span class="kt">string</span> <span class="n">application</span><span class="p">,</span> <span class="kt">string</span> <span class="n">error</span><span class="p">,</span> <span class="kt">string</span> <span class="n">status</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"[Timestamp: \{timestamp}], Application: [\{application}], Error: [\{error}], Status [\{status}]"</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>No more parameter mismatch errors!</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/expression-bodied-methods/" itemprop="url">C# 6.0 New Features - Expression-Bodied Methods</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -257,96 +319,6 @@
 </div>
 
 <p>I don’t think I liked this new feature. If you see a direct method call it feels like it’s a member of that method. But now it’s possible that method can be defined inside a static class somewhere else. I think it would just cause confusion and doesn’t add any benefit.</p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/12/07/auto-properties-with-initializers/" itemprop="url">C# 6.0 New Features - Auto-Properties with Initializers</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-12-07T00:20:00+00:00" itemprop="datePublished">December  7, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Currently, in Visual Studio 2013, if you have a line like this</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="kt">int</span> <span class="n">MyProperty</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span>  <span class="p">}</span>
-</code></pre></div></div>
-
-<p>you’d get a compilation error like this:</p>
-
-<p><img src="/images/vpblogimg/2014/12/getter-only-property-error-vs-2013.png" alt="Getter-only auto-property error"></p>
-
-<p>But the same code in VS 2015 compiles happily. The reason to add this feature is to not get in the way of immutable data types.</p>
-
-<p>Another new feature about auto-properties is initializers. For example the following code would compile and run with new C#:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">AutoInit</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">FirstName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="s">"Unknown"</span><span class="p">;</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">LastName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="s">"Unknown"</span><span class="p">;</span>
-
-    <span class="k">public</span> <span class="nf">AutoInit</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"{0} {1}"</span><span class="p">,</span> <span class="n">FirstName</span><span class="p">,</span> <span class="n">LastName</span><span class="p">));</span>
-        <span class="n">FirstName</span> <span class="p">=</span> <span class="s">"Volkan"</span><span class="p">;</span>
-        <span class="n">LastName</span> <span class="p">=</span> <span class="s">"Paksoy"</span><span class="p">;</span>
-        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"{0} {1}"</span><span class="p">,</span> <span class="n">FirstName</span><span class="p">,</span> <span class="n">LastName</span><span class="p">));</span>
-    <span class="p">}</span>
-<span class="p">}</span>		
-</code></pre></div></div>
-<p>and the output is unsurprisingly looks like this:</p>
-
-<p><img src="/images/vpblogimg/2014/12/init-auto-property-ouput.png" alt="Auto-property initializer output"></p>
-
-<p>When I first ran this code successfully I was surprised how I managed to set values without a setter. Looks like under the covers it’s generating a read-only backing field for the property and just assignning the value to the field instead of calling the setter method. It can easily be seen using a decompiler:</p>
-
-<p><img src="/images/vpblogimg/2014/12/auto-property-justdecompile.png" alt="Just Decompile output"></p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<p>As it’s a read-only value it can only be set inside the constructor. So if you add the following method it wouldn’t compile:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">SetValue</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">FirstName</span> <span class="p">=</span> <span class="s">"another name"</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p><img src="/images/vpblogimg/2014/12/auto-property-set-error.png" alt="Auto-property set error"></p>
-
-<p>It’s a small improvement providing an alternative way to write the same code in less lines.</p>
 
 		
 		

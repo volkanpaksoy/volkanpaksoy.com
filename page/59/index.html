@@ -146,6 +146,95 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2013/07/12/new-toy-beaglebone-black/" itemprop="url">New toy: BeagleBone Black</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-07-12T23:46:03+01:00" itemprop="datePublished">July 12, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
+
+<!-- hobby -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">beaglebone_black, electronics</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>After Raspberry Pi opened the way for low-cost small computers, a number of them started to show up in the market. One of the most recent ones gaining ground is BeagleBoard.</p>
+
+<p><img src="/images/vpblogimg/2013/07/beagle_logo_hdr.gif" alt="Beagle Logo"></p>
+
+<p>I just bought the cheap version which is called BeagleBone black which looks something like this:</p>
+
+<p><img src="/images/vpblogimg/2013/07/BeagleBone_Black_Board.jpg" alt="BeagleBone_Black_Board"></p>
+
+<p>Nice looking little fellow, right?</p>
+
+<h3 id="getting-started">Getting Started</h3>
+<p>I followed the getting started guide which you can find on the home page. Also the link in the resources section. When I plugged it in to USB it is recognized as a removable device. Then downloaded and tried to install the drivers as suggested but no luck. Apparently the drivers are unsigned and Windows 8 didn’t allow me to install them. Googling a little bit I found a step-by-step guide to change the machine settings so that unsigned drivers can be installed. I followed the steps and it worked like a charm. The original URL is in the resources section also the steps are below.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h3 id="troubleshooting">Troubleshooting</h3>
+<p>To be able to install drivers on Windows 8 follow the steps below:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. Press win+c on the keyboard to bring up the charms side bar (or move mouse to right top corner of the screen)
+2. Click the Settings button.
+3. Click the Change PC Settings at the bottom of the sidebar.
+4. On screen that shows up, select the General option from the sidebar then scroll down the page that appears.
+5. Click the Restart now button under the Advanced startup section.
+6. You will momentarily see the restarting screen, then it will switch to a blue screen titled "Choose an option"
+7. Click the Troubleshoot button.
+8. Click Advanced options.
+9. Click Startup Settings
+10. Click Restart
+11. You should then see a Startup Settings screen after your computer reboots.
+12. Press 7 or F7 on your keyboard to Disable driver signature enforcement
+13. Now Windows 8 will continue starting up.
+14. Log-in as normal, and then run BONE_D64.exe again
+15. Now you should see 4 warning dialogs about "unsigned driver installation", click OK for all of them.
+</code></pre></div></div>
+
+<h3 id="results">Results</h3>
+<p>So far so good:</p>
+
+<p><img src="/images/vpblogimg/2013/07/BeagleBone_Black.jpg" alt="BeagleBone Black"></p>
+
+<p>I can connect to the web server running by default. I’ll try to explore what I can do with it further. Let’s see what it is capable of.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://beagleboard.org/Getting%20Started" target="_blank" rel="noopener noreferrer">Getting started guide</a></li>
+  <li><a href="https://groups.google.com/forum/#!topic/beagleboard/_y-fIgg-J7I" target="_blank" rel="noopener noreferrer">Troubleshoting Windows 8 driver installation</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2013/07/10/hardening-windows-with-emet/" itemprop="url">Hardening Windows with EMET</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -385,170 +474,6 @@ The isolation levels you need to pay attention are:</p>
 <p>SNAPSHOT: Specifies that data read by any statement in a transaction will be the transactionally consistent version of the data that existed at the start of the transaction.</p>
 
 <p>Source: <a href="http://msdn.microsoft.com/en-us/library/ms173763.aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/ms173763.aspx</a></p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2013/07/06/study-notes-for-70-461-querying-microsoft-sql-server-2012/" itemprop="url">Study Notes for 70-461: Querying Microsoft SQL Server 2012 – Part 1</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2013-07-06T11:22:13+01:00" itemprop="datePublished">July  6, 2013</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">certification, sql_server</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>As I mentioned before I like certification because it gives me a chance to cover all topics related to a subject no matter how trivial. During my preparations for this exam I learned some useful stuff. I believe they can be very useful in real-life scenarios. A compiled a list of items that I learned while studying for this exam:</p>
-
-<h3 id="01-common-table-expressions">01. Common Table Expressions</h3>
-<p>Not a new feature in SQL 2012 actually. I have used it a few times but I didn’t know its name back then. A Common Table Expression (CTE) is basically a temporary result set that you can use in the scope statement. For example</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>WITH DepartmentCTE (Name, GroupName)
-AS
-(
-    SELECT Name, GroupName
-    FROM HumanResources.Department
-    WHERE GroupName = 'Executive General and Administration'
-)
-
-SELECT NationalIDNumber
-FROM DepartmentCTE cte
-INNER JOIN HumanResources.Employee e ON cte.Name = e.JobTitle
-</code></pre></div></div>
-
-<p>This is not a very good example because a simple join could be used instead. But for the demonstration purposes it should be enough to layout the syntax and usage.</p>
-
-<p>Source: <a href="http://msdn.microsoft.com/en-us/library/ms190766(v=sql.105).aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/ms190766(v=sql.105).aspx</a></p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h3 id="02-pivot--unpivot">02. Pivot / Unpivot</h3>
-<p>I had one question about Pivot and that was just the definition of it so it was easy. Basically, pivot converts row values to columns. For example, take this query:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT o.TerritoryID, YEAR(OrderDate) AS SaleYear, SUM(SubTotal) AS Total
-FROM Sales.SalesOrderHeader o
-WHERE o.TerritoryID = 1
-GROUP BY o.TerritoryID, YEAR(OrderDate)
-ORDER BY SaleYear ASC, o.TerritoryID ASC
-</code></pre></div></div>
-
-<p>which yields this output:</p>
-
-<p><img src="/images/vpblogimg/2013/07/QueryOutput01.png" alt="Query Output"></p>
-
-<p>Say we want to get all years as columns and the totals as the values in the row. Using pivots we can rewrite the query as follows:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT 'Total Sales' AS TotalSales, [2005], [2006], [2007], [2008]
-FROM
-(
-    SELECT o.TerritoryID, YEAR(OrderDate) AS SaleYear, SubTotal
-    FROM Sales.SalesOrderHeader o
-    WHERE o.TerritoryID = 1
-) AS SourceTable
-PIVOT
-(
-    SUM(SubTotal)
-    FOR SaleYear IN ([2005], [2006], [2007], [2008])
-) AS PivotTable;
-</code></pre></div></div>
-
-<p>and we get this resultset:</p>
-
-<p><img src="/images/vpblogimg/2013/07/QueryOutput02.png" alt="Query Output"></p>
-
-<p>Source: <a href="http://msdn.microsoft.com/en-us/library/ms177410(v=sql.105).aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/ms177410(v=sql.105).aspx</a></p>
-
-<h3 id="03-for-xml">03. FOR XML</h3>
-<p>I think XML lost a lot of ground after the rise of JSON over the last few years but still it is used very commonly. I never used FOR XML in a real-life project but I was aware the Microsoft cares about it and not surprisingly I got 4 questions. It’s is very simple and intuitive actually. The keywords you need to know are: RAW, AUTO, EXPLICIT, PATH and ELEMENTS</p>
-
-<p><em>Raw:</em> Returns a single <row> element for row.</row></p>
-
-<p>Query:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT TOP 1 *
-FROM HumanResources.Department
-FOR XML RAW
-</code></pre></div></div>
-
-<p>Output:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;row DepartmentID="1" Name="Engineering" GroupName="Research and Development" ModifiedDate="2002-06-01T00:00:00"/&gt;
-</code></pre></div></div>
-<p><em>Auto:</em> Generates the name of the elements from the query</p>
-
-<p>Query:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT TOP 1 *
-FROM HumanResources.Department
-FOR XML AUTO
-</code></pre></div></div>
-
-<p>Output:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;HumanResources.Department DepartmentID="1" Name="Engineering" GroupName="Research and Development" ModifiedDate="2002-06-01T00:00:00"&gt;
-</code></pre></div></div>
-<p><em>Elements:</em> Returns the values in elements rather than attributes.</p>
-
-<p>Query:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT TOP 1 *
-FROM HumanResources.Department
-FOR XML AUTO, ELEMENTS
-</code></pre></div></div>
-
-<p>Output:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;HumanResources.Department&gt;
-&lt;DepartmentID&gt;1&lt;/DepartmentID&gt;
-&lt;Name&gt;Engineering&lt;/Name&gt;
-&lt;GroupName&gt;Research and Development&lt;/GroupName&gt;
-&lt;ModifiedDate&gt;2002-06-01T00:00:00&lt;/ModifiedDate&gt;
-&lt;/HumanResources.Department&gt;
-</code></pre></div></div>
-
-<p><em>Path:</em> Gives more control over the path of the nodes</p>
-
-<p>Query:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT TOP 1 *
-FROM HumanResources.Department
-FOR XML PATH('Department'), ROOT('HumanResources')
-</code></pre></div></div>
-
-<p>Output:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;HumanResources&gt;
-&lt;Department&gt;
-&lt;DepartmentID&gt;1&lt;/DepartmentID&gt;
-&lt;Name&gt;Engineering&lt;/Name&gt;
-&lt;GroupName&gt;Research and Development&lt;/GroupName&gt;
-&lt;ModifiedDate&gt;2002-06-01T00:00:00&lt;/ModifiedDate&gt;
-&lt;/Department&gt;
-&lt;/HumanResources&gt;
-</code></pre></div></div>
-
-<p>Source: <a href="http://msdn.microsoft.com/en-us/library/ms178107.aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/ms178107.aspx</a></p>
 
 		
 		

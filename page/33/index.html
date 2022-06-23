@@ -146,6 +146,299 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/01/07/adventures-in-fsharp-part-5/" itemprop="url">Adventures in F# - Part 5</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-01-07T15:00:00+00:00" itemprop="datePublished">January  7, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">fsharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>It’s about time for me to develop some application to put the basics in use. I will develop it in Visual Studio so first is to get accustomed to using F# in VS 2013. There are 5 project types for F#:</p>
+
+<ul>
+  <li>Console Application</li>
+  <li>Library</li>
+  <li>Tutorial</li>
+  <li>Portable Library</li>
+  <li>Portable Library (Legacy)</li>
+</ul>
+
+<p>Portable Library should be helpful when developing universal Windows Store apps. For my purposes Console Application and Library should be enough. Before going any further I decided to check out the Tutorial project. So below are today’s notes on using F# in VS 2013 and from the tutorial project</p>
+
+<h3 id="notes">Notes</h3>
+<ul>
+  <li>Tutorial project comes with a single Tutorial.fsx file with all the sample code. Console Application, on the other hand, comes with Program.fs. Apparently an fsx is the extension for F# script files: <em>“An F# script file is a normal F# source code file, except that .fsx files have a few extra capabilities.”</em>.</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2015/01/fsharp-fsx-windows-explorer-integration.png" alt="fsx Windows Explorer integration"></p>
+
+<ul>
+  <li>Ctrl + Alt + F combination opens the F# Interactive Window</li>
+  <li>You can select a code block and run it in the interactive window by right-clikcing and selecting “Execute in Interactive” or using Alt + Enter shortcut.</li>
+  <li>A <strong>module</strong> is a logical grouping of related code segments. The code in a module must be indented. When types and functions are inside modules they can be accessed by their fully-qualified names from outside the module:</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">module</span> <span class="nc">MyModule1</span> <span class="p">=</span>
+    <span class="k">let</span> <span class="n">module1Value</span> <span class="p">=</span> <span class="mi">100</span>
+    <span class="k">let</span> <span class="n">module1Function</span> <span class="n">x</span> <span class="p">=</span>
+        <span class="n">x</span> <span class="o">+</span> <span class="mi">10</span>
+
+<span class="k">module</span> <span class="nc">MyModule2</span> <span class="p">=</span>
+    <span class="k">let</span> <span class="n">module2Value</span> <span class="p">=</span> <span class="mi">121</span>
+    <span class="k">let</span> <span class="n">module2Function</span> <span class="n">x</span> <span class="p">=</span>
+        <span class="n">x</span> <span class="p">*</span> <span class="p">(</span><span class="nn">MyModule1</span><span class="p">.</span><span class="n">module1Function</span> <span class="n">module2Value</span><span class="p">)</span>
+
+<span class="nn">MyModule2</span><span class="p">.</span><span class="n">module2Function</span> <span class="mi">5</span>
+</code></pre></div></div>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<ul>
+  <li>Modules can have <em>public, private or internal</em> access modifiers. The default is <em>public</em>.</li>
+  <li>A foreach loop can be defined as for i in {values} -&gt; … For example</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">sampleTableOfSquares</span> <span class="p">=</span> <span class="p">[</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="mi">0</span> <span class="p">..</span> <span class="mi">99</span> <span class="p">-&gt;</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">*</span><span class="n">i</span><span class="p">)</span> <span class="p">]</span>
+</code></pre></div></div>
+
+<ul>
+  <li>When defining functions parenthesis can be used optionally. I think this makes the function look more “mathy” and a littler easier to read.</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">func1a</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">=</span> <span class="n">x</span><span class="p">*</span><span class="n">x</span> <span class="o">+</span> <span class="mi">3</span>             
+</code></pre></div></div>
+
+<ul>
+  <li>To improve the readability further it sounds like a good idea to annotate the type always (even when it can be inferred automatically)</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">func2</span> <span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="kt">int</span><span class="p">)</span> <span class="p">=</span> <span class="mi">2</span><span class="p">*</span><span class="n">x</span><span class="p">*</span><span class="n">x</span> <span class="p">-</span> <span class="n">x</span><span class="o">/</span><span class="mi">5</span> <span class="o">+</span> <span class="mi">3</span>   
+</code></pre></div></div>
+
+<ul>
+  <li>Boolean operations are straightforward</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">boolean1</span> <span class="p">=</span> <span class="bp">true</span>
+<span class="k">let</span> <span class="n">boolean2</span> <span class="p">=</span> <span class="bp">false</span>
+<span class="k">let</span> <span class="n">boolean3</span> <span class="p">=</span> <span class="k">not</span> <span class="n">boolean1</span> <span class="p">&amp;&amp;</span> <span class="p">(</span><span class="n">boolean2</span> <span class="o">||</span> <span class="bp">false</span><span class="p">)</span>
+<span class="n">printfn</span> <span class="s2">"The expression 'not boolean1 &amp;&amp; (boolean2 || false)' is %A"</span> <span class="n">boolean3</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Double-quotes can be used inside strings be enclosing them with triple quotes</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">string4</span> <span class="p">=</span> <span class="s2">"""He said "</span><span class="n">hello</span> <span class="n">world</span><span class="s2">" after you did"""</span>
+</code></pre></div></div>
+
+<ul>
+  <li>A fragment of a string can be accessed by this notation:</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">string1</span> <span class="p">=</span> <span class="s2">"Hello"</span>
+<span class="k">let</span> <span class="n">string2</span>  <span class="p">=</span> <span class="s2">"world"</span>
+<span class="k">let</span> <span class="n">helloWorld</span> <span class="p">=</span> <span class="n">string1</span> <span class="o">+</span> <span class="s2">" "</span> <span class="o">+</span> <span class="n">string2</span>
+<span class="k">let</span> <span class="n">substring</span> <span class="p">=</span> <span class="n">helloWorld</span><span class="o">.[</span><span class="mi">0</span><span class="p">..</span><span class="mi">6</span><span class="p">]</span>
+</code></pre></div></div>
+
+<ul>
+  <li>A tuples is a set of ordered values</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">tuple1</span> <span class="p">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"fred"</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">1415</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Lists can be defined in various syntax</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">list1</span> <span class="p">=</span> <span class="p">[</span> <span class="p">]</span>
+<span class="k">let</span> <span class="n">list2</span> <span class="p">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">;</span> <span class="mi">2</span><span class="p">;</span> <span class="mi">3</span> <span class="p">]</span>
+<span class="k">let</span> <span class="n">list3</span> <span class="p">=</span> <span class="mi">42</span> <span class="p">::</span> <span class="n">list2</span>
+<span class="k">let</span> <span class="n">numberList</span> <span class="p">=</span> <span class="p">[</span> <span class="mi">1</span> <span class="p">..</span> <span class="mi">1000</span> <span class="p">]</span>
+<span class="k">let</span> <span class="n">squares</span> <span class="p">=</span> 
+    <span class="n">numberList</span> 
+    <span class="p">|&gt;</span> <span class="nn">List</span><span class="p">.</span><span class="n">map</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span><span class="p">*</span><span class="n">x</span><span class="p">)</span> 
+</code></pre></div></div>
+
+<ul>
+  <li>Classes can be defined by type keyword</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="nc">Vector2D</span><span class="p">(</span><span class="n">dx</span> <span class="p">:</span> <span class="kt">float</span><span class="p">,</span> <span class="n">dy</span> <span class="p">:</span> <span class="kt">float</span><span class="p">)</span> <span class="p">=</span> 
+    <span class="k">let</span> <span class="n">length</span> <span class="p">=</span> <span class="n">sqrt</span> <span class="p">(</span><span class="n">dx</span><span class="p">*</span><span class="n">dx</span> <span class="o">+</span> <span class="n">dy</span><span class="p">*</span><span class="n">dy</span><span class="p">)</span>
+    <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">DX</span> <span class="p">=</span> <span class="n">dx</span>  
+    <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">DY</span> <span class="p">=</span> <span class="n">dy</span>
+    <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">Length</span> <span class="p">=</span> <span class="n">length</span>
+    <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">Scale</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="p">=</span> <span class="nc">Vector2D</span><span class="p">(</span><span class="n">k</span> <span class="p">*</span> <span class="n">this</span><span class="p">.</span><span class="nc">DX</span><span class="p">,</span> <span class="n">k</span> <span class="p">*</span> <span class="n">this</span><span class="p">.</span><span class="nc">DY</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Generics classes are supported</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="nc">StateTracker</span><span class="p">&lt;</span><span class="k">'</span><span class="nc">T</span><span class="o">&gt;(</span><span class="n">initialElement</span><span class="p">:</span> <span class="k">'</span><span class="nc">T</span><span class="p">)</span> <span class="p">=</span> 
+    <span class="k">let</span> <span class="k">mutable</span> <span class="n">states</span> <span class="p">=</span> <span class="p">[</span> <span class="n">initialElement</span> <span class="p">]</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Classes can implement interfaces</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="nc">ReadFile</span><span class="bp">()</span> <span class="p">=</span>
+    <span class="k">let</span> <span class="n">file</span> <span class="p">=</span> <span class="k">new</span> <span class="nn">System</span><span class="p">.</span><span class="nn">IO</span><span class="p">.</span><span class="nc">StreamReader</span><span class="p">(</span><span class="s2">"readme.txt"</span><span class="p">)</span>
+    <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">ReadLine</span><span class="bp">()</span> <span class="p">=</span> <span class="n">file</span><span class="p">.</span><span class="nc">ReadLine</span><span class="bp">()</span>
+    <span class="k">interface</span> <span class="nn">System</span><span class="p">.</span><span class="nc">IDisposable</span> <span class="k">with</span>    
+        <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">Dispose</span><span class="bp">()</span> <span class="p">=</span> <span class="n">file</span><span class="p">.</span><span class="nc">Close</span><span class="bp">()</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>Arrays use a similar syntax to lists except [</td>
+          <td>…</td>
+          <td>] operators are used</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">array1</span> <span class="p">=</span> <span class="p">[|</span> <span class="mi">1</span> <span class="p">..</span> <span class="mi">1000</span> <span class="p">|]</span>
+<span class="k">let</span> <span class="n">evenNumbers</span> <span class="p">=</span> <span class="nn">Array</span><span class="p">.</span><span class="n">init</span> <span class="mi">1001</span> <span class="p">(</span><span class="k">fun</span> <span class="n">n</span> <span class="p">-&gt;</span> <span class="n">n</span> <span class="p">*</span> <span class="mi">2</span><span class="p">)</span> 
+</code></pre></div></div>
+
+<ul>
+  <li>Sequences are evaluated on-demand and are re-evaluated each time they are iterated. They are defined by curly braces</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="n">numbersSeq</span> <span class="p">=</span> <span class="n">seq</span> <span class="p">{</span> <span class="mi">1</span> <span class="p">..</span> <span class="mi">1000</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Recursive functions are defined by <strong>let rec</strong> keyword</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="k">rec</span> <span class="n">factorial</span> <span class="n">n</span> <span class="p">=</span> 
+    <span class="k">if</span> <span class="n">n</span> <span class="p">=</span> <span class="mi">0</span> <span class="k">then</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">n</span> <span class="p">*</span> <span class="n">factorial</span> <span class="p">(</span><span class="n">n</span><span class="p">-</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Record types can be created by type keyword and curly braces</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="nc">ContactCard</span> <span class="p">=</span> 
+    <span class="p">{</span> <span class="nc">Name</span>     <span class="p">:</span> <span class="kt">string</span><span class="p">;</span>
+      <span class="nc">Phone</span>    <span class="p">:</span> <span class="kt">string</span><span class="p">;</span>
+      <span class="nc">Verified</span> <span class="p">:</span> <span class="kt">bool</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Union types can be created by type keyword and pipe-separated values</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span> <span class="nc">Suit</span> <span class="p">=</span> 
+    <span class="p">|</span> <span class="nc">Hearts</span> 
+    <span class="p">|</span> <span class="nc">Clubs</span> 
+    <span class="p">|</span> <span class="nc">Diamonds</span> 
+    <span class="p">|</span> <span class="nc">Spades</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Option values are any kind of value tagged with either ‘Some’ or ‘None’.</li>
+  <li>Code can be annotated with units of measure when using F# arithmetic over numeric types</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">open</span> <span class="nn">Microsoft</span><span class="p">.</span><span class="nn">FSharp</span><span class="p">.</span><span class="nn">Data</span><span class="p">.</span><span class="nn">UnitSystems</span><span class="p">.</span><span class="nn">SI</span><span class="p">.</span><span class="nc">UnitNames</span>
+
+    <span class="p">[&lt;</span><span class="nc">Measure</span><span class="p">&gt;]</span>
+    <span class="k">type</span> <span class="n">mile</span> <span class="p">=</span>
+        <span class="c1">/// Conversion factor mile to meter: meter is defined in SI.UnitNames</span>
+        <span class="k">static</span> <span class="k">member</span> <span class="n">asMeter</span> <span class="p">=</span> <span class="mi">1600</span><span class="o">.&lt;</span><span class="n">meter</span><span class="o">/</span><span class="n">mile</span><span class="p">&gt;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Large arrays can be processed in parallel</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">let</span> <span class="n">oneBigArray</span> <span class="p">=</span> <span class="p">[|</span> <span class="mi">0</span> <span class="p">..</span> <span class="mi">100000</span> <span class="p">|]</span>
+    
+    <span class="c1">// do some CPU intensive computation </span>
+    <span class="k">let</span> <span class="k">rec</span> <span class="n">computeSomeFunction</span> <span class="n">x</span> <span class="p">=</span> 
+        <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">2</span> <span class="k">then</span> <span class="mi">1</span> 
+        <span class="k">else</span> <span class="n">computeSomeFunction</span> <span class="p">(</span><span class="n">x</span> <span class="p">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">computeSomeFunction</span> <span class="p">(</span><span class="n">x</span> <span class="p">-</span> <span class="mi">2</span><span class="p">)</span>
+       
+    <span class="c1">// Do a parallel map over a large input array</span>
+    <span class="k">let</span> <span class="n">computeResults</span><span class="bp">()</span> <span class="p">=</span> <span class="n">oneBigArray</span> <span class="p">|&gt;</span> <span class="nn">Array</span><span class="p">.</span><span class="nn">Parallel</span><span class="p">.</span><span class="n">map</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">computeSomeFunction</span> <span class="p">(</span><span class="n">x</span> <span class="o">%</span> <span class="mi">20</span><span class="o">))</span>
+
+    <span class="n">printfn</span> <span class="s2">"Parallel computation results: %A"</span> <span class="p">(</span><span class="n">computeResults</span><span class="bp">()</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Events are also supported</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">open</span> <span class="nc">System</span>
+
+    <span class="c1">// create instance of Event object that consists of subscription point (event.Publish) and event trigger (event.Trigger)</span>
+    <span class="k">let</span> <span class="n">simpleEvent</span> <span class="p">=</span> <span class="k">new</span> <span class="nc">Event</span><span class="p">&lt;</span><span class="kt">int</span><span class="o">&gt;()</span> 
+
+    <span class="c1">// add handler</span>
+    <span class="n">simpleEvent</span><span class="p">.</span><span class="nn">Publish</span><span class="p">.</span><span class="nc">Add</span><span class="p">(</span>
+        <span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">printfn</span> <span class="s2">"this is handler was added with Publish.Add: %d"</span> <span class="n">x</span><span class="p">)</span>
+
+    <span class="c1">// trigger event</span>
+    <span class="n">simpleEvent</span><span class="p">.</span><span class="nc">Trigger</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>I like the tutorial script that came with VS. It shows all basic aspects in one place. I think I’ve spent enough time covering the basics. I need to dive deeper and develop something on my own or at least check out complete applications which I’m going to do next.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://msdn.microsoft.com/en-us/library/dd233160.aspx" target="_blank" rel="noopener noreferrer">Walkthrough: Your First F# Program</a></li>
+  <li><a href="http://blogs.msdn.com/b/chrsmith/archive/2008/09/12/scripting-in-f.aspx" target="_blank" rel="noopener noreferrer">Scripting in F#</a></li>
+  <li><a href="http://msdn.microsoft.com/en-gb/library/dd233221.aspx" target="_blank" rel="noopener noreferrer">Modules in F#</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/01/06/surface-pro-3-review/" itemprop="url">Surface Pro 3 Review</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -360,123 +653,6 @@
 <h2 id="resources">Resources</h2>
 <ul>
   <li><a href="http://www.daniellewis.me.uk/2014/02/21/asp-net-web-api-from-scratch-part-1/" target="_blank" rel="noopener noreferrer">ASP.NET Web API from scratch</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/01/05/adventures-in-fsharp-part-4/" itemprop="url">Adventures in F# - Part 4</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-01-05T11:00:00+00:00" itemprop="datePublished">January  5, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">fsharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Moving on in the TryFSharp.org site today I finished the last two sections in the Advanced part.</p>
-
-<h3 id="notes">Notes</h3>
-<ul>
-  <li>
-    <p><strong>Computational Expressions</strong> can be used to “alter the standard evaluation rule of the language and define sub-languages that model certain programming patterns”</p>
-
-    <p>The reason we can alter the semantics of the language is the F# compiler rewrites (de-sugars) computation expressions before compiling.</p>
-
-    <p>For example the code snippet below</p>
-
-    <div class="language-fsharp highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="k">type</span> <span class="nc">Age</span> <span class="p">=</span>
-  <span class="p">|</span> <span class="nc">PossiblyAlive</span> <span class="k">of</span> <span class="kt">int</span>
-  <span class="p">|</span> <span class="nc">NotAlive</span>
-	
-  <span class="k">type</span> <span class="nc">AgeBuilder</span><span class="bp">()</span> <span class="p">=</span>
-      <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">Bind</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="p">=</span>
-          <span class="k">match</span> <span class="n">x</span> <span class="k">with</span>
-          <span class="p">|</span> <span class="nc">PossiblyAlive</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">when</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">120</span> <span class="p">-&gt;</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-          <span class="p">|</span> <span class="p">_</span> <span class="p">-&gt;</span> <span class="nc">NotAlive</span>
-      <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">Delay</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="p">=</span> <span class="n">f</span><span class="bp">()</span>
-      <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">Return</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">=</span> <span class="nc">PossiblyAlive</span> <span class="n">x</span>
-	
-  <span class="k">let</span> <span class="n">age</span> <span class="p">=</span> <span class="k">new</span> <span class="nc">AgeBuilder</span><span class="bp">()</span>
-	
-  <span class="k">let</span> <span class="n">willBeThere</span> <span class="n">a</span> <span class="n">y</span> <span class="p">=</span>
-    <span class="n">age</span> <span class="p">{</span> 
-      <span class="k">let</span><span class="o">!</span> <span class="n">current</span> <span class="p">=</span> <span class="nc">PossiblyAlive</span> <span class="n">a</span>
-      <span class="k">let</span><span class="o">!</span> <span class="n">future</span> <span class="p">=</span> <span class="nc">PossiblyAlive</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">a</span><span class="p">)</span>
-	
-      <span class="k">return</span> <span class="n">future</span>
-    <span class="p">}</span>
-  <span class="n">willBeThere</span> <span class="mi">38</span> <span class="mi">150</span>
-</code></pre></div>    </div>
-
-    <p>is de-sugared to this:</p>
-
-    <div class="language-fsharp highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  <span class="k">let</span> <span class="n">willBeThere2</span> <span class="n">a</span> <span class="n">y</span> <span class="p">=</span>
-    <span class="n">age</span><span class="p">.</span><span class="nc">Delay</span><span class="p">(</span><span class="k">fun</span> <span class="bp">()</span> <span class="p">-&gt;</span> 
-      <span class="n">age</span><span class="p">.</span><span class="nc">Bind</span><span class="p">(</span><span class="nc">PossiblyAlive</span> <span class="n">a</span><span class="p">,</span> <span class="k">fun</span> <span class="n">current</span> <span class="p">-&gt;</span>
-        <span class="n">age</span><span class="p">.</span><span class="nc">Bind</span><span class="p">(</span><span class="nc">PossiblyAlive</span> <span class="p">(</span><span class="n">y</span><span class="o">+</span><span class="n">a</span><span class="o">),</span> <span class="k">fun</span> <span class="n">future</span> <span class="p">-&gt;</span>
-          <span class="n">age</span><span class="p">.</span><span class="nc">Return</span><span class="p">(</span><span class="n">future</span><span class="o">))))</span>
-	
-  <span class="n">willBeThere2</span> <span class="mi">38</span> <span class="mi">80</span>
-</code></pre></div>    </div>
-
-    <p>At this point this concept seems too complicated to sink my teeth into. TryFSharp.suggests further study of the following concepts to have a better understanding of computation expressions:</p>
-
-    <ul>
-      <li>The sophisticated architecture of function calls that are generated by de-sugaring</li>
-      <li>Monads - the theory behind computational expressions</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>Quotations</strong> is a language feature “that enables you to generate and work with F# code expressions programmatically. This feature lets you generate an abstract syntax tree that represents F# code. The abstract syntax tree can then be traversed and processed according to the needs of your application. For example, you can use the tree to generate F# code or generate code in some other language.”</p>
-  </li>
-</ul>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h3 id="conclusion">Conclusion</h3>
-<p>After dabbling 4 days in TryFSharp.org I think it’s time to move on. There are 4 more sections in the site but since I can only learn by building something on my own I’ll try to come up with a small project to use the basics. Otherwise it’s likely that all this information will be forgotten. It’s already very overwhelming and I need a small achievement to motivate myself.</p>
-
-<p>So I leave TryFSharp.org at this point, for a while at least. Even though I don’t find the advanced topics well-explained it’s still a very nice resource to get started.</p>
-
-<p><img src="/images/vpblogimg/2015/01/TryFSharp-REPL.png" alt="TryFSharp.org"></p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://msdn.microsoft.com/en-us/library/dd233212.aspx" target="_blank" rel="noopener noreferrer">MSDN Article - Code Quotations</a></li>
-  <li><a href="http://TryFSharp.org" target="_blank" rel="noopener noreferrer">TryFSharp.org</a></li>
-  <li><a href="http://stackoverflow.com/questions/11974624/getting-started-with-f" target="_blank" rel="noopener noreferrer">StackOverflow - Getting started with F#</a></li>
 </ul>
 
 		

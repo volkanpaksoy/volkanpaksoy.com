@@ -146,6 +146,125 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2017/09/05/DIY-Streaming-Service-with-Synology/" itemprop="url">DIY Streaming Service with Synology</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2017-09-05T07:00:00+01:00" itemprop="datePublished">September  5, 2017</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
+
+<!-- hobby -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">synology, music, streaming</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I’ve been a Spotify customer for quite long time but recently realized that I wasn’t using it enough to justify 10 quid per month. Amazon made a great offer for 4 months subscription for only £0.99 and I’m trying that out now but the quality of the service didn’t impress so far. Then it dawned on me: I already have lots of MP3s from my old archives, I have a fast internet connection and I have a Synology. Why not just build my own streaming?</p>
+
+<h2 id="one-device-to-rule-them-all-synology">One device to rule them all: Synology</h2>
+<p>Everyday I’m growing more fond of my Synology and regretting for all that time I haven’t utilized it fully.</p>
+
+<p>For streaming audio, we need the server and client software. The server side comes with Synology: Audio Station</p>
+
+<h3 id="the-server">The Server</h3>
+<p>Using Synology Audio Station is a breeze. You simply connect to Synology over the network and copy your albums into the music folder. Try to have a cover art named as “cover.jpg” so that your albums shows nicely on the user interface.</p>
+
+<p><img src="/images/vpblogimg/2017/09/synology-audio-folder-view.png" alt=""></p>
+
+<h3 id="the-client">The Client</h3>
+<p>Synology has a suite of iOS applications which are available in the Apple App Store. The one I’m using for audio streaming is called <strong>DS Audio</strong>.</p>
+
+<p><img src="/images/vpblogimg/2017/09/synology-audio-on-appstore.PNG" alt=""></p>
+
+<p>By using Synology’s Control Panel you can use a specific user for listening to music only. This way even if your account is compromised the attacker will only have read-only access to your music library.</p>
+
+<p><img src="/images/vpblogimg/2017/09/synology-audio-user-permissions.png" alt=""></p>
+
+<h2 id="connecting-to-the-server">Connecting to the server</h2>
+<p>There are two ways of connecting to your server:</p>
+
+<ol>
+  <li>Dynamic DNS</li>
+  <li>Quick Connect (QC)</li>
+</ol>
+
+<p>Dynamic DNS is a builtin functionality but you’d need a Synology account. Basically your Synology pings their server so that it can detec the IP changes.</p>
+
+<p>QC is the way I chose to go with. It’s a proprietary technology by Synology. The nice thing about QC is when you are connected to your local network it uses the internal IP so it doesn’t use mobile data. When you’re outside it uses the external IP and connects over the Internet.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h2 id="features">Features</h2>
+<ul>
+  <li>You can download all the music you want from your own library without any limitations. There’s no limit set for manual downloads. For automatic downloads you can choose from no caching to caching everything or choose a fixed size from 250MB to 20GB.</li>
+  <li>When you’re offline you don’t need to login. On login form there’s a link to Downloaded Songs so you can skip logging in and go straight to your local cache.</li>
+  <li>You can pin your favourite albums to home screen.</li>
+  <li>Creating a playlist or adding songs to playlists is cumbersome (on iPhone at least):
+    <ul>
+      <li>Select a song and tap on … next to the song</li>
+      <li>Tap Add. This will add your song to the play queue.</li>
+      <li>Tap on Play button on top right corner.</li>
+      <li>Tap playlist icon on top right corner.</li>
+      <li>Tap the same icon again which is now on top left corner to go into edit mode</li>
+      <li>Now tap on the radio buttons on the left of the songs to select.</li>
+      <li>When done, tap on the icon on the bottom left corner. This will open the Add to Playlist screen (finally!)</li>
+      <li>Here you can choose an existing playlist or create a new one by clicking + icon.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Considering how easy this can be done on Spotify client this really needs to be improved.</p>
+
+<ul>
+  <li>In the library or Downloaded Songs sections, you can organise your music by Album, Artist, Composer, Genre and Folder. Of course in order for Artist/Composer/Genre classification to work you have to have your music properly tagged.</li>
+  <li>The client has Radio featue which has builtin support for SHOUTCast</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2017/09/synology-shoutcast.PNG" alt="SHOUTCast"></p>
+
+<ul>
+  <li>You can rate songs. There’s a built-in Top Rated playlist. By rating them you can play your favourite songs without needing them to be added to playlists which is a neat feature.</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2017/09/synology-rate-playlist.PNG" alt=""></p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>I think having full control over my own music is great and even though DS Audio client has some drawbacks it’s worth it as it’s completely free. Also you can just set it up as a secondary streaming service in addition to your favourite paid one just in case so that you have a backup solution.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://blog.synology.com/?p=2283" target="_blank" rel="noopener noreferrer">Synology Blog: QuickConnect, Quickly Explained</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2017/05/20/synology-dns-server-for-dev-testing/" itemprop="url">Using Synology DNS Server for testing</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -319,101 +438,6 @@
 <ul>
   <li><a href="https://github.com/volkanpaksoy/simple-pdf-merger" target="_blank" rel="noopener noreferrer">Source Code</a></li>
   <li><a href="http://learnedtoday.net/post/159893278830/combining-pdfs-on-mac" target="_blank" rel="noopener noreferrer">TIL: Combining PDFs on Mac</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2017/04/11/Integrating-c-applications-with-slack/" itemprop="url">Integrating C# applications with Slack</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2017-04-11T05:00:00+01:00" itemprop="datePublished">April 11, 2017</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">slack, csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Slack is a great messaging platform and it can integrate very easily with C# applications.</p>
-
-<h2 id="step-01-enable-incoming-webhooks">Step 01: Enable incoming webhooks</h2>
-<p>First go to <a href="https://slack.com/services/new/incoming-webhook" target="_blank" rel="noopener noreferrer">Incoming Webhooks</a> page and turn on the webhooks if it’s not already turned on.</p>
-
-<p><img src="/images/vpblogimg/2017/04/Slack-01-Enable-Webhook-Integrations.PNG" alt=""></p>
-
-<h2 id="step-02-create-a-new-configuration">Step 02. Create a new configuration</h2>
-<p>You can select an existing channel or user to post messages to. Or you can create a new channel. (May need a refresh for the new one to appear in the list)</p>
-
-<p><img src="/images/vpblogimg/2017/04/Slack-02-Create-Webhook.PNG" alt=""></p>
-
-<h2 id="step-03-install-slackwebhooks-nuget-package">Step 03. Install Slack.Webhooks Nuget package</h2>
-
-<p>In the package manager console, run</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package Slack.Webhooks
-</code></pre></div></div>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h2 id="step-04-write-some-code">Step 04. Write some code!</h2>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">url</span> <span class="p">=</span> <span class="s">"{Webhook URL created in Step 2}"</span><span class="p">;</span>
-
-<span class="kt">var</span> <span class="n">slackClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">SlackClient</span><span class="p">(</span><span class="n">url</span><span class="p">);</span>
-
-<span class="kt">var</span> <span class="n">slackMessage</span> <span class="p">=</span> <span class="k">new</span> <span class="n">SlackMessage</span>
-<span class="p">{</span>
-    <span class="n">Channel</span> <span class="p">=</span> <span class="s">"#general"</span><span class="p">,</span>
-    <span class="n">Text</span> <span class="p">=</span> <span class="s">"New message coming in!"</span><span class="p">,</span>
-    <span class="n">IconEmoji</span> <span class="p">=</span> <span class="n">Emoji</span><span class="p">.</span><span class="n">CreditCard</span><span class="p">,</span>
-    <span class="n">Username</span> <span class="p">=</span> <span class="s">"any-name-would-do"</span>
-<span class="p">};</span>
-
-<span class="n">slackClient</span><span class="p">.</span><span class="nf">Post</span><span class="p">(</span><span class="n">slackMessage</span><span class="p">);</span>
-</code></pre></div></div>
-
-<h2 id="done">Done</h2>
-<p>That’s it! Very easy and painless integration to get real-time desktop notifications.</p>
-
-<h2 id="some-notes">Some notes</h2>
-
-<ul>
-  <li>Even though you choose a channel while creating the webhook, in my experience you can use the same one to post to different channels. You don’t need to create a new webhook for each channel.</li>
-  <li>Username can be any text basically. It doesn’t need to correspond to a Slack account.</li>
-  <li>First time you send a message with a username, it uses the emoji you specify in the message. You can leave it null in which case it uses the default. On consequent posts, it uses the same emoji for that user even if you set a different one.</li>
-</ul>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://github.com/nerdfury/Slack.Webhooks" target="_blank" rel="noopener noreferrer">Slack.Webhooks library on GitHub</a></li>
 </ul>
 
 		

@@ -146,6 +146,91 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/nameof-operator/" itemprop="url">C# 6.0 New Features - nameof Operator</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-08T12:30:00+00:00" itemprop="datePublished">December  8, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Personally I think this one is a bit trivial. So the argument is it eliminates the need for using hard-coded strings in the code.</p>
+
+<p>For instance:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">NameofOperator</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Run</span><span class="p">(</span><span class="n">SomeClass</span> <span class="n">someClass</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">someClass</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="s">"someClass"</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">SomeClass</span>
+<span class="p">{</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Say you refactored the code and changed the parameter name in this example. It is likely to forget changing the name in the exception throwing line since it has no reference to the actual parameter.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>By using nameof operator we can avoid such mistakes:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">NameofOperator</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Run</span><span class="p">(</span><span class="n">SomeClass</span> <span class="n">refactoredName</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">refactoredName</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="k">nameof</span><span class="p">(</span><span class="n">refactoredName</span><span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">SomeClass</span>
+<span class="p">{</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The results are identical but this way when we change a parameter name all references to that object will be updated automatically.</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/null-conditional-operators/" itemprop="url">C# 6.0 New Features - Null-Conditional Operators</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -296,68 +381,6 @@
 
 <p>It’s a shorthand but not so much! I don’t see much value in this notation but I’m sure in time it will prove itself. I don’t think the guys in the language team are just adding random features!</p>
 
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/string-interpolation/" itemprop="url">C# 6.0 New Features - String Interpolation</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-12-08T11:00:00+00:00" itemprop="datePublished">December  8, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>One of favorite features is the new string formatting using <em>String Interpolation</em>. In the past I encountered a lot of errors while formatting strings especially when preparing log messages. You may need lots of small pieces of data that so after a few iterations you may forget to add new parameters.</p>
-
-<p>For example in the imaginary Log method below only 3 parameters are supplied whereas the string expects 4. It compiles successfully because the string is generated at run-time and it doesn’t check the number curly braces against the number of parameters supplied.</p>
-
-<p><img src="/images/vpblogimg/2014/12/argument-count-mismatch.png" alt="Argument count mismatch error"></p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<p>Using the new feature such errors can be avoided as we can put the values directly in their places in the string:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">StringInterpolation</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="nf">Log</span><span class="p">(</span><span class="kt">string</span> <span class="n">timestamp</span><span class="p">,</span> <span class="kt">string</span> <span class="n">application</span><span class="p">,</span> <span class="kt">string</span> <span class="n">error</span><span class="p">,</span> <span class="kt">string</span> <span class="n">status</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"[Timestamp: \{timestamp}], Application: [\{application}], Error: [\{error}], Status [\{status}]"</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>No more parameter mismatch errors!</p>
 
 		
 		

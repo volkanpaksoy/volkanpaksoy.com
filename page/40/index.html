@@ -146,6 +146,96 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/07/auto-properties-with-initializers/" itemprop="url">C# 6.0 New Features - Auto-Properties with Initializers</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-07T00:20:00+00:00" itemprop="datePublished">December  7, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Currently, in Visual Studio 2013, if you have a line like this</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="kt">int</span> <span class="n">MyProperty</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span>  <span class="p">}</span>
+</code></pre></div></div>
+
+<p>you’d get a compilation error like this:</p>
+
+<p><img src="/images/vpblogimg/2014/12/getter-only-property-error-vs-2013.png" alt="Getter-only auto-property error"></p>
+
+<p>But the same code in VS 2015 compiles happily. The reason to add this feature is to not get in the way of immutable data types.</p>
+
+<p>Another new feature about auto-properties is initializers. For example the following code would compile and run with new C#:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">AutoInit</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">FirstName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="s">"Unknown"</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">LastName</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="s">"Unknown"</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">AutoInit</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"{0} {1}"</span><span class="p">,</span> <span class="n">FirstName</span><span class="p">,</span> <span class="n">LastName</span><span class="p">));</span>
+        <span class="n">FirstName</span> <span class="p">=</span> <span class="s">"Volkan"</span><span class="p">;</span>
+        <span class="n">LastName</span> <span class="p">=</span> <span class="s">"Paksoy"</span><span class="p">;</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"{0} {1}"</span><span class="p">,</span> <span class="n">FirstName</span><span class="p">,</span> <span class="n">LastName</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>		
+</code></pre></div></div>
+<p>and the output is unsurprisingly looks like this:</p>
+
+<p><img src="/images/vpblogimg/2014/12/init-auto-property-ouput.png" alt="Auto-property initializer output"></p>
+
+<p>When I first ran this code successfully I was surprised how I managed to set values without a setter. Looks like under the covers it’s generating a read-only backing field for the property and just assignning the value to the field instead of calling the setter method. It can easily be seen using a decompiler:</p>
+
+<p><img src="/images/vpblogimg/2014/12/auto-property-justdecompile.png" alt="Just Decompile output"></p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>As it’s a read-only value it can only be set inside the constructor. So if you add the following method it wouldn’t compile:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">SetValue</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">FirstName</span> <span class="p">=</span> <span class="s">"another name"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2014/12/auto-property-set-error.png" alt="Auto-property set error"></p>
+
+<p>It’s a small improvement providing an alternative way to write the same code in less lines.</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/12/06/csharp-6-new-features/" itemprop="url">C# 6.0 New Features</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -309,117 +399,6 @@ foreach ($path in $results) {
   <li><a href="http://www.howtogeek.com/50236/customizing-your-powershell-profile/" target="_blank" rel="noopener noreferrer">Customizing Your Powershell Profile</a></li>
 </ul>
 
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/12/03/update-markdown-posts/" itemprop="url">Update Imported Markdown Posts</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-12-03T10:15:27+00:00" itemprop="datePublished">December  3, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
-
-<!-- misc -->
-
-
-
-
-    <a href="/category/misc">misc</a>
-    
-</span>
-	<span class="tags">jekyll</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>As you probably know I’ve migrated to GitHub Pages from WordPress as I blogged <a href="https://volkanpaksoy.com/archive/2014/11/26/static-blog-ftw/">here</a>.</p>
-
-<p>It was a fairly easy migration but migrating the actual content proved to be trickier. There are lots of resources on using Jekyll’s importers. I found <a href="http://hadihariri.com/2013/12/24/migrating-from-wordpress-to-jekyll/" target="_blank" rel="noopener noreferrer">this one</a> useful. Just export everything to an XML and run the converter to get the posts in markdown. The problem is the <em>YAML Front Matter</em> it generates is a bit messy:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
-layout: post
-title: Blind Password Masking
-date: 2011-06-14 03:46:18.000000000 +00:00
-categories:
-- Off the Top of My Head
-tags: []
-status: publish
-type: post
-published: true
-meta:
-  _edit_last: '1'
-author:
-  login: blogadmin
-  email: admin@myvirtualhome.net
-  display_name: Volkan
-  first_name: ''
-  last_name: ''
----
-</code></pre></div></div>
-
-<p>I don’t want or need most of this stuff anyway!. Also I had two main issues:</p>
-
-<ul>
-  <li>Images didn’t work as it didn’t get the full path. I use S3 to host all images but the imported posts were converted to use a local assets folder. There may be a configuration setting for that but in my case I decided to convert all my posts to markdown from HTML anyway (which was a great way to practice Markdown)</li>
-  <li>Main issue was with Disqus. It’s not like people are racing to submit comments to my ramblings but still I’d like to have Disqus enabled on all my posts. Apparently to enable comments you need to specify it in the front matter like this:</li>
-</ul>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>comments: true
-</code></pre></div></div>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h3 id="manual-vs-programmatical">Manual vs. programmatical</h3>
-<p>First I resisted the temptation to write a small application to convert the layouts but manual conversion soon proved to be very time consuming even with 100+ posts. So I developed the simple console application below. It scans the folder you specify (filters *.markdown files) and reads the existing layout and converts it to the format I wanted:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>---
-layout: post
-title: @TITLE
-date: @DATE
-categories: [@CATEGORIES]
-comments: true
-</code></pre></div></div>
-
-<p>I wanted to keep it simple and clean. Also as all my posts are now in pure markdown I can easily loop through and update the elements (like converting H3 to H2 or adding tags to layout etc)</p>
-
-<h3 id="source-code">Source Code</h3>
-
-<noscript><pre>400: Invalid request</pre></noscript>
-<script src="https://gist.github.com/ceaa1a6dae7dea206f0069fb686f92d6.js"> </script>
-
-<h3 id="usage">Usage</h3>
-<p>It probably won’t apply to most situations but helped me out so why not publish it just in case, right? To use it you have to change the ROOT_FOLDER value in Program class at the bottom (Do NOT forget to backup your posts first!)</p>
-
-<p>As I wanted to revisit all my posts I wanted to mark them instead of replacing automatically with the original one. So when you run the program it deletes the original post and creates the updated one with “.output” appended. So you can easily find which files are modified by checking the extension. If you want it to replace the original post you can uncomment this line at the end of the ConvertFile method</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="c1">// File.Move(outputFilePath, inputFilePath);</span>
-</code></pre></div></div>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://hadihariri.com/2013/12/24/migrating-from-wordpress-to-jekyll/" target="_blank" rel="noopener noreferrer">Migrating from WordPress to Jekyll</a></li>
-  <li><a href="http://jekyllbootstrap.com/lessons/jekyll-introduction.html" target="_blank" rel="noopener noreferrer">Jekyll introduction</a></li>
-  <li><a href="https://github.com/Haacked/subtext-jekyll-exporter" target="_blank" rel="noopener noreferrer">Phil Haack’s Subtext exporter</a></li>
-</ul>
 
 		
 		

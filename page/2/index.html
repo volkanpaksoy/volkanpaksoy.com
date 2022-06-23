@@ -146,6 +146,153 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2020/03/18/Migrating-EC2-Instance-to-a-Different-Account/" itemprop="url">Migrating an EC2 Instance to a Different AWS Account</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2020-03-18T06:00:00+00:00" itemprop="datePublished">March 18, 2020</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
+
+<!-- aws -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">ec2, migration</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Recently I needed to migrate an EC2 instance to a different AWS account. There’s no built-in functionality to handle this. The solution is creating an AMI from the instance and sharing it with the target account. I scripted my solution with Powershell and AWS Tools for Powershell as below.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+<p>Since the operation involves a source account and a target account, first create 2 profiles with EC2 access. credentials files should look like this</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[source_profile]
+aws_access_key_id = xxxxxxxxx
+aws_secret_access_key = xxxxxxxxx
+
+[target_profile]
+aws_access_key_id = xxxxxxxxx
+aws_secret_access_key = xxxxxxxxx
+</code></pre></div></div>
+
+<h2 id="step-00-configuration">Step 00: Configuration</h2>
+<p>I put all the variables in a Powershell script file which I include in the following steps. To use the scripts you need to provide the values first. Hopefully the variable names are self-explanatory:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$sourceRegion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$sourceAccountId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$instanceId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$amiName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$amiDescription</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$targetAccountAwsProfileName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$targetAccountId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span><span class="nv">$targetRegion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="step-01-create-ami">Step 01: Create AMI</h2>
+<p>First step to migrate EC2 instance is to create an AMi from the instance.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">.</span><span class="w"> </span><span class="o">.</span><span class="n">\</span><span class="s2">"00. configuration.ps1"</span><span class="w">
+
+</span><span class="c"># Create AMI</span><span class="w">
+</span><span class="nv">$imageId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">New-EC2Image</span><span class="w"> </span><span class="nt">-InstanceId</span><span class="w"> </span><span class="nv">$instanceId</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nv">$amiName</span><span class="w"> </span><span class="nt">-Description</span><span class="w"> </span><span class="nv">$amiDescription</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
+
+</span><span class="n">Set-Variable</span><span class="w"> </span><span class="nt">-Scope</span><span class="w"> </span><span class="nx">global</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nx">AMI_ID</span><span class="w"> </span><span class="nt">-Value</span><span class="w"> </span><span class="nv">$imageId</span><span class="w">
+</span><span class="n">Write-Host</span><span class="w"> </span><span class="s2">"AMI_ID: ["</span><span class="w"> </span><span class="nv">$AMI_ID</span><span class="w"> </span><span class="s2">"]"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This operation takes a few minutes. The image has to become available before we can proceed to the next step.</p>
+
+<h2 id="step-02-share-ami">Step 02: Share AMI</h2>
+<p>Now the image is ready we have to share it with the target account. The script below shares the AMI and allows new volumes created from this AMI.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">.</span><span class="w"> </span><span class="o">.</span><span class="n">\</span><span class="s2">"00. configuration.ps1"</span><span class="w">
+
+</span><span class="nv">$imageId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Get-Variable</span><span class="w"> </span><span class="nx">AMI_ID</span><span class="w"> </span><span class="nt">-valueOnly</span><span class="w">
+</span><span class="n">Edit-EC2ImageAttribute</span><span class="w"> </span><span class="nt">-ImageId</span><span class="w"> </span><span class="nv">$imageId</span><span class="w"> </span><span class="nt">-Attribute</span><span class="w"> </span><span class="nx">launchPermission</span><span class="w"> </span><span class="nt">-OperationType</span><span class="w"> </span><span class="nx">add</span><span class="w"> </span><span class="nt">-UserId</span><span class="w"> </span><span class="nv">$targetAccountId</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
+
+</span><span class="nv">$imageSnapshots</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Get-EC2Snapshot</span><span class="w"> </span><span class="nt">-OwnerId</span><span class="w"> </span><span class="nv">$sourceAccountId</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
+                </span><span class="o">|</span><span class="w"> </span><span class="n">Where-Object</span><span class="w"> </span><span class="p">{</span><span class="bp">$_</span><span class="o">.</span><span class="nf">Description</span><span class="w"> </span><span class="o">-like</span><span class="w"> </span><span class="s2">"*</span><span class="nv">$imageId</span><span class="s2">*"</span><span class="w"> </span><span class="p">}</span><span class="w">
+
+</span><span class="kr">foreach</span><span class="w"> </span><span class="p">(</span><span class="nv">$snapshot</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nv">$imageSnapshots</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">Edit-EC2SnapshotAttribute</span><span class="w"> </span><span class="nt">-SnapshotId</span><span class="w"> </span><span class="nv">$snapshot</span><span class="o">.</span><span class="nf">SnapshotId</span><span class="w"> </span><span class="nt">-Attribute</span><span class="w"> </span><span class="nx">createVolumePermission</span><span class="w"> </span><span class="nt">-OperationType</span><span class="w"> </span><span class="nx">add</span><span class="w"> </span><span class="nt">-UserId</span><span class="w"> </span><span class="nv">$targetAccountId</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h2 id="step-03-copy-ami">Step 03: Copy AMI</h2>
+<p>At this point, if you go to the target account you should be able to see the image when you choose “Private images” category. Make sure to choose the same region as the source account to be able to see the image.</p>
+
+<p>We have access to this image but we want to have our own copy which we accomplish with the script below:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">.</span><span class="w"> </span><span class="o">.</span><span class="n">\</span><span class="s2">"00. configuration.ps1"</span><span class="w">
+
+</span><span class="nv">$imageId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Get-Variable</span><span class="w"> </span><span class="nx">AMI_ID</span><span class="w"> </span><span class="nt">-valueOnly</span><span class="w">
+</span><span class="n">Copy-EC2Image</span><span class="w"> </span><span class="nt">-SourceImageId</span><span class="w"> </span><span class="nv">$imageId</span><span class="w"> </span><span class="nt">-SourceRegion</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w"> </span><span class="nt">-Name</span><span class="w"> </span><span class="nv">$amiName</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$targetAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$targetRegion</span><span class="w">
+</span></code></pre></div></div>
+
+<p>In my experience the whole copying process took about 5 minutes.</p>
+
+<p>Now that we have our own copy of the AMI we can launch instances as we please. Job (almost) done!</p>
+
+<h2 id="step-04-clean-up">Step 04: Clean Up</h2>
+
+<p>Final step is to clean up after ourselves. Since this AMI was created to migrate to the new account only I assume we won’t need it anymore in the source account. The following script deregisters the AMI and deletes all the associated snapshots.</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">.</span><span class="w"> </span><span class="o">.</span><span class="n">\</span><span class="s2">"00. configuration.ps1"</span><span class="w">
+
+</span><span class="c"># Create image script writes the AMI ID to a variable. If it doesn't exist get the image id from AWS Management Console</span><span class="w">
+</span><span class="nv">$imageId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Get-Variable</span><span class="w"> </span><span class="nx">AMI_ID</span><span class="w"> </span><span class="nt">-valueOnly</span><span class="w">
+
+</span><span class="n">Write-Host</span><span class="w"> </span><span class="s2">"Unregistering image: ["</span><span class="w"> </span><span class="nv">$imageId</span><span class="w"> </span><span class="s2">"]"</span><span class="w">
+</span><span class="n">Unregister-EC2Image</span><span class="w"> </span><span class="nt">-ImageId</span><span class="w"> </span><span class="nv">$imageId</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
+
+</span><span class="nv">$imageSnapshots</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Get-EC2Snapshot</span><span class="w"> </span><span class="nt">-OwnerId</span><span class="w"> </span><span class="nv">$sourceAccountId</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
+                </span><span class="o">|</span><span class="w"> </span><span class="n">Where-Object</span><span class="w"> </span><span class="p">{</span><span class="bp">$_</span><span class="o">.</span><span class="nf">Description</span><span class="w"> </span><span class="o">-like</span><span class="w"> </span><span class="s2">"*</span><span class="nv">$imageId</span><span class="s2">*"</span><span class="w"> </span><span class="p">}</span><span class="w">
+
+</span><span class="kr">foreach</span><span class="w"> </span><span class="p">(</span><span class="nv">$snapshot</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nv">$imageSnapshots</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">Write-Host</span><span class="w"> </span><span class="s2">"Removing snapshot: ["</span><span class="w"> </span><span class="nv">$snapshot</span><span class="o">.</span><span class="nf">SnapshotId</span><span class="w"> </span><span class="s2">"]"</span><span class="w">
+    </span><span class="n">Remove-EC2Snapshot</span><span class="w"> </span><span class="nt">-SnapshotId</span><span class="w"> </span><span class="nv">$snapshot</span><span class="o">.</span><span class="nf">SnapshotId</span><span class="w"> </span><span class="nt">-Force</span><span class="w"> </span><span class="nt">-ProfileName</span><span class="w"> </span><span class="nv">$sourceAccountAwsProfileName</span><span class="w"> </span><span class="nt">-Region</span><span class="w"> </span><span class="nv">$sourceRegion</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="c"># Delete variable</span><span class="w">
+</span><span class="n">Remove-Variable</span><span class="w"> </span><span class="nx">AMI_ID</span><span class="w"> </span><span class="nt">-Scope</span><span class="w"> </span><span class="nx">global</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/migrate-ec2-instance-to-another-account" target="_blank" rel="noopener noreferrer">Source Code</a></li>
+  <li><a href="https://aws.amazon.com/premiumsupport/knowledge-center/account-transfer-ec2-instance/" target="_blank" rel="noopener noreferrer">How do I transfer an Amazon EC2 instance to a different AWS account?</a></li>
+  <li><a href="https://alestic.com/2014/02/ec2-create-image-reboot/" target="_blank" rel="noopener noreferrer">EC2 create-image Does Not Fully “Stop” The Instance</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2019/12/05/Using-Audio-in-Docker-Container/" itemprop="url">Using Audio in Docker Container</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -450,322 +597,6 @@ phases:
   <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/CodeBuild_CI_Pipeline" target="_blank" rel="noopener noreferrer">Source code</a></li>
 </ul>
 
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2019/10/26/Infrastructure-as-Code-with-AWS-CloudFormation-and-Cloud-Development-Kit/" itemprop="url">Infrastructure as Code with AWS CloudFormation and Cloud Development Kit (CDK)</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2019-10-26T13:00:00+01:00" itemprop="datePublished">October 26, 2019</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/devopsaws">devops</a></span> -->
-
-<!-- devops, aws -->
-
-
-
-
-    <a href="/category/devops">devops</a>
-    , 
-
-    <a href="/category/aws">aws</a>
-    
-</span>
-	<span class="tags">cloudformation, cdk</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<h2 id="introduction">Introduction</h2>
-<p>Using AWS is great as it simplifies and improves infrastructure provisioning and maintenance quite a lot. As you depend more and more on AWS you quickly realize that managing everything through AWS Management Console is not an ideal way.</p>
-
-<p>Earlier this year, I published this <a href="https://volkanpaksoy.com/archive/2019/01/15/Infrastructure-as-code-with-AWS-CloudFormation/">post</a> about AWS CloudFormation. This post will also discuss using CloudFormation but by taking it a higher level by using AWS Cloud Development Kit (CDK).</p>
-
-<h2 id="levels-of-infrastructure">Levels of infrastructure</h2>
-<p>I liked the way the several approaches of infrastructure management is illustrated as levels here: <a href="https://www.youtube.com/watch?v=184S7ki6fJA" target="_blank" rel="noopener noreferrer">Develop a Web App Using Amazon ECS and AWS Cloud Development Kit (CDK) - AWS Online Tech Talks (YouTube Video)</a></p>
-
-<p>In a nutshell, those levels are:</p>
-
-<h3 id="level-0-by-hand">Level 0: By hand</h3>
-<p>This approach is simply using AWS Management Console user interface to manage the infrastructure.</p>
-
-<p><strong>Pros:</strong></p>
-
-<ul>
-  <li>Simple and easy</li>
-  <li>Helps to get results faster for exploratory projects</li>
-</ul>
-
-<p><strong>Cons:</strong></p>
-
-<ul>
-  <li>Hard to reproduce</li>
-  <li>Possible inconsistencies based on people’s preferences</li>
-  <li>Error-prone</li>
-  <li>Slow for complex systems</li>
-</ul>
-
-<h3 id="level-1-imperative-infrastructure-as-code">Level 1: Imperative Infrastructure as Code</h3>
-<p>In this approach you write your own scripts using AWS SDK and manage the resources programmatically.</p>
-
-<p><strong>Pros:</strong></p>
-
-<ul>
-  <li>Repeatable and reusable</li>
-  <li>Can be source-controlled</li>
-</ul>
-
-<p><strong>Cons:</strong></p>
-
-<ul>
-  <li>Lots of boilerplate code</li>
-  <li>It needs to address all edge cases</li>
-</ul>
-
-<h3 id="level-2-declarative-infrastructure-as-code">Level 2: Declarative Infrastructure as Code</h3>
-<p>Describe the infrastructure as a script (in JSON or YAML) and use an resource provisioning engine such as AWS CloudFormation or HashiCorp Terraform which in turn use AWS SDK to manage the infrastructure.</p>
-
-<p><strong>Pros:</strong></p>
-
-<ul>
-  <li>No boilerplate</li>
-  <li>Creating and updating resources is handled automatically</li>
-</ul>
-
-<p><strong>Cons:</strong></p>
-
-<ul>
-  <li>Templates can become verbose</li>
-  <li>Implementing logic is limited to some built-in helper functions</li>
-</ul>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h3 id="level-3-aws-cloud-development-kit">Level 3: AWS Cloud Development Kit</h3>
-<p>In this approach software is developed using AWS CDK which generates the input for AWS CloudFormation.</p>
-
-<p><img src="/images/vpblogimg/2019/10/aws_cdk/aws-cdk-overview.jpg" alt=""></p>
-
-<p>The application can be developed in a number of languages. At the time of this writing the following languages are supported: TypeScript, JavaScript, Python, Java, C#.</p>
-
-<p><strong>Pros:</strong></p>
-
-<ul>
-  <li>Handles creation of underlying resources. For example, when creating a VPC it also automatically generates YAML for all other networking resources (routing tables, NAT gateways etc) that are required by VPC.</li>
-  <li>Helps with local workflow</li>
-  <li>CDK constructs are reusable. Can be developed by AWS or third parties and can be installed separately.</li>
-  <li>Ability to use familiar programming languages</li>
-</ul>
-
-<p><strong>Cons:</strong></p>
-
-<ul>
-  <li>Extra installation</li>
-</ul>
-
-<h2 id="basic-concepts">Basic Concepts</h2>
-<ul>
-  <li>
-<strong>Construct:</strong> Basic building block for an AWS CDK app. Represents a “cloud component” and encapsulates everything AWS CloudFormation needs to create the component. They can be developed or downloaded from <a href="https://docs.aws.amazon.com/cdk/api/latest/docs/aws-construct-library.html" target="_blank" rel="noopener noreferrer">AWS Construct Library</a>
-</li>
-  <li>
-<strong>Stack:</strong> Constructs need to be created within the scope of a Stack. This corresponds to a CloudFormation template.</li>
-  <li>
-<strong>App:</strong> Stacks are created in the scope of an App. An App can contain multiple stacks.</li>
-</ul>
-
-<h2 id="cdk-basics">CDK Basics</h2>
-<ul>
-  <li>In order to create an application that uses CDK we need to install the CDK</li>
-  <li>The application can have one of the 3 supported templates:
-    <ul>
-      <li>app: General purpose application. This is the default template</li>
-      <li>lib: Used to develop a CDK construct</li>
-      <li>sample-app: Creates an application already populated with a sample CDK application.</li>
-    </ul>
-  </li>
-  <li>The following diagram illustrates the app lifecycle:</li>
-</ul>
-
-<p><img src="/images/vpblogimg/2019/10/aws_cdk/aws-cdk-app-lifecycle.png" alt=""></p>
-
-<h2 id="installing-cdk">Installing CDK</h2>
-<p>AWS CDK is developed using TypeScript. It’s available via npm:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install -g aws-cdk
-</code></pre></div></div>
-
-<h2 id="using-cdk">Using CDK</h2>
-<p>In my example, I will use C#. A new project can be created by using <strong>cdk init</strong> command:</p>
-
-<p><img src="/images/vpblogimg/2019/10/aws_cdk/aws-cdk-init.png" alt=""></p>
-
-<p>It expects 2 parameters: Language (Can be one of these: csharp, fsharp, java, javascript, python or typescript).</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk init app --language csharp
-</code></pre></div></div>
-
-<p>To test my first app, I followed the sample app provided and added an S3 construct to my code:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">CdkWorkoutStack</span> <span class="p">:</span> <span class="n">Stack</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="nf">CdkWorkoutStack</span><span class="p">(</span><span class="n">Construct</span> <span class="n">parent</span><span class="p">,</span> <span class="kt">string</span> <span class="n">id</span><span class="p">,</span> <span class="n">IStackProps</span> <span class="n">props</span><span class="p">)</span> <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">_</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Bucket</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s">"CdkBucket"</span><span class="p">,</span> <span class="k">new</span> <span class="n">BucketProps</span>
-        <span class="p">{</span>
-            <span class="n">Versioned</span> <span class="p">=</span> <span class="k">true</span>
-        <span class="p">});</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<p>Next step is to synnthesize a CloudFormation template by running</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk synth
-</code></pre></div></div>
-
-<p>This generates a folder called cdk.out which contains a file named CdkWorkoutStack.template.json and with the following contents:</p>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"Resources"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"CdkBucket2FB0D10E"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AWS::S3::Bucket"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"Properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"VersioningConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-          </span><span class="nl">"Status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Enabled"</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-      </span><span class="p">},</span><span class="w">
-      </span><span class="nl">"UpdateReplacePolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Retain"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"DeletionPolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Retain"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"Metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"aws:cdk:path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CdkWorkoutStack/CdkBucket/Resource"</span><span class="w">
-      </span><span class="p">}</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">  
-</span></code></pre></div></div>
-
-<p>Final step is to create the resources by running</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk deploy
-</code></pre></div></div>
-
-<p>This produces the following results:</p>
-
-<p><img src="/images/vpblogimg/2019/10/aws_cdk/aws-cdk-deployment-results.png" alt=""></p>
-
-<p>And not surprisingly a CloudFormation stack with the bucket is created in AWS.</p>
-
-<p>In the next version I’m going to change some properties of the bucket such as:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">CdkWorkoutStack</span> <span class="p">:</span> <span class="n">Stack</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="nf">CdkWorkoutStack</span><span class="p">(</span><span class="n">Construct</span> <span class="n">parent</span><span class="p">,</span> <span class="kt">string</span> <span class="n">id</span><span class="p">,</span> <span class="n">IStackProps</span> <span class="n">props</span><span class="p">)</span> <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">_</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Bucket</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s">"CdkBucket"</span><span class="p">,</span> <span class="k">new</span> <span class="n">BucketProps</span>
-        <span class="p">{</span>
-            <span class="n">Versioned</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
-            <span class="n">BlockPublicAccess</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">BlockPublicAccess</span><span class="p">(</span><span class="k">new</span> <span class="nf">BlockPublicAccessOptions</span><span class="p">()</span>
-            <span class="p">{</span>
-                <span class="n">BlockPublicAcls</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
-                <span class="n">BlockPublicPolicy</span> <span class="p">=</span> <span class="k">true</span>
-            <span class="p">})</span>
-        <span class="p">});</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>After this change in the code we can review what’s going to be updated by running the following command:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk diff
-</code></pre></div></div>
-
-<p>and it produces the following result outlining the changes between the current code and the deployed version:</p>
-
-<p><img src="/images/vpblogimg/2019/10/aws_cdk/aws-cdk-diff-results.png" alt=""></p>
-
-<p>And the stack can be deleted by running the following command:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cdk destroy
-</code></pre></div></div>
-
-<p>In the CDK version I’m using the default deletion policy is to retain. That’s why when I deleted the stack via CDK it didn’t delete the bucket. In order to change that behaviour I had to change the value to delete as such:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">CdkWorkoutStack</span> <span class="p">:</span> <span class="n">Stack</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="nf">CdkWorkoutStack</span><span class="p">(</span><span class="n">Construct</span> <span class="n">parent</span><span class="p">,</span> <span class="kt">string</span> <span class="n">id</span><span class="p">,</span> <span class="n">IStackProps</span> <span class="n">props</span><span class="p">)</span> <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="n">props</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">bucket</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Bucket</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="s">"CdkBucket"</span><span class="p">,</span> <span class="k">new</span> <span class="n">BucketProps</span>
-        <span class="p">{</span>
-            <span class="n">Versioned</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
-            <span class="n">BlockPublicAccess</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">BlockPublicAccess</span><span class="p">(</span><span class="k">new</span> <span class="nf">BlockPublicAccessOptions</span><span class="p">()</span>
-            <span class="p">{</span>
-                <span class="n">BlockPublicAcls</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
-                <span class="n">BlockPublicPolicy</span> <span class="p">=</span> <span class="k">true</span>
-            <span class="p">})</span>
-        <span class="p">});</span>
-
-        <span class="kt">var</span> <span class="n">resource</span> <span class="p">=</span> <span class="n">bucket</span><span class="p">.</span><span class="n">Node</span><span class="p">.</span><span class="nf">FindChild</span><span class="p">(</span><span class="s">"Resource"</span><span class="p">)</span> <span class="k">as</span> <span class="n">Amazon</span><span class="p">.</span><span class="n">CDK</span><span class="p">.</span><span class="n">CfnResource</span><span class="p">;</span>
-        <span class="n">resource</span><span class="p">.</span><span class="nf">ApplyRemovalPolicy</span><span class="p">(</span><span class="n">RemovalPolicy</span><span class="p">.</span><span class="n">DESTROY</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>This time it produces a CloudFormation template with a different policy:</p>
-
-<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"Resources"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"CdkBucket2FB0D10E"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AWS::S3::Bucket"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"Properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"PublicAccessBlockConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-          </span><span class="nl">"BlockPublicAcls"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"BlockPublicPolicy"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="nl">"VersioningConfiguration"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-          </span><span class="nl">"Status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Enabled"</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-      </span><span class="p">},</span><span class="w">
-      </span><span class="nl">"UpdateReplacePolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Delete"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"DeletionPolicy"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Delete"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"Metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"aws:cdk:path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CdkWorkoutStack/CdkBucket/Resource"</span><span class="w">
-      </span><span class="p">}</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div></div>
-
-<p>This time after destroy command it did delete the bucket as well.</p>
-
-<h2 id="conclusion">Conclusion</h2>
-<p>I think infrastructure as code is definitely the way to manage cloud resources and CDK provides a great way to simplify the process. It’s at early stages for the time being as the NuGet packages are in devpreview mode but it’s good enough to rely on and start developing with CDK.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://www.youtube.com/watch?v=Lh-kVC2r2AU" target="_blank" rel="noopener noreferrer">AWS re:Invent 2018: Infrastructure Is Code with the AWS Cloud Development Kit (DEV372) (YouTube Video)</a></li>
-  <li><a href="https://www.youtube.com/watch?v=184S7ki6fJA" target="_blank" rel="noopener noreferrer">Develop a Web App Using Amazon ECS and AWS Cloud Development Kit (CDK) - AWS Online Tech Talks (YouTube Video)</a></li>
-  <li><a href="https://docs.aws.amazon.com/en_pv/cdk/latest/guide/getting_started.html" target="_blank" rel="noopener noreferrer">AWS Documentation: Getting Started With the AWS CDK</a></li>
-  <li><a href="https://docs.aws.amazon.com/cdk/api/latest/docs/aws-construct-library.html" target="_blank" rel="noopener noreferrer">AWS CDK Construct Library</a></li>
-</ul>
 
 		
 		

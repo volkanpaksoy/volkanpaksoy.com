@@ -146,6 +146,115 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2018/07/20/Verifying-Data-Integrity-with-AWS-S3/" itemprop="url">Verifying Data Integrity with AWS S3</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2018-07-20T06:00:00+01:00" itemprop="datePublished">July 20, 2018</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">s3, csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>When it comes to transferring files over network, there’s always a risk of ending up with corrupted files. To prevent this on transfers to and from S3, AWS provides us with some tools we can leverage to guarantee correctness of the files.</p>
+
+<h2 id="verifying-files-while-uploading">Verifying files while uploading</h2>
+
+<p>In order to verify the file is uploaded successfully, we need to provide AWS the MD5 hash value of our file. Once upload has been completed, AWS calculates the MD5 hash on their end and compares the both values. If they match, it means it went through successfully. So our request looks like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="n">PutObjectRequest</span>
+<span class="p">{</span>
+    <span class="n">MD5Digest</span> <span class="p">=</span> <span class="n">md5</span><span class="p">,</span>
+    <span class="n">BucketName</span> <span class="p">=</span> <span class="n">bucketName</span><span class="p">,</span>
+    <span class="n">Key</span> <span class="p">=</span>  <span class="n">key</span><span class="p">,</span>
+    <span class="n">FilePath</span> <span class="p">=</span> <span class="n">inputPath</span><span class="p">,</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>where we calculate MD5 hash value like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">stream</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FileStream</span><span class="p">(</span><span class="n">fullPath</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">Open</span><span class="p">,</span> <span class="n">FileAccess</span><span class="p">.</span><span class="n">Read</span><span class="p">,</span> <span class="n">FileShare</span><span class="p">.</span><span class="n">Read</span><span class="p">))</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">md5</span> <span class="p">=</span> <span class="n">MD5</span><span class="p">.</span><span class="nf">Create</span><span class="p">())</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">hash</span> <span class="p">=</span> <span class="n">md5</span><span class="p">.</span><span class="nf">ComputeHash</span><span class="p">(</span><span class="n">stream</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToBase64String</span><span class="p">(</span><span class="n">hash</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In my tests, it looks like if you don’t provide a valid MD5 hash, you get a <em>WinHttpException</em> with the inner exception message “The connection with the server was terminated abnormally”</p>
+
+<p>If you provide a valid but incorrect MD5, the exception thrown is of type <em>AmazonS3Exception</em> with the message “The Content-MD5 you specified did not match what we received”.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>Amazon SDK comes with 2 utility methods named <em>GenerateChecksumForContent</em> and <em>GenerateChecksumForStream</em>. At the time of this writing, GenerateChecksumForStream wasn’t available in the AWS SDK for .NET Core. So the only method worked for me to calculate the hash was the way as shown above.</p>
+
+<h2 id="verifying-files-while-downloading">Verifying files while downloading</h2>
+
+<p>When downloading we use EtagToMatch property of GetObjectRequest to have the verification:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="n">GetObjectRequest</span>
+<span class="p">{</span>
+	<span class="n">BucketName</span> <span class="p">=</span> <span class="n">bucketName</span><span class="p">,</span>
+    <span class="n">Key</span> <span class="p">=</span>  <span class="n">key</span><span class="p">,</span>
+    <span class="n">EtagToMatch</span> <span class="p">=</span> <span class="s">"\"278D8FD9F7516B4CA5D7D291DB04FB20\""</span><span class="p">.</span><span class="nf">ToLower</span><span class="p">()</span> <span class="c1">// Case-sensitive</span>
+<span class="p">};</span>
+
+<span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">response</span> <span class="p">=</span> <span class="k">await</span> <span class="n">_s3Client</span><span class="p">.</span><span class="nf">GetObjectAsync</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+<span class="p">{</span>
+    <span class="k">await</span> <span class="n">response</span><span class="p">.</span><span class="nf">WriteResponseStreamToFileAsync</span><span class="p">(</span><span class="n">outputPath</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="n">CancellationToken</span><span class="p">.</span><span class="n">None</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>When we request the object this way and if the the MD5 hash we send doesn’t match the one on the server we get an exception with the following message: <em>“At least one of the pre-conditions you specified did not hold”</em></p>
+
+<p>Once important point to keep in mind is that AWS keeps the hashes in lowerc-ase and the comparison is case-sensitive so make sure to convert everything to lower-case before you send it out.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/VerifyingDataIntegrityWithAWSS3" target="_blank" rel="noopener noreferrer">Sample source code</a></li>
+  <li><a href="https://aws.amazon.com/premiumsupport/knowledge-center/data-integrity-s3/" target="_blank" rel="noopener noreferrer">How do I ensure data integrity of objects uploaded to or downloaded from Amazon S3?</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash?view=powershell-6" target="_blank" rel="noopener noreferrer">Powershell Get-FileHash cmdlet reference</a></li>
+  <li><a href="https://docs.aws.amazon.com/cli/latest/topic/s3-faq.html" target="_blank" rel="noopener noreferrer">AWS CLI S3 FAQ</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2018/07/08/AWS-certification-notes-cloud-practitioner/" itemprop="url">AWS Certification Notes: AWS Certified Cloud Practitioner</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -847,149 +956,6 @@ dotnet lambda deploy-function send_cv
   <li><a href="https://github.com/aws/aws-lambda-dotnet/tree/master/Libraries/src/Amazon.Lambda.SNSEvents" target="_blank" rel="noopener noreferrer">Amazon.Lambda.SNSEvents</a></li>
   <li><a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html" target="_blank" rel="noopener noreferrer">Sending Personalized Email Using the Amazon SES API</a></li>
 </ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2018/06/15/AWS-certification/" itemprop="url">AWS Certification</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2018-06-15T07:00:00+01:00" itemprop="datePublished">June 15, 2018</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
-
-<!-- aws -->
-
-
-
-
-    <a href="/category/aws">aws</a>
-    
-</span>
-	<span class="tags">certification</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I’ve been working with AWS for years. Since I love everything about it and planning to use it for the foreseeable future, I’ve decided to go ahead and get the official certificates. This is to make sure I’ve covered all the important aspects of AWS fully. Also it motivates me to devleop more projects and blog posts on it.</p>
-
-<h2 id="overview">Overview</h2>
-<p>There are 2 main categories of tracks:</p>
-
-<ul>
-  <li>Role-based Certifications</li>
-  <li>Specialty Certifications</li>
-</ul>
-
-<p>The tracks and exam paths to take are shown in the diagram below:</p>
-
-<p><img src="/images/vpblogimg/2018/06/aws-certification-01-overview.png" alt=""></p>
-
-<p>My plan is to start with Cloud Practitioner exam, continue with AWS Solutions Architect track and move on to developer and sysops tracks.</p>
-
-<h2 id="costs">Costs</h2>
-<p>I think it’s important to analyze costs first to assess whether or not this is a journey you want to start.</p>
-
-<h3 id="individual-exam-costs">Individual Exam Costs</h3>
-<p>|Exam Name|Cost|Notes
-|AWS Certified Cloud Practitioner|100 USD|Optional
-|Associate-level exams|150 USD|
-|Professional-level exams|300 USD|
-|Specialty exams|300 USD|
-|Recertification exams|75 USD|Recertification is required every two years for all AWS Certifications
-|Associate-level practice exams|20 USD|
-|Professional-level practice exams|40 USD|</p>
-
-<h3 id="total-tracks-costs">Total Tracks Costs</h3>
-<p>|Exam Track|Total Cost|With VAT|Notes|
-|AWS Solutions Architect|450 USD|540 USD|
-|AWS Certified DevOps Engineer|450 USD|540 USD|
-|All Associate Level Exams |300 USD|360 USD|3 Exams
-|All Professional Level Exams |600 USD|720 USD|2 Exams (There’s no professional level for developer, both associate level exams lead to DevOps engineer)
-|All Exams|1150 USD|1380 USD|Includes the optional Cloud Practitioner exam</p>
-
-<p>The total cost is quite cheap but I think in the end it’s worth it.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h2 id="taking-the-exams">Taking the Exams</h2>
-<p>It all starts with <a href="https://aws.training" target="_blank" rel="noopener noreferrer">aws.training</a> site. Just sign in with your Amazon account or create a new one. This allows you to take the online free courses. To take the exams you’d need a new account. I think this is because they partnered with a 3rd party to provide this.</p>
-
-<p><img src="/images/vpblogimg/2018/06/aws-certification-02-new-certification-account.png" alt=""></p>
-
-<p>Registration is quite similar. Just provide name and address and search for an exam centre.</p>
-
-<h2 id="online-training">Online Training</h2>
-
-<h3 id="free-courses">Free Courses</h3>
-
-<h4 id="aws-training"><a href="https://aws.training" target="_blank" rel="noopener noreferrer">AWS Training</a></h4>
-<p>This is the official certification site of AWS. It allows the user to enroll to courses and view their transcript.</p>
-
-<p>It’s a bit hard to find the actual course after you enrol because you can’t jump to contents from search results. What you should do is first go to My Transcript and under current courses you should be able to see the course and a link that says “Open”. Clickking that link takes to the actual content.</p>
-
-<ul>
-  <li><a href="https://www.aws.training/learningobject/curriculum?id=16357" target="_blank" rel="noopener noreferrer">AWS Cloud Practitioner Essentials (Digital)</a></li>
-</ul>
-
-<p>It has more content in the site. I’ll discover more as I go along.</p>
-
-<h4 id="edx"><a href="https://www.edx.org/school/aws" target="_blank" rel="noopener noreferrer">edX</a></h4>
-<p>edX have recently launched 3 free AWS courses.</p>
-
-<p><img src="/images/vpblogimg/2018/06/aws-certification-03-edx-aws-exams.png" alt=""></p>
-
-<h3 id="paid-courses">Paid Courses</h3>
-<ul>
-  <li><a href="https://www.cbtnuggets.com/blog/2018/01/new-course-aws-certified-cloud-practitioner/" target="_blank" rel="noopener noreferrer">CBT Nuggets: AWS Certified Cloud Practitioner</a></li>
-  <li><a href="https://www.udemy.com/aws-certified-developer-associate/" target="_blank" rel="noopener noreferrer">Udemy: AWS Certified Developer - Associate 2018</a></li>
-  <li><a href="https://www.pluralsight.com/courses/aws-certified-solutions-architect-associate" target="_blank" rel="noopener noreferrer">Pluralsight: AWS Certified Solutions Architect - Associate</a></li>
-  <li><a href="https://acloud.guru/courses?vendors=aws" target="_blank" rel="noopener noreferrer">acloud.guru: AWS Courses</a></li>
-  <li><a href="https://www.lynda.com/learning-paths/IT/become-an-aws-cloud-practitioner" target="_blank" rel="noopener noreferrer">Lynda: Become an AWS Cloud Practitioner</a></li>
-</ul>
-
-<h3 id="various-training-resources">Various Training Resources</h3>
-<ul>
-  <li><a href="https://aws.amazon.com/new/" target="_blank" rel="noopener noreferrer">What’s New with AWS</a></li>
-  <li><a href="https://cloudacademy.com/blog/amazon-aws-2/" target="_blank" rel="noopener noreferrer">CloudAcademy AWS Blog</a></li>
-  <li><a href="http://www.ajsnetworking.com/" target="_blank" rel="noopener noreferrer">AJS Networking</a></li>
-  <li><a href="https://gist.github.com/volkanpaksoy/840b2059e739b0a37a4444683b24124b" target="_blank" rel="noopener noreferrer">A curated list of AWS resources to prepare for the AWS Certifications</a></li>
-</ul>
-
-<h2 id="conclusion">Conclusion</h2>
-<p>As my favourite saying goes: “It’s not about the destination, it’s about the journey”.</p>
-
-<p>AWS certification for me is not a destination. It just plays a role for me to stay on course and stay motivated to create more projects and blog posts in a timely manner.</p>
-
-<p>I’m hoping to see this journey to completion. I’ll be posting more on AWS and my journey on certification soon.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://aws.training" target="_blank" rel="noopener noreferrer">aws.training</a></li>
-  <li><a href="https://aws.amazon.com/certification/certified-cloud-practitioner/" target="_blank" rel="noopener noreferrer">AWS Certified Cloud Practitioner exam</a></li>
-  <li><a href="https://aws.amazon.com/certification/faqs/" target="_blank" rel="noopener noreferrer">AWS Certification FAQ</a></li>
-  <li><a href="https://www.certmetrics.com/amazon/public/transcript.aspx" target="_blank" rel="noopener noreferrer">Transcript validation</a></li>
-  <li><a href="https://hackernoon.com/3-reasons-why-you-should-get-aws-certified-this-year-7e44dbc51519" target="_blank" rel="noopener noreferrer">Hackernoon article: 3 Reasons Why You Should Get AWS Certified This Year</a></li>
-</ul>
-
 
 		
 		

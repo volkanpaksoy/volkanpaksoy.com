@@ -146,6 +146,52 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2014/11/15/tip-day-generating-insert-statements-sql-server-management-studio/" itemprop="url">Tip of the Day: Generating insert statements with SQL Server Management Studio</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-11-15T23:51:27+00:00" itemprop="datePublished">November 15, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">tip_of_the_day, sql_server, ssms</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>The feature exists but a bit buried away. To create insert statements for table(s):</p>
+
+<ol>
+  <li>Right click on the database and go to Tasks -&gt; Generate Scripts</li>
+  <li>Select the tables that you want to generate the script</li>
+  <li>In “Set scripting options” page click on the Advanced button</li>
+  <li>Under the General category, locate “Types of data to script”. It contains 3 options: Data Only, Schema and Data, and Schema Only. Default is Schema only,if you select an option with data in it you can get the data with the insert statements.</li>
+</ol>
+
+<p><img src="/images/vpblogimg/2014/11/SQLServerGeneratingInsertScript.png" alt="Generating Insert Scripts With SSMS"></p>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/11/11/package-manager-windows-chocolatey/" itemprop="url">Package Manager for Windows: Chocolatey</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -264,78 +310,6 @@
 <h2 id="resources">Resources</h2>
 <ul>
   <li><a href="http://implbits.com" target="_blank" rel="noopener noreferrer">Official site</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/08/22/windows-services-simplified-topshelf/" itemprop="url">Windows Services Simplified: TopShelf</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-08-22T22:20:16+01:00" itemprop="datePublished">August 22, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">topshelf, windows_service, csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p><img src="/images/vpblogimg/2014/08/TopShelfIcon.png" alt="Topshelf"></p>
-
-<p>In almost all projects I’ve worked there was always a need for scheduled background jobs. Windows Services are well-suited for the job but when it comes to deployment and debugging they fall short. This is where TopShelf comes to rescue!</p>
-
-<h3 id="topshelf-in-action">TopShelf in action</h3>
-<p>With TopShelf all you need to do is create a Console Application as your Windows Service and initialize TopShelf in the Main method:</p>
-
-<p><img src="/images/vpblogimg/2014/08/TopShelf-Code.png" alt="Topshelf"></p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<p>Configuring it is quite easy and straightforward. It also has a nice comprehensive documentation on its <a href="http://topshelf-project.com/" target="_blank" rel="noopener noreferrer">official site</a>. You can define all the parameters like the account that will run the service, the recovery policy and start-up type.</p>
-
-<h3 id="what-about-scheduling">What about scheduling</h3>
-<p>Scheduling is also a crucial feature in background services. TopShelf doesn’t help with that but that’s easy to fix with <a href="https://github.com/jgeurts/FluentScheduler" target="_blank" rel="noopener noreferrer">FluentScheduler</a>.</p>
-
-<p><img src="/images/vpblogimg/2014/08/TopShelf-Code2.png" alt="Topshelf"></p>
-
-<p>FluentScheduler is yet another great library available at NuGet which makes scheduling a breeze. No need to fiddle with timers, it can be defined very easily.</p>
-
-<p>And here is the sample code:</p>
-
-<noscript><pre>400: Invalid request</pre></noscript>
-<script src="https://gist.github.com/198174e19c567a6109b6b30292ee3058.js"> </script>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://topshelf-project.com" target="_blank" rel="noopener noreferrer">Top-Shelf Official site</a></li>
-  <li><a href="https://github.com/jgeurts/FluentScheduler" target="_blank" rel="noopener noreferrer">FluentScheduler</a></li>
 </ul>
 
 		

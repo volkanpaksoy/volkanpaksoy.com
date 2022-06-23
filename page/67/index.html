@@ -146,6 +146,63 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2012/10/30/synchronizing-windows-live-writer-with-dropbox/" itemprop="url">Synchronizing Windows Live Writer with Dropbox</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2012-10-30T15:30:52+00:00" itemprop="datePublished">October 30, 2012</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
+
+<!-- misc -->
+
+
+
+
+    <a href="/category/misc">misc</a>
+    
+</span>
+	<span class="tags">dropbox, live_writer, sync</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I like Windows Live Writer and I use it for blogging. The problem is I start multiple posts at once, take some notes on them and save them as drafts. Sometimes when I’m on a different machine I want to add some notes on the existing drafts but (you guessed it) the drafts are saved locally on a different machine. I already have Dropbox installed almost on my machines so I decided to harness it to the task.</p>
+
+<p><strong>STEP 01:</strong> Delete the My Blog Posts folder in the destination machine.
+The local folder is created automatically under <em>%UserProfile%\Documents\My Weblog Posts.</em> Delete this folder. Make sure LiveWriter is closed before deleting it.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p><strong>STEP 02:</strong> Create a directory junction
+A directory junction is a mapping to another folder. In Windows 7 you can use mklink command to create directory junctions (as well as symbolic and hard links)</p>
+
+<blockquote>
+  <p>mklink /D "%UserProfile%\Documents\My Weblog Posts" {PATH_TO_DROPBOX_ROOT}\My Weblog Posts"</p>
+</blockquote>
+
+<p>Enter the correct path to your dropbox folder and that’s it. Now you can enjoy the ease of synchronized blog drafts.</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2012/10/25/poor-mans-two-factor-authentication-for-windows/" itemprop="url">Poor man’s two-factor authentication for Windows</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -252,58 +309,6 @@
 <p><img src="/images/vpblogimg/2012/10/ChaosMonkey.jpg" alt="Chaos Monkey"></p>
 
 <p>Originally developed by Netflix and open-sourced later. It is AWS specific tool. What is does is connect to your AWS system and terminate instances randomly. So that you can observe your system in such worst case scenarios. The good thing about it is, it selects its “victims” by looking at a tag you provide. So if you don’t want a single node such as a database server, you can easily exclude it. Source code can be downloaded from <a href="https://github.com/simonmunro/ChaosMonkey" target="_blank" rel="noopener noreferrer">here</a>.</p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2012/10/19/otp-everywhere/" itemprop="url">OTP Everywhere</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2012-10-19T13:37:01+01:00" itemprop="datePublished">October 19, 2012</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/security">security</a></span> -->
-
-<!-- security -->
-
-
-
-
-    <a href="/category/security">security</a>
-    
-</span>
-	<span class="tags">yubikey</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p><img src="/images/vpblogimg/2012/10/Yubikey.png" alt="Yubikey"></p>
-
-<p>I love my Yubikey so much that I recently bought another one. I couldn’t find a good use for it yet but I’m sure I will someday :-)</p>
-
-<p>If you don’t know what a Yubikey is, check out its vendor <a href="http://www.yubico.com/yubikey" target="_blank" rel="noopener noreferrer">here</a>. Basically it is a one-time password (OTP) generator. It has a USB input device. It doesn’t require batteries to operate so you can use one everywhere without having to worry about such issues. I’m trying to incorporate using it into my daily life so that I can leverage two-factor authentication as much as possible.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<p>Today, I found another usage. Yubikey Wordpress plugin. By using this plugin now I can login to my blog using my password and OTP generated by Yubikey. Yubikey has a web API and the plugin calls the API to authenticate your device. To learn more about the settings visit the plugin’s site: <a href="http://wordpress.org/extend/plugins/yubikey-plugin/installation/" target="_blank" rel="noopener noreferrer">http://wordpress.org/extend/plugins/yubikey-plugin/installation/</a></p>
-
 
 		
 		

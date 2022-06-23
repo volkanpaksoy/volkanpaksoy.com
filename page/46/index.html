@@ -146,6 +146,78 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2014/08/22/windows-services-simplified-topshelf/" itemprop="url">Windows Services Simplified: TopShelf</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-08-22T22:20:16+01:00" itemprop="datePublished">August 22, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">topshelf, windows_service, csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p><img src="/images/vpblogimg/2014/08/TopShelfIcon.png" alt="Topshelf"></p>
+
+<p>In almost all projects I’ve worked there was always a need for scheduled background jobs. Windows Services are well-suited for the job but when it comes to deployment and debugging they fall short. This is where TopShelf comes to rescue!</p>
+
+<h3 id="topshelf-in-action">TopShelf in action</h3>
+<p>With TopShelf all you need to do is create a Console Application as your Windows Service and initialize TopShelf in the Main method:</p>
+
+<p><img src="/images/vpblogimg/2014/08/TopShelf-Code.png" alt="Topshelf"></p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>Configuring it is quite easy and straightforward. It also has a nice comprehensive documentation on its <a href="http://topshelf-project.com/" target="_blank" rel="noopener noreferrer">official site</a>. You can define all the parameters like the account that will run the service, the recovery policy and start-up type.</p>
+
+<h3 id="what-about-scheduling">What about scheduling</h3>
+<p>Scheduling is also a crucial feature in background services. TopShelf doesn’t help with that but that’s easy to fix with <a href="https://github.com/jgeurts/FluentScheduler" target="_blank" rel="noopener noreferrer">FluentScheduler</a>.</p>
+
+<p><img src="/images/vpblogimg/2014/08/TopShelf-Code2.png" alt="Topshelf"></p>
+
+<p>FluentScheduler is yet another great library available at NuGet which makes scheduling a breeze. No need to fiddle with timers, it can be defined very easily.</p>
+
+<p>And here is the sample code:</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/198174e19c567a6109b6b30292ee3058.js"> </script>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://topshelf-project.com" target="_blank" rel="noopener noreferrer">Top-Shelf Official site</a></li>
+  <li><a href="https://github.com/jgeurts/FluentScheduler" target="_blank" rel="noopener noreferrer">FluentScheduler</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/07/20/using-multiple-git-accounts-ssh-keys/" itemprop="url">Using multiple git accounts with SSH keys</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -284,63 +356,6 @@
   <li><a href="http://geekmom.com/2013/08/ev3-review-lego-robot/" target="_blank" rel="noopener noreferrer">Lego EV3 review and comparison to NXT 2.0</a></li>
   <li><a href="http://channel9.msdn.com/posts/LEGO-Mindstorms-EV3-API" target="_blank" rel="noopener noreferrer">Channel9 video on programming EV3 with .NET API</a></li>
   <li><a href="https://github.com/volkanpaksoy/lego/tree/master/projects/VP.Playground.Lego.EV3Test" target="_blank" rel="noopener noreferrer">Source code for the test application</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/05/11/density-based-clustering-dbscan-algorithm/" itemprop="url">Density-based Clustering with DBSCAN Algorithm</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-05-11T13:20:15+01:00" itemprop="datePublished">May 11, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">java, machine_learning</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>My previous post was about grid-based clustering. DBSCAN (Density-Based Spatial Clustering of Applications with Noise) takes another approach called density-based clustering. It grows regions with high density (above threshold provided) into clusters and discovers clusters of arbitrary shape.</p>
-
-<h3 id="dbscan-implementation">DBSCAN Implementation</h3>
-<p>First off the data is loaded and a distance matrix is calculated based on the data points.</p>
-
-<p><img src="/images/vpblogimg/2014/05/DBSCAN-01.png" alt="DBSCAN 1"></p>
-
-<p>The algorithm visits every data point and finds its neighbours. If the neighbours are dense enough than the cluster is expanded to include those points as well.</p>
-
-<p><img src="/images/vpblogimg/2014/05/DBSCAN-03.png" alt="DBSCAN 3"></p>
-
-<p>So data points that are close enough to each other are included in the same cluster.</p>
-
-<p><img src="/images/vpblogimg/2014/05/DBSCAN-02.png" alt="DBSCAN 2"></p>
-
-<p>Joining dense clusters is a similar approach taken in grid clustering. The difference is this way the clusters can have arbitrary shapes.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://en.wikipedia.org/wiki/DBSCAN" target="_blank" rel="noopener noreferrer">Wikipedia article</a></li>
-  <li><a href="https://github.com/volkanpaksoy/VP.MachineLearning.DBSCAN" target="_blank" rel="noopener noreferrer">Source code</a></li>
 </ul>
 
 		

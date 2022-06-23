@@ -146,6 +146,70 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2012/12/16/introduction-to-couchbase-part-1/" itemprop="url">Introduction to Couchbase – Part 1</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2012-12-16T15:00:27+00:00" itemprop="datePublished">December 16, 2012</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">nosql</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Couch is one of move most popular databases in NOSQL movement. When I first started playing around with Couch I was a bit confused by the naming. I had thought there was one product but turns out there are two actually.</p>
+
+<h3 id="couchdb-vs-couchbase">CouchDB vs. Couchbase</h3>
+<p>Apache CouchDB was created by Damien Katz who then started a company called CouchOne Inc. After some time they decided to merge their company with Membase Inc. which developed another open-source distributed key-value database called Membase. They merged the two products so that it would use Membase as storage backend and some portions were rewritten. The end result was called Couchbase. So even though it’s based on Apache CouchDB it’s a different product and is being developed by a different company. But it’s still open source and licensed under the Apache 2.0 license.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h3 id="which-one-to-use">Which one to use?</h3>
+<p>They serve different needs. Couchbase has a built-in memcached-based caching technology whereas Apache CouchDB is a disk-based database. Therefore Couchbase is better suited low latency requirements. Couchbase has built-in replication which allows data to be spread across all the nodes in the cluster automatically. Apache CouchDB supports peer-to-peer replication. I find auto-replication feature of Couchbase marvellous and it’s extremely easy to manage. When you create a new node it can be a new cluster on its own or it can be added to an existing cluster. Adding it to a cluster consists of just providing the IP address/hostname and administrator credentials of a machine in that cluster and the rest is automagically taken care of. I’m using Couchbase in my test applications.</p>
+
+<h3 id="whats-new-in-couchbase-20">What’s new in Couchbase 2.0</h3>
+<p>Couchbase released a new major version recently. Highlights of the new features are:</p>
+
+<ul>
+  <li>Cross Data-Center Replication (XDCR) enhancements</li>
+  <li>2 cool sample buckets (beer-sample and gamesim-sample)</li>
+  <li>A new REST-API</li>
+  <li>New command-line tools</li>
+  <li>Querying views during rebalance</li>
+</ul>
+
+<p>In the next post I’ll go into more technical details.</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2012/12/11/wiretap-your-other-machine/" itemprop="url">Wiretap your network</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -308,65 +372,6 @@ $smtpClient.Send($email)
 <p>This example uses port 587 and SSL, your configuration may vary. That’s all there is to it to send a mail with PowerShell and you have full control over it.</p>
 
 <p>To run this script in the actions list select “Start a program” from the actions list. In the Program/script textbox enter “powershell” and enter the full path of the script in the arguments textbox. Don’t forget to save it with a ps1 extension.</p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2012/11/29/share-your-machines-with-vmware-workstation/" itemprop="url">Share your machines with VMWare Workstation</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2012-11-29T13:34:41+00:00" itemprop="datePublished">November 29, 2012</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/sysops">sysops</a></span> -->
-
-<!-- sysops -->
-
-
-
-
-    <a href="/category/sysops">sysops</a>
-    
-</span>
-	<span class="tags">virtualization</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>VMWare is one of my favourite IT companies. They are specialized in one area and they create very nice products. And they mind their own business. I mean you don’t read about them in patent dispute related news. As virtualization is the key technology behind cloud computing in a way VMWare is one of the pioneers to make it happen. They say Microsoft is advancing with HyperV 3.0 but currently I’ll stick to VMWare Workstation for now. As of version 8.0 VMWare Workstation comes with a cool feature called VM Sharing. As the name implies, you can sharing a whole machine and connect to it from another workstation application and manage that machine as if it was a local machine. So if you need to access a virtual machine from multiple computers you can accomplish it without creating multiple copies of the machine. All you have to do is open the VM you want to share and select <strong>VM -–&gt; Manage –-&gt; Share</strong>. Keep in mind that the machine must be powered off.</p>
-
-<p><img src="/images/vpblogimg/2012/11/SharedVM00.png" alt="VMWare"></p>
-
-<p>Sharing wizard is very simple. It asks if you want to clone the machine and move it under the shared VM folder. I like moving it because I don’t want to deal with multiple copies. Then from the client side select <strong>File –-&gt; Connect to server</strong>.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<p><img src="/images/vpblogimg/2012/11/SharedVM01.png" alt="VMWare"></p>
-
-<p>Then provide the hostname / IP address along with administrator credentials and you can see the shared VMs under (not surprisingly) <strong>Shared VMs</strong> menu at the bottom of the left menu.</p>
-
-<p><img src="/images/vpblogimg/2012/11/SharedVM02.png" alt="VMWare"></p>
-
-<p>The rest is exactly the same as the regular process. You can manage the remote virtual machine as if it resides in your local environment.</p>
-
-<p><img src="/images/vpblogimg/2012/11/SharedVM03.png" alt="VMWare"></p>
 
 		
 		

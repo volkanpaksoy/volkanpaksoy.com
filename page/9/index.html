@@ -146,6 +146,152 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2019/03/29/A-Docker-Image-to-Sync-Git-Repositories/" itemprop="url">A Docker Image to Sync Git Repositories</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-03-29T06:00:00+00:00" itemprop="datePublished">March 29, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devdevops">dev</a></span> -->
+
+<!-- dev, devops -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags">git</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>When you work on the same repository on multiple computers it’s easy to forget to push code and leave some changes local. To avoid that I decided to develop a tiny project that loops through all the folders and pulls remote changes then commits and pushes all the local changes.</p>
+
+<p>The script itself it very simple. It first pulls the latest and pushes the local changes:</p>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">Function</span><span class="w"> </span><span class="nf">Sync-Git</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">git</span><span class="w"> </span><span class="nx">fetch</span><span class="w"> </span><span class="nt">--all</span><span class="w">
+    </span><span class="n">git</span><span class="w"> </span><span class="nx">pull</span><span class="w">
+    </span><span class="n">git</span><span class="w"> </span><span class="nx">add</span><span class="w"> </span><span class="o">.</span><span class="w">
+    </span><span class="n">git</span><span class="w"> </span><span class="nx">commit</span><span class="w"> </span><span class="nt">-m</span><span class="w"> </span><span class="s1">'git-sync'</span><span class="w">
+    </span><span class="n">git</span><span class="w"> </span><span class="nx">push</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="nv">$rootFolder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'/rootFolder'</span><span class="w">
+
+</span><span class="n">Write-Host</span><span class="w"> </span><span class="s2">"Changing directory to root folder: </span><span class="nv">$rootFolder</span><span class="s2">"</span><span class="w">
+</span><span class="n">Set-Location</span><span class="w"> </span><span class="nv">$rootFolder</span><span class="w">
+</span><span class="n">Get-Location</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Write-Host</span><span class="w">
+
+</span><span class="n">Get-ChildItem</span><span class="w"> </span><span class="nt">-Directory</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">ForEach-Object</span><span class="w"> </span><span class="p">{</span><span class="w"> 
+    </span><span class="n">Set-Location</span><span class="w"> </span><span class="nt">-Path</span><span class="w"> </span><span class="bp">$_</span><span class="w"> 
+    </span><span class="n">Write-Host</span><span class="w"> </span><span class="bp">$_</span><span class="w">
+    </span><span class="n">Sync-Git</span><span class="w">
+    </span><span class="nx">Set-Location</span><span class="w"> </span><span class="nv">$rootFolder</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="n">Write-Host</span><span class="w"> </span><span class="s2">"Done"</span><span class="w">
+
+</span></code></pre></div></div>
+
+<p>Dockerfile is based Microsoft’s Powershell image and it only needs to install Git on it:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM mcr.microsoft.com/powershell
+
+RUN apt-get update &amp;&amp; apt-get install -y git
+RUN git config --global user.email "you@example.com"
+
+RUN echo "    IdentityFile ~/.ssh/id_rsa" &gt;&gt; /etc/ssh/ssh_config
+RUN echo "    StrictHostKeyChecking no" &gt;&gt; /etc/ssh/ssh_config
+
+RUN mkdir /home/git-sync
+WORKDIR /home/git-sync
+
+COPY ./git-sync.ps1 .
+
+ENTRYPOINT ["pwsh", "git-sync.ps1"]
+</code></pre></div></div>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>Build it at the root folder:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build . -t {image name}
+</code></pre></div></div>
+
+<p>And run it as:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run --rm -d -v /host/path/to/root/git/folder:/rootFolder -v ~/.ssh:/root/.ssh:ro {image name}
+</code></pre></div></div>
+
+<p>Or pull my image from Docker Hub:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull volkanpaksoy/git-sync
+</code></pre></div></div>
+
+<h2 id="issues">Issues</h2>
+
+<h3 id="fatal-unable-to-auto-detect-email-address">fatal: unable to auto-detect email address</h3>
+<p>GitHub didn’t allow me to push my changes without an email address so I had to add the command below to Dockerfile:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config --global user.email "you@example.com"
+</code></pre></div></div>
+
+<p>It doesn’t look good maybe but I don’t care too much about email addresses in commits anyway so I’m fine with it.</p>
+
+<h3 id="warning-unprotected-private-key-file-error">“WARNING: UNPROTECTED PRIVATE KEY FILE!” error</h3>
+<p>This might also be an issue in which case the solution is simple (assuming the name of the private key file is id_rsa):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chmod 600 ~/.ssh/id_rsa 
+</code></pre></div></div>
+
+<h3 id="bad-configuration-option">Bad configuration option</h3>
+<p>Make sure to have the following options in the config file in your .ssh directory:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Host *
+  StrictHostKeyChecking no
+  AddKeysToAgent yes
+  IgnoreUnknown UseKeychain
+  UseKeychain yes
+  IdentityFile ~/.ssh/id_rsa
+</code></pre></div></div>
+
+<h2 id="source-code">Source Code</h2>
+<p></p>
+<div class="github-widget" data-repo="volkanpaksoy/git-sync"></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/git-sync" target="_blank" rel="noopener noreferrer">Source Code</a></li>
+  <li><a href="https://hub.docker.com/r/volkanpaksoy/git-sync" target="_blank" rel="noopener noreferrer">Docker repository</a></li>
+  <li><a href="https://help.github.com/en/articles/about-commit-email-addresses" target="_blank" rel="noopener noreferrer">About commit email addresses</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2019/03/28/Unit-Testing-in-JavaScript-Part-1-Basics/" itemprop="url">Unit Testing in Javascript - Part 1: Basics</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -342,112 +488,6 @@ describe('Factorial', function() {
   <li><a href="https://docs.kali.org/downloading/kali-linux-live-usb-install" target="_blank" rel="noopener noreferrer">Making a Kali Bootable USB Drive</a></li>
 </ul>
 
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2019/03/09/No-More-Snoozing-Tips-Tools-and-Techniques/" itemprop="url">No more snoozing: Tips, tools and techniques</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2019-03-09T04:00:00+00:00" itemprop="datePublished">March  9, 2019</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/hobbymisc">hobby</a></span> -->
-
-<!-- hobby, misc -->
-
-
-
-
-    <a href="/category/hobby">hobby</a>
-    , 
-
-    <a href="/category/misc">misc</a>
-    
-</span>
-	<span class="tags">productivity, apple_watch, alexa, philips_hue, iot</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>My #1 rule for productivity is “No Snoozing!”. If you snooze, it means you are late for everything you planned to do and that is a terrible way to start your day. This post is about a few tools, tips and techniques I use to prevent snoozing.</p>
-
-<h2 id="tip-1-sleep-well">Tip #1: Sleep well</h2>
-<p>This is generally easier said done but there’s no way around it. You MUST get enough sleep. Otherwise, sooner or later your will power will get weaker and weaker. Eventually you’ll succumb to the sweet temptation of more sleep.</p>
-
-<h2 id="tip-2-place-the-alarm-away-from-your-bed">Tip #2: Place the alarm away from your bed</h2>
-<p>This way when your alarm (most likely your phone) goes off you have to make a deliberate attempt to get up and turn it off. If you have to get out of the bed you’re more likely to not to get back to it straight away.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h2 id="tip-3-use-multiple-alarms-with-different-sounds">Tip #3: Use multiple alarms with different sounds</h2>
-<p>It gets easier to wake up if you can surprise yourself! Human beings are so good at adapting to every condition we very easily start getting used and ignore the same alarm sound going off at the exact same time every day. I find it useful to change the alarm times and sounds every now and then.</p>
-
-<h2 id="tip-4-use-apple-watch">Tip #4: Use Apple Watch</h2>
-<p>After Apple Watch Series 4 was released I got myself one.</p>
-
-<p><img src="/images/vpblogimg/2019/03/no-snooze-apple-watch-series-4.jpg" alt=""></p>
-
-<p>I’m not sure if it’s worth the cost but when it comes to waking up a little vibration on your wrist can do miracles apparently!</p>
-
-<p>When you have it pair with your iPhone, by default you can stop the alarms from your watch. This may be a nice convenience feature in some cases, but when it comes to waking up we are trying to make it as hard as possible for ourselves to turn the alarms off.</p>
-
-<p>My trick is:</p>
-
-<p>First I disable “Push alerts from iPhone” in the Watch app.</p>
-
-<p><img src="/images/vpblogimg/2019/03/no-snooze-push-alerts-from-iphone.PNG" alt=""></p>
-
-<p>Then I create a separate alarm on watch for the same time.</p>
-
-<p>This way I get 2 alarms at the same time. It’s easy to stop the watch as it’s within my arm’s reach. While the haptic feedback of the watch wakes me up the alarm on the phone also goes off. Now I have to physically get out of the bed to stop that one as well.</p>
-
-<h2 id="tip-5-use-alexa">Tip #5: Use Alexa</h2>
-<p>Another gizmo to set an alarm is Alexa but you can do much more than just that with Routines.</p>
-
-<p><img src="/images/vpblogimg/2019/03/no-snooze-echo-dot-3rd-gen.jpg" alt=""></p>
-
-<h3 id="tip-51-play-a-playlist">Tip #5.1: Play a playlist</h3>
-<p>This tip requires Spotify Premium subscription.</p>
-
-<p>First, create yourself a nice, loud and heavy playlist of “waking up” music. I prefer energetic Heavy Metal songs from Lamb of God and Slayer. The trick here is to play a random song every morning. Similar to Tip #3, the same song every morning becomes very boring very quickly. But having a random one keeps you surprised every morning. I use this command to play my playlist in shuffle mode:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Shuffle Playlist '{Playlist name}'
-</code></pre></div></div>
-
-<h3 id="tip-52-turn-the-lights-on">Tip #5.2: Turn the lights on</h3>
-<p>A good sleep tip is to keep your bedroom as dark as possible. That’s why I have all black curtains in my room and it’s quite dark. The downside is it’s so good for sleep it makes waking up even harder!</p>
-
-<p>That’s why I bought myself a Philips Hue smart bulb and as part of my waking up routine Alexa turns it on along with playing the Spotify playlist.</p>
-
-<p>This is what my routine looks like:</p>
-
-<p><img src="/images/vpblogimg/2019/03/no-snooze-alexa-routine.PNG" alt=""></p>
-
-<h2 id="conclusion">Conclusion</h2>
-<p>For me snoozing is a cardinal sin so I’m always on the lookout for improving my arsenal to fight against snoozing. Hope you find something useful in this post too. If you have tips on your own feel free to leave a comment.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://www.macobserver.com/tips/quick-tip/how-to-disable-iphone-alarm-snooze/" target="_blank" rel="noopener noreferrer">How to Disable Snooze for an Alarm on your iPhone and Apple Watch</a></li>
-</ul>
 
 		
 		
