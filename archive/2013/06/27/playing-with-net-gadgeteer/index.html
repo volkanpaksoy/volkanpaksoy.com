@@ -1,0 +1,252 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Playing with .NET Gadgeteer - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2013/06/27/playing-with-net-gadgeteer/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+  <link rel="stylesheet" href="/css/w3.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script>
+
+  
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y3V7V2XX9Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y3V7V2XX9Q');
+</script>
+
+<!-- <script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'G-Y3V7V2XX9Q']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script> -->
+
+
+
+  <!-- Twitter cards -->
+  <meta name="twitter:site"    content="@volkan_paksoy">
+  <meta name="twitter:creator" content="@Volkan Paksoy">
+  <meta name="twitter:title"   content="Playing with .NET Gadgeteer">
+
+  
+  <meta name="twitter:description" content="">
+  
+
+  
+  <meta name="twitter:card"  content="summary">
+  <meta name="twitter:image" content=""> -->
+  
+  <!-- end of Twitter cards -->
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+<br>
+
+<div style="border: 2px solid coral; border-radius: 5px; padding: 5px;">
+  <p style="font-style: italic; color: coral;">Other Blogs:</p>
+  <p><a href="https://devpower.co.uk" target="_blank" rel="noopener noreferrer">Dev Power</a></p>
+  <p><a href="https://cloudinternals.net" target="_blank" rel="noopener noreferrer">Cloud Internals</a></p>
+  <p><a href="https://infosecinternals.com" target="_blank" rel="noopener noreferrer">InfoSec Internals</a></p>
+</div>
+<br>
+
+<!-- <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="volkanpaksoy" data-color="#005050" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#ffffff" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script> -->
+
+<a href="https://www.buymeacoffee.com/volkanpaksoy" target="_blank" rel="noopener noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;"></a>
+
+<div id="ezoic-pub-ad-placeholder-102">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Playing with .NET Gadgeteer</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-06-27T18:09:40-05:00" itemprop="datePublished">June 27, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- hobby, dev -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">dotnet_gadgeteer</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>I like gadgets and electronics. Programming against hardware and interact with the real world makes it much more fun I think. I bought a .NET Gadgeteer kit set some time ago but hadn’t much time to spend on it. Now it’s time to break that cycle and actually do something with it.</p>
+
+<h3 id="setting-up-dev-environment">Setting up dev environment</h3>
+<p>As this will be more experimenting than actual development I decided to use my spare laptop for this task. I installed the latest version of .NET Micro Framework which can be found in the official site. My kit is GHI Electronics’ FEZ Spider Starter Kit which can be ordered from here: <a href="https://www.ghielectronics.com/catalog/product/297" target="_blank" rel="noopener noreferrer">https://www.ghielectronics.com/catalog/product/297</a>. I also needed to install device drivers and Spider mainboard SDK which all could be found on GHI’s website.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h3 id="updating-the-firmware">Updating the Firmware</h3>
+<p>Since I bought the device .NET Micro Framework release v4.2 and I wanted to work with the latest version. Turns out it’s a quite complicated process! I tried a bunch of tools but finally managed to upgrade my framework by using FEZSpiderMainboardUpdater.exe application which can be found under the legacy apps from GHI.</p>
+
+<p><img src="/images/vpblogimg/2013/06/SpiderUpdater.png" alt="Spider updater"></p>
+
+<h3 id="down-to-coding">Down to coding</h3>
+<p>After installing every bit it was time to develop my first program to explore its capabilities. For this I used the excellent “Getting started with the FEZ Spider Kit”. You can find the link below in Resources section.
+What you do is basically designing your gadget using the designer that’s installed in the Visual Studio and comes with the Gadgeteer project. Then you connect the actual hardware components in the same way. After this you run it just like a regular project. It first compiles and deploys the project to the device then runs it. You can even debug your source code even though it’s running on the mainboard.</p>
+
+<p><img src="/images/vpblogimg/2013/06/Mainboard_diagram.png" alt="Mainboard Diagram"></p>
+
+<p>After I completed the gadget described in the guide, I got a rather strange and annoying error called “MMP error”. After Googling it a little bit I found the link for the workaround: <a href="http://netmf.codeplex.com/workitem/221" target="_blank" rel="noopener noreferrer">http://netmf.codeplex.com/workitem/221</a>. After copying the config file the problem was resolved. The source code for the sample project is just a few lines which can be seen below:</p>
+
+<p><img src="/images/vpblogimg/2013/06/SourceCode.png" alt="Gadgeteer source code"></p>
+
+<p>The application is quite simple: You press the button and the camera takes a picture and displays on the screen. You can see a sample screenshot below:</p>
+
+<p><img src="/images/vpblogimg/2013/06/Gadgeteer_Sample_Output.jpg" alt="Gadgeteer sample Output"></p>
+
+<p>So far so good. I now have the environment ready and I have to check all the components and find out what they are capable of and hopefully come up with a cool project idea to make all this worthwhile.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://gadgeteer.codeplex.com" target="_blank" rel="noopener noreferrer">Gadgeter Downloads</a></li>
+  <li><a href="http://research.microsoft.com/en-us/projects/gadgeteer/" target="_blank" rel="noopener noreferrer">MS Research home page</a></li>
+  <li><a href="http://www.netmf.com/gadgeteer" target="_blank" rel="noopener noreferrer">Gadgetter site in .NET Micro Framework website</a></li>
+  <li><a href="https://www.ghielectronics.com/technologies/.net-gadgeteer" target="_blank" rel="noopener noreferrer">GHI Electronics Gadgeteer site</a></li>
+  <li><a href="http://www.ghielectronics.com/downloads/Gadgeteer/Mainboard/Spider/FEZSpider%20Starter%20Kit%20Guide.pdf" target="_blank" rel="noopener noreferrer">Getting started with the FEZ Spider Kit</a></li>
+  <li><a href="http://www.netmf.com" target="_blank" rel="noopener noreferrer">Official .NET Micro Framework</a></li>
+  <li><a href="http://www.youtube.com/watch?v=pYXYjBUyBC0" target="_blank" rel="noopener noreferrer">O’Reilly Getting Started with .NET Gadgeteer webcast</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2013/04/22/wifi-pineapple/" title="Previous Post: 
+Wifi Pineapple">« Wifi Pineapple</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2013/06/28/electronics-101/" title="next Post: 
+Electronics 101">Electronics 101 » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2023 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

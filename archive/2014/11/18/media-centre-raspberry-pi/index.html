@@ -1,0 +1,330 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Media Centre with Raspberry Pi - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2014/11/18/media-centre-raspberry-pi/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+  <link rel="stylesheet" href="/css/w3.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script>
+
+  
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y3V7V2XX9Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y3V7V2XX9Q');
+</script>
+
+<!-- <script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'G-Y3V7V2XX9Q']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script> -->
+
+
+
+  <!-- Twitter cards -->
+  <meta name="twitter:site"    content="@volkan_paksoy">
+  <meta name="twitter:creator" content="@Volkan Paksoy">
+  <meta name="twitter:title"   content="Media Centre with Raspberry Pi">
+
+  
+  <meta name="twitter:description" content="">
+  
+
+  
+  <meta name="twitter:card"  content="summary">
+  <meta name="twitter:image" content=""> -->
+  
+  <!-- end of Twitter cards -->
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+<br>
+
+<div style="border: 2px solid coral; border-radius: 5px; padding: 5px;">
+  <p style="font-style: italic; color: coral;">Other Blogs:</p>
+  <p><a href="https://devpower.co.uk" target="_blank" rel="noopener noreferrer">Dev Power</a></p>
+  <p><a href="https://cloudinternals.net" target="_blank" rel="noopener noreferrer">Cloud Internals</a></p>
+  <p><a href="https://infosecinternals.com" target="_blank" rel="noopener noreferrer">InfoSec Internals</a></p>
+</div>
+<br>
+
+<!-- <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="volkanpaksoy" data-color="#005050" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#ffffff" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script> -->
+
+<a href="https://www.buymeacoffee.com/volkanpaksoy" target="_blank" rel="noopener noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;"></a>
+
+<div id="ezoic-pub-ad-placeholder-102">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Media Centre with Raspberry Pi</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-11-18T18:30:27-06:00" itemprop="datePublished">November 18, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">raspberry_pi, gadget</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>I never cared for building a media centre before as I’m front of my desktop computer all day long and it has everything I need! But I was always curious about what the whole thing is about. As I was already looking for an excuse to buy myself one of those <a href="http://www.raspberrypi.org/products/model-b-plus/" target="_blank" rel="noopener noreferrer">new Raspberry Pi B+ models</a> it didn’t take too long before I decided to build a shiny little media centre for myself!</p>
+
+<h3 id="software">Software</h3>
+<p>First of all before I engaged with this world they’ve already changed the name of the software! What’s formerly known as XBMC is now called Kodi. It has releases for Windows, Mac, Linux, Raspberry Pi etc. so no wonder why it’s so ubiquitous. For Raspberry Pi there are two popular distros: <a href="http://www.raspbmc.com/" target="_blank" rel="noopener noreferrer">Raspbmc</a> and <a href="http://openelec.tv/" target="_blank" rel="noopener noreferrer">OpeElec</a>. When you are a complete noob choosing the right distro might be a hassle. After a quick search I found a a nice comparison <a href="http://www.htpcbeginner.com/raspbmc-vs-openelec-comparison-2014/" target="_blank" rel="noopener noreferrer">here</a>. Turns out Raspbmc comes with a full OS and running XBMC on top of it. That’s why I decided to go with it as it would give me full control over the Raspberry Pi and I could use it for other purposes as well.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h3 id="hardware">Hardware</h3>
+<p><img src="/images/vpblogimg/2014/11/Raspberry-Pi-BPlus.jpg" alt="Raspberry Pi B+"></p>
+
+<p>I mentioned the Raspberry Pi already but I needed a few accessories too.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Price</th>
+      <th>Where to buy?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Raspberry Pi + Case</td>
+      <td>£31</td>
+      <td><a href="http://www.amazon.co.uk/gp/product/B00LU2FDHW" target="_blank" rel="noopener noreferrer">Amazon</a></td>
+    </tr>
+    <tr>
+      <td>32GB microSD Card</td>
+      <td>£13</td>
+      <td><a href="http://www.amazon.co.uk/gp/product/B00J29BR3Y" target="_blank" rel="noopener noreferrer">Amazon</a></td>
+    </tr>
+    <tr>
+      <td>Power adaptor</td>
+      <td>£5</td>
+      <td><a href="http://www.amazon.co.uk/gp/product/B00LSEQMO0" target="_blank" rel="noopener noreferrer">Amazon</a></td>
+    </tr>
+    <tr>
+      <td>Remote control</td>
+      <td>£4</td>
+      <td><a href="http://www.ebay.co.uk/itm/261234427838?_trksid=p2060778.m2749.l2649&amp;ssPageName=STRK%3AMEBIDX%3AIT" target="_blank" rel="noopener noreferrer">eBay</a></td>
+    </tr>
+    <tr>
+      <td>Audio splitter</td>
+      <td>£8</td>
+      <td><a href="http://www.amazon.co.uk/gp/product/B0017VKV2I" target="_blank" rel="noopener noreferrer">Amazon</a></td>
+    </tr>
+    <tr>
+      <td>Monitor / TV</td>
+      <td>£0</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Keyboard &amp; Mouse</td>
+      <td>£0</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Wi-Fi Adaptor</td>
+      <td>£0</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Wireless headphones</td>
+      <td>£0</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Speakers</td>
+      <td>£0</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>£0 doesn’t, unfortunately, mean they were free. It just means I used my existing gadgets lying around idly so it’s a win-win situation anyway. It felt good to utilize them even though that meant spending extra 60 quids!</p>
+
+<h3 id="installation">Installation</h3>
+<p>Alright, now that we know what to install and where to install, let’s get cracking! Installation is dead simple as with all Raspberry Pi projects. All we have to do is download the latest build from <a href="http://www.raspbmc.com/download/" target="_blank" rel="noopener noreferrer">Raspbmc website</a> and prepare an SD card using a tool like <a href="http://sourceforge.net/projects/win32diskimager/" target="_blank" rel="noopener noreferrer">Win32 Disk Imager</a>. Insert it into the Pi and you’re good to go. When you plug in the pi and connect to your monitor/TV you get to the home screen:</p>
+
+<p><img src="/images/vpblogimg/2014/11/XBMC-Home.png" alt="XBMC Home screen"></p>
+
+<h3 id="configuration">Configuration</h3>
+<p>So it’s almost ready to kick back and enjoy podcasts, TV shows and movies but we need to tweak it a little first.</p>
+
+<h4 id="wireless">Wireless</h4>
+<p>If you can use wired network, do so as it would be much faster. Unfortunately I have to use a wireless adaptor because of the location of my switch and me not wanting a long Ethernet cable crossing the room! To switch to Wi-Fi go to Program –&gt; Raspbmc Settings. In the Network Configuration tab change  Network Mode to “Wireless (WIFI) Network”</p>
+
+<p><img src="/images/vpblogimg/2014/11/XBMC-Network-Settings.jpg" alt="XBMC Network Settings"></p>
+
+<h4 id="audio">Audio</h4>
+<p>For audio I use my speakers and wireless headset which are both connected via 3.5mm audio jack. The default audio output is HDMI so I needed to change it to Analogue in System –&gt; System Settings –&gt; System –&gt; Audio Output</p>
+
+<p><img src="/images/vpblogimg/2014/11/XBMC-Audio-Settings.png" alt="XBMC Audio Settings"></p>
+
+<h4 id="stuff-to-watch">Stuff to watch!</h4>
+<p>Almost there! Now we need to add stuff. To add an online source just hover Videos and select “Add ons”. Then you can install scripts for your favourite video/audio sources. My all-time favourite podcast network is
+<a href="http://twit.tv" target="_blank" rel="noopener noreferrer">TWiT</a> so I was relieved to see there was an add-on for it.</p>
+
+<p><img src="/images/vpblogimg/2014/11/XBMC-Video-AddOn.png" alt="XBMC Video AddOn"></p>
+
+<p>Also it is possible to add RSS feeds manually as explained in <a href="http://www.makeuseof.com/tag/add-podcast-feeds-xbmc-media-center/" target="_blank" rel="noopener noreferrer">this</a> nice article.</p>
+
+<h3 id="whats-missing">What’s Missing</h3>
+<ul>
+  <li>I added sources from my desktop computer for TV shows and movies but ideally they should be put on a NAS on the network so it doesn’t rely on desktop up and running all the time (even though it is!)</li>
+  <li>To enjoy it fully it would be nice to plug it to a nice big TV. An 18.5” monitor is barely good enough for video podcasts but definitely not a viable option to watch movies.</li>
+</ul>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>It feels nice to watch my favourite podcast shows on a cheap, remote-controlled small computer. It was absolutely hassle free to build it which left more time to play with fun stuff, like installing a Twitter add-on (which unfortunately failed to run because of incompatibility issues!) I’ll definitely keep on playing with it. After adding more stuff and streamlining the process (like adding new favourite feeds to a playlist automatically) I’m sure I’ll enjoy it a lot more.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://kodi.tv/" target="_blank" rel="noopener noreferrer">XBMC Official</a></li>
+  <li><a href="http://www.raspbmc.com/" target="_blank" rel="noopener noreferrer">Raspbmc</a></li>
+  <li><a href="http://www.htpcbeginner.com/raspbmc-vs-openelec-comparison-2014" target="_blank" rel="noopener noreferrer">Raspbmc – OpenElec comparison</a></li>
+  <li><a href="http://www.makeuseof.com/tag/add-podcast-feeds-xbmc-media-center" target="_blank" rel="noopener noreferrer">Adding RSS feeds manually</a></li>
+  <li><a href="http://sourceforge.net/projects/win32diskimager/" target="_blank" rel="noopener noreferrer">Win32 Disk Imager</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2014/11/16/take-control-content/" title="Previous Post: 
+Take control of your content">« Take control of your content</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2014/11/20/welcome-markdown/" title="next Post: 
+Welcome, Markdown!">Welcome, Markdown! » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2023 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

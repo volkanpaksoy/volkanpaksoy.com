@@ -1,0 +1,319 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Dynamic DNS with AWS Route 53 - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2015/08/11/dynamic-dns-with-aws-route53/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+  <link rel="stylesheet" href="/css/w3.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script>
+
+  
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y3V7V2XX9Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y3V7V2XX9Q');
+</script>
+
+<!-- <script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'G-Y3V7V2XX9Q']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script> -->
+
+
+
+  <!-- Twitter cards -->
+  <meta name="twitter:site"    content="@volkan_paksoy">
+  <meta name="twitter:creator" content="@Volkan Paksoy">
+  <meta name="twitter:title"   content="Dynamic DNS with AWS Route 53">
+
+  
+  <meta name="twitter:description" content="">
+  
+
+  
+  <meta name="twitter:card"  content="summary">
+  <meta name="twitter:image" content=""> -->
+  
+  <!-- end of Twitter cards -->
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+<br>
+
+<div style="border: 2px solid coral; border-radius: 5px; padding: 5px;">
+  <p style="font-style: italic; color: coral;">Other Blogs:</p>
+  <p><a href="https://devpower.co.uk" target="_blank" rel="noopener noreferrer">Dev Power</a></p>
+  <p><a href="https://cloudinternals.net" target="_blank" rel="noopener noreferrer">Cloud Internals</a></p>
+  <p><a href="https://infosecinternals.com" target="_blank" rel="noopener noreferrer">InfoSec Internals</a></p>
+</div>
+<br>
+
+<!-- <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="volkanpaksoy" data-color="#005050" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#ffffff" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script> -->
+
+<a href="https://www.buymeacoffee.com/volkanpaksoy" target="_blank" rel="noopener noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;"></a>
+
+<div id="ezoic-pub-ad-placeholder-102">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Dynamic DNS with AWS Route 53</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-08-11T19:30:00-05:00" itemprop="datePublished">August 11, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- aws, dev -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">route53, csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>If you don’t have a static IP and you need to access your home network for some reason you may find Dynamic DNS services useful. I was using No-IP until its limitations became offputting. Since I love DIY stuff and AWS I thought I could build the exact same service on my own using Route 53.</p>
+
+<h2 id="enter-dyndns53">Enter DynDns53</h2>
+
+<p>It’s a simple application. What it does is basically:</p>
+
+<ul>
+  <li>Get current external IP</li>
+  <li>For each subdomain in the configuration, call AWS API and get domain info</li>
+  <li>Check if the recorded IP is different than the current one</li>
+  <li>If so, call AWS API to update it with the new one, if not do nothing.</li>
+</ul>
+
+<p>In a different post on <a href="https://volkanpaksoy.com/archive/2015/03/07/portable-online-library-with-calibre-and-raspberry-pi/">setting up Calibre on a Raspberry Pi</a> I developed a script that did the same thing:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">boto.route53</span>
+<span class="kn">import</span> <span class="nn">urllib2</span>
+<span class="n">currentIP</span> <span class="o">=</span> <span class="n">urllib2</span><span class="p">.</span><span class="n">urlopen</span><span class="p">(</span><span class="s">"http://checkip.amazonaws.com/"</span><span class="p">).</span><span class="n">read</span><span class="p">()</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">boto</span><span class="p">.</span><span class="n">connect_route53</span><span class="p">()</span>
+<span class="n">zone</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="n">get_zone</span><span class="p">(</span><span class="s">"volki.info."</span><span class="p">)</span>
+<span class="n">change_set</span> <span class="o">=</span> <span class="n">boto</span><span class="p">.</span><span class="n">route53</span><span class="p">.</span><span class="n">record</span><span class="p">.</span><span class="n">ResourceRecordSets</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="s">'{HOSTED_ZONE_ID}'</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">rrset</span> <span class="ow">in</span> <span class="n">conn</span><span class="p">.</span><span class="n">get_all_rrsets</span><span class="p">(</span><span class="n">zone</span><span class="p">.</span><span class="nb">id</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">rrset</span><span class="p">.</span><span class="n">name</span> <span class="o">==</span> <span class="s">'calibre.volki.info.'</span><span class="p">:</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">change_set</span><span class="p">.</span><span class="n">add_change</span><span class="p">(</span><span class="s">"UPSERT"</span><span class="p">,</span> <span class="n">rrset</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">rrset</span><span class="p">.</span><span class="nb">type</span><span class="p">,</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+        <span class="n">rrset</span><span class="p">.</span><span class="n">resource_records</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">currentIP</span>
+        <span class="n">u</span><span class="p">.</span><span class="n">add_value</span><span class="p">(</span><span class="n">rrset</span><span class="p">.</span><span class="n">resource_records</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">change_set</span><span class="p">.</span><span class="n">commit</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>The difference of DynDns53 is that it can run as a background service and it has a cute logo! The C# equivalent of above code is like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">void</span> <span class="nf">Update</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">config</span> <span class="p">=</span> <span class="n">_configHandler</span><span class="p">.</span><span class="nf">GetConfig</span><span class="p">();</span>
+    <span class="kt">string</span> <span class="n">currentExternalIp</span> <span class="p">=</span> <span class="n">_ipChecker</span><span class="p">.</span><span class="nf">GetExternalIp</span><span class="p">();</span>
+
+    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">domain</span> <span class="k">in</span> <span class="n">config</span><span class="p">.</span><span class="n">DomainList</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">string</span> <span class="n">subdomain</span> <span class="p">=</span> <span class="n">domain</span><span class="p">.</span><span class="n">DomainName</span><span class="p">;</span>
+        <span class="kt">string</span> <span class="n">zoneId</span> <span class="p">=</span> <span class="n">domain</span><span class="p">.</span><span class="n">ZoneId</span><span class="p">;</span>
+
+        <span class="kt">var</span> <span class="n">listResourceRecordSetsResponse</span> <span class="p">=</span> <span class="n">_amazonClient</span><span class="p">.</span><span class="nf">ListResourceRecordSets</span><span class="p">(</span><span class="k">new</span> <span class="nf">ListResourceRecordSetsRequest</span><span class="p">()</span> <span class="p">{</span> <span class="n">HostedZoneId</span> <span class="p">=</span> <span class="n">zoneId</span> <span class="p">});</span>
+        <span class="kt">var</span> <span class="n">resourceRecordSet</span> <span class="p">=</span> <span class="n">listResourceRecordSetsResponse</span><span class="p">.</span><span class="n">ResourceRecordSets</span><span class="p">.</span><span class="nf">First</span><span class="p">(</span><span class="n">recordset</span> <span class="p">=&gt;</span> <span class="n">recordset</span><span class="p">.</span><span class="n">Name</span> <span class="p">==</span> <span class="n">subdomain</span><span class="p">);</span>
+        <span class="kt">var</span> <span class="n">resourceRecord</span> <span class="p">=</span> <span class="n">resourceRecordSet</span><span class="p">.</span><span class="n">ResourceRecords</span><span class="p">.</span><span class="nf">First</span><span class="p">();</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">resourceRecord</span><span class="p">.</span><span class="n">Value</span> <span class="p">!=</span> <span class="n">currentExternalIp</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">resourceRecord</span><span class="p">.</span><span class="n">Value</span> <span class="p">=</span> <span class="n">currentExternalIp</span><span class="p">;</span>
+
+            <span class="n">_amazonClient</span><span class="p">.</span><span class="nf">ChangeResourceRecordSets</span><span class="p">(</span><span class="k">new</span> <span class="nf">ChangeResourceRecordSetsRequest</span><span class="p">()</span>
+            <span class="p">{</span>
+                <span class="n">HostedZoneId</span> <span class="p">=</span> <span class="n">zoneId</span><span class="p">,</span>
+                <span class="n">ChangeBatch</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ChangeBatch</span><span class="p">()</span>
+                <span class="p">{</span>
+                    <span class="n">Changes</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Change</span><span class="p">&gt;()</span> 
+                    <span class="p">{</span> 
+                        <span class="k">new</span> <span class="nf">Change</span><span class="p">(</span><span class="n">ChangeAction</span><span class="p">.</span><span class="n">UPSERT</span><span class="p">,</span> <span class="n">resourceRecordSet</span><span class="p">)</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>That’s it. The rest is just user interface, a Windows service and some basic uni tests.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h2 id="usage">Usage</h2>
+
+<p>The project has a WPF user interface and a Windows service. Both are using the same library (DynDns53.Core) so the functionality is the same. Using the user interface is pretty straightforward.</p>
+
+<p><img src="/images/vpblogimg/2015/08/dyndns53-mainwindow.png" alt=""></p>
+
+<p>Just add your AWS keys that have access privileges to your domains. You can set it to run at system start so you don’t have to start it manually.</p>
+
+<p><img src="/images/vpblogimg/2015/08/dyndns53-settings-window.png" alt=""></p>
+
+<p>I built the Windows service using Topshelf. To install it, build the application and on an elevated command prompt just run</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DynDns53.Service.exe install
+</code></pre></div></div>
+
+<p>Similarly to uninstall:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DynDns53.Service.exe uninstall
+</code></pre></div></div>
+
+<h1 id="whats-missing">What’s missing</h1>
+
+<ul>
+  <li>Landing page: I’ll update the project details on the site generated by GitHub Pages.</li>
+  <li>Mac/Linux support: As the worlds are colliding I’d like to discover what I can do with the new .NET Core runtime. Since this is a simple project I think it’s a good place to start</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/dyndns53" target="_blank" rel="noopener noreferrer">DynDns53 Source Code</a></li>
+  <li><a href="http://dyndns53.com" target="_blank" rel="noopener noreferrer">Project website</a></li>
+</ul>
+
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2015/08/08/checking-domain-availability-with-aws-route53-part-3/" title="Previous Post: 
+Checking domain availability with AWS Route 53 - Part 3">« Checking domain availability with AWS Route 53 - Part 3</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2015/08/19/continuous-integration-with-tfs-2015-express/" title="next Post: 
+Continuous Integration with TFS Express 2015 from scratch">Continuous Integration with TFS Express 2015 from scratch » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2023 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Developing a Web API with ASP.NET Core - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2019/05/21/Developing-a-Web-API-with-ASP.NET-Core/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+  <link rel="stylesheet" href="/css/w3.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script>
+
+  
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y3V7V2XX9Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y3V7V2XX9Q');
+</script>
+
+<!-- <script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'G-Y3V7V2XX9Q']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script> -->
+
+
+
+  <!-- Twitter cards -->
+  <meta name="twitter:site"    content="@volkan_paksoy">
+  <meta name="twitter:creator" content="@Volkan Paksoy">
+  <meta name="twitter:title"   content="Developing a Web API with ASP.NET Core">
+
+  
+  <meta name="twitter:description" content="">
+  
+
+  
+  <meta name="twitter:card"  content="summary">
+  <meta name="twitter:image" content=""> -->
+  
+  <!-- end of Twitter cards -->
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+<br>
+
+<div style="border: 2px solid coral; border-radius: 5px; padding: 5px;">
+  <p style="font-style: italic; color: coral;">Other Blogs:</p>
+  <p><a href="https://devpower.co.uk" target="_blank" rel="noopener noreferrer">Dev Power</a></p>
+  <p><a href="https://cloudinternals.net" target="_blank" rel="noopener noreferrer">Cloud Internals</a></p>
+  <p><a href="https://infosecinternals.com" target="_blank" rel="noopener noreferrer">InfoSec Internals</a></p>
+</div>
+<br>
+
+<!-- <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="volkanpaksoy" data-color="#005050" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#ffffff" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script> -->
+
+<a href="https://www.buymeacoffee.com/volkanpaksoy" target="_blank" rel="noopener noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;"></a>
+
+<div id="ezoic-pub-ad-placeholder-102">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Developing a Web API with ASP.NET Core</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-05-21T23:00:00-05:00" itemprop="datePublished">May 21, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">asp.net, dotnet_core</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>Developing projects is fun and a great way to learn new stuff. The things is everything moves so fast, you constantly need to maintain the projects as well. In that spirit, I decided to re-write my old AngularJS DomChk53.</p>
+
+<p>First, I developed an API. This way I won’t have to maintain my AWS Lambda functions. Even though nobody uses them, still opening a public API poses risks and maintenance hassle. Now everybody can run their own system locally using their own AWS accounts.</p>
+
+<h2 id="api-implementation">API Implementation</h2>
+
+<p></p>
+<div class="github-widget" data-repo="volkanpaksoy/domchk53"></div>
+
+<p>Full source code of the API can be found in DomChk53 repo under <em>aspnet-api</em> folder. There’s not much benefit in covering the code line by line but I want to talk about some of the stuff that stood out in one way or the other:</p>
+
+<h3 id="cs5001-program-does-not-contain-a-static-main-method-error">CS5001: Program does not contain a static ‘Main’ method” error</h3>
+<p>I started this API with the intention of deploying it to Docker so right after I created a new project I tested Docker deployment but it kept giving the error above. After some searching I found that the Dockerfile was in the wrong folder! I moved it one level up as suggested in <a href="https://developercommunity.visualstudio.com/content/problem/344880/dotnet-core-build-linux-returns-error-cs5001-progr.html" target="_blank" rel="noopener noreferrer">this</a> answer and it worked like a charm!</p>
+
+<h3 id="reading-config-values">Reading config values</h3>
+<p>I appreciated the ease of using configuration files. IConfiguration provider is provided out-of-the-box which handles appsettings.json config file.</p>
+
+<p>So for example I was able to inject it easily:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="nf">TldService</span><span class="p">(</span><span class="n">IConfiguration</span> <span class="n">configuration</span><span class="p">,</span> <span class="n">IFetchHtmlService</span> <span class="n">fetchHtmlService</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="n">configuration</span> <span class="p">=</span> <span class="n">configuration</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="n">fetchHtmlService</span> <span class="p">=</span> <span class="n">fetchHtmlService</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>and use it like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">awsDocumentationUrl</span> <span class="p">=</span> <span class="n">configuration</span><span class="p">[</span><span class="s">"AWS.DocumentationURL"</span><span class="p">];</span>
+</code></pre></div></div>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h3 id="using-dependency-injection">Using dependency injection</h3>
+<p>ASP.NET Core Web API has built-in dependency injection so when I needed to use it all I had to do was register my classes in ConfigureServices method:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// This method gets called by the runtime. Use this method to add services to the container.</span>
+<span class="k">public</span> <span class="k">void</span> <span class="nf">ConfigureServices</span><span class="p">(</span><span class="n">IServiceCollection</span> <span class="n">services</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">services</span><span class="p">.</span><span class="nf">AddMvc</span><span class="p">().</span><span class="nf">SetCompatibilityVersion</span><span class="p">(</span><span class="n">CompatibilityVersion</span><span class="p">.</span><span class="n">Version_2_1</span><span class="p">);</span>
+
+    <span class="n">services</span><span class="p">.</span><span class="n">AddTransient</span><span class="p">&lt;</span><span class="n">ITldService</span><span class="p">,</span> <span class="n">TldService</span><span class="p">&gt;();</span>
+    <span class="n">services</span><span class="p">.</span><span class="n">AddTransient</span><span class="p">&lt;</span><span class="n">IFetchHtmlService</span><span class="p">,</span> <span class="n">FetchHtmlService</span><span class="p">&gt;();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="documentation">Documentation</h3>
+<p>Adding Swagger documentation was a breeze. I just followed the steps in the <a href="https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle" target="_blank" rel="noopener noreferrer">documentation</a> and now I have a pretty documentation. More on that in the usage section below.</p>
+
+<h2 id="aws-implementation">AWS Implementation</h2>
+<p>Even though the code will run locally in a Docker container, you still need to setup an IAM user with the appropriate permissions. So make sure the policy below is attached to the user:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": "route53domains:CheckDomainAvailability",
+            "Resource": "*"
+        }
+    ]
+}
+</code></pre></div></div>
+
+<h2 id="usage">Usage</h2>
+<p>Nice thing about Swagger is it can used as a full-blown API client as well. So instead of developing a dummy client I just used Swagger UI for simple domain availability enquiries. This is until I develop a better frontend on my own. For now at least it works.</p>
+
+<p>To use Swagger, simply run the Domchk53.API application and change the URL to https://localhost:{port number}/docs, port number being whatever your local web server is running on.</p>
+
+<p><img src="/images/vpblogimg/2019/05/aspnet-webapi-swagger-01.png" alt=""></p>
+
+<h3 id="curl-usage">curl usage:</h3>
+<p>Windows:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -i -X POST -H "Content-Type: application/json" -d "{\"domainList\": [\"volkan\"], \"tldList\": [\"com\", \"net\"]}" https://localhost:5001/api/domain
+</code></pre></div></div>
+
+<p>Mac:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl --insecure -X POST -H "Content-Type: application/json" -d '{"domainList": ["volkan"], "tldList": ["com", "net"]}' https://localhost:5001/api/domain
+</code></pre></div></div>
+
+<h3 id="example-test-data">Example Test data:</h3>
+<p>This is just a quick reference to be used as template:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  "domainList": ["domain1", "domain2"],
+  "tldList": ["com", "net"]
+}
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{ "domainList": ["volkan"], "tldList": ["com", "net"] }
+</code></pre></div></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://developercommunity.visualstudio.com/content/problem/344880/dotnet-core-build-linux-returns-error-cs5001-progr.html" target="_blank" rel="noopener noreferrer">Solution for “CS5001: Program does not contain a static ‘Main’ method” error</a></li>
+  <li><a href="https://weblog.west-wind.com/posts/2018/Feb/18/Accessing-Configuration-in-NET-Core-Test-Projects" target="_blank" rel="noopener noreferrer">Accessing Configuration in .NET Core Test Projects</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-2.1" target="_blank" rel="noopener noreferrer">Dependency injection in ASP.NET Core</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle" target="_blank" rel="noopener noreferrer">Get started with Swashbuckle and ASP.NET Core</a></li>
+</ul>
+
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2019/04/03/Unit-Testing-in-JavaScript-Part-2-Mocking/" title="Previous Post: 
+Unit Testing in Javascript - Part 2: Mocking">« Unit Testing in Javascript - Part 2: Mocking</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2019/06/10/Docker-in-Depth/" title="next Post: 
+Docker in Depth">Docker in Depth » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2023 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

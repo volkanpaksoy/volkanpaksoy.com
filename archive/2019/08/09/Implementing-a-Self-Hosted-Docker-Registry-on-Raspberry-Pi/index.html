@@ -1,0 +1,324 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Implementing a Self-Hosted Docker Registry on Raspberry Pi - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2019/08/09/Implementing-a-Self-Hosted-Docker-Registry-on-Raspberry-Pi/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+  <link rel="stylesheet" href="/css/w3.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script>
+
+  
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y3V7V2XX9Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y3V7V2XX9Q');
+</script>
+
+<!-- <script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'G-Y3V7V2XX9Q']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script> -->
+
+
+
+  <!-- Twitter cards -->
+  <meta name="twitter:site"    content="@volkan_paksoy">
+  <meta name="twitter:creator" content="@Volkan Paksoy">
+  <meta name="twitter:title"   content="Implementing a Self-Hosted Docker Registry on Raspberry Pi">
+
+  
+  <meta name="twitter:description" content="">
+  
+
+  
+  <meta name="twitter:card"  content="summary">
+  <meta name="twitter:image" content=""> -->
+  
+  <!-- end of Twitter cards -->
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+<br>
+
+<div style="border: 2px solid coral; border-radius: 5px; padding: 5px;">
+  <p style="font-style: italic; color: coral;">Other Blogs:</p>
+  <p><a href="https://devpower.co.uk" target="_blank" rel="noopener noreferrer">Dev Power</a></p>
+  <p><a href="https://cloudinternals.net" target="_blank" rel="noopener noreferrer">Cloud Internals</a></p>
+  <p><a href="https://infosecinternals.com" target="_blank" rel="noopener noreferrer">InfoSec Internals</a></p>
+</div>
+<br>
+
+<!-- <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="volkanpaksoy" data-color="#005050" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#ffffff" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script> -->
+
+<a href="https://www.buymeacoffee.com/volkanpaksoy" target="_blank" rel="noopener noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;"></a>
+
+<div id="ezoic-pub-ad-placeholder-102">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Implementing a Self-Hosted Docker Registry on Raspberry Pi</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-08-09T23:00:00-05:00" itemprop="datePublished">August  9, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- docker -->
+
+
+
+
+    <a href="/category/docker">docker</a>
+    
+</span>
+	<span class="tags">registry, self_hosted</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>Working with Docker is great but when you want to deploy your applications to another server you need a registry to push your images so that you can pull them from the other end. To have that capability in my dev environment I decided to setup my own self-hosted Docker registry.</p>
+
+<p>For the sake of brevity, I will omit creating Raspberry Pi SD Card and installing Docker on it. There are lots of gret videos and articles out there already.</p>
+
+<h2 id="self-hosted-vs-hosted">Self-hosted vs Hosted</h2>
+<p>When it comes to hosted Docker registries, there are lots of free and paid options.</p>
+
+<p><strong>Benefits of self-hosted registry:</strong></p>
+
+<ul>
+  <li>See the storage size and number of repos required for your system early on without having to pay anything</li>
+  <li>Push/pull images on the go without Internet connection during development phase</li>
+  <li>No privacy concerns: If you upload your image with your application in it you may have some sensitive data inside the image which may pose a risk if the 3rd party registry has full access to them</li>
+  <li>Free!</li>
+</ul>
+
+<p><strong>Benefits of hosted registry:</strong></p>
+
+<ul>
+  <li>Hassle-free: No backups or server management</li>
+</ul>
+
+<p>There are great Docker registries such as Docker Hub and Amazon ECR. I wouldn’t recommend usign a self-hosted registry for production. But if the price or privacy is a concern it can certainly be an option.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h2 id="creating-self-hosted-registry">Creating Self-Hosted Registry</h2>
+<p>It sounds like it requires installing a server application but the nice thing about Docker is, even it is a Docker registry it can run in a container itself. So first off we pull the registry repo for Docker Hub:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull registry
+</code></pre></div></div>
+
+<p>Now let’s create a container that will act as our registry:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d -p 5000:5000 --restart always --name registry registry
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-repo-list-before.png" alt=""></p>
+
+<p>In my case the hostname of the Raspbeery Pi is</p>
+
+<p>Now to test how we can push and pull images let’s download Docker’s hello-world image from Docker Hub:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull hello-world
+</code></pre></div></div>
+
+<p>Now to push this inot our own registry running in Raspbeery Pi all we have to do is tag it with the server URL such as:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker tag hello-world HOBBITON.local:5000/hello-world
+</code></pre></div></div>
+
+<p>At this point if we take look at the images on our local machine we can see the hello-world image is duplicated.</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-registry-tagged-image.png" alt=""></p>
+
+<p>Now let’s push it to Pi:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker push HOBBITON.local:5000/hello-world
+</code></pre></div></div>
+
+<p>This doesn’t work because of the following reason:</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-push-failed.png" alt=""></p>
+
+<p>This is because the reigstry is considered to be insecure and by default it’s rejected by the client. We can confirm it’s deemed to be insecure if we check the server by running the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker info
+</code></pre></div></div>
+
+<p>At the bottom of the bottom we can see the localhost registry is insecure:</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-info-insecure-registry.png" alt=""></p>
+
+<p>To address this we can add this registry to the list of insecure registries. For example in a Mac client we add go to Preferences –&gt; Daemon and add the Raspberry Pi registry as shown below:</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-add-insecure-registry.png" alt=""></p>
+
+<p>After this, if we try once again to push to Pi we can see it succeded:</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-push-to-pi-successful.png" alt=""></p>
+
+<p>If you’re pulling from a client without a user interface, another Raspberry Pi for example, try the following:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo nano  /etc/docker/daemon.json
+</code></pre></div></div>
+
+<p>and add the following (with the correct registry name):</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w"> </span><span class="nl">"insecure-registries"</span><span class="p">:[</span><span class="s2">"myregistry.example.com:5000"</span><span class="p">]</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>and restart Docker:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo service docker restart
+</code></pre></div></div>
+
+<p>Now if we check the repository list on the registry again we can see the hello-world image hosted on our Pi:</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-repo-list-after.png" alt=""></p>
+
+<p>Let’s now see if we can pull this image from another client.</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-pull.png" alt=""></p>
+
+<p>And after pulling the image we can see it in the image list:</p>
+
+<p><img src="/images/vpblogimg/2019/08/self-hosted-docker-list-on-puller.png" alt=""></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.pluralsight.com/courses/implementing-self-hosted-docker-registry" target="_blank" rel="noopener noreferrer">Pluralsight course: Implementing a Self-hosted Docker Registry</a></li>
+  <li><a href="https://hub.docker.com/_/registry" target="_blank" rel="noopener noreferrer">Docker registry repo</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2019/07/04/ElasticSearch-Workout/" title="Previous Post: 
+Elasticsearch Workout">« Elasticsearch Workout</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2019/08/21/Exploring-AWS-DeepLens/" title="next Post: 
+Exploring AWS DeepLens">Exploring AWS DeepLens » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2023 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

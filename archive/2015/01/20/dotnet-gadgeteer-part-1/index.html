@@ -1,0 +1,293 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>.NET Gadgeteer (Part 1 of n) - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2015/01/20/dotnet-gadgeteer-part-1/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+  <link rel="stylesheet" href="/css/w3.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script>
+
+  
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y3V7V2XX9Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y3V7V2XX9Q');
+</script>
+
+<!-- <script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'G-Y3V7V2XX9Q']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script> -->
+
+
+
+  <!-- Twitter cards -->
+  <meta name="twitter:site"    content="@volkan_paksoy">
+  <meta name="twitter:creator" content="@Volkan Paksoy">
+  <meta name="twitter:title"   content=".NET Gadgeteer (Part 1 of n)">
+
+  
+  <meta name="twitter:description" content="">
+  
+
+  
+  <meta name="twitter:card"  content="summary">
+  <meta name="twitter:image" content=""> -->
+  
+  <!-- end of Twitter cards -->
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+<br>
+
+<div style="border: 2px solid coral; border-radius: 5px; padding: 5px;">
+  <p style="font-style: italic; color: coral;">Other Blogs:</p>
+  <p><a href="https://devpower.co.uk" target="_blank" rel="noopener noreferrer">Dev Power</a></p>
+  <p><a href="https://cloudinternals.net" target="_blank" rel="noopener noreferrer">Cloud Internals</a></p>
+  <p><a href="https://infosecinternals.com" target="_blank" rel="noopener noreferrer">InfoSec Internals</a></p>
+</div>
+<br>
+
+<!-- <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="volkanpaksoy" data-color="#005050" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#ffffff" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script> -->
+
+<a href="https://www.buymeacoffee.com/volkanpaksoy" target="_blank" rel="noopener noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;"></a>
+
+<div id="ezoic-pub-ad-placeholder-102">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">.NET Gadgeteer (Part 1 of n)</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-01-20T20:00:00-06:00" itemprop="datePublished">January 20, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- hobby, dev -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    , 
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">gadget, dotnet_gadgeteer</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>My problem is I have a ton of gadgets and keep getting more before building meaningful projects with the previous ones. So I decided to be a good boy and create at least one full project with the existing ones before I move on to new shiny toys. First target is my .NET Gadgeteer hardware kit set that’s been lying around for a quite some time. For the sake of completeness here are the previous posts about Gadgeteer so far:</p>
+
+<ul>
+  <li><a href="https://volkanpaksoy.com/archive/2013/07/26/cleaning-up-net-gadgeteer-work-environment/">Cleaning up .NET Gadgeteer work environment</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2013/06/27/playing-with-net-gadgeteer/">Playing with .NET Gadgeteer</a></li>
+</ul>
+
+<p>My main goal now is to discover the capabilities of the kit I have and try to come up with a fun project. So as I have no clue at the moment I will play around with each component I have and create sample projects for each them. By the end I hope I’ll get a nice idea.</p>
+
+<h3 id="what-is-it-anyway">What is it anyway?</h3>
+<p>The official definiton is: “Microsoft .NET Gadgeteer is an open-source toolkit for building small electronic devices using the .NET Micro Framework” I think it’s a great kit for children because it makes development a lot easier than say Arduino.</p>
+
+<p>All sockets are labelled and all you have to do is connect the mathcing sockets in the module and mainboard:</p>
+
+<p><img src="/images/vpblogimg/common/Gadgeteer/Gadgeteer_Cerberus_Mainboard.jpg" alt="Cerberus Mainboard"></p>
+
+<p><img src="/images/vpblogimg/common/Gadgeteer/Gadgeteer_Socket_Letter.jpg" alt="Gadgeteer Socket Letters"></p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>Also if you are a .NET developer there is absolutely no learning curve. You just build your application just like you’ve been building all along.</p>
+
+<h3 id="setting-up-the-development-environment">Setting up the development environment!</h3>
+<p>Well, there is no learning curve but still you need to make some preparations. First thing you need to do is install the .NET Micro Framework. Then the next step I took is install the Gadgeteer project templates for Visual Studio 2013. All of these can be found at the downloads section at <a href="https://www.ghielectronics.com/support/netmf" target="_blank" rel="noopener noreferrer">GHI Electronics website</a>.</p>
+
+<p>Once you install the Gadgeteer package you should be able to create new Gadgeteer projects when you select <em>File</em> -&gt; <em>New Project</em> in Visual Studio:</p>
+
+<p><img src="/images/vpblogimg/common/Gadgeteer/gadgeteer-add-new-project.png" alt="Visual Studio Add Gadgeteer Project"></p>
+
+<p>Next step is to select the mainboard you’re going to use in the project:</p>
+
+<p><img src="/images/vpblogimg/common/Gadgeteer/gadgeteer-board-selection.png" alt="Gadgeteer Mainboard Selection"></p>
+
+<h3 id="first-rule-of-gadget-development-fork-over-the-money">First rule of gadget development: Fork over the money!</h3>
+<p>Once you install the required software you will of course need the actually hardware to run your applications on. The bulk of modules I currently have came from the starter kit I initially bought:</p>
+
+<p><img src="/images/vpblogimg/common/Gadgeteer/Gadgeteer_FEZ_Spider_Starter_Kit.jpg" alt="FEZ Spider Starter Kit"></p>
+
+<p>Then I added a few more components but there are so many more that can be purchased. Since it’s an open hardware platform any vendor can build their own modules. But looks like, even though it’s open-source, a company called <a href="https://www.ghielectronics.com/" target="_blank" rel="noopener noreferrer">GHI Electronics</a> are taking the lead in this market.</p>
+
+<h3 id="lets-get-down-to-business">Let’s get down to business!</h3>
+<p>I will explain each module in depth in the upcoming posts but for the purposes of testing the development environment I’ll just build a sample project consisting of Spider mainboard and 3 LEDs.</p>
+
+<p>First component I’m going to play around is multi color LED. I happen to have 3 of them and added all of them to my design. Once you drag and drop the modules you want to use in your project you can simply right-click on an empty point on the canvas and select <em>Connect All Modules</em>. It automatically connects using the appropriate slots for each module. So you can instantly get something like this:</p>
+
+<p><img src="/images/vpblogimg/common/Gadgeteer/gadgeteer-sample-design.png" alt="Sample design"></p>
+
+<p>And the source code I’m going to use to test it is as follows:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">partial</span> <span class="k">class</span> <span class="nc">Program</span>
+<span class="p">{</span>
+	<span class="k">void</span> <span class="nf">ProgramStarted</span><span class="p">()</span>
+	<span class="p">{</span>
+		<span class="n">multicolorLED</span><span class="p">.</span><span class="nf">TurnOff</span><span class="p">();</span>
+		<span class="n">multicolorLED2</span><span class="p">.</span><span class="nf">TurnOff</span><span class="p">();</span>
+		<span class="n">multicolorLED3</span><span class="p">.</span><span class="nf">TurnOff</span><span class="p">();</span>
+
+		<span class="n">multicolorLED</span><span class="p">.</span><span class="nf">TurnBlue</span><span class="p">();</span>
+		<span class="n">multicolorLED2</span><span class="p">.</span><span class="nf">TurnGreen</span><span class="p">();</span>
+		<span class="n">multicolorLED3</span><span class="p">.</span><span class="nf">TurnRed</span><span class="p">();</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Once you get such a visual design it’s very easy to build the actual hardware by referring to this:</p>
+
+<p><img src="/images/vpblogimg/common/Gadgeteer/Gadgeteer-Sample-Hardware.jpg" alt="Sample hardware"></p>
+
+<p>By the way, I’m using <a href="http://www.amazon.co.uk/Tamiya-70172-Universal-Plate-210x160mm/dp/B005PQJ5O6" target="_blank" rel="noopener noreferrer">Tamiya universal plate</a> to keep modules nice and tidy otherwise they hang around uncontrollably. So it is quite handy.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>I’ll leave it here. I’m hoping this post should have enough information for anyone who wants to start developing projects with .NET Gadgeteer hardware kit. In the next post I’ll go over each component and discover their capabilities. If you already have a Gadgeteer kit your mileage may vary as I can only cover the devices I own. I’d appreciate if you submit any project ideas. I can acquire the modules needed and add to my projects.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://www.netmf.com/gadgeteer/" target="_blank" rel="noopener noreferrer">Official Gadgeteer site</a></li>
+  <li><a href="https://www.ghielectronics.com/support/netmf" target="_blank" rel="noopener noreferrer">GHI Downloads</a></li>
+  <li><a href="http://www.amazon.co.uk/Tamiya-70172-Universal-Plate-210x160mm/dp/B005PQJ5O6" target="_blank" rel="noopener noreferrer">Tamiya universal plate</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2015/01/13/adventures-in-fsharp-rock-paper-scissors-lizard-spock/" title="Previous Post: 
+Adventures in F# - Rock Paper Scissors Lizard Spock">« Adventures in F# - Rock Paper Scissors Lizard Spock</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2015/01/21/adventures-in-fsharp-interfaces-exception-handling-and-unit-testing/" title="next Post: 
+Adventures in F# - Interfaces, Exception Handling and Unit Testing">Adventures in F# - Interfaces, Exception Handling and Unit Testing » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2023 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>
