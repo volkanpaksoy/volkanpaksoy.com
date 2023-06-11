@@ -4,7 +4,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>Exploring AWS DeepLens - Playground for the mind</title>
+	<title>Hosting Email using hMailServer on AWS EC2 - Playground for the mind</title>
 	<meta name="author" content="Volkan Paksoy">
 
 	
@@ -20,7 +20,7 @@
 
 	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
 	
-	<link rel="canonical" href="https://volkanpaksoy.com/archive/2019/08/21/Exploring-AWS-DeepLens/">
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2023/06/08/Hosting-Email-on-AWS-EC2/">
 	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
@@ -64,7 +64,7 @@
   <!-- Twitter cards -->
   <meta name="twitter:site"    content="@volkan_paksoy">
   <meta name="twitter:creator" content="@Volkan Paksoy">
-  <meta name="twitter:title"   content="Exploring AWS DeepLens">
+  <meta name="twitter:title"   content="Hosting Email using hMailServer on AWS EC2">
 
   
   <meta name="twitter:description" content="">
@@ -149,114 +149,36 @@
 			<div class="mid-col-container">
 				<div id="content" class="inner">
 <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-	<h1 class="title" itemprop="name">Exploring AWS DeepLens</h1>
+	<h1 class="title" itemprop="name">Hosting Email using hMailServer on AWS EC2</h1>
 	<div class="meta">
 	<span class="date">
 
 
 
 
-<time datetime="2019-08-21T00:00:00-05:00" itemprop="datePublished">August 21, 2019</time></span>
+<time datetime="2023-06-08T01:00:00-05:00" itemprop="datePublished">June  8, 2023</time></span>
 	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
 
-<!-- machine_learning, aws -->
+<!-- aws -->
 
 
 
-
-    <a href="/category/machine_learning">machine_learning</a>
-    , 
 
     <a href="/category/aws">aws</a>
     
 </span>
-	<span class="tags">deeplens</span>
+	<span class="tags">email, hmailserver, ec2</span>
 	
 </div>
 	<div class="entry-content" itemprop="articleBody">
-<p>I recently bought this device in anticipation of getting accustomed with AWS Machine Learning services. I thought it would be a nice and fun introduction to build a DIY project using ML. This weekend I had a chance to play around with it.</p>
+<p>Having your email server can be a good opportunity to learn more about the details of emails. To experiment with email features and especially to learn more about email security, I decided to install a mail server.</p>
 
-<h2 id="unboxing">Unboxing</h2>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-unboxing-1.jpeg" alt=""></p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-unboxing-2.jpeg" alt=""></p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-unboxing-3.jpeg" alt=""></p>
-
-<h2 id="registering">Registering</h2>
-
-<p>First thing you need to do is register your DeepLens which can be done <a href="https://docs.aws.amazon.com/deeplens/latest/dg/deeplens-getting-started-register.html" target="_blank" rel="noopener noreferrer">here</a></p>
-
-<p>Alternatively, you can log in to AWS Console, go to AWS DeepLens service and click Register Device. As of this writing this service is only available in Tokyo, N.Virginia and Frankfurt. As closest to me is Frankfurt I chose that one.</p>
-
-<h2 id="creating-a-project">Creating a Project</h2>
-
-<p>Now that the devices is ready, I went to Projects section and created a new project based on a template. For this initial exploration mission I chose Bird Classification template.</p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-project-templates.png" alt=""></p>
-
-<p>When you choose your template it shows a description of the template and how it works</p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-project-overview.png" alt=""></p>
-
-<p>Once you create the project it creates the necessary resources. For example in my template it created 2 Lambda functions:</p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-lambda.png" alt=""></p>
-
-<p>Now we are ready to deploy the project to the device so we can simply click on Deploy to Device button on top right-hand corner in the project page:</p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-deploy-to-device.png" alt=""></p>
-
-<p>After that you choose your DeepLens from the avialble device list (in my case I had one device) and click Review then Deploy</p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-deploy-review.png" alt=""></p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h2 id="testing-the-project">Testing the project</h2>
-
-<p>First I followed the steps to install custom certificate so that I can start viewing the video feed in my browser:</p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-video-feed-1.png" alt=""></p>
-
-<p>Because DeepLens doesn’t know if there’s a bird or not in the picture it constantly makes a guess. Even an empty carton box looks like a Long Tailed Jaeger with 2.1% confidence apparently!</p>
-
-<p>When I presented an image I found from the Internet the results significantly improved though (thankfully, otherwise this would all be for nothing!)</p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-video-feed-2.png" alt=""></p>
-
-<p>According to Google the bird in the picture is indeed a Kingfisher.</p>
-
-<p>Next test is the bird I saw on the roof and identified as a Mallard. Let’s see what DeepLens thinks about it:</p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-video-feed-3.png" alt=""></p>
-
-<p>So with 17.5% confidens DeepLenms agrees that it is a Mallard. One thing to note is that the angle of the image significantly changes the prediction. Even a slight change in the angle makes the prediction shift from 3% to 45%. But it’s just a test project template anyway so I’m not looking for too much accuracy at this point.</p>
-
-<p>Final test: I downloaded the dataset used to train the algorithm. It’s a 1.1GB download full of images. To compare with the last Mallard test I got one picture from the Mallard folder and showed it to DeepLens:</p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-video-feed-4.png" alt=""></p>
-
-<p>As shown above the confidence increased to 55%. So probably if I use the pictures I took to train the algorithm I would be able to get much better results.</p>
-
-<h2 id="conclusion">Conclusion</h2>
-
-<p>This was just a first step to set up and explore the device. Hopefully in the comin days I’ll be doing more meaningful projects with it and post those too.</p>
+<p>There are many options to choose from, but having a GUI is beneficial when you’re exploring things so I decided to go with Windows and settled on <a href="https://www.hmailserver.com/" target="_blank" rel="noopener noreferrer">hMailServer</a> as the SMTP server.</p>
 
 <h2 id="resources">Resources</h2>
-
 <ul>
-  <li><a href="https://aws.amazon.com/deeplens/" target="_blank" rel="noopener noreferrer">AWS DeepLens Site</a></li>
-  <li><a href="https://aws.amazon.com/blogs/aws/aws-deeplens-now-orderable-in-seven-additional-countries" target="_blank" rel="noopener noreferrer">AWS DeepLens – Now Orderable in Seven Additional Countries</a></li>
-  <li><a href="http://www.vision.caltech.edu/visipedia/CUB-200-2011.html" target="_blank" rel="noopener noreferrer">Caltech-UCSD Birds-200-2011</a></li>
+  <li><a href="https://www.hmailserver.com/" target="_blank" rel="noopener noreferrer">hMailServer</a></li>
+  <li>
 </ul>
 </div>
 
@@ -265,15 +187,12 @@
 <div id="page-navigation"> 
         <div class="previous"> 
          
-                <a href="/archive/2019/08/10/Implementing-a-Self-Hosted-Docker-Registry-on-Raspberry-Pi/" title="Previous Post: 
-Implementing a Self-Hosted Docker Registry on Raspberry Pi">« Implementing a Self-Hosted Docker Registry on Raspberry Pi</a>
+                <a href="/archive/2022/06/23/Powershell-Gotcha-Contains-Operator/" title="Previous Post: 
+Powershell Gotcha: Contains Operator">« Powershell Gotcha: Contains Operator</a>
          
         </div>
 
         <div class="next"> 
-         
-               <a href="/archive/2019/08/31/Setting-Up-a-Pi-Hole-with-a-Raspberry-Pi/" title="next Post: 
-Setting Up a Pi Hole with a Raspberry Pi">Setting Up a Pi Hole with a Raspberry Pi » </a> 
          
         </div>
 </div> 

@@ -154,6 +154,121 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2019/04/03/Unit-Testing-in-JavaScript-Part-2-Mocking/" itemprop="url">Unit Testing in Javascript - Part 2: Mocking</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-04-03T01:00:00-05:00" itemprop="datePublished">April  3, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">javascript, tdd, unit_testing</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>As applications get more complex, they come with more dependencies. Mocking helps us isolate the subject under test so that our unit tests can run any external dependencies. In this example, I’d like to show a simple mocking example using Jasmine and Karma in an Angular app.</p>
+
+<h2 id="case-study-mocking-a-http-dependency">Case study: Mocking a HTTP dependency</h2>
+
+<p>In this example the service I want to test is called TldService. It basically gets a raw HTML from a URL and extracts some data using regex.</p>
+
+<p>It looks something like this</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export class TldService {
+
+  constructor(private fetchHtmlService: FetchHtmlService) { }
+
+  getAllSupportedTlds(): string[] {
+    const rawHtml = this.fetchHtmlService.getRawHtml();
+    const supportedTlds = this.parseHtml(rawHtml);
+    return supportedTlds;
+  }
+
+  private parseHtml(html: string): string[] {
+    const pattern = /some-regex-pattern/g;
+    const regEx = new RegExp(pattern);
+    let tldList = [];
+
+    let match = regEx.exec(html);
+    console.log(match);
+
+    while (match !== null) {
+      tldList.push(match[1]);
+      match = regEx.exec(html);
+    }
+
+    return tldList;
+  }
+}
+</code></pre></div></div>
+
+<p>This service depends on FetchHtmlService which does the getting HTML part. Nice thing about injecting this dependency is that we can replace it with a fake one while testing. This way we can test it without even having to implement the dependency.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import { TestBed } from '@angular/core/testing';
+import { TldService } from './tld.service';
+import { FetchHtmlService } from './fetch-html.service';
+
+describe('TldService', () =&gt; {
+  beforeEach(() =&gt; TestBed.configureTestingModule({
+
+  }));
+
+  it('should be created', () =&gt; {
+    const service: TldService = TestBed.get(TldService);
+    expect(service).toBeTruthy();
+  });
+
+  it('should parse html and extract TLD list', () =&gt; {
+    const fetchHtmlService: FetchHtmlService = new FetchHtmlService();
+    spyOn(fetchHtmlService, 'getRawHtml').and.returnValue('&lt;a href="registrar-tld-list.html#academy"&gt;.academy&lt;/a&gt;');
+    const service: TldService = new TldService(fetchHtmlService);
+    expect(service.getAllSupportedTlds().length).toBe(1);
+  });
+});
+</code></pre></div></div>
+
+<p>In the 2nd test above we are creating a new FetchHtmlService and overriding the <em>getRawHtml</em> function behaviour by using Jasmine’s <strong>spyOn</strong> method.</p>
+
+<p>That’s it! Now we don’t need a network connection to make actual calls while testing our code. We can develop and test our service in isolation independent from the dependency!</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/UnitTestingInJavaScriptPart2" target="_blank" rel="noopener noreferrer">Source code</a></li>
+  <li><a href="https://jasmine.github.io/" target="_blank" rel="noopener noreferrer">Jasmine JS</a></li>
+  <li><a href="https://karma-runner.github.io/latest/index.html" target="_blank" rel="noopener noreferrer">Karma JS</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2019/03/29/A-Docker-Image-to-Sync-Git-Repositories/" itemprop="url">A Docker Image to Sync Git Repositories</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -416,86 +531,6 @@ describe('Factorial', function() {
   <li><a href="https://mochajs.org" target="_blank" rel="noopener noreferrer">Mocha JS</a></li>
   <li><a href="https://www.chaijs.com" target="_blank" rel="noopener noreferrer">Chai JS</a></li>
 </ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2019/03/23/Repurposing-A-10-Year-Old-MacBook/" itemprop="url">Repurposing a 10-Year-Old MacBook</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2019-03-23T01:00:00-05:00" itemprop="datePublished">March 23, 2019</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/linux">linux</a></span> -->
-
-<!-- linux -->
-
-
-
-
-    <a href="/category/linux">linux</a>
-    
-</span>
-	<span class="tags">macbook, ubuntu</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p><img src="/images/vpblogimg/2019/03/repurposing-macbook-initial.jpeg" alt=""></p>
-
-<p>This is my old MacBook Mid 2009. It was sitting in the closet for so long I thought I could invent some purpose and use it before it finally dies. Looks like latest macOS version don’t even support this device so I thought maybe I could use it as a learning tool for Ubuntu.</p>
-
-<p>Since SSDs are so cheap these days I just decided to keep the old macOS drive as backup and install Ubuntu on one of these babies:</p>
-
-<p><img src="/images/vpblogimg/2019/03/repurposing-macbook-ssd-on-amazon.png" alt=""></p>
-
-<p>I think around £18 is a small price to pay for a brand new SSD so went with it.</p>
-
-<h2 id="installing-ubuntu">Installing Ubuntu</h2>
-
-<ol>
-  <li>
-    <p>Download the ISO <a href="https://www.ubuntu.com/download" target="_blank" rel="noopener noreferrer">here</a></p>
-  </li>
-  <li>
-    <p>Burn the ISO to a USB Drive. Instead of installing extra software I followed this guide: <a href="https://docs.kali.org/downloading/kali-linux-live-usb-install" target="_blank" rel="noopener noreferrer">Making a Kali Bootable USB Drive</a>. It’s for Kali Linux but this bit works for burning any Linux distro.</p>
-  </li>
-</ol>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<ol>
-  <li>For the rest follow the steps <a href="https://www.macworld.co.uk/how-to/mac/how-install-linux-on-mac-3637265/" target="_blank" rel="noopener noreferrer">here</a> starting with Step 9</li>
-</ol>
-
-<p>And after the installation this is what my MacBook looks like:</p>
-
-<p><img src="/images/vpblogimg/2019/03/repurposing-macbook-with-ubuntu.jpeg" alt=""></p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://www.youtube.com/watch?time_continue=56&amp;v=k22795agwmw" target="_blank" rel="noopener noreferrer">iFixit How To: MacBook Hard Drive Replacement/Upgrade</a></li>
-  <li><a href="https://www.macworld.co.uk/how-to/mac/how-install-linux-on-mac-3637265/" target="_blank" rel="noopener noreferrer">How to install &amp; set up Linux on a Mac</a></li>
-  <li><a href="https://docs.kali.org/downloading/kali-linux-live-usb-install" target="_blank" rel="noopener noreferrer">Making a Kali Bootable USB Drive</a></li>
-</ul>
-
 
 		
 		

@@ -154,6 +154,80 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2014/03/22/k-means-implementation/" itemprop="url">k-means Implementation</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-03-22T08:46:33-05:00" itemprop="datePublished">March 22, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp, machine_learning</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I’m keeping on reviving my old projects. This is the second data mining algorithm implementation. It is another clustering algorithm called <em>k-means</em>.</p>
+
+<h3 id="k-means-algorithm">k-means Algorithm</h3>
+<p>Algorithm groups and creates k clusters from n data points. First the cluster centres are picked randomly from the data points. Then the entire dataset is iterated and all points are assigned to their closest cluster. Closest cluster is determined by measuring the distance of the data point to the centroid of the clusters. This process is repeated until there is no change in the dataset and all points are assigned to the closest ones.</p>
+
+<p><img src="/images/vpblogimg/2014/03/Kmeans_results.png" alt="K-means Results"></p>
+
+<h3 id="implementation">Implementation</h3>
+<p>The project contains 6 libraries:</p>
+
+<ul>
+  <li>
+<em>VP.KMeans.Core:</em> Core library including the algorithm implementation</li>
+  <li>
+<em>VP.KMeansClient.GUI:</em> User interface for entering the parameters and plotting the clusters</li>
+  <li>
+<em>VP.KMeansClient.Console:</em> Console user interface. No fancy plots, just an output file is generated</li>
+  <li>
+<em>VP.KMeans.DataGenerator.Core:</em> Library to generate test data</li>
+  <li>
+<em>VP.KMeans.DataGenerator.Console:</em> Console application to feed the core library to generate test data</li>
+  <li>
+<em>CPI.Plot3D:</em> External library to plot the results</li>
+</ul>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://en.wikipedia.org/wiki/K-means_clustering" target="_blank" rel="noopener noreferrer">Wikipedia article</a></li>
+  <li><a href="https://github.com/volkanpaksoy/VP.DataMining.KMeans" target="_blank" rel="noopener noreferrer">Source code</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/03/15/apriori-implementation/" itemprop="url">An Apriori implementation</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -357,83 +431,6 @@
 <h2 id="resources">Resources</h2>
 <ul>
   <li><a href="https://www.fitbit.com/uk/flex" target="_blank" rel="noopener noreferrer">Official site</a></li>
-</ul>
-
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/01/04/framework-design-guidelines/" itemprop="url">Book Review: Framework Design Guidelines</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-01-04T08:58:06-06:00" itemprop="datePublished">January  4, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
-
-<!-- misc -->
-
-
-
-
-    <a href="/category/misc">misc</a>
-    
-</span>
-	<span class="tags">review, book</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<h3 id="framework-design-guidelines">Framework Design Guidelines</h3>
-
-<p><img src="/images/vpblogimg/2014/01/Framework_Design_Guidelines_Cover.jpg" alt="Fitbit Flex"></p>
-
-<p>Having a common framework is quite important to reduce code reuse. But designing that framework properly and consistently is a huge challenge. Even though we are living in a RESTful world now, I think having a framework or a set of common libraries for personal or commercial projects is still relevant. A well-designed well-tested framework would significantly improve any application built on top of it.</p>
-
-<p>I had referred to this book partially before but this time decided to read it from cover to cover and make sure I “digest” all. It contains countless gems that every developer should know. Anyone developing even small libraries can benefit from this book a lot. You don’t need to design the .NET framework (like the authors). Also it comes with a DVD full of presentations of authors.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h3 id="companion-dvd">Companion DVD</h3>
-<p>Unfortunately I lost my DVD. Probably it’s inside one of the many CD cake boxes. I was hoping to check it out as I went along the book. But luckily I found out that it is freely available from the publisher. Check you the download link in the resources section. One thing to beware about the download is that you can come across another link in the Brad Abrams’s blog <a href="http://blogs.msdn.com/b/brada/archive/2009/04/01/framework-design-guidelines-book-extra-content-from-the-dvd-posted.aspx" target="_blank" rel="noopener noreferrer">here</a>. The download works fine but one of the presentations inside it is corrupted so I suggest you download each section separately from the site in the resources.</p>
-
-<h3 id="some-notes">Some notes</h3>
-<p>The book is full of gems and very useful tips. Here are just a few:</p>
-
-<ul>
-  <li>Keep it simple: “You can always add, you cannot ever remove”</li>
-  <li>There is no perfect design: You always have to make some sacrifices and consider the trade-offs</li>
-  <li>Well-designed frameworks are consistent</li>
-  <li>Scenario-driven design: Imagine scenarios to visualize the real-world use of the API When in doubt leave the feature out, add it later. Conduct usability studies to get developers’ opinions</li>
-  <li>Keep type initialization as simple as possible. It lowers the barrier of entry.</li>
-  <li>Throw exceptions to communicate the proper usage of API. It makes the API self-documenting and supports the learning-by-doing approach.</li>
-  <li>Going overboard with abstractions may deteriorate the performance and usability of the framework.</li>
-</ul>
-
-<p>Even though it’s been a few years since this books was released it is still a very helpful resource.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://www.amazon.co.uk/Framework-Design-Guidelines-Conventions-Development/dp/0321545613" target="_blank" rel="noopener noreferrer">Amazon link</a></li>
-  <li><a href="http://www.informit.com/store/framework-design-guidelines-conventions-idioms-and-9780321545619" target="_blank" rel="noopener noreferrer">DVD download</a></li>
-  <li><a href="http://msdn.microsoft.com/en-us/library/ms229042(v=vs.110).aspx" target="_blank" rel="noopener noreferrer">Excerpt on MSDN</a></li>
 </ul>
 
 

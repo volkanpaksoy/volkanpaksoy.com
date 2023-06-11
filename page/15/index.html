@@ -154,6 +154,275 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2018/06/26/Automated-Email-Processing-with-AWS-SES-and-Lambda/" itemprop="url">Automated Email Processing with AWS SES and Lambda</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2018-06-26T01:00:00-05:00" itemprop="datePublished">June 26, 2018</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">ses, lambda</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>A few years ago AWS announced a new SES feature: Incoming Emails. So far I have only used it once to receive domain verification emails to an S3 bucket but haven’t built a meaningful project. In this blog post my goal is to develop a sample project to demonstrate receiving emails with SES and processing those emails automatically by triggering Lambda functions.</p>
+
+<p>As a demo project I will build a system that automatically responds to a sender with my latest CV as shown in the diagram below</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-00-architecture.png" alt=""></p>
+
+<h2 id="receiving-email-with-amazon-simple-email-service">Receiving Email with Amazon Simple Email Service</h2>
+<p>Amazon Simple Email Service (SES) is Amazon’s SMTP server. It’s core functionality has been sending emails but Amazon kept adding more features such as using templates and receiving emails.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h3 id="step-1-verify-a-new-domain">Step 1: Verify a New Domain</h3>
+<p>First, we need a verified domain to receive emails. If you already have one you ca skip this step.</p>
+
+<ul>
+  <li>Step 1.1: In the SES console, click Domains –&gt; Verify a New Domain</li>
+  <li>Step 1.2: Enter the domain name to verify and click Verify This Domain</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-01-verify-domain.png" alt=""></p>
+
+<ul>
+  <li>Step 1.3: In the new dialog click Use Route 53</li>
+</ul>
+
+<p>(This is assuming your domain is in Route53. If not you have to verify it by other means)</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-02-verify-domain-confirmation.png" alt=""></p>
+
+<ul>
+  <li>Step 1.4: Make sure you check Email Receiving Record checkbox and proceed</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-03-verify-domain-create-record-sets.png" alt=""></p>
+
+<ul>
+  <li>Step 1.5 Confirm verification status</li>
+</ul>
+
+<p>Go back to Domains page in SES console and make sure the verification has been completed successfully</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-04-verify-domain-confirm-results.png" alt=""></p>
+
+<p>In my example, it only took about 2 minutes.</p>
+
+<h3 id="step-2-create-a-lambda-function-to-send-the-cv">Step 2: Create a Lambda function to send the CV</h3>
+
+<p>In the next step we will continue to configure SES to specify what to do with the received email. But first we need the actual Lambda function to do the work. Then we will connect this to SES so that it runs everytime when we receive an email to a specific email.</p>
+
+<ul>
+  <li>Step 2.1: Create a Lambda function from scratch</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-06-create-lambda.png" alt=""></p>
+
+<ul>
+  <li>Step 2.2: Create an SNS topic</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-08-create-sns-topic.png" alt=""></p>
+
+<p>SES will publish emails to this topic. We will do the plumbing and give necessary permissions later.</p>
+
+<ul>
+  <li>Step 2.3: Create subscription for the Lambda function to SNS topic</li>
+</ul>
+
+<p>Now we tie the topic to our Lambda by creating a subscription</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-10-create-sns-subscription.png" alt=""></p>
+
+<ul>
+  <li>Step 2.4: Attach necessary permissions to the new role</li>
+</ul>
+
+<p>In my example, I store my CV in an S3 bucket. So the policy would need to receive SNS notifications, read access to S3 bucket and permissions to send emails.</p>
+
+<p>By default a new Lambda role comes with AWSLambdaBasicExecutionRole attached to it</p>
+
+<p>First add this to have read-only access to a single bucket:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VisualEditor0"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"s3:GetObjectAcl"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"s3:GetObject"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"s3:ListBucket"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"arn:aws:s3:::{BUCKET NAME}"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"arn:aws:s3:::*/*"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Then this to be able to send emails</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VisualEditor0"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"ses:SendEmail"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"ses:SendTemplatedEmail"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"ses:SendRawEmail"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>I like to keep these small, modular policies so that I can reuse then in other projects.</p>
+
+<p>After adding the policies you should be able to see these in your Lambda function’s access list when you refresh the function’s page:</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-07-updated-permissions.png" alt=""></p>
+
+<h3 id="step-3-develop-the-lambda-function">Step 3: Develop the Lambda function</h3>
+
+<p>In this exmample I’m going to use a .NET Core and C# 2.0 to create the Lambda function.</p>
+
+<ul>
+  <li>Step 3.1: Install Lambda templates</li>
+</ul>
+
+<p>In Windows, AWS Lambda function templates come with AWS Visual Studio extension but in Mac we have to install them via command line.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet new -i Amazon.Lambda.Templates::*
+</code></pre></div></div>
+
+<ul>
+  <li>Step 3.2: Create Lambda function</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet new lambda.EmptyFunction --name SendEmailWithAttachmentFromS3 --profile default --region eu-west-1
+</code></pre></div></div>
+
+<ul>
+  <li>Step 3.3:</li>
+</ul>
+
+<p>Now it’s time for the actual implementation. I’m not going to paste the whole code here. Best place to get it is its <a href="https://github.com/volkanpaksoy/lab/tree/master/blog/SendEmailWithAttachmentFromS3/src/SendEmailWithAttachmentFromS3" target="_blank" rel="noopener noreferrer">GitHub repository</a></p>
+
+<ul>
+  <li>Step 3.4 Deploy the function</li>
+</ul>
+
+<p>Create an IAM user with access to Lambda deployment and create a profile locally named deploy-lambda-profile.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet restore
+dotnet lambda deploy-function send_cv
+</code></pre></div></div>
+
+<h3 id="step-4-create-a-receipt-rule">Step 4: Create a Receipt Rule</h3>
+<p>Now that we have a verified domain, we need a rule to receive emails.</p>
+
+<p>In my example project, I’m going to use an email address that will send my latest CV to a provided email adress.</p>
+
+<ul>
+  <li>
+    <p>Step 4.1: In the Email Receiving section click on Rule Sets –&gt; Create a Receipt Rule</p>
+  </li>
+  <li>
+    <p>Step 4.2: Add a recipient</p>
+  </li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-05-add-recipient.png" alt=""></p>
+
+<ul>
+  <li>Step 4.3: Add an Action</li>
+</ul>
+
+<p>Now we choose what to do when an email is received. In this example I want it to be published to an SNS topic that I created earlier. I could invoke the Lambda function directly but leveraging publish/subscribe gives me more flexibility as in I can change the subscriber in the future or add more stuff to do without affecting the rule configuration.</p>
+
+<p>Since it supports multiple actions I could choose to invoke Lambda directly and add more actions here later on if need be but I’d like to use a standard approach which is all events are published to SNS and the interested parties subscribe to the topics.</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-09-add-action.png" alt=""></p>
+
+<p>I chose UTF-8 because I’m not expecting any data in the message body so it doesn’t matter too much in this example.</p>
+
+<ul>
+  <li>Step 4.4 Give it a name and create the rule.</li>
+</ul>
+
+<h2 id="step-4-test-end-to-end">Step 4: Test end-to-end</h2>
+
+<p>Now that it’s all set up, it is time to test.</p>
+
+<ul>
+  <li>Step 4.1: Send a blank email to cv@vlkn.me (Or any other address if you’re setting up your own)</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-11-test-send-email.png" alt=""></p>
+
+<ul>
+  <li>Step 4.2:</li>
+</ul>
+
+<p>Then after a few seconds later, receive an email with the attachment:</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-12-test-confirm-email.png" alt=""></p>
+
+<p>The second email is optional. Basically, I creted an email subscriber too. So that whenever a blank email is received I get notified by SNS directly. This helps me to keep an eye on traffic if there is any.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/SendEmailWithAttachmentFromS3/src/SendEmailWithAttachmentFromS3" target="_blank" rel="noopener noreferrer">Demo Source Code</a></li>
+  <li><a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html" target="_blank" rel="noopener noreferrer">Receiving Email with Amazon SES</a></li>
+  <li><a href="https://aws.amazon.com/blogs/aws/new-receive-and-process-incoming-email-with-amazon-ses/" target="_blank" rel="noopener noreferrer">AWS Blog: Receive and Process Incoming Email with Amazon SES</a></li>
+  <li><a href="https://aws.amazon.com/blogs/messaging-and-targeting/introducing-email-templates-and-bulk-sending/" target="_blank" rel="noopener noreferrer">Introducing Email Templates and Bulk Sending</a></li>
+  <li><a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-dotnet-coreclr-deployment-package.html" target="_blank" rel="noopener noreferrer">.NET Core CLI</a></li>
+  <li><a href="https://github.com/aws/aws-lambda-dotnet/tree/master/Libraries/src/Amazon.Lambda.SNSEvents" target="_blank" rel="noopener noreferrer">Amazon.Lambda.SNSEvents</a></li>
+  <li><a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html" target="_blank" rel="noopener noreferrer">Sending Personalized Email Using the Amazon SES API</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2018/06/15/AWS-certification/" itemprop="url">AWS Certification</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -506,264 +775,6 @@
   <li><a href="https://docs.aws.amazon.com/powershell/latest/userguide/pstools-getting-set-up-linux-mac.html" target="_blank" rel="noopener noreferrer">Setting up the AWS Tools for PowerShell Core on Linux or macOS X</a></li>
   <li><a href="https://docs.aws.amazon.com/powershell/latest/reference/" target="_blank" rel="noopener noreferrer">AWS Tools for PowerShell Cmdlet Reference</a></li>
   <li><a href="https://docs.aws.amazon.com/apigateway/api-reference/" target="_blank" rel="noopener noreferrer">Amazon API Gateway REST API</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2018/03/14/Updated-DynDns53-with-DotNet-Core-Docker-and-Angular5/" itemprop="url">Updated DynDns53 with .NET Core, Docker and Angular 5</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2018-03-14T01:00:00-05:00" itemprop="datePublished">March 14, 2018</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
-
-<!-- dev, aws -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    , 
-
-    <a href="/category/aws">aws</a>
-    
-</span>
-	<span class="tags">route53, angular, dotnet_core, dynamic_dns, csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>A few years back I developed a project called DynDns53. I was fed up with the dynamic DNS tools available and thought could easily achieve the same functionality since I had already been using AWS Route53.</p>
-
-<p>Fast forward a few years, due to some neglect on my part and technology moving so fast the project started to feel outdated and abandoned. So I decided to revise it.</p>
-
-<p>Key improvements in this version are:</p>
-
-<ul>
-  <li>Core library is now available in NuGet so anyone can build their own clients around it</li>
-  <li>A new client built with .NET Core so that it runs on all platforms now</li>
-  <li>A Docker version is available that runs the .NET Core client</li>
-  <li>A new client built with Angular 5 to replace the legacy AngularJS</li>
-  <li>CI integration: Travis is running the unit tests of core library</li>
-  <li>Revised WPF and Windows Service clients and fixed bugs</li>
-  <li>Added more detailed documentation on how to set up the environment for various clients</li>
-</ul>
-
-<p>Also kept the old repository but renamed it to <a href="https://github.com/volkanpaksoy/dyndns53-legacy" target="_blank" rel="noopener noreferrer">dyndns53-legacy</a>. I might archive it at some point as I’m not planning to support it any longer.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h2 id="available-on-nuget">Available on NuGet</h2>
-<p>NuGet is a great way of installing and updating libraries. I thought it would be a good idea to make use of it in this project so that it can be used without cloning the repository.</p>
-
-<p>With DotNetCore it’s quite easy to create a NuGet package. Just navigate to project folder (where .csproj file is located) and run this:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet pack -c Release
-</code></pre></div></div>
-
-<p>The default configuration it uses is Debug so make sure you’re using the correct build and a matching pack command. You should be able to see a screen similar to this</p>
-
-<p><img src="/images/vpblogimg/2018/03/dyndns53-nuget-package-creation.png" alt=""></p>
-
-<p>Then push it to Nuget</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet nuget push ./bin/Release/DynDns53.CoreLib.1.0.0.nupkg -k {NUGET.ORG API_KEY} -s https://api.nuget.org/v3/index.json
-</code></pre></div></div>
-
-<p><img src="/images/vpblogimg/2018/03/dyndns53-nuget-package-push-result.png" alt=""></p>
-
-<p>To double-check you can go to your NuGet account page and under Manage Packages you should be able to see your newly published package:</p>
-
-<p><img src="/images/vpblogimg/2018/03/dyndns53-nuget-package-list.png" alt=""></p>
-
-<p>Now we play the waiting game! Becuase it may take some time for the package to be processed by NuGet. For exmaple I saw the warning shown in the screenshot 15 minutes after I pushed the package:</p>
-
-<p><img src="/images/vpblogimg/2018/03/dyndns53-nuget-package-validating.png" alt=""></p>
-
-<p>Generally this is a quick process but the first time I published my package, I got my confirmation email about 7 hours later so your mileage may vary.</p>
-
-<p>If you need to update your package after it’s been published, make sure to increment the version number before running dotnet pack. In order to do that, you can simply edit the .csproj file and change the Version value:</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nt">&lt;PropertyGroup&gt;</span>
-    <span class="nt">&lt;TargetFramework&gt;</span>netstandard2.0<span class="nt">&lt;/TargetFramework&gt;</span>
-    <span class="nt">&lt;PackageId&gt;</span>DynDns53.CoreLib<span class="nt">&lt;/PackageId&gt;</span>
-    <span class="nt">&lt;Version&gt;</span>1.0.1<span class="nt">&lt;/Version&gt;</span>
-    <span class="nt">&lt;Authors&gt;</span>Volkan Paksoy<span class="nt">&lt;/Authors&gt;</span>
-    <span class="nt">&lt;Company&gt;&lt;/Company&gt;</span>
-  <span class="nt">&lt;/PropertyGroup&gt;</span>
-</code></pre></div></div>
-
-<h3 id="notes">Notes</h3>
-<ul>
-  <li>
-    <p>Regarding the NuGet API Key: They recently changed their approach about keys. Now you only have one chance to save your key somewhere else. If you don’t save it, you won’t be able to access ti via their UI. You can create a new one of course so no big deal. But to avoid key pollution you might wanna save it in a safe place for future reference.</p>
-  </li>
-  <li>
-    <p>If you are publishing packages frequently, you may not be able to get the updates even after they had been published. The reason for that is the packages are cached locally. So make sure to clean your cache before you try to update the packages. On Mac, Visual Studio doesn’t have a Clean Cache option as of this writing (unlike Windows) so you have to go to your user folder and remove the packages under {user}/.nuget/packages folder. After this, you update the packages and you should get the latest validated version from Nuget.</p>
-  </li>
-</ul>
-
-<h2 id="net-core-client">.NET Core Client</h2>
-
-<h3 id="prerequisites">Prerequisites</h3>
-<p>First, you’d need an IAM user who has access to Route53. You can use the policy template below to give the minimum possible permissions:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "route53:ListResourceRecordSets",
-                "route53:ChangeResourceRecordSets"
-            ],
-            "Resource": "arn:aws:route53:::hostedzone/{ZONE ID}"
-        }
-    ]
-}
-</code></pre></div></div>
-
-<p>Only 2 actions are performed so as long as you remmeber to update the policy with the new zone IDs if you need to manage other domains this should work fine work you.</p>
-
-<h3 id="usage">Usage</h3>
-<p>Basic usage is very straightforward. Once compiled you can supply the IAM Access and Secret Keys and the domains to update with their Route53 Zone IDs as shown below:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet DynDns53.Client.DotNetCore.dll --AccessKey {ACCESS KEY} --SecretKey {SECRET KEY} --Domains ZoneId1:Domain1 ZoneId2:Domain2 
-</code></pre></div></div>
-
-<h3 id="notes-1">Notes</h3>
-<ul>
-  <li>.NET Core Console Application uses the NuGet package. One difference between .NET Core and classis .NET application is that the packages are no longer stored along with the application. Instead they are downloaded to the user’s folder under .nuget folder (e.g. on a Mac it’s located at /Users/{USERNAME}/.nuget/packages)</li>
-</ul>
-
-<h2 id="available-on-docker-hub">Available on Docker Hub</h2>
-<p>Even though it’s not a complex application I think it’s easier and hassle-free to run it in a self-contained Docker container. Currently it only supports Linux containers. I might need to develop a multi-architecture image in the future in need be but for now Linux only is sufficient for my needs.</p>
-
-<h3 id="usage-1">Usage</h3>
-<p>You can get the image from Docker hub with the following command:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull volkanpaksoy/dyndns53
-</code></pre></div></div>
-
-<p>and running it is very similar to running the .NET Core Client as that’s what’s running inside the container anyway:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d volkanpaksoy/dyndns53 --AccessKey {ACCESS KEY} --SecretKey {SECRET KEY} --Domains ZoneId1:Domain1 ZoneId2:Domain2 --Interval 300
-</code></pre></div></div>
-
-<p>The command above would run the container in daemon mode so that it can keep on updating the DNS every 5 minutes (300 seconds)</p>
-
-<h3 id="notes-2">Notes</h3>
-<ul>
-  <li>I had an older Visual Studio 2017 for Mac installation and it didn’t have Docker support. The setup is not very granular to pick specific features. So my solution was to reinstall the whole thing at which point Docker support was available in my project.</li>
-</ul>
-
-<p><img src="/images/vpblogimg/2018/03/dyndns53-vs-2017-docker-support.png" alt=""></p>
-
-<ul>
-  <li>
-    <p>After adding Docker support the default build configuration becomes docker-compose. But it doesn’t work straight away as it throws an exception saying</p>
-
-    <div class="language-plaintext highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  ERROR: for dyndns53.client.dotnetcore  Cannot start service 	dyndns53.client.dotnetcore: Mounts denied: 
-  The path /usr/local/share/dotnet/sdk/NuGetFallbackFolder
-  is not shared from OS X and is not known to Docker.
-  You can configure shared paths from Docker -&gt; Preferences... -&gt; File Sharing.
-  See https://docs.docker.com/docker-for-mac/osxfs/#namespaces for more info.
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<p>I added the folder it mentions in the error message to shared folders as shown below and it worked fine afterwards:</p>
-
-<p><img src="/images/vpblogimg/2018/03/dyndns53-docker-shared-folders.png" alt=""></p>
-
-<ul>
-  <li>Currently it only works on Linux containers. There’s a nice article<a href="http://callistaenterprise.se/blogg/teknik/2017/12/28/multi-platform-docker-images/" target="_blank" rel="noopener noreferrer">here</a> about creating multi-architecture Docker images. I’ll try to make mine multi-arch as well when I revisit the project or there is an actual need for that.</li>
-</ul>
-
-<h2 id="angular-5-client">Angular 5 Client</h2>
-<p>I’ve updated the web-based client using Angular 5 and Bootstrap 4 (Currently in Beta) which now looks like this:</p>
-
-<p><img src="/images/vpblogimg/2018/03/dyndns53-new-ui.png" alt=""></p>
-
-<p>I kept a copy of the old version which was developed with AngularJS. It’s available at this address: <a href="http://legacy.dyndns53.myvirtualhome.net/" target="_blank" rel="noopener noreferrer">http://legacy.dyndns53.myvirtualhome.net/</a></p>
-
-<h3 id="notes-3">Notes</h3>
-<ul>
-  <li>
-    <p>After I added AWS SDK package I started getting a nasty error:</p>
-
-    <div class="language-plaintext highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code>  ERROR in node_modules/aws-sdk/lib/http_response.d.ts(1,25): error TS2307: Cannot find module 'stream'.
-</code></pre></div>    </div>
-
-    <p>Fortunately the solution is easy as shown in the accepted answer <a href="https://stackoverflow.com/questions/43017736/integrating-aws-sdk-to-angular2-gives-cannot-find-module-stream" target="_blank" rel="noopener noreferrer">here</a>. Just remove “types: []” line in tsconfig.app.json file. Make sure you’re updating the correct file though as there is similarly named tsconfig.json in the root. What we are after is the tsconfig.app.json under src folder.</p>
-  </li>
-  <li>
-    <p>In this project, I use 3 different IP checkers (AWS, DynDns and a custom one I developed myself a while back and running on Heroku). Calling these from other clients is fine but when in the web application I bumped into CORS issues. There are possible solutions for this:</p>
-
-    <ol>
-      <li>
-        <p>Create you own API to return the IP address: In the previous version, I created an API with AWS API Gateway which uses a very simple Lambda function to return caller’s IP address</p>
-
-        <div class="language-plaintext highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code> exports.handler = function(event, context) {
-   	 context.succeed({
-         "ip": event.ip
-     })
- }
-</code></pre></div>        </div>
-
-        <p>I create a GET method for my API and used the above Lambda function. Now that I had full control over it I was able to enable CORS as shown below:</p>
-
-        <p><img src="/images/vpblogimg/2018/03/dyndns53-enable-CORS.png" alt=""></p>
-      </li>
-      <li>
-        <p>The other solution is “tricking” the browser by injecting CORS headers by using a Chrome extension. There is an umber of them but I use the one aptly named “Allow-Control-Allow-Origin: *”</p>
-
-        <p><img src="/images/vpblogimg/2018/03/dyndns53-CORS-Chrome-Extension-1.png" alt=""></p>
-
-        <p>After installed you just enable it and the getting external IP works fine.</p>
-
-        <p><img src="/images/vpblogimg/2018/03/dyndns53-CORS-Chrome-Extension-2.png" alt=""></p>
-
-        <p>It’s a good practice to filter it for your specific needs so that it doesn’t affect other sites (I had some issues with Google Docs when this is turned on)</p>
-      </li>
-    </ol>
-  </li>
-</ul>
-
-<h2 id="ci-integration">CI Integration</h2>
-<p>I created a Travis integration which is free since my project is open-source. It runs the unit tests of the core library automatically. Also added the shiny badge on the project’s readme file that shows the build status.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://github.com/volkanpaksoy/dyndns53" target="_blank" rel="noopener noreferrer">DynDns53 Source Code</a></li>
-  <li><a href="https://hub.docker.com/r/volkanpaksoy/dyndns53/" target="_blank" rel="noopener noreferrer">Docker Repository</a></li>
-  <li><a href="https://docs.microsoft.com/en-us/nuget/quickstart/create-and-publish-a-package-using-the-dotnet-cli" target="_blank" rel="noopener noreferrer">NuGet Documentation: Create and publish a package</a></li>
-  <li><a href="https://docs.microsoft.com/en-us/dotnet/core/docker/docker-basics-dotnet-core" target="_blank" rel="noopener noreferrer">Microsoft Docs: Learn Docker Basics with .NET Core</a></li>
-  <li><a href="https://docs.microsoft.com/en-us/azure/vs-azure-tools-docker-troubleshooting-docker-errors" target="_blank" rel="noopener noreferrer">Microsoft Docs: Troubleshoot Visual Studio 2017 development with Docker</a></li>
-  <li><a href="http://callistaenterprise.se/blogg/teknik/2017/12/28/multi-platform-docker-images/" target="_blank" rel="noopener noreferrer">Create multi-platform Docker images</a></li>
-  <li><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-cors.html" target="_blank" rel="noopener noreferrer">Enable CORS for an API Gateway Resource</a></li>
 </ul>
 
 		

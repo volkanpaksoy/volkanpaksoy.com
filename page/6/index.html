@@ -154,6 +154,253 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2019/09/06/Git-Branching-Strategies-Git-Flow/" itemprop="url">Git Branching Strategies: Git Flow</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-09-06T01:00:00-05:00" itemprop="datePublished">September  6, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">git, git flow, sourcetree</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>In this post I woud like to talk about a common Git branching strategy: Git Flow.</p>
+
+<h2 id="basic-approach">Basic approach</h2>
+
+<ul>
+  <li>Main diagram of the workflow:</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-00-diagram.png" alt=""></p>
+
+<ul>
+  <li>
+    <p>The central repo holds two main branches with an infinite lifetime:</p>
+
+    <ul>
+      <li>master</li>
+      <li>develop</li>
+    </ul>
+  </li>
+  <li>origin/master is the main branch where the source code of HEAD always reflects a production-ready state</li>
+  <li>origin/develop is the main branch where the source code of HEAD always reflects a state with the latest delivered development changes for the next release (also called as integration branch)</li>
+  <li>When the source code in the develop branch reaches a stable point and is ready to be released, all of the changes should be merged back into master somehow and then tagged with a release number.</li>
+  <li>There are also supporting branches with limited lifetime such as:
+    <ul>
+      <li>Feature branches</li>
+      <li>Release branches</li>
+      <li>Hotfix branches</li>
+    </ul>
+  </li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>Supporting branch</th>
+      <th>May branch off</th>
+      <th>Must merge back into</th>
+      <th>Naming convention</th>
+      <th>Lifetime</th>
+      <th>Remarks</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Feature</td>
+      <td>develop</td>
+      <td>develop</td>
+      <td>anything except master, develop, release-*, or hotfix-*</td>
+      <td>as long as the feature is in development</td>
+      <td>Features should never interact directly with master.</td>
+    </tr>
+    <tr>
+      <td>Release</td>
+      <td>develop</td>
+      <td>develop and master</td>
+      <td>release-*</td>
+      <td>preparation of the release</td>
+      <td>Starts after feature-freeze. Allows minor bugfixes. Adding large new features here is strictly prohibited.</td>
+    </tr>
+    <tr>
+      <td>Hotfix</td>
+      <td>master</td>
+      <td>develop and master</td>
+      <td>hotfix-*</td>
+      <td>preparation of the release</td>
+      <td>Similar to release in that used to prepare a production release but unplanned.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h2 id="automation">Automation</h2>
+<p>Most tools have plugins to support Git Flow. In the example below I will use SourceTree which is available in Windows and Mac.</p>
+
+<p>In this example I’m going to use a GitHub repository called <em>gitflow-automation-test</em>. I’ve already created it in GitHub and in my development environment.</p>
+
+<h3 id="initialization-and-working-with-features">Initialization and working with features</h3>
+<p>First thing to do with Git Flow in SourceTree is to initialize the repository.</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-01-init.png" alt=""></p>
+
+<p>It sounds confusing at first because the git repo itself is already initialized. What it actually does is explained <a href="https://community.atlassian.com/t5/Sourcetree-questions/What-does-quot-Initialising-repository-for-git-flow-quot-is/qaq-p/433782" target="_blank" rel="noopener noreferrer">here</a>. It shows a dialog box to configure the plugin:</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-02-init-configure.png" alt=""></p>
+
+<p>It also created the local develop branch.</p>
+
+<p>At this point we have the three types of branches explained above to choose from to start. Let’s start with a new feature named “users”</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-03-start-feature.png" alt=""></p>
+
+<p>I just added a blank file that represents the changes required for that feature and commmited my changes.</p>
+
+<p>Now that the feature has been implemented, I want to finish the feature. Similar to start, I went to Repository -&gt; Git Flow -&gt; Hg Flow -&gt; Finish Feature</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-04-finish-feature.png" alt=""></p>
+
+<p>As the options in the window suggests, this action merges the changes into develop and deletes the local branch. It doesn’t push to remote so we have to push it ourselves.</p>
+
+<h3 id="releasing-new-version">Releasing new version</h3>
+<p>Now let’s assume we’ve implemented all the features planned for this release and we want to deploy a new version of our application.</p>
+
+<p>To achieve this we start a new release:</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-05-start-release.png" alt=""></p>
+
+<p>Once we are ready to ship this release, we end the release similarly:</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-06-finish-release.png" alt=""></p>
+
+<p>We can choose to push to the origin directly too. If we switch to detail view in Sourcetree output we can see a nice summary of actions that took place:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Summary of actions:
+- Release branch 'release/1.0' has been merged into 'master'
+- The release was tagged '1.0'
+- Release tag '1.0' has been back-merged into 'develop'
+- Release branch 'release/1.0' has been locally deleted
+- 'develop', 'master' and tags have been pushed to 'origin'
+- You are now on branch 'develop' 
+</code></pre></div></div>
+
+<h3 id="working-with-hotfixes">Working with hotfixes</h3>
+<p>As the development continues, let’s assume we implemented another feature named “orders”. Finished the feature and pushed to origin. Now we have a new feature in develop. Suddenly we noticed there’s a bug in the production and we need to deploy a hotfix. We cannot create a new release branch off of develop because the new “orders” feature would be deployed along with the bugfix. So we create out hotfix branch off of master which always points to production.</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-07-start-hotfix.png" alt=""></p>
+
+<p>As we can see the code reverted back to master:</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-08-hotfix-contents.png" alt=""></p>
+
+<p>So I added another file to represent the changes for the hotfix and finished the hotfix:</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-09-finish-hotfix.png" alt=""></p>
+
+<p>And the summary of actions looks like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Summary of actions:
+- Hotfix branch 'hotfix/1.0-hotfix-1' has been merged into 'master'
+- The hotfix was tagged '1.0-hotfix-1'
+- Hotfix tag '1.0-hotfix-1' has been back-merged into 'develop'
+- Hotfix branch 'hotfix/1.0-hotfix-1' has been locally deleted
+- 'develop', 'master' and tags have been pushed to 'origin'
+- You are now on branch 'develop'
+</code></pre></div></div>
+
+<p>As we can see the process is very similar to release. The only difference is the originating branch which was master in this case.</p>
+
+<h2 id="working-with-pull-requests">Working with pull requests</h2>
+<p>It’s a good practice to create pull requests and ask colleagues to review the code before merging into develop. This can still be part of Git Flow.</p>
+
+<p>In this example I’ve created a new feature called “customers”. The changes are represented by the file “Implemented Customers Feature in This File.md”. I’ve commited my code to my feature branch and pushed it to GitHub.</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-10-new-feature-on-github.png" alt=""></p>
+
+<p>Now I can click a new Pull Request by clicking Compare &amp; pull request button:</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-11-open-pr-on-github.png" alt=""></p>
+
+<p>I’ve clicked on Create Pull Request and now it’s open on GitHub.</p>
+
+<p>At this point there are several strategies you can take such as reviewed handling the merge and the developer deleting the local branch themselves (as there won’t be a Finish Feature step).</p>
+
+<p>My suggestion is for the reviewer to Approve the pull request but not to merge it. Once the PR is approved, the developer receives a notification. Also the status of the PR can be seen on GitHub as well:</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-12-approved-pr-on-github.png" alt=""></p>
+
+<p>At this point the developer can go back to Git Flow and finish feature as shown previously.</p>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-13-select-feature-to-finish.png" alt=""></p>
+
+<p>Now that we know customers feature have been approved we can select that and finish that feature:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Summary of actions:
+- The feature branch 'feature/customers' was merged into 'develop'
+- Feature branch 'feature/customers' has been locally deleted; it has been remotely deleted from 'origin'
+- You are now on branch 'develop'
+</code></pre></div></div>
+
+<p>At this point developer needs to push the merged develop branch to GitHub otherwise the recent change (approved customers change) doesn’t appear in remote even though the pull request was merged.</p>
+
+<p>Even if you’re in the middle of another feature and have uncommited files you can still finish the approved feature so it doesn’t interrupt with your work.</p>
+
+<h2 id="command-line">Command Line</h2>
+<p>All the Git Flow commands explained above are also supported by command line but to be able to use them you have to install it:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew install git-flow
+</code></pre></div></div>
+
+<p>Then you can start using it as</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git flow &lt;subcommand&gt;
+</code></pre></div></div>
+
+<p><img src="/images/vpblogimg/2019/09/git-gitflow-14-command-line.png" alt=""></p>
+
+<p>In Windows, command line tools come with the installer so no extra installation is necessary.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://nvie.com/posts/a-successful-git-branching-model" target="_blank" rel="noopener noreferrer">Git Flow Original Blog Post: A successful Git branching model</a></li>
+  <li><a href="/assets/docs/Git-branching-model.pdf">Full branching model PDF</a></li>
+  <li><a href="https://www.codingblocks.net/podcast/comparing-git-workflows/" target="_blank" rel="noopener noreferrer">Coding Blocks Podcast: Comparing Git Workflows</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2019/09/04/alarm-pi/" itemprop="url">Alarm Pi</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -458,128 +705,6 @@ sudo systemctl start ssh
   <li><a href="https://twit.tv/shows/know-how/episodes/355" target="_blank" rel="noopener noreferrer">TWiT Know How Episode 355: Raspberry Pi-Hole!</a></li>
   <li><a href="https://hub.docker.com/r/pihole/pihole/" target="_blank" rel="noopener noreferrer">Docker Pi-hole DockerHub repository</a></li>
   <li><a href="https://discourse.pi-hole.net/" target="_blank" rel="noopener noreferrer">Pi-Hole Forum</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2019/08/21/Exploring-AWS-DeepLens/" itemprop="url">Exploring AWS DeepLens</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2019-08-21T00:00:00-05:00" itemprop="datePublished">August 21, 2019</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/machine_learningaws">machine_learning</a></span> -->
-
-<!-- machine_learning, aws -->
-
-
-
-
-    <a href="/category/machine_learning">machine_learning</a>
-    , 
-
-    <a href="/category/aws">aws</a>
-    
-</span>
-	<span class="tags">deeplens</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I recently bought this device in anticipation of getting accustomed with AWS Machine Learning services. I thought it would be a nice and fun introduction to build a DIY project using ML. This weekend I had a chance to play around with it.</p>
-
-<h2 id="unboxing">Unboxing</h2>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-unboxing-1.jpeg" alt=""></p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-unboxing-2.jpeg" alt=""></p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-unboxing-3.jpeg" alt=""></p>
-
-<h2 id="registering">Registering</h2>
-
-<p>First thing you need to do is register your DeepLens which can be done <a href="https://docs.aws.amazon.com/deeplens/latest/dg/deeplens-getting-started-register.html" target="_blank" rel="noopener noreferrer">here</a></p>
-
-<p>Alternatively, you can log in to AWS Console, go to AWS DeepLens service and click Register Device. As of this writing this service is only available in Tokyo, N.Virginia and Frankfurt. As closest to me is Frankfurt I chose that one.</p>
-
-<h2 id="creating-a-project">Creating a Project</h2>
-
-<p>Now that the devices is ready, I went to Projects section and created a new project based on a template. For this initial exploration mission I chose Bird Classification template.</p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-project-templates.png" alt=""></p>
-
-<p>When you choose your template it shows a description of the template and how it works</p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-project-overview.png" alt=""></p>
-
-<p>Once you create the project it creates the necessary resources. For example in my template it created 2 Lambda functions:</p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-lambda.png" alt=""></p>
-
-<p>Now we are ready to deploy the project to the device so we can simply click on Deploy to Device button on top right-hand corner in the project page:</p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-deploy-to-device.png" alt=""></p>
-
-<p>After that you choose your DeepLens from the avialble device list (in my case I had one device) and click Review then Deploy</p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-deploy-review.png" alt=""></p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h2 id="testing-the-project">Testing the project</h2>
-
-<p>First I followed the steps to install custom certificate so that I can start viewing the video feed in my browser:</p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-video-feed-1.png" alt=""></p>
-
-<p>Because DeepLens doesn’t know if there’s a bird or not in the picture it constantly makes a guess. Even an empty carton box looks like a Long Tailed Jaeger with 2.1% confidence apparently!</p>
-
-<p>When I presented an image I found from the Internet the results significantly improved though (thankfully, otherwise this would all be for nothing!)</p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-video-feed-2.png" alt=""></p>
-
-<p>According to Google the bird in the picture is indeed a Kingfisher.</p>
-
-<p>Next test is the bird I saw on the roof and identified as a Mallard. Let’s see what DeepLens thinks about it:</p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-video-feed-3.png" alt=""></p>
-
-<p>So with 17.5% confidens DeepLenms agrees that it is a Mallard. One thing to note is that the angle of the image significantly changes the prediction. Even a slight change in the angle makes the prediction shift from 3% to 45%. But it’s just a test project template anyway so I’m not looking for too much accuracy at this point.</p>
-
-<p>Final test: I downloaded the dataset used to train the algorithm. It’s a 1.1GB download full of images. To compare with the last Mallard test I got one picture from the Mallard folder and showed it to DeepLens:</p>
-
-<p><img src="/images/vpblogimg/2019/08/deeplens-video-feed-4.png" alt=""></p>
-
-<p>As shown above the confidence increased to 55%. So probably if I use the pictures I took to train the algorithm I would be able to get much better results.</p>
-
-<h2 id="conclusion">Conclusion</h2>
-
-<p>This was just a first step to set up and explore the device. Hopefully in the comin days I’ll be doing more meaningful projects with it and post those too.</p>
-
-<h2 id="resources">Resources</h2>
-
-<ul>
-  <li><a href="https://aws.amazon.com/deeplens/" target="_blank" rel="noopener noreferrer">AWS DeepLens Site</a></li>
-  <li><a href="https://aws.amazon.com/blogs/aws/aws-deeplens-now-orderable-in-seven-additional-countries" target="_blank" rel="noopener noreferrer">AWS DeepLens – Now Orderable in Seven Additional Countries</a></li>
-  <li><a href="http://www.vision.caltech.edu/visipedia/CUB-200-2011.html" target="_blank" rel="noopener noreferrer">Caltech-UCSD Birds-200-2011</a></li>
 </ul>
 
 		

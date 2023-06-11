@@ -154,6 +154,106 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2015/01/08/adventures-in-fsharp-monogame/" itemprop="url">Adventures in F# - MonoGame, F# and Santa!</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-01-08T17:30:00-06:00" itemprop="datePublished">January  8, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">fsharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>In today’s F# session I’ll examine a sample program. It helps to be inspired and learn more about real-life usage and capabilities of the language.</p>
+
+<p>It’s definitely a fun game if nothing else and offers a lot to learn for F# noobs like myself!</p>
+
+<p><img src="/images/vpblogimg/2015/01/make-santa-jump-game.gif" alt="Make Santa Jump"></p>
+
+<p>One thing to pay attention is when you first clone and build it gives compile errors.</p>
+
+<p><img src="/images/vpblogimg/2015/01/fsharp-santa-build-errors.png" alt="Build error"></p>
+
+<p>To fix this you have reload the solution and restart Visual Studio.</p>
+
+<h3 id="notes">Notes</h3>
+<ul>
+  <li>
+<strong>use</strong> keyword has the same functionality as a let binding but adds a call to Dispose method. It’s like the using statement</li>
+  <li>
+<strong>open</strong> keyword is similar to using in C# but it can be used for other modules as well as namespaces</li>
+  <li>I added a source file called Game.fs and started getting the following error:</li>
+</ul>
+
+<blockquote>
+  <p>Files in libraries or multiple-file applications must begin with a namespace 
+or module declaration, e.g. ‘namespace SomeNamespace.SubNamespace’ or ‘module 
+SomeNamespace.SomeModule’. Only the last source file of an application may
+omit such a declaration.</p>
+</blockquote>
+
+<p>Even though G came before P, Visual Studio didn’t automatically reorder files alphabetically like it would normally do with C#. Apparently even the order of files are important in F# (who knew?). There are even Move Up/Down options in the context menu. So I right-clicked Program.fs and moved it down so it would be the last source file in the project and it fixed the build error!</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<ul>
+  <li>Properties can be defined with get and set members as below:</li>
+</ul>
+
+<div class="language-fsharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">module</span> <span class="nc">Game</span>
+
+<span class="k">type</span> <span class="nc">Suit</span> <span class="p">=</span> 
+    <span class="p">|</span> <span class="nc">Hearts</span> 
+    <span class="p">|</span> <span class="nc">Clubs</span> 
+    <span class="p">|</span> <span class="nc">Diamonds</span> 
+    <span class="p">|</span> <span class="nc">Spades</span>
+
+<span class="k">type</span> <span class="nc">Card</span><span class="p">(</span><span class="n">suit</span> <span class="p">:</span> <span class="nc">Suit</span><span class="p">,</span> <span class="n">value</span> <span class="p">:</span> <span class="kt">int</span><span class="p">)</span> <span class="p">=</span> 
+    <span class="k">let</span> <span class="k">mutable</span> <span class="n">faceValue</span> <span class="p">=</span> <span class="n">value</span>
+
+    <span class="k">member</span> <span class="n">this</span><span class="p">.</span><span class="nc">Value</span>
+        <span class="k">with</span> <span class="n">get</span><span class="bp">()</span> <span class="p">=</span> <span class="n">faceValue</span>
+        <span class="k">and</span> <span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="p">=</span> <span class="n">faceValue</span> <span class="p">&lt;-</span> <span class="n">value</span>
+</code></pre></div></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://channel9.msdn.com/coding4fun/blog/MonoGame-F-and-Santa" target="_blank" rel="noopener noreferrer">Channel 9 post: MonoGame, F# and Santa!</a></li>
+  <li><a href="http://timjones.tw/blog/archive/2014/12/28/make-santa-jump-game-in-fsharp-using-monogame" target="_blank" rel="noopener noreferrer">Original blogpost by Tim Jones</a></li>
+  <li><a href="https://github.com/tgjones/make-santa-jump" target="_blank" rel="noopener noreferrer">GitHub repository</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/01/07/adventures-in-fsharp-part-5/" itemprop="url">Adventures in F# - Part 5</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -509,158 +609,6 @@
 <h2 id="resources">Resources</h2>
 <ul>
   <li><a href="http://www.microsoft.com/surface/en-gb/products/surface-pro-3" target="_blank" rel="noopener noreferrer">Surface Pro 3 specs</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2015/01/05/visual-studio-project-template-for-webapi/" itemprop="url">Visual Studio Project Template for ASP.NET Web API</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-01-05T09:00:00-06:00" itemprop="datePublished">January  5, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">visual_studio, web_api</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>In Visual Studio 2013 they decided to create one web project called <em>ASP.NET Web Application</em> to make it simpler as opposed to VS 2012 which had 7 different templates. I like this project wizard but I think there is a gap in the templates it provides when you want to start a Web API project. If you select Web API it comes with a full blown ASP.NET MVC website. If you select Empty you don’t get anything. I feel like there should be something in between: A functional Web API project with no overhead of the website.</p>
-
-<h3 id="minimal-web-api">Minimal Web API</h3>
-<p>The steps to achieve this are simple. I found this <a href="http://www.daniellewis.me.uk/2014/02/21/asp-net-web-api-from-scratch-part-1/" target="_blank" rel="noopener noreferrer">blog post</a> that helped me to get what I wanted quickly.</p>
-
-<p>For the sake of completeness the steps to create the minimal Web API project is as follows (I changed some of the steps to suit my needs):</p>
-
-<ol>
-  <li>Create an Emptry ASP.NET Web Project</li>
-  <li>
-    <p>Install Web API package via Nuget</p>
-
-    <div class="language-plaintext highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code> Install-Package Microsoft.AspNet.WebApi
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>Add a <em>Global Configuration Class</em> and add the following line defining a default route to  <em>Application_Start</em> method</p>
-
-    <div class="language-csharp highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code> <span class="k">protected</span> <span class="k">void</span> <span class="nf">Application_Start</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
- <span class="p">{</span>
-     <span class="n">GlobalConfiguration</span><span class="p">.</span><span class="n">Configuration</span><span class="p">.</span><span class="n">Routes</span><span class="p">.</span><span class="nf">MapHttpRoute</span><span class="p">(</span><span class="s">"Default"</span><span class="p">,</span> <span class="s">"{controller}/{id}"</span><span class="p">,</span> <span class="k">new</span> <span class="p">{</span> <span class="n">id</span> <span class="p">=</span> <span class="n">RouteParameter</span><span class="p">.</span><span class="n">Optional</span> <span class="p">});</span>
- <span class="p">}</span>
-</code></pre></div>    </div>
-  </li>
-</ol>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<ol>
-  <li>
-    <p>Add a controller from Web API Controller Class (v2.1) template and rename it to DefaultController. By default it comes with method implementations for GET/POST/PUT/DELETE HTTP verbs:</p>
-
-    <div class="language-csharp highlighter-rouge">
-<div class="highlight"><pre class="highlight"><code> <span class="k">public</span> <span class="k">class</span> <span class="nc">DefaultController</span> <span class="p">:</span> <span class="n">ApiController</span>
- <span class="p">{</span>
-     <span class="c1">// GET: api/Entry</span>
-     <span class="k">public</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="nf">Get</span><span class="p">()</span>
-     <span class="p">{</span>
-         <span class="k">return</span> <span class="k">new</span> <span class="kt">string</span><span class="p">[]</span> <span class="p">{</span> <span class="s">"value1"</span><span class="p">,</span> <span class="s">"value2"</span> <span class="p">};</span>
-     <span class="p">}</span>
-
-     <span class="c1">// GET: api/Entry/5</span>
-     <span class="k">public</span> <span class="kt">string</span> <span class="nf">Get</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">)</span>
-     <span class="p">{</span>
-         <span class="k">return</span> <span class="s">"value"</span><span class="p">;</span>
-     <span class="p">}</span>
-
-     <span class="c1">// POST: api/Entry</span>
-     <span class="k">public</span> <span class="k">void</span> <span class="nf">Post</span><span class="p">([</span><span class="n">FromBody</span><span class="p">]</span><span class="kt">string</span> <span class="k">value</span><span class="p">)</span>
-     <span class="p">{</span>
-     <span class="p">}</span>
-
-     <span class="c1">// PUT: api/Entry/5</span>
-     <span class="k">public</span> <span class="k">void</span> <span class="nf">Put</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">,</span> <span class="p">[</span><span class="n">FromBody</span><span class="p">]</span><span class="kt">string</span> <span class="k">value</span><span class="p">)</span>
-     <span class="p">{</span>
-     <span class="p">}</span>
-
-     <span class="c1">// DELETE: api/Entry/5</span>
-     <span class="k">public</span> <span class="k">void</span> <span class="nf">Delete</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">)</span>
-     <span class="p">{</span>
-     <span class="p">}</span>
- <span class="p">}</span>	
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>In order to run properly the following references need to be deployed:</p>
-    <ul>
-      <li>System.Net.Http.Formatting</li>
-      <li>System.Web.Http</li>
-      <li>System.Web.Http.WebHost</li>
-    </ul>
-  </li>
-</ol>
-
-<p>So change <em>Copy Local</em> to true in the properties window.</p>
-
-<p>That’s all it takes to create a working Web API.</p>
-
-<h3 id="templates-in-action">Templates in action</h3>
-<p>Now I have what I want but when I need a new Web API project I don’t want to start from scratch every time. Instead I’d rather use the nice and easy templating feature of Visual Studio. To create the template:</p>
-
-<ol>
-  <li>
-    <p>Select File -&gt; Export Template</p>
-
-    <p><img src="/images/vpblogimg/2015/01/vs-project-template-wizard.png" alt="Visual Studio Project Template Wizard"></p>
-  </li>
-  <li>
-    <p>Leave “Project template” selected and click next. Give the template a name and description. It will automatically import the template to Visual Studio so leave the defaults.</p>
-
-    <p><img src="/images/vpblogimg/2015/01/vs-project-template-wizard-options.png" alt="Visual Studio Project Template Wizard Otions"></p>
-  </li>
-</ol>
-
-<p>When you need to create a simple Web API you can use this template from now on by simply searching webapi in the templates:</p>
-
-<p><img src="/images/vpblogimg/2015/01/vs-project-template-select-template.png" alt="Visual Studio Project Template Search"></p>
-
-<p>And when you create a new project based on this template (not surprisingly) you get something like this:</p>
-
-<p><img src="/images/vpblogimg/2015/01/vs-project-template-default-project.png" alt="Visual Studio Project Template-Based Project Output"></p>
-
-<p>Creating the project from scratch was easy enough but using templates is even easier so why not use it!</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://www.daniellewis.me.uk/2014/02/21/asp-net-web-api-from-scratch-part-1/" target="_blank" rel="noopener noreferrer">ASP.NET Web API from scratch</a></li>
 </ul>
 
 		

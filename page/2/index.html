@@ -154,6 +154,157 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2021/08/31/Using-Dymo-LabelWriter-450-with-a-Raspberry-Pi/" itemprop="url">Using Dymo LabelWriter 450 with a Raspberry Pi</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2021-08-31T01:00:00-05:00" itemprop="datePublished">August 31, 2021</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
+
+<!-- hobby -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">raspberry_pi, productivity, dymo, labelwriter_450</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I have a Dymo LabelWriter 450 for years and I love using it. Especially it worked a miracle recently when I organised all ny shelves and bagged and labelled everything. To have the ability of keeping the printer online all the time and print easily I decided to plug it in a Raspberry Pi and share over the network. The steps below explain how it can be done easily:</p>
+
+<h2 id="step-01-plug-in-the-printer-to-the-pi-via-usb">Step 01: Plug in the printer to the Pi via USB</h2>
+<p>Simply plug it in and power it on.</p>
+
+<h2 id="step-02">Step 02:</h2>
+<ul>
+  <li>Click Pi -&gt; Preferences -&gt; Add / Remove Software</li>
+  <li>Search “dymo”</li>
+  <li>Tick the checkbox next to “printer driver for DYMO label printers”</li>
+  <li>Click Apply and wait for the installation to complete</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/01-add-drivers.jpg" alt=""></p>
+
+<h2 id="step-03-configure-printer">Step 03: Configure printer</h2>
+<ul>
+  <li>On the Pi itself, open a browser and go to “http://localhost:631”</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/02-configure-printer.jpg" alt=""></p>
+
+<ul>
+  <li>Click Administration and Add Printer. In the username/password prompt, use the account you used to log in (most likely username “pi”)</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/03-printer-administration.jpg" alt=""></p>
+
+<ul>
+  <li>You should see DYMO printer in the list of Local Printers</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/04-local-printer-list.jpg" alt=""></p>
+
+<ul>
+  <li>Change the name of the printer if you like and click Continue</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/05-add-printer-step-01.jpg" alt=""></p>
+
+<ul>
+  <li>Change the drivers if it’s incorrect and click Add Printer</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/06-add-printer-step-02.jpg" alt=""></p>
+
+<ul>
+  <li>Accept or modify the default options and click Set Default Options</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/07-add-printer-step-03.jpg" alt=""></p>
+
+<ul>
+  <li>Confirm the printer is listed in the printers list</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/08-add-printer-confirm.jpg" alt=""></p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h2 id="step-04-share-the-printer">Step 04: Share the printer</h2>
+<ul>
+  <li>Click Pi -&gt; Preferences -&gt; Print Settings</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/09-share-printer-step-01.jpg" alt=""></p>
+
+<ul>
+  <li>From Printer menu select Shared to share it over the network</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/10-share-printer-step-02.jpg" alt=""></p>
+
+<h2 id="step-05-setup-client-machine">Step 05: Setup client machine</h2>
+
+<h3 id="option-1-add-network-printer">Option 1: Add network printer</h3>
+
+<ul>
+  <li>Download and install DYMO software</li>
+  <li>Upon first run, application asks to run Add Network Printer Utility</li>
+  <li>Click Yes</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/11-add-network-printer-utility.png" alt=""></p>
+
+<p>For me, this method did work on one machine and did not work on another one. So for the other machine I used Option 2</p>
+
+<h3 id="option-2-add-printer-using-oss-add-printer-functionality">Option 2: Add printer using OS’s add printer functionality</h3>
+
+<p>I used a Mac for this but should be similar on Windows.</p>
+
+<ul>
+  <li>Search for Printers &amp; Scanners</li>
+  <li>Click + button</li>
+  <li>It should show the printer on the network:</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/12-add-printer.png" alt=""></p>
+
+<h2 id="step-06-test">Step 06: Test</h2>
+
+<p>Now that printer is recognized on the client machine, just design your labels and print using DYMO Label app.</p>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/13-print-results.jpg" alt=""></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.dymo.com/support?cfid=user-guide" target="_blank" rel="noopener noreferrer">Official DYMO site to download drivers and software</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2020/03/18/Migrating-EC2-Instance-to-a-Different-Account/" itemprop="url">Migrating an EC2 Instance to a Different AWS Account</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -419,192 +570,6 @@ fi
   <li><a href="https://stackoverflow.com/questions/40136606/how-to-expose-audio-from-docker-container-to-a-mac" target="_blank" rel="noopener noreferrer">How to expose audio from Docker container to a Mac?</a></li>
   <li><a href="https://devops.datenkollektiv.de/running-a-docker-soundbox-on-mac.html" target="_blank" rel="noopener noreferrer">Running a Docker Soundbox on Mac</a></li>
 </ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2019/11/05/Continuous-Integration-with-CodeBuild/" itemprop="url">Continuous Integration with CodeBuild</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2019-11-05T20:00:00-06:00" itemprop="datePublished">November  5, 2019</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/devopsaws">devops</a></span> -->
-
-<!-- devops, aws -->
-
-
-
-
-    <a href="/category/devops">devops</a>
-    , 
-
-    <a href="/category/aws">aws</a>
-    
-</span>
-	<span class="tags">github, codebuild, continuous_integration, ci</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>In this post, I’d like to show how to achieve continuous integration using CodeBuild service.</p>
-
-<p>Main goals to achieve:</p>
-
-<ul>
-  <li>Run unit tests in a Docker container</li>
-  <li>Kick off build automatically when code is pushed</li>
-  <li>Show build status</li>
-  <li>Send notifications when tests fail</li>
-</ul>
-
-<h2 id="codebuild-setup">Codebuild Setup</h2>
-
-<h3 id="step-01-project-configuration">Step 01: Project Configuration</h3>
-<p>Specify a unique name and make sure to tick “Enable build badge” checkbox</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/project-configuration.png" alt=""></p>
-
-<h3 id="step-02-source-selection">Step 02: Source Selection</h3>
-<p>In this step select GitHub as source provider and select “Repository in my GitHub account” option. AWS will use OAuth and redirect to GitHub to ask for authoization to access your repositories. After granting access you should be able to see your repositories in the dropdown list:</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/select-source.png" alt=""></p>
-
-<p>I left “Source version” field blank as I want the build to run for all branches and for all commits.</p>
-
-<h3 id="step-03-webhook-configuration">Step 03: Webhook Configuration</h3>
-<p>Tick the “Rebuild every time a code change is pushed to this repository” checkbox and select PUSH from the event type list. You can select more events to trigger builds for CI purposes it should be enough to run after every time code is pushed.</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/webhook-configuration.png" alt=""></p>
-
-<p>What this does is add a CodeBuild webhook in GitHub that looks like this:</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/webhook-in-github.png" alt=""></p>
-
-<p>Whenever a push happens in the repository, GitHub posts the details to CodeBuild webhook and that triggers a build.</p>
-
-<h3 id="step-04-environment-configuration">Step 04: Environment configuration</h3>
-<p>The build takes place in a Docker container so we have to provide a Docker image with build tools installed. Alternatively we can use one of the managed images that AWS provides. In this example I’ll use a managed image:</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/environment-configuration.png" alt=""></p>
-
-<h3 id="step-05-other-configuration">Step 05: Other configuration</h3>
-<p>In this example, I will accept the defaults for the rest of the settings because I don’t need to generate artifacts to run unit tests. It’s generally wise to enable CloudWatch logs so that you can monitor the build process closely. Since I accept the default path for buildspec.yml, I have to place it at the root of the repository.</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/buildspec-artifacts-logs-configuration.png" alt=""></p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h2 id="running-the-tests">Running the tests</h2>
-<p>The core responsibility of CI pipeline is to run the unit tests. CodeBuild is a generic service and it doesn’t come with any tools to run unit tests as it’s application and environment dependent. The way we configure is by using buildspec.yml file. In this example I’m running a dotnet core project and making sure the unit tests are run first is as easy as this:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 0.2
-
-phases:
-  install:
-    runtime-versions:
-        dotnet: 2.2
-  build:
-    commands:
-      - dotnet restore
-      - dotnet test
-      - dotnet publish Sample.UI.Web -c Release -o ./output
-</code></pre></div></div>
-
-<p>This way CodeBuild will execute the steps above and all the unit tests in the solution will be run.</p>
-
-<h2 id="run-build-automatically">Run build automatically</h2>
-<p>Now that the GitHub repository and CodeBuild projects are both ready, let’s see if we can kick off a build by pushing some code changes:</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/auto-build-after-commit-1.png" alt=""></p>
-
-<p>Also after pushing code to a feature branch I was able to see that build was triggered.</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/auto-build-after-commit-2.png" alt=""></p>
-
-<p>So now I could confirm running the build automatically.</p>
-
-<p>As a side note, the failed ones were failing due to this error</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>YAML_FILE_ERROR: This build image requires selecting at least one runtime version.
-</code></pre></div></div>
-
-<p>The solution was to specify the runtime in the buildspec.yml file explicitly by adding this bit:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>install:
-  runtime-versions:
-      dotnet: 2.2
-</code></pre></div></div>
-
-<p>Also it’s worth noting that the source version value in Codebuild corresponds to commit hash. For example the commit hash shown below</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/commit-id-on-github.png" alt=""></p>
-
-<p>appears on CodeBuild as</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/commit-id-on-codebuild.png" alt=""></p>
-
-<h2 id="showing-build-status">Showing build status</h2>
-<p>Showing the build status on GitHub repository is very easy. We already enabled build badge while creating the build project. Now we have to copy the badge URL as shown below:</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/copy-badge-url.png" alt=""></p>
-
-<p>Then in the GitHub repository, edit the readme.md file and add the following:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>![Build status](badge URL copied from AWS console)
-</code></pre></div></div>
-
-<p>Now if you go to the GitHub repository page and refresh you can see the latest status of the build (of master branch):</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/displaying-build-status.png" alt=""></p>
-
-<p>After I fixed the error and merged into master branch I could see the build passing badge as well:</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/build-status-passing.png" alt=""></p>
-
-<h2 id="notifications">Notifications</h2>
-<p>It would be nice to have a direct integration with notifications. This can be achieved using CloudWatch Events. In this sample project I’m going to use SNS to send email notifications.</p>
-
-<p>First, I went to CloudWatch and created a rule and added the build state changed events. Just gave it a name and created the rule so that it looked like this:</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/cloudwatch-event-rule-view.png" alt=""></p>
-
-<p>After that I broke the test intentionally and received email for build failure in JSON format.</p>
-
-<p><img src="/images/vpblogimg/2019/11/ci-with-codebuild/build-notification-json.png" alt=""></p>
-
-<h2 id="conclusion">Conclusion</h2>
-<p>In this post I wanted to show a continuous integration pipeline using GitHub and CodeBuild. It can further be improved by posting the build status to Slack so that the whole team can get the notifications instantly. For the time being I achieved the goals I set out for initially so I’ll wrap it up here.</p>
-
-<h2 id="source-code">Source Code</h2>
-<p>Source code can be found in the repo below under blog/CodeBuild_CI_Pipeline folder</p>
-
-<p></p>
-<div class="github-widget" data-repo="volkanpaksoy/lab"></div>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://docs.aws.amazon.com/en_pv/codebuild/latest/userguide/sample-build-notifications.html" target="_blank" rel="noopener noreferrer">Build Notifications Sample for CodeBuild</a></li>
-  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/CodeBuild_CI_Pipeline" target="_blank" rel="noopener noreferrer">Source code</a></li>
-</ul>
-
 
 		
 		

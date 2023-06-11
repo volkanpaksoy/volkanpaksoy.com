@@ -154,6 +154,161 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2019/10/19/AWS-Developer-Tools-Services-Part-2-AWS-CodeBuild/" itemprop="url">AWS Developer Tools Services Part 2: AWS CodeBuild</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-10-19T01:00:00-05:00" itemprop="datePublished">October 19, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awsdevops">aws</a></span> -->
+
+<!-- aws, devops -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/devops">devops</a>
+    
+</span>
+	<span class="tags">codebuild, git, aws_developer_tools_services</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<h2 id="introduction">Introduction</h2>
+<p>This post is part of my mini-series about <a href="https://aws.amazon.com/products/developer-tools/" target="_blank" rel="noopener noreferrer">AWS Developer Tools Services</a></p>
+
+<ul>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/15/AWS-Developer-Tools-Services-Part-1-AWS-CodeCommit/">Part 1: AWS CodeCommit</a></li>
+  <li>Part 2: AWS CodeBuild</li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/20/AWS-Developer-Tools-Services-Part-3-AWS-CodeDeploy/">Part 3: AWS CodeDeploy</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/23/AWS-Developer-Tools-Services-Part-4-AWS-CodePipeline/">Part 4: AWS CodePipeline</a></li>
+</ul>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-icon.png" alt=""></p>
+
+<h2 id="aws-codebuild">AWS CodeBuild</h2>
+<p>As the name implies, AWS CodeBuild is Amazon’s build service that compiles your code, runs unit tests etc. As this is quite broad and changes from project to project and technology to technology it requires some customization.</p>
+
+<h2 id="hook-up-the-source-code">Hook up the source code</h2>
+<p>First step is to select the source. It’s quite flexible in the sense that it integrates with top Git providers such as GitHub and Bitbucket. The easiest way is to use CodeCommit because of the direct integration between services. No extra authentication is required to connect to the repository.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-selecting-source.png" alt=""></p>
+
+<p>It also support Amazon S3 as source but I cannot think of a practical use for it.</p>
+
+<p>Another interesting feature is that it supports multiple input sources. If your build depends on source from multiple repositories I would consider merging them into a single repository but if that’s not possible this is a nice option to make it work.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h2 id="hook-up-the-docker-image-with-build-tools">Hook up the Docker image with build tools</h2>
+<p>The build process takes place in a Docker container. By default AWS provides their own build images for different operating systems:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-environment.png" alt=""></p>
+
+<p>A couple of notes on build images:</p>
+
+<ul>
+  <li>AWS provides some build images but we can provide our own images as well.</li>
+  <li>
+    <p>How the managed images configured can be found here: <a href="https://docs.aws.amazon.com/en_pv/codebuild/latest/userguide/build-env-ref-available.html" target="_blank" rel="noopener noreferrer">Docker Images Provided by CodeBuild</a>. They have build tools installed on these images for all runtimes they support. As of this writing dotnet core 3.0 is not supported in any of the images though.</p>
+  </li>
+  <li>The image availability may differ between regions. For example N.Virginia regions has 3 supported OS images whereas London region doesn’t have Windows image.</li>
+  <li>Running this build process is not free and pricing details can be found <a href="https://aws.amazon.com/codebuild/pricing" target="_blank" rel="noopener noreferrer">here</a>. If you’re running long build processes that you run frequently these costs can quickly add up.</li>
+</ul>
+
+<h2 id="configuring-the-build">Configuring the build</h2>
+<p>If you run the build after selecting the source and the build image, you get the following error:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-buildspec-missing-error.png" alt=""></p>
+
+<p>By default CodeBuild requires a special configuration file called buildspec.yml to reside at the root of the repository:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-buildspec-settings.png" alt=""></p>
+
+<p>In my example, the folder structure is like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[Root]
+	[Src]
+   		[Sample.UI.Web]
+   		[Sample.Core]
+   		[Sample.Core.UnitTests]
+   		Sample.sln
+   		buildspec.yml
+</code></pre></div></div>
+
+<p>I’m using a dotnet core 2.2 project on Windows-based Docker image and my buildspec.yml looks like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: 0.2
+
+phases:
+  build:
+    commands:
+      - cd ./src
+      - dotnet restore
+      - dotnet test
+      - dotnet publish Sample.UI.Web -c Release -o ../output
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: ./src/output
+</code></pre></div></div>
+
+<h2 id="running-the-unit-tests">Running the unit tests</h2>
+<p>As you can see in my buildspec file I’m running the unit tests using <em>dotnet test</em> command. There’s no built-in facility in CodeBuild to run unit tests as it’s a general-purpose tool. You have to provide your own mechanism to achieve this.</p>
+
+<p>To test running the unit tests I deliberately broke a test and checked in the code. After running the build again I got this result:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-running-tests.png" alt=""></p>
+
+<p>So it actually runs the tests and fails the build if there’s a failing test. Ideally you want to run the tests whenever there are code changes. Looks like currently this is possible via CodePipeline service. I’ll explore that later and will cover running the build and unit tests automatically.</p>
+
+<h2 id="artifacts">Artifacts</h2>
+<p>Now that we can build the project we need to upload the output of the build to somewhere so that we can deploy it. Currently you can only choose Amazon S3 to upload the artifacts or no artifacts at all.</p>
+
+<p>If you had created a bucket already you can simply select it from the dropdown list.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codebuild-artifacts.png" alt=""></p>
+
+<p>The options are pretty basic. You can choose to compress the output and upload as a single zip file or the artifacts you defined in the buildspec in their original format.</p>
+
+<p>You can also choose to create a folder named as the build GUID so that you can keep the unique outputs for each release. You can do this by specifying Build ID as the namespace type.</p>
+
+<p>When you’re running the build make sure to view the full logs to get the latest status quickly. I noticed that if you just watch the main page and check out the results you may experience some delays.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>In my experience CodeBuild doesn’t provide too much to help with the build process because by nature it’s a generic tool. But it provides flexibility and full integration with other AWS services such as CodeCommit and CodeDeploy so I believe it’s worht using.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://aws.amazon.com/codebuild/pricing/" target="_blank" rel="noopener noreferrer">AWS CodeBuild Pricing</a></li>
+  <li><a href="https://docs.aws.amazon.com/en_pv/codebuild/latest/userguide/build-env-ref-available.html" target="_blank" rel="noopener noreferrer">Docker Images Provided by CodeBuild</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2019/10/15/AWS-Developer-Tools-Services-Part-1-AWS-CodeCommit/" itemprop="url">AWS Developer Tools Services Part 1: AWS CodeCommit</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -326,253 +481,6 @@
   <li><a href="https://guides.github.com/introduction/flow/" target="_blank" rel="noopener noreferrer">Understanding the GitHub flow</a></li>
   <li><a href="https://www.youtube.com/watch?v=juLIxo42A_s" target="_blank" rel="noopener noreferrer">YouTube Video: The GitHub Flow - GitHub Universe 2016</a></li>
   <li><a href="https://www.youtube.com/watch?v=47E-jcuQz5c" target="_blank" rel="noopener noreferrer">YouTube Video: Git &amp; GitHub: GitHub Workflow (A very concise explanation in 1 minute and 13 seconds)</a></li>
-</ul>
-
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2019/09/06/Git-Branching-Strategies-Git-Flow/" itemprop="url">Git Branching Strategies: Git Flow</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2019-09-06T01:00:00-05:00" itemprop="datePublished">September  6, 2019</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">git, git flow, sourcetree</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>In this post I woud like to talk about a common Git branching strategy: Git Flow.</p>
-
-<h2 id="basic-approach">Basic approach</h2>
-
-<ul>
-  <li>Main diagram of the workflow:</li>
-</ul>
-
-<p><img src="/images/vpblogimg/2019/09/git-gitflow-00-diagram.png" alt=""></p>
-
-<ul>
-  <li>
-    <p>The central repo holds two main branches with an infinite lifetime:</p>
-
-    <ul>
-      <li>master</li>
-      <li>develop</li>
-    </ul>
-  </li>
-  <li>origin/master is the main branch where the source code of HEAD always reflects a production-ready state</li>
-  <li>origin/develop is the main branch where the source code of HEAD always reflects a state with the latest delivered development changes for the next release (also called as integration branch)</li>
-  <li>When the source code in the develop branch reaches a stable point and is ready to be released, all of the changes should be merged back into master somehow and then tagged with a release number.</li>
-  <li>There are also supporting branches with limited lifetime such as:
-    <ul>
-      <li>Feature branches</li>
-      <li>Release branches</li>
-      <li>Hotfix branches</li>
-    </ul>
-  </li>
-</ul>
-
-<table>
-  <thead>
-    <tr>
-      <th>Supporting branch</th>
-      <th>May branch off</th>
-      <th>Must merge back into</th>
-      <th>Naming convention</th>
-      <th>Lifetime</th>
-      <th>Remarks</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Feature</td>
-      <td>develop</td>
-      <td>develop</td>
-      <td>anything except master, develop, release-*, or hotfix-*</td>
-      <td>as long as the feature is in development</td>
-      <td>Features should never interact directly with master.</td>
-    </tr>
-    <tr>
-      <td>Release</td>
-      <td>develop</td>
-      <td>develop and master</td>
-      <td>release-*</td>
-      <td>preparation of the release</td>
-      <td>Starts after feature-freeze. Allows minor bugfixes. Adding large new features here is strictly prohibited.</td>
-    </tr>
-    <tr>
-      <td>Hotfix</td>
-      <td>master</td>
-      <td>develop and master</td>
-      <td>hotfix-*</td>
-      <td>preparation of the release</td>
-      <td>Similar to release in that used to prepare a production release but unplanned.</td>
-    </tr>
-  </tbody>
-</table>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h2 id="automation">Automation</h2>
-<p>Most tools have plugins to support Git Flow. In the example below I will use SourceTree which is available in Windows and Mac.</p>
-
-<p>In this example I’m going to use a GitHub repository called <em>gitflow-automation-test</em>. I’ve already created it in GitHub and in my development environment.</p>
-
-<h3 id="initialization-and-working-with-features">Initialization and working with features</h3>
-<p>First thing to do with Git Flow in SourceTree is to initialize the repository.</p>
-
-<p><img src="/images/vpblogimg/2019/09/git-gitflow-01-init.png" alt=""></p>
-
-<p>It sounds confusing at first because the git repo itself is already initialized. What it actually does is explained <a href="https://community.atlassian.com/t5/Sourcetree-questions/What-does-quot-Initialising-repository-for-git-flow-quot-is/qaq-p/433782" target="_blank" rel="noopener noreferrer">here</a>. It shows a dialog box to configure the plugin:</p>
-
-<p><img src="/images/vpblogimg/2019/09/git-gitflow-02-init-configure.png" alt=""></p>
-
-<p>It also created the local develop branch.</p>
-
-<p>At this point we have the three types of branches explained above to choose from to start. Let’s start with a new feature named “users”</p>
-
-<p><img src="/images/vpblogimg/2019/09/git-gitflow-03-start-feature.png" alt=""></p>
-
-<p>I just added a blank file that represents the changes required for that feature and commmited my changes.</p>
-
-<p>Now that the feature has been implemented, I want to finish the feature. Similar to start, I went to Repository -&gt; Git Flow -&gt; Hg Flow -&gt; Finish Feature</p>
-
-<p><img src="/images/vpblogimg/2019/09/git-gitflow-04-finish-feature.png" alt=""></p>
-
-<p>As the options in the window suggests, this action merges the changes into develop and deletes the local branch. It doesn’t push to remote so we have to push it ourselves.</p>
-
-<h3 id="releasing-new-version">Releasing new version</h3>
-<p>Now let’s assume we’ve implemented all the features planned for this release and we want to deploy a new version of our application.</p>
-
-<p>To achieve this we start a new release:</p>
-
-<p><img src="/images/vpblogimg/2019/09/git-gitflow-05-start-release.png" alt=""></p>
-
-<p>Once we are ready to ship this release, we end the release similarly:</p>
-
-<p><img src="/images/vpblogimg/2019/09/git-gitflow-06-finish-release.png" alt=""></p>
-
-<p>We can choose to push to the origin directly too. If we switch to detail view in Sourcetree output we can see a nice summary of actions that took place:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Summary of actions:
-- Release branch 'release/1.0' has been merged into 'master'
-- The release was tagged '1.0'
-- Release tag '1.0' has been back-merged into 'develop'
-- Release branch 'release/1.0' has been locally deleted
-- 'develop', 'master' and tags have been pushed to 'origin'
-- You are now on branch 'develop' 
-</code></pre></div></div>
-
-<h3 id="working-with-hotfixes">Working with hotfixes</h3>
-<p>As the development continues, let’s assume we implemented another feature named “orders”. Finished the feature and pushed to origin. Now we have a new feature in develop. Suddenly we noticed there’s a bug in the production and we need to deploy a hotfix. We cannot create a new release branch off of develop because the new “orders” feature would be deployed along with the bugfix. So we create out hotfix branch off of master which always points to production.</p>
-
-<p><img src="/images/vpblogimg/2019/09/git-gitflow-07-start-hotfix.png" alt=""></p>
-
-<p>As we can see the code reverted back to master:</p>
-
-<p><img src="/images/vpblogimg/2019/09/git-gitflow-08-hotfix-contents.png" alt=""></p>
-
-<p>So I added another file to represent the changes for the hotfix and finished the hotfix:</p>
-
-<p><img src="/images/vpblogimg/2019/09/git-gitflow-09-finish-hotfix.png" alt=""></p>
-
-<p>And the summary of actions looks like this:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Summary of actions:
-- Hotfix branch 'hotfix/1.0-hotfix-1' has been merged into 'master'
-- The hotfix was tagged '1.0-hotfix-1'
-- Hotfix tag '1.0-hotfix-1' has been back-merged into 'develop'
-- Hotfix branch 'hotfix/1.0-hotfix-1' has been locally deleted
-- 'develop', 'master' and tags have been pushed to 'origin'
-- You are now on branch 'develop'
-</code></pre></div></div>
-
-<p>As we can see the process is very similar to release. The only difference is the originating branch which was master in this case.</p>
-
-<h2 id="working-with-pull-requests">Working with pull requests</h2>
-<p>It’s a good practice to create pull requests and ask colleagues to review the code before merging into develop. This can still be part of Git Flow.</p>
-
-<p>In this example I’ve created a new feature called “customers”. The changes are represented by the file “Implemented Customers Feature in This File.md”. I’ve commited my code to my feature branch and pushed it to GitHub.</p>
-
-<p><img src="/images/vpblogimg/2019/09/git-gitflow-10-new-feature-on-github.png" alt=""></p>
-
-<p>Now I can click a new Pull Request by clicking Compare &amp; pull request button:</p>
-
-<p><img src="/images/vpblogimg/2019/09/git-gitflow-11-open-pr-on-github.png" alt=""></p>
-
-<p>I’ve clicked on Create Pull Request and now it’s open on GitHub.</p>
-
-<p>At this point there are several strategies you can take such as reviewed handling the merge and the developer deleting the local branch themselves (as there won’t be a Finish Feature step).</p>
-
-<p>My suggestion is for the reviewer to Approve the pull request but not to merge it. Once the PR is approved, the developer receives a notification. Also the status of the PR can be seen on GitHub as well:</p>
-
-<p><img src="/images/vpblogimg/2019/09/git-gitflow-12-approved-pr-on-github.png" alt=""></p>
-
-<p>At this point the developer can go back to Git Flow and finish feature as shown previously.</p>
-
-<p><img src="/images/vpblogimg/2019/09/git-gitflow-13-select-feature-to-finish.png" alt=""></p>
-
-<p>Now that we know customers feature have been approved we can select that and finish that feature:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Summary of actions:
-- The feature branch 'feature/customers' was merged into 'develop'
-- Feature branch 'feature/customers' has been locally deleted; it has been remotely deleted from 'origin'
-- You are now on branch 'develop'
-</code></pre></div></div>
-
-<p>At this point developer needs to push the merged develop branch to GitHub otherwise the recent change (approved customers change) doesn’t appear in remote even though the pull request was merged.</p>
-
-<p>Even if you’re in the middle of another feature and have uncommited files you can still finish the approved feature so it doesn’t interrupt with your work.</p>
-
-<h2 id="command-line">Command Line</h2>
-<p>All the Git Flow commands explained above are also supported by command line but to be able to use them you have to install it:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew install git-flow
-</code></pre></div></div>
-
-<p>Then you can start using it as</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git flow &lt;subcommand&gt;
-</code></pre></div></div>
-
-<p><img src="/images/vpblogimg/2019/09/git-gitflow-14-command-line.png" alt=""></p>
-
-<p>In Windows, command line tools come with the installer so no extra installation is necessary.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://nvie.com/posts/a-successful-git-branching-model" target="_blank" rel="noopener noreferrer">Git Flow Original Blog Post: A successful Git branching model</a></li>
-  <li><a href="/assets/docs/Git-branching-model.pdf">Full branching model PDF</a></li>
-  <li><a href="https://www.codingblocks.net/podcast/comparing-git-workflows/" target="_blank" rel="noopener noreferrer">Coding Blocks Podcast: Comparing Git Workflows</a></li>
 </ul>
 
 

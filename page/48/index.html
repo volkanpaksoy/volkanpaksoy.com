@@ -154,6 +154,59 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2014/04/18/rough-set-implementation/" itemprop="url">Rough set implementation</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-04-18T08:59:55-05:00" itemprop="datePublished">April 18, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">java, machine_learning</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>A rough set is an approximation of a set that gives the lower and upper borders of the set.</p>
+
+<h3 id="rough-set-implementation">Rough set implementation</h3>
+<p>The sample implementation starts off with reading the data set and the configuration file. The object and attribute index lists are acquired from the configuration. The items that have indices specified in the object list are considered as the set of objects and the rest of the items are the complement of the data set.</p>
+
+<p><img src="/images/vpblogimg/2014/04/Rought-Sets-01.png" alt="RoughSet 1"></p>
+
+<p>If a given index in attribute index list equal in both object list and complementary object list are not equal the object is considered to belong to the negative border, if not it belongs to the positive border.</p>
+
+<h3 id="sample-output">Sample Output</h3>
+<p><img src="/images/vpblogimg/2014/04/Rought-Sets-02.png" alt="RoughSet Sample Output"></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://en.wikipedia.org/wiki/Rough_set" target="_blank" rel="noopener noreferrer">Wikipedia article on rough sets</a></li>
+  <li><a href="https://github.com/volkanpaksoy/VP.MachineLearning.RoughSets" target="_blank" rel="noopener noreferrer">Source code</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/04/16/genetic-algorithm-implementation/" itemprop="url">Genetic Algorithm Implementation</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -275,80 +328,6 @@
 <h2 id="resources">Resources</h2>
 <ul>
   <li><a href="https://github.com/volkanpaksoy/VP.DataMining.AGNES" target="_blank" rel="noopener noreferrer">Source code</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/03/22/k-means-implementation/" itemprop="url">k-means Implementation</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-03-22T08:46:33-05:00" itemprop="datePublished">March 22, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">csharp, machine_learning</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I’m keeping on reviving my old projects. This is the second data mining algorithm implementation. It is another clustering algorithm called <em>k-means</em>.</p>
-
-<h3 id="k-means-algorithm">k-means Algorithm</h3>
-<p>Algorithm groups and creates k clusters from n data points. First the cluster centres are picked randomly from the data points. Then the entire dataset is iterated and all points are assigned to their closest cluster. Closest cluster is determined by measuring the distance of the data point to the centroid of the clusters. This process is repeated until there is no change in the dataset and all points are assigned to the closest ones.</p>
-
-<p><img src="/images/vpblogimg/2014/03/Kmeans_results.png" alt="K-means Results"></p>
-
-<h3 id="implementation">Implementation</h3>
-<p>The project contains 6 libraries:</p>
-
-<ul>
-  <li>
-<em>VP.KMeans.Core:</em> Core library including the algorithm implementation</li>
-  <li>
-<em>VP.KMeansClient.GUI:</em> User interface for entering the parameters and plotting the clusters</li>
-  <li>
-<em>VP.KMeansClient.Console:</em> Console user interface. No fancy plots, just an output file is generated</li>
-  <li>
-<em>VP.KMeans.DataGenerator.Core:</em> Library to generate test data</li>
-  <li>
-<em>VP.KMeans.DataGenerator.Console:</em> Console application to feed the core library to generate test data</li>
-  <li>
-<em>CPI.Plot3D:</em> External library to plot the results</li>
-</ul>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://en.wikipedia.org/wiki/K-means_clustering" target="_blank" rel="noopener noreferrer">Wikipedia article</a></li>
-  <li><a href="https://github.com/volkanpaksoy/VP.DataMining.KMeans" target="_blank" rel="noopener noreferrer">Source code</a></li>
 </ul>
 
 		

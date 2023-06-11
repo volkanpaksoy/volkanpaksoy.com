@@ -154,6 +154,82 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2013/01/31/running-mono-on-raspberry-pi/" itemprop="url">Running Mono on Raspberry Pi</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-01-31T12:53:01-06:00" itemprop="datePublished">January 31, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">raspberry_pi, mono</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>As a developer my initial plan was to develop something running on Raspberry Pi. Unfortunately being a .NET developer and playing around with Microsoft stack all the time, my arsenal for Linux development is very limited. Before I master Python, I wanted to run small applications using Mono. This would be a good chance to see how smoothly .NET programs can run independent from the platform.</p>
+
+<p>So I booted my Raspberry Pi with a Raspbian image (hard-float ABI). And installed Mono runtime and MonoDevelop IDE.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sudo</span> <span class="n">apt</span><span class="p">-</span><span class="k">get</span> <span class="n">update</span>
+<span class="n">sudo</span> <span class="n">apt</span><span class="p">-</span><span class="k">get</span> <span class="n">install</span> <span class="n">mono</span><span class="p">-</span><span class="n">runtime</span>
+<span class="n">sudo</span> <span class="n">apt</span><span class="p">-</span><span class="k">get</span> <span class="n">install</span> <span class="n">monodevelop</span>
+</code></pre></div></div>
+
+<p>Launched MonoDevelop eagerly to write my first Hello World program on Raspberry Pi and boom! I got the following error:</p>
+
+<p><img src="/images/vpblogimg/2013/01/MonoDevelop_Exception.jpg" alt="MonoDevelop Exception"></p>
+
+<p>The good old “Object reference not set to an instance of an object” exception!</p>
+
+<p>After searching around I found out that Mono doesn’t run on Raspbian image and it requires an image with “soft-float ABI“. Turns out soft-float version runs floating point operations using software instead of FPU (Floating Point Unit). Therefore soft-float version it is slower than Raspbian.
+I quickly downloaded the soft-float image and tried to boot it up again. This time I couldn’t even see the login screen. It got stuck at a stage saying “Waiting for /dev to be fully populated” After some time it timed out and started giving some errors.</p>
+
+<p><img src="/images/vpblogimg/2013/01/Raspberry_SoftFloat_with_512MB.jpg" alt="Raspberry_SoftFloat_with_512MB"></p>
+
+<p>Having no idea what’s going on, consulted Google again and found out other people had the same problem. The proposed solution was to replace start.elf with the one from the hard-float image. I tried running it with the replaced elf file but got the same result. I’ve been doing all these experiments on my new Raspberry Pi which is 512MB. Having failed where others seemed to succeed, I put the blame on the hardware I’m using and decided to try the same image with the old Pi. The result was promising: I could boot the Pi with the soft-float version finally. I installed the Mono runtime and MonoDevelop again but looks like MonoDevelop is above Pi’s paygrade! It was excruciatingly slow that I decided to create the sample project on my desktop PC and carry it over with a USB flash drive. Mounted the flash drive using the following commands (replace tosh with directory name you want and make sure you’re mounting the correct device.)</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sudo</span> <span class="n">mkdir</span> <span class="p">/</span><span class="n">media</span><span class="p">/</span><span class="n">tosh</span>
+<span class="n">sudo</span> <span class="n">mount</span> <span class="p">-</span><span class="n">t</span> <span class="n">vfat</span> <span class="p">-</span><span class="n">o</span> <span class="n">uid</span><span class="p">=</span><span class="n">pi</span><span class="p">,</span><span class="n">gid</span><span class="p">=</span><span class="n">pi</span> <span class="p">/</span><span class="n">dev</span><span class="p">/</span><span class="n">sda1</span> <span class="p">/</span><span class="n">media</span><span class="p">/</span><span class="n">tosh</span><span class="p">/</span>
+</code></pre></div></div>
+
+<p>Here comes the moment of truth. I changed the directory to the copied files and ran the exe file. Here’s the output:</p>
+
+<p><img src="/images/vpblogimg/2013/01/Mono_on_Raspberry.jpg" alt="Mono on Raspberry"></p>
+
+<p>The screen glares but at the bottom of the screen you can see the glowing (by all means) phrase: Hello World!
+Of course, this is just the beginning. I’ll see how compatible and reliable Mono framework is after I deploy more complex applications on Raspberry Pi.</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2013/01/19/namespace-collision/" itemprop="url">Namespace collision</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -328,123 +404,6 @@ I created a few snippets for simple methods returning primitive types. Depending
 <p><img src="/images/vpblogimg/2013/01/TestMethodSnippet.png" alt="TestMethodSnippet"></p>
 
 <p>Another great feature about this tool is you can export a selected text block as a snippet. All you have to do is right-click and select Export as Snippet, make the final touches in the editor and save.</p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2013/01/06/diy-network-cables/" itemprop="url">DIY - Network cables</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2013-01-06T16:18:15-06:00" itemprop="datePublished">January  6, 2013</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
-
-<!-- hobby -->
-
-
-
-
-    <a href="/category/hobby">hobby</a>
-    
-</span>
-	<span class="tags">electronics, network</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>There aren’t too many reasons why someone would like to make their own Ethernet cables. Sheer fun, learning the nitty-gritty (and useless in most cases) details of how they are made are to name a few. Also as I have too many gadgets making my own cables at any length I please would be convenient and can save a few bucks in the long run. So let’s get started.</p>
-
-<h3 id="the-toolkit">The toolkit</h3>
-
-<h4 id="cable">Cable:</h4>
-
-<p><strong>CAT6:</strong> <a href="http://www.amazon.co.uk/gp/product/B002SQPDXS/ref=oh_details_o00_s00_i00" target="_blank" rel="noopener noreferrer">http://www.amazon.co.uk/gp/product/B002SQPDXS/ref=oh_details_o00_s00_i00</a></p>
-
-<p><strong>CAT5:</strong> <a href="http://www.amazon.co.uk/gp/product/B000HWY304/ref=wms_ohs_product" target="_blank" rel="noopener noreferrer">http://www.amazon.co.uk/gp/product/B000HWY304/ref=wms_ohs_product</a></p>
-
-<p>For the obvious reasons! It’s best to get the latest version generally. I will use CAT6 all around my network but I also bought CAT5e as I was anticipating some errors at the beginning so I’d better make them by wasting cheaper cable.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h4 id="rj45-modular-connectors">RJ45 Modular Connectors:</h4>
-
-<p><a title="http://www.amazon.co.uk/gp/product/B004HTK30M/ref=oh_details_o01_s00_i00" href="http://www.amazon.co.uk/gp/product/B004HTK30M/ref=oh_details_o01_s00_i00" target="_blank" rel="noopener noreferrer">http://www.amazon.co.uk/gp/product/B004HTK30M/ref=oh_details_o01_s00_i00</a></p>
-
-<p>I’ve watched a lot of tutorial videos. When an expert is showing it, it looks quite easy but I quickly found out it’s not. Aligning all 8 cables and placing them in the correct order is not as easy as it seems. So I definitely recommend two-piece crimps that come with a “guide”. It’s a small piece that allows you to insert all the cables relatively easily and then you insert the whole block into the crimp.</p>
-
-<p><strong>RJ45 Crimp Tool:</strong> <a href="http://www.amazon.co.uk/gp/product/B004J02DRU/ref=oh_details_o00_s00_i00" target="_blank" rel="noopener noreferrer">http://www.amazon.co.uk/gp/product/B004J02DRU/ref=oh_details_o00_s00_i00</a></p>
-
-<p>The set I bought comes with a crimper and a cutter. It looks good enough to do tis job and quite cheap. After the cables are inserted in the connector, the crimper is used to press them all in and connect with the</p>
-
-<h4 id="tester">Tester:</h4>
-
-<p><a href="http://www.amazon.co.uk/gp/product/B007CJUEDA/ref=wms_ohs_product" target="_blank" rel="noopener noreferrer">http://www.amazon.co.uk/gp/product/B007CJUEDA/ref=wms_ohs_product</a></p>
-
-<p>Altough it is easy to test the cable by connecting to a machine, it is generally recommended to use a tester. I guess it makes sense especially when you have to make lots of cables. I bought one for £4 so I guess it’s good deal. The downside is doesn’t support CAT6 which I didn’t notice at the or ordering. If manual testing doesn’t prove to be helpful I would consider buying a better product.</p>
-
-<h4 id="boots">Boots:</h4>
-
-<p><a href="http://www.amazon.co.uk/gp/product/B009EPCOP6/ref=wms_ohs_product" target="_blank" rel="noopener noreferrer">http://www.amazon.co.uk/gp/product/B009EPCOP6/ref=wms_ohs_product</a></p>
-
-<p>These are plastic sleeves over the connector. They are helpful sometimes to avoid the connector clip from getting broken</p>
-
-<h4 id="technical-details">Technical Details</h4>
-
-<p><strong>CAT5 vs. CAT5e vs. CAT6:</strong> The difference is that CAT6 supports 1000Base-T/1000Base-TX (Gigabit Ethernet). CAT5 and CAT5e supports 10Base-T/100Base-TX (Maximum 100Mbit/s)  CAT5e is an improvement over CAT5. It introduces new crosstalk specifications. (Crosstalk means a signal creating a detrimental effect on another channel)</p>
-
-<p><strong>T568A vs. T568B:</strong> The order of the cables matters and they have to be in the same order in both ends. These specific orders are named as T568A and B. What I understand you can use as long as you use it for both ends but all resources I’ve found favoured using T568B so I’ll use that one as well.</p>
-
-<p><strong>Crossover cable:</strong> When you connect one end in T568A and the other T568B it becomes a crossover cable (Regular ones are called patch cables). Crossover cables are used to connect two computers instead connecting a computer to a switch or router. I’ll test creating one of these as well.</p>
-
-<h4 id="action">Action!</h4>
-
-<p>I think we have everything ready to get started. Here’s what I did step-by-step:</p>
-
-<ol>
-  <li>Cut the required length of cable.</li>
-  <li>Remove the outer jacket.</li>
-  <li>Arrange the wires by referring to the wiring standard (T568B) and insert them into the guide of the connector.</li>
-  <li>Insert the guide into the connector.</li>
-  <li>Insert the connector to the crimp tool and press it firmly.</li>
-  <li>Repeat Steps 1- 5 for the other end.
-10 minutes later I had my first homebrew CAT5 cable:</li>
-</ol>
-
-<p><img src="/images/vpblogimg/2013/01/Cat5Final.jpg" alt="CAT5"></p>
-
-<p>Let’s use the tester to verify we did good. Using the tester is quite simple: Just plug in the both ends to the device. If you lights blinking from 1 to 8 simultaneously on both sides that means we are good. I tested it with a broken table too. In that case no lights were on so it’s easy to see if it works or not.</p>
-
-<p><img src="/images/vpblogimg/2013/01/CableTester.jpg" alt="Cable Tester"></p>
-
-<p>CAT6 is slightly different: It has plastic part in the middle of the cable which holds the cables apart as shown in the image below.</p>
-
-<p><img src="/images/vpblogimg/2013/01/Cat6.jpg" alt="CAT6"></p>
-
-<p>All we have to do cut that piece before separating the pairs and the rest is exactly the same as CAT5.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://www.youtube.com/watch?v=-5uXqZlC9GU#t=15m33s" target="_blank" rel="noopener noreferrer">KnowHow episode about Arduino and cable making</a></li>
-  <li><a href="http://www.lanshack.com/cat5e-tutorial.aspx" target="_blank" rel="noopener noreferrer">A detailed and in-depth page</a></li>
-</ul>
 
 		
 		

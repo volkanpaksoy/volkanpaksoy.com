@@ -20,7 +20,7 @@
 
 	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
 	
-	<link rel="canonical" href="https://volkanpaksoy.com/page/45/">
+	<link rel="canonical" href="https://volkanpaksoy.com/page/72/">
 	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
@@ -154,151 +154,29 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2014/11/15/tip-day-preventing-corrupted-files-uploading-aws/" itemprop="url">Tip of the Day: Preventing corrupted files while uploading to AWS</a></h1>
+	<h1 class="title" itemprop="name"><a href="/archive/2011/06/13/blind-password-masking/" itemprop="url">Blind Password Masking</a></h1>
 	<div class="meta">
 	<span class="date">
 
 
 
 
-<time datetime="2014-11-15T18:00:33-06:00" itemprop="datePublished">November 15, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
+<time datetime="2011-06-13T22:46:18-05:00" itemprop="datePublished">June 13, 2011</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
 
-<!-- aws -->
-
-
+<!-- misc -->
 
 
-    <a href="/category/aws">aws</a>
+
+
+    <a href="/category/misc">misc</a>
     
 </span>
-	<span class="tags">tip_of_the_day, s3</span>
+	<span class="tags">password_masking, security</span>
 	
 </div>
 	<div class="entry-content" itemprop="articleBody">
-		<p>If you are working with large files, transferring them to S3 correctly might be an issue. To ensure data integrity you can send the MD5 hash of the file in <strong>Content-MD5</strong> header.</p>
-
-<p>After the transfer S3 compares the MD5 value of the transferred file with the value you provided. If they don’t match it returns an error. This is an easy and great way to ensure the file has been uploaded safe and sound.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPUT.html" target="_blank" rel="noopener noreferrer">AWS API Documentation</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/11/15/tip-day-generating-insert-statements-sql-server-management-studio/" itemprop="url">Tip of the Day: Generating insert statements with SQL Server Management Studio</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-11-15T17:51:27-06:00" itemprop="datePublished">November 15, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">tip_of_the_day, sql_server, ssms</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>The feature exists but a bit buried away. To create insert statements for table(s):</p>
-
-<ol>
-  <li>Right click on the database and go to Tasks -&gt; Generate Scripts</li>
-  <li>Select the tables that you want to generate the script</li>
-  <li>In “Set scripting options” page click on the Advanced button</li>
-  <li>Under the General category, locate “Types of data to script”. It contains 3 options: Data Only, Schema and Data, and Schema Only. Default is Schema only,if you select an option with data in it you can get the data with the insert statements.</li>
-</ol>
-
-<p><img src="/images/vpblogimg/2014/11/SQLServerGeneratingInsertScript.png" alt="Generating Insert Scripts With SSMS"></p>
-
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/11/11/package-manager-windows-chocolatey/" itemprop="url">Package Manager for Windows: Chocolatey</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-11-11T10:02:56-06:00" itemprop="datePublished">November 11, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/devops">devops</a></span> -->
-
-<!-- devops -->
-
-
-
-
-    <a href="/category/devops">devops</a>
-    
-</span>
-	<span class="tags">chocolatey</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>When moving to a new machine, re-installing all the applications is sounds a very daunting task. Linux distros have been enjoying the ease of package repositories for quite a long time and users can install almost everything they need by package manager applications like apt-get and yum. Chocolatey aims to bring the same convenience to Windows.</p>
-
-<h3 id="easy-install-indeed">Easy Install Indeed!</h3>
-<p>Installation is a breeze as shown in their website. By using some Powershell and NuGet magic you download a script which then downloads Chocolatey package from the <a href="https://chocolatey.org/api/v2/package/chocolatey/" target="_blank" rel="noopener noreferrer">repository</a>. You may have noticed the URL is very similar to nuget.org’s package path. That’s simply because it uses NuGet under the hood. Even the user interface is just a skinned version of <a href="https://github.com/NuGet/NuGetGallery" target="_blank" rel="noopener noreferrer">NuGet Gallery</a> (which is open source and can be downloaded from GitHub).</p>
-
-<p><img src="/images/vpblogimg/2014/10/Chocolatey-Install.png" alt="Chocolatey-Install"></p>
-
-<h3 id="automate-all-installations">Automate all installations</h3>
-<p>After Chocolatey is installed all you have to do is browse the packages and select the ones you want to install with an easy command such as:</p>
-<blockquote>
-  <p>choco install atom</p>
-</blockquote>
-
-<p>And after a bunch of colourful messages you’re good to go.</p>
-
-<p><img src="/images/vpblogimg/2014/10/Chocolatey01.png" alt="Chocolatey-Install"></p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h3 id="are-we-done">Are we done?</h3>
-<p>Most core tools for development and everyday use (SysInternals, Fiddler, Chrome, FireFox, NodeJS, Python, VLC, Paint.NET etc.) can be installed automatically using Chocolatey. The major applications such as Visual Studio and SQL Server still need some love and your caring hands but I think automating installation of tens of applications in such an easy way is priceless.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://chocolatey.org" target="_blank" rel="noopener noreferrer">Official Chocolatey site</a></li>
-  <li><a href="https://github.com/NuGet/NuGetGallery" target="_blank" rel="noopener noreferrer">NuGet Gallery Source Code</a></li>
-</ul>
+		<p>I hate blind password masking. I want to see what i type. If there is  nobody around to peep at my screen, which is most of the time, then  masked passwords provides me no protection. Only helps for creating  occasional troubles..</p>
 
 		
 		
@@ -311,10 +189,8 @@
 </div>
 <nav id="pagenavi">
     
-        <a href="/page/44" class="prev">Prev</a>
+        <a href="/page/71" class="prev">Prev</a>
     
-    
-        <a href="/page/46" class="next">Next</a>
     
     <div class="center"><a href="/archive">Blog Archives</a></div>
 </nav>

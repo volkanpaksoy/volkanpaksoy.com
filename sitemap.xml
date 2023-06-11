@@ -777,8 +777,8 @@
 <lastmod>2019-07-04T23:00:00-05:00</lastmod>
 </url>
 <url>
-<loc>https://volkanpaksoy.com/archive/2019/08/09/Implementing-a-Self-Hosted-Docker-Registry-on-Raspberry-Pi/</loc>
-<lastmod>2019-08-09T23:00:00-05:00</lastmod>
+<loc>https://volkanpaksoy.com/archive/2019/08/10/Implementing-a-Self-Hosted-Docker-Registry-on-Raspberry-Pi/</loc>
+<lastmod>2019-08-10T06:00:00-05:00</lastmod>
 </url>
 <url>
 <loc>https://volkanpaksoy.com/archive/2019/08/21/Exploring-AWS-DeepLens/</loc>
@@ -851,6 +851,10 @@
 <url>
 <loc>https://volkanpaksoy.com/archive/2022/06/23/Powershell-Gotcha-Contains-Operator/</loc>
 <lastmod>2022-06-23T01:00:00-05:00</lastmod>
+</url>
+<url>
+<loc>https://volkanpaksoy.com/archive/2023/06/08/Hosting-Email-on-AWS-EC2/</loc>
+<lastmod>2023-06-08T01:00:00-05:00</lastmod>
 </url>
 <url>
 <loc>https://volkanpaksoy.com/404/</loc>
@@ -1097,6 +1101,9 @@
 </url>
 <url>
 <loc>https://volkanpaksoy.com/page/71/</loc>
+</url>
+<url>
+<loc>https://volkanpaksoy.com/page/72/</loc>
 </url>
 <url>
 <loc>https://volkanpaksoy.com/assets/docs/Git-branching-model.pdf</loc>
