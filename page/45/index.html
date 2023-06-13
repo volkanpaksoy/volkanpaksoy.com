@@ -154,49 +154,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2014/11/15/tip-day-preventing-corrupted-files-uploading-aws/" itemprop="url">Tip of the Day: Preventing corrupted files while uploading to AWS</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-11-15T18:00:33-06:00" itemprop="datePublished">November 15, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
-
-<!-- aws -->
-
-
-
-
-    <a href="/category/aws">aws</a>
-    
-</span>
-	<span class="tags">tip_of_the_day, s3</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>If you are working with large files, transferring them to S3 correctly might be an issue. To ensure data integrity you can send the MD5 hash of the file in <strong>Content-MD5</strong> header.</p>
-
-<p>After the transfer S3 compares the MD5 value of the transferred file with the value you provided. If they don’t match it returns an error. This is an easy and great way to ensure the file has been uploaded safe and sound.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPUT.html" target="_blank" rel="noopener noreferrer">AWS API Documentation</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/11/15/tip-day-generating-insert-statements-sql-server-management-studio/" itemprop="url">Tip of the Day: Generating insert statements with SQL Server Management Studio</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -298,6 +255,69 @@
 <ul>
   <li><a href="http://chocolatey.org" target="_blank" rel="noopener noreferrer">Official Chocolatey site</a></li>
   <li><a href="https://github.com/NuGet/NuGetGallery" target="_blank" rel="noopener noreferrer">NuGet Gallery Source Code</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2014/08/25/verify-file-integrity-hashes/" itemprop="url">Verify file integrity with HashTab</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-08-25T13:15:31-05:00" itemprop="datePublished">August 25, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
+
+<!-- misc -->
+
+
+
+
+    <a href="/category/misc">misc</a>
+    
+</span>
+	<span class="tags">hashtab, software_review</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Many times I used file hashes to verify that it’s been correctly downloaded or uploaded. It’s especially useful with large files where things are more likely to go wrong. That’s why most MD5 or SHA1 hashes provided with many large file downloads such Linux distros.</p>
+
+<p><img src="/images/vpblogimg/2014/08/FileHashes-01.png" alt="Ubuntu MD5 Hashes"></p>
+
+<h3 id="best-shell-extension-ever-hashtab">Best shell extension ever: HashTab!</h3>
+<p>This is a just quick plug about one of my favourite tools in Windows: HashTab. The best thing about it is that it’s a shell extension. So to find out the hash values of a file is simple as right-clicking and selecting File Hashes tab. So, using the MD5 has example above, if you have downloaded ubuntu-14.04.1-server-amd64.iso all you have to do is check it’s properties.</p>
+
+<p><img src="/images/vpblogimg/2014/08/FileHashes-02.png" alt="File Hashes"></p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>HahsTab also monitors the clipboard. So if you copy the MD5 value from Ubuntu’s site it automatically compares it with the calculated hash values and confirms file integrity with a large shiny green check!</p>
+
+<p>Out of the box it displays most common 3 hash algorithms but if you need more supported algorithms.</p>
+
+<p><img src="/images/vpblogimg/2014/08/FileHashes-03.png" alt="HashTab Settings"></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://implbits.com" target="_blank" rel="noopener noreferrer">Official site</a></li>
 </ul>
 
 		

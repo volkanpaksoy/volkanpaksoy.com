@@ -154,143 +154,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2018/12/18/Monitoring-EC2-Instance-Disk-Space-with-AWS-CloudWatch/" itemprop="url">Monitoring EC2 Instance Disk Space with AWS CloudWatch</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2018-12-18T22:00:00-06:00" itemprop="datePublished">December 18, 2018</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/awsdevops">aws</a></span> -->
-
-<!-- aws, devops -->
-
-
-
-
-    <a href="/category/aws">aws</a>
-    , 
-
-    <a href="/category/devops">devops</a>
-    
-</span>
-	<span class="tags">cloudwatch, custom_metric</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I had an issue recently with an EC2 instance running out of disk space. Unfortunately free disk space is not a metric that comes out of the box with AWS CloudWatch. This post is about implementing a custom metric and getting notifications via AWs CloudWatch based on that metric.</p>
-
-<h2 id="steps-to-monitor-disk-space-with-cloudwatch">Steps to monitor disk space with CloudWatch</h2>
-
-<p><strong>Step 1: Download sample config file</strong></p>
-
-<p>AWS provides a sample JSON file at this location: <a href="https://s3.amazonaws.com/ec2-downloads-windows/CloudWatchConfig/AWS.EC2.Windows.CloudWatch.json" target="_blank" rel="noopener noreferrer">https://s3.amazonaws.com/ec2-downloads-windows/CloudWatchConfig/AWS.EC2.Windows.CloudWatch.json</a></p>
-
-<p>Download a copy of this file.</p>
-
-<p><strong>Step 2: Set IsEnabled to true</strong></p>
-
-<p>By default it comes disabled so set the value as shown below:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"IsEnabled": true
-</code></pre></div></div>
-
-<p><strong>Step 3: Add the custom metric for disk usage</strong></p>
-
-<p>Add the custom metric to monitor disk space:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
-    "Id": "PerformanceCounterDisk",
-    "FullName": "AWS.EC2.Windows.CloudWatch.PerformanceCounterComponent.PerformanceCounterInputComponent,AWS.EC2.Windows.CloudWatch",
-    "Parameters": {
-        "CategoryName": "LogicalDisk",
-        "CounterName": "% Free Space",
-        "InstanceName": "C:",
-        "MetricName": "FreeDiskPercentage",
-        "Unit": "Percent",
-        "DimensionName": "InstanceId",
-        "DimensionValue": "{instance_id}"
-    }
-}
-</code></pre></div></div>
-
-<p><strong>Step 4: Add the new metric to flows</strong></p>
-
-<p>After defining the metric we need to add it to the flows so that it can be sent to CloudWatch. To achieve this update the flows section as shown below:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"Flows": {
-    "Flows": 
-    [
-        "(ApplicationEventLog,SystemEventLog),CloudWatchLogs",
-        "(PerformanceCounter,PerformanceCounterDisk),CloudWatch"
-    ]
-}
-</code></pre></div></div>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<p><strong>Step 5: Add IAM role to server</strong></p>
-
-<p>It’s a good practice to manage permissions of EC2 instances via IAM roles assigned to the machine. To enable sending logs to CloudWatch add AmazonEC2RoleForSSM policy to the machine’s role</p>
-
-<p><img src="/images/vpblogimg/2018/12/aws-cloudwatch-custom-metrics-01.png" alt=""></p>
-
-<p>Without this role SSM agent service gets an access denied error.</p>
-
-<p><strong>Step 6: Restart Amazon SSM Agent service</strong></p>
-
-<p>Either by using Windows Services Manager or running the following command:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Restart-Service AmazonSSMAgent
-</code></pre></div></div>
-
-<p>Once this is all done wait a few minutes and check CloudWatch metrics. Under All -&gt; Windows/Default you should be able to see new metric under InstanceId group (as that’s what we are using to group the logs). And when you click the metric you should be able to see a nice time-based graph of free disk space on the server:</p>
-
-<p><img src="/images/vpblogimg/2018/12/aws-cloudwatch-custom-metrics-02.png" alt=""></p>
-
-<h2 id="notes">Notes</h2>
-
-<ul>
-  <li>
-    <p>It’s useful to know where SSM Agent’s logs are stored. They can be found in this path:</p>
-
-    <p>%PROGRAMDATA%\Amazon\SSM\Logs\</p>
-  </li>
-  <li>
-    <p>The service reports every 5 minutes. The PollInterval in the JSON file is in seconds and is different than service report interval.</p>
-  </li>
-</ul>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html" target="_blank" rel="noopener noreferrer">AWS Documentation: Publish Custom Metrics</a></li>
-  <li><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/cwl-ug.pdf" target="_blank" rel="noopener noreferrer">Amazon CloudWatch Logs User Guide (PDF)</a></li>
-  <li><a href="https://s3.amazonaws.com/ec2-downloads-windows/CloudWatchConfig/AWS.EC2.Windows.CloudWatch.json" target="_blank" rel="noopener noreferrer">CoudWatch Sample Config File</a></li>
-  <li><a href="https://stackoverflow.com/questions/37441225/how-to-monitor-free-disk-space-at-aws-ec2-with-cloud-watch-in-windows" target="_blank" rel="noopener noreferrer">StackOverflow question: How to monitor free disk space at AWS EC2 with Cloud Watch in windows
-</a></li>
-  <li><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartWindows2016.html" target="_blank" rel="noopener noreferrer">Quick Start: Enable Your Amazon EC2 Instances Running Windows Server 2016 to Send Logs to CloudWatch Logs Using the CloudWatch Logs Agent</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2018/09/03/AWS-Organisations/" itemprop="url">Managing Accounts with AWS Organizations</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -641,6 +504,108 @@ mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
   <li><a href="https://devanswers.co/postfix-statusbounced-unknown-user-user/" target="_blank" rel="noopener noreferrer">Can’t send mail to own domain. Postfix: status=bounced (unknown user: “user”)</a></li>
   <li><a href="https://www.systutorials.com/docs/linux/man/5-mdadm.conf/" target="_blank" rel="noopener noreferrer">mdadm.conf (5) - Linux Man Pages</a></li>
 </ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2018/07/21/Row-Against-the-Machine-Getting-Rowing-Data-Out-of-Concept2-Model-D/" itemprop="url">Row Against the Machine: Getting Rowing Data Out of Concept2 Model D</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2018-07-21T01:00:00-05:00" itemprop="datePublished">July 21, 2018</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
+
+<!-- hobby -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">fitness, concept2, rowing</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I’ve been using a Concept2 Model D rowing machine for some time now and quite enjoying it as a form of workout. (Primarily because I can still watch Netflix or Youtube while rowing!)</p>
+
+<p><img src="/images/vpblogimg/2018/07/concept2-model-c.jpg" alt="Concept2 Model C Rowing Machine"></p>
+
+<p>Since I have some data accumulated in it I decided to have a look into ways of getting it and working on it hoping that it give me some insights about possible ways of improving my stats.</p>
+
+<h2 id="official-tools">Official Tools</h2>
+<p>To be honest the existing toolset that comes out of the box is quite sufficient.</p>
+
+<h3 id="logbook">LogBook</h3>
+<p>This is the official web application where you can monitor your workouts.</p>
+
+<p><img src="/images/vpblogimg/2018/07/concept2-logbook.png" alt="Concept LogBook"></p>
+
+<p>This application is quite good really. You can manually enter your workouts, view the existing history. Create teams and participate in challenges so there’s also a social aspect to it.</p>
+
+<h3 id="ios-app-ergdata">iOS App: ErgData</h3>
+<p>The monitor connected to the rowing machine (Performance Monitor - PM5) supports Bluetooth connection which can be easily paired with an iPhone. If you install ErgData app on your phone you can sync the device with your phone  and get them out that way very easily. Better yet, it allows you to upload your workouts to LogBook. After you complete a workout, you can easily upload the results by clicking Sync.</p>
+
+<p><img src="/images/vpblogimg/2018/07/concept2-ergdata.jpeg" alt="Concept2 ErgData app"></p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h2 id="unofficial-tools">Unofficial Tools</h2>
+
+<h3 id="raspirowing">RasPiRowing</h3>
+<p>I found this nice Raspberry Pi based project called <a href="https://raspirowing.com/" target="_blank" rel="noopener noreferrer">RasPiRowing</a> developed one of the staff members of Concept.</p>
+
+<p>Since I’m a fan of Raspberry Pi have a whole bunch of them lyting around, it didn’t take me long to install it and use it. It works just fine and comes with a fun fish game too:</p>
+
+<p><img src="/images/vpblogimg/2018/07/concept2-fish-pi-game.jpg" alt="FishPi Game"></p>
+
+<p>It’s a nice way of interacting with the Concept2. Since it can be accessed by a Python application I can build my own applications as well to get data out of the erg.</p>
+
+<h2 id="developer-tools">Developer Tools</h2>
+
+<h3 id="sdk">SDK</h3>
+<p>There is an <a href="http://www.concept2.co.uk/service/software/software-development-kit" target="_blank" rel="noopener noreferrer">SDK</a> available to download for both Mac and Windows.</p>
+
+<p>I installed the Mac version which extracts the files under /Users/{username}/C2 PM SDK/</p>
+
+<p>But I couldn’t find much useful stuff in there:</p>
+
+<p><img src="/images/vpblogimg/2018/07/concept2-sdk.png" alt="SDK contents"></p>
+
+<p>Tried to build the XCode project but gave a build error and I just left it at that.</p>
+
+<h3 id="api">API</h3>
+<p>They also provide an API wich can be used to get the data out. This sounds the most interesting part to me as I can develop my own custom tools based on this API.</p>
+
+<p>In the documentation, they advise to use the dev site first while trying out the API and then request using the live data. Also you need to register your application with Concept2 to be able to use their APIs.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://log.concept2.com/login" target="_blank" rel="noopener noreferrer">Concept2 Logbook</a></li>
+  <li><a href="http://www.concept2.co.uk/service/software/software-development-kit" target="_blank" rel="noopener noreferrer">Concept2 SDK</a></li>
+  <li><a href="http://log.concept2.com/developers/documentation/" target="_blank" rel="noopener noreferrer">Logbook API Documentation</a></li>
+  <li><a href="https://raspirowing.com/" target="_blank" rel="noopener noreferrer">RasPiRowing</a></li>
+</ul>
+
 
 		
 		

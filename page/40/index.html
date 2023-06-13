@@ -154,73 +154,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2014/12/07/using-statements-for-static-classess/" itemprop="url">C# 6.0 New Features - Using statements for static classes</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-12-07T10:00:00-06:00" itemprop="datePublished">December  7, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Currently using statements are for namespaces only. With this new feature they can used for static classes as well. Like this:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.IO</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.IO.File</span><span class="p">;</span>
-
-<span class="k">namespace</span> <span class="nn">CSharp6Features</span>
-<span class="p">{</span>
-    <span class="k">class</span> <span class="nc">UsingStaticClass</span>
-    <span class="p">{</span>
-        <span class="k">public</span> <span class="k">class</span> <span class="nc">StaticUsing</span>
-        <span class="p">{</span>
-            <span class="k">public</span> <span class="nf">StaticUsing</span><span class="p">()</span>
-            <span class="p">{</span>
-                <span class="n">File</span><span class="p">.</span><span class="nf">WriteAllText</span><span class="p">(</span><span class="s">"C:\test.txt"</span><span class="p">,</span> <span class="s">"test"</span><span class="p">);</span>
-                <span class="nf">WriteAllText</span><span class="p">(</span><span class="s">"C:\test.txt"</span><span class="p">,</span> <span class="s">"test"</span><span class="p">);</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-</code></pre></div></div>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<p>I don’t think I liked this new feature. If you see a direct method call it feels like it’s a member of that method. But now it’s possible that method can be defined inside a static class somewhere else. I think it would just cause confusion and doesn’t add any benefit.</p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/12/06/auto-properties-with-initializers/" itemprop="url">C# 6.0 New Features - Auto-Properties with Initializers</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -374,6 +307,104 @@
   <li><a href="http://msdn.microsoft.com/en-us/magazine/dn802602.aspx" target="_blank" rel="noopener noreferrer">MSDN Magazine Article: The New and Improved C# 6.0</a></li>
   <li><a href="http://msdn.microsoft.com/en-us/magazine/dn683793.aspx" target="_blank" rel="noopener noreferrer">MSDN Magazine article: A C# 6.0 Language Preview</a></li>
   <li><a href="http://channel9.msdn.com/Events/Visual-Studio/Connect-event-2014/116" target="_blank" rel="noopener noreferrer">Channel 9 Video</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/04/uploading-files-to-s3-using-windows-powershell/" itemprop="url">Uploading files to AWS S3 using Windows PowerShell</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-04T16:30:00-06:00" itemprop="datePublished">December  4, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
+
+<!-- aws -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">s3, powershell</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Cloud computing is a relatively new concept, especially when compared to FTP which dates back to 70s (<a href="http://en.wikipedia.org/wiki/File_Transfer_Protocol#History_of_FTP_server" target="_blank" rel="noopener noreferrer">History of FTP server</a>). So not every device supports S3 uploads. If you cannot force a device to upload directly to S3 and have control over the FTP server machine (and assuming it’s running Windows) you can create a simple PowerShell script to upload files to S3.</p>
+
+<h3 id="ftp-to-s3">FTP to S3</h3>
+<p>First you need to install <a href="http://aws.amazon.com/powershell/" target="_blank" rel="noopener noreferrer">AWS Tools for Windows</a>. I tested on a couple of machines and the results were dramatically different. My main development machine is running Windows 8.1 and has PowerShell v4 on it. I had no issues with using AWS commandlets in this environment. The VM I tested has PS v2 on it and I had to make some changes first.</p>
+
+<h3 id="v2-vs-v4">v2 vs. v4</h3>
+<p>The problem is AWS module is not loaded and you have to do it yourself with this command</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import-module "C:\Program Files (x86)\AWS Tools\PowerShell\AWSPowerShell\AWSPowerShell.psd1"
+</code></pre></div></div>
+
+<p>After this command you can use AWS commandlets but when you close and open another shell it will be completely oblivious and will deny knowing what you’re talking about! To automate this process you need to add it to your profile. AWS documentation tells you to edit your profile straight away but the profile did not exist in my case. So first check if the profile exists:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Test-Path $profile
+</code></pre></div></div>
+<p>If you get “False” like I did then you need to create a new profile first.</p>
+
+<p><img src="/images/vpblogimg/2014/12/PowerShell-Profile-Check.png" alt=""></p>
+
+<p>To create the profile run the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>New-Item -path $profile -type file –force
+</code></pre></div></div>
+
+<p>then you can edit the profile by simply running</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>notepad $profile
+</code></pre></div></div>
+
+<p>Add the import-module command above and save the file. From now on every time you run PowerShell it will be ready to run AWS commandlets.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h3 id="time-to-upload">Time to upload</h3>
+<p>Now that we got over with troubleshooting we can finally upload our files. The commandlet we need is called Write-S3Object. The parameters it requires are the target bucket name, source file, target path, and the credentials.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Write-S3Object -BucketName my-bucket -File file.txt -Key subfolder/remote-file.txt -CannedACLName Private -AccessKey accesskey -SecretKey secretKey
+</code></pre></div></div>
+
+<p>Most likely you would like to upload a bunch of files under a folder. In order to accomplish that you can create a simple PowerShell script like this one:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$results = Get-ChildItem .\path\to\files -Recurse -Include "*.pdf" 
+foreach ($path in $results) {
+	Write-Host $path
+	$filename = [System.IO.Path]::GetFileName($path)
+	Write-S3Object -BucketName my-bucket -File $path -Key subfolder/$filename -CannedACLName Private -AccessKey accessKey -SecretKey secretKey
+}
+</code></pre></div></div>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://aws.amazon.com/powershell/" target="_blank" rel="noopener noreferrer">AWS Tools Download</a></li>
+  <li><a href="http://docs.aws.amazon.com/powershell/latest/userguide/pstools-getting-set-up.html" target="_blank" rel="noopener noreferrer">Setting up AWS Tools</a></li>
+  <li><a href="http://www.howtogeek.com/50236/customizing-your-powershell-profile/" target="_blank" rel="noopener noreferrer">Customizing Your Powershell Profile</a></li>
 </ul>
 
 

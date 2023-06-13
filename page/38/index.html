@@ -154,89 +154,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/exception-handling-improvements/" itemprop="url">C# 6.0 New Features - Exception-Handling Improvements</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-12-08T07:00:00-06:00" itemprop="datePublished">December  8, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>There are 2 improvements on exception handling:</p>
-
-<ol>
-  <li>Exception filters</li>
-  <li>Using await in catch and finally blocks</li>
-</ol>
-
-<h3 id="exception-filters">Exception Filters</h3>
-<p>Visual Basic and F# already have this feature and now C# has it too! the way it works is basically defining a condition for the catch block (example taken from <a href="http://channel9.msdn.com/Events/Visual-Studio/Connect-event-2014/116" target="_blank" rel="noopener noreferrer">Channel 9 video</a>):</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">try</span>
-<span class="p">{</span>
-
-<span class="p">}</span>
-<span class="k">catch</span><span class="p">(</span><span class="n">ConfigurationException</span> <span class="n">e</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">IsSevere</span><span class="p">)</span>
-<span class="p">{</span>
-
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>I think it can make exception handling more modular. Also it’s better than catching and rethrowing in terms of we don’t lose information about the original exception.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h3 id="using-await-in-catch-and-finally-blocks">Using await in catch and finally blocks</h3>
-<p>Like most people I hadn’t noticed we couldn’t do that already! Apparently it was just a flaw in the current implementation and they closed that gap with this version</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">try</span>
-<span class="p">{</span>
-
-<span class="p">}</span>
-<span class="k">catch</span><span class="p">(</span><span class="n">ConfigurationException</span> <span class="n">e</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">IsSevere</span><span class="p">)</span>
-<span class="p">{</span>
-	<span class="k">await</span> <span class="nf">LogAsync</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="k">finally</span>
-<span class="p">{</span>
-	<span class="k">await</span> <span class="nf">CloseAsync</span><span class="p">();</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/nameof-operator/" itemprop="url">C# 6.0 New Features - nameof Operator</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -401,6 +318,77 @@
 </code></pre></div></div>
 
 <p>They both produce the same results. The more complex the object hierarchy becomes the more useful this feature would be.</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/index-initializers/" itemprop="url">C# 6.0 New Features - Index Initializers</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-08T05:30:00-06:00" itemprop="datePublished">December  8, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>In current C# a collection initialization can be done like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;();</span>
+<span class="n">result</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="s">"index1"</span><span class="p">,</span> <span class="s">"value1"</span><span class="p">);</span>
+<span class="n">result</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="s">"index2"</span><span class="p">,</span> <span class="s">"value2"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>or key - value pairs can be added during initialization</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;()</span> 
+<span class="p">{</span>
+	<span class="p">{</span><span class="s">"index1"</span><span class="p">,</span> <span class="s">"value1"</span><span class="p">},</span>
+	<span class="p">{</span><span class="s">"index2"</span><span class="p">,</span> <span class="s">"value2"</span><span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>With C# 6.0 values at specific indices can be initialized like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;()</span> 
+<span class="p">{</span>
+	<span class="p">[</span><span class="s">"index1"</span><span class="p">]</span> <span class="p">=</span> <span class="s">"value1"</span><span class="p">,</span>
+	<span class="p">[</span><span class="s">"index2"</span><span class="p">]</span> <span class="p">=</span> <span class="s">"value2"</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>It’s a shorthand but not so much! I don’t see much value in this notation but I’m sure in time it will prove itself. I don’t think the guys in the language team are just adding random features!</p>
+
 
 		
 		

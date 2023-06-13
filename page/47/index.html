@@ -154,93 +154,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2014/05/24/programming-lego-mindstorms-ev3-net-api/" itemprop="url">Programming Lego Mindstorms EV3 with .NET API</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-05-24T11:15:14-05:00" itemprop="datePublished">May 24, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/devhobby">dev</a></span> -->
-
-<!-- dev, hobby -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    , 
-
-    <a href="/category/hobby">hobby</a>
-    
-</span>
-	<span class="tags">lego, mindstorms, ev3</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I had my eye on the new Lego Mindstorms set for a while. Finally I decided to order it from Amazon. It’s still a bit pricey but I think it’s worth it. I read nice review of EV3 <a href="http://geekmom.com/2013/08/ev3-review-lego-robot/" target="_blank" rel="noopener noreferrer">here</a> which also includes comparisons to the previous generation of the Mindstorms kit.</p>
-
-<p><img src="/images/vpblogimg/2014/05/EV3-01.jpg" alt="Lego Mindstorms EV3"></p>
-
-<h2 id="programming-ev3-the-official-way">Programming EV3: The Official Way</h2>
-<p>Programming the kit is very easy using Lego’s official graphical programming tool. You just have to drag and drop the components and fiddle with the parameters. Check out the following very basic application:</p>
-
-<p><img src="/images/vpblogimg/2014/05/EV3-02.png" alt="Lego Mindstorms EV3"></p>
-
-<p>It powers the motors connected to ports B and C. It keeps doing that in a loop as long as the value read from Infrared Sensor is larger than 20. If there is an object closer to 20 centimetres it breaks and ends the program.</p>
-
-<h2 id="programming-ev3-the-net-way">Programming EV3: The .NET Way</h2>
-<p>The .NET API is an open-source project. I recommend watching the introductory <a href="http://channel9.msdn.com/posts/LEGO-Mindstorms-EV3-API" target="_blank" rel="noopener noreferrer">video</a> which shows the basics. It shows how to move the robot by sending direct commands to turn the motors and how to read values from the sensors. The following part the test application shows the event handlers for the direction buttons and setup code to connect to the brick.</p>
-
-<p><img src="/images/vpblogimg/2014/05/EV3-04.png" alt="Lego Mindstorms EV3"></p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<p>I also added a similar implementation of the NXT-G program above. It’s a while loop which breaks when the value from the IR sensor is lower than 10.</p>
-
-<p><img src="/images/vpblogimg/2014/05/EV3-05.png" alt="Lego Mindstorms EV3"></p>
-
-<p>And voila! Now my clever robot senses the object in front of it and avoids the collision by stopping!</p>
-
-<p>You can find the source code for the test application on <a href="https://github.com/volkanpaksoy/lego/tree/master/projects/VP.Playground.Lego.EV3Test" target="_blank" rel="noopener noreferrer">GitHub</a></p>
-
-<h2 id="tips--tricks">Tips &amp; Tricks</h2>
-<ul>
-  <li>
-    <p>When I first implemented the NXT-G equivalent version the sensor value wasn’t updating properly. I checked the discussion forums in the CodePlex project page and found out that other people were having a similar issue. A workaround was adding the Thread.Sleep(10) line. After that I could read the updated sensor values without any problems. Although it doesn’t feel like the right solution it works fine as a temporary workaround.</p>
-  </li>
-  <li>
-    <p>During the testing and debugging I managed to crash the Lego brick a few times. First I feared I actually “bricked” the brick but luckily a reset resolved it. Resetting the brick is not obvious though, I had to check the manual for that. So in case you need to reset it you have to hold down Back, Center and Left buttons. Then release the Back button when the screen goes blank and release the other two when the screen says “Starting”.</p>
-  </li>
-</ul>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://geekmom.com/2013/08/ev3-review-lego-robot/" target="_blank" rel="noopener noreferrer">Lego EV3 review and comparison to NXT 2.0</a></li>
-  <li><a href="http://channel9.msdn.com/posts/LEGO-Mindstorms-EV3-API" target="_blank" rel="noopener noreferrer">Channel9 video on programming EV3 with .NET API</a></li>
-  <li><a href="https://github.com/volkanpaksoy/lego/tree/master/projects/VP.Playground.Lego.EV3Test" target="_blank" rel="noopener noreferrer">Source code for the test application</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/05/11/density-based-clustering-dbscan-algorithm/" itemprop="url">Density-based Clustering with DBSCAN Algorithm</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -347,6 +260,59 @@
 <h2 id="resources">Resources</h2>
 <ul>
   <li><a href="https://github.com/volkanpaksoy/VP.MachineLearning.GridClustering" target="_blank" rel="noopener noreferrer">Source code</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2014/04/18/rough-set-implementation/" itemprop="url">Rough set implementation</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-04-18T08:59:55-05:00" itemprop="datePublished">April 18, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">java, machine_learning</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>A rough set is an approximation of a set that gives the lower and upper borders of the set.</p>
+
+<h3 id="rough-set-implementation">Rough set implementation</h3>
+<p>The sample implementation starts off with reading the data set and the configuration file. The object and attribute index lists are acquired from the configuration. The items that have indices specified in the object list are considered as the set of objects and the rest of the items are the complement of the data set.</p>
+
+<p><img src="/images/vpblogimg/2014/04/Rought-Sets-01.png" alt="RoughSet 1"></p>
+
+<p>If a given index in attribute index list equal in both object list and complementary object list are not equal the object is considered to belong to the negative border, if not it belongs to the positive border.</p>
+
+<h3 id="sample-output">Sample Output</h3>
+<p><img src="/images/vpblogimg/2014/04/Rought-Sets-02.png" alt="RoughSet Sample Output"></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://en.wikipedia.org/wiki/Rough_set" target="_blank" rel="noopener noreferrer">Wikipedia article on rough sets</a></li>
+  <li><a href="https://github.com/volkanpaksoy/VP.MachineLearning.RoughSets" target="_blank" rel="noopener noreferrer">Source code</a></li>
 </ul>
 
 

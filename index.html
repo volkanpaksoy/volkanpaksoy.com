@@ -154,50 +154,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2023/06/08/Hosting-Email-on-AWS-EC2/" itemprop="url">Hosting Email using hMailServer on AWS EC2</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2023-06-08T01:00:00-05:00" itemprop="datePublished">June  8, 2023</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
-
-<!-- aws -->
-
-
-
-
-    <a href="/category/aws">aws</a>
-    
-</span>
-	<span class="tags">email, hmailserver, ec2</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Having your email server can be a good opportunity to learn more about the details of emails. To experiment with email features and especially to learn more about email security, I decided to install a mail server.</p>
-
-<p>There are many options to choose from, but having a GUI is beneficial when you’re exploring things so I decided to go with Windows and settled on <a href="https://www.hmailserver.com/" target="_blank" rel="noopener noreferrer">hMailServer</a> as the SMTP server.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://www.hmailserver.com/" target="_blank" rel="noopener noreferrer">hMailServer</a></li>
-  <li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2022/06/23/Powershell-Gotcha-Contains-Operator/" itemprop="url">Powershell Gotcha: Contains Operator</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -431,6 +387,157 @@ sudo chmod a+rX /mnt/sda/will
   <li><a href="https://www.plex.tv/media-server-downloads/#plex-media-server" target="_blank" rel="noopener noreferrer">Plex Downloads Page</a></li>
   <li><a href="https://magpi.raspberrypi.org/articles/samba-file-server" target="_blank" rel="noopener noreferrer">Samba: Set up a Raspberry Pi as a File Server for your local network</a></li>
   <li><a href="https://unix.stackexchange.com/questions/559299/plex-media-server-cannot-see-sub-folders-permissions-issue" target="_blank" rel="noopener noreferrer">Plex Media Server cannot see sub folders.. Permissions issue?</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2021/08/31/Using-Dymo-LabelWriter-450-with-a-Raspberry-Pi/" itemprop="url">Using Dymo LabelWriter 450 with a Raspberry Pi</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2021-08-31T01:00:00-05:00" itemprop="datePublished">August 31, 2021</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
+
+<!-- hobby -->
+
+
+
+
+    <a href="/category/hobby">hobby</a>
+    
+</span>
+	<span class="tags">raspberry_pi, productivity, dymo, labelwriter_450</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I have a Dymo LabelWriter 450 for years and I love using it. Especially it worked a miracle recently when I organised all ny shelves and bagged and labelled everything. To have the ability of keeping the printer online all the time and print easily I decided to plug it in a Raspberry Pi and share over the network. The steps below explain how it can be done easily:</p>
+
+<h2 id="step-01-plug-in-the-printer-to-the-pi-via-usb">Step 01: Plug in the printer to the Pi via USB</h2>
+<p>Simply plug it in and power it on.</p>
+
+<h2 id="step-02">Step 02:</h2>
+<ul>
+  <li>Click Pi -&gt; Preferences -&gt; Add / Remove Software</li>
+  <li>Search “dymo”</li>
+  <li>Tick the checkbox next to “printer driver for DYMO label printers”</li>
+  <li>Click Apply and wait for the installation to complete</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/01-add-drivers.jpg" alt=""></p>
+
+<h2 id="step-03-configure-printer">Step 03: Configure printer</h2>
+<ul>
+  <li>On the Pi itself, open a browser and go to “http://localhost:631”</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/02-configure-printer.jpg" alt=""></p>
+
+<ul>
+  <li>Click Administration and Add Printer. In the username/password prompt, use the account you used to log in (most likely username “pi”)</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/03-printer-administration.jpg" alt=""></p>
+
+<ul>
+  <li>You should see DYMO printer in the list of Local Printers</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/04-local-printer-list.jpg" alt=""></p>
+
+<ul>
+  <li>Change the name of the printer if you like and click Continue</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/05-add-printer-step-01.jpg" alt=""></p>
+
+<ul>
+  <li>Change the drivers if it’s incorrect and click Add Printer</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/06-add-printer-step-02.jpg" alt=""></p>
+
+<ul>
+  <li>Accept or modify the default options and click Set Default Options</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/07-add-printer-step-03.jpg" alt=""></p>
+
+<ul>
+  <li>Confirm the printer is listed in the printers list</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/08-add-printer-confirm.jpg" alt=""></p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h2 id="step-04-share-the-printer">Step 04: Share the printer</h2>
+<ul>
+  <li>Click Pi -&gt; Preferences -&gt; Print Settings</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/09-share-printer-step-01.jpg" alt=""></p>
+
+<ul>
+  <li>From Printer menu select Shared to share it over the network</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/10-share-printer-step-02.jpg" alt=""></p>
+
+<h2 id="step-05-setup-client-machine">Step 05: Setup client machine</h2>
+
+<h3 id="option-1-add-network-printer">Option 1: Add network printer</h3>
+
+<ul>
+  <li>Download and install DYMO software</li>
+  <li>Upon first run, application asks to run Add Network Printer Utility</li>
+  <li>Click Yes</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/11-add-network-printer-utility.png" alt=""></p>
+
+<p>For me, this method did work on one machine and did not work on another one. So for the other machine I used Option 2</p>
+
+<h3 id="option-2-add-printer-using-oss-add-printer-functionality">Option 2: Add printer using OS’s add printer functionality</h3>
+
+<p>I used a Mac for this but should be similar on Windows.</p>
+
+<ul>
+  <li>Search for Printers &amp; Scanners</li>
+  <li>Click + button</li>
+  <li>It should show the printer on the network:</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/12-add-printer.png" alt=""></p>
+
+<h2 id="step-06-test">Step 06: Test</h2>
+
+<p>Now that printer is recognized on the client machine, just design your labels and print using DYMO Label app.</p>
+
+<p><img src="/images/vpblogimg/2021/08/dymo-labelwriter-450-on-raspberry-pi/13-print-results.jpg" alt=""></p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://www.dymo.com/support?cfid=user-guide" target="_blank" rel="noopener noreferrer">Official DYMO site to download drivers and software</a></li>
 </ul>
 
 		

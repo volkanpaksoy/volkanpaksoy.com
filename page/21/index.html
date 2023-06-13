@@ -154,86 +154,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2016/01/11/aws-gotchas/" itemprop="url">Top 3 AWS Gotchas</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2016-01-11T12:00:00-06:00" itemprop="datePublished">January 11, 2016</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
-
-<!-- aws -->
-
-
-
-
-    <a href="/category/aws">aws</a>
-    
-</span>
-	<span class="tags">s3, ec2, eip</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I’ve been using AWS for a few years now and over the years I noticed there some questions that keep popping up. I was confused by these issues at first and as they look like they are tripping everybody up at some point I decided to compile of a small list of common gotchas. I’ll update this or post another when if I come across more of these.</p>
-
-<h2 id="1-the-s3-folder-delusion">1. The S3 folder delusion</h2>
-
-<p>When you AWS console you can create folders to group objects but this is just a delusion deliberately created by AWS to simplify the usage. In reality, S3 has a flat structure and all the objects are on the same level. Here’s the excerpt from AWS documentation that states this fact:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>In Amazon S3, buckets and objects are the primary resources, where objects are stored in buckets. Amazon S3 has a flat structure with no hierarchy like you would see in a typical file system. However, for the sake of organizational simplicity, the Amazon S3 console supports the folder concept as a means of grouping objects. Amazon S3 does this by using key name prefixes for objects.
-</code></pre></div></div>
-
-<p>So essentially AWS is just smart enough to recognize the standard folder notation we’ve been using for ages to make this things easier for us.</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h2 id="2-reserved-instance-confusion">2. Reserved instance confusion</h2>
-
-<p>Reserved instances cost less but require some resource planning and paying some money up-front. Although there is now an option to buy reserved instances with no upfront payment they generally shine on long-term commitments with heavy usage (always-on machines). The confusing bit you don’t reserve actual instances. Unfortunately management console doesn’t do a great job in bridging that gap and when you buy a reserved instance you don’t even know which running instance it covers.</p>
-
-<p>Basically you just buy a subscription for 1 or 3 years and you pay less for any machine that meets that criteria. For instance, say you reserved 1 Linux t1.small instance for 12 months and you are running 2 t1.small Linux instances at the moment. You will pay reserved instance prices for one of them and on-demand price for the other. From a financial point of view it doesn’t matter which one is which. If you shut down one of those instances, again regardless of the instance, you still pay for reserved instance price as it matches your reserved instance criteria.</p>
-
-<p>So that’s all there is to it really. Reserved instance is just about billing and has nothing to do with the actual running instances.</p>
-
-<h2 id="3-publicelastic-ip-uncertainty">3. Public/Elastic IP uncertainty</h2>
-
-<p>There are 3 types of IP addresses in AWS:</p>
-
-<p>Private IPs are internal IP that every instance are assigned. They remain the same throughout the lifespan of the instance and as the name implies they are not addressable from the Internet.</p>
-
-<p>Public IPs are optional. They remain the same as long as the instance is running but they are likely to change after a reboot. So they are not reliable for web-accessible applications.</p>
-
-<p>Elastic IPs are basically static IPs that never change. By default AWS gives up to 5 EIPs. If you need more you have to contact their support. They come free of charge as long as they are associated with a running instance. It costs a small amount if you just want to keep them around without using them though.</p>
-
-<h2 id="resources">Resources</h2>
-
-<ul>
-  <li><a href="http://docs.aws.amazon.com/AmazonS3/latest/UG/FolderOperations.html" target="_blank" rel="noopener noreferrer">AWS Documentation: Working with Folders</a></li>
-  <li><a href="https://aws.amazon.com/ec2/faqs/#Reserved_Instances" target="_blank" rel="noopener noreferrer">Reserved Instances FAQ</a></li>
-  <li><a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-instance-addressing.html" target="_blank" rel="noopener noreferrer">Amazon EC2 Instance IP Addressing</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/11/19/diy-pdf-viewer/" itemprop="url">A DIY PDF Reader</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -732,6 +652,512 @@
   <li><a href="http://content.tfl.gov.uk/tfl-colour-standard.pdf" target="_blank" rel="noopener noreferrer">TFL Colour Standards</a></li>
 </ul>
 
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/11/11/building-a-simple-http-server-with-nancy/" itemprop="url">Building a simple HTTP server with Nancy</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-11-11T05:30:00-06:00" itemprop="datePublished">November 11, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp, nancy</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Recently I needed to simulate HTTP responses from a 3rd party. I decided to use Nancy to quickly build a local web server that would handle my test requests and return the responses I wanted.</p>
+
+<p>Here’s the definition of Nancy from their official website:</p>
+
+<blockquote>
+  <p>Nancy is a lightweight, low-ceremony, framework for building HTTP based services on .Net and Mono.</p>
+</blockquote>
+
+<p>It can handle DELETE, GET, HEAD, OPTIONS, POST, PUT and PATCH requests. It’s very easy to customize and extend as it’s module-based. In order to build our tiny web server we are going to need self-hosting package:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package Nancy.Hosting.Self
+</code></pre></div></div>
+
+<p>This would automatically install Nancy as it depends on that package.</p>
+
+<h2 id="self-hosting-in-action">Self-hosting in action</h2>
+
+<p>The container application can be anything as long it keeps running one way or another. A background service would be ideal for this task. Since all I need is testing I just created a console application and added Console.ReadKey() statement to keep it “alive”</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Program</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="kt">string</span> <span class="n">_url</span> <span class="p">=</span> <span class="s">"http://localhost"</span><span class="p">;</span>
+    <span class="k">private</span> <span class="kt">int</span> <span class="n">_port</span> <span class="p">=</span> <span class="m">12345</span><span class="p">;</span>
+    <span class="k">private</span> <span class="n">NancyHost</span> <span class="n">_nancy</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">Program</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">uri</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span> <span class="s">$"</span><span class="p">{</span><span class="n">_url</span><span class="p">}</span><span class="s">:</span><span class="p">{</span><span class="n">_port</span><span class="p">}</span><span class="s">/"</span><span class="p">);</span>
+        <span class="n">_nancy</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">NancyHost</span><span class="p">(</span><span class="n">uri</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">_nancy</span><span class="p">.</span><span class="nf">Start</span><span class="p">();</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Started listennig port </span><span class="p">{</span><span class="n">_port</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">ReadKey</span><span class="p">();</span>
+        <span class="n">_nancy</span><span class="p">.</span><span class="nf">Stop</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">p</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Program</span><span class="p">();</span>
+        <span class="n">p</span><span class="p">.</span><span class="nf">Start</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>If you try this code, it’s likely that you’ll have an error (AutomaticUrlReservationCreationFailureException)</p>
+
+<p><img src="/images/vpblogimg/2015/11/self-hosting-with-nancy-AutomaticUrlReservationCreationFailureException.png" alt=""></p>
+
+<p>saying:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The Nancy self host was unable to start, as no namespace reservation existed for the provided url(s).
+
+Please either enable UrlReservations.CreateAutomatically on the HostConfiguration provided to 
+the NancyHost, or create the reservations manually with the (elevated) command(s):
+
+netsh http add urlacl url="http://+:12345/" user="Everyone"
+</code></pre></div></div>
+
+<p>There are 3 ways to resolve this issue and two of which are already suggested in the error message:</p>
+
+<ol>
+  <li>
+    <p>In an elevated command prompt (fancy way of saying run as administrator!), run</p>
+
+    <div class="language-plaintext highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> netsh http add urlacl url="http://+:12345/" user="Everyone"
+</code></pre></div>    </div>
+
+    <p>What add urlacl does is</p>
+
+    <blockquote>
+      <p>Reserves the specified URL for non-administrator users and accounts</p>
+    </blockquote>
+
+    <p>If you want to delete it later on you can use the following command</p>
+
+    <div class="language-plaintext highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> netsh http delete urlacl url=http://+:12345/
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<ol>
+  <li>
+    <p>Specify a host configuration to NancyHost like this:</p>
+
+    <div class="language-csharp highlighter-rouge">
+<div class="highlight"><pre class="highlight"><code> <span class="kt">var</span> <span class="n">configuration</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HostConfiguration</span><span class="p">()</span>
+ <span class="p">{</span>
+     <span class="n">UrlReservations</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">UrlReservations</span><span class="p">()</span> <span class="p">{</span> <span class="n">CreateAutomatically</span> <span class="p">=</span> <span class="k">true</span> <span class="p">}</span>
+ <span class="p">};</span>
+	
+ <span class="n">_nancy</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">NancyHost</span><span class="p">(</span><span class="n">configuration</span><span class="p">,</span> <span class="n">uri</span><span class="p">);</span>
+</code></pre></div>    </div>
+
+    <p>This essentially does the same thing and a UAC prompt pops up so it’s not that automatical!</p>
+  </li>
+  <li>
+    <p>Run the Visual Studio (and the standalone application when deployed) as administrator</p>
+  </li>
+</ol>
+
+<p>After applying either one of the 3 solutions, let’s run the application and try the address http://localhost:12345 in a browser and we get …</p>
+
+<p><img src="/images/vpblogimg/2015/11/self-hosting-with-nancy-404.png" alt=""></p>
+
+<p>Excellent! We are actually getting a response from the server even though it’s just a 404 error.</p>
+
+<p>Now let’s add some functionality, otherwise it isn’t terribly useful.</p>
+
+<h2 id="handling-requests">Handling requests</h2>
+<p>Requests are handled by <em>modules</em>. Creating a module is as simple as creating a class deriving from <em>NancyModule</em>. Let’s create two handlers for the root, one for GET verbs and one for POST:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">SimpleModule</span> <span class="p">:</span> <span class="n">Nancy</span><span class="p">.</span><span class="n">NancyModule</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nf">SimpleModule</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Get</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span> <span class="s">"Received GET request"</span><span class="p">;</span>
+
+        <span class="n">Post</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span> <span class="s">"Received POST request"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Nancy automatically discovers all modules so we don’t have to register them. If there are conflicting handlers the last one discovered overrides the previous ones. For example the following example would work fine and the second GET handler will be executed:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">SimpleModule</span> <span class="p">:</span> <span class="n">Nancy</span><span class="p">.</span><span class="n">NancyModule</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nf">SimpleModule</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Get</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span> <span class="s">"Received GET request"</span><span class="p">;</span>
+
+        <span class="n">Post</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span> <span class="s">"Received POST request"</span><span class="p">;</span>
+
+        <span class="n">Get</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span> <span class="s">"Let me have the request!"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="working-with-input-data-request-parameters">Working with input data: Request parameters</h2>
+<p>In the simple we used underscore to represent input as didn’t care but most of the time we would. In that case we can get the request parameters as a DynamicDictionary (a type that comes with Nancy). For example let’s create a route for <em>/user</em>:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="nf">SimpleModule</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Get</span><span class="p">[</span><span class="s">"/user/{id}"</span><span class="p">]</span> <span class="p">=</span> <span class="n">parameters</span> <span class="p">=&gt;</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(((</span><span class="kt">int</span><span class="p">)</span><span class="n">parameters</span><span class="p">.</span><span class="n">id</span><span class="p">)</span> <span class="p">==</span> <span class="m">666</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="s">$"All hail user #</span><span class="p">{</span><span class="n">parameters</span><span class="p">.</span><span class="n">id</span><span class="p">}</span><span class="s">! \\m/"</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="s">"Just a regular user!"</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>And send the GET request:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET http://localhost:12345/user/666 HTTP/1.1
+User-Agent: Fiddler
+Host: localhost:12345
+Content-Length: 2
+</code></pre></div></div>
+
+<p>which would return the response:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
+Content-Type: text/html
+Server: Microsoft-HTTPAPI/2.0
+Date: Tue, 10 Nov 2015 11:40:08 GMT
+Content-Length: 23
+
+All hail user #666! \m/
+</code></pre></div></div>
+
+<h2 id="working-with-input-data-request-body">Working with input data: Request body</h2>
+<p>Now let’s try to handle the data posted in the request body. Data posted in the body can be accessed though <strong>this.Request.Body</strong> property such as for the following request</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>POST http://localhost:12345/ HTTP/1.1
+User-Agent: Fiddler
+Host: localhost:12345
+Content-Length: 55
+Content-Type: application/json
+
+{
+    "username": "volkan",
+    "isAdmin": "sure!"
+}
+</code></pre></div></div>
+
+<p>this code would first convert the request stream to a string and deserialize it to a POCO:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Post</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">id</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="n">Body</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">length</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="n">Body</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">data</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="p">[</span><span class="n">length</span><span class="p">];</span>
+    <span class="n">id</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">length</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">body</span> <span class="p">=</span> <span class="n">System</span><span class="p">.</span><span class="n">Text</span><span class="p">.</span><span class="n">Encoding</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="nf">GetString</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+
+    <span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="n">JsonConvert</span><span class="p">.</span><span class="n">DeserializeObject</span><span class="p">&lt;</span><span class="n">SimpleRequest</span><span class="p">&gt;(</span><span class="n">body</span><span class="p">);</span>
+    <span class="k">return</span> <span class="m">200</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+<p>If the was posted from a form for example and sent in the following format in the body</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>username=volkan&amp;isAdmin=sure!
+</code></pre></div></div>
+
+<p>then we could simply convert it to a dictionary with a little bit of LINQ:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Post</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">parameters</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">id</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="n">Body</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="n">length</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="n">Body</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+    <span class="kt">byte</span><span class="p">[]</span> <span class="n">data</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="p">[</span><span class="n">length</span><span class="p">];</span>
+    <span class="n">id</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">length</span><span class="p">);</span>
+    <span class="kt">string</span> <span class="n">body</span> <span class="p">=</span> <span class="n">System</span><span class="p">.</span><span class="n">Text</span><span class="p">.</span><span class="n">Encoding</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="nf">GetString</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">p</span> <span class="p">=</span> <span class="n">body</span><span class="p">.</span><span class="nf">Split</span><span class="p">(</span><span class="sc">'&amp;'</span><span class="p">)</span>
+        <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">s</span> <span class="p">=&gt;</span> <span class="n">s</span><span class="p">.</span><span class="nf">Split</span><span class="p">(</span><span class="sc">'='</span><span class="p">))</span>
+        <span class="p">.</span><span class="nf">ToDictionary</span><span class="p">(</span><span class="n">k</span> <span class="p">=&gt;</span> <span class="n">k</span><span class="p">.</span><span class="nf">ElementAt</span><span class="p">(</span><span class="m">0</span><span class="p">),</span> <span class="n">v</span> <span class="p">=&gt;</span> <span class="n">v</span><span class="p">.</span><span class="nf">ElementAt</span><span class="p">(</span><span class="m">1</span><span class="p">));</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="s">"username"</span><span class="p">]</span> <span class="p">==</span> <span class="s">"volkan"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s">"awesome!"</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="s">"meh!"</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>This is nice but it’s a lot of work to read the whole and manually deserialize it! Fortunately Nancy supports model binding. First we need to add the using statement as the <strong>Bind</strong> extension method lives in <em>Nancy.ModelBinding</em></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>using Nancy.ModelBinding;
+</code></pre></div></div>
+
+<p>Now we can simplify the code by the help of model binding:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Post</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">Bind</span><span class="p">&lt;</span><span class="n">SimpleRequest</span><span class="p">&gt;();</span>
+    <span class="k">return</span> <span class="n">request</span><span class="p">.</span><span class="n">username</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>The important thing to note is to send the data with the appropriate content type. For the form data example the request should be like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>POST http://localhost:12345/ HTTP/1.1
+User-Agent: Fiddler
+Host: localhost:12345
+Content-Length: 29
+Content-Type: application/x-www-form-urlencoded
+
+username=volkan&amp;isAdmin=sure!
+</code></pre></div></div>
+
+<p>It also works for binding JSON to the same POCO.</p>
+
+<h2 id="preparing-responses">Preparing responses</h2>
+<p>Nancy is very flexible in terms of responses. As shown in the above examples you can return a string</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Post</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="s">"This is a valid response"</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>which would yield this HTTP message on the wire:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
+Content-Type: text/html
+Server: Microsoft-HTTPAPI/2.0
+Date: Tue, 10 Nov 2015 15:48:12 GMT
+Content-Length: 20
+
+This is a valid response
+</code></pre></div></div>
+
+<p>Response code is set to 200 - OK automatically and the text is sent in the response body.</p>
+
+<p>We can just set the code and return a response with a simple one-liner:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Post</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span> <span class="m">405</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>which would produce:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 405 Method Not Allowed
+Content-Type: text/html
+Server: Microsoft-HTTPAPI/2.0
+Date: Tue, 10 Nov 2015 15:51:36 GMT
+Content-Length: 0
+</code></pre></div></div>
+
+<p>To prepare more complex responses with headers and everything we can construct a new Response object like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Post</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">jsonString</span> <span class="p">=</span> <span class="s">"{ username: \"admin\", password: \"just kidding\" }"</span><span class="p">;</span>
+    <span class="kt">byte</span><span class="p">[]</span> <span class="n">jsonBytes</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="nf">GetBytes</span><span class="p">(</span><span class="n">jsonString</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="k">new</span> <span class="nf">Response</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">StatusCode</span> <span class="p">=</span> <span class="n">HttpStatusCode</span><span class="p">.</span><span class="n">OK</span><span class="p">,</span>
+        <span class="n">ContentType</span> <span class="p">=</span> <span class="s">"application/json"</span><span class="p">,</span>
+        <span class="n">ReasonPhrase</span> <span class="p">=</span> <span class="s">"Because why not!"</span><span class="p">,</span>
+        <span class="n">Headers</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;()</span>
+        <span class="p">{</span>
+            <span class="p">{</span> <span class="s">"Content-Type"</span><span class="p">,</span> <span class="s">"application/json"</span> <span class="p">},</span>
+            <span class="p">{</span> <span class="s">"X-Custom-Header"</span><span class="p">,</span> <span class="s">"Sup?"</span> <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="n">Contents</span> <span class="p">=</span> <span class="n">c</span> <span class="p">=&gt;</span> <span class="n">c</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="n">jsonBytes</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">jsonBytes</span><span class="p">.</span><span class="n">Length</span><span class="p">)</span>
+    <span class="p">};</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>and we would get this at the other end of the line:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 Because why not!
+Content-Type: application/json
+Server: Microsoft-HTTPAPI/2.0
+X-Custom-Header: Sup?
+Date: Tue, 10 Nov 2015 16:09:19 GMT
+Content-Length: 47
+
+{ username: "admin", password: "just kidding" }
+</code></pre></div></div>
+
+<p>Response also comes with a lot of useful methods like AsJson, AsXml and AsRedirect. For example we could simplify returning a JSON response like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Post</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">_</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">Response</span><span class="p">.</span><span class="n">AsJson</span><span class="p">&lt;</span><span class="n">SimpleResponse</span><span class="p">&gt;(</span>
+        <span class="k">new</span> <span class="nf">SimpleResponse</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">Status</span> <span class="p">=</span> <span class="s">"A-OK!"</span><span class="p">,</span> <span class="n">ErrorCode</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">Description</span> <span class="p">=</span> <span class="s">"All systems are go!"</span>
+        <span class="p">});</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>and the result would contain the appropriate header and status code:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Server: Microsoft-HTTPAPI/2.0
+Date: Tue, 10 Nov 2015 16:19:18 GMT
+Content-Length: 68
+
+{"status":"A-OK!","errorCode":1,"description":"All systems are go!"}
+</code></pre></div></div>
+
+<p>One extension I like is the AsRedirect method. The following example would return Google search results for a given parameter:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get</span><span class="p">[</span><span class="s">"/search"</span><span class="p">]</span> <span class="p">=</span> <span class="n">parameters</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">s</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="n">Query</span><span class="p">[</span><span class="s">"q"</span><span class="p">];</span>
+    <span class="k">return</span> <span class="n">Response</span><span class="p">.</span><span class="nf">AsRedirect</span><span class="p">(</span><span class="s">$"http://www.google.com/search?q=</span><span class="p">{</span><span class="n">s</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<h2 id="https">HTTPS</h2>
+<p>What if we needed to support HTTPS for our tests for some reason? Fear not, Nancy covers that too. By default, if we just try to use HTTPS by changing the protocol we would get this exception:</p>
+
+<blockquote>
+  <p>The connection to ‘localhost’ failed. 
+System.Security.SecurityException Failed to negotiate HTTPS connection with server.fiddler.network.https HTTPS handshake to localhost (for #2) failed. System.IO.IOException Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host.</p>
+</blockquote>
+
+<p>The solution is to add create a self-signed certificate and add it using netsh http add command. Here’s the step-by-step process:</p>
+
+<ol>
+  <li>Create a self-signed certificate: Open a Visual Studio command prompt and enter the following command:</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>makecert nancy.cer
+</code></pre></div></div>
+
+<p>You can provide more properties so that it would look with a name that makes sense. Here’s an MSD page to</p>
+
+<ol>
+  <li>Run mmc and add Certificates snap-in. Make sure to select <strong>Computer Account</strong>.</li>
+</ol>
+
+<p><img src="/images/vpblogimg/2015/11/self-hosting-with-nancy-cert-account.png" alt=""></p>
+
+<p>I selected <em>My User Account</em> at first and it gave the following error:</p>
+
+<blockquote>
+  <p>SSL Certificate add failed, Error: 1312 A specified logon session does not exist. It may already have been terminated.</p>
+</blockquote>
+
+<p>In that case the solution is just to drag and drop the certificate to the computer account as shown below:</p>
+
+<p><img src="/images/vpblogimg/2015/11/self-hosting-with-nancy-cert-store.png" alt=""></p>
+
+<ol>
+  <li>
+    <p>Right-click on Certificates (Local Computer) -&gt; Personal -&gt; Certificates and select All tasks -&gt; Import and browse to nancy.cer file created in Step 1</p>
+  </li>
+  <li>
+    <p>Double-click on the certificate, switch to Details tab and scroll to the bottom and copy the Thumbprint value (and remove the spaces after copied it)</p>
+  </li>
+</ol>
+
+<p><img src="/images/vpblogimg/2015/11/self-hosting-with-nancy-cert-thumbnail.png" alt=""></p>
+
+<ol>
+  <li>Now enter the following commands. The first one is the same as before, just with HTTPS as protocol. The second command add the certificate we’ve just created.</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>netsh http add urlacl url=https://+:12345/ user="Everyone"
+
+netsh http add sslcert ipport=0.0.0.0:1234 ccerthash=653a1c60d4daaae00b2a103f242eac965ca21bec appid={A0DEC7A4-CF28-42FD-9B85-AFFDDD4FDD0F} clientcertnegotiation=enable
+</code></pre></div></div>
+
+<p>Here appid can be any GUID.</p>
+
+<p>Let’s take it out for a test drive:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Get</span><span class="p">[</span><span class="s">"/"</span><span class="p">]</span> <span class="p">=</span> <span class="n">parameters</span> <span class="p">=&gt;</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="s">"Response over HTTPS! Weeee!"</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>This request</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET https://localhost:12345 HTTP/1.1
+Host: localhost:12345
+
+
+</code></pre></div></div>
+
+<p>returns this response</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 200 OK
+Content-Type: text/html
+Server: Microsoft-HTTPAPI/2.0
+Date: Wed, 11 Nov 2015 10:24:58 GMT
+Content-Length: 27
+
+Response over HTTPS! Weeee!
+</code></pre></div></div>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>There are a few alternatives when you need a small web server to test something locally. Nancy is one of them. It’s easy to configure, use and it’s lightweight. Apparently you can even <a href="https://github.com/NancyFx/Nancy/wiki/Running-Nancy-on-your-Raspberry-Pi" target="_blank" rel="noopener noreferrer">host in on a Raspberry Pi!</a></p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="http://nancyfx.org/" target="_blank" rel="noopener noreferrer">Official Nancy site</a></li>
+  <li><a href="https://github.com/NancyFx" target="_blank" rel="noopener noreferrer">GitHub repository</a></li>
+  <li><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/cc307223(v=vs.85).aspx" target="_blank" rel="noopener noreferrer">Windows Dev Centre reference for add urlacl</a></li>
+  <li><a href="https://msdn.microsoft.com/en-us/library/bfsktky3(v=vs.110).aspx" target="_blank" rel="noopener noreferrer">MSDN Reference for Makecert</a></li>
+  <li><a href="https://github.com/NancyFx/Nancy/wiki/Accessing-the-client-certificate-when-using-SSL" target="_blank" rel="noopener noreferrer">Accessing the client certificate when using SSL</a></li>
+  <li><a href="https://coderead.wordpress.com/2014/08/07/enabling-ssl-for-self-hosted-nancy/" target="_blank" rel="noopener noreferrer">Blogpost: Enabling SSL for Self-Hosted Nancy</a></li>
+  <li><a href="https://github.com/NancyFx/Nancy/wiki/Running-Nancy-on-your-Raspberry-Pi" target="_blank" rel="noopener noreferrer">Running Nancy on your Raspberry Pi</a></li>
+</ul>
 
 		
 		

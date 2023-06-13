@@ -154,67 +154,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2013/06/28/electronics-101/" itemprop="url">Electronics 101</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2013-06-28T10:51:13-05:00" itemprop="datePublished">June 28, 2013</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
-
-<!-- hobby -->
-
-
-
-
-    <a href="/category/hobby">hobby</a>
-    
-</span>
-	<span class="tags">electronics</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Playing with Gadgeteer fuelled my enthusiasm so I dusted off my solderless breadboard and basic electronics components that came with the basic kit I bought a while ago.</p>
-
-<p><img src="/images/vpblogimg/2013/06/Electronics101_02.jpg" alt="Electronics"></p>
-
-<p>I don’t know what most of those things are but I decided to start with a simple circuit that lights an LED. After burning a few LEDs I learned that it would be a good idea to use a resistor in the circuit in order not to fry the LED. Reading resistors turned out to be a pain though! They are colour-coded and you have to know the value of each colour. I found here a nice calculator to free myself from that unnecessary waste of time: <a href="http://www.csgnetwork.com/resistcolcalc.html" target="_blank" rel="noopener noreferrer">http://www.csgnetwork.com/resistcolcalc.html</a></p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<p>Yet there was another problem. All the sources I had found were talking about 3 bands. But my resistors had 5 colour bands! After spending some more time I learned that there is also a 5-colour version of resistors. Here is the calculator for the 5-band version: <a href="http://www.diyalarmforum.com/5-band-resistor-calc" target="_blank" rel="noopener noreferrer">http://www.diyalarmforum.com/5-band-resistor-calc</a></p>
-
-<p>The problem is they are so tiny that it’s not always easy to distinguish the colours. Anyway, I decided to pick one and hope for the best.</p>
-
-<p>The next challenge is using the breadboard. Even though it’s meant to make life easier for circuit builders there’s a still a few things to learn about it which are not very intuitive. I found a nice video on Youtube to learn the basics: <a href="http://www.youtube.com/watch?v=k9jcHB9tWko" target="_blank" rel="noopener noreferrer">http://www.youtube.com/watch?v=k9jcHB9tWko</a></p>
-
-<p>After playing around a little bit a finally managed to light a LED which was nice but didn’t feel like much of an accomplishment. It required too much time to achieve something so trivial.</p>
-
-<p><img src="/images/vpblogimg/2013/06/Electronics101_01.jpg" alt="Electronics"></p>
-
-<p>I think I’ll need various components to build something significant. The kit I have looks very limited. But before I invest more money into this I think I’ll keep playing with more high-level products like Gadgeteer, Netduino and Arduino. If I can incorporate breadboard and lower-level components into systems using those that would a bonus but without such powerful controllers I don’t think I’ll get satisfying results with circuits built on a solderless breadboard.</p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2013/06/27/playing-with-net-gadgeteer/" itemprop="url">Playing with .NET Gadgeteer</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -356,6 +295,88 @@ They have a great step-by-step tutorial (see References down below). After follo
   <li><a href="http://www.troyhunt.com/2013/04/the-beginners-guide-to-breaking-website.html" target="_blank" rel="noopener noreferrer">Troy Hunt’s blogpost</a></li>
   <li><a href="https://wifipineapple.com/?flashing" target="_blank" rel="noopener noreferrer">Flashing the device</a></li>
   <li><a href="http://news.cnet.com/8301-31921_3-57394889-281/five-ways-to-protect-yourself-from-wi-fi-honeypots/" target="_blank" rel="noopener noreferrer">Protecting from WiFi Honeypots</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2013/03/19/roll-your-own-cloud-with-owncloud/" itemprop="url">Roll your own cloud with ownCloud</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2013-03-19T19:52:29-05:00" itemprop="datePublished">March 19, 2013</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/sysops">sysops</a></span> -->
+
+<!-- sysops -->
+
+
+
+
+    <a href="/category/sysops">sysops</a>
+    
+</span>
+	<span class="tags">cloud_computing, system_administration, owncloud</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Evernote has been recently hacked. Dropbox has been hacked many times. Who knows what’s going in the other services we are using. So I decided to phase out my cloud service providers and create my own cloud.
+There are bunch of ways of running this tool. For instance, you can just download a VM image with everything installed. I decided to start from scratch and perform a manual installation on a new Ubuntu server. It’s very easy. First we need to install dependencies:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt-get install apache2 php5 php5-gd php-xml-parser php5-intl
+apt-get install php5-sqlite php5-mysql smbclient curl libcurl3 php5-curl
+</code></pre></div></div>
+
+<p>Then extract the downladed compressed file:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tar -xjf path/to/downloaded/owncloud-x.x.x.tar.bz2
+cp -r owncloud /path/to/your/webserver
+</code></pre></div></div>
+
+<p>Set the directory permissions:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chown -R www-data:www-data /path/to/your/owncloud/
+</code></pre></div></div>
+
+<p>Enable .htaccess by settings AllowOverride to “All” in /var/www directory in Apache config which is in /etc/apache2/sites-enabled/000-default on Ubuntu
+Finally run mod_rewrite:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>a2enmod rewrite
+a2enmod headers
+</code></pre></div></div>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>I got these instructions from Admin Manual which can be found here: <a href="http://doc.owncloud.com/server/2012.4.5/ownCloudAdminManual.pdf" target="_blank" rel="noopener noreferrer">ownCloud Admin Manual</a> It’s quite straighforward. Then all we have to do is navigate to login page, create an admin account and start uploading files:</p>
+
+<p><img src="/images/vpblogimg/2013/03/ownCloud.png" alt="Own Cloud"></p>
+
+<p>My favourite features are:</p>
+
+<ul>
+  <li>Ability to share password protected links with specific users</li>
+  <li>Ability to set expiry date to shared files</li>
+  <li>Ability to sync mulitple local folders (it doesn’t have to mimic the directory structure of server, you can select and map separate folders)</li>
+  <li>Supports plugins. A simple note taking plugin is quite helpful to take and sync notes. Also I installed YubiAuth plugin which supposedly enables using my Yubikey with it. But couldn’t make it work yet.
+My only negative observation about it is SMTP settings didn’t work. When I tried to send someone a link of shared file I got a bizarre error. On their forums I saw other people having similar problems. To me it’s not a crucial issue (as a single user, who am I going to mail anyway) but for an organization it may quickly become an annoying issue.</li>
 </ul>
 
 		

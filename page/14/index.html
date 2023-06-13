@@ -154,108 +154,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2018/07/21/Row-Against-the-Machine-Getting-Rowing-Data-Out-of-Concept2-Model-D/" itemprop="url">Row Against the Machine: Getting Rowing Data Out of Concept2 Model D</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2018-07-21T01:00:00-05:00" itemprop="datePublished">July 21, 2018</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/hobby">hobby</a></span> -->
-
-<!-- hobby -->
-
-
-
-
-    <a href="/category/hobby">hobby</a>
-    
-</span>
-	<span class="tags">fitness, concept2, rowing</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>I’ve been using a Concept2 Model D rowing machine for some time now and quite enjoying it as a form of workout. (Primarily because I can still watch Netflix or Youtube while rowing!)</p>
-
-<p><img src="/images/vpblogimg/2018/07/concept2-model-c.jpg" alt="Concept2 Model C Rowing Machine"></p>
-
-<p>Since I have some data accumulated in it I decided to have a look into ways of getting it and working on it hoping that it give me some insights about possible ways of improving my stats.</p>
-
-<h2 id="official-tools">Official Tools</h2>
-<p>To be honest the existing toolset that comes out of the box is quite sufficient.</p>
-
-<h3 id="logbook">LogBook</h3>
-<p>This is the official web application where you can monitor your workouts.</p>
-
-<p><img src="/images/vpblogimg/2018/07/concept2-logbook.png" alt="Concept LogBook"></p>
-
-<p>This application is quite good really. You can manually enter your workouts, view the existing history. Create teams and participate in challenges so there’s also a social aspect to it.</p>
-
-<h3 id="ios-app-ergdata">iOS App: ErgData</h3>
-<p>The monitor connected to the rowing machine (Performance Monitor - PM5) supports Bluetooth connection which can be easily paired with an iPhone. If you install ErgData app on your phone you can sync the device with your phone  and get them out that way very easily. Better yet, it allows you to upload your workouts to LogBook. After you complete a workout, you can easily upload the results by clicking Sync.</p>
-
-<p><img src="/images/vpblogimg/2018/07/concept2-ergdata.jpeg" alt="Concept2 ErgData app"></p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h2 id="unofficial-tools">Unofficial Tools</h2>
-
-<h3 id="raspirowing">RasPiRowing</h3>
-<p>I found this nice Raspberry Pi based project called <a href="https://raspirowing.com/" target="_blank" rel="noopener noreferrer">RasPiRowing</a> developed one of the staff members of Concept.</p>
-
-<p>Since I’m a fan of Raspberry Pi have a whole bunch of them lyting around, it didn’t take me long to install it and use it. It works just fine and comes with a fun fish game too:</p>
-
-<p><img src="/images/vpblogimg/2018/07/concept2-fish-pi-game.jpg" alt="FishPi Game"></p>
-
-<p>It’s a nice way of interacting with the Concept2. Since it can be accessed by a Python application I can build my own applications as well to get data out of the erg.</p>
-
-<h2 id="developer-tools">Developer Tools</h2>
-
-<h3 id="sdk">SDK</h3>
-<p>There is an <a href="http://www.concept2.co.uk/service/software/software-development-kit" target="_blank" rel="noopener noreferrer">SDK</a> available to download for both Mac and Windows.</p>
-
-<p>I installed the Mac version which extracts the files under /Users/{username}/C2 PM SDK/</p>
-
-<p>But I couldn’t find much useful stuff in there:</p>
-
-<p><img src="/images/vpblogimg/2018/07/concept2-sdk.png" alt="SDK contents"></p>
-
-<p>Tried to build the XCode project but gave a build error and I just left it at that.</p>
-
-<h3 id="api">API</h3>
-<p>They also provide an API wich can be used to get the data out. This sounds the most interesting part to me as I can develop my own custom tools based on this API.</p>
-
-<p>In the documentation, they advise to use the dev site first while trying out the API and then request using the live data. Also you need to register your application with Concept2 to be able to use their APIs.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://log.concept2.com/login" target="_blank" rel="noopener noreferrer">Concept2 Logbook</a></li>
-  <li><a href="http://www.concept2.co.uk/service/software/software-development-kit" target="_blank" rel="noopener noreferrer">Concept2 SDK</a></li>
-  <li><a href="http://log.concept2.com/developers/documentation/" target="_blank" rel="noopener noreferrer">Logbook API Documentation</a></li>
-  <li><a href="https://raspirowing.com/" target="_blank" rel="noopener noreferrer">RasPiRowing</a></li>
-</ul>
-
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2018/07/20/Verifying-Data-Integrity-with-AWS-S3/" itemprop="url">Verifying Data Integrity with AWS S3</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -796,6 +694,275 @@
   <li><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-vpc.html#differences-ec2-classic-vpc" target="_blank" rel="noopener noreferrer">AWS Docs: Differences Between EC2-Classic and EC2-VPC
 </a></li>
   <li><a href="https://aws.amazon.com/architecture/well-architected/" target="_blank" rel="noopener noreferrer">AWS Well-Architected</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2018/06/26/Automated-Email-Processing-with-AWS-SES-and-Lambda/" itemprop="url">Automated Email Processing with AWS SES and Lambda</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2018-06-26T01:00:00-05:00" itemprop="datePublished">June 26, 2018</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
+
+<!-- dev, aws -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">ses, lambda</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>A few years ago AWS announced a new SES feature: Incoming Emails. So far I have only used it once to receive domain verification emails to an S3 bucket but haven’t built a meaningful project. In this blog post my goal is to develop a sample project to demonstrate receiving emails with SES and processing those emails automatically by triggering Lambda functions.</p>
+
+<p>As a demo project I will build a system that automatically responds to a sender with my latest CV as shown in the diagram below</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-00-architecture.png" alt=""></p>
+
+<h2 id="receiving-email-with-amazon-simple-email-service">Receiving Email with Amazon Simple Email Service</h2>
+<p>Amazon Simple Email Service (SES) is Amazon’s SMTP server. It’s core functionality has been sending emails but Amazon kept adding more features such as using templates and receiving emails.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h3 id="step-1-verify-a-new-domain">Step 1: Verify a New Domain</h3>
+<p>First, we need a verified domain to receive emails. If you already have one you ca skip this step.</p>
+
+<ul>
+  <li>Step 1.1: In the SES console, click Domains –&gt; Verify a New Domain</li>
+  <li>Step 1.2: Enter the domain name to verify and click Verify This Domain</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-01-verify-domain.png" alt=""></p>
+
+<ul>
+  <li>Step 1.3: In the new dialog click Use Route 53</li>
+</ul>
+
+<p>(This is assuming your domain is in Route53. If not you have to verify it by other means)</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-02-verify-domain-confirmation.png" alt=""></p>
+
+<ul>
+  <li>Step 1.4: Make sure you check Email Receiving Record checkbox and proceed</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-03-verify-domain-create-record-sets.png" alt=""></p>
+
+<ul>
+  <li>Step 1.5 Confirm verification status</li>
+</ul>
+
+<p>Go back to Domains page in SES console and make sure the verification has been completed successfully</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-04-verify-domain-confirm-results.png" alt=""></p>
+
+<p>In my example, it only took about 2 minutes.</p>
+
+<h3 id="step-2-create-a-lambda-function-to-send-the-cv">Step 2: Create a Lambda function to send the CV</h3>
+
+<p>In the next step we will continue to configure SES to specify what to do with the received email. But first we need the actual Lambda function to do the work. Then we will connect this to SES so that it runs everytime when we receive an email to a specific email.</p>
+
+<ul>
+  <li>Step 2.1: Create a Lambda function from scratch</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-06-create-lambda.png" alt=""></p>
+
+<ul>
+  <li>Step 2.2: Create an SNS topic</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-08-create-sns-topic.png" alt=""></p>
+
+<p>SES will publish emails to this topic. We will do the plumbing and give necessary permissions later.</p>
+
+<ul>
+  <li>Step 2.3: Create subscription for the Lambda function to SNS topic</li>
+</ul>
+
+<p>Now we tie the topic to our Lambda by creating a subscription</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-10-create-sns-subscription.png" alt=""></p>
+
+<ul>
+  <li>Step 2.4: Attach necessary permissions to the new role</li>
+</ul>
+
+<p>In my example, I store my CV in an S3 bucket. So the policy would need to receive SNS notifications, read access to S3 bucket and permissions to send emails.</p>
+
+<p>By default a new Lambda role comes with AWSLambdaBasicExecutionRole attached to it</p>
+
+<p>First add this to have read-only access to a single bucket:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VisualEditor0"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"s3:GetObjectAcl"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"s3:GetObject"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"s3:ListBucket"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"arn:aws:s3:::{BUCKET NAME}"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"arn:aws:s3:::*/*"</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Then this to be able to send emails</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VisualEditor0"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"ses:SendEmail"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"ses:SendTemplatedEmail"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"ses:SendRawEmail"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nl">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>I like to keep these small, modular policies so that I can reuse then in other projects.</p>
+
+<p>After adding the policies you should be able to see these in your Lambda function’s access list when you refresh the function’s page:</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-07-updated-permissions.png" alt=""></p>
+
+<h3 id="step-3-develop-the-lambda-function">Step 3: Develop the Lambda function</h3>
+
+<p>In this exmample I’m going to use a .NET Core and C# 2.0 to create the Lambda function.</p>
+
+<ul>
+  <li>Step 3.1: Install Lambda templates</li>
+</ul>
+
+<p>In Windows, AWS Lambda function templates come with AWS Visual Studio extension but in Mac we have to install them via command line.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet new -i Amazon.Lambda.Templates::*
+</code></pre></div></div>
+
+<ul>
+  <li>Step 3.2: Create Lambda function</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet new lambda.EmptyFunction --name SendEmailWithAttachmentFromS3 --profile default --region eu-west-1
+</code></pre></div></div>
+
+<ul>
+  <li>Step 3.3:</li>
+</ul>
+
+<p>Now it’s time for the actual implementation. I’m not going to paste the whole code here. Best place to get it is its <a href="https://github.com/volkanpaksoy/lab/tree/master/blog/SendEmailWithAttachmentFromS3/src/SendEmailWithAttachmentFromS3" target="_blank" rel="noopener noreferrer">GitHub repository</a></p>
+
+<ul>
+  <li>Step 3.4 Deploy the function</li>
+</ul>
+
+<p>Create an IAM user with access to Lambda deployment and create a profile locally named deploy-lambda-profile.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dotnet restore
+dotnet lambda deploy-function send_cv
+</code></pre></div></div>
+
+<h3 id="step-4-create-a-receipt-rule">Step 4: Create a Receipt Rule</h3>
+<p>Now that we have a verified domain, we need a rule to receive emails.</p>
+
+<p>In my example project, I’m going to use an email address that will send my latest CV to a provided email adress.</p>
+
+<ul>
+  <li>
+    <p>Step 4.1: In the Email Receiving section click on Rule Sets –&gt; Create a Receipt Rule</p>
+  </li>
+  <li>
+    <p>Step 4.2: Add a recipient</p>
+  </li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-05-add-recipient.png" alt=""></p>
+
+<ul>
+  <li>Step 4.3: Add an Action</li>
+</ul>
+
+<p>Now we choose what to do when an email is received. In this example I want it to be published to an SNS topic that I created earlier. I could invoke the Lambda function directly but leveraging publish/subscribe gives me more flexibility as in I can change the subscriber in the future or add more stuff to do without affecting the rule configuration.</p>
+
+<p>Since it supports multiple actions I could choose to invoke Lambda directly and add more actions here later on if need be but I’d like to use a standard approach which is all events are published to SNS and the interested parties subscribe to the topics.</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-09-add-action.png" alt=""></p>
+
+<p>I chose UTF-8 because I’m not expecting any data in the message body so it doesn’t matter too much in this example.</p>
+
+<ul>
+  <li>Step 4.4 Give it a name and create the rule.</li>
+</ul>
+
+<h2 id="step-4-test-end-to-end">Step 4: Test end-to-end</h2>
+
+<p>Now that it’s all set up, it is time to test.</p>
+
+<ul>
+  <li>Step 4.1: Send a blank email to cv@vlkn.me (Or any other address if you’re setting up your own)</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-11-test-send-email.png" alt=""></p>
+
+<ul>
+  <li>Step 4.2:</li>
+</ul>
+
+<p>Then after a few seconds later, receive an email with the attachment:</p>
+
+<p><img src="/images/vpblogimg/2018/06/process-email-with-ses-12-test-confirm-email.png" alt=""></p>
+
+<p>The second email is optional. Basically, I creted an email subscriber too. So that whenever a blank email is received I get notified by SNS directly. This helps me to keep an eye on traffic if there is any.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/SendEmailWithAttachmentFromS3/src/SendEmailWithAttachmentFromS3" target="_blank" rel="noopener noreferrer">Demo Source Code</a></li>
+  <li><a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html" target="_blank" rel="noopener noreferrer">Receiving Email with Amazon SES</a></li>
+  <li><a href="https://aws.amazon.com/blogs/aws/new-receive-and-process-incoming-email-with-amazon-ses/" target="_blank" rel="noopener noreferrer">AWS Blog: Receive and Process Incoming Email with Amazon SES</a></li>
+  <li><a href="https://aws.amazon.com/blogs/messaging-and-targeting/introducing-email-templates-and-bulk-sending/" target="_blank" rel="noopener noreferrer">Introducing Email Templates and Bulk Sending</a></li>
+  <li><a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-dotnet-coreclr-deployment-package.html" target="_blank" rel="noopener noreferrer">.NET Core CLI</a></li>
+  <li><a href="https://github.com/aws/aws-lambda-dotnet/tree/master/Libraries/src/Amazon.Lambda.SNSEvents" target="_blank" rel="noopener noreferrer">Amazon.Lambda.SNSEvents</a></li>
+  <li><a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html" target="_blank" rel="noopener noreferrer">Sending Personalized Email Using the Amazon SES API</a></li>
 </ul>
 
 		

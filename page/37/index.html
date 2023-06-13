@@ -154,118 +154,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2014/12/11/update-aws-security-groups-with-powershell/" itemprop="url">Update AWS Security Groups with PowerShell</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-12-11T18:30:00-06:00" itemprop="datePublished">December 11, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/awssecurity">aws</a></span> -->
-
-<!-- aws, security -->
-
-
-
-
-    <a href="/category/aws">aws</a>
-    , 
-
-    <a href="/category/security">security</a>
-    
-</span>
-	<span class="tags">powershell, ec2</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>Here’s the scenario:</p>
-
-<ul>
-  <li>You use AWS</li>
-  <li>You don’t have a static IP</li>
-  <li>You connect to your EC2 instances via SSH and/or RDP only from your IP</li>
-  <li>You are too lazy to update the security groups manually when your IP changes!</li>
-</ul>
-
-<p>You’ve come to the right place: I’ve got the solution.</p>
-
-<p>Let’s have a look how it’s built step-by-step:</p>
-
-<h3 id="step-1-create-an-iam-account-to-access-security-groups">Step 1: Create an IAM account to access security groups</h3>
-<p>As a general rule of thumb always grant the minimum privileges possible to the accounts you use. Create a new user and go to the user’s details. Select <em>Attach User Policy</em> and then <em>Policy Generator</em>. Select <em>AWS EC2</em> from the services list. For our script to run we need 3 privileges: List security groups (<em>DescribeSecurityGroups</em>), delete old IP permissions (<em>RevokeSecurityGroupIngress</em>) and add new IP permissions (<em>AuthorizeSecurityGroupIngress</em>).</p>
-
-<p><img src="/images/vpblogimg/2014/12/iam-security-group-user.png" alt=""></p>
-
-<p>Alternatively you can just attach the following policy to your user:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "Stmt1418339796000",
-      "Effect": "Allow",
-      "Action": [
-        "ec2:AuthorizeSecurityGroupIngress",
-        "ec2:DescribeSecurityGroups",
-        "ec2:RevokeSecurityGroupIngress"
-      ],
-      "Resource": [
-        "*"
-      ]
-    }
-  ]
-}
-</code></pre></div></div>
-
-<p>IAM has a very nice simulation feature. Before you proceed I recommend you run it and verify only 3 actions are allowed.</p>
-
-<p><img src="/images/vpblogimg/2014/12/aws-iam-policy-simulator.png" alt=""></p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h3 id="step-2-modify-the-powershell-script">Step 2: Modify the PowerShell script</h3>
-<p>The script I created is on Gist as seen below. Before you can use it you have to update it with the access and secret keys of the user created above.</p>
-
-<p>Also since fiddling with security groups can become messy very quickly I’d strongly recommend you perform a dry run first. By default <em>$dryRun</em> is set to true. Unless you set it to <em>$false</em> it will only display what it is going to do but will not take any action. So make sure you know what you’re doing before you give it a go. I don’t think this script will be a ready-made script for anyone. Probably would need some tweaking here and there to tailor to your needs. But this version works for me so here it is:</p>
-
-<noscript><pre>400: Invalid request</pre></noscript>
-<script src="https://gist.github.com/c99400aec7e519626d9b6d0d1cf409aa.js"> </script>
-
-<p>First it gets a list of security groups that have SSH and RDP permissions in them. Then loops through these permissions and compares the IP address with the current one. I used my own external IP checker service that I’ve recently developed as I <a href="https://volkanpaksoy.com/archive/2014/12/08/simple-api-with-nodejs/">blogged here</a>. You can use other services as well. Just make sure you change the URL in the script. My service returns a JSON object so if the method you use returns a different format you need to modify the parsing code as well.</p>
-
-<p>If the IP addresses are different, it revokes the old permission and creates a new one with your current IP. Protocol and ports remain intact.</p>
-
-<p>This is the output of the script:</p>
-
-<p><img src="/images/vpblogimg/2014/12/aws-security-group-update-script.png" alt=""></p>
-
-<p>If the IP addresses for port 22 an 3389 are up-to-date it just displays “<em>Security group is up-to-date</em>” so it can be run consecutively. So you can schedule it to run as often as you want.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://docs.aws.amazon.com/powershell/latest/userguide/pstools-welcome.html" target="_blank" rel="noopener noreferrer">AWS PowerShell Tools documentation</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/simple-api-with-nodejs/" itemprop="url">A simple REST API with Node.js</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -491,6 +379,89 @@ its default configuration SHOULD contain an obfuscated identifier as described i
   <li><a href="http://msdn.microsoft.com/en-us/magazine/dn683793.aspx" target="_blank" rel="noopener noreferrer">MSDN Magazine article: A C# 6.0 Language Preview</a></li>
   <li><a href="http://channel9.msdn.com/Events/Visual-Studio/Connect-event-2014/116" target="_blank" rel="noopener noreferrer">Channel 9 Video</a></li>
 </ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/exception-handling-improvements/" itemprop="url">C# 6.0 New Features - Exception-Handling Improvements</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-08T07:00:00-06:00" itemprop="datePublished">December  8, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>There are 2 improvements on exception handling:</p>
+
+<ol>
+  <li>Exception filters</li>
+  <li>Using await in catch and finally blocks</li>
+</ol>
+
+<h3 id="exception-filters">Exception Filters</h3>
+<p>Visual Basic and F# already have this feature and now C# has it too! the way it works is basically defining a condition for the catch block (example taken from <a href="http://channel9.msdn.com/Events/Visual-Studio/Connect-event-2014/116" target="_blank" rel="noopener noreferrer">Channel 9 video</a>):</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">try</span>
+<span class="p">{</span>
+
+<span class="p">}</span>
+<span class="k">catch</span><span class="p">(</span><span class="n">ConfigurationException</span> <span class="n">e</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">IsSevere</span><span class="p">)</span>
+<span class="p">{</span>
+
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>I think it can make exception handling more modular. Also it’s better than catching and rethrowing in terms of we don’t lose information about the original exception.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h3 id="using-await-in-catch-and-finally-blocks">Using await in catch and finally blocks</h3>
+<p>Like most people I hadn’t noticed we couldn’t do that already! Apparently it was just a flaw in the current implementation and they closed that gap with this version</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">try</span>
+<span class="p">{</span>
+
+<span class="p">}</span>
+<span class="k">catch</span><span class="p">(</span><span class="n">ConfigurationException</span> <span class="n">e</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">IsSevere</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="k">await</span> <span class="nf">LogAsync</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">finally</span>
+<span class="p">{</span>
+	<span class="k">await</span> <span class="nf">CloseAsync</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
 
 		
 		

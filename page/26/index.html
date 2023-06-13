@@ -154,238 +154,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2015/08/08/checking-domain-availability-with-aws-route53-part-3/" itemprop="url">Checking domain availability with AWS Route 53 - Part 3</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2015-08-08T17:00:00-05:00" itemprop="datePublished">August  8, 2015</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/devaws">dev</a></span> -->
-
-<!-- dev, aws -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    , 
-
-    <a href="/category/aws">aws</a>
-    
-</span>
-	<span class="tags">csharp, route53</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<h1 id="part-3-consuming-the-apis">Part 3: Consuming the APIs</h1>
-
-<p>So far in the series:</p>
-
-<ul>
-  <li><a href="https://volkanpaksoy.com/archive/2015/08/04/checking-domain-availability-with-aws-route53-part-1/">Part 1: Getting TLD List</a></li>
-  <li><a href="https://volkanpaksoy.com/archive/2015/08/06/checking-domain-availability-with-aws-route53-part-2/">Part 2: Implementing API for TLD service</a></li>
-</ul>
-
-<p>In this installment it’s time to implement the actual application that consumes the TLD API as well as AWS Route 53 API. I decided to turn this into a little project with a name, logo and everything. I’ll keep updating the project. Currently it just has the core library and a console application. I know it’s not enough but you have to start somewhere!</p>
-
-<h3 id="core-functionality">Core functionality</h3>
-
-<p>Basically what it does is:</p>
-
-<ol>
-  <li>
-    <p>Get the supported TLD list</p>
-  </li>
-  <li>
-    <p>For each TLD send a CheckDomainAvailability request to AWS</p>
-  </li>
-  <li>
-    <p>Return the resultset</p>
-  </li>
-</ol>
-
-<p>When I first started out I was meaning to make these requests run in parallel. But they got throttled and I ended up using all my allowance. So I changed the code to make a call per second:</p>
-
-<p>The TldProvider I developed can be used in two different ways:</p>
-
-<ol>
-  <li>As a NuGet Package</li>
-</ol>
-
-<p>I uploaded my package to NuGet.org so you can install it by running</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package TldProvider.Core.dll
-</code></pre></div></div>
-
-<p>and the usage would be:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Tld</span><span class="p">&gt;</span> <span class="nf">GetTldListFromLibrary</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">string</span> <span class="n">url</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"Aws.Route53.DocPageUrl"</span><span class="p">];</span>
-    <span class="kt">var</span> <span class="n">tldListProvider</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TldListProvider</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">supportedTLDlist</span> <span class="p">=</span> <span class="n">tldListProvider</span><span class="p">.</span><span class="nf">GetSupportedTldList</span><span class="p">(</span><span class="n">url</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">supportedTLDlist</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<ol>
-  <li>As an API the usage is a bit more complex because of the JSON to list conversion:</li>
-</ol>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Tld</span><span class="p">&gt;</span> <span class="nf">GetTldListFromApi</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">string</span> <span class="n">apiUrl</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"TldProvider.Api.EndPoint"</span><span class="p">];</span>
-    <span class="kt">var</span> <span class="n">httpClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpClient</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpRequestMessage</span><span class="p">()</span> <span class="p">{</span> <span class="n">Method</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">HttpMethod</span><span class="p">(</span><span class="s">"GET"</span><span class="p">),</span> <span class="n">RequestUri</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="n">apiUrl</span><span class="p">)</span> <span class="p">};</span>
-    <span class="kt">var</span> <span class="n">httpResponse</span> <span class="p">=</span> <span class="n">httpClient</span><span class="p">.</span><span class="nf">SendAsync</span><span class="p">(</span><span class="n">request</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
-    <span class="kt">var</span> <span class="n">apiResponse</span> <span class="p">=</span> <span class="n">httpResponse</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="nf">ReadAsStringAsync</span><span class="p">().</span><span class="n">Result</span><span class="p">;</span>
-    <span class="kt">dynamic</span> <span class="n">resp</span> <span class="p">=</span> <span class="n">Newtonsoft</span><span class="p">.</span><span class="n">Json</span><span class="p">.</span><span class="n">JsonConvert</span><span class="p">.</span><span class="nf">DeserializeObject</span><span class="p">(</span><span class="n">apiResponse</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">resultAsStringList</span> <span class="p">=</span> <span class="n">JToken</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="n">apiResponse</span><span class="p">)[</span><span class="s">"tldList"</span><span class="p">].</span><span class="n">ToObject</span><span class="p">&lt;</span><span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;&gt;();</span> <span class="p">;</span>
-    <span class="kt">var</span> <span class="n">resultAsTldList</span> <span class="p">=</span> <span class="n">resultAsStringList</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">t</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="nf">Tld</span><span class="p">()</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="n">t</span> <span class="p">}).</span><span class="nf">ToList</span><span class="p">();</span>
-    <span class="k">return</span> <span class="n">resultAsTldList</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>Actually this method should not return List<tld> as it would require a reference to the library. The idea of using the API is to get rid of that dependency in the first place but I just wanted to add both and use them interchangably.</tld></p>
-
-<p>So finally tha main course: The check method that loops through the TLD list and gets the availability from AWS Route 53 API</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">DomainCheckResult</span><span class="p">&gt;</span> <span class="nf">Check</span><span class="p">(</span><span class="kt">string</span> <span class="n">domainName</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">string</span> <span class="n">ACCESS_KEY</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"Aws.Route53.AccessKey"</span><span class="p">];</span>
-    <span class="kt">string</span> <span class="n">SECRET_KEY</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"Aws.Route53.SecretKey"</span><span class="p">];</span>
-
-    <span class="kt">var</span> <span class="n">results</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">DomainCheckResult</span><span class="p">&gt;();</span>
-
-    <span class="kt">var</span> <span class="n">credentials</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">BasicAWSCredentials</span><span class="p">(</span><span class="n">ACCESS_KEY</span><span class="p">,</span> <span class="n">SECRET_KEY</span><span class="p">);</span>
-    <span class="kt">var</span> <span class="n">config</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AmazonRoute53DomainsConfig</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="n">RegionEndpoint</span> <span class="p">=</span> <span class="n">RegionEndpoint</span><span class="p">.</span><span class="n">USEast1</span>
-    <span class="p">};</span>
-
-    <span class="kt">var</span> <span class="n">amazonRoute53DomainsClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AmazonRoute53DomainsClient</span><span class="p">(</span><span class="n">credentials</span><span class="p">,</span> <span class="n">config</span><span class="p">);</span>
-
-    <span class="c1">// var supportedTLDlist = GetTldListFromLibrary();</span>
-    <span class="kt">var</span> <span class="n">supportedTLDlist</span> <span class="p">=</span> <span class="nf">GetTldListFromApi</span><span class="p">();</span>
-
-    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">tld</span> <span class="k">in</span> <span class="n">supportedTLDlist</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CheckDomainAvailabilityRequest</span><span class="p">()</span> <span class="p">{</span> <span class="n">DomainName</span> <span class="p">=</span>  <span class="s">$"</span><span class="p">{</span><span class="n">domainName</span><span class="p">}</span><span class="s">.</span><span class="p">{</span><span class="n">tld</span><span class="p">.</span><span class="n">Name</span><span class="p">}</span><span class="s">"</span> <span class="p">};</span>
-
-        <span class="kt">var</span> <span class="n">response</span> <span class="p">=</span> <span class="n">amazonRoute53DomainsClient</span><span class="p">.</span><span class="nf">CheckDomainAvailabilityAsync</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
-        <span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="n">response</span><span class="p">.</span><span class="n">Result</span><span class="p">;</span>
-        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"</span><span class="p">{</span><span class="n">request</span><span class="p">.</span><span class="n">DomainName</span><span class="p">}</span><span class="s"> --&gt; </span><span class="p">{</span><span class="n">result</span><span class="p">.</span><span class="n">Availability</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
-        <span class="n">results</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="k">new</span> <span class="nf">DomainCheckResult</span><span class="p">()</span>
-        <span class="p">{</span>
-            <span class="n">Domain</span> <span class="p">=</span> <span class="n">domainName</span><span class="p">,</span>
-            <span class="n">Tld</span> <span class="p">=</span> <span class="n">tld</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span>
-            <span class="n">Availability</span> <span class="p">=</span> <span class="n">result</span><span class="p">.</span><span class="n">Availability</span><span class="p">,</span>
-            <span class="n">CheckDate</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span>
-        <span class="p">});</span>
-
-        <span class="n">System</span><span class="p">.</span><span class="n">Threading</span><span class="p">.</span><span class="n">Thread</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="m">1000</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="n">results</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<h3 id="troubleshooting">TroubleShooting</h3>
-<p>I had a few problems while implementing. Learned a few things while fixing them. So here they are:</p>
-
-<ul>
-  <li>
-    <p>I created an IAM account that has access to Route53. But that wasn’t enough. There is a separate action called <strong>route53domains</strong>. I had to grant access to this as well to use domains API.</p>
-  </li>
-  <li>
-    <p>I use EUWest1 region since it’s the closest one. Normally Route53 doesn’t require any region setting but weirdly I had to set region to US East1 in order to access Route53Domains API.</p>
-  </li>
-</ul>
-
-<p>The problems above makes me think domains didn’t fit very well with the current Route53. It feels like it has not integrated seamlessly yet.</p>
-
-<h3 id="first-client-console-application">First client: Console application</h3>
-<p>This used to be the test application but since I don’t have any user interface currently this will be my first client. It just accepts the domain name from the user, checks the availability and saves the results in JSON format. This is all the code of the console application:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">Length</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Usage: DomChk53.UI.Console {domain name}"</span><span class="p">);</span>
-        <span class="k">return</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="kt">string</span> <span class="n">domain</span> <span class="p">=</span> <span class="n">args</span><span class="p">[</span><span class="m">0</span><span class="p">];</span>
-    <span class="kt">var</span> <span class="n">checker</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">DomainChecker</span><span class="p">();</span>
-    <span class="kt">var</span> <span class="n">results</span> <span class="p">=</span> <span class="n">checker</span><span class="p">.</span><span class="nf">Check</span><span class="p">(</span><span class="n">domain</span><span class="p">);</span>
-
-    <span class="kt">string</span> <span class="n">outputFilename</span> <span class="p">=</span> <span class="s">$"results-</span><span class="p">{</span><span class="n">domain</span><span class="p">}</span><span class="s">-</span><span class="p">{</span><span class="n">DateTime</span><span class="p">.</span><span class="n">UtcNow</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(</span><span class="s">"yyyyMMdd-HHmmss"</span><span class="p">)}</span><span class="s">.json"</span><span class="p">;</span>
-    <span class="kt">string</span> <span class="n">json</span> <span class="p">=</span> <span class="n">Newtonsoft</span><span class="p">.</span><span class="n">Json</span><span class="p">.</span><span class="n">JsonConvert</span><span class="p">.</span><span class="nf">SerializeObject</span><span class="p">(</span><span class="n">results</span><span class="p">);</span>
-    <span class="n">File</span><span class="p">.</span><span class="nf">WriteAllText</span><span class="p">(</span><span class="n">outputFilename</span><span class="p">,</span> <span class="n">json</span><span class="p">);</span>
-    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Saved the results to </span><span class="p">{</span><span class="n">outputFilename</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>It also displays the results of each domain on the console you can have keep track of what it’s doing</p>
-
-<p><img src="/images/vpblogimg/2015/08/domchk53-console-output.png" alt=""></p>
-
-<p>It saves the results with a timestamp so a history can be maintained:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  {
-    "Domain": "volkan",
-    "Tld": "cool",
-    "Availability": "AVAILABLE",
-    "CheckDate": "2015-08-05T12:31:58.40081Z"
-  },
-</code></pre></div></div>
-
-<h3 id="whats-missing">What’s missing</h3>
-<p>It’s not much but at least it delivers what it promises: You give it a domain name and it checks the availability of all supported TLDs by AWS Route 53 and returns the results. But there’s a lot to do to improve this project. Some items in my list:</p>
-
-<ul>
-  <li>A web-based user interface that allows viewing these results online.</li>
-  <li>Get the price list for each tLD as well and display it along with the name</li>
-  <li>Registering selected domains: It would be nice if you could buy the available domains using the same interface</li>
-  <li>A landing page at domchk53.com so that it can have links to the source code, online checker etc.</li>
-</ul>
-
-<h3 id="conclusion">Conclusion</h3>
-<p>The reason I started this project was to overcome the limitations of AWS Route 53 domains UI and be able to search all supported TLDs all at once. To consider the project complete I will prepare a single-page website about the project and develop a nice user-interface. But in terms of basic functionality I can get what I set out for so I can think of it as a small success I guess.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://github.com/volkanpaksoy/domchk53" target="_blank" rel="noopener noreferrer">Project source code</a></li>
-  <li><a href="http://domchk53.com" target="_blank" rel="noopener noreferrer">Project website</a></li>
-  <li><a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/registrar-tld-list.html" target="_blank" rel="noopener noreferrer">List of Supported TLDs</a></li>
-  <li><a href="http://docs.aws.amazon.com/general/latest/gr/rande.html" target="_blank" rel="noopener noreferrer">AWS Documentation for Route 53 Domains region</a></li>
-  <li><a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html" target="_blank" rel="noopener noreferrer">AWS Documentation for Route 53 limitations</a></li>
-  <li><a href="https://d32ze2gidvkk54.cloudfront.net/Amazon_Route_53_Domain_Registration_Pricing_20140731.pdf" target="_blank" rel="noopener noreferrer">AWS Domain price list</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2015/08/06/checking-domain-availability-with-aws-route53-part-2/" itemprop="url">Checking domain availability with AWS Route 53 - Part 2</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -837,6 +605,168 @@ If-Modified-Since: Fri, 17 Jul 2015 23:17:38 GMT
   <li><a href="https://developer.yahoo.com/yql/" target="_blank" rel="noopener noreferrer">YQL website</a></li>
   <li><a href="https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en" target="_blank" rel="noopener noreferrer">Chrome Extension to allow CORS</a></li>
 </ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2015/07/24/configuration-file-management-on-GitHub/" itemprop="url">Configuration File Management on GitHub</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2015-07-24T16:30:00-05:00" itemprop="datePublished">July 24, 2015</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">dotnet, configuration, github</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>I hate configuration files! They contain highly sensitive information and there is always a risk of them leaking out. Especially when I read horror stories like <a href="http://wptavern.com/ryan-hellyers-aws-nightmare-leaked-access-keys-result-in-a-6000-bill-overnight" target="_blank" rel="noopener noreferrer">this</a> I remind myself to be more careful about it. It is particularly important when starting off with a private repository and converting it to open-source.</p>
+
+<p>There are a few approaches and I will try to make pros and cons list for each of them which hopefully would make it easier for me to make a decision.</p>
+
+<h3 id="method-1-ignore-config-files-completely">Method 1: Ignore config files completely</h3>
+<p>Simply add to gitignore before checking in the config files. This is not really a viable option but to cover all basis I wanted to add this one as well.</p>
+
+<h4 id="pros">Pros</h4>
+<ul>
+  <li>Very easy to implement</li>
+  <li>Easy to be consistent (use the same gitignore everywhere)</li>
+</ul>
+
+<h4 id="cons">Cons</h4>
+<ul>
+  <li>When someone checks out the project initially it wouldn’t compile because of the missing config file.</li>
+  <li>For a new user there is no way to figure out what the actual config should look like</li>
+  <li>For internal applications, you have to maintain local copies and handle distribution among developers manually.</li>
+</ul>
+
+<h3 id="method-2-check-in-configuration-with-placeholders">Method 2: Check in configuration with placeholders</h3>
+<p>Check in the initial file then run the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git update-index --assume-unchanged &lt;file&gt;
+</code></pre></div></div>
+
+<p>After this you can add the actual values and use the config as usual. But those values will be ignored. This way when someone checks out they can at least compile the project.</p>
+
+<h4 id="pros-1">Pros</h4>
+<ul>
+  <li>Less disruptive as the project can be compiled</li>
+</ul>
+
+<h4 id="cons-1">Cons</h4>
+<ul>
+  <li>When you make a change to the config file (e.g. add/rename keys) you can’t check in those changes as well</li>
+</ul>
+
+<h3 id="method-3-ignore-config-file-check-in-a-sample-file-instead">Method 3: Ignore config file, check in a sample file instead</h3>
+<p>This is essentially a merger of Method 1 and 2. Maintain two files (e.g. App.config and App.config.sample). Ignore the app.config from the getgo and only check in .sample file. Structurally it will be exactly the same as app.config without the confidential values.</p>
+
+<h4 id="pros-2">Pros</h4>
+<ul>
+  <li>Won’t compile by default, extra step for the people who check out (small one but still)</li>
+</ul>
+
+<h4 id="cons-2">Cons</h4>
+<ul>
+  <li>Both files need to be kept in sync manually</li>
+  <li>Still no online copy of the actual config file available</li>
+</ul>
+
+<h3 id="method-4-reference-to-another-configuration-file">Method 4: Reference to another configuration file</h3>
+<p>A slight variation of the previous method. .NET allows cascading and linking with configuration files. For example say this is my app.config file:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;configuration&gt;</span>
+	<span class="nt">&lt;appSettings</span> <span class="na">file=</span><span class="s">"Actual.config"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Twilio.AccountSID"</span> <span class="na">value=</span><span class="s">"SAMPLE SID"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Twilio.AuthToken"</span> <span class="na">value=</span><span class="s">"SAMPLE TOKEN"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Non-sensitive-info"</span> <span class="na">value=</span><span class="s">"some value"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;/appSettings&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div></div>
+
+<p>I can link the appSettings section to another file named actual.config which would look like this:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;appSettings&gt;</span>
+  <span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Twilio.AccountSID"</span> <span class="na">value=</span><span class="s">"REAL 123456"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Twilio.AuthToken"</span> <span class="na">value=</span><span class="s">"REAL Token"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;add</span> <span class="na">key=</span><span class="s">"Non-sensitive-info"</span> <span class="na">value=</span><span class="s">"some value"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/appSettings&gt;</span>
+</code></pre></div></div>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>Actual.config never goes into source control. When the application cannot find the actual.config it just uses the values in the app.config. When the actual.config is present, those values override the sample values.</p>
+
+<h4 id="pros-3">Pros</h4>
+<ul>
+  <li>Only keys with sensitive values can be hidden</li>
+</ul>
+
+<h4 id="cons-3">Cons</h4>
+<ul>
+  <li>Doesn’t work with custom config sections</li>
+  <li>Still no online copy of the actual config file available</li>
+</ul>
+
+<h3 id="method-5-use-submodules-to-link-to-config-files">Method 5: Use submodules to link to config files</h3>
+<p>The idea is to maintain a private repository that contains the config files and add it as a submodule:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git submodule add git@github.com:volkanpaksoy/private-config.git
+</code></pre></div></div>
+
+<p>And link to that configuration file in the app.config as in Method 4.</p>
+
+<h4 id="pros-4">Pros</h4>
+<ul>
+  <li>Actual values are online and accessible</li>
+</ul>
+
+<h4 id="cons-4">Cons</h4>
+<ul>
+  <li>Requires a paid account for private repositories</li>
+  <li>More complicated</li>
+</ul>
+
+<h3 id="verdict">Verdict</h3>
+<p>As I already have a paid GitHub account the con for Method 5 is not quite valid for me so I think I will go with that one. Otherwise the actual values will be stored locally on the disk only and will eventually get lost. Looks like there is no convenient and easy way of doing it after all. If you have any suggestions I’m all ears.</p>
+
+<p>As I said, I hate configuration files!</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://gitready.com/intermediate/2009/02/18/temporarily-ignoring-files.html" target="_blank" rel="noopener noreferrer">Temporarily ignoring files</a></li>
+  <li><a href="http://stackoverflow.com/questions/4743770/git-collaboration-how-to-manage-configuration-files" target="_blank" rel="noopener noreferrer">SO Thread: Git sample and default files</a></li>
+  <li><a href="http://msdevshow.com/2014/07/github-with-phil-haack/" target="_blank" rel="noopener noreferrer">Phil Haack on MSDevShow</a></li>
+  <li><a href="http://stackoverflow.com/questions/5252450/using-someone-elses-repo-as-a-git-submodule-on-github" target="_blank" rel="noopener noreferrer">SO Thread: Using other repositories as submodules</a></li>
+</ul>
+
 
 		
 		

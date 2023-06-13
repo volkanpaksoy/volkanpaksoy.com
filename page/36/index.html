@@ -154,200 +154,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2014/12/15/simple-ids-with-nmap/" itemprop="url">Simple IDS with Nmap</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-12-15T16:45:00-06:00" itemprop="datePublished">December 15, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/securityawsdev">security</a></span> -->
-
-<!-- security, aws, dev -->
-
-
-
-
-    <a href="/category/security">security</a>
-    , 
-
-    <a href="/category/aws">aws</a>
-    , 
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">network, raspberry_pi, nmap</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>One of the Nmap’s many usages is for asset management as it is very good at discovering devices in a network. I’m going to use it to develop a simple IDS (Intrusion Detection System). Of course IDS software is much more complex and I hope I will look into installing a proper one, like <a href="https://www.snort.org/" target="_blank" rel="noopener noreferrer">Snort</a>, when I have the time but for now I’ll just roll out my own. My goals in this project are:</p>
-
-<ol>
-  <li>Utilise the idle old Raspberry Pi: I used one to <a href="https://volkanpaksoy.com/archive/2014/11/19/media-centre-raspberry-pi/">build a media server</a> another one as a <a href="https://volkanpaksoy.com/archive/2014/12/12/homebrew-security-camera-with-raspberry-pi/">security camera</a>. The 3rd one is one of the first releases. It has 256MB memory and failed to run various projects I tried in the past. Looks like it’s at least good enough to run Nmap so it may have a use after all.</li>
-  <li>Practice more Powershell and discover XML parsing capabilities.</li>
-  <li>Writing a Python version of the same script so that everything can run on Pi but I’ll defer that to a later date.</li>
-</ol>
-
-<h3 id="basics">Basics</h3>
-<p>So like every Raspberry Pi project, first step is to download a distro suitable for Raspberry Pi and write to an SD/miroSD card. There is a Pi version of the (in)famous security distro Kali Linux. It’s convenient as it comes with all security tools pre-installed but for my purposes I just used a plain <a href="http://www.raspberrypi.org/downloads/" target="_blank" rel="noopener noreferrer">Raspbian</a> as I only need Nmap.</p>
-
-<p>Nmap that is installed from Linux repositories was a bit outdated (v6.00) so I decided to download the latest version (v6.47) and build it from source. Even though all I need is a simple command I like to keep my tools current!</p>
-
-<h3 id="how-does-it-work">How Does It Work</h3>
-<p>I placed the Pi near the switch so that it can use Ethernet. It gets results much faster so I recommend wired over wireless. So the initial version will work like this:</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<ol>
-  <li>A cron job runs on Pi every n minutes. Executes Nmap and uploads the results in XML format to AWS S3.</li>
-  <li>A scheduled task runs on a Windows Server running Powershell. It gets the latest XML from S3 and gets the active hosts on the network.</li>
-  <li>Compares the results to a device list and sends a notification if an intruder is detected.</li>
-</ol>
-
-<p>Of course in order this to work first I need to assign static IPs to all my devices and record these addresses along with MAC addresses in the configuration.</p>
-
-<h3 id="lets-get-cracking">Let’s get cracking!</h3>
-
-<p>I covered Nmap basics <a href="https://volkanpaksoy.com/archive/2014/12/13/nmap-basics/">here</a>. In this project all I need is host discovery so I’m not interested in the services, machine names, operating systems etc. I’ll just run this command:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo nmap -sn 172.16.1.0/24 -oX output.xml
-</code></pre></div></div>
-
-<p>Also I need my old friend s3cmd so I ran this</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install s3cmd
-</code></pre></div></div>
-
-<p>Then</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>s3cmd --configure
-</code></pre></div></div>
-
-<p>and entered the credentials for the new IAM user I created who has access only to a single S3 bucket.</p>
-
-<p>So to put it together in a shell script I created the simple script below.</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#!/bin/bash
-
-echo "Running Nmap"
-sudo nmap -sn 172.16.1.0/24 -oX /home/pi/output.xml
-
-timestamp=$(date +%Y%m%d_%H%M%S)
-s3FileName=nmap_output_$timestamp.xml
-
-echo "Uploading the output to S3"
-sudo s3cmd put /home/pi/output.xml s3://{BUCKET}/$s3FileName
-
-sudo rm /home/pi/output.xml
-</code></pre></div></div>
-
-<p>Also to make the script executable so I ran this:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo chmod 755 my_script
-</code></pre></div></div>
-
-<h3 id="analyze-and-alert">Analyze and alert</h3>
-<p>So now I have a list of devices running on the network. The Nmap XML output looks something like this:</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0"?&gt;</span>
-<span class="cp">&lt;?xml-stylesheet href="file:///usr/bin/../share/nmap/nmap.xsl" type="text/xsl"?&gt;</span>
-<span class="c">&lt;!-- Nmap 6.47 scan initiated Mon Dec 15 13:30:01 2014 as: nmap -sn -oX /home/pi/output.xml 172.16.1.0/24 --&gt;</span>
-<span class="nt">&lt;nmaprun</span> <span class="na">scanner=</span><span class="s">"nmap"</span> <span class="na">args=</span><span class="s">"nmap -sn -oX /home/pi/output.xml 172.16.1.0/24"</span> <span class="na">start=</span><span class="s">"1418650201"</span> <span class="na">startstr=</span><span class="s">"Mon Dec 15 13:30:01 2014"</span> <span class="na">version=</span><span class="s">"6.47"</span> <span class="na">xmloutputversion=</span><span class="s">"1.04"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;verbose</span> <span class="na">level=</span><span class="s">"0"</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;debugging</span> <span class="na">level=</span><span class="s">"0"</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;host&gt;</span>
-    <span class="nt">&lt;status</span> <span class="na">state=</span><span class="s">"up"</span> <span class="na">reason=</span><span class="s">"arp-response"</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;address</span> <span class="na">addr=</span><span class="s">"172.16.1.10"</span> <span class="na">addrtype=</span><span class="s">"ipv4"</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;address</span> <span class="na">addr=</span><span class="s">"AA:BB:CC:DD:EE:FF"</span> <span class="na">addrtype=</span><span class="s">"mac"</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;hostnames&gt;</span>
-    <span class="nt">&lt;/hostnames&gt;</span>
-    <span class="nt">&lt;times</span> <span class="na">srtt=</span><span class="s">"1142"</span> <span class="na">rttvar=</span><span class="s">"5000"</span> <span class="na">to=</span><span class="s">"100000"</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;/host&gt;</span>
-  <span class="nt">&lt;runstats&gt;</span>
-    <span class="nt">&lt;finished</span> <span class="na">time=</span><span class="s">"1418650208"</span> <span class="na">timestr=</span><span class="s">"Mon Dec 15 13:30:08 2014"</span> <span class="na">elapsed=</span><span class="s">"6.40"</span> <span class="na">summary=</span><span class="s">"Nmap done at Mon Dec 15 13:30:08 2014; 256 IP addresses (11 hosts up) scanned in 6.40 seconds"</span> <span class="na">exit=</span><span class="s">"success"</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;hosts</span> <span class="na">up=</span><span class="s">"11"</span> <span class="na">down=</span><span class="s">"245"</span> <span class="na">total=</span><span class="s">"256"</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;/runstats&gt;</span>
-<span class="nt">&lt;/nmaprun&gt;</span>
-</code></pre></div></div>
-
-<p>And my configuration file looks like this:</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
-<span class="nt">&lt;assetList&gt;</span>
-  <span class="nt">&lt;host</span> <span class="na">name=</span><span class="s">"Dev"</span> <span class="na">ip=</span><span class="s">"172.16.1.10"</span> <span class="na">mac=</span><span class="s">"12:12:12:12:12:12"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;host</span> <span class="na">name=</span><span class="s">"Raspberry Pi XBMC"</span> <span class="na">ip=</span><span class="s">"172.16.1.11"</span> <span class="na">mac=</span><span class="s">"AA:AA:AA:AA:AA:AA"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;host</span> <span class="na">name=</span><span class="s">"Printer"</span> <span class="na">ip=</span><span class="s">"172.16.1.12"</span> <span class="na">mac=</span><span class="s">"BB:BB:BB:BB:BB:BB"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;host</span> <span class="na">name=</span><span class="s">"iPad"</span> <span class="na">ip=</span><span class="s">"172.16.1.13"</span> <span class="na">mac=</span><span class="s">"CC:CC:CC:CC:CC:CC"</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/assetList&gt;</span>
-</code></pre></div></div>
-
-<p>A gem I discovered about Powershell is the Powershell ISE (Integrated Shell Environment). It supports IntelliSense-type discovery so makes it much easier and faster to write and run scripts.</p>
-
-<p><img src="/images/vpblogimg/2014/12/powershell-ise.png" alt="Powershell ISE"></p>
-
-<h3 id="into-the-powershell">Into the Powershell</h3>
-<p>The script does the following</p>
-
-<ol>
-  <li>Load the configuration</li>
-  <li>Get the latest asset list from S3 and load</li>
-  <li>Compare and see if there are any unknown devices on the network</li>
-  <li>If there is send an email notification</li>
-</ol>
-
-<p>Since Powershell is based on .NET framework, working with XML is nothing new. I just used standard XPath queries to match the MAC and IP addresses of the discovered devices to the ones I entered to the configuration file.</p>
-
-<p>Here’s the script:</p>
-
-<noscript><pre>400: Invalid request</pre></noscript>
-<script src="https://gist.github.com/0caef92a4562d17b404d37c8b0445902.js"> </script>
-
-<h3 id="time-for-some-action">Time for some action</h3>
-<p>OK let’s see how we are doing now. After I recorded all the known devices the output of the script was like below:</p>
-
-<p><img src="/images/vpblogimg/2014/12/powershell-script-output-no-alarm.png" alt="Script output"></p>
-
-<p>One interesting thing to note is Nmap cannot discover its own MAC address. I guess that’s because as it’s using ARP protocol to resolve MAC addresses on the local subnet and it doesn’t have its own MAC in its ARP table it cannot find it. I decided to skip the entry but may be a better choice to compare only the IP address if this is the case.
-Anyway, I will leave it as is for now.</p>
-
-<p>To test it I turned on my old phone and connected to the network. Within 10 minutes I received the following notification email:</p>
-
-<p><img src="/images/vpblogimg/2014/12/powershell-new-device-alert.png" alt=""></p>
-
-<p>So far so good!</p>
-
-<h3 id="conclusion">Conclusion</h3>
-<p>I would never trust such a thing as the ultimate defence mechanism but even so I believe it may come in handy in some situations. More importantly this was a fun little project for me as it involved bash scripting, Powershell, AWS and XML. I’m glad I finally came up with a use for the idle Raspberry Pi also happy to discover Powershell ISE.</p>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://www.alexrams.com/blog/2014/10/11/install-latest-version-nmap-ubuntu-12-04/" target="_blank" rel="noopener noreferrer">Installing Nmap from source</a></li>
-  <li><a href="http://technet.microsoft.com/en-us/library/dd315244.aspx" target="_blank" rel="noopener noreferrer">Introducing the Windows PowerShell ISE</a></li>
-  <li><a href="https://www.kali.org/tag/raspberry-pi/" target="_blank" rel="noopener noreferrer">Kali Linux for Raspberry Pi</a></li>
-  <li><a href="http://zxq9.com/archives/795" target="_blank" rel="noopener noreferrer">Most common Bash date commands for timestamping</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/12/13/nmap-basics/" itemprop="url">Nmap Basics</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -668,6 +474,118 @@ Anyway, I will leave it as is for now.</p>
   <li><a href="http://www.fl3m.com/2012/08/sending-email-through-amazon-ses-with.html" target="_blank" rel="noopener noreferrer">PowerShell script to send email</a></li>
   <li><a href="http://www.raspberrypi.org/downloads/" target="_blank" rel="noopener noreferrer">Raspberry Pi downloads</a></li>
   <li><a href="http://s3tools.org/s3cmd" target="_blank" rel="noopener noreferrer">Amazon S3 Tools</a></li>
+</ul>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/11/update-aws-security-groups-with-powershell/" itemprop="url">Update AWS Security Groups with PowerShell</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-11T18:30:00-06:00" itemprop="datePublished">December 11, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/awssecurity">aws</a></span> -->
+
+<!-- aws, security -->
+
+
+
+
+    <a href="/category/aws">aws</a>
+    , 
+
+    <a href="/category/security">security</a>
+    
+</span>
+	<span class="tags">powershell, ec2</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>Here’s the scenario:</p>
+
+<ul>
+  <li>You use AWS</li>
+  <li>You don’t have a static IP</li>
+  <li>You connect to your EC2 instances via SSH and/or RDP only from your IP</li>
+  <li>You are too lazy to update the security groups manually when your IP changes!</li>
+</ul>
+
+<p>You’ve come to the right place: I’ve got the solution.</p>
+
+<p>Let’s have a look how it’s built step-by-step:</p>
+
+<h3 id="step-1-create-an-iam-account-to-access-security-groups">Step 1: Create an IAM account to access security groups</h3>
+<p>As a general rule of thumb always grant the minimum privileges possible to the accounts you use. Create a new user and go to the user’s details. Select <em>Attach User Policy</em> and then <em>Policy Generator</em>. Select <em>AWS EC2</em> from the services list. For our script to run we need 3 privileges: List security groups (<em>DescribeSecurityGroups</em>), delete old IP permissions (<em>RevokeSecurityGroupIngress</em>) and add new IP permissions (<em>AuthorizeSecurityGroupIngress</em>).</p>
+
+<p><img src="/images/vpblogimg/2014/12/iam-security-group-user.png" alt=""></p>
+
+<p>Alternatively you can just attach the following policy to your user:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1418339796000",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:AuthorizeSecurityGroupIngress",
+        "ec2:DescribeSecurityGroups",
+        "ec2:RevokeSecurityGroupIngress"
+      ],
+      "Resource": [
+        "*"
+      ]
+    }
+  ]
+}
+</code></pre></div></div>
+
+<p>IAM has a very nice simulation feature. Before you proceed I recommend you run it and verify only 3 actions are allowed.</p>
+
+<p><img src="/images/vpblogimg/2014/12/aws-iam-policy-simulator.png" alt=""></p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h3 id="step-2-modify-the-powershell-script">Step 2: Modify the PowerShell script</h3>
+<p>The script I created is on Gist as seen below. Before you can use it you have to update it with the access and secret keys of the user created above.</p>
+
+<p>Also since fiddling with security groups can become messy very quickly I’d strongly recommend you perform a dry run first. By default <em>$dryRun</em> is set to true. Unless you set it to <em>$false</em> it will only display what it is going to do but will not take any action. So make sure you know what you’re doing before you give it a go. I don’t think this script will be a ready-made script for anyone. Probably would need some tweaking here and there to tailor to your needs. But this version works for me so here it is:</p>
+
+<noscript><pre>400: Invalid request</pre></noscript>
+<script src="https://gist.github.com/c99400aec7e519626d9b6d0d1cf409aa.js"> </script>
+
+<p>First it gets a list of security groups that have SSH and RDP permissions in them. Then loops through these permissions and compares the IP address with the current one. I used my own external IP checker service that I’ve recently developed as I <a href="https://volkanpaksoy.com/archive/2014/12/08/simple-api-with-nodejs/">blogged here</a>. You can use other services as well. Just make sure you change the URL in the script. My service returns a JSON object so if the method you use returns a different format you need to modify the parsing code as well.</p>
+
+<p>If the IP addresses are different, it revokes the old permission and creates a new one with your current IP. Protocol and ports remain intact.</p>
+
+<p>This is the output of the script:</p>
+
+<p><img src="/images/vpblogimg/2014/12/aws-security-group-update-script.png" alt=""></p>
+
+<p>If the IP addresses for port 22 an 3389 are up-to-date it just displays “<em>Security group is up-to-date</em>” so it can be run consecutively. So you can schedule it to run as often as you want.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="http://docs.aws.amazon.com/powershell/latest/userguide/pstools-welcome.html" target="_blank" rel="noopener noreferrer">AWS PowerShell Tools documentation</a></li>
 </ul>
 
 		
