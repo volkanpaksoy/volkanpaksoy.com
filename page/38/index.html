@@ -161,7 +161,7 @@
 
 
 
-<time datetime="2014-12-08T06:30:00-06:00" itemprop="datePublished">December  8, 2014</time></span>
+<time datetime="2014-12-08T05:00:00-06:00" itemprop="datePublished">December  8, 2014</time></span>
 	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
 
 <!-- dev -->
@@ -239,98 +239,6 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/null-conditional-operators/" itemprop="url">C# 6.0 New Features - Null-Conditional Operators</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-12-08T06:00:00-06:00" itemprop="datePublished">December  8, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>This is another handy feature. Checking for null values before accessing them can quickly become cumbersome and yields a lot of boilerplate code. With this new operator checking for nulls and coalescing becomes really short and easy to read.</p>
-
-<p>For example:</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">NullConditionalOperators</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="k">void</span> <span class="nf">Run</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="n">Person</span> <span class="n">person</span> <span class="p">=</span> <span class="nf">GetPerson</span><span class="p">();</span>
-
-        <span class="c1">// Current C#</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">person</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">&amp;&amp;</span> <span class="n">person</span><span class="p">.</span><span class="n">Country</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">person</span><span class="p">.</span><span class="n">Country</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">else</span>
-        <span class="p">{</span>
-            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Undefined"</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">private</span> <span class="n">Person</span> <span class="nf">GetPerson</span><span class="p">()</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">Person</span><span class="p">()</span> <span class="p">{</span> <span class="n">Firstname</span> <span class="p">=</span> <span class="s">"Volkan"</span><span class="p">,</span> <span class="n">Lastname</span> <span class="p">=</span> <span class="s">"Paksoy"</span> <span class="p">};</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="k">public</span> <span class="k">class</span> <span class="nc">Person</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">Firstname</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="s">"Unknown"</span><span class="p">;</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">Lastname</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="s">"Unknown"</span><span class="p">;</span>
-    <span class="k">public</span> <span class="n">Country</span> <span class="n">Country</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    
-<span class="p">}</span>
-
-<span class="k">public</span> <span class="k">class</span> <span class="nc">Country</span>
-<span class="p">{</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">IsoCode</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>In the example above if you need to print the name of the country first you need to ensure both the Person and Country objects are not null. The if block aobe can be reduced to a one-liner with 6.0:</p>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">person</span><span class="p">?.</span><span class="n">Country</span><span class="p">?.</span><span class="n">Name</span> <span class="p">??</span> <span class="s">"Undefined"</span><span class="p">);</span>
-</code></pre></div></div>
-
-<p>They both produce the same results. The more complex the object hierarchy becomes the more useful this feature would be.</p>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/index-initializers/" itemprop="url">C# 6.0 New Features - Index Initializers</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -338,7 +246,7 @@
 
 
 
-<time datetime="2014-12-08T05:30:00-06:00" itemprop="datePublished">December  8, 2014</time></span>
+<time datetime="2014-12-08T05:00:00-06:00" itemprop="datePublished">December  8, 2014</time></span>
 	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
 
 <!-- dev -->
@@ -388,6 +296,63 @@
 </code></pre></div></div>
 
 <p>It’s a shorthand but not so much! I don’t see much value in this notation but I’m sure in time it will prove itself. I don’t think the guys in the language team are just adding random features!</p>
+
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/expression-bodied-methods/" itemprop="url">C# 6.0 New Features - Expression-Bodied Methods</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-08T05:00:00-06:00" itemprop="datePublished">December  8, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>It’s a shorthand for writing methods. The body now can be written just like a Lambda expression as shown in Log2 method below:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="kt">string</span> <span class="nf">Log</span><span class="p">(</span><span class="kt">string</span> <span class="n">timestamp</span><span class="p">,</span> <span class="kt">string</span> <span class="n">application</span><span class="p">,</span> <span class="kt">string</span> <span class="n">error</span><span class="p">,</span> <span class="kt">string</span> <span class="n">status</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"[Timestamp: \{timestamp}], Application: [\{application}], Error: [\{error}], Status [\{status}]"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="kt">string</span> <span class="nf">Log2</span><span class="p">(</span><span class="kt">string</span> <span class="n">timestamp</span><span class="p">,</span> <span class="kt">string</span> <span class="n">application</span><span class="p">,</span> <span class="kt">string</span> <span class="n">error</span><span class="p">,</span> <span class="kt">string</span> <span class="n">status</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"[Timestamp: \{timestamp}], Application: [\{application}], Error: [\{error}], Status [\{status}]"</span><span class="p">);</span>
+
+</code></pre></div></div>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>It may come in handy for helper methods. The only benefit I can see is getting rid of opening and closing curly braces which generally don’t bother me much. But I know lots of people trying to avoid curly braces as much as possible. I’m sure this feature will be popular among them.</p>
 
 
 		

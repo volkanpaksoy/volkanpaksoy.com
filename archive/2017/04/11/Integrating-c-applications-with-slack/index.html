@@ -1,0 +1,264 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Integrating C# applications with Slack - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2017/04/11/Integrating-c-applications-with-slack/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+  <link rel="stylesheet" href="/css/w3.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script>
+
+  
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y3V7V2XX9Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y3V7V2XX9Q');
+</script>
+
+<!-- <script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'G-Y3V7V2XX9Q']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script> -->
+
+
+
+  <!-- Twitter cards -->
+  <meta name="twitter:site"    content="@volkan_paksoy">
+  <meta name="twitter:creator" content="@Volkan Paksoy">
+  <meta name="twitter:title"   content="Integrating C# applications with Slack">
+
+  
+  <meta name="twitter:description" content="">
+  
+
+  
+  <meta name="twitter:card"  content="summary">
+  <meta name="twitter:image" content=""> -->
+  
+  <!-- end of Twitter cards -->
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+<br>
+
+<div style="border: 2px solid coral; border-radius: 5px; padding: 5px;">
+  <p style="font-style: italic; color: coral;">Other Blogs:</p>
+  <p><a href="https://devpower.co.uk" target="_blank" rel="noopener noreferrer">Dev Power</a></p>
+  <p><a href="https://cloudinternals.net" target="_blank" rel="noopener noreferrer">Cloud Internals</a></p>
+  <p><a href="https://infosecinternals.com" target="_blank" rel="noopener noreferrer">InfoSec Internals</a></p>
+</div>
+<br>
+
+<!-- <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="volkanpaksoy" data-color="#005050" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#ffffff" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script> -->
+
+<a href="https://www.buymeacoffee.com/volkanpaksoy" target="_blank" rel="noopener noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;"></a>
+
+<div id="ezoic-pub-ad-placeholder-102">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Integrating C# applications with Slack</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2017-04-11T06:00:00-05:00" itemprop="datePublished">April 11, 2017</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">slack, csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p>Slack is a great messaging platform and it can integrate very easily with C# applications.</p>
+
+<h2 id="step-01-enable-incoming-webhooks">Step 01: Enable incoming webhooks</h2>
+<p>First go to <a href="https://slack.com/services/new/incoming-webhook" target="_blank" rel="noopener noreferrer">Incoming Webhooks</a> page and turn on the webhooks if it’s not already turned on.</p>
+
+<p><img src="/images/vpblogimg/2017/04/Slack-01-Enable-Webhook-Integrations.PNG" alt=""></p>
+
+<h2 id="step-02-create-a-new-configuration">Step 02. Create a new configuration</h2>
+<p>You can select an existing channel or user to post messages to. Or you can create a new channel. (May need a refresh for the new one to appear in the list)</p>
+
+<p><img src="/images/vpblogimg/2017/04/Slack-02-Create-Webhook.PNG" alt=""></p>
+
+<h2 id="step-03-install-slackwebhooks-nuget-package">Step 03. Install Slack.Webhooks Nuget package</h2>
+
+<p>In the package manager console, run</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Install-Package Slack.Webhooks
+</code></pre></div></div>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h2 id="step-04-write-some-code">Step 04. Write some code!</h2>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">url</span> <span class="p">=</span> <span class="s">"{Webhook URL created in Step 2}"</span><span class="p">;</span>
+
+<span class="kt">var</span> <span class="n">slackClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">SlackClient</span><span class="p">(</span><span class="n">url</span><span class="p">);</span>
+
+<span class="kt">var</span> <span class="n">slackMessage</span> <span class="p">=</span> <span class="k">new</span> <span class="n">SlackMessage</span>
+<span class="p">{</span>
+    <span class="n">Channel</span> <span class="p">=</span> <span class="s">"#general"</span><span class="p">,</span>
+    <span class="n">Text</span> <span class="p">=</span> <span class="s">"New message coming in!"</span><span class="p">,</span>
+    <span class="n">IconEmoji</span> <span class="p">=</span> <span class="n">Emoji</span><span class="p">.</span><span class="n">CreditCard</span><span class="p">,</span>
+    <span class="n">Username</span> <span class="p">=</span> <span class="s">"any-name-would-do"</span>
+<span class="p">};</span>
+
+<span class="n">slackClient</span><span class="p">.</span><span class="nf">Post</span><span class="p">(</span><span class="n">slackMessage</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="done">Done</h2>
+<p>That’s it! Very easy and painless integration to get real-time desktop notifications.</p>
+
+<h2 id="some-notes">Some notes</h2>
+
+<ul>
+  <li>Even though you choose a channel while creating the webhook, in my experience you can use the same one to post to different channels. You don’t need to create a new webhook for each channel.</li>
+  <li>Username can be any text basically. It doesn’t need to correspond to a Slack account.</li>
+  <li>First time you send a message with a username, it uses the emoji you specify in the message. You can leave it null in which case it uses the default. On consequent posts, it uses the same emoji for that user even if you set a different one.</li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/nerdfury/Slack.Webhooks" target="_blank" rel="noopener noreferrer">Slack.Webhooks library on GitHub</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2016/10/15/HTTP2/" title="Previous Post: 
+HTTP/2">« HTTP/2</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2017/05/09/merging-pdfs/" title="next Post: 
+Merging PDFs">Merging PDFs » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2023 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

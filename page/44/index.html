@@ -154,71 +154,31 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2014/11/16/tip-day-capitalize-words-string-c/" itemprop="url">Tip of the Day: Capitalize all words in string with C#</a></h1>
+	<h1 class="title" itemprop="name"><a href="/archive/2014/11/16/tip-day-automatic-object-deletion-aws-s3/" itemprop="url">Tip of the Day: Automatic object deletion in AWS S3</a></h1>
 	<div class="meta">
 	<span class="date">
 
 
 
 
-<time datetime="2014-11-16T05:04:26-06:00" itemprop="datePublished">November 16, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+<time datetime="2014-11-16T05:00:00-06:00" itemprop="datePublished">November 16, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
 
-<!-- dev -->
-
-
+<!-- aws -->
 
 
-    <a href="/category/dev">dev</a>
+
+
+    <a href="/category/aws">aws</a>
     
 </span>
-	<span class="tags">tip_of_the_day, csharp</span>
+	<span class="tags">tip_of_the_day, s3</span>
 	
 </div>
 	<div class="entry-content" itemprop="articleBody">
-		<p>To capitalize all words in a string you can use the function built-in the .NET framework <strong><em>ToTitleCase</em></strong> function in <strong><em>System.Globalization.TextInfo</em></strong> class</p>
+		<p>In some cases you may want objects in a bucket be deleted automatically, for example for log files or surveillance footage you may want to keep only latest n days. You can run scripts to delete them manually but it can also be done by setting the expiration date on the bucket.</p>
 
-<p>Here is a sample (taken from MSDN link below):</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
-<span class="k">using</span> <span class="nn">System.Globalization</span><span class="p">;</span>
-
-<span class="k">public</span> <span class="k">class</span> <span class="nc">Example</span>
-<span class="p">{</span>
-   <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">()</span>
-   <span class="p">{</span>
-      <span class="kt">string</span><span class="p">[]</span> <span class="n">values</span> <span class="p">=</span> <span class="p">{</span> <span class="s">"a tale of two cities"</span><span class="p">,</span> <span class="s">"gROWL to the rescue"</span><span class="p">,</span>
-                          <span class="s">"inside the US government"</span><span class="p">,</span> <span class="s">"sports and MLB baseball"</span><span class="p">,</span>
-                          <span class="s">"The Return of Sherlock Holmes"</span><span class="p">,</span> <span class="s">"UNICEF and children"</span><span class="p">};</span>
-
-      <span class="n">TextInfo</span> <span class="n">ti</span> <span class="p">=</span> <span class="n">CultureInfo</span><span class="p">.</span><span class="n">CurrentCulture</span><span class="p">.</span><span class="n">TextInfo</span><span class="p">;</span>
-      <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="k">value</span> <span class="k">in</span> <span class="n">values</span><span class="p">)</span>
-         <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"{0} --&gt; {1}"</span><span class="p">,</span> <span class="k">value</span><span class="p">,</span> <span class="n">ti</span><span class="p">.</span><span class="nf">ToTitleCase</span><span class="p">(</span><span class="k">value</span><span class="p">));</span>
-   <span class="p">}</span>
-<span class="p">}</span>
-<span class="c1">// The example displays the following output: </span>
-<span class="c1">//    a tale of two cities --&gt; A Tale Of Two Cities </span>
-<span class="c1">//    gROWL to the rescue --&gt; Growl To The Rescue </span>
-<span class="c1">//    inside the US government --&gt; Inside The US Government </span>
-<span class="c1">//    sports and MLB baseball --&gt; Sports And MLB Baseball </span>
-<span class="c1">//    The Return of Sherlock Holmes --&gt; The Return Of Sherlock Holmes </span>
-<span class="c1">//    UNICEF and children --&gt; UNICEF And Children</span>
-</code></pre></div></div>
-
-<div id="ezoic-pub-ad-placeholder-101">
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
-<!-- ezoic-00 -->
-<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://msdn.microsoft.com/en-us/library/system.globalization.textinfo.totitlecase(v=vs.110).aspx" target="_blank" rel="noopener noreferrer">http://msdn.microsoft.com/en-us/library/system.globalization.textinfo.totitlecase(v=vs.110).aspx</a></li>
-</ul>
-
+<p><img src="/images/vpblogimg/2014/11/AWS_S3_Lifecycle%5B1%5D.png" alt="AWS S3 Object Lifecycle"></p>
 
 		
 		
@@ -232,14 +192,14 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2014/11/15/tip-day-activate-multi-factor-authentication-mfa-aws/" itemprop="url">Tip of the Day: Activate multi-factor authentication (MFA) on AWS</a></h1>
+	<h1 class="title" itemprop="name"><a href="/archive/2014/11/16/tip-day-activate-multi-factor-authentication-mfa-aws/" itemprop="url">Tip of the Day: Activate multi-factor authentication (MFA) on AWS</a></h1>
 	<div class="meta">
 	<span class="date">
 
 
 
 
-<time datetime="2014-11-15T18:17:19-06:00" itemprop="datePublished">November 15, 2014</time></span>
+<time datetime="2014-11-16T05:00:00-06:00" itemprop="datePublished">November 16, 2014</time></span>
 	<span class="categories"><!-- <span class="category-link"><a href="/category/awssecurity">aws</a></span> -->
 
 <!-- aws, security -->
@@ -301,36 +261,50 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2014/11/15/tip-day-preventing-corrupted-files-uploading-aws/" itemprop="url">Tip of the Day: Preventing corrupted files while uploading to AWS</a></h1>
+	<h1 class="title" itemprop="name"><a href="/archive/2014/11/16/take-control-content/" itemprop="url">Take control of your content</a></h1>
 	<div class="meta">
 	<span class="date">
 
 
 
 
-<time datetime="2014-11-15T18:00:33-06:00" itemprop="datePublished">November 15, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/aws">aws</a></span> -->
+<time datetime="2014-11-16T05:00:00-06:00" itemprop="datePublished">November 16, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/misc">misc</a></span> -->
 
-<!-- aws -->
-
-
+<!-- misc -->
 
 
-    <a href="/category/aws">aws</a>
+
+
+    <a href="/category/misc">misc</a>
     
 </span>
-	<span class="tags">tip_of_the_day, s3</span>
+	<span class="tags"></span>
 	
 </div>
 	<div class="entry-content" itemprop="articleBody">
-		<p>If you are working with large files, transferring them to S3 correctly might be an issue. To ensure data integrity you can send the MD5 hash of the file in <strong>Content-MD5</strong> header.</p>
+		<p>One of the sites I like is Coderwall. It’s a nice place to check out quick tips from different developers. Also it has a voting system which you feel a bit validated when people find your tips helpful. I have 6 “protips” in their site and some of them had a few upvotes. I was motivated to post more tips which are especially too short for a blog post.</p>
 
-<p>After the transfer S3 compares the MD5 value of the transferred file with the value you provided. If they don’t match it returns an error. This is an easy and great way to ensure the file has been uploaded safe and sound.</p>
+<h2 id="your-upvotes-are-no-good-here">Your upvotes are no good here!</h2>
+<p>A few backs I logged in to check if I had any new upvotes. To my surprise, not only I didn’t get anything new, all my previous hard-earned upvotes were deleted as well! I contacted their support and 2 weeks later they said they could have been deleted because of spam concerns. If a tip is online for about a year and it was viewed by hundreds of people and got 3-4 upvotes in the process I think it’s safe to think that there’s not a scam going on here. Even if you think something is fishy you should give them benefit of the doubt just because the numbers are very small and very plausible. Luckily, I have better things to do than scam Coderwall and a few measly upvotes have no meaning at all.</p>
 
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPUT.html" target="_blank" rel="noopener noreferrer">AWS API Documentation</a></li>
-</ul>
+<h2 id="time-to-pack-and-leave">Time to pack and leave</h2>
+<p>A week later I decided to publish all my posts n my blog. I went to my account to list my tips but the link wasn’t working. So I couldn’t even get the tips I had created. At least they provide a way to search by username. That’s how I could find my own tips. That was the straw that broke the camel’s back! So the lesson learned here is that always take control of your own content. Publish it on your own site/blog or whatever platform you control then propagate your content elsewhere if you choose to do so.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h2 id="goodbye-coderwall">Goodbye, Coderwall!</h2>
+<p>I know this idea sounds very natural and obvious to some people. I think I should have thought of it before this incident but at least I recovered my content without any loss and learned a valuable lesson. I may still post to Coderwall but after deleting my votes and treating me like a scammer I’ve lost interest to their site. Looking at the quality of their support I don’t think they will be around for a long time anyway!</p>
+
+<p>From now on I will post suck quick tips on this blog under “Tip of the Day” category.</p>
+
 
 		
 		

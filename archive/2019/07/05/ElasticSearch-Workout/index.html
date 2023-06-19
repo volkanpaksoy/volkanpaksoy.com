@@ -1,0 +1,475 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Elasticsearch Workout - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2019/07/05/ElasticSearch-Workout/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+  <link rel="stylesheet" href="/css/w3.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script>
+
+  
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y3V7V2XX9Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y3V7V2XX9Q');
+</script>
+
+<!-- <script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'G-Y3V7V2XX9Q']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script> -->
+
+
+
+  <!-- Twitter cards -->
+  <meta name="twitter:site"    content="@volkan_paksoy">
+  <meta name="twitter:creator" content="@Volkan Paksoy">
+  <meta name="twitter:title"   content="Elasticsearch Workout">
+
+  
+  <meta name="twitter:description" content="">
+  
+
+  
+  <meta name="twitter:card"  content="summary">
+  <meta name="twitter:image" content=""> -->
+  
+  <!-- end of Twitter cards -->
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+<br>
+
+<div style="border: 2px solid coral; border-radius: 5px; padding: 5px;">
+  <p style="font-style: italic; color: coral;">Other Blogs:</p>
+  <p><a href="https://devpower.co.uk" target="_blank" rel="noopener noreferrer">Dev Power</a></p>
+  <p><a href="https://cloudinternals.net" target="_blank" rel="noopener noreferrer">Cloud Internals</a></p>
+  <p><a href="https://infosecinternals.com" target="_blank" rel="noopener noreferrer">InfoSec Internals</a></p>
+</div>
+<br>
+
+<!-- <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="volkanpaksoy" data-color="#005050" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#ffffff" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script> -->
+
+<a href="https://www.buymeacoffee.com/volkanpaksoy" target="_blank" rel="noopener noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;"></a>
+
+<div id="ezoic-pub-ad-placeholder-102">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Elasticsearch Workout</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-07-05T06:00:00-05:00" itemprop="datePublished">July  5, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp, elasticsearch, docker, nest</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<p><img src="/images/vpblogimg/2019/07/logo-elastic-elasticsearch-lt.svg" alt=""></p>
+
+<p>I’ve been playing around with Elasticsearch on several occasions. This post is to organize those thoughts and experiences and show an easy way to setup ElasticSearch and start playing around with it.</p>
+
+<h2 id="setup">Setup</h2>
+<p>Easiest way to setup Elasticsearch locally is using Docker. As of this writing the latest version of Elasticsearch is 7.2.0 and I’ll be using that in this example:</p>
+
+<p>If you don’t already have the image, simply pull from Docker hub:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+</code></pre></div></div>
+
+<p>For development environment suggested command to run a container is</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+</code></pre></div></div>
+
+<p>which keeps it very simple and straightforward but in my workout I’d like to insert a whole bunch of data and run some queries on it and I don’t want to re-generate my data over and over again. So I decided to persist my data on host.</p>
+
+<h3 id="persisting-elasticsearch-data">Persisting Elasticsearch Data</h3>
+<p>Instead of running containers one by one in the command line a better approach is to create a docker-compose.yml file file and use Docker compose to start services. I used the sample YAML file provided in official Elastic <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html" target="_blank" rel="noopener noreferrer">documentation</a></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '2.2'
+services:
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    container_name: es01
+    environment:
+      - node.name=es01
+      - discovery.seed_hosts=es02
+      - cluster.initial_master_nodes=es01,es02
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - esnet
+  es02:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    container_name: es02
+    environment:
+      - node.name=es02
+      - discovery.seed_hosts=es01
+      - cluster.initial_master_nodes=es01,es02
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata02:/usr/share/elasticsearch/data
+    networks:
+      - esnet
+
+volumes:
+  esdata01:
+    driver: local
+  esdata02:
+    driver: local
+
+networks:
+  esnet:
+</code></pre></div></div>
+
+<p>This example creates an Elasticsearch cluster with 2 nodes and uses named volumes to persist data so next time when we bring this cluster up again we should be able to continue where we left off data-wise.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h2 id="sample-application">Sample Application</h2>
+<p>In <a href="https://volkanpaksoy.com/archive/2019/06/27/Generating-Test-Data-with-Bogus/">my previous blog post</a> I developed a simple test data generator to generate fake bank statement data with a library called Bogus. In this project, I will use that generator to generate lots and lots of test data, insert them into Elasticsearch and have fun with it!</p>
+
+<p>When you start a C# project and start looking for a library to interact with Elasticsearch, it’s a bit confusing to find out there are actually two of them: Elasticsearch.net and NEST. The gist of it is NEST is a high-level library that uses Elasticsearch.net under the hood. It also exposes low-level client so that it actually enhances Elasticsearch.net and allows using strongly typed DSL queries. In the sample application I used NEST.</p>
+
+<h3 id="creating-elasticsearch-client">Creating Elasticsearch client</h3>
+<p>Creating a client with some basic settings is straightforward:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">connectionSettings</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ConnectionSettings</span><span class="p">(</span><span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="s">"http://localhost:9200"</span><span class="p">)))</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">settings</span> <span class="p">=</span> <span class="n">connectionSettings</span>
+        <span class="p">.</span><span class="nf">DefaultIndex</span><span class="p">(</span><span class="s">"bankstatementindex"</span><span class="p">)</span>
+        <span class="p">.</span><span class="nf">ThrowExceptions</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+	<span class="n">IElasticClient</span> <span class="n">elasticClient</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ElasticClient</span><span class="p">(</span><span class="n">settings</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="indexing-data">Indexing data</h3>
+<p>To index a single document **IndexDocument<t>** method can be called. However, using this method to loop through a large number of documents is not recommended.</t></p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">elasticClient</span><span class="p">.</span><span class="n">IndexDocument</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;(</span><span class="n">testData</span><span class="p">.</span><span class="nf">First</span><span class="p">());</span>
+</code></pre></div></div>
+
+<p>For multiple documents, <strong>IndexMany</strong> method should be called. If the data size too large then using <strong>BulkAll</strong> method and <strong>BulkAllObservable</strong> helper is recommended.</p>
+
+<p>To see the difference I created a test to index 5,000 documents with a looping over the array and using BulkAll after that. Looping over the collection took around 26 seconds whereas bulk index took only 1.2 seconds as shown in the screenshot.</p>
+
+<p><img src="/images/vpblogimg/2019/07/indexdocument-vs-bulkall.png" alt=""></p>
+
+<p>Also it displays “Done” 5 times because I set the size to 1,000 and I requested 5,000 documents to be indexed so it automatically divided the load into 5 and made 5 calls:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">bulkAll</span> <span class="p">=</span> <span class="n">elasticClient</span><span class="p">.</span><span class="nf">BulkAll</span><span class="p">(</span><span class="n">testData</span><span class="p">,</span> <span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span>
+                <span class="p">.</span><span class="nf">BackOffRetries</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+                <span class="p">.</span><span class="nf">BackOffTime</span><span class="p">(</span><span class="s">"30s"</span><span class="p">)</span>
+                <span class="p">.</span><span class="nf">RefreshOnCompleted</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
+                <span class="p">.</span><span class="nf">MaxDegreeOfParallelism</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
+                <span class="p">.</span><span class="nf">Size</span><span class="p">(</span><span class="m">1000</span><span class="p">));</span>
+
+<span class="n">bulkAll</span><span class="p">.</span><span class="nf">Wait</span><span class="p">(</span><span class="n">TimeSpan</span><span class="p">.</span><span class="nf">FromSeconds</span><span class="p">(</span><span class="m">60</span><span class="p">),</span>
+    <span class="n">onNext</span><span class="p">:</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="n">Console</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="s">"Done"</span><span class="p">);</span> <span class="p">}</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<p>Same result can also be achieved by subscribing to BulkAll observer:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">waitHandle</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CountdownEvent</span><span class="p">(</span><span class="m">1</span><span class="p">);</span>
+
+<span class="n">bulkAll</span><span class="p">.</span><span class="nf">Subscribe</span><span class="p">(</span><span class="k">new</span> <span class="nf">BulkAllObserver</span><span class="p">(</span>
+    <span class="n">onNext</span><span class="p">:</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="n">Console</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="s">"."</span><span class="p">);</span> <span class="p">},</span>
+    <span class="n">onError</span><span class="p">:</span> <span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span> <span class="k">throw</span> <span class="n">e</span><span class="p">;</span> <span class="p">},</span>
+    <span class="n">onCompleted</span><span class="p">:</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="n">waitHandle</span><span class="p">.</span><span class="nf">Signal</span><span class="p">()</span>
+<span class="p">));</span>
+
+<span class="n">waitHandle</span><span class="p">.</span><span class="nf">Wait</span><span class="p">();</span>
+</code></pre></div></div>
+
+<h3 id="showing-progress">Showing progress</h3>
+<p>In the sample code below I showed displaying progress using onNext action delegate:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var testData = dataGen.Generate(statementConfig.StartDate, statementConfig.EndDate, statementConfig.OpeningBalance, statementConfig.DebitTransactionRatio, statementConfig.TransactionDateInterval, statementConfig.NumberOfStatementLines);
+var cancellationToken = new CancellationToken();
+var batchSize = 250;
+var bulkAll = elasticClient.BulkAll(testData, x =&gt; x
+    .BackOffRetries(2)
+    .BackOffTime("30s")
+    .RefreshOnCompleted(true)
+    .MaxDegreeOfParallelism(4)
+    .Size(batchSize), cancellationToken);
+var totalIndexed = 0;
+var stopWatch = new Stopwatch();
+stopWatch.Start();
+bulkAll.Wait(TimeSpan.FromSeconds(60),
+    onNext: (b) =&gt;
+    {
+        totalIndexed += batchSize;
+        Console.WriteLine($"Total indexed documents: {totalIndexed}");
+    }
+);
+</code></pre></div></div>
+
+<p>and the output looked like this:</p>
+
+<p><img src="/images/vpblogimg/2019/07/bulkall-parallel-threads.png" alt=""></p>
+
+<p>Even though the numbers seem a bit wonky I think it’s a good example to illustrate the multi-threaded nature of BulkAll. Because I set the maximum degree of paralleism to 4 and first 1,000 were inserted in a mixed order suggesting that they were running in parallel.</p>
+
+<h3 id="cancellation-with-bulk-operations">Cancellation with bulk operations</h3>
+<p>BulkAll observer can also be cancelled for longer processes if necessary. The code excerpt below shows the relevant pieces to cancellation</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">var</span> <span class="n">cancellationTokenSource</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CancellationTokenSource</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">cancellationToken</span> <span class="p">=</span> <span class="n">cancellationTokenSource</span><span class="p">.</span><span class="n">Token</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">batchSize</span> <span class="p">=</span> <span class="m">250</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">bulkAll</span> <span class="p">=</span> <span class="n">elasticClient</span><span class="p">.</span><span class="nf">BulkAll</span><span class="p">(</span><span class="n">testData</span><span class="p">,</span> <span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span>
+    <span class="p">.</span><span class="nf">BackOffRetries</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">BackOffTime</span><span class="p">(</span><span class="s">"30s"</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">RefreshOnCompleted</span><span class="p">(</span><span class="k">true</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">MaxDegreeOfParallelism</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">Size</span><span class="p">(</span><span class="n">batchSize</span><span class="p">),</span> <span class="n">cancellationToken</span><span class="p">);</span>
+<span class="kt">var</span> <span class="n">totalIndexed</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">stopWatch</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Stopwatch</span><span class="p">();</span>
+<span class="n">stopWatch</span><span class="p">.</span><span class="nf">Start</span><span class="p">();</span>
+<span class="n">Task</span><span class="p">.</span><span class="n">Factory</span><span class="p">.</span><span class="nf">StartNew</span><span class="p">(()</span> <span class="p">=&gt;</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Started monitor thread"</span><span class="p">);</span>
+        <span class="kt">var</span> <span class="n">cancelled</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(!</span><span class="n">cancelled</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">stopWatch</span><span class="p">.</span><span class="n">Elapsed</span> <span class="p">&gt;=</span> <span class="n">TimeSpan</span><span class="p">.</span><span class="nf">FromSeconds</span><span class="p">(</span><span class="m">60</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">cancellationToken</span><span class="p">.</span><span class="n">CanBeCanceled</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Cancelling. Elapsed time: </span><span class="p">{</span><span class="n">stopWatch</span><span class="p">.</span><span class="n">Elapsed</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(</span><span class="s">"mm\\:ss\\.ff"</span><span class="p">)}</span><span class="s">"</span><span class="p">);</span>
+                    <span class="n">cancellationTokenSource</span><span class="p">.</span><span class="nf">Cancel</span><span class="p">();</span>
+                    <span class="n">cancelled</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="n">Thread</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="m">100</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">);</span>
+
+<span class="k">try</span>
+<span class="p">{</span>
+    <span class="n">bulkAll</span><span class="p">.</span><span class="nf">Wait</span><span class="p">(</span><span class="n">TimeSpan</span><span class="p">.</span><span class="nf">FromSeconds</span><span class="p">(</span><span class="m">60</span><span class="p">),</span>
+        <span class="n">onNext</span><span class="p">:</span> <span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">=&gt;</span>
+        <span class="p">{</span>
+            <span class="n">totalIndexed</span> <span class="p">+=</span> <span class="n">batchSize</span><span class="p">;</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Total indexed documents: </span><span class="p">{</span><span class="n">totalIndexed</span><span class="p">}</span><span class="s">"</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">);</span>
+<span class="p">}</span>
+<span class="k">catch</span> <span class="p">(</span><span class="n">OperationCanceledException</span> <span class="n">e</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">$"Taking longer than allowed. Cancelled."</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="querying-data">Querying Data</h3>
+<p>Querying data can be done by calling Search method of ElasticsearchClient. Here’s a few examples below. There are more in the sample accompanying source code:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Get the first 100 documents</span>
+<span class="kt">var</span> <span class="n">searchResponse</span> <span class="p">=</span> <span class="n">elasticClient</span><span class="p">.</span><span class="n">Search</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;(</span><span class="n">s</span> <span class="p">=&gt;</span> <span class="n">s</span>
+    <span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="n">q</span> <span class="p">=&gt;</span> <span class="n">q</span>
+        <span class="p">.</span><span class="nf">MatchAll</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="p">.</span><span class="nf">Size</span><span class="p">(</span><span class="m">100</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Get transactions with date between 01/01/2018 and 10/01/2018</span>
+<span class="kt">var</span> <span class="n">searchResponse</span> <span class="p">=</span> <span class="n">elasticClient</span><span class="p">.</span><span class="n">Search</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;(</span><span class="n">s</span> <span class="p">=&gt;</span> <span class="n">s</span>
+    <span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="n">q</span> <span class="p">=&gt;</span> <span class="n">q</span>
+        <span class="p">.</span><span class="nf">DateRange</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span>
+            <span class="p">.</span><span class="nf">Field</span><span class="p">(</span><span class="n">f</span> <span class="p">=&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">TransactionDate</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">GreaterThanOrEquals</span><span class="p">(</span><span class="k">new</span> <span class="nf">DateTime</span><span class="p">(</span><span class="m">2018</span><span class="p">,</span> <span class="m">01</span><span class="p">,</span> <span class="m">01</span><span class="p">))</span>
+            <span class="p">.</span><span class="nf">LessThanOrEquals</span><span class="p">(</span><span class="k">new</span> <span class="nf">DateTime</span><span class="p">(</span><span class="m">2018</span><span class="p">,</span> <span class="m">01</span><span class="p">,</span> <span class="m">10</span><span class="p">))</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="p">.</span><span class="nf">Size</span><span class="p">(</span><span class="m">10000</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<h3 id="deleting-data">Deleting data</h3>
+<p>For my tests I had to delete all frequently and it can be achieved by running the query below:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">elasticClient</span><span class="p">.</span><span class="n">DeleteByQuery</span><span class="p">&lt;</span><span class="n">BankStatementLine</span><span class="p">&gt;(</span><span class="n">del</span> <span class="p">=&gt;</span> <span class="n">del</span>
+    <span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="n">q</span> <span class="p">=&gt;</span> <span class="n">q</span><span class="p">.</span><span class="nf">QueryString</span><span class="p">(</span><span class="n">qs</span> <span class="p">=&gt;</span> <span class="n">qs</span><span class="p">.</span><span class="nf">Query</span><span class="p">(</span><span class="s">"*"</span><span class="p">)))</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="source-code">Source Code</h2>
+<p></p>
+<div class="github-widget" data-repo="volkanpaksoy/lab"></div>
+
+<p>Sample application can be found under blog/ElasticsearchWorkout folder in the repository.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://github.com/volkanpaksoy/lab/tree/master/blog/ElasticsearchWorkout" target="_blank" rel="noopener noreferrer">Sample source code</a></li>
+  <li><a href="https://www.elastic.co/guide/en/elasticsearch/client/net-api/current/nest-getting-started.html" target="_blank" rel="noopener noreferrer">NEST Getting Started</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/06/27/Generating-Test-Data-with-Bogus/">Blog post: Generating Test Data with Bogus</a></li>
+  <li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.2/index.html" target="_blank" rel="noopener noreferrer">Elasticsearch Reference</a></li>
+  <li><a href="https://www.elastic.co/guide/en/elasticsearch/client/net-api/7.x/index.html" target="_blank" rel="noopener noreferrer">Elasticsearch.Net and NEST: the .NET clients 7.x</a></li>
+  <li><a href="https://www.elastic.co/blog/a-practical-introduction-to-elasticsearch" target="_blank" rel="noopener noreferrer">A Practical Introduction to Elasticsearch</a></li>
+  <li><a href="https://rimdev.io/bulk-import-documents-into-elasticsearch-using-nest/" target="_blank" rel="noopener noreferrer">Bulk Import Documents Into Elasticsearch Using NEST</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2019/06/27/Generating-Test-Data-with-Bogus/" title="Previous Post: 
+Generating Test Data with Bogus">« Generating Test Data with Bogus</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2019/08/10/Implementing-a-Self-Hosted-Docker-Registry-on-Raspberry-Pi/" title="next Post: 
+Implementing a Self-Hosted Docker Registry on Raspberry Pi">Implementing a Self-Hosted Docker Registry on Raspberry Pi » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2023 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

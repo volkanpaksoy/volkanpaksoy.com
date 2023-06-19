@@ -1,0 +1,304 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>AWS Developer Tools Services Part 4: AWS CodePipeline - Playground for the mind</title>
+	<meta name="author" content="Volkan Paksoy">
+
+	
+	<meta name="description" content="
+		
+	">
+	
+
+	<!-- http://t.co/dKP3o1e -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="https://feeds.feedburner.com/PlaygroundForTheMind" rel="alternate" title="Playground for the mind" type="application/atom+xml">
+	
+	<link rel="canonical" href="https://volkanpaksoy.com/archive/2019/10/23/AWS-Developer-Tools-Services-Part-4-AWS-CodePipeline/">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,400italic,600,700,800' rel='stylesheet' type='text/css'>
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="/css/code.css" type="text/css">
+  <link rel="stylesheet" href="/css/w3.css" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="/js/slash.js" async></script>
+	<script src="/js/GithubRepoWidget.min.js" async></script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996"
+  crossorigin="anonymous"></script>
+
+  
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y3V7V2XX9Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y3V7V2XX9Q');
+</script>
+
+<!-- <script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'G-Y3V7V2XX9Q']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script> -->
+
+
+
+  <!-- Twitter cards -->
+  <meta name="twitter:site"    content="@volkan_paksoy">
+  <meta name="twitter:creator" content="@Volkan Paksoy">
+  <meta name="twitter:title"   content="AWS Developer Tools Services Part 4: AWS CodePipeline">
+
+  
+  <meta name="twitter:description" content="">
+  
+
+  
+  <meta name="twitter:card"  content="summary">
+  <meta name="twitter:image" content=""> -->
+  
+  <!-- end of Twitter cards -->
+
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+				<header id="header" class="inner"><div class="profilepic">
+	
+	<a href="/">
+		<img src="https://s.gravatar.com/avatar/760bf518408c38ebb0f0e5adb8089e30?s=80?s=160" alt="Profile Picture" style="width: 160px;">
+	</a>	
+	
+</div>
+<hgroup>
+  <h1 class="site-title" style="font-size: 2.4em;">
+		<a style="color: rgba(255, 165, 0, 0.8);" href="/">Playground for the mind</a>
+	</h1>
+  
+    <h2>It's all about the journey, not the destination</h2>
+  
+</hgroup>
+
+<nav id="sub-nav">
+	<div class="social">
+		
+			<a class="rss" href="https://feeds.feedburner.com/PlaygroundForTheMind" title="RSS" target="_blank" rel="noopener noreferrer">RSS</a>
+		
+		
+			<a class="github" href="https://github.com/volkanpaksoy" title="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+		
+		
+			<a class="stackoverflow" href="https://stackoverflow.com/users/3093396/volkan-paksoy" title="StackOverflow" target="_blank" rel="noopener noreferrer">StackOverflow</a>
+		
+	</div>
+</nav>
+
+<nav id="main-nav">
+<ul class="main-navigation">
+  <li><a href="/archive">posts</a></li>
+  <li><a href="/category">categories</a></li>
+</ul>
+<br>
+
+<div style="border: 2px solid coral; border-radius: 5px; padding: 5px;">
+  <p style="font-style: italic; color: coral;">Other Blogs:</p>
+  <p><a href="https://devpower.co.uk" target="_blank" rel="noopener noreferrer">Dev Power</a></p>
+  <p><a href="https://cloudinternals.net" target="_blank" rel="noopener noreferrer">Cloud Internals</a></p>
+  <p><a href="https://infosecinternals.com" target="_blank" rel="noopener noreferrer">InfoSec Internals</a></p>
+</div>
+<br>
+
+<!-- <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="volkanpaksoy" data-color="#005050" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#ffffff" data-font-color="#ffffff" data-coffee-color="#FFDD00" ></script> -->
+
+<a href="https://www.buymeacoffee.com/volkanpaksoy" target="_blank" rel="noopener noreferrer"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;"></a>
+
+<div id="ezoic-pub-ad-placeholder-102">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+</nav></header>				
+			</div>
+		</div>
+		<div class="mid-col">
+			<div class="mid-col-container">
+				<div id="content" class="inner">
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">AWS Developer Tools Services Part 4: AWS CodePipeline</h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2019-10-23T06:00:00-05:00" itemprop="datePublished">October 23, 2019</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/"></a></span> -->
+
+<!-- devops, aws -->
+
+
+
+
+    <a href="/category/devops">devops</a>
+    , 
+
+    <a href="/category/aws">aws</a>
+    
+</span>
+	<span class="tags">codepipeline, git, aws_developer_tools_services</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+<h2 id="introduction">Introduction</h2>
+<p>This post is part of my mini-series about <a href="https://aws.amazon.com/products/developer-tools/" target="_blank" rel="noopener noreferrer">AWS Developer Tools Services</a></p>
+
+<ul>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/15/AWS-Developer-Tools-Services-Part-1-AWS-CodeCommit/">Part 1: AWS CodeCommit</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/19/AWS-Developer-Tools-Services-Part-2-AWS-CodeBuild/">Part 2: AWS CodeBuild</a></li>
+  <li><a href="https://volkanpaksoy.com/archive/2019/10/20/AWS-Developer-Tools-Services-Part-3-AWS-CodeDeploy/">Part 3: AWS CodeDeploy</a></li>
+  <li>Part 4: AWS CodePipeline</li>
+</ul>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-icon.png" alt=""></p>
+
+<h2 id="aws-codepipeline">AWS CodePipeline</h2>
+<p>In the previous posts I was able to create a Git repository in CodeCommit, create a build and upload the artifacts to an S3 bucket using CodeBuild and deploy the artifacts to an EC2 instance. In this post I will use CodePipeline service to tie these steps together.</p>
+
+<p>AWS CodePipeline is more like an umbrella service that it combines the the source, build and deploy steps together with some added benefits:</p>
+
+<ul>
+  <li>Ability to retry deployment: In CodeDeploy, if the deployment fails you have to create a new deployment manually but with Pipeline we have the option to retry the deployment which clones the failed deployment and runs the new one automatically.</li>
+  <li>Trigger build upon code changes: You can start builds manually or on schedule by creating triggers but you can not trigger a build when you push your code to the repository. CodePipeline handles this automatically.</li>
+</ul>
+
+<h2 id="create-a-pipeline">Create a pipeline</h2>
+
+<h3 id="step-1-give-it-a-name">Step 1: Give it a name</h3>
+<p>First step is to simply give the pipeline a name. CodePipeline can automatically create an IAM role with the required permissions. Required permissions are not really clear at this point as we haven’t connected any of the services yet. That’s why it’s very useful to keep the “Allow AWS CodePipeline to create a service role so it can be used with this new pipeline” checkbox ticked.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-create-pipeline.png" alt=""></p>
+
+<h4 id="step-2-add-source">Step 2: Add source</h4>
+<p>Next, we choose the source provider. In this example, I will use CodeCommit. It also support Amazon ECR, Amazon S3 and GitHub.</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-add-source.png" alt=""></p>
+
+<p>At this stage, by using CloudWatch events we can automatically start the build. This option os provided because CodeCommit is an AWS service. If you choose GitHub as your provider you’ll see GitHub webhooks which do the same job.</p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<h4 id="step-3-add-build">Step 3: Add build</h4>
+<p>By default two build services are supported: CodeBuild and Jenkins. It’s easier to connect to CodeBuild as you just have to select your build project from the dropdown list:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-add-build.png" alt=""></p>
+
+<p>You can also choose to skip this stage. If you are copying static assets from an S3 bucket for instance you wouldn’t need to build anything and would choose to skip this stage.</p>
+
+<h4 id="step-4-add-deployment">Step 4: Add deployment</h4>
+<p>At deployment stage, we have quite a few options:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-add-deployment-1.png" alt=""></p>
+
+<p>As stated before, I will use the CodeDeploy deployment I created before:</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-add-deployment-2.png" alt=""></p>
+
+<p>Finally we review and create the pipeline.</p>
+
+<h2 id="troubleshooting-the-pipeline">Troubleshooting the pipeline</h2>
+<p>Even though my CodeBuild and CodeDeploy projects succeeded, running the CodePipeline at this point fails. The reason for this error is CodePipeline creates its own S3 bucket and CodeDeploy agent needs access to that bucket as well to be able to download the deployment artifacts. So I had to modify my policy as such:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:Get*",
+        "s3:List*"
+      ],
+      "Resource": [
+        "arn:aws:s3:::replace-with-your-s3-bucket-name/*",
+        "arn:aws:s3:::aws-codedeploy-us-east-1/*",
+        "arn:aws:s3:::codepipeline-us-east-1-XXXXXXXXXXX/*"
+      ]
+    }
+  ]
+}
+</code></pre></div></div>
+
+<h2 id="see-it-in-action">See it in action</h2>
+<p>After fixing the policy I retried the deployment (which creates a new deployment, doesn’t actually retry the failed one)</p>
+
+<p><img src="/images/vpblogimg/2019/10/aws-codepipeline-results.png" alt=""></p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>In this mini-series, I investigated creating a full pipeline using AWS developer services. In future posts I will delve deeper into these services and start using other complementary services as well.</p>
+
+<h2 id="resources">Resources</h2>
+<ul>
+  <li><a href="https://aws.amazon.com/codepipeline" target="_blank" rel="noopener noreferrer">AWS CodePipeline</a></li>
+</ul>
+</div>
+
+</article>
+
+<div id="page-navigation"> 
+        <div class="previous"> 
+         
+                <a href="/archive/2019/10/20/AWS-Developer-Tools-Services-Part-3-AWS-CodeDeploy/" title="Previous Post: 
+AWS Developer Tools Services Part 3: AWS CodeDeploy">« AWS Developer Tools Services Part 3: AWS CodeDeploy</a>
+         
+        </div>
+
+        <div class="next"> 
+         
+               <a href="/archive/2019/10/24/Playing-with-Lego-Mindstorms/" title="next Post: 
+Playing with Lego Mindstorms NXT and EV3">Playing with Lego Mindstorms NXT and EV3 » </a> 
+         
+        </div>
+</div> 
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright © 2023 - Volkan Paksoy Blog content licensed under the Creative Commons <a href="http://creativecommons.org/licenses/by/2.5/" target="_blank" rel="noopener noreferrer">CC BY 2.5</a> | Site design based on the <a href="https://github.com/shashankmehta/greyshade" target="_blank" rel="noopener noreferrer">Greyshade theme</a> under the <a href="http://sm.mit-license.org/" target="_blank" rel="noopener noreferrer">MIT license</a>
+</p>
+</footer>
+		</div>
+	</div>
+</body>
+</html>

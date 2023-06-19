@@ -154,6 +154,68 @@
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/string-interpolation/" itemprop="url">C# 6.0 New Features - String Interpolation</a></h1>
+	<div class="meta">
+	<span class="date">
+
+
+
+
+<time datetime="2014-12-08T05:00:00-06:00" itemprop="datePublished">December  8, 2014</time></span>
+	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
+
+<!-- dev -->
+
+
+
+
+    <a href="/category/dev">dev</a>
+    
+</span>
+	<span class="tags">csharp</span>
+	
+</div>
+	<div class="entry-content" itemprop="articleBody">
+		<p>One of favorite features is the new string formatting using <em>String Interpolation</em>. In the past I encountered a lot of errors while formatting strings especially when preparing log messages. You may need lots of small pieces of data that so after a few iterations you may forget to add new parameters.</p>
+
+<p>For example in the imaginary Log method below only 3 parameters are supplied whereas the string expects 4. It compiles successfully because the string is generated at run-time and it doesn’t check the number curly braces against the number of parameters supplied.</p>
+
+<p><img src="/images/vpblogimg/2014/12/argument-count-mismatch.png" alt="Argument count mismatch error"></p>
+
+<div id="ezoic-pub-ad-placeholder-101">
+<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
+<!-- ezoic-00 -->
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5266062674794996" data-ad-slot="4902272427" data-ad-format="auto"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<p>Using the new feature such errors can be avoided as we can put the values directly in their places in the string:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">StringInterpolation</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="nf">Log</span><span class="p">(</span><span class="kt">string</span> <span class="n">timestamp</span><span class="p">,</span> <span class="kt">string</span> <span class="n">application</span><span class="p">,</span> <span class="kt">string</span> <span class="n">error</span><span class="p">,</span> <span class="kt">string</span> <span class="n">status</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"[Timestamp: \{timestamp}], Application: [\{application}], Error: [\{error}], Status [\{status}]"</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>No more parameter mismatch errors!</p>
+
+		
+		
+	</div>
+
+
+    </article>
+
+
+
+
+    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+        
 	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/simple-api-with-nodejs/" itemprop="url">A simple REST API with Node.js</a></h1>
 	<div class="meta">
 	<span class="date">
@@ -161,7 +223,7 @@
 
 
 
-<time datetime="2014-12-08T15:30:00-06:00" itemprop="datePublished">December  8, 2014</time></span>
+<time datetime="2014-12-08T05:00:00-06:00" itemprop="datePublished">December  8, 2014</time></span>
 	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
 
 <!-- dev -->
@@ -331,14 +393,14 @@ its default configuration SHOULD contain an obfuscated identifier as described i
 
     <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
         
-	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/csharp-6-new-features-conclusion/" itemprop="url">C# 6.0 New Features - Conclusion</a></h1>
+	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/null-conditional-operators/" itemprop="url">C# 6.0 New Features - Null-Conditional Operators</a></h1>
 	<div class="meta">
 	<span class="date">
 
 
 
 
-<time datetime="2014-12-08T08:00:00-06:00" itemprop="datePublished">December  8, 2014</time></span>
+<time datetime="2014-12-08T05:00:00-06:00" itemprop="datePublished">December  8, 2014</time></span>
 	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
 
 <!-- dev -->
@@ -353,88 +415,49 @@ its default configuration SHOULD contain an obfuscated identifier as described i
 	
 </div>
 	<div class="entry-content" itemprop="articleBody">
-		<h3 id="conclusion-and-list-of-posts">Conclusion and List of Posts</h3>
-<p>General consensus is that the new features are just small increments to improve productivity. They will help to clean up existing code. Less code is helpful to focus on the actual business logic instead of the clutter caused by the language.</p>
+		<p>This is another handy feature. Checking for null values before accessing them can quickly become cumbersome and yields a lot of boilerplate code. With this new operator checking for nulls and coalescing becomes really short and easy to read.</p>
 
-<p>For easy navigation I listed the links for all the previous posts:</p>
+<p>For example:</p>
 
-<h3 id="table-of-contents">Table of contents</h3>
-<ol>
-  <li><a href="/archive/2014/12/06/csharp-6-new-features/">C# 6.0 New Features - Introduction</a></li>
-  <li><a href="/archive/2014/12/07/auto-properties-with-initializers/">Auto-Properties with Initializers</a></li>
-  <li><a href="/archive/2014/12/07/using-statements-for-static-classess/">Using statements for static classes</a></li>
-  <li><a href="/archive/2014/12/08/expression-bodied-methods/">Expression-bodied methods</a></li>
-  <li><a href="/archive/2014/12/08/string-interpolation/">String interpolation</a></li>
-  <li><a href="/archive/2014/12/08/index-initializers/">Index initializers</a></li>
-  <li><a href="/archive/2014/12/08/null-conditional-operators/">Null-conditional operators</a></li>
-  <li><a href="/archive/2014/12/08/nameof-operator/">nameof operator</a></li>
-  <li><a href="/archive/2014/12/08/exception-handling-improvements/">Exception-handling improvements</a></li>
-</ol>
-
-<h2 id="resources">Resources</h2>
-<ul>
-  <li><a href="https://www.wintellectnow.com/course/detail/what-s-new-in-c-6-visual-basic-dotnet-14-and-visual-studio-14" target="_blank" rel="noopener noreferrer">Wintellect course</a></li>
-  <li><a href="http://dotnetrocks.com/default.aspx?showNum=1029" target="_blank" rel="noopener noreferrer">.NET Rocks Podcast</a></li>
-  <li><a href="http://msdn.microsoft.com/en-us/magazine/dn802602.aspx" target="_blank" rel="noopener noreferrer">MSDN Magazine Article: The New and Improved C# 6.0</a></li>
-  <li><a href="http://msdn.microsoft.com/en-us/magazine/dn683793.aspx" target="_blank" rel="noopener noreferrer">MSDN Magazine article: A C# 6.0 Language Preview</a></li>
-  <li><a href="http://channel9.msdn.com/Events/Visual-Studio/Connect-event-2014/116" target="_blank" rel="noopener noreferrer">Channel 9 Video</a></li>
-</ul>
-
-		
-		
-	</div>
-
-
-    </article>
-
-
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-        
-	<h1 class="title" itemprop="name"><a href="/archive/2014/12/08/exception-handling-improvements/" itemprop="url">C# 6.0 New Features - Exception-Handling Improvements</a></h1>
-	<div class="meta">
-	<span class="date">
-
-
-
-
-<time datetime="2014-12-08T07:00:00-06:00" itemprop="datePublished">December  8, 2014</time></span>
-	<span class="categories"><!-- <span class="category-link"><a href="/category/dev">dev</a></span> -->
-
-<!-- dev -->
-
-
-
-
-    <a href="/category/dev">dev</a>
-    
-</span>
-	<span class="tags">csharp</span>
-	
-</div>
-	<div class="entry-content" itemprop="articleBody">
-		<p>There are 2 improvements on exception handling:</p>
-
-<ol>
-  <li>Exception filters</li>
-  <li>Using await in catch and finally blocks</li>
-</ol>
-
-<h3 id="exception-filters">Exception Filters</h3>
-<p>Visual Basic and F# already have this feature and now C# has it too! the way it works is basically defining a condition for the catch block (example taken from <a href="http://channel9.msdn.com/Events/Visual-Studio/Connect-event-2014/116" target="_blank" rel="noopener noreferrer">Channel 9 video</a>):</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">try</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">class</span> <span class="nc">NullConditionalOperators</span>
 <span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Run</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Person</span> <span class="n">person</span> <span class="p">=</span> <span class="nf">GetPerson</span><span class="p">();</span>
 
+        <span class="c1">// Current C#</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">person</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">&amp;&amp;</span> <span class="n">person</span><span class="p">.</span><span class="n">Country</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">person</span><span class="p">.</span><span class="n">Country</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Undefined"</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="n">Person</span> <span class="nf">GetPerson</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">Person</span><span class="p">()</span> <span class="p">{</span> <span class="n">Firstname</span> <span class="p">=</span> <span class="s">"Volkan"</span><span class="p">,</span> <span class="n">Lastname</span> <span class="p">=</span> <span class="s">"Paksoy"</span> <span class="p">};</span>
+    <span class="p">}</span>
 <span class="p">}</span>
-<span class="k">catch</span><span class="p">(</span><span class="n">ConfigurationException</span> <span class="n">e</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">IsSevere</span><span class="p">)</span>
-<span class="p">{</span>
 
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Person</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Firstname</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="s">"Unknown"</span><span class="p">;</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Lastname</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span> <span class="p">=</span> <span class="s">"Unknown"</span><span class="p">;</span>
+    <span class="k">public</span> <span class="n">Country</span> <span class="n">Country</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Country</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">IsoCode</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>I think it can make exception handling more modular. Also it’s better than catching and rethrowing in terms of we don’t lose information about the original exception.</p>
+<p>In the example above if you need to print the name of the country first you need to ensure both the Person and Country objects are not null. The if block aobe can be reduced to a one-liner with 6.0:</p>
 
 <div id="ezoic-pub-ad-placeholder-101">
 <script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5266062674794996" crossorigin="anonymous"></script>
@@ -445,23 +468,10 @@ its default configuration SHOULD contain an obfuscated identifier as described i
 </script>
 </div>
 
-<h3 id="using-await-in-catch-and-finally-blocks">Using await in catch and finally blocks</h3>
-<p>Like most people I hadn’t noticed we couldn’t do that already! Apparently it was just a flaw in the current implementation and they closed that gap with this version</p>
-
-<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">try</span>
-<span class="p">{</span>
-
-<span class="p">}</span>
-<span class="k">catch</span><span class="p">(</span><span class="n">ConfigurationException</span> <span class="n">e</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">IsSevere</span><span class="p">)</span>
-<span class="p">{</span>
-	<span class="k">await</span> <span class="nf">LogAsync</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="k">finally</span>
-<span class="p">{</span>
-	<span class="k">await</span> <span class="nf">CloseAsync</span><span class="p">();</span>
-<span class="p">}</span>
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">person</span><span class="p">?.</span><span class="n">Country</span><span class="p">?.</span><span class="n">Name</span> <span class="p">??</span> <span class="s">"Undefined"</span><span class="p">);</span>
 </code></pre></div></div>
 
+<p>They both produce the same results. The more complex the object hierarchy becomes the more useful this feature would be.</p>
 
 		
 		
